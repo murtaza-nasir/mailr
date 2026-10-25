@@ -1,0 +1,13 @@
+# Instance settings: set by an admin in Settings → Admin, for every user (table instance_settings).
+# One line per key, `key: plain description`; `key: {internal: why}` for a key that is not a setting
+# a person chooses. A key may appear in only one file of this folder. The settings map test
+# (frontend/src/features/settings/groups.test.ts) checks that Settings has a place for each one.
+
+calendars.builtin: "Built-in calendars: every user gets a calendar and a task list on this server, shown as \"mailr calendar\". Off by default. Turning it off hides them and keeps their data."
+calendars.builtin_who: "Who gets a built-in calendar: everyone (the default), or only admins and members of groups whose access policy turns on \"Members get a mailr calendar\"."
+calendars.sharing: "Who users may share their own built-in calendars, notes, lists and tables with (one policy for all three; the key keeps its name): anyone on this server (the default), only people who share a group with them, or nobody. A narrower choice applies to new shares; existing shares stay until someone stops them."
+calendars.phone_access: "Phones and desktop calendar apps (iPhone, DAVx5, Thunderbird) may sign in to the built-in calendars and contacts with app passwords. Off by default; needs built-in calendars and the reverse-proxy setup. Off pauses every app password."
+calendars.phone_url: "The public https address phones and desktop apps use for the built-in calendars, for example https://dav.example.com (host only)."
+models.local_policy: "The household rule for hosted models: each person chooses (the default; each person's Local models only switch starts off) or local models only for everyone (every person's switch shows on and locked). Nothing locks a person's switch off."
+accounts.admin_connect: "Administrators may connect mail accounts for members: in Admin → Users, or in a preset for one person's first sign-in. Off by default (each person connects their own). The member sees \"Connected by your administrator\", is told in Activity, and may disconnect it; a disconnected account comes back only when an administrator connects it again on purpose. Turning it off stops new connections and keeps the ones made."
+phone_apps.notes_min_version: "The oldest Notes app version the server answers, for example 1.1.0 (Admin → Phone apps). Older Notes apps keep their changes on the phone and ask for the update. Empty: no limit. The mailr app's limit is MAILR_ANDROID_MIN_VERSION."

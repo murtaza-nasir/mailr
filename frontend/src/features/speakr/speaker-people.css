@@ -1,0 +1,144 @@
+/* The People tab of the recording sheet (SpeakerPeople.tsx): one row per speaker. A candidate chip
+   holds its own Confirm and Not them buttons, so a narrow sheet moves whole chips to the next line
+   and never leaves buttons on a row of their own. */
+.spk-people ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.spk-row {
+  display: grid;
+  grid-template-columns: fit-content(32%) auto 1fr;
+  gap: 6px 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.spk-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spk-arrow {
+  color: var(--text-3);
+}
+
+.spk-who {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  min-width: 0;
+}
+
+.spk-person,
+.spk-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.spk-chip {
+  flex: 1 1 240px;
+  padding-block: 2px;
+  padding-inline: 6px 2px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 12px);
+  background: var(--surface);
+}
+
+.spk-text {
+  display: inline-flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.spk-pname {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spk-detail,
+.spk-hint {
+  font-size: 12px;
+  color: var(--text-2);
+  overflow-wrap: anywhere;
+}
+
+.spk-hint {
+  color: var(--primary);
+}
+
+.spk-yes {
+  color: var(--success);
+}
+
+.spk-card-link {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: var(--text-2);
+}
+
+.spk-card-link:hover {
+  background: var(--hover);
+}
+
+.spk-note {
+  flex-basis: 100%;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.spk-search {
+  width: 100%;
+}
+
+.spk-results {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.spk-result {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: var(--radius-sm, 8px);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+.spk-result:hover,
+.spk-result:focus-visible {
+  background: var(--hover);
+}
+
+@media (max-width: 560px) {
+  .spk-row {
+    grid-template-columns: 1fr;
+  }
+
+  .spk-arrow {
+    display: none;
+  }
+}

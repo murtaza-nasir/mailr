@@ -1,0 +1,14 @@
+.gradle/
+build/
+local.properties
+keystore/
+keystore.properties
+deploy.properties
+*.apk
+*.aab
+.idea/
+captures/
+
+# Roborazzi output of DocsShotsTest (copied to site/docs/assets/shots for the docs)
+app/screenshots/docs/
+notes/screenshots/docs/

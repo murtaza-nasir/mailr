@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="voice_order_phone_first">Phone first, then server</string>
+    <string name="voice_order_server">Always server</string>
+    <string name="voice_phone_has_recognizer">On-device recognition is available.</string>
+    <string name="voice_phone_no_recognizer">No on-device recognition.</string>
+    <string name="voice_server_can_transcribe">Transcription available on your server; clips aren\'t kept.</string>
+    <string name="voice_server_none">No speech server set up.</string>
+    <string name="voice_now_on_device">Dictation is processed on this phone.</string>
+    <string name="voice_now_server">Dictation is processed by your own speech server.</string>
+    <string name="voice_now_none">Dictation unavailable. Type instead.</string>
+    <string name="voice_hosted_rule">Your server may use a hosted speech service for ordinary chats. Clips spoken into a chat that read local-only items go to a local speech server only.</string>
+    <string name="voice_no_speech">No speech heard. Try again.</string>
+    <string name="voice_err_no_match">No speech heard. Try again.</string>
+    <string name="voice_err_permissions">Dictation requires the microphone.</string>
+    <string name="voice_err_network">Speech recognition requires a connection. Type instead or try again.</string>
+    <string name="voice_err_busy">Speech recognition busy. Try again.</string>
+    <string name="voice_err_audio">The microphone is in use by another app.</string>
+    <string name="voice_err_language_not_supported">This phone can\'t do voice typing in this language.</string>
+    <string name="voice_err_language_unavailable">Voice typing for this language isn\'t on this phone yet.</string>
+    <string name="voice_err_other">Dictation stopped (error %1$d). Type instead or try again.</string>
+    <string name="voice_server_failed">Couldn\'t transcribe the clip.</string>
+    <string name="voice_server_unreachable">Couldn\'t reach your server. Type instead or try again.</string>
+</resources>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings → Ambrose → Addresses that speak for you: the web's
+     settings.assistant.trustedSection.* strings in frontend/src/locales/en.json, worded the same. -->
+<resources>
+    <string name="trusted_title">Trusted addresses</string>
+    <string name="trusted_settings_sub">Your addresses that %1$s can trust, and addresses for other assistants.</string>
+    <string name="trusted_intro">Your addresses that are not connected to Mailr, such as a work account. Each address counts only after you confirm it with a code, and only for mail verified by its own domain. Mail from these addresses then counts as yours in standing orders.</string>
+    <string name="trusted_none">No addresses yet.</string>
+    <string name="trusted_address_of_yours">An address of yours</string>
+    <string name="trusted_send_code">Send code</string>
+    <plurals name="trusted_how">
+        <item quantity="one">A code is sent to the address. Enter it here within %1$d minute. The address counts only after that, and only for mail verified by its own domain.</item>
+        <item quantity="other">A code is sent to the address. Enter it here within %1$d minutes. The address counts only after that, and only for mail verified by its own domain.</item>
+    </plurals>
+    <string name="trusted_look_like_yours">Suggested addresses</string>
+    <plurals name="trusted_messages_from">
+        <item quantity="one">%1$d email from it</item>
+        <item quantity="other">%1$d emails from it</item>
+    </plurals>
+    <string name="trusted_state_confirmed">Confirmed</string>
+    <string name="trusted_state_pending">Code sent</string>
+    <string name="trusted_state_expired">Code expired</string>
+    <string name="trusted_last_verified">Its last mail was verified by its domain.</string>
+    <string name="trusted_last_not_verified">Its last mail was not verified by its domain, so a note in it would not count.</string>
+    <string name="trusted_code">Code</string>
+    <string name="trusted_confirm">Confirm</string>
+    <string name="trusted_resend">Send a new code</string>
+    <string name="trusted_remove">Remove</string>
+    <string name="trusted_remove_address">Remove %1$s</string>
+    <string name="trusted_cancel">Cancel</string>
+    <string name="trusted_remove_title">Remove %1$s?</string>
+    <string name="trusted_remove_body">Mail from this address becomes ordinary mail again. To add it back, you need a new code.</string>
+    <plurals name="trusted_code_sent">
+        <item quantity="one">Code sent to %1$s, valid for %2$d minute.</item>
+        <item quantity="other">Code sent to %1$s, valid for %2$d minutes.</item>
+    </plurals>
+    <string name="trusted_confirmed_msg">%1$s confirmed</string>
+    <string name="trusted_removed_msg">%1$s removed from trusted addresses</string>
+    <string name="trusted_from_forward">From your forward “%1$s”</string>
+    <string name="trusted_follow_order">Notes you forward from these addresses are handled by %1$s under the standing order “Follow my forwarded notes”.</string>
+    <string name="trusted_open_orders">Standing orders</string>
+    <string name="trusted_elsewhere_title">Addresses for other assistants</string>
+    <string name="trusted_elsewhere_desc">Your addresses that another assistant reads and acts on, such as an alias for a separate assistant. Mail sent only to these addresses is skipped by standing orders, so two assistants never act on the same forward. An order that names the address in its search still runs.</string>
+    <string name="trusted_elsewhere_none">None. Standing orders run on mail to all your addresses.</string>
+    <string name="trusted_elsewhere_address">Address for another assistant</string>
+    <string name="trusted_elsewhere_add">Add</string>
+    <string name="trusted_elsewhere_remove">Remove %1$s</string>
+    <string name="trusted_elsewhere_added">Mail sent only to %1$s is now skipped by standing orders</string>
+    <string name="trusted_elsewhere_removed">Standing orders run on mail to %1$s again</string>
+</resources>

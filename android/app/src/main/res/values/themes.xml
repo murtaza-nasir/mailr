@@ -1,0 +1,23 @@
+<resources>
+    <style name="Theme.Mailr" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/splash_bg</item>
+    </style>
+    <style name="Theme.Mailr.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_bg</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.Mailr</item>
+    </style>
+    <!-- "Send to self": a see-through window; the card and its scrim are drawn in Compose. -->
+    <style name="Theme.Mailr.Overlay" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+    <!-- HandoverActivity shows nothing while it asks the server (the Notes app's Continue as). -->
+    <style name="Theme.Mailr.Handover" parent="android:Theme.Translucent.NoTitleBar" />
+</resources>

@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">Mailr</string>
+    <string name="channel_mail">New mail</string>
+    <string name="channel_connection">Live connection</string>
+    <string name="channel_connection_desc">Shown while the live connection is on.</string>
+    <string name="channel_mail_desc">Important and Primary mail as it arrives</string>
+    <string name="channel_approvals">Waiting for you</string>
+    <string name="channel_assistant">Assistant</string>
+    <string name="channel_assistant_desc">Briefings, digests and alerts from standing orders</string>
+    <string name="channel_approvals_desc">Actions waiting for your approval</string>
+    <string name="channel_sending">Sending</string>
+    <string name="channel_sending_desc">Messages that couldn\'t be sent</string>
+    <string name="share_compose_label">New email</string>
+    <string name="share_self_label">Send to self</string>
+    <string name="share_self_long">Send to yourself</string>
+    <string name="share_self_person">Me</string>
+    <string name="self_sending">Sending to yourself…</string>
+    <string name="self_failed">Couldn\'t send to yourself</string>
+    <string name="action_try_again">Try again</string>
+    <string name="channel_event_reminders">Event reminders</string>
+    <string name="channel_event_reminders_desc">Before calendar events start</string>
+    <string name="channel_task_reminders">Task reminders</string>
+    <string name="channel_task_reminders_desc">When tasks are due</string>
+    <string name="channel_missed_reminders">Missed reminders</string>
+    <string name="channel_missed_reminders_desc">Reminders due while the phone was off</string>
+    <string name="channel_agenda">Morning agenda</string>
+    <string name="channel_agenda_desc">Today\'s events and tasks, each morning</string>
+    <!-- Static labels (the manifest and the widget picker read them before the app has run, so they keep
+         the default name). At runtime the widget, the tile and the shortcuts use today_talk, ask_shortcut_* with the user's name. -->
+    <string name="ask_widget_label">Ask Ambrose</string>
+    <!-- %1$s is the assistant's name (Ambrose unless the user renamed it); dynamic launcher shortcuts. -->
+    <string name="ask_shortcut_short">Ask %1$s</string>
+    <string name="ask_shortcut_long">Ask %1$s</string>
+    <string name="dictate_shortcut_short">Dictate</string>
+    <string name="dictate_shortcut_long">Dictate to %1$s</string>
+    <string name="talk_widget_label">Talk to Ambrose</string>
+    <string name="talk_widget_desc">Tap to talk to Ambrose</string>
+    <string name="talk_tile_label">Talk to Ambrose</string>
+    <string name="today_widget_label">Today</string>
+    <string name="today_widget_desc">Today\'s events and tasks</string>
+    <string name="agenda_widget_label">Agenda</string>
+    <string name="agenda_widget_desc">The next few days, tasks and weather</string>
+    <string name="new_task_tile_label">New task</string>
+    <string name="channel_recording">Recording</string>
+    <string name="channel_recording_desc">Speakr recording in progress</string>
+</resources>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda widget, numeral duotone: the start half, right to left (light). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#DBCDE7F0" />
+
+    <corners android:topLeftRadius="0dp" android:bottomLeftRadius="0dp" android:topRightRadius="28dp" android:bottomRightRadius="28dp" />
+</shape>

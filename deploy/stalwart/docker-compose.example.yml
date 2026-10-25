@@ -1,0 +1,30 @@
+# Example: Stalwart as mailr's mail store. Merge into the main compose file.
+# Only 143/993 are meant for the outside world (phones); 8080 (JMAP + management)
+# stays on the internal network and is reached by the mailr backend as http://stalwart:8080.
+services:
+  stalwart:
+    image: stalwartlabs/stalwart:v0.16.23   # pin; :latest moves weekly
+    restart: unless-stopped
+    entrypoint: ["/bin/sh", "/opt/mailr/entrypoint.sh"]
+    environment:
+      STALWART_HOSTNAME: mail.example.com          # SMTP/greeting/hostname; also the default public URL host
+      STALWART_PUBLIC_URL: http://stalwart:8080    # makes JMAP session URLs usable from the backend
+      STALWART_RECOVERY_ADMIN: admin:${STALWART_ADMIN_PASSWORD}   # provisioning + break-glass admin
+      MAILR_DOMAIN: example.com
+      MAILR_SVC_USER: mailr-svc
+      MAILR_SVC_PASSWORD: ${MAILR_SVC_PASSWORD}
+      MAILR_TRUSTED_NET: 172.16.0.0/12
+      # STALWART_PG_PASSWORD: ${STALWART_PG_PASSWORD}   # only with config.postgres.json
+    volumes:
+      - ./stalwart/config.json:/etc/stalwart/config.json:ro
+      - ./stalwart/provision.json:/opt/mailr/provision.json:ro
+      - ./stalwart/provision-groupware.json:/opt/mailr/provision-groupware.json:ro
+      - ./stalwart/entrypoint.sh:/opt/mailr/entrypoint.sh:ro
+      - stalwart-data:/var/lib/stalwart
+    ports:
+      - "143:143"
+      - "993:993"
+    # expose 8080 only to the backend network (no host port)
+
+volumes:
+  stalwart-data:

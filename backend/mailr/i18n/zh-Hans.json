@@ -1,0 +1,1704 @@
+{
+  "_meta": {
+    "language": "英语",
+    "native": "英语"
+  },
+  "common": {
+    "no_subject": "（无主题）"
+  },
+  "errors": {
+    "common": {
+      "not_found": "未找到",
+      "nothing_to_change": "没有可更改的内容",
+      "invalid_email": "无效的电子邮件地址",
+      "invalid_cursor": "无效的游标",
+      "too_large": "内容过大",
+      "event_not_found": "未找到活动",
+      "task_not_found": "未找到任务",
+      "note_not_found": "未找到笔记",
+      "table_not_found": "未找到表格",
+      "list_not_found": "未找到列表",
+      "draft_not_found": "未找到草稿",
+      "memory_not_found": "未找到记忆",
+      "conversation_not_found": "未找到会话",
+      "not_an_email": "不是有效的电子邮件地址",
+      "unknown_connector": "未知的连接器",
+      "uploads_busy": "同时上传的文件过多，请稍后再试"
+    },
+    "mail": {
+      "conversation_not_found": "未找到会话",
+      "message_not_found": "未找到邮件",
+      "attached_email_unreadable": "无法显示此附件邮件，请下载后在其他应用中打开",
+      "rule_not_found": "未找到规则",
+      "approve_user_only": "只有用户可以批准发送",
+      "attachment_expired": "附件上传已过期；请重新附加文件",
+      "attachments_limit": "附件大小上限为 {{max}} MB",
+      "image_proxy_off": "图片代理已关闭",
+      "image_unavailable": "图片不可用",
+      "images_paused": "图片已暂停",
+      "inline_image_type": "仅支持内联显示 PNG、JPEG、GIF 和 WebP 图片",
+      "message_no_unsubscribe_link": "此邮件没有退订链接",
+      "messages_not_in_conversation": "邮件不属于此会话",
+      "no_delete_forever_list": "无法永久删除整个列表；请清空回收站",
+      "no_identities": "尚无身份",
+      "no_layout_section": "没有此布局部分",
+      "no_such_image": "没有此图片",
+      "no_such_part": "没有此部分",
+      "nothing_to_undo": "没有可撤消的操作",
+      "reject_user_only": "只有用户可以拒绝发送",
+      "unsubscribe_refused": "未通过邮件退订 {{to}}：{{reason}}",
+      "uploads_full": "你待发送的附件已占满此服务器为你保留的 {{max}} MB；请先发送或删除带附件的草稿，然后重试"
+    },
+    "calendar": {
+      "event_not_found": "未找到活动",
+      "task_not_found": "未找到任务",
+      "calendar_not_found": "未找到日历",
+      "cancel_not_verified": "没有人验证组织者发送了此取消通知，因此该活动仍保留在您的日历中",
+      "link_needs_confirmation": "请先选择组织者：{{organizer}} 可能会更改此活动",
+      "link_not_verified": "没有人验证邀请的发送者是组织者，因此它无法接管您的活动",
+      "account_not_found": "未找到日历账户",
+      "accounts_change_user_only": "只有用户可以更改日历账户",
+      "accounts_connect_user_only": "日历账户仅由已登录用户连接",
+      "accounts_remove_user_only": "仅用户可移除日历账户",
+      "answer_user_only": "仅用户可在此处回复邀请",
+      "builtin_cannot_remove": "无法移除 Mailr 日历。您可以将其隐藏。",
+      "builtin_fixed": "无法更改 Mailr 日历的名称、地址和登录信息。您可以将其隐藏。",
+      "choose_a_change": "请至少选择一项更改",
+      "confirm_calendar_name": "确认内容必须为日历名称",
+      "copy_caldav_only": "仅已连接的 CalDAV 账户可复制到 Mailr 日历",
+      "decline_proposal_user_only": "仅用户可拒绝提议的时间",
+      "defaults_user_only": "日历默认设置仅由已登录用户设置",
+      "deleted_on_server": "它已在日历服务器上被删除",
+      "event_needs_start": "活动需要开始时间",
+      "file_limit_5mb": "日历文件大小限制为 5 MB",
+      "file_no_events": "文件中没有活动",
+      "group_calendar_not_found": "未找到群组日历",
+      "group_freebusy_user_only": "您所在群组的空闲/忙碌状态仅对已登录用户可见",
+      "import_max_events": "一次导入最多 {{max}} 个活动",
+      "import_user_only": "仅用户可导入日历文件",
+      "invitation_unreadable": "无法读取邀请",
+      "message_no_ics": "此消息不包含日历文件",
+      "need_sending_address": "请先添加带有发件服务器的发件地址",
+      "need_sending_address_reply": "回复邀请前请先添加发件地址",
+      "no_builtin_calendar": "此服务器上没有您的 Mailr 日历",
+      "no_invitation": "此消息不包含邀请",
+      "no_proposal": "此消息未为此活动提议新的时间",
+      "no_unapplied_change": "此邮件没有未应用的日历更改",
+      "not_a_guest": "您不是此活动的受邀者",
+      "not_a_request": "这不是邀请请求 ({{method}})",
+      "not_ics": "该文件不是 iCalendar (.ics) 文件",
+      "organizer_cancels": "仅组织者可以取消此活动",
+      "proposal_no_time": "提议中没有时间",
+      "proposal_not_guest": "该提议并非来自您所组织活动的受邀者",
+      "proposal_recipients_changed": "受邀者名单已更改；更新后的邀请将发送给：{{notify}}",
+      "proposal_unverified": "无法验证该提议的发件人（{{sender}}）；请先确认您信任此发件人",
+      "range_62_days": "范围必须最多为 62 天",
+      "range_one_year": "范围必须为正数且最多为一年",
+      "range_positive_62_days": "范围必须为正数且最多为 62 天",
+      "read_only": "此日历为只读",
+      "refresh_hours": "每 {{min}} 到 {{max}} 小时刷新一次。",
+      "server_read_only": "更改被拒绝：此日历对您为只读。",
+      "server_rejected_change": "无法在日历服务器上保存更改：{{error}}",
+      "server_rejected_request": "日历服务器拒绝了请求：{{error}}",
+      "server_unexpected": "日历服务器返回了意外响应：{{error}}",
+      "share_not_by_token": "日历不能通过 API 令牌共享。",
+      "signin_failed": "无法登录日历服务器：{{error}}",
+      "store_rejected_change": "无法在邮件存储中保存更改：{{error}}",
+      "subscribe_user_only": "只有已登录的用户可以订阅日历",
+      "subscription_not_found": "未找到订阅",
+      "unknown_calendar": "未知日历",
+      "unverified_user_only": "只有已登录的用户可以应用来自未验证发件人的更改",
+      "window_two_years": "时间窗口必须为正数且不超过两年"
+    },
+    "admin": {
+      "user_not_found": "未找到用户",
+      "endpoint_not_found": "未找到端点",
+      "api_key_again": "再次输入 API 密钥以探测不同的 URL",
+      "cannot_delete_self": "您不能删除自己",
+      "cannot_demote_self": "您不能降级或禁用自己的账户",
+      "egress_from_env": "出口代理已在服务器环境中设置 (MAILR_IMAGE_PROXY_EGRESS)。",
+      "list_models_failed": "无法列出模型：{{error}}",
+      "local_only_needs_local": "仅限本地邮件需要本地端点",
+      "local_public": "{{host}} 是一个公共地址，因此不能标记为本地。请使用您网络或本机上的地址，或将其标记为托管。",
+      "local_public_no_host": "这是一个公共地址，因此不能标记为本地。请使用您网络或本机上的地址，或将其标记为托管。",
+      "password_not_by_token": "密码由已登录的管理员更改，而不是通过 API 令牌",
+      "public_address_first": "请先输入公共地址。"
+    },
+    "accounts": {
+      "account_not_found": "未找到账户",
+      "add_own_accounts": "请在“设置”→“邮件”→“邮件账户”下添加您自己的账户",
+      "admin_connects_not_token": "邮件账户由已登录的管理员连接，而不是通过 API 令牌",
+      "admin_local_only": "管理员要求此账户保持仅限本地",
+      "backup_check_failed": "备份检查失败（{{reason}}）；不会从服务商处删除邮件",
+      "colour_mail_only": "只有邮件账户才有颜色",
+      "colour_unknown": "请选择以下账户颜色之一：蓝色、橙色、绿色、紫色、粉色、青色、红色或黄色",
+      "confirm_account_name": "请准确输入账户名称以确认",
+      "disconnected_by_person": "{{person}} 已断开此账户的连接。请先与其沟通；如果您重新连接，系统会再次通知他们。",
+      "enter_password": "请输入账户密码",
+      "file_too_large_gb": "文件大于 {{max}} GB",
+      "first_sync_running": "首次同步尚未完成",
+      "imap_required": "必须提供收件 (IMAP) 服务器",
+      "import_daily_limit": "你在过去 24 小时内已上传 {{max}} GB 用于导入，已达此服务器每天的上限；请稍后再试",
+      "import_disk_full": "服务器磁盘即将写满，上传已停止；请联系管理员释放空间",
+      "import_space_full": "未完成的导入占用了您的导入空间；请在它们完成后重试",
+      "imports_running": "你正在进行的导入已达此服务器可同时运行的数量（{{max}}）；请在其中一个完成后再开始此导入",
+      "managed_off": "在此服务器上，管理员不能为成员连接邮件账户。请在“设置”→“管理员”→“用户”中启用此功能。",
+      "mode_not_supported": "此账户类型不支持该模式",
+      "no_backup_yet": "尚无备份；邮件只有在备份后才会从服务商处删除。请在首次每日备份后重试。",
+      "no_new_mail_since_sync": "自首次同步以来，此账户没有新邮件；请给自己发送一封测试邮件并重试",
+      "password_again_change": "更改服务器时请再次输入密码",
+      "password_again_test": "测试不同服务器时请再次输入密码",
+      "person_has_account": "此人已拥有此账户",
+      "provider_unsupported": "暂不支持此提供商",
+      "save_sent_imap_only": "只有 IMAP 帐户会在服务提供商处保存已发送邮件",
+      "sent_copy_mirror_only": "只有设为“保持同步”的 IMAP 账户才会在服务商处保存已发送邮件",
+      "store_needs_mail_export": "此服务器不提供“由Mailr保存邮件”：它需要每日邮件导出，而管理员已将其关闭。请使用“保持同步”。",
+      "turned_off": "此账户已停用，请先启用",
+      "upload_mbox": "请上传 .mbox 文件，或包含 Maildir / mbox 文件的 .zip 压缩包",
+      "upstream_delete_store_only": "只有设为“由Mailr保存邮件”的账户才能从服务商处删除邮件",
+      "user_only": "只有已登录的用户才能管理账户"
+    },
+    "auth": {
+      "password_too_short": "密码必须至少包含 {{min}} 个字符",
+      "no_account": "此用户没有 Mailr 账户",
+      "admin_only": "仅限管理员",
+      "current_password_wrong": "当前密码错误",
+      "handover_app_only": "只有已登录的 Mailr 应用才能移交登录状态",
+      "handover_expired": "此移交已过期或已使用，请重试",
+      "handover_other_app": "此移交并非由当前应用发起",
+      "handover_signed_out": "Mailr 应用已退出登录，请在该处或此处登录",
+      "id_token_azp": "ID 令牌具有意外的授权方",
+      "id_token_no_expiry": "ID 令牌没有过期时间",
+      "id_token_other_app": "ID 令牌并非为 Mailr 应用签发",
+      "id_token_other_provider": "ID 令牌由不同的提供商签发",
+      "id_token_other_server": "此登录是为另一台服务器发起的；请检查服务器地址，然后重新登录",
+      "id_token_rejected": "ID 令牌被拒绝",
+      "id_token_rejected_why": "ID 令牌被拒绝：{{error}}",
+      "id_token_signature": "ID 令牌签名无效",
+      "id_token_too_old": "ID 令牌太旧，请重新登录",
+      "imap_password_user_only": "只有用户本人才能创建 IMAP 密码",
+      "local_login_disabled": "本地登录已禁用",
+      "native_not_configured": "未配置原生登录",
+      "native_update_app": "此应用版本已无法登录；请更新应用，然后重新登录",
+      "nonce_mismatch": "nonce 不匹配",
+      "oidc_not_configured": "未配置 OIDC",
+      "password_signin_off": "此服务器已关闭密码登录",
+      "password_user_only": "只有用户本人才能更改密码",
+      "profile_user_only": "只有用户本人才能更改个人资料",
+      "provider_keys_unavailable": "无法获取登录提供方的密钥",
+      "provider_not_accepted": "登录提供商未接受登录，请重试",
+      "provider_refused": "登录提供商拒绝或取消了登录",
+      "revoke_user_only": "只有用户本人才能撤销会话",
+      "sessions_user_only": "只有用户本人才能列出会话",
+      "signin_expired": "登录会话已过期，请重试",
+      "signin_used": "此登录已被使用，请重新登录",
+      "signs_in_with_sso": "此账户使用单点登录；管理员可以设置密码",
+      "signup_disabled": "注册已禁用",
+      "state_mismatch": "state 不匹配",
+      "token_unverifiable": "无法验证来自登录提供方的令牌",
+      "token_wrong_app": "令牌并非为此应用签发",
+      "unknown_session": "未知的会话 ID",
+      "wrong_credentials": "电子邮件或密码错误"
+    },
+    "outbox": {
+      "message_state": "邮件状态为 {{status}}"
+    },
+    "tables": {
+      "view_not_found": "未找到视图",
+      "row_not_found": "未找到行",
+      "column_limit": "此表格已有 {{max}} 列，已达上限",
+      "calendar_needs_date": "只有日期列可在日历中显示",
+      "choose_import_column": "请至少选择一列进行导入",
+      "max_days": "最多只能请求 {{max}} 天",
+      "no_matching_column": "文件中的列与此表格中的列不匹配",
+      "no_such_column": "此表格没有该列",
+      "not_link_column": "不是链接列",
+      "tokens_use_tools": "API 令牌只能通过 {{name}} 的工具访问表格"
+    },
+    "websearch": {
+      "provider_not_found": "未找到提供方",
+      "api_key_again": "重新输入 API 密钥以测试不同的 URL",
+      "provider_name_taken": "已存在同名提供方",
+      "reader_from_env": "此阅读器已在服务器环境中设置 (MAILR_BROWSER_URL)；请将其关闭，或移除该变量"
+    },
+    "pictures": {
+      "no_picture": "没有图片",
+      "changed_by_user": "图片已被用户更改",
+      "limit_2mb": "图片大小限制为 2 MB",
+      "no_provider_picture": "您的登录提供方未发送图片；请使用单点登录重新登录",
+      "provider_fetch_failed": "无法从您的登录提供方获取头像",
+      "provider_host_blocked": "此服务器已屏蔽您登录提供方的图片主机",
+      "removed_by_user": "图片已被用户移除",
+      "set_by_user": "图片已由用户设置",
+      "too_large": "图片过大",
+      "wrong_type": "请上传 PNG、JPEG、GIF 或 WebP 图片"
+    },
+    "labels": {
+      "label_not_found": "未找到标签",
+      "account_not_found": "未找到邮件账户",
+      "name_required": "标签需要名称",
+      "limit": "您已有 {{max}} 个标签，已达上限",
+      "name_too_long": "标签名称最多可包含 {{max}} 个字符",
+      "choose_own": "请选择您自己的标签之一",
+      "colours_user_only": "只有用户可以一次性更改所有标签颜色",
+      "label_not_found_named": "未找到标签：{{label}}",
+      "name_missing": "需要名称"
+    },
+    "identities": {
+      "identity_not_found": "未找到身份",
+      "user_managed": "身份由用户管理"
+    },
+    "people": {
+      "unknown_person": "未知联系人"
+    },
+    "assistant": {
+      "unknown_session": "未知的聊天会话",
+      "chat_title_too_long": "聊天标题最多只能有 {{max}} 个字符",
+      "choose_conversation": "请选择一个会话",
+      "no_running_turn": "此对话中没有正在进行的回复",
+      "order_already_ran": "该指令已在该邮件上运行过",
+      "order_not_found": "未找到指令",
+      "order_test_needs_query": "添加搜索内容或问题以进行测试",
+      "orders_in_app": "常设指令在应用中管理（令牌请使用 manage_order 工具）",
+      "still_answering": "助手在此对话中仍在回复；请先停止它",
+      "no_title": "暂时无法生成简短标题，请稍后重试",
+      "empty_chat": "此对话中没有可用于生成标题的问题",
+      "unknown_review": "未知审批",
+      "review_not_running": "此审批未运行",
+      "review_not_stopped": "只有已停止或失败的审批才能继续",
+      "unknown_review_choice": "未知的已记住选择",
+      "review_choices_user_only": "记住的审阅选择需在应用中管理"
+    },
+    "notes": {
+      "section_not_found": "未找到部分",
+      "group_list_owner_only": "只有登录用户才能在群组中创建列表。",
+      "nothing_to_add": "没有可添加的内容",
+      "section_name_required": "章节需要名称",
+      "section_exists": "此列表已有一个名为 {{name}} 的部分",
+      "own_access": "只有所有者可以更改您的访问权限。",
+      "presence_app_only": "在线状态仅来自应用",
+      "share_not_by_token": "笔记和表格不能通过 API 令牌共享。",
+      "version_not_found": "未找到版本"
+    },
+    "forwarding": {
+      "user_managed": "转发地址由登录用户管理",
+      "agents_cannot_change": "代理无法更改转发规则",
+      "agents_cannot_create": "代理无法创建转发规则",
+      "not_verified": "{{address}} 不是经过验证的转发地址（设置 → 邮件 → 过滤器与屏蔽 → 转发地址）",
+      "too_many_codes": "此地址的确认码过多；请稍后一小时再试",
+      "too_many_wrong": "错误代码过多；请删除此地址，稍后重新添加",
+      "unknown_address": "未知的转发地址",
+      "wrong_code": "代码错误"
+    },
+    "permissions": {
+      "rule_not_found": "未找到规则",
+      "approval_not_found": "未找到审批",
+      "different_sources": "请求来自不同的对话或代理；请逐一决定",
+      "user_only": "权限和审批由登录用户管理"
+    },
+    "models": {
+      "none_configured": "未配置语言模型",
+      "call_failed": "模型调用失败：{{error}}",
+      "choices_in_app": "模型选择在应用中完成",
+      "endpoint_cannot_do_task": "{{endpoint}} 无法执行此任务",
+      "model_not_allowed": "您的管理员未允许您使用此模型。",
+      "model_not_listed": "该端点未列出此模型",
+      "not_embedding_model": "此模型无法生成搜索嵌入。请选择嵌入模型，或将搜索索引保留为“无”。",
+      "models_not_allowed": "您的管理员未允许您使用这些模型：{{models}}",
+      "no_such_endpoint": "没有这样的端点",
+      "switch_in_app": "此开关在应用中更改"
+    },
+    "settings": {
+      "user_only": "设置只能由用户更改"
+    },
+    "access": {
+      "default_not_allowed": "{{task}} 的默认值必须是允许的模型之一",
+      "endpoint_cannot_do": "{{endpoint}} 无法执行 {{task}}",
+      "everyone_built_in": "“所有人”策略是内置的。请编辑它。",
+      "everyone_cannot_delete": "“所有人”策略是内置的。若要缩小其范围，请关闭其开关并禁用所有模型。",
+      "everyone_keeps_name": "“所有人”策略无法重命名，且任何组都不能使用该名称。",
+      "group_has_policy": "该组已有策略",
+      "groups_from_idp": "此账户的组来自身份提供者；请在该处更改",
+      "policy_not_found": "未找到策略"
+    },
+    "activity": {
+      "entry_not_found": "未找到条目",
+      "signed_in_only": "动态仅向已登录用户显示"
+    },
+    "cleanup": {
+      "categories_by_sender": "按发件人、域名或列表为组建议类别",
+      "forwarding_in_settings": "请在设置 → 邮件 → 过滤器与屏蔽中创建转发过滤器",
+      "group_changed_other": "群组已更改：当前有 {{count}} 个会话，而非 {{expected}} 个。请再次检查预览。",
+      "no_future_search": "此组没有匹配其未来邮件的搜索条件",
+      "no_sorting_model": "您没有可用的排序模型",
+      "no_unsubscribe_link": "此订阅没有退订链接"
+    },
+    "contacts": {
+      "accept_user_only": "只有已登录用户可以接受建议的组",
+      "dismiss_user_only": "只有已登录用户可以忽略建议的组",
+      "group_from_address_book": "此组来自您的地址簿；请在该处更改",
+      "group_max_members": "一个组最多包含 {{max}} 人",
+      "group_name_required": "请为组命名",
+      "group_not_found": "未找到组",
+      "settings_user_only": "地址簿设置仅适用于已登录用户",
+      "suggest_user_only": "只有已登录用户可以查找组建议",
+      "suggestion_not_found": "未找到建议",
+      "suggestion_user_only": "只有已登录用户可以接受或忽略建议"
+    },
+    "dictation": {
+      "bad_answer": "无法从语音服务器读取答案。",
+      "empty_clip": "剪辑为空。请重试。",
+      "not_audio": "请以音频格式发送剪辑（m4a、mp3、wav、webm 或 ogg）。",
+      "not_set_up": "未设置通过服务器的听写功能。",
+      "server_not_local": "语音服务器必须位于本地网络中。",
+      "timeout": "无法及时连接到语音服务器。",
+      "too_big": "剪辑大小不得超过 {{max}} MB。",
+      "too_long": "剪辑时长不得超过 {{max}} 秒。",
+      "transcribe_failed": "无法转录该音频片段。",
+      "unreachable": "无法连接到语音服务器。",
+      "local_only_unavailable": "仅限本地模型时不可用。未设置用于语音转文本的本地模型。",
+      "env_endpoint": "此端点由 MAILR_ASR_URL 设置，因此其地址在该处更改。"
+    },
+    "filters": {
+      "file_limit_2mb": "过滤器文件限制为 2 MB",
+      "import_user_only": "只有已登录的用户可以导入过滤器",
+      "not_gmail_xml": "不是 Gmail 过滤器 XML 文件",
+      "unknown_label": "操作中包含未知标签"
+    },
+    "intel": {
+      "decision_cannot_accept": "此决定无法被接受",
+      "decision_not_found": "未找到决定",
+      "decisions_lab_user_only": "决定实验室仅适用于已登录用户",
+      "importance_review_user_only": "重要性审查仅适用于已登录用户",
+      "index_admin_only": "仅限管理员：搜索索引由管理员管理",
+      "no_embedding_endpoint": "未配置嵌入端点（设置 → 管理员 → 模型，任务“embed”）",
+      "retriage_user_only": "重新运行分类仅针对已登录用户",
+      "translation_failed": "无法翻译：{{error}}",
+      "unknown_smart_label": "未知智能标签"
+    },
+    "invites": {
+      "expired": "此邀请已过期。请请求新的邀请。",
+      "invite_not_found": "未找到邀请",
+      "link_not_valid": "此邀请链接无效。请请求新的链接。",
+      "password_min_10": "请使用至少 10 个字符。",
+      "revoked": "此邀请已被撤回。请请求新的邀请。",
+      "sign_in_first": "请先登录。",
+      "signs_in_another_way": "此账户使用不同的登录方式。请使用登录按钮。",
+      "used": "此邀请已被使用。请登录以继续。",
+      "wrong_account": "此邀请是发给 {{invited}} 的。您已登录为 {{current}}。请退出登录并重新打开链接。"
+    },
+    "knowledge": {
+      "entity_not_found": "未找到实体",
+      "only_builtin_reset": "仅可重置内置技能",
+      "skill_no_instructions": "该技能没有指令",
+      "skill_not_found": "未找到技能",
+      "suggestion_not_found": "未找到建议"
+    },
+    "layouts": {
+      "layout_not_found": "未找到该布局",
+      "user_only": "布局仅可由用户更改"
+    },
+    "live": {
+      "filter_not_found": "未找到过滤器",
+      "stream_apps_only": "实时事件流仅适用于已登录的应用",
+      "typing_apps_only": "输入状态报告仅来自已登录的应用"
+    },
+    "onboarding": {
+      "admins_may_not_connect": "在此服务器上，管理员不能为成员连接邮件账号。",
+      "already_connected": "此账号已连接；请在“管理员 → 用户”下管理",
+      "nothing_to_summarise": "暂无内容可摘要",
+      "prepare_not_by_token": "邮件账号由已登录的管理员准备，而非通过 API 令牌",
+      "prepare_one_person": "邮件账号只能为一个人（通过电子邮件地址）准备，不能为群组准备",
+      "preset_exists": "该地址或群组已存在预设",
+      "preset_not_found": "未找到预设",
+      "too_many_presets": "预设过多；请先删除一些",
+      "user_only": "设置指南属于已登录用户"
+    },
+    "phone": {
+      "app_not_on_server": "此服务器上没有 {{app}} 应用",
+      "mail_server_no_answer": "无法连接到邮件服务器。请稍后重试。",
+      "no_such_app": "未找到该应用",
+      "no_such_app_password": "未找到该应用密码",
+      "passwords_not_by_token": "手机应用密码不能通过 API 令牌管理。",
+      "version_format": "请使用类似 1.1.0 的版本号，或留空。"
+    },
+    "push": {
+      "target_not_found": "未找到推送目标",
+      "user_only": "推送目标由已登录用户或应用会话管理"
+    },
+    "reminders": {
+      "invalid_token": "无效的提醒令牌",
+      "notification_expired": "通知已过期；请打开 Mailr 以处理该提醒",
+      "push_user_only": "推送订阅由当前登录用户管理",
+      "settings_user_only": "提醒设置由用户更改",
+      "snooze_too_far": "延后时间超过一年",
+      "task_changed": "该任务已在其他设备上更改；请打开 Mailr 以完成它"
+    },
+    "screener": {
+      "decision_user_only": "只有您可以更改 Screener 决定",
+      "no_such_account": "没有此邮件账户：{{accounts}}",
+      "no_such_sender": "Screener 中没有此发件人",
+      "settings_change_user_only": "只有您可以更改 Screener 设置",
+      "settings_see_user_only": "只有您可以查看 Screener 设置"
+    },
+    "spam": {
+      "not_on_list": "不在列表中",
+      "user_only": "垃圾邮件列表只能由用户更改"
+    },
+    "speakr": {
+      "account_not_found": "未找到 Speakr 账户",
+      "account_user_only": "只有当前登录用户可以更改 Speakr 账户",
+      "error": "Speakr: {{error}}",
+      "error_hint": "Speakr：{{error}} {{hint}}",
+      "field_too_long": "字段过长",
+      "file_empty": "文件为空",
+      "local_only_no_model": "此录音仅限本地，且没有可用的本地模型",
+      "merge_in_app": "参与者在“录音”应用中合并",
+      "no_model": "未为此配置模型",
+      "not_connected": "未连接任何 Speakr 账户（设置 → 邮件 → 邮件账户 → Speakr）",
+      "recording_not_found": "在 Speakr 中未找到录音",
+      "recording_too_large": "Mailr 中的录音限制为 {{max}} MB"
+    },
+    "tasks": {
+      "nothing_to_move": "没有可移动的内容"
+    },
+    "templates": {
+      "name_required": "模板需要名称",
+      "shortcut_taken": "另一个模板已使用 ;{{shortcut}}",
+      "template_not_found": "未找到模板"
+    },
+    "tokens": {
+      "token_not_found": "未找到令牌",
+      "unknown_token": "未知令牌",
+      "user_only": "令牌只能由当前登录用户管理"
+    },
+    "import": {
+      "not_a_zip": "{{name}} 不是可读的 .zip 文件",
+      "zip_too_many_files": "{{name}} 包含超过 {{max}} 个文件",
+      "zip_too_large": "{{name}} 解压后的笔记超过 {{mb}} MB",
+      "too_many_notes": "一次导入最多 {{max}} 条笔记",
+      "too_many_contacts": "一次导入最多 {{max}} 个联系人",
+      "too_many_events": "一次导入最多 {{max}} 个活动",
+      "bad_kind": "类型必须是 {{kinds}} 之一",
+      "read_only_calendar": "此日历为只读",
+      "already_undone": "此导入已撤消。",
+      "user_only": "只有已登录的用户可以导入",
+      "not_found": "未找到导入"
+    },
+    "trusted": {
+      "user_managed": "只有您可以在“设置”→“{{name}}”中更改受信任的地址",
+      "too_many_codes": "此地址的验证码过多；请稍后一小时再试",
+      "too_many_codes_today": "您每天最多可发送 {{max}} 个验证码，请明天再试",
+      "already_yours": "这已经是您在 Mailr 中的自有地址之一",
+      "already_confirmed": "此地址已确认",
+      "address_limit": "您最多可以拥有 {{max}} 个受信任地址",
+      "not_found": "未知地址",
+      "too_many_wrong": "错误代码过多；请删除此地址，稍后重新添加",
+      "code_expired": "验证码已过期；请发送新的验证码",
+      "wrong_code": "验证码错误"
+    }
+  },
+  "push": {
+    "mail": {
+      "title": "{{name}} 发来的邮件",
+      "unknown_sender": "未知发件人",
+      "body": "新消息"
+    },
+    "private": {
+      "follow_up": {
+        "title": "尚无回复",
+        "body": "打开 Mailr 查看会话。"
+      },
+      "approval": {
+        "title": "需要审批",
+        "body": "打开 Mailr 进行查看。"
+      },
+      "send_failed": {
+        "title": "消息未发送",
+        "body": "打开 Mailr 查看原因。"
+      },
+      "send_uncertain": {
+        "title": "可能已发送",
+        "body": "再次发送前请先在 Mailr 中查看“已发送”。"
+      },
+      "reminder": {
+        "title": "提醒",
+        "body": "打开 Mailr 查看。"
+      },
+      "new_mail": {
+        "title": "Mailr",
+        "body": "新消息"
+      },
+      "important_mail": {
+        "title": "Mailr",
+        "body": "新消息"
+      },
+      "default": {
+        "title": "Mailr",
+        "body": "打开 Mailr 阅读。"
+      }
+    },
+    "approval": {
+      "title": "{{actor}} 的审批请求",
+      "agent_email_title": "批准代理发送的邮件",
+      "to_single": "收件人：{{first}}。",
+      "to_more_other": "收件人：{{first}} 及其他 {{count}} 人。"
+    },
+    "send_failed": {
+      "title": "消息未发送",
+      "body": "发送至 {{to}}：{{error}}"
+    },
+    "send_uncertain": {
+      "title": "可能已发送",
+      "body": "收件人 {{to}}：再次发送前请先查看“已发送”。"
+    },
+    "follow_up": {
+      "title": "{{who}} 未回复",
+      "title_anyone": "尚无回复"
+    },
+    "reminder": {
+      "missed": "已错过：{{title}}",
+      "generic": {
+        "event": "活动提醒",
+        "task": "任务提醒",
+        "note": "笔记提醒",
+        "other": "提醒"
+      }
+    },
+    "account": {
+      "title": "{{name}}：需要密码",
+      "title_private": "需要邮件账户密码",
+      "body": "请在“设置”→“邮件”→“邮件账户”中重新输入。在此之前，不会收到新邮件。"
+    },
+    "test": {
+      "body": "测试通知"
+    }
+  },
+  "health": {
+    "account": {
+      "paused": "已暂停",
+      "signin": "需要密码",
+      "error": "同步失败。正在自动重试。",
+      "first_sync": "首次同步中",
+      "not_synced_yet": "尚未同步",
+      "stale_hours_other": "{{count}} 小时未同步",
+      "stale_days_other": "{{count}} 天未同步",
+      "deletions_held_other": "已暂缓 {{count}} 项服务商处删除：请检查账户",
+      "deletion_paused_export_off": "已暂停在服务商处删除：邮件导出已关闭",
+      "changes_not_synced_other": "{{count}} 项更改尚未同步到服务提供商",
+      "sent_not_saved_other": "有 {{count}} 封已发送邮件无法保存到 {{provider}} 的“已发送”文件夹",
+      "syncing": "正在同步",
+      "ok": "已是最新"
+    },
+    "summary": {
+      "ok_other": "全部 {{count}} 个账户正在同步。",
+      "bad": "{{name}}：{{text}}。",
+      "bad_more_other": "{{name}}：{{text}}（另有 {{count}} 项）。"
+    },
+    "check": {
+      "db": "数据库",
+      "store": "邮件存储",
+      "worker": "后台工作进程",
+      "sync": "邮件账户同步",
+      "export": "每日邮件导出",
+      "backup_target": "备份副本",
+      "calendar_export": "日历和联系人导出",
+      "notes_export": "笔记和表格导出",
+      "push": "推送服务器 (ntfy)",
+      "egress": "图片出站流量 (VPN)",
+      "proxy": "反向代理标头",
+      "db_dump": "数据库转储",
+      "disk": "可用磁盘空间",
+      "jobs_failed": "失败的任务",
+      "store_sync": "邮件存储索引"
+    },
+    "ready": {
+      "reachable": "可访问",
+      "db_unreachable": "数据库无法访问",
+      "store_unreachable": "邮件存储无法访问",
+      "store_answered": "邮件存储返回 {{status}}",
+      "worker_none": "尚无工作进程心跳",
+      "worker_stale": "{{minutes}} 分钟内无工作进程心跳",
+      "worker_ok": "{{seconds}} 秒前有心跳",
+      "sync_none": "没有需要同步的邮件账户",
+      "jobs_overdue_other": "{{count}} 个任务逾期超过 {{minutes}} 分钟",
+      "sync_bad_other": "{{count}} 个账户未同步",
+      "sync_ok_other": "{{count}} 个账户正在同步",
+      "sync_ok_first_other": "{{count}} 个账户正在同步，{{first}} 个正在首次同步",
+      "no_mail": "暂无邮件",
+      "mail_export_off": "已关闭（MAILR_MAIL_EXPORT=false）",
+      "exported_stale_other": "{{count}} 个账户中有 {{stale}} 个未在 {{hours}} 小时内导出",
+      "exported_ok_other": "{{count}} 个账户已在最近 {{hours}} 小时内导出",
+      "exported_waiting_other": "过去 {{hours}} 小时内已导出 {{count}} 个账户中的 {{exported}} 个，有 {{waiting}} 个新账户（首次导出待处理）",
+      "copied_stale_other": "{{count}} 个账号中有 {{stale}} 个未在 {{hours}} 小时内完成复制",
+      "copied_ok_other": "{{count}} 个账号已在最近 {{hours}} 小时内完成复制",
+      "copied_waiting_other": "过去 {{hours}} 小时内已复制 {{count}} 个账户中的 {{exported}} 个，有 {{waiting}} 个新账户（首次复制待处理）",
+      "target_unwritable": "备份目标不可写",
+      "target_unconfigured": "未配置备份目标",
+      "target_missing": "缺少备份目标",
+      "target_unmounted": "备份目标未挂载（缺少 {{marker}} 文件）",
+      "not_configured": "未配置",
+      "target_ok_mail_off": "已挂载且可写；邮件导出已关闭",
+      "no_calendars": "暂无日历",
+      "no_notes": "暂无笔记或表格",
+      "calendar_not_run_other": "{{stale}} 个日历导出任务在 {{hours}} 小时内未运行（共 {{count}} 个）",
+      "calendar_not_copied_other": "{{stale}} 个日历导出任务在 {{hours}} 小时内未复制（共 {{count}} 个）",
+      "calendar_ok_other": "过去 {{hours}} 小时内有 {{count}} 个日历导出任务",
+      "calendar_ok_copied_other": "过去 {{hours}} 小时内有 {{count}} 个日历导出任务并已复制",
+      "calendar_waiting_other": "过去 {{hours}} 小时内已导出 {{count}} 个日历中的 {{exported}} 个，有 {{waiting}} 个新日历（首次导出待处理）",
+      "notes_not_run_other": "{{stale}} 个笔记导出任务在 {{hours}} 小时内未运行（共 {{count}} 个）",
+      "notes_not_copied_other": "{{stale}} 个笔记导出任务在 {{hours}} 小时内未复制（共 {{count}} 个）",
+      "notes_ok_other": "过去 {{hours}} 小时内有 {{count}} 个笔记导出任务",
+      "notes_ok_copied_other": "过去 {{hours}} 小时内有 {{count}} 个笔记导出任务并已复制",
+      "notes_waiting_other": "过去 {{hours}} 小时内已导出 {{count}} 个笔记中的 {{exported}} 个，有 {{waiting}} 个新笔记（首次导出待处理）",
+      "push_none": "未配置推送服务器",
+      "push_unreachable": "推送服务器无法访问",
+      "push_answered": "推送服务器返回 {{status}}",
+      "push_ok": "推送服务器可访问",
+      "proxy_untrusted": "已忽略来自不可信地址的转发标头",
+      "proxy_ok": "没有不可信的转发标头",
+      "dump_off": "夜间数据库转储已关闭",
+      "dump_none": "尚无数据库转储",
+      "dump_failed": "上次数据库转储失败",
+      "dump_stale": "最近 {{hours}} 小时内没有数据库转储",
+      "dump_ok": "上次转储在 {{hours}} 小时前 ({{mb}} MB)",
+      "disk_unreadable": "无法读取可用空间",
+      "disk_full": "{{name}}：仅剩 {{percent}} % 可用空间",
+      "disk_low": "{{name}}：可用空间 {{percent}} %（偏低）",
+      "disk_ok": "最低可用空间 {{percent}} % ({{name}})",
+      "jobs_failed_other": "过去一小时内有 {{count}} 个任务失败",
+      "jobs_failed_none": "过去一小时内没有任务失败",
+      "timed_out": "检查超时",
+      "failed": "检查失败",
+      "store_sync_ok": "没有邮件索引失败",
+      "store_sync_failed_other": "邮件存储中有 {{count}} 封邮件无法建立索引"
+    },
+    "model": {
+      "timeout": "服务器超时。",
+      "connect": "无响应。请检查服务器是否正在运行以及地址是否正确。",
+      "transport": "与服务器的连接失败。",
+      "key_refused": "API 密钥被拒绝。",
+      "unknown_model": "未知的模型名称。",
+      "no_path": "地址错误：路径不存在 (404)。地址通常以 /v1 结尾。",
+      "model_refused": "此模型名称被拒绝。",
+      "busy": "服务器繁忙或超出配额 (429)。",
+      "server_failed": "服务器错误 ({{status}})。",
+      "refused": "请求被拒绝 ({{status}})。",
+      "local_only": "内容为仅限本地，而此端点是托管的。",
+      "said": "{{text}}",
+      "failed": "调用失败。",
+      "no_decision": "未返回决策。请检查地址、密钥和模型名称。",
+      "not_openai": "不是兼容 OpenAI 的聊天端点。"
+    },
+    "task": {
+      "chat": {
+        "label": "{{name}} 与写作",
+        "desc": "聊天、摘要、简报、起草和常设指令。"
+      },
+      "classify": {
+        "label": "分类与决策",
+        "desc": "重要性、分类和常设指令检查。用于每封新邮件，因此请选择快速模型。"
+      },
+      "embed": {
+        "label": "搜索索引",
+        "desc": "用于搜索和 {{name}} 记忆的嵌入。整个服务器使用一个模型，以确保索引的一致性。"
+      },
+      "transcribe": {
+        "label": "语音转文字",
+        "desc": "听写：将语音片段转换为文字。仅当未开启“仅限本地模型”时，托管服务才会处理语音片段。"
+      }
+    }
+  },
+  "invites": {
+    "mail": {
+      "subject": "您的 Mailr 邀请",
+      "body": "打开此链接以加入：{{url}}",
+      "body_until": "请在任意设备上打开此链接以加入 Mailr：\n\n{{url}}\n\n此链接仅可使用一次，有效期至 {{date}}。"
+    }
+  },
+  "digest": {
+    "meetings": {
+      "line": "**今日会议：** {{items}}",
+      "item": "{{time}} {{title}}（[准备]({{url}})）",
+      "untitled": "会议"
+    },
+    "screener_other": "**Screener：** {{count}} 位新发件人待处理（[查看]({{url}})）",
+    "title": "{{name}} · {{order}}",
+    "quiet_line": "• {{title}}：{{body}}"
+  },
+  "assistant": {
+    "quiet_summary_other": "{{name}}：您离开期间有 {{count}} 条更新",
+    "errand": "差事",
+    "forward": "您转发的笔记",
+    "commands": {
+      "new": "开始新对话",
+      "chats": "打开或搜索您的对话",
+      "rename": "重命名此对话",
+      "retitle": "为此对话生成新的简短标题",
+      "delete": "删除此对话",
+      "retry": "重新生成上一条回复",
+      "copy": "复制上一条回复",
+      "note": "将上一条回复保存为笔记",
+      "local": "在此对话中使用本地模型",
+      "model": "显示此对话使用的模型",
+      "help": "列出命令和您的技能",
+      "task": "添加任务",
+      "event": "添加日历活动",
+      "remember": "让 {{name}} 记住某事",
+      "forget": "让 {{name}} 忘记某事",
+      "today": "今天：日历、到期任务和需要您处理的邮件",
+      "week": "本周：活动、截止日期和等待您处理的邮件",
+      "summarize": "总结当前会话",
+      "reply": "为当前会话起草回复",
+      "waiting": "您已发送但尚未收到回复的邮件",
+      "find": "搜索您的邮件",
+      "sweep": "审阅屏幕上的整个列表，并在一张卡片上提出清理建议",
+      "example": {
+        "rename": "/rename 健身记录",
+        "task": "/task 周五下午3点致电银行",
+        "event": "/event 周二上午10点看牙医，时长45分钟",
+        "remember": "/remember 我的健身房周日晚上9点关门",
+        "forget": "/forget 我的旧电话号码",
+        "find": "/find 水管工的发票"
+      },
+      "app_only": "{{command}} 仅在网页版 Mailr 应用中可用。此应用尚不支持该功能。",
+      "needs_text": "请在 {{command}} 后输入您的意图，例如：{{example}}",
+      "model_local": "此对话使用 {{model}}，即您服务器上的本地模型。请在“设置”→“{{name}}”→“模型”中更改。",
+      "model_hosted": "此对话使用 {{model}}，即托管模型。请在“设置”→“{{name}}”→“模型”中更改，或输入 /local 以在此对话中使用本地模型。",
+      "model_none": "未设置聊天模型。请在“设置”→“{{name}}”→“模型”中选择。"
+    },
+    "review_past_choice": "您过去的选择"
+  },
+  "notify": {
+    "shared": "{{by}} 与您共享了“{{name}}”",
+    "local_only_on": "{{by}} 为“{{name}}”启用了仅限本地模型",
+    "local_only_off": "{{by}} 为“{{name}}”禁用了仅限本地模型"
+  },
+  "activity": {
+    "what": {
+      "quoted": "“{{title}}”",
+      "untitled": "（无标题）",
+      "a_conversation": "一个会话",
+      "conversations_other": "{{count}} 个会话",
+      "a_note": "一个笔记",
+      "a_list": "一个列表",
+      "a_table": "一个表格"
+    },
+    "mail": {
+      "archive": "已归档 {{what}}",
+      "inbox": "已将 {{what}} 移至收件箱",
+      "trash": "已将 {{what}} 移至回收站",
+      "untrash": "已从回收站恢复 {{what}}",
+      "spam": "已将 {{what}} 报告为垃圾邮件",
+      "not_spam": "已将 {{what}} 标记为非垃圾邮件",
+      "delete_forever": "已永久删除 {{what}}",
+      "star": "已为 {{what}} 加星标",
+      "unstar": "已取消 {{what}} 的星标",
+      "important": "已将 {{what}} 标记为重要",
+      "not_important": "已将 {{what}} 标记为非重要",
+      "add_labels": "已为 {{what}} 添加标签",
+      "remove_labels": "已移除 {{what}} 的标签",
+      "move": "已移动 {{what}}",
+      "snooze": "已延后 {{what}}",
+      "unsnooze": "已取消延后 {{what}}",
+      "mute": "已将 {{what}} 静音",
+      "unmute": "已取消 {{what}} 的静音",
+      "category": "已更改 {{what}} 的分类",
+      "follow_up": "已为 {{what}} 设置跟进",
+      "cancel_follow_up": "已取消 {{what}} 的跟进",
+      "restore_labels": "已撤消对 {{what}} 的更改",
+      "restore_importance": "已撤消对 {{what}} 的更改",
+      "restore_category": "已撤消对 {{what}} 的更改",
+      "show_in_tab": "已将 {{what}} 移至标签页",
+      "restore_tab": "已撤消对 {{what}} 的更改",
+      "other": "已更改 {{what}}",
+      "forward_note": "在 {{what}} 中开始处理您转发的笔记"
+    },
+    "calendar": {
+      "created": "已创建活动 {{what}}",
+      "cancelled": "已取消活动 {{what}}",
+      "moved": "已移动活动 {{what}}",
+      "changed": "已更改活动 {{what}}",
+      "deleted": "已删除活动 {{what}}"
+    },
+    "tasks": {
+      "added": "已添加任务 {{what}}",
+      "skipped": "本次已跳过 {{what}}",
+      "completed": "已完成 {{what}}",
+      "reopened": "已重新打开 {{what}}",
+      "moved": "已移动任务 {{what}}",
+      "changed": "已更改任务 {{what}}",
+      "deleted": "已删除任务 {{what}}"
+    },
+    "notes": {
+      "created": "已创建 {{what}}",
+      "copied": "已复制 {{what}}",
+      "trashed": "已将 {{what}} 移至回收站",
+      "restored": "已恢复 {{what}}",
+      "purged": "已永久删除 {{what}}",
+      "converted": "已转换 {{what}}",
+      "reverted": "已撤消对 {{what}} 的更改",
+      "revision_restored": "已恢复 {{what}} 的早期版本",
+      "edited": "已编辑 {{what}}",
+      "items_added": "已向 {{what}} 添加项目",
+      "item_deleted": "已删除 {{what}} 中的一个项目",
+      "checked_cleared": "已清除 {{what}} 中已勾选的项目",
+      "unchecked_all": "已取消勾选 {{what}} 中的所有项目",
+      "section_deleted": "已删除 {{what}} 中的一个部分",
+      "item_to_task": "已从 {{what}} 中的一个项目创建任务",
+      "captured": "已添加到 {{what}}",
+      "items_checked": "已勾选 {{what}} 中的项目",
+      "items_unchecked": "已取消勾选 {{what}} 中的项目"
+    },
+    "tables": {
+      "created": "已创建表格 {{what}}",
+      "trashed": "已将表格 {{what}} 移至回收站",
+      "restored": "已恢复表格 {{what}}",
+      "copied": "已复制表格 {{what}}",
+      "rows_added_other": "已向 {{what}} 添加 {{count}} 行",
+      "rows_added_some": "已向 {{what}} 添加行",
+      "rows_deleted_other": "已从 {{what}} 删除 {{count}} 行",
+      "rows_deleted_some": "已从 {{what}} 删除行",
+      "rows_restored_other": "已在 {{what}} 中恢复 {{count}} 行",
+      "rows_restored_some": "已在 {{what}} 中恢复行",
+      "edited": "已编辑 {{what}}",
+      "column_deleted": "已删除 {{what}} 中的一列",
+      "reverted": "已撤消对 {{what}} 的更改"
+    },
+    "account": {
+      "managed_disconnect": "已断开 {{address}} 的连接，该账户由您的管理员连接。除非您的管理员要求，否则不会再次添加。",
+      "managed_disconnected": "{{who}} 已断开 {{address}} 的连接，该账户是您为其连接的。"
+    },
+    "admin": {
+      "changed": "您的管理员已更改您的账户。",
+      "name": "您的管理员已将您的名称更改为 {{name}}。",
+      "role_added": "管理员已将您设为管理员。",
+      "role_removed": "管理员已移除您的管理员角色。",
+      "disabled": "管理员已停用您的账户。",
+      "enabled": "管理员已重新启用您的账户。",
+      "password_set": "管理员已为您设置新密码。您已在所有设备上退出登录。",
+      "password_reset": "管理员已重置您的密码。您已在所有设备上退出登录。",
+      "password_reset_tokens_other": "管理员已重置您的密码。您已在所有设备上退出登录，并且 {{count}} 个 API 令牌已失效。",
+      "email_verified": "管理员已将您的电子邮件地址标记为已验证。",
+      "email_unverified": "管理员已将您的电子邮件地址标记为未验证。",
+      "account_local_only": "您的管理员已将 {{name}} 设为仅限本地。其邮件现在仅发送至本地模型。",
+      "account_connected": "管理员已为您连接 {{address}}。您可以在“设置”>“邮件”>“邮件账户”中断开连接。",
+      "account_reconnected": "在您断开连接后，管理员已为您重新连接 {{address}}。您可以在“设置”>“邮件”>“邮件账户”中断开连接。",
+      "account_removed": "管理员已移除 {{address}}。其邮件仍保留。",
+      "policy_added": "管理员已为您的群组 {{group}} 添加访问规则。",
+      "policy_changed": "管理员已更改您的群组 {{group}} 可使用的功能或模型。",
+      "policy_removed": "管理员已移除您的群组 {{group}} 的访问规则。",
+      "groups": "您的管理员已将您的群组更改为 {{groups}}。功能访问权限取决于您的群组。",
+      "groups_none": "您的管理员已将您从所有群组中移除。功能访问权限取决于您的群组。"
+    }
+  },
+  "approvals": {
+    "mail": {
+      "archive": {
+        "ask": "归档 {{what}}",
+        "done": "已归档 {{what}}",
+        "ing": "正在归档 {{what}}"
+      },
+      "inbox": {
+        "ask": "将 {{what}} 移至收件箱",
+        "done": "已将 {{what}} 移至收件箱",
+        "ing": "正在将 {{what}} 移至收件箱"
+      },
+      "trash": {
+        "ask": "将 {{what}} 移至回收站",
+        "done": "已将 {{what}} 移至回收站",
+        "ing": "正在将 {{what}} 移至回收站"
+      },
+      "untrash": {
+        "ask": "从回收站恢复 {{what}}",
+        "done": "已恢复 {{what}}",
+        "ing": "正在从回收站恢复 {{what}}"
+      },
+      "spam": {
+        "ask": "将 {{what}} 报告为垃圾邮件",
+        "done": "已将 {{what}} 报告为垃圾邮件",
+        "ing": "正在将 {{what}} 报告为垃圾邮件"
+      },
+      "not_spam": {
+        "ask": "将 {{what}} 标记为非垃圾邮件",
+        "done": "已将 {{what}} 标记为非垃圾邮件",
+        "ing": "正在将 {{what}} 标记为非垃圾邮件"
+      },
+      "delete_forever": {
+        "ask": "永久删除 {{what}}",
+        "done": "已永久删除 {{what}}",
+        "ing": "正在永久删除 {{what}}"
+      },
+      "read": {
+        "ask": "将 {{what}} 标记为已读",
+        "done": "已将 {{what}} 标记为已读",
+        "ing": "正在将 {{what}} 标记为已读"
+      },
+      "unread": {
+        "ask": "将 {{what}} 标记为未读",
+        "done": "已将 {{what}} 标记为未读",
+        "ing": "正在将 {{what}} 标记为未读"
+      },
+      "star": {
+        "ask": "为 {{what}} 加星标",
+        "done": "已为 {{what}} 加星标",
+        "ing": "正在为 {{what}} 加星标"
+      },
+      "unstar": {
+        "ask": "取消 {{what}} 的星标",
+        "done": "已取消 {{what}} 的星标",
+        "ing": "正在取消 {{what}} 的星标"
+      },
+      "important": {
+        "ask": "将 {{what}} 标记为重要",
+        "done": "已将 {{what}} 标记为重要",
+        "ing": "正在将 {{what}} 标记为重要"
+      },
+      "not_important": {
+        "ask": "将 {{what}} 标记为非重要",
+        "done": "已将 {{what}} 标记为非重要",
+        "ing": "正在将 {{what}} 标记为非重要"
+      },
+      "add_labels": {
+        "ask": "为 {{what}} 添加标签",
+        "done": "已为 {{what}} 添加标签",
+        "ing": "正在为 {{what}} 添加标签"
+      },
+      "remove_labels": {
+        "ask": "从 {{what}} 移除标签",
+        "done": "已从 {{what}} 移除标签",
+        "ing": "正在从 {{what}} 移除标签"
+      },
+      "move": {
+        "ask": "移动 {{what}}",
+        "done": "已移动 {{what}}",
+        "ing": "正在移动 {{what}}"
+      },
+      "snooze": {
+        "ask": "延后 {{what}}",
+        "done": "已延后 {{what}}",
+        "ing": "正在延后 {{what}}"
+      },
+      "unsnooze": {
+        "ask": "取消延后 {{what}}",
+        "done": "已取消延后 {{what}}",
+        "ing": "正在取消延后 {{what}}"
+      },
+      "mute": {
+        "ask": "静音 {{what}}",
+        "done": "已静音 {{what}}",
+        "ing": "正在静音 {{what}}"
+      },
+      "unmute": {
+        "ask": "取消静音 {{what}}",
+        "done": "已取消静音 {{what}}",
+        "ing": "正在取消静音 {{what}}"
+      },
+      "category": {
+        "ask": "更改 {{what}} 的类别",
+        "done": "已移动 {{what}}",
+        "ing": "正在更改 {{what}} 的类别"
+      },
+      "show_in_tab": {
+        "ask": "将 {{what}} 移至其他标签页",
+        "done": "已将 {{what}} 移至其他标签页",
+        "ing": "正在将 {{what}} 移至其他标签页"
+      },
+      "follow_up": {
+        "ask": "如果 {{what}} 没有回复，请提醒我",
+        "done": "已为 {{what}} 设置提醒",
+        "ing": "正在为 {{what}} 设置提醒"
+      },
+      "cancel_follow_up": {
+        "ask": "取消 {{what}} 的提醒",
+        "done": "已取消 {{what}} 的提醒",
+        "ing": "正在取消 {{what}} 的提醒"
+      },
+      "other": {
+        "ask": "{{action}} {{what}}",
+        "done": "已更改 {{what}}",
+        "ing": "正在更改 {{what}}"
+      }
+    },
+    "what": {
+      "the_conversations": "这些会话",
+      "the_messages": "这些邮件",
+      "messages_other": "{{count}} 封邮件",
+      "conversations_other": "{{count}} 个会话"
+    },
+    "field": {
+      "add_label": "添加标签",
+      "add_labels": "添加标签",
+      "remove_labels": "移除标签",
+      "also": "同时",
+      "then": "然后",
+      "name": "名称",
+      "matches": "匹配条件",
+      "existing_mail": "现有邮件",
+      "matches_now": "当前匹配",
+      "when": "当",
+      "recordings": "录音",
+      "mail": "邮件",
+      "pick_single": "选择一项",
+      "only_if": "仅当",
+      "options": "选项",
+      "errand": "差事",
+      "result_goes_to": "结果发送至",
+      "labels": "标签",
+      "until": "直到",
+      "messages": "消息",
+      "from": "发件人",
+      "to": "收件人",
+      "cc": "抄送",
+      "bcc": "密送",
+      "subject": "主题",
+      "attachments": "附件",
+      "remote_images": "远程图片",
+      "links_to": "链接至",
+      "reminders": "提醒",
+      "show_as": "显示为",
+      "video_link": "视频链接",
+      "status": "状态",
+      "visibility": "可见性",
+      "mail_the_guests": "向宾客发送电子邮件",
+      "note_to_guests": "给宾客的备注",
+      "applies_to": "适用于",
+      "event": "活动",
+      "time": "时间",
+      "title": "标题",
+      "where": "地点",
+      "repeats": "重复",
+      "calendar": "日历",
+      "guests": "受邀者",
+      "notes": "备注",
+      "invitations_to": "邀请对象",
+      "cancellation_to": "取消对象",
+      "task": "任务",
+      "due": "截止日期",
+      "list": "列表",
+      "priority": "优先级",
+      "applies_automatically": "自动应用",
+      "enabled": "已启用",
+      "used_for": "用于",
+      "about": "关于",
+      "instructions": "说明",
+      "note": "备注",
+      "recipients_now": "当前收件人"
+    },
+    "value": {
+      "apply_existing": "也应用于现有邮件",
+      "no_subject": "（无主题）",
+      "none": "无",
+      "free": "空闲",
+      "busy": "忙碌",
+      "status_cancelled": "已取消",
+      "status_confirmed": "已确认",
+      "status_tentative": "暂定",
+      "class_public": "公开",
+      "class_private": "私人",
+      "class_confidential": "机密",
+      "class_default": "默认",
+      "yes": "是",
+      "no": "否",
+      "no_title": "（无标题）",
+      "no_place": "无地点",
+      "another_calendar": "其他日历"
+    },
+    "flag": {
+      "archive": "跳过收件箱",
+      "mark_read": "标记为已读",
+      "star": "加星标",
+      "spam": "移至垃圾邮件",
+      "never_spam": "永不移至垃圾邮件",
+      "trash": "移至回收站",
+      "notify": "通知我",
+      "important_always": "始终标记为重要",
+      "important_never": "从不标记为重要",
+      "category": "归入 {{category}}",
+      "forward": "转发给 {{to}}",
+      "add_to_calendar": "将邀请添加到我的日历"
+    },
+    "flag_inline": {
+      "archive": "跳过收件箱",
+      "mark_read": "标记为已读",
+      "star": "加星标",
+      "spam": "移至垃圾邮件",
+      "never_spam": "从不移至垃圾邮件",
+      "trash": "移至回收站",
+      "notify": "通知我",
+      "important_always": "始终标记为重要",
+      "important_never": "从不标记为重要",
+      "category": "归入 {{category}}",
+      "forward": "转发给 {{to}}",
+      "add_to_calendar": "将邀请添加到我的日历"
+    },
+    "filter": {
+      "title": {
+        "create": "创建过滤器",
+        "update": "修改过滤器",
+        "delete": "删除过滤器",
+        "apply": "对现有邮件运行过滤器"
+      },
+      "who": {
+        "sender": "来自 {{sender}} 的邮件",
+        "senders_other": "来自 {{count}} 位发件人的邮件",
+        "matching": "匹配的邮件"
+      },
+      "summary": {
+        "labels_other": "{{who}} 将添加标签 {{names}}。",
+        "flag": "{{who}}：{{flag}}。"
+      }
+    },
+    "match": {
+      "some_other": "过去 6 个月内有 {{count}} 封邮件，最新的一封是 {{date}} 的“{{subject}}”",
+      "many_other": "过去 6 个月内有超过 {{count}} 封邮件，最新的一封是 {{date}} 的“{{subject}}”",
+      "none": "过去 6 个月内没有邮件。批准前请检查搜索条件。"
+    },
+    "order": {
+      "title": {
+        "create": "创建常设指令",
+        "update": "修改常设指令",
+        "pause": "暂停常设指令",
+        "resume": "恢复常设指令",
+        "delete": "删除常设指令"
+      },
+      "title_named": {
+        "create": "创建常设指令：{{name}}",
+        "update": "修改常设指令：{{name}}",
+        "pause": "暂停常设指令：{{name}}",
+        "resume": "恢复常设指令：{{name}}",
+        "delete": "删除常设指令：{{name}}"
+      },
+      "when": {
+        "message": "每封新邮件",
+        "recording": "每个新录音",
+        "schedule": "按计划（{{schedule}}，{{zone}}）",
+        "schedule_local": "按计划（{{schedule}}，您的时区）"
+      },
+      "when_inline": {
+        "message": "每封新邮件",
+        "recording": "每个新录音",
+        "schedule": "按计划（{{schedule}}，{{zone}}）",
+        "schedule_local": "按计划（{{schedule}}，您的时区）"
+      },
+      "deliver": {
+        "brief": "邮件上的卡片",
+        "notify": "通知",
+        "digest": "摘要"
+      },
+      "summary_other": "将 {{when}} 归入 {{count}} 个选项之一。",
+      "from_trusted": "仅处理您从受信任地址转发的邮件",
+      "from_me": "仅来自您或您受信任地址的邮件"
+    },
+    "who": {
+      "nobody": "无人",
+      "two": "{{first}} 和 {{second}}",
+      "more_other": "{{first}} 和另外 {{count}} 人"
+    },
+    "send": {
+      "title": "发送给 {{who}}"
+    },
+    "event": {
+      "title": "更改活动",
+      "applies_this": "{{span}}（仅此次）",
+      "applies_following": "此次及后续，从 {{day}} 开始",
+      "applies_series_rule": "整个系列（{{rule}}）",
+      "applies_series": "整个系列",
+      "create": "创建活动 {{name}}",
+      "change": "更改 {{name}}",
+      "delete": "删除 {{name}}",
+      "cancel": "取消 {{name}}",
+      "change_occurrence": "更改 {{name}} 的一次活动",
+      "delete_occurrence": "删除 {{name}} 的一次活动",
+      "cancel_occurrence": "取消 {{name}} 的一次活动",
+      "change_unnamed": "更改活动",
+      "delete_unnamed": "删除活动",
+      "cancel_unnamed": "取消活动",
+      "quoted": "“{{name}}”"
+    },
+    "scope": {
+      "this": "仅此次",
+      "following": "此次及后续",
+      "all": "整个系列"
+    },
+    "task": {
+      "title": "更改任务",
+      "add": "添加任务 {{name}}",
+      "change": "更改任务",
+      "complete": "完成任务",
+      "reopen": "重新打开任务",
+      "delete": "删除任务",
+      "delete_cascade": "删除任务及其子任务",
+      "move": "移动任务",
+      "skip": "跳过此次"
+    },
+    "settings": {
+      "title": "更改设置"
+    },
+    "skill": {
+      "title": "更改技能"
+    },
+    "memory": {
+      "title": "更改记忆"
+    },
+    "generic": {
+      "title": "批准此操作"
+    },
+    "draft": {
+      "title_recipients": "更改草稿收件人：{{who}}",
+      "title_change": "将草稿更改为发送给 {{who}}",
+      "title_save": "将草稿保存至 {{who}}",
+      "summary": "不会发送任何邮件。草稿将保留在草稿箱中。"
+    },
+    "reason": {
+      "read_mail": {
+        "plain": "{{who}} 在阅读邮件后撰写了此内容。",
+        "outsider": "{{who}} 在阅读邮件后撰写了此内容。{{names}} 不在该会话中。",
+        "outsiders": "{{who}} 在阅读邮件后撰写了此内容。{{names}} 和 {{last}} 不在该会话中。",
+        "bcc": "{{who}} 在查看邮件后撰写了此内容。该邮件包含密送收件人。"
+      },
+      "read_mail_agent": {
+        "plain": "代理在阅读邮件后撰写了此内容。",
+        "outsider": "代理在阅读邮件后撰写了此内容。{{names}} 不在该会话中。",
+        "outsiders": "代理在阅读邮件后撰写了此内容。{{names}} 和 {{last}} 不在该会话中。",
+        "bcc": "代理在查看邮件后撰写了此内容。该邮件包含密送收件人。"
+      },
+      "draft_recipients": "草稿的收件人将会更改。",
+      "forwarded_unverified": "您转发了此更改。由于无法核实内部消息的撰写者，因此需要您确认。"
+    },
+    "done": {
+      "done": "已完成",
+      "filter_create": "创建了过滤器",
+      "filter_update": "更改了过滤器",
+      "filter_delete": "删除了过滤器",
+      "filter_apply": "对现有邮件运行了过滤器",
+      "order_create": "创建了常设指令",
+      "order_update": "更改了常设指令",
+      "order_pause": "暂停了常设指令",
+      "order_resume": "恢复了常设指令",
+      "order_delete": "删除了常设指令",
+      "sent": "发送了邮件",
+      "label_create": "创建了标签",
+      "label_update": "更改了标签",
+      "label_delete": "删除了标签",
+      "event_added": "添加了活动",
+      "event_changed": "更改了活动",
+      "event_removed": "移除了活动",
+      "rsvp": "发送了您的回复",
+      "task_added": "添加了任务",
+      "task_completed": "完成了任务",
+      "task_deleted": "删除了任务",
+      "task_changed": "更改了任务",
+      "skill_saved": "保存了技能",
+      "memory_saved": "保存了记忆",
+      "memory_forgot": "已删除记忆",
+      "settings_changed": "更改了设置",
+      "unsubscribed": "已退订",
+      "note_made": "创建了笔记",
+      "note_trashed": "移至回收站",
+      "checked_cleared": "清除了已勾选的项目",
+      "note_labels": "更改了标签",
+      "note_changed": "更改了笔记"
+    },
+    "outcome": {
+      "pending": "等待审批",
+      "working": "已批准 · 进行中",
+      "executed": "已批准 · {{done}}",
+      "denied": "已拒绝",
+      "discarded": "已丢弃 · 未作更改",
+      "expired": "已过期",
+      "failed": "已批准 · 失败",
+      "failed_error": "已批准 · 失败：{{error}}"
+    },
+    "step": {
+      "search_mail": "正在搜索邮件“{{q}}”",
+      "view": {
+        "inbox": "正在查看收件箱",
+        "all": "正在查看邮件",
+        "sent": "正在查看已发送邮件",
+        "starred": "正在查看已加星标邮件",
+        "important": "正在查看重要邮件",
+        "drafts": "正在查看草稿",
+        "snoozed": "正在查看已延后邮件",
+        "label": "正在查看标签"
+      },
+      "search_meaning": "正在按含义搜索“{{q}}”",
+      "search_web": "正在搜索网络“{{q}}”",
+      "read_site": "正在读取 {{site}}",
+      "read_page": "正在读取网页",
+      "passages": "正在查找关于“{{q}}”的段落",
+      "passages_in": "正在查找“{{subject}}”中关于“{{q}}”的段落",
+      "read_conversation_named": "正在读取“{{subject}}”",
+      "read_conversation": "正在读取会话",
+      "read_message_named": "正在读取邮件“{{subject}}”",
+      "read_message": "正在读取邮件",
+      "attachment_named": "正在打开“{{name}}”",
+      "attachment": "正在打开附件",
+      "person": "正在查找 {{email}}",
+      "context_named": "正在收集“{{subject}}”的上下文",
+      "context": "正在收集上下文",
+      "recall": "正在搜索记忆“{{q}}”",
+      "remember": "正在将“{{text}}”保存到记忆",
+      "note_named": {
+        "get_note": "正在读取“{{note}}”",
+        "update_note": "正在修改“{{note}}”",
+        "checklist_items": "正在修改“{{note}}”",
+        "delete_note": "正在将“{{note}}”移至回收站",
+        "restore_note": "正在恢复“{{note}}”",
+        "note_history": "正在查看“{{note}}”的版本"
+      },
+      "search_notes": "正在搜索笔记“{{q}}”",
+      "use_skill": "正在使用 /{{name}} 技能",
+      "entity": "正在查找 {{ref}}",
+      "search_calendar_q": "正在搜索日历“{{q}}”",
+      "search_calendar": "正在搜索日历",
+      "find_time": "正在查找时间",
+      "rsvp": {
+        "accepted": "正在接受邀请",
+        "declined": "正在拒绝邀请",
+        "tentative": "正在回复邀请（待定）",
+        "other": "正在回复邀请"
+      },
+      "order_list": "正在检查您的常设指令",
+      "list": {
+        "create": "正在创建任务列表",
+        "rename": "正在重命名任务列表",
+        "color": "正在更改任务列表颜色",
+        "delete": "正在删除任务列表",
+        "other": "正在修改任务列表"
+      },
+      "list_named": {
+        "create": "正在创建任务列表“{{name}}”",
+        "rename": "正在重命名任务列表“{{name}}”",
+        "color": "正在更改任务列表“{{name}}”的颜色",
+        "delete": "正在删除任务列表“{{name}}”",
+        "other": "正在修改任务列表“{{name}}”"
+      },
+      "calendar": {
+        "create": "正在创建日历",
+        "rename": "正在重命名日历",
+        "color": "正在更改日历颜色",
+        "delete": "正在删除日历",
+        "other": "正在修改日历"
+      },
+      "calendar_named": {
+        "create": "正在创建日历“{{name}}”",
+        "rename": "正在重命名日历“{{name}}”",
+        "color": "正在更改日历“{{name}}”的颜色",
+        "delete": "正在删除日历“{{name}}”",
+        "other": "正在修改日历“{{name}}”"
+      },
+      "filter": {
+        "create": "正在创建过滤器",
+        "update": "正在修改过滤器",
+        "delete": "正在删除过滤器",
+        "apply": "正在应用过滤器",
+        "activate": "正在切换过滤器",
+        "save": "正在保存过滤器",
+        "other": "正在修改过滤器"
+      },
+      "filter_named": {
+        "create": "正在创建过滤器“{{name}}”",
+        "update": "正在修改过滤器“{{name}}”",
+        "delete": "正在删除过滤器“{{name}}”",
+        "apply": "正在应用过滤器“{{name}}”",
+        "activate": "正在切换过滤器“{{name}}”",
+        "save": "正在保存过滤器“{{name}}”",
+        "other": "正在修改过滤器“{{name}}”"
+      },
+      "label": {
+        "create": "正在创建标签",
+        "update": "正在修改标签",
+        "delete": "正在删除标签",
+        "apply": "正在应用标签",
+        "activate": "正在切换标签",
+        "save": "正在保存标签",
+        "other": "正在更改标签"
+      },
+      "label_named": {
+        "create": "正在创建标签“{{name}}”",
+        "update": "正在更改标签“{{name}}”",
+        "delete": "正在删除标签“{{name}}”",
+        "apply": "正在应用标签“{{name}}”",
+        "activate": "正在切换标签“{{name}}”",
+        "save": "正在保存标签“{{name}}”",
+        "other": "正在更改标签“{{name}}”"
+      },
+      "layout": {
+        "create": "正在创建收件箱布局",
+        "update": "正在更改收件箱布局",
+        "delete": "正在删除收件箱布局",
+        "apply": "正在应用收件箱布局",
+        "activate": "正在切换收件箱布局",
+        "save": "正在保存收件箱布局",
+        "other": "正在更改收件箱布局"
+      },
+      "layout_named": {
+        "create": "正在创建收件箱布局“{{name}}”",
+        "update": "正在更改收件箱布局“{{name}}”",
+        "delete": "正在删除收件箱布局“{{name}}”",
+        "apply": "正在应用收件箱布局“{{name}}”",
+        "activate": "正在切换收件箱布局“{{name}}”",
+        "save": "正在保存收件箱布局“{{name}}”",
+        "other": "正在更改收件箱布局“{{name}}”"
+      },
+      "order": {
+        "create": "正在创建常设指令",
+        "update": "正在更改常设指令",
+        "delete": "正在删除常设指令",
+        "pause": "正在暂停常设指令",
+        "resume": "正在恢复常设指令",
+        "other": "正在更改常设指令"
+      },
+      "order_named": {
+        "create": "正在创建常设指令“{{name}}”",
+        "update": "正在更改常设指令“{{name}}”",
+        "delete": "正在删除常设指令“{{name}}”",
+        "pause": "正在暂停常设指令“{{name}}”",
+        "resume": "正在恢复常设指令“{{name}}”",
+        "other": "正在更改常设指令“{{name}}”"
+      },
+      "fixed": {
+        "list_labels": "正在检查您的标签",
+        "list_calendar": "正在检查您的日历",
+        "list_tasks": "正在检查您的任务",
+        "create_event": "正在创建日历活动",
+        "create_task": "正在创建任务",
+        "create_draft": "正在撰写草稿",
+        "update_draft": "正在修改草稿",
+        "send_draft": "正在准备发送",
+        "get_outbox_status": "正在检查发件箱",
+        "apply_label": "正在应用标签",
+        "archive": "正在归档",
+        "show_in_tab": "正在切换到标签页",
+        "list_drafts": "正在查看您的草稿",
+        "get_draft": "正在阅读草稿",
+        "list_skills": "正在检查您的技能",
+        "get_skill": "正在阅读技能",
+        "create_skill": "正在保存新技能",
+        "update_skill": "正在更新技能",
+        "forget": "正在删除记忆",
+        "upsert_entity": "正在保存人员或项目",
+        "get_configuration": "正在检查您的设置",
+        "update_settings": "正在更改设置",
+        "update_signature": "正在更改您的签名",
+        "update_profile": "正在更新您的个人资料",
+        "get_brief": "正在阅读简报",
+        "read_screen": "正在读取屏幕内容",
+        "list_view": "正在读取整个列表",
+        "review_mail": "正在开始审阅列表",
+        "list_attachments": "正在检查附件",
+        "update_brief": "正在更新简报",
+        "get_signals": "正在检查紧急事项",
+        "search_events": "正在搜索日历",
+        "get_event": "正在阅读活动",
+        "get_calendar_defaults": "正在检查您的日历",
+        "get_free_busy": "正在检查空闲/忙碌状态",
+        "update_event": "正在更改日历活动",
+        "delete_event": "正在删除日历活动",
+        "cancel_event": "正在取消会议",
+        "search_tasks": "正在搜索您的任务",
+        "update_task": "正在更改任务",
+        "complete_task": "正在完成任务",
+        "move_task": "正在移动任务",
+        "delete_task": "正在删除任务",
+        "bulk_tasks": "正在更改多个任务",
+        "list_reminders": "正在检查您的提醒",
+        "list_recordings": "正在查看您的录音",
+        "get_recording": "正在读取录音",
+        "get_transcript": "正在读取转录文本",
+        "search_recordings": "正在搜索您的录音",
+        "get_summary": "正在读取会议摘要",
+        "recordings_for_event": "正在查找会议录音",
+        "link_recording": "正在关联录音",
+        "propose_action_items": "正在查找行动项",
+        "draft_follow_up": "正在撰写跟进草稿",
+        "send_to_speakr": "正在将文件发送到 Speakr",
+        "update_recording": "正在更改 Speakr 中的录音",
+        "share_recording": "正在创建分享链接",
+        "list_notes": "正在查看您的笔记",
+        "get_note": "正在读取笔记",
+        "create_note": "正在创建笔记",
+        "update_note": "正在更改笔记",
+        "checklist_items": "正在更改列表",
+        "delete_note": "正在将笔记移至回收站",
+        "note_history": "正在检查笔记版本",
+        "manage_note_labels": "正在更改笔记标签"
+      }
+    },
+    "count": {
+      "result_other": "{{count}} 个结果",
+      "passage_other": "{{count}} 个段落",
+      "event_other": "{{count}} 个活动",
+      "task_other": "{{count}} 个任务",
+      "note_other": "{{count}} 条笔记",
+      "version_other": "{{count}} 个版本",
+      "label_other": "{{count}} 个标签",
+      "skill_other": "{{count}} 项技能",
+      "recording_other": "{{count}} 个录音",
+      "draft_other": "{{count}} 个草稿",
+      "attachment_other": "{{count}} 个附件",
+      "conversation_other": "{{count}} 个会话",
+      "message_other": "{{count}} 条消息",
+      "memory_other": "{{count}} 条记忆",
+      "item_other": "{{count}} 个项目"
+    },
+    "result": {
+      "page_read": "已阅读页面",
+      "page_read_cut": "已阅读页面（已缩短）",
+      "nothing_saved": "尚未保存任何内容",
+      "nothing_changed": "未作更改",
+      "open_draft": "已在打开的草稿中更改",
+      "join": "{{first}}，{{rest}}",
+      "already_done": "已在上方完成",
+      "same_again": "结果与之前相同",
+      "results_from_other": "来自 {{provider}} 的 {{count}} 个结果",
+      "items_added_other": "已添加 {{count}} 个项目",
+      "changes_made_other": "已进行 {{count}} 次更改",
+      "waiting_other": "{{count}} 项待您处理",
+      "failed_other": "{{count}} 项失败",
+      "saved_reminds": "已保存 · 提醒时间 {{when}}",
+      "saved_no_reminder": "已保存 · 无提醒",
+      "reviewing_other": "正在审阅 {{count}} 个会话",
+      "review_running_other": "已有 {{count}} 个会话的审阅正在进行中",
+      "nothing_to_review": "没有需要审阅的内容"
+    },
+    "step_outcome": {
+      "approved": "已批准",
+      "denied": "已拒绝",
+      "expired": "已过期",
+      "failed": "失败"
+    },
+    "forward": {
+      "title": "处理您转发的备注",
+      "summary": "您已从受信任的地址转发此邮件。{{name}} 将执行备注中的请求；每个步骤仍需单独获得授权。"
+    }
+  },
+  "mail": {
+    "date": {
+      "weekday": {
+        "0": "周一",
+        "1": "周二",
+        "2": "周三",
+        "3": "周四",
+        "4": "周五",
+        "5": "周六",
+        "6": "周日"
+      },
+      "month": {
+        "1": "1月",
+        "2": "2月",
+        "3": "3月",
+        "4": "4月",
+        "5": "5月",
+        "6": "6月",
+        "7": "7月",
+        "8": "8月",
+        "9": "9月",
+        "10": "10月",
+        "11": "11月",
+        "12": "12月"
+      },
+      "day": "{{year}}年{{month}}月{{day}}日 {{weekday}}",
+      "time": "{{hour}}:{{minute}}",
+      "day_time": "{{date}} {{time}}",
+      "range": "{{start}} – {{end}}",
+      "zone": "{{when}}（{{zone}}）"
+    },
+    "quote": {
+      "wrote": "{{sender}} 于 {{date}} 写道：",
+      "forwarded": "---------- 转发的邮件 ---------",
+      "from": "发件人：{{value}}",
+      "date": "日期：{{value}}",
+      "subject": "主题：{{value}}",
+      "to": "收件人：{{value}}"
+    },
+    "itip": {
+      "subject": {
+        "invitation": "邀请：{{title}}",
+        "update": "已更新的邀请：{{title}}",
+        "cancel": "已取消：{{title}}",
+        "decline_counter": "已拒绝新时间：{{title}}"
+      },
+      "body": {
+        "invitation": "{{organizer}} 邀请您参加此活动。",
+        "update": "{{organizer}} 更新了此活动。",
+        "cancel": "{{organizer}} 取消了此活动。",
+        "cancel_occurrence": "{{organizer}} 取消了此活动的一次实例。",
+        "decline_counter": "{{organizer}} 拒绝了您提议的时间。活动未变更。"
+      },
+      "untitled": "（无标题）",
+      "when": "时间：{{when}}",
+      "where": "地点：{{where}}"
+    },
+    "rsvp": {
+      "subject": {
+        "accepted": "已接受：{{title}}",
+        "declined": "已拒绝：{{title}}",
+        "tentative": "暂定接受：{{title}}"
+      },
+      "body": {
+        "accepted": "{{who}} 接受了此邀请。",
+        "declined": "{{who}} 已拒绝此邀请。",
+        "tentative": "{{who}} 已暂定接受此邀请。"
+      }
+    },
+    "speakr": {
+      "followup_subject": "后续跟进：{{title}}",
+      "followup_notes": "以下是 {{title}} 的笔记。",
+      "our_meeting": "我们的会议",
+      "task_from_recording": "来自录音 {{title}}：{{link}}",
+      "task_from_recording_at": "来自录音 {{title}}（{{time}}）：{{link}}",
+      "task_meeting": "会议：{{link}}",
+      "recording": "录音",
+      "quoted": "“{{title}}”",
+      "signed_in": "已以 {{who}} 身份登录 Speakr。",
+      "signed_in_count_other": "已以 {{who}} 身份登录 Speakr，{{count}} 条录音。",
+      "token_access": "令牌访问权限：{{scopes}}。",
+      "token_full": "完全",
+      "scope": {
+        "full": "此令牌拥有对您 Speakr 账户的完全访问权限，包括删除录音和更改 Webhook。对于 Mailr，使用“集成”预设（读取、写入、上传）即可。",
+        "extra_other": "此令牌还包含 {{scopes}}，Mailr 不会使用这些权限。不含这些权限的令牌更安全。",
+        "no_read": "此令牌无法读取录音。请创建一个具有读取权限的令牌。",
+        "no_write": "此令牌无法编辑。请创建一个具有写入权限的令牌。",
+        "no_share": "此令牌无法创建共享链接。请创建一个具有共享权限的令牌。",
+        "no_upload": "此令牌无法上传，因此 Speakr 中的“转录”和新录音将失败。如果您使用这些功能，请添加上传权限。",
+        "no_webhooks": "Without the webhooks scope, Get updates instantly requires a webhook you create in Speakr."
+      }
+    }
+  },
+  "import": {
+    "untitled": "(无标题)"
+  },
+  "trusted": {
+    "mail": {
+      "subject": "确认代码 {{code}}",
+      "body": "{{who}} 请求将 {{address}} 添加为 {{assistant}} 的受信任地址。\n\n确认码：{{code}}\n\n该确认码将在 {{minutes}} 分钟后过期。如果您未预期收到此消息，请忽略它。在输入确认码之前，不会进行任何更改。"
+    }
+  },
+  "calendar_forward": {
+    "moved": "{{title}} 已移至 {{when}}（原为 {{was}}）",
+    "cancelled": "{{title}} 已被 {{who}} 取消",
+    "changed": "{{title}} 已更改：{{what}}",
+    "what": {
+      "title": "标题",
+      "place": "地点",
+      "description": "描述",
+      "guests": "受邀者",
+      "link": "会议链接",
+      "when": "时间",
+      "details": "详细信息"
+    }
+  },
+  "reminders": {
+    "detail": {
+      "all_day": "全天",
+      "today": "今天",
+      "tomorrow": "明天",
+      "yesterday": "昨天",
+      "date": "{{month}}{{day}}日 {{weekday}}",
+      "due": "截止：{{when}}",
+      "due_at": "截止：{{when}} {{time}}"
+    }
+  }
+}

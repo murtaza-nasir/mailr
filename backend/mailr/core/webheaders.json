@@ -1,0 +1,41 @@
+{
+  "_doc": "The security headers of the web app's pages: the one list that the server (core/webheaders.py, main.py security_headers) and the development and test servers (frontend/vite.config.ts pageHeaders) both use.",
+  "all": {
+    "X-Content-Type-Options": "nosniff",
+    "Referrer-Policy": "no-referrer"
+  },
+  "pages": {
+    "X-Frame-Options": "DENY"
+  },
+  "csp": {
+    "default-src": "'self'",
+    "img-src": "'self' data: blob:",
+    "media-src": "'self' blob:",
+    "style-src": "'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src": "'self' https://fonts.gstatic.com data:",
+    "frame-src": "'self' blob: about:",
+    "connect-src": "'self'",
+    "object-src": "'none'",
+    "base-uri": "'none'",
+    "frame-ancestors": "'none'",
+    "form-action": "'self'"
+  },
+  "csp_remote_images": {
+    "img-src": "https:"
+  },
+  "_doc_help_csp": "The help pages at /help/ (core/helpdocs.py): the built user guide. Its own scripts and styles from /help/, plus the SHA-256 hashes of the docs theme's inline scripts, which core/helpdocs.py adds to script-src from the built pages. The app's policy above never gets them.",
+  "help_csp": {
+    "default-src": "'self'",
+    "script-src": "'self'",
+    "style-src": "'self' 'unsafe-inline'",
+    "img-src": "'self' data:",
+    "font-src": "'self' data:",
+    "connect-src": "'self'",
+    "worker-src": "'self'",
+    "frame-src": "'none'",
+    "object-src": "'none'",
+    "base-uri": "'none'",
+    "frame-ancestors": "'none'",
+    "form-action": "'self'"
+  }
+}

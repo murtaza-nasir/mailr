@@ -1,0 +1,41 @@
+/* Mailr docs: small additions to Material. */
+.md-typeset img[src*="assets/shots/"] {
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+}
+.md-typeset table:not([class]) td code {
+  white-space: nowrap;
+}
+/* At phone width, long names in the first column (MAILR_* variables, setting keys) wrap, so the
+   description column stays on screen. */
+@media (max-width: 600px) {
+  .md-typeset table:not([class]) td:first-child code {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+/* A card's title line (icon, then bold text): the icon and the text share one centre line. */
+.md-typeset .grid.cards > ul > li > p:first-child {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.md-typeset .grid.cards > ul > li > p:first-child > .twemoji {
+  flex: none;
+  margin: 0;
+}
+.md-typeset .grid.cards > ul > li {
+  border-radius: 10px;
+}
+/* Dark scheme: the outline buttons on the landing page use the link colour, which meets the
+   WCAG AA contrast ratio on the slate background (the theme's indigo does not). */
+[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary) {
+  color: var(--md-typeset-a-color);
+  border-color: currentColor;
+}
+[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary):hover,
+[data-md-color-scheme="slate"] .md-typeset .md-button:not(.md-button--primary):focus {
+  color: var(--md-accent-bg-color);
+  background-color: var(--md-accent-fg-color);
+  border-color: var(--md-accent-fg-color);
+}

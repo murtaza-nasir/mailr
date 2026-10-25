@@ -1,0 +1,16 @@
+# User settings: appearance.
+# One line per key, `key: plain description`; `key: {internal: why}` for a key that is not a setting
+# a person chooses. A key may appear in only one file of this folder. The settings map test
+# (frontend/src/features/settings/groups.test.ts) checks that Settings has a place for each one.
+
+reading_pane: "Where a conversation opens: full page, to the right of the list, or below it."
+reading_pane_by_theme: The reading pane position remembered per theme.
+density: "List density: default, comfortable or compact."
+theme: "Light, dark, or follow the system."
+ui_theme: The look of the web app (Classic and the other themes).
+ui_accent: "The colours of the style: one of its presets, or a colour of your own with partner colours ({preset, seed, harmony}; the Android app can use it too)."
+card_bundles: Whether the Cards theme bundles similar mail.
+keyboard_shortcuts: Turn keyboard shortcuts on or off.
+sender_pictures: "Look up sender pictures (BIMI, Gravatar, Libravatar). Off by default."
+label_scheme: The colour scheme the label colour picker uses.
+side_panel: "The side panel shown next to mail: none, calendar, tasks or the assistant."

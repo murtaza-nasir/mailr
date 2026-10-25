@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- The web look's controls (io.github.murtazanasir.mailr.look) -->
+    <string name="look_dismiss">Dismiss</string>
+    <string name="look_date">Date</string>
+    <string name="look_time">Time</string>
+    <string name="look_previous_month">Previous month</string>
+    <string name="look_next_month">Next month</string>
+    <!-- %1$s: today's date written the way the field expects it -->
+    <string name="look_not_a_date">Type a date such as %1$s</string>
+    <!-- %1$s: a time written the way the field expects it -->
+    <string name="look_not_a_time">Type a time such as %1$s</string>
+    <string name="look_use_clock">Pick on the clock</string>
+    <string name="look_type_time">Type the time</string>
+</resources>

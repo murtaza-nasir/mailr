@@ -1,0 +1,4 @@
+[
+  { "file": "src/lib/html.ts", "match": "", "reason": "the mail body frame's stylesheet and mail HTML: written for mail clients" },
+  { "file": "src/features/compose/inlineImages.ts", "match": "margin-left", "reason": "an image's alignment in the mail that is sent: the sender chose left or right" }
+]

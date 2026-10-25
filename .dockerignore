@@ -1,0 +1,13 @@
+**/node_modules
+**/.venv
+**/__pycache__
+**/.data
+**/.env
+frontend/dist
+.git
+deploy/dev
+backend/mailr/data/lid.176.ftz
+backend/mailr/help
+backend/mailr/help.building
+backend/mailr/help.old
+site/site

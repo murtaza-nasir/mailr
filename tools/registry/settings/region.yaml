@@ -1,0 +1,11 @@
+# User settings: Settings → You → Region.
+# One line per key, `key: plain description`; `key: {internal: why}` for a key that is not a setting
+# a person chooses. A key may appear in only one file of this folder. The settings map test
+# (frontend/src/features/settings/groups.test.ts) checks that Settings has a place for each one.
+
+timezone: "Your one time zone, for the calendar, tasks, reminders, tables and Ambrose. The assistant profile's timezone is the same setting."
+time_format: "12-hour, 24-hour, or follow the device."
+week_start: The first day of the week.
+date_order: "How a date such as 12/10 reads in tables and imports: month first or day first."
+currency: "The currency a new currency column uses."
+language: "The language of mailr's words: the web, the phone apps, notifications and Ambrose's replies. Automatic follows the browser or the phone."

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda widget, paper and rail: the paper card (dark). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#D1161D23" />
+    <stroke android:width="1dp" android:color="#14FFFFFF" />
+    <corners android:radius="24dp" />
+</shape>

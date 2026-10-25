@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Memory page and the person card: the web's memory.*, people.card.*
+     and settings.assistant.memory* strings in frontend/src/locales/en.json, worded the same. -->
+<resources>
+    <string name="memory_title">Memory</string>
+    <string name="memory_desc">%1$s\'s memories. Edit or delete any of them.</string>
+    <string name="memory_back">Back</string>
+    <string name="memory_learn_now">Learn now</string>
+    <string name="memory_learn_queued">Learning started. New suggestions show under To review.</string>
+    <string name="memory_add">Add memory</string>
+    <plurals name="memory_last_learned">
+        <item quantity="one">Last learned %1$s · %2$d new</item>
+        <item quantity="other">Last learned %1$s · %2$d new</item>
+    </plurals>
+    <string name="memory_last_failed">Last try %1$s failed. %2$s</string>
+    <string name="memory_learning_off">Learning from mail is off.</string>
+    <string name="memory_never_learned">Not learned from mail yet.</string>
+    <string name="memory_error_model_failed">The model didn\'t answer. Retried in an hour.</string>
+    <string name="memory_error_cut_off">The answer was cut off. Retried in an hour.</string>
+    <string name="memory_error_unreadable">Couldn\'t read the answer. Retried in an hour.</string>
+    <string name="memory_error_gave_up">That mail was skipped after three tries.</string>
+
+    <string name="memory_search">Search memories</string>
+    <string name="memory_clear_search">Clear search</string>
+    <string name="memory_filter_label">Filter by kind</string>
+    <string name="memory_filter_all">All</string>
+    <string name="memory_kind_fact">Fact</string>
+    <string name="memory_kind_preference">Preference</string>
+    <string name="memory_kind_routine">Routine</string>
+    <string name="memory_kind_commitment">Commitment</string>
+    <string name="memory_kind_fact_example">Works at Northwind</string>
+    <string name="memory_kind_preference_example">Prefers short replies</string>
+    <string name="memory_kind_routine_example">Teaches Tuesday evenings</string>
+    <string name="memory_kind_commitment_example">Promised João a licence quote</string>
+    <string name="memory_kind_example">Example: %1$s</string>
+
+    <string name="memory_empty_title">No memories yet</string>
+    <string name="memory_empty_hint">Tell %1$s “remember that Sam is my accountant”, or add one here.</string>
+    <string name="memory_no_match">No memories match.</string>
+    <string name="memory_load_failed">Couldn\'t load memories.</string>
+    <string name="memory_offline_title">You\'re offline</string>
+    <string name="memory_offline_hint">Memories show when you\'re connected.</string>
+    <string name="memory_retry">Retry</string>
+
+    <string name="memory_to_review">To review</string>
+    <string name="memory_to_review_desc">Not used until you keep them.</string>
+    <string name="memory_keep">Keep</string>
+    <string name="memory_keep_all">Keep all</string>
+    <string name="memory_dismiss">Dismiss</string>
+    <string name="memory_dismiss_all">Dismiss all</string>
+    <plurals name="memory_kept">
+        <item quantity="one">%d memory kept.</item>
+        <item quantity="other">%d memories kept.</item>
+    </plurals>
+    <string name="memory_sure">%1$d%% confidence</string>
+    <string name="memory_about_you">About you</string>
+    <string name="memory_about_you_empty">Notes about you show here.</string>
+    <string name="memory_people">People</string>
+    <string name="memory_topics">Topics</string>
+    <string name="memory_open_card">Open card</string>
+    <string name="memory_open_card_of">Open %1$s\'s card</string>
+
+    <string name="memory_source_you">You</string>
+    <string name="memory_source_mail">Learned from mail</string>
+    <string name="memory_source_chat">From a chat</string>
+    <string name="memory_source_link">Source</string>
+    <string name="memory_until">Until %1$s</string>
+    <string name="memory_expired">Expired %1$s</string>
+    <string name="memory_local_only">Local only</string>
+    <string name="memory_local_only_desc">From a local-only account: used with local models only</string>
+    <string name="memory_make_task">Create task</string>
+    <string name="memory_task_made">Task added.</string>
+    <string name="memory_pin">Pin</string>
+    <string name="memory_unpin">Unpin</string>
+    <string name="memory_pin_desc">Always give this to %1$s.</string>
+    <string name="memory_edit">Edit memory</string>
+    <string name="memory_delete">Delete memory</string>
+    <string name="memory_deleted">Memory deleted.</string>
+    <string name="memory_undo">Undo</string>
+    <string name="memory_saved">Memory saved.</string>
+    <string name="memory_will_remember">Saved to %1$s\'s memory.</string>
+    <string name="memory_not_saved">Couldn\'t save.</string>
+    <string name="memory_not_saved_offline">Couldn\'t save. Check the connection.</string>
+
+    <!-- The add and edit sheet. -->
+    <string name="memory_text_label">What should %1$s remember?</string>
+    <string name="memory_text_placeholder">e.g. Sam prefers Thai food and hates early dinners.</string>
+    <string name="memory_kind">Kind</string>
+    <string name="memory_about">About</string>
+    <string name="memory_you">You</string>
+    <string name="memory_new_subject">New person or topic…</string>
+    <string name="memory_new_name">Name</string>
+    <string name="memory_new_person">Person</string>
+    <string name="memory_new_topic">Topic</string>
+    <string name="memory_forget_after">Forget after (optional)</string>
+    <string name="memory_forget_hint">For things like “away until Friday”.</string>
+    <string name="memory_forget_none">Never</string>
+    <string name="memory_forget_clear">Clear date</string>
+    <string name="memory_pick_date">Pick a date</string>
+    <string name="memory_save">Save</string>
+    <string name="memory_cancel">Cancel</string>
+    <string name="memory_entity_person">Person</string>
+    <string name="memory_entity_organization">Organisation</string>
+    <string name="memory_entity_project">Project</string>
+    <string name="memory_entity_topic">Topic</string>
+    <string name="memory_entity_place">Place</string>
+    <string name="memory_subject_option">%1$s (%2$s)</string>
+
+    <!-- Entry points: Ambrose's ⋮ menu and Settings. -->
+    <string name="memory_more_options">More options</string>
+    <string name="memory_settings_sub">%1$s\'s memory of you and the people you write to.</string>
+
+    <!-- The person card. -->
+    <string name="person_card_title">Person</string>
+    <string name="person_knows">%1$s\'s memory</string>
+    <string name="person_knows_nothing">Notes about them show here.</string>
+    <string name="person_no_mail">No mail</string>
+    <string name="person_vip">VIP</string>
+    <string name="person_mail">Mail</string>
+    <string name="person_mail_counts">You wrote %1$d · they wrote %2$d</string>
+    <string name="person_mail_last">You wrote %1$d · they wrote %2$d · last %3$s</string>
+    <string name="person_job_title">Title</string>
+    <string name="person_organisation">Organisation</string>
+    <string name="person_phone">Phone</string>
+    <string name="person_mobile">Mobile</string>
+    <string name="person_address">Address</string>
+    <string name="person_birthday">Birthday</string>
+    <string name="person_groups">Groups</string>
+    <string name="person_emails">Email</string>
+    <string name="person_also_called">Also called</string>
+    <string name="person_domains">Domains</string>
+    <string name="person_load_failed">Couldn\'t load this person.</string>
+    <string name="person_close">Close</string>
+    <string name="person_card_chip">Card: %1$s</string>
+    <!-- "From a chat" on a memory that came from an Ambrose chat: opens that chat at the message. -->
+    <string name="memory_open_chat">Open the chat this came from</string>
+    <string name="memory_chat_still_answering">%1$s is still answering. Try again when it\'s done.</string>
+    <string name="memory_chat_open_failed">Couldn\'t open the chat. Check the connection.</string>
+</resources>

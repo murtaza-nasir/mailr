@@ -1,0 +1,1774 @@
+{
+  "_meta": {
+    "language": "Français",
+    "native": "Français"
+  },
+  "common": {
+    "no_subject": "(sans objet)"
+  },
+  "errors": {
+    "common": {
+      "not_found": "introuvable",
+      "nothing_to_change": "aucune modification à effectuer",
+      "invalid_email": "e-mail non valide",
+      "invalid_cursor": "curseur non valide",
+      "too_large": "trop volumineux",
+      "event_not_found": "événement introuvable",
+      "task_not_found": "tâche introuvable",
+      "note_not_found": "note introuvable",
+      "table_not_found": "tableau introuvable",
+      "list_not_found": "liste introuvable",
+      "draft_not_found": "brouillon introuvable",
+      "memory_not_found": "mémoire introuvable",
+      "conversation_not_found": "conversation introuvable",
+      "not_an_email": "ce n'est pas une adresse e-mail",
+      "unknown_connector": "connecteur inconnu",
+      "uploads_busy": "trop d’envois en même temps ; réessayez dans un instant"
+    },
+    "mail": {
+      "conversation_not_found": "conversation introuvable",
+      "message_not_found": "message introuvable",
+      "attached_email_unreadable": "Ce message joint ne peut pas être affiché ; téléchargez-le pour l'ouvrir ailleurs",
+      "rule_not_found": "règle introuvable",
+      "approve_user_only": "seul l'utilisateur peut approuver les envois",
+      "attachment_expired": "expiration du téléchargement de la pièce jointe ; joignez à nouveau le fichier",
+      "attachments_limit": "les pièces jointes sont limitées à {{max}} Mo",
+      "image_proxy_off": "le proxy d'images est désactivé",
+      "image_unavailable": "image indisponible",
+      "images_paused": "les images sont en pause",
+      "inline_image_type": "seules les images PNG, JPEG, GIF et WebP peuvent être affichées en ligne",
+      "message_no_unsubscribe_link": "ce message ne contient pas de lien de désinscription",
+      "messages_not_in_conversation": "les messages ne font pas partie de cette conversation",
+      "no_delete_forever_list": "la suppression définitive n'est pas disponible pour une liste entière ; videz la Corbeille à la place",
+      "no_identities": "aucune identité pour le moment",
+      "no_layout_section": "section de mise en page introuvable",
+      "no_such_image": "image introuvable",
+      "no_such_part": "élément introuvable",
+      "nothing_to_undo": "rien à annuler",
+      "reject_user_only": "seul l'utilisateur peut rejeter les envois",
+      "unsubscribe_refused": "désinscription par e-mail refusée pour {{to}} : {{reason}}",
+      "uploads_full": "vos pièces jointes en attente d’envoi occupent déjà les {{max}} Mo que ce serveur vous réserve ; envoyez ou supprimez des brouillons avec pièces jointes, puis réessayez"
+    },
+    "calendar": {
+      "event_not_found": "événement introuvable",
+      "task_not_found": "tâche introuvable",
+      "calendar_not_found": "agenda introuvable",
+      "cancel_not_verified": "personne n'a vérifié que l'organisateur a bien envoyé cette annulation, l'événement reste donc dans votre agenda",
+      "link_needs_confirmation": "choisissez d'abord l'organisateur : {{organizer}} peut modifier cet événement",
+      "link_not_verified": "personne n'a vérifié que l'expéditeur de l'invitation est bien l'organisateur, il ne peut donc pas prendre le contrôle de votre événement",
+      "account_not_found": "compte d'agenda introuvable",
+      "accounts_change_user_only": "seul l'utilisateur peut modifier les comptes d'agenda",
+      "accounts_connect_user_only": "les comptes d'agenda sont connectés par l'utilisateur connecté",
+      "accounts_remove_user_only": "seul l'utilisateur peut supprimer des comptes d'agenda",
+      "answer_user_only": "seul l'utilisateur peut répondre aux invitations ici",
+      "builtin_cannot_remove": "L'agenda Mailr ne peut pas être supprimé. Vous pouvez le masquer.",
+      "builtin_fixed": "Le nom, l'adresse et la connexion de l'agenda Mailr ne peuvent pas être modifiés. Vous pouvez le masquer.",
+      "choose_a_change": "choisissez au moins une modification",
+      "confirm_calendar_name": "la confirmation doit correspondre au nom de l'agenda",
+      "copy_caldav_only": "seul un compte CalDAV connecté peut être copié dans l'agenda Mailr",
+      "decline_proposal_user_only": "seul l'utilisateur peut refuser une proposition d'horaire",
+      "defaults_user_only": "les paramètres par défaut de l'agenda sont définis par l'utilisateur connecté",
+      "deleted_on_server": "il a été supprimé sur le serveur d'agenda",
+      "event_needs_start": "un événement nécessite une date de début",
+      "file_limit_5mb": "les fichiers d'agenda sont limités à 5 Mo",
+      "file_no_events": "le fichier ne contient aucun événement",
+      "group_calendar_not_found": "agenda de groupe introuvable",
+      "group_freebusy_user_only": "la disponibilité dans vos groupes est réservée à la personne connectée",
+      "import_max_events": "au maximum {{max}} événements par importation",
+      "import_user_only": "seul l'utilisateur peut importer des fichiers d'agenda",
+      "invitation_unreadable": "impossible de lire l'invitation",
+      "message_no_ics": "ce message ne contient aucun fichier d'agenda",
+      "need_sending_address": "ajoutez d'abord une adresse d'envoi avec un serveur de courrier sortant",
+      "need_sending_address_reply": "ajoutez une adresse d'envoi avant de répondre aux invitations",
+      "no_builtin_calendar": "vous n'avez aucun agenda Mailr sur ce serveur",
+      "no_invitation": "ce message ne contient pas d'invitation",
+      "no_proposal": "ce message ne propose pas de nouvel horaire pour cet événement",
+      "no_unapplied_change": "ce message ne contient aucune modification d'agenda non appliquée",
+      "not_a_guest": "vous n'êtes pas invité à cet événement",
+      "not_a_request": "ceci n'est pas une demande d'invitation ({{method}})",
+      "not_ics": "le fichier n'est pas un fichier iCalendar (.ics)",
+      "organizer_cancels": "seul l'organisateur peut annuler cet événement",
+      "proposal_no_time": "la proposition ne contient pas d'horaire",
+      "proposal_not_guest": "la proposition ne provient pas d'un invité d'un événement que vous organisez",
+      "proposal_recipients_changed": "la liste des invités a changé ; l'invitation mise à jour irait à : {{notify}}",
+      "proposal_unverified": "l'expéditeur de la proposition ({{sender}}) n'a pas pu être vérifié ; confirmez d'abord que vous lui faites confiance",
+      "range_62_days": "la période doit être d'au plus 62 jours",
+      "range_one_year": "la période doit être positive et d'au plus un an",
+      "range_positive_62_days": "la période doit être positive et d'au plus 62 jours",
+      "read_only": "cet agenda est en lecture seule",
+      "refresh_hours": "Actualiser toutes les {{min}} à {{max}} heures.",
+      "server_read_only": "Modification refusée : cet agenda est en lecture seule pour vous.",
+      "server_rejected_change": "impossible d'enregistrer la modification sur le serveur d'agenda : {{error}}",
+      "server_rejected_request": "la demande a été refusée par le serveur d'agenda : {{error}}",
+      "server_unexpected": "Réponse inattendue du serveur d'agenda : {{error}}",
+      "share_not_by_token": "Les agendas ne peuvent pas être partagés via un jeton d'API.",
+      "signin_failed": "impossible de se connecter au serveur d'agenda : {{error}}",
+      "store_rejected_change": "impossible d'enregistrer la modification dans la messagerie : {{error}}",
+      "subscribe_user_only": "seul l'utilisateur connecté peut s'abonner aux agendas",
+      "subscription_not_found": "Abonnement introuvable",
+      "unknown_calendar": "agenda inconnu",
+      "unverified_user_only": "Seul l'utilisateur connecté peut appliquer une modification provenant d'un expéditeur non vérifié",
+      "window_two_years": "La période doit être positive et d'une durée maximale de deux ans"
+    },
+    "admin": {
+      "user_not_found": "Utilisateur introuvable",
+      "endpoint_not_found": "Point de terminaison introuvable",
+      "api_key_again": "Saisissez à nouveau la clé d'API pour tester une autre URL",
+      "cannot_delete_self": "Vous ne pouvez pas vous supprimer vous-même",
+      "cannot_demote_self": "Vous ne pouvez pas vous rétrograder ni vous désactiver vous-même",
+      "egress_from_env": "Le proxy de sortie est défini dans l'environnement du serveur (MAILR_IMAGE_PROXY_EGRESS).",
+      "list_models_failed": "impossible de lister les modèles : {{error}}",
+      "local_only_needs_local": "les e-mails locaux uniquement nécessitent un point de terminaison local",
+      "local_public": "{{host}} est une adresse publique, elle ne peut donc pas être marquée comme locale. Utilisez une adresse de votre réseau ou de cette machine, ou marquez-la comme hébergée.",
+      "local_public_no_host": "Il s'agit d'une adresse publique, elle ne peut donc pas être marquée comme locale. Utilisez une adresse de votre réseau ou de cette machine, ou marquez-la comme hébergée.",
+      "password_not_by_token": "Les mots de passe sont modifiés par un administrateur connecté, pas par un jeton d'API",
+      "public_address_first": "Saisissez d'abord l'adresse publique."
+    },
+    "accounts": {
+      "account_not_found": "Compte introuvable",
+      "add_own_accounts": "Ajoutez vos propres comptes dans Paramètres → E-mail → Comptes de messagerie",
+      "admin_connects_not_token": "Les comptes de messagerie sont connectés par un administrateur connecté, pas par un jeton d'API",
+      "admin_local_only": "Un administrateur exige que ce compte reste en mode local uniquement",
+      "backup_check_failed": "la vérification de la sauvegarde a échoué ({{reason}}) ; les e-mails ne sont pas supprimés chez le fournisseur",
+      "colour_mail_only": "Seuls les comptes de messagerie ont une couleur",
+      "colour_unknown": "Choisissez une des couleurs de compte : bleu, orange, vert, violet, rose, turquoise, rouge ou jaune",
+      "confirm_account_name": "Saisissez exactement le nom du compte pour confirmer",
+      "disconnected_by_person": "{{person}} a déconnecté ce compte. Contactez-le d'abord ; il sera à nouveau notifié si vous vous reconnectez.",
+      "enter_password": "Saisissez le mot de passe du compte",
+      "file_too_large_gb": "Le fichier est plus volumineux que {{max}} Go",
+      "first_sync_running": "La première synchronisation n'est pas encore terminée",
+      "imap_required": "Le serveur entrant (IMAP) est requis",
+      "import_daily_limit": "vous avez téléversé {{max}} Go pour des importations ces dernières 24 heures, le maximum que ce serveur accepte par jour ; réessayez plus tard",
+      "import_disk_full": "le disque du serveur est presque plein, le téléversement a donc été arrêté ; demandez à l’administrateur de libérer de l’espace",
+      "import_space_full": "Les importations non terminées remplissent votre espace d'importation ; réessayez lorsqu'elles seront terminées",
+      "imports_running": "vous avez déjà autant d’importations en cours que ce serveur en exécute à la fois ({{max}}) ; lancez celle-ci quand l’une d’elles sera terminée",
+      "managed_off": "Les administrateurs ne peuvent pas connecter de comptes de messagerie pour les membres sur ce serveur. Activez cette option dans Paramètres → Administration → Utilisateurs.",
+      "mode_not_supported": "Mode non pris en charge pour ce type de compte",
+      "no_backup_yet": "pas encore de sauvegarde ; les e-mails ne sont supprimés chez le fournisseur qu'une fois sauvegardés. Réessayez après la première sauvegarde quotidienne.",
+      "no_new_mail_since_sync": "Aucun nouveau courrier reçu via ce compte depuis sa première synchronisation ; envoyez-vous un message de test et réessayez",
+      "password_again_change": "Saisissez à nouveau le mot de passe lors de la modification du serveur",
+      "password_again_test": "Saisissez à nouveau le mot de passe pour tester un autre serveur",
+      "person_has_account": "Cette personne possède déjà ce compte",
+      "provider_unsupported": "ce fournisseur n'est pas encore pris en charge",
+      "save_sent_imap_only": "seuls les comptes IMAP enregistrent les messages envoyés chez le fournisseur",
+      "sent_copy_mirror_only": "seul un compte IMAP en « Garder synchronisé » enregistre les e-mails envoyés chez le fournisseur",
+      "store_needs_mail_export": "« Mailr conserve les e-mails » n'est pas disponible sur ce serveur : il nécessite l'export quotidien des e-mails, que l'administrateur a désactivé. Utilisez « Garder synchronisé ».",
+      "turned_off": "ce compte est désactivé ; activez-le d'abord",
+      "upload_mbox": "importez un fichier .mbox ou un fichier .zip contenant des fichiers Maildir / mbox",
+      "upstream_delete_store_only": "les e-mails ne peuvent être supprimés chez le fournisseur que pour un compte en « Mailr conserve les e-mails »",
+      "user_only": "les comptes ne peuvent être gérés que par l'utilisateur connecté"
+    },
+    "auth": {
+      "password_too_short": "le mot de passe doit comporter au moins {{min}} caractères",
+      "no_account": "aucun compte Mailr pour cet utilisateur",
+      "admin_only": "Admin uniquement",
+      "current_password_wrong": "le mot de passe actuel est incorrect",
+      "handover_app_only": "seule l'application Mailr connectée peut transférer sa connexion",
+      "handover_expired": "ce transfert de session a expiré ou a déjà été utilisé ; réessayez",
+      "handover_other_app": "ce transfert de session n'a pas été initié par cette application",
+      "handover_signed_out": "l'application Mailr est déconnectée ; connectez-vous là-bas ou ici",
+      "id_token_azp": "Le jeton d'identification a une partie autorisée inattendue",
+      "id_token_no_expiry": "Le jeton d'identification n'a pas d'expiration",
+      "id_token_other_app": "Le jeton d'identification n'a pas été émis pour l'application Mailr",
+      "id_token_other_provider": "Le jeton d'identification a été émis par un fournisseur différent",
+      "id_token_other_server": "cette connexion a été initiée pour un autre serveur ; vérifiez l'adresse du serveur et reconnectez-vous",
+      "id_token_rejected": "Jeton d'identification rejeté",
+      "id_token_rejected_why": "Jeton d'identification rejeté : {{error}}",
+      "id_token_signature": "La signature du jeton d'identification est invalide",
+      "id_token_too_old": "Le jeton d'identification est trop ancien ; reconnectez-vous",
+      "imap_password_user_only": "seul l'utilisateur peut créer un mot de passe IMAP",
+      "local_login_disabled": "la connexion locale est désactivée",
+      "native_not_configured": "la connexion native n'est pas configurée",
+      "native_update_app": "cette version de l'application ne permet plus de se connecter ; mettez à jour l'application, puis reconnectez-vous",
+      "nonce_mismatch": "nonce non concordant",
+      "oidc_not_configured": "OIDC n'est pas configuré",
+      "password_signin_off": "la connexion par mot de passe est désactivée sur ce serveur",
+      "password_user_only": "seul l'utilisateur peut modifier le mot de passe",
+      "profile_user_only": "seul l'utilisateur peut modifier le profil",
+      "provider_keys_unavailable": "impossible de récupérer les clés du fournisseur d'authentification",
+      "provider_not_accepted": "le fournisseur de connexion n'a pas accepté la connexion ; réessayez",
+      "provider_refused": "le fournisseur de connexion a refusé ou annulé la connexion",
+      "revoke_user_only": "seul l'utilisateur peut révoquer les sessions",
+      "sessions_user_only": "seul l'utilisateur peut lister les sessions",
+      "signin_expired": "la session de connexion a expiré, réessayez",
+      "signin_used": "cette connexion a déjà été utilisée ; reconnectez-vous",
+      "signs_in_with_sso": "ce compte utilise l'authentification unique ; un administrateur peut définir un mot de passe",
+      "signup_disabled": "l'inscription est désactivée",
+      "state_mismatch": "état non concordant",
+      "token_unverifiable": "impossible de vérifier le jeton du fournisseur d'authentification",
+      "token_wrong_app": "jeton non émis pour cette application",
+      "unknown_session": "identifiant de session inconnu",
+      "wrong_credentials": "e-mail ou mot de passe incorrect"
+    },
+    "outbox": {
+      "message_state": "le message est {{status}}"
+    },
+    "tables": {
+      "view_not_found": "vue introuvable",
+      "row_not_found": "ligne introuvable",
+      "column_limit": "Ce tableau contient {{max}} colonnes, le maximum",
+      "calendar_needs_date": "Seule une colonne de date peut s'afficher dans l'agenda",
+      "choose_import_column": "Sélectionnez au moins une colonne à importer",
+      "max_days": "Demandez au maximum {{max}} jours",
+      "no_matching_column": "Aucune colonne du fichier ne correspond à une colonne de ce tableau",
+      "no_such_column": "Ce tableau ne contient pas cette colonne",
+      "not_link_column": "n'est pas une colonne de lien",
+      "tokens_use_tools": "Les jetons d'API ne peuvent accéder aux tableaux que via les outils de {{name}}"
+    },
+    "websearch": {
+      "provider_not_found": "fournisseur introuvable",
+      "api_key_again": "saisissez à nouveau la clé API pour tester une autre URL",
+      "provider_name_taken": "un fournisseur portant ce nom existe déjà",
+      "reader_from_env": "ce lecteur est défini dans l'environnement du serveur (MAILR_BROWSER_URL) ; désactivez-le ou supprimez la variable"
+    },
+    "pictures": {
+      "no_picture": "aucune image",
+      "changed_by_user": "l'image est modifiée par l'utilisateur",
+      "limit_2mb": "les images sont limitées à 2 Mo",
+      "no_provider_picture": "votre fournisseur d'authentification n'a pas envoyé d'image ; reconnectez-vous via l'authentification unique",
+      "provider_fetch_failed": "impossible de récupérer la photo depuis votre fournisseur d'authentification",
+      "provider_host_blocked": "l'hôte de l'image de votre fournisseur d'authentification est bloqué sur ce serveur",
+      "removed_by_user": "les images sont supprimées par l'utilisateur",
+      "set_by_user": "les images sont définies par l'utilisateur",
+      "too_large": "l'image est trop volumineuse",
+      "wrong_type": "téléchargez une image PNG, JPEG, GIF ou WebP"
+    },
+    "labels": {
+      "label_not_found": "libellé introuvable",
+      "account_not_found": "Compte de messagerie introuvable",
+      "name_required": "Un libellé nécessite un nom",
+      "limit": "Vous avez {{max}} libellés, le maximum",
+      "name_too_long": "Un nom de libellé peut contenir au maximum {{max}} caractères",
+      "choose_own": "choisissez l'un de vos libellés",
+      "colours_user_only": "seul l'utilisateur peut modifier toutes les couleurs des libellés à la fois",
+      "label_not_found_named": "libellé introuvable : {{label}}",
+      "name_missing": "nom requis"
+    },
+    "identities": {
+      "identity_not_found": "identité introuvable",
+      "user_managed": "les identités sont gérées par l'utilisateur"
+    },
+    "people": {
+      "unknown_person": "personne inconnue"
+    },
+    "assistant": {
+      "unknown_session": "session de chat inconnue",
+      "chat_title_too_long": "un titre de conversation peut contenir au maximum {{max}} caractères",
+      "choose_conversation": "choisissez une conversation",
+      "no_running_turn": "aucune interaction en cours dans cette conversation",
+      "order_already_ran": "cette consigne a déjà été exécutée sur ce message",
+      "order_not_found": "consigne introuvable",
+      "order_test_needs_query": "ajoutez une recherche ou une question pour tester",
+      "orders_in_app": "les consignes permanentes sont gérées dans l'application (les jetons utilisent l'outil manage_order)",
+      "still_answering": "l'assistant est encore en train de répondre dans cette conversation ; arrêtez-le d'abord",
+      "no_title": "aucun titre court n'a pu être généré pour le moment ; réessayez plus tard",
+      "empty_chat": "cette conversation ne contient aucune question permettant de générer un titre",
+      "unknown_review": "examen inconnu",
+      "review_not_running": "cet examen n'est pas en cours",
+      "review_not_stopped": "seul un examen arrêté ou en échec peut être repris",
+      "unknown_review_choice": "choix mémorisé inconnu",
+      "review_choices_user_only": "les choix d'examen mémorisés se gèrent dans l'application"
+    },
+    "notes": {
+      "section_not_found": "section introuvable",
+      "group_list_owner_only": "Seule la personne connectée peut créer une liste dans un groupe.",
+      "nothing_to_add": "Rien à ajouter",
+      "section_name_required": "Une section nécessite un nom",
+      "section_exists": "Cette liste contient déjà une section nommée {{name}}",
+      "own_access": "Seul le propriétaire peut modifier votre accès.",
+      "presence_app_only": "La présence provient uniquement de l'application",
+      "share_not_by_token": "Les notes et les tableaux ne peuvent pas être partagés via un jeton d'API.",
+      "version_not_found": "version introuvable"
+    },
+    "forwarding": {
+      "user_managed": "les adresses de transfert sont gérées par l'utilisateur connecté",
+      "agents_cannot_change": "les agents ne peuvent pas modifier les règles de transfert",
+      "agents_cannot_create": "les agents ne peuvent pas créer de règles de transfert",
+      "not_verified": "{{address}} n'est pas une adresse de redirection vérifiée (Paramètres → E-mail → Filtres et blocage → Adresses de redirection)",
+      "too_many_codes": "trop de codes de confirmation pour cette adresse ; réessayez dans une heure",
+      "too_many_wrong": "trop de codes incorrects ; supprimez cette adresse et ajoutez-la à nouveau plus tard",
+      "unknown_address": "adresse de transfert inconnue",
+      "wrong_code": "code incorrect"
+    },
+    "permissions": {
+      "rule_not_found": "règle introuvable",
+      "approval_not_found": "approbation introuvable",
+      "different_sources": "les demandes proviennent de conversations ou d'agents différents ; traitez-les une par une",
+      "user_only": "les autorisations et les approbations sont gérées par l'utilisateur connecté"
+    },
+    "models": {
+      "none_configured": "aucun modèle de langage n'est configuré",
+      "call_failed": "l'appel au modèle a échoué : {{error}}",
+      "choices_in_app": "les choix de modèles se font dans l'application",
+      "endpoint_cannot_do_task": "{{endpoint}} ne peut pas effectuer cette tâche",
+      "model_not_allowed": "Votre administrateur ne vous a pas autorisé à utiliser ce modèle.",
+      "model_not_listed": "ce point de terminaison ne répertorie pas ce modèle",
+      "not_embedding_model": "Ce modèle ne produit pas d’embeddings de recherche. Choisissez un modèle d’embeddings, ou laissez Index de recherche sur Aucun.",
+      "models_not_allowed": "Votre administrateur ne vous a pas autorisé à utiliser ces modèles : {{models}}",
+      "no_such_endpoint": "point de terminaison inexistant",
+      "switch_in_app": "ce réglage est modifié dans l'application"
+    },
+    "settings": {
+      "user_only": "les paramètres ne peuvent être modifiés que par l'utilisateur"
+    },
+    "access": {
+      "default_not_allowed": "la valeur par défaut pour {{task}} doit être l'un des modèles autorisés",
+      "endpoint_cannot_do": "{{endpoint}} ne peut pas effectuer {{task}}",
+      "everyone_built_in": "La stratégie Tout le monde est intégrée. Modifiez-la à la place.",
+      "everyone_cannot_delete": "La stratégie Tout le monde est intégrée. Pour la restreindre, désactivez ses options et n'autorisez aucun modèle.",
+      "everyone_keeps_name": "La stratégie Tout le monde ne peut pas être renommée, et aucun groupe ne peut utiliser ce nom.",
+      "group_has_policy": "ce groupe a déjà une stratégie",
+      "groups_from_idp": "les groupes de ce compte proviennent du fournisseur d'identité ; modifiez-les là-bas",
+      "policy_not_found": "stratégie introuvable"
+    },
+    "activity": {
+      "entry_not_found": "élément introuvable",
+      "signed_in_only": "L'activité n'est visible que par la personne connectée"
+    },
+    "cleanup": {
+      "categories_by_sender": "suggérez des catégories pour les groupes par expéditeur, domaine ou liste",
+      "forwarding_in_settings": "créez des filtres de redirection dans Paramètres → E-mail → Filtres et blocage",
+      "group_changed_one": "le groupe a changé : il contient maintenant {{count}} conversation, et non {{expected}}. Vérifiez à nouveau l'aperçu.",
+      "group_changed_other": "le groupe a changé : il contient maintenant {{count}} conversations, et non {{expected}}. Vérifiez à nouveau l'aperçu.",
+      "no_future_search": "ce groupe n'a aucune recherche correspondant à ses futurs e-mails",
+      "no_sorting_model": "aucun modèle de tri n'est disponible pour vous",
+      "no_unsubscribe_link": "cet abonnement n'a pas de lien de désinscription"
+    },
+    "contacts": {
+      "accept_user_only": "seul l'utilisateur connecté peut accepter un groupe suggéré",
+      "dismiss_user_only": "seul l'utilisateur connecté peut ignorer un groupe suggéré",
+      "group_from_address_book": "ce groupe provient de votre carnet d'adresses ; modifiez-le là-bas",
+      "group_max_members": "un groupe contient au maximum {{max}} personnes",
+      "group_name_required": "donnez un nom au groupe",
+      "group_not_found": "groupe introuvable",
+      "settings_user_only": "les paramètres du carnet d'adresses sont réservés à l'utilisateur connecté",
+      "suggest_user_only": "seul l'utilisateur connecté peut rechercher des suggestions de groupes",
+      "suggestion_not_found": "suggestion introuvable",
+      "suggestion_user_only": "seul l'utilisateur connecté peut accepter ou ignorer une suggestion"
+    },
+    "dictation": {
+      "bad_answer": "Impossible de lire la réponse du serveur vocal.",
+      "empty_clip": "Le clip est vide. Réessayez.",
+      "not_audio": "Envoyez le clip au format audio (m4a, mp3, wav, webm ou ogg).",
+      "not_set_up": "La dictée via le serveur n'est pas configurée.",
+      "server_not_local": "Le serveur vocal doit se trouver sur le réseau local.",
+      "timeout": "Impossible de joindre le serveur vocal à temps.",
+      "too_big": "Les clips peuvent avoir une taille maximale de {{max}} Mo.",
+      "too_long": "Les clips peuvent avoir une durée maximale de {{max}} secondes.",
+      "transcribe_failed": "Impossible de transcrire le clip.",
+      "unreachable": "Impossible de joindre le serveur vocal.",
+      "local_only_unavailable": "Non disponible avec les modèles locaux uniquement. Aucun modèle local n'est configuré pour la reconnaissance vocale.",
+      "env_endpoint": "Ce point de terminaison est configuré par MAILR_ASR_URL, son adresse est donc modifiée à cet endroit."
+    },
+    "filters": {
+      "file_limit_2mb": "un fichier de filtres est limité à 2 Mo",
+      "import_user_only": "seul l'utilisateur connecté peut importer des filtres",
+      "not_gmail_xml": "ce n'est pas un fichier XML de filtres Gmail",
+      "unknown_label": "libellé inconnu dans les actions"
+    },
+    "intel": {
+      "decision_cannot_accept": "cette décision ne peut pas être acceptée",
+      "decision_not_found": "décision introuvable",
+      "decisions_lab_user_only": "le laboratoire de décisions est réservé à l'utilisateur connecté",
+      "importance_review_user_only": "la revue de l'importance est réservée à l'utilisateur connecté",
+      "index_admin_only": "administrateur uniquement : l'index de recherche est géré par un administrateur",
+      "no_embedding_endpoint": "aucun point de terminaison d'intégration n'est configuré (Paramètres → Admin → Modèles, tâche 'embed')",
+      "retriage_user_only": "la relance du tri est réservée à l'utilisateur connecté",
+      "translation_failed": "impossible de traduire : {{error}}",
+      "unknown_smart_label": "libellé intelligent inconnu"
+    },
+    "invites": {
+      "expired": "Cette invitation a expiré. Demandez-en une nouvelle.",
+      "invite_not_found": "invitation introuvable",
+      "link_not_valid": "Ce lien d'invitation n'est pas valide. Demandez-en un nouveau.",
+      "password_min_10": "Utilisez au moins 10 caractères.",
+      "revoked": "Cette invitation a été retirée. Demandez-en une nouvelle.",
+      "sign_in_first": "Connectez-vous d'abord.",
+      "signs_in_another_way": "Ce compte utilise une autre méthode de connexion. Utilisez le bouton de connexion.",
+      "used": "Cette invitation a déjà été utilisée. Connectez-vous pour continuer.",
+      "wrong_account": "Cette invitation est destinée à {{invited}}. Vous êtes connecté en tant que {{current}}. Déconnectez-vous et rouvrez le lien."
+    },
+    "knowledge": {
+      "entity_not_found": "entité introuvable",
+      "only_builtin_reset": "seules les compétences intégrées peuvent être réinitialisées",
+      "skill_no_instructions": "la compétence n'a pas d'instructions",
+      "skill_not_found": "compétence introuvable",
+      "suggestion_not_found": "suggestion introuvable"
+    },
+    "layouts": {
+      "layout_not_found": "mise en page inexistante",
+      "user_only": "les mises en page ne peuvent être modifiées que par l'utilisateur"
+    },
+    "live": {
+      "filter_not_found": "filtre introuvable",
+      "stream_apps_only": "le flux d'événements en direct est réservé aux applications connectées",
+      "typing_apps_only": "les rapports de frappe proviennent des applications connectées"
+    },
+    "onboarding": {
+      "admins_may_not_connect": "Les administrateurs ne peuvent pas connecter de comptes de messagerie pour les membres sur ce serveur.",
+      "already_connected": "ce compte a déjà été connecté ; gérez-le dans Admin → Utilisateurs",
+      "nothing_to_summarise": "rien à résumer pour le moment",
+      "prepare_not_by_token": "les comptes de messagerie sont préparés par un administrateur connecté, pas par un jeton API",
+      "prepare_one_person": "un compte de messagerie peut être préparé pour une personne (par adresse e-mail), pas pour un groupe",
+      "preset_exists": "un préréglage pour cette adresse ou ce groupe existe déjà",
+      "preset_not_found": "préréglage introuvable",
+      "too_many_presets": "trop de préréglages ; supprimez-en d'abord",
+      "user_only": "le guide de configuration appartient à l'utilisateur connecté"
+    },
+    "phone": {
+      "app_not_on_server": "aucune application {{app}} sur ce serveur",
+      "mail_server_no_answer": "Impossible de joindre le serveur de messagerie. Réessayez plus tard.",
+      "no_such_app": "application inexistante",
+      "no_such_app_password": "mot de passe d'application inexistant",
+      "passwords_not_by_token": "Les mots de passe de l'application Téléphone ne peuvent pas être gérés via un jeton API.",
+      "version_format": "Utilisez une version comme 1.1.0, ou laissez le champ vide."
+    },
+    "push": {
+      "target_not_found": "cible de push introuvable",
+      "user_only": "les cibles de push sont gérées par l'utilisateur connecté ou la session de l'application"
+    },
+    "reminders": {
+      "invalid_token": "jeton de rappel invalide",
+      "notification_expired": "notification expirée ; ouvrez Mailr pour traiter le rappel",
+      "push_user_only": "les abonnements push sont gérés par l'utilisateur connecté",
+      "settings_user_only": "les paramètres de rappel sont modifiés par l'utilisateur",
+      "snooze_too_far": "la mise en attente est prévue dans plus d'un an",
+      "task_changed": "la tâche a été modifiée sur un autre appareil ; ouvrez Mailr pour la terminer"
+    },
+    "screener": {
+      "decision_user_only": "vous seul pouvez modifier une décision de Screener",
+      "no_such_account": "compte de messagerie inconnu : {{accounts}}",
+      "no_such_sender": "expéditeur inconnu dans Screener",
+      "settings_change_user_only": "vous seul pouvez modifier les paramètres de Screener",
+      "settings_see_user_only": "vous seul pouvez voir les paramètres de Screener"
+    },
+    "spam": {
+      "not_on_list": "absent de la liste",
+      "user_only": "la liste de spam ne peut être modifiée que par l'utilisateur"
+    },
+    "speakr": {
+      "account_not_found": "Compte Speakr introuvable",
+      "account_user_only": "seul l'utilisateur connecté peut modifier un compte Speakr",
+      "error": "Speakr: {{error}}",
+      "error_hint": "Speakr : {{error}} {{hint}}",
+      "field_too_long": "un champ est trop long",
+      "file_empty": "le fichier est vide",
+      "local_only_no_model": "Cet enregistrement est local uniquement et aucun modèle local n'est disponible",
+      "merge_in_app": "Les participants sont fusionnés dans l'application Enregistrements",
+      "no_model": "Aucun modèle n'est configuré pour cette action",
+      "not_connected": "aucun compte Speakr n'est connecté (Paramètres → E-mail → Comptes de messagerie → Speakr)",
+      "recording_not_found": "enregistrement introuvable dans Speakr",
+      "recording_too_large": "les enregistrements sont limités à {{max}} Mo dans Mailr"
+    },
+    "tasks": {
+      "nothing_to_move": "rien à déplacer"
+    },
+    "templates": {
+      "name_required": "un modèle nécessite un nom",
+      "shortcut_taken": "un autre modèle utilise déjà ;{{shortcut}}",
+      "template_not_found": "modèle introuvable"
+    },
+    "tokens": {
+      "token_not_found": "jeton introuvable",
+      "unknown_token": "jeton inconnu",
+      "user_only": "les jetons ne peuvent être gérés que par l'utilisateur connecté"
+    },
+    "import": {
+      "not_a_zip": "{{name}} n'est pas un fichier .zip lisible",
+      "zip_too_many_files": "{{name}} contient plus de {{max}} fichiers",
+      "zip_too_large": "{{name}} décompresse plus de {{mb}} Mo de notes",
+      "too_many_notes": "au maximum {{max}} notes par importation",
+      "too_many_contacts": "au maximum {{max}} contacts par importation",
+      "too_many_events": "au maximum {{max}} événements par importation",
+      "bad_kind": "le type doit être l'un des suivants : {{kinds}}",
+      "read_only_calendar": "cet agenda est en lecture seule",
+      "already_undone": "Cette importation a déjà été annulée.",
+      "user_only": "seul l'utilisateur connecté peut importer",
+      "not_found": "importation introuvable"
+    },
+    "trusted": {
+      "user_managed": "Vous seul pouvez modifier les adresses de confiance, dans Paramètres → {{name}}",
+      "too_many_codes": "Trop de codes pour cette adresse ; réessayez dans une heure",
+      "too_many_codes_today": "Vous pouvez envoyer au maximum {{max}} codes par jour ; réessayez demain",
+      "already_yours": "Ceci est déjà l'une de vos propres adresses dans Mailr",
+      "already_confirmed": "Cette adresse est déjà confirmée",
+      "address_limit": "vous pouvez avoir au maximum {{max}} adresses de confiance",
+      "not_found": "Adresse inconnue",
+      "too_many_wrong": "trop de codes incorrects ; supprimez cette adresse et ajoutez-la à nouveau plus tard",
+      "code_expired": "Le code a expiré ; envoyez-en un nouveau",
+      "wrong_code": "Code incorrect"
+    }
+  },
+  "push": {
+    "mail": {
+      "title": "E-mail de {{name}}",
+      "unknown_sender": "expéditeur inconnu",
+      "body": "Nouveau message"
+    },
+    "private": {
+      "follow_up": {
+        "title": "Pas de réponse",
+        "body": "Ouvrez Mailr pour voir la conversation."
+      },
+      "approval": {
+        "title": "Approbation requise",
+        "body": "Ouvrez Mailr pour l'examiner."
+      },
+      "send_failed": {
+        "title": "Message non envoyé",
+        "body": "Ouvrez Mailr pour voir pourquoi."
+      },
+      "send_uncertain": {
+        "title": "Peut-être envoyé",
+        "body": "Vérifiez les Envoyés dans Mailr avant de renvoyer."
+      },
+      "reminder": {
+        "title": "Rappel",
+        "body": "Ouvrez Mailr pour le voir."
+      },
+      "new_mail": {
+        "title": "Mailr",
+        "body": "Nouveau message"
+      },
+      "important_mail": {
+        "title": "Mailr",
+        "body": "Nouveau message"
+      },
+      "default": {
+        "title": "Mailr",
+        "body": "Ouvrez Mailr pour le lire."
+      }
+    },
+    "approval": {
+      "title": "Demande d'approbation de {{actor}}",
+      "agent_email_title": "Approuver un e-mail d'un agent",
+      "to_single": "À {{first}}.",
+      "to_more_one": "À {{first}} et {{count}} autre.",
+      "to_more_other": "À {{first}} et {{count}} autres."
+    },
+    "send_failed": {
+      "title": "Message non envoyé",
+      "body": "À {{to}} : {{error}}"
+    },
+    "send_uncertain": {
+      "title": "Peut-être envoyé",
+      "body": "À {{to}} : vérifiez les Envoyés avant de renvoyer."
+    },
+    "follow_up": {
+      "title": "Pas de réponse de {{who}}",
+      "title_anyone": "Pas de réponse"
+    },
+    "reminder": {
+      "missed": "Manqué : {{title}}",
+      "generic": {
+        "event": "Rappel d'événement",
+        "task": "Rappel de tâche",
+        "note": "Rappel de note",
+        "other": "Rappel"
+      }
+    },
+    "account": {
+      "title": "{{name}} : mot de passe requis",
+      "title_private": "Mot de passe du compte de messagerie requis",
+      "body": "Saisissez-le à nouveau dans Paramètres → E-mail → Comptes de messagerie. Aucun nouvel e-mail n'arrivera avant cela."
+    },
+    "test": {
+      "body": "Notification de test"
+    }
+  },
+  "health": {
+    "account": {
+      "paused": "En pause",
+      "signin": "Mot de passe requis",
+      "error": "Échec de la synchronisation. Nouvelle tentative automatique.",
+      "first_sync": "Première synchronisation en cours",
+      "not_synced_yet": "Pas encore synchronisé",
+      "stale_hours_one": "Non synchronisé depuis {{count}} heure",
+      "stale_hours_other": "Non synchronisé depuis {{count}} heures",
+      "stale_days_one": "Non synchronisé depuis {{count}} jour",
+      "stale_days_other": "Non synchronisé depuis {{count}} jours",
+      "deletions_held_one": "{{count}} suppression chez le fournisseur retenue : vérifiez le compte",
+      "deletions_held_other": "{{count}} suppressions chez le fournisseur retenues : vérifiez le compte",
+      "deletion_paused_export_off": "Suppression chez le fournisseur en pause : l’export du courrier est désactivé",
+      "changes_not_synced_one": "{{count}} modification non synchronisée avec le fournisseur",
+      "changes_not_synced_other": "{{count}} modifications non synchronisées avec le fournisseur",
+      "sent_not_saved_one": "{{count}} message envoyé n'a pas pu être enregistré dans le dossier Envoyés de {{provider}}",
+      "sent_not_saved_other": "{{count}} messages envoyés n'ont pas pu être enregistrés dans le dossier Envoyés de {{provider}}",
+      "syncing": "Synchronisation",
+      "ok": "À jour"
+    },
+    "summary": {
+      "ok_one": "{{count}} compte est en cours de synchronisation.",
+      "ok_other": "Les {{count}} comptes sont en cours de synchronisation.",
+      "bad": "{{name}} : {{text}}.",
+      "bad_more_one": "{{name}} : {{text}} (et {{count}} autre).",
+      "bad_more_other": "{{name}} : {{text}} (et {{count}} autres)."
+    },
+    "check": {
+      "db": "Base de données",
+      "store": "Stockage des e-mails",
+      "worker": "Processus en arrière-plan",
+      "sync": "Synchronisation des comptes de messagerie",
+      "export": "Export quotidien des e-mails",
+      "backup_target": "Copie de sauvegarde",
+      "calendar_export": "Export de l'agenda et des contacts",
+      "notes_export": "Export des notes et des tableaux",
+      "push": "Serveur de push (ntfy)",
+      "egress": "Sortie des images (VPN)",
+      "proxy": "En-têtes du proxy inverse",
+      "db_dump": "Export BDD",
+      "disk": "Espace disque libre",
+      "jobs_failed": "Tâches échouées",
+      "store_sync": "Indexation du magasin de courrier"
+    },
+    "ready": {
+      "reachable": "accessible",
+      "db_unreachable": "base de données inaccessible",
+      "store_unreachable": "stockage des e-mails inaccessible",
+      "store_answered": "Le serveur de messagerie a renvoyé {{status}}",
+      "worker_none": "aucun signal d'activité du processus en arrière-plan",
+      "worker_stale": "aucun signal d'activité du processus en arrière-plan depuis {{minutes}} min",
+      "worker_ok": "signal d'activité il y a {{seconds}} s",
+      "sync_none": "aucun compte de messagerie à synchroniser",
+      "jobs_overdue_one": "{{count}} tâche en retard de plus de {{minutes}} min",
+      "jobs_overdue_other": "{{count}} tâches en retard de plus de {{minutes}} min",
+      "sync_bad_one": "{{count}} compte non synchronisé",
+      "sync_bad_other": "{{count}} comptes non synchronisés",
+      "sync_ok_one": "{{count}} compte en cours de synchronisation",
+      "sync_ok_other": "{{count}} comptes en cours de synchronisation",
+      "sync_ok_first_one": "{{count}} compte en cours de synchronisation, {{first}} en première synchronisation",
+      "sync_ok_first_other": "{{count}} comptes en cours de synchronisation, {{first}} en première synchronisation",
+      "no_mail": "Aucun e-mail",
+      "mail_export_off": "désactivé (MAILR_MAIL_EXPORT=false)",
+      "exported_stale_one": "{{stale}} sur {{count}} compte non exporté depuis {{hours}} h",
+      "exported_stale_other": "{{stale}} sur {{count}} comptes non exportés depuis {{hours}} h",
+      "exported_ok_one": "{{count}} compte exporté au cours des {{hours}} dernières heures",
+      "exported_ok_other": "{{count}} comptes exportés au cours des {{hours}} dernières heures",
+      "exported_waiting_one": "{{exported}} compte sur {{count}} exporté au cours des {{hours}} dernières heures, {{waiting}} nouveau (première exportation en attente)",
+      "exported_waiting_other": "{{exported}} comptes sur {{count}} exportés au cours des {{hours}} dernières heures, {{waiting}} nouveaux (première exportation en attente)",
+      "copied_stale_one": "{{stale}} sur {{count}} compte non copié depuis {{hours}} h",
+      "copied_stale_other": "{{stale}} sur {{count}} comptes non copiés depuis {{hours}} h",
+      "copied_ok_one": "{{count}} compte copié au cours des {{hours}} dernières heures",
+      "copied_ok_other": "{{count}} comptes copiés au cours des {{hours}} dernières heures",
+      "copied_waiting_one": "{{exported}} compte sur {{count}} copié au cours des {{hours}} dernières heures, {{waiting}} nouveau (première copie en attente)",
+      "copied_waiting_other": "{{exported}} comptes sur {{count}} copiés au cours des {{hours}} dernières heures, {{waiting}} nouveaux (première copie en attente)",
+      "target_unwritable": "destination de sauvegarde non accessible en écriture",
+      "target_unconfigured": "destination de sauvegarde non configurée",
+      "target_missing": "destination de sauvegarde manquante",
+      "target_unmounted": "destination de sauvegarde non montée (fichier {{marker}} absent)",
+      "not_configured": "non configuré",
+      "target_ok_mail_off": "monté et accessible en écriture ; l’export du courrier est désactivé",
+      "no_calendars": "aucun agenda pour le moment",
+      "no_notes": "aucune note ou tableau pour le moment",
+      "calendar_not_run_one": "{{stale}} export d'agenda sur {{count}} non exécuté depuis {{hours}} h",
+      "calendar_not_run_other": "{{stale}} exports d'agenda sur {{count}} non exécutés depuis {{hours}} h",
+      "calendar_not_copied_one": "{{stale}} export d'agenda sur {{count}} non copié depuis {{hours}} h",
+      "calendar_not_copied_other": "{{stale}} exports d'agenda sur {{count}} non copiés depuis {{hours}} h",
+      "calendar_ok_one": "{{count}} export d'agenda au cours des {{hours}} dernières heures",
+      "calendar_ok_other": "{{count}} exports d'agenda au cours des {{hours}} dernières heures",
+      "calendar_ok_copied_one": "{{count}} export d'agenda au cours des {{hours}} dernières heures et copié",
+      "calendar_ok_copied_other": "{{count}} exports d'agenda au cours des {{hours}} dernières heures et copiés",
+      "calendar_waiting_one": "{{exported}} agenda sur {{count}} exporté au cours des {{hours}} dernières heures, {{waiting}} nouveau (première exportation en attente)",
+      "calendar_waiting_other": "{{exported}} agendas sur {{count}} exportés au cours des {{hours}} dernières heures, {{waiting}} nouveaux (première exportation en attente)",
+      "notes_not_run_one": "{{stale}} export de notes sur {{count}} non exécuté depuis {{hours}} h",
+      "notes_not_run_other": "{{stale}} exports de notes sur {{count}} non exécutés depuis {{hours}} h",
+      "notes_not_copied_one": "{{stale}} export de notes sur {{count}} non copié depuis {{hours}} h",
+      "notes_not_copied_other": "{{stale}} exports de notes sur {{count}} non copiés depuis {{hours}} h",
+      "notes_ok_one": "{{count}} export de notes au cours des {{hours}} dernières heures",
+      "notes_ok_other": "{{count}} exports de notes au cours des {{hours}} dernières heures",
+      "notes_ok_copied_one": "{{count}} export de notes au cours des {{hours}} dernières heures et copié",
+      "notes_ok_copied_other": "{{count}} exports de notes au cours des {{hours}} dernières heures et copiés",
+      "notes_waiting_one": "{{exported}} note sur {{count}} exportée au cours des {{hours}} dernières heures, {{waiting}} nouvelle (première exportation en attente)",
+      "notes_waiting_other": "{{exported}} notes sur {{count}} exportées au cours des {{hours}} dernières heures, {{waiting}} nouvelles (première exportation en attente)",
+      "push_none": "aucun serveur de push configuré",
+      "push_unreachable": "serveur de push injoignable",
+      "push_answered": "Le serveur de notifications a renvoyé {{status}}",
+      "push_ok": "serveur de push joignable",
+      "proxy_untrusted": "les en-têtes transmis depuis une adresse non fiable ont été ignorés",
+      "proxy_ok": "aucun en-tête transmis non fiable",
+      "dump_off": "sauvegardes nocturnes de la base de données désactivées",
+      "dump_none": "aucune sauvegarde de la base de données",
+      "dump_failed": "la dernière sauvegarde de la base de données a échoué",
+      "dump_stale": "aucune sauvegarde de la base de données depuis {{hours}} h",
+      "dump_ok": "dernière sauvegarde il y a {{hours}} h ({{mb}} Mo)",
+      "disk_unreadable": "l'espace libre n'a pas pu être lu",
+      "disk_full": "{{name}} : seulement {{percent}} % d'espace libre",
+      "disk_low": "{{name}} : {{percent}} % d'espace libre (faible)",
+      "disk_ok": "espace libre le plus bas {{percent}} % ({{name}})",
+      "jobs_failed_one": "{{count}} tâche échouée dans la dernière heure",
+      "jobs_failed_other": "{{count}} tâches échouées dans la dernière heure",
+      "jobs_failed_none": "aucune tâche échouée dans la dernière heure",
+      "timed_out": "vérification expirée",
+      "failed": "échec de la vérification",
+      "store_sync_ok": "aucun message n'a échoué à l'indexation",
+      "store_sync_failed_one": "{{count}} message du magasin de courrier n'a pas pu être indexé",
+      "store_sync_failed_other": "{{count}} messages du magasin de courrier n'ont pas pu être indexés"
+    },
+    "model": {
+      "timeout": "Le serveur a expiré.",
+      "connect": "Aucune réponse. Vérifiez que le serveur est en cours d'exécution et que l'adresse est correcte.",
+      "transport": "La connexion au serveur a échoué.",
+      "key_refused": "La clé API a été refusée.",
+      "unknown_model": "Nom de modèle inconnu.",
+      "no_path": "Adresse incorrecte : chemin introuvable (404). L'adresse se termine généralement par /v1.",
+      "model_refused": "Ce nom de modèle a été refusé.",
+      "busy": "Le serveur est occupé ou a atteint son quota (429).",
+      "server_failed": "Erreur du serveur ({{status}}).",
+      "refused": "Requête refusée ({{status}}).",
+      "local_only": "Le contenu est local uniquement et ce point de terminaison est hébergé.",
+      "said": "{{text}}",
+      "failed": "L'appel a échoué.",
+      "no_decision": "Aucune décision renvoyée. Vérifiez l'adresse, la clé et le nom du modèle.",
+      "not_openai": "Ce n'est pas un point de terminaison de chat compatible OpenAI."
+    },
+    "task": {
+      "chat": {
+        "label": "{{name}} et rédaction",
+        "desc": "Chat, résumés, briefs, rédaction et consignes permanentes."
+      },
+      "classify": {
+        "label": "Tri et décisions",
+        "desc": "Importance, catégories et vérification des consignes permanentes. Utilisé pour chaque nouvel e-mail, choisissez donc un modèle rapide."
+      },
+      "embed": {
+        "label": "Index de recherche",
+        "desc": "Plongements pour la recherche et la mémoire de {{name}}. Un seul modèle pour tout le serveur, pour un index cohérent."
+      },
+      "transcribe": {
+        "label": "Transcription vocale",
+        "desc": "Dictée : un enregistrement vocal devient du texte. Un service hébergé ne reçoit que les enregistrements effectués lorsque rien n'est ouvert en mode local uniquement."
+      }
+    }
+  },
+  "invites": {
+    "mail": {
+      "subject": "Votre invitation Mailr",
+      "body": "Ouvrez ce lien pour rejoindre : {{url}}",
+      "body_until": "Ouvrez ce lien sur n'importe quel appareil pour rejoindre Mailr :\n\n{{url}}\n\nIl fonctionne une seule fois, jusqu'au {{date}}."
+    }
+  },
+  "digest": {
+    "meetings": {
+      "line": "**Réunions du jour :** {{items}}",
+      "item": "{{time}} {{title}} ([préparation]({{url}}))",
+      "untitled": "Réunion"
+    },
+    "screener_one": "**Screener :** {{count}} nouvel expéditeur en attente ([examiner]({{url}}))",
+    "screener_other": "**Screener :** {{count}} nouveaux expéditeurs en attente ([examiner]({{url}}))",
+    "title": "{{name}} · {{order}}",
+    "quiet_line": "• {{title}} : {{body}}"
+  },
+  "assistant": {
+    "quiet_summary_one": "{{name}} : {{count}} mise à jour pendant votre absence",
+    "quiet_summary_other": "{{name}} : {{count}} mises à jour pendant votre absence",
+    "errand": "Course",
+    "forward": "Votre note transférée",
+    "commands": {
+      "new": "Démarrer une nouvelle conversation",
+      "chats": "Ouvrir vos conversations ou les rechercher",
+      "rename": "Renommer cette conversation",
+      "retitle": "Générer un nouveau titre court pour cette conversation",
+      "delete": "Supprimer cette conversation",
+      "retry": "Rédiger à nouveau la dernière réponse",
+      "copy": "Copier la dernière réponse",
+      "note": "Enregistrer la dernière réponse dans une note",
+      "local": "Conserver cette conversation sur votre modèle local",
+      "model": "Afficher le modèle qui répond dans cette conversation",
+      "help": "Lister les commandes et vos compétences",
+      "task": "Ajouter une tâche",
+      "event": "Ajouter un événement à l'agenda",
+      "remember": "Demander à {{name}} de se souvenir de quelque chose",
+      "forget": "Demander à {{name}} d'oublier quelque chose",
+      "today": "Aujourd'hui : agenda, tâches à faire et e-mails qui vous concernent",
+      "week": "Cette semaine : événements, échéances et e-mails en attente",
+      "summarize": "Résumer la conversation ouverte",
+      "reply": "Rédiger une réponse à la conversation ouverte",
+      "waiting": "E-mails envoyés qui attendent toujours une réponse",
+      "find": "Rechercher dans vos e-mails",
+      "sweep": "Examiner la liste affichée à l'écran et proposer ce qu'il faut supprimer, sur une seule carte",
+      "example": {
+        "rename": "/rename Journal de fitness",
+        "task": "/task appeler la banque ven 15h",
+        "event": "/event dentiste mar 10h pendant 45 min",
+        "remember": "/remember ma salle de sport ferme à 21h le dimanche",
+        "forget": "/forget mon ancien numéro de téléphone",
+        "find": "/find facture du plombier"
+      },
+      "app_only": "{{command}} fonctionne dans l'application Mailr sur le web. Cette application ne le propose pas encore.",
+      "needs_text": "Saisissez ce que vous souhaitez après {{command}}, par exemple : {{example}}",
+      "model_local": "Cette conversation utilise {{model}}, un modèle local sur votre propre serveur. Modifiez-le dans Paramètres → {{name}} → Modèles.",
+      "model_hosted": "Cette conversation utilise {{model}}, un modèle hébergé. Modifiez-le dans Paramètres → {{name}} → Modèles, ou tapez /local pour conserver cette conversation sur votre modèle local.",
+      "model_none": "Aucun modèle n'est configuré pour la conversation. Choisissez-en un dans Paramètres → {{name}} → Modèles."
+    },
+    "review_past_choice": "votre choix passé"
+  },
+  "notify": {
+    "shared": "{{by}} a partagé « {{name}} » avec vous",
+    "local_only_on": "{{by}} a activé Modèles locaux uniquement pour « {{name}} »",
+    "local_only_off": "{{by}} a désactivé Modèles locaux uniquement pour « {{name}} »"
+  },
+  "activity": {
+    "what": {
+      "quoted": "“{{title}}”",
+      "untitled": "(sans titre)",
+      "a_conversation": "une conversation",
+      "conversations_one": "{{count}} conversation",
+      "conversations_other": "{{count}} conversations",
+      "a_note": "une note",
+      "a_list": "une liste",
+      "a_table": "un tableau"
+    },
+    "mail": {
+      "archive": "{{what}} archivé",
+      "inbox": "{{what}} déplacé vers la Boîte de réception",
+      "trash": "{{what}} déplacé vers la Corbeille",
+      "untrash": "{{what}} restauré depuis la Corbeille",
+      "spam": "{{what}} signalé comme spam",
+      "not_spam": "{{what}} marqué comme non-spam",
+      "delete_forever": "{{what}} définitivement supprimé",
+      "star": "{{what}} suivi",
+      "unstar": "{{what}} non suivi",
+      "important": "{{what}} marqué comme important",
+      "not_important": "{{what}} marqué comme non important",
+      "add_labels": "{{what}} étiqueté",
+      "remove_labels": "Étiquettes retirées de {{what}}",
+      "move": "{{what}} déplacé",
+      "snooze": "{{what}} mis en attente",
+      "unsnooze": "{{what}} sorti d'attente",
+      "mute": "{{what}} mis en sourdine",
+      "unmute": "{{what}} retiré de la sourdine",
+      "category": "Catégorie de {{what}} modifiée",
+      "follow_up": "Suivi défini sur {{what}}",
+      "cancel_follow_up": "Suivi annulé sur {{what}}",
+      "restore_labels": "Modification de {{what}} annulée",
+      "restore_importance": "Modification de {{what}} annulée",
+      "restore_category": "Modification de {{what}} annulée",
+      "show_in_tab": "{{what}} déplacé vers un onglet",
+      "restore_tab": "Modification de {{what}} annulée",
+      "other": "{{what}} modifié",
+      "forward_note": "A commencé sur votre note transférée dans {{what}}"
+    },
+    "calendar": {
+      "created": "Événement {{what}} créé",
+      "cancelled": "Événement {{what}} annulé",
+      "moved": "Événement {{what}} déplacé",
+      "changed": "Événement {{what}} modifié",
+      "deleted": "Événement {{what}} supprimé"
+    },
+    "tasks": {
+      "added": "Tâche {{what}} ajoutée",
+      "skipped": "{{what}} ignorée cette fois",
+      "completed": "A terminé {{what}}",
+      "reopened": "A rouvert {{what}}",
+      "moved": "A déplacé la tâche {{what}}",
+      "changed": "A modifié la tâche {{what}}",
+      "deleted": "A supprimé la tâche {{what}}"
+    },
+    "notes": {
+      "created": "A créé {{what}}",
+      "copied": "A copié {{what}}",
+      "trashed": "A déplacé {{what}} dans la Corbeille",
+      "restored": "A restauré {{what}}",
+      "purged": "A définitivement supprimé {{what}}",
+      "converted": "A converti {{what}}",
+      "reverted": "A annulé une modification de {{what}}",
+      "revision_restored": "A restauré une version antérieure de {{what}}",
+      "edited": "A modifié {{what}}",
+      "items_added": "A ajouté des éléments à {{what}}",
+      "item_deleted": "A supprimé un élément de {{what}}",
+      "checked_cleared": "A effacé les éléments cochés de {{what}}",
+      "unchecked_all": "A décoché tous les éléments de {{what}}",
+      "section_deleted": "A supprimé une section de {{what}}",
+      "item_to_task": "A créé une tâche à partir d'un élément de {{what}}",
+      "captured": "A ajouté à {{what}}",
+      "items_checked": "A coché des éléments dans {{what}}",
+      "items_unchecked": "A décoché des éléments dans {{what}}"
+    },
+    "tables": {
+      "created": "A créé le tableau {{what}}",
+      "trashed": "A déplacé le tableau {{what}} dans la Corbeille",
+      "restored": "A restauré le tableau {{what}}",
+      "copied": "A copié le tableau {{what}}",
+      "rows_added_one": "A ajouté {{count}} ligne à {{what}}",
+      "rows_added_other": "A ajouté {{count}} lignes à {{what}}",
+      "rows_added_some": "A ajouté des lignes à {{what}}",
+      "rows_deleted_one": "A supprimé {{count}} ligne de {{what}}",
+      "rows_deleted_other": "A supprimé {{count}} lignes de {{what}}",
+      "rows_deleted_some": "A supprimé des lignes de {{what}}",
+      "rows_restored_one": "A restauré {{count}} ligne dans {{what}}",
+      "rows_restored_other": "A restauré {{count}} lignes dans {{what}}",
+      "rows_restored_some": "A restauré des lignes dans {{what}}",
+      "edited": "A modifié {{what}}",
+      "column_deleted": "A supprimé une colonne de {{what}}",
+      "reverted": "A annulé une modification de {{what}}"
+    },
+    "account": {
+      "managed_disconnect": "Déconnexion de {{address}}, que votre administrateur avait connectée. Elle ne sera pas ajoutée à nouveau sauf si votre administrateur le demande.",
+      "managed_disconnected": "{{who}} a déconnecté {{address}}, que vous aviez connectée pour lui/elle."
+    },
+    "admin": {
+      "changed": "Votre administrateur a modifié votre compte.",
+      "name": "Votre administrateur a modifié votre nom en {{name}}.",
+      "role_added": "Votre administrateur vous a nommé administrateur.",
+      "role_removed": "Votre administrateur a retiré votre rôle d'administrateur.",
+      "disabled": "Votre administrateur a désactivé votre compte.",
+      "enabled": "Votre administrateur a réactivé votre compte.",
+      "password_set": "Votre administrateur a défini un nouveau mot de passe pour vous. Vous avez été déconnecté de tous les appareils.",
+      "password_reset": "Votre administrateur a réinitialisé votre mot de passe. Vous avez été déconnecté de tous les appareils.",
+      "password_reset_tokens_one": "Votre administrateur a réinitialisé votre mot de passe. Vous avez été déconnecté de tous les appareils et {{count}} jeton API a cessé de fonctionner.",
+      "password_reset_tokens_other": "Votre administrateur a réinitialisé votre mot de passe. Vous avez été déconnecté de tous les appareils et {{count}} jetons API ont cessé de fonctionner.",
+      "email_verified": "Votre administrateur a marqué votre adresse e-mail comme vérifiée.",
+      "email_unverified": "Votre administrateur a marqué votre adresse e-mail comme non vérifiée.",
+      "account_local_only": "Votre administrateur a défini {{name}} en mode local uniquement. Ses e-mails sont désormais envoyés uniquement aux modèles locaux.",
+      "account_connected": "Votre administrateur a connecté {{address}} pour vous. Déconnectez-le dans Paramètres → E-mail → Comptes de messagerie.",
+      "account_reconnected": "Votre administrateur a reconnecté {{address}} pour vous après votre déconnexion. Déconnectez-le dans Paramètres → E-mail → Comptes de messagerie.",
+      "account_removed": "Votre administrateur a supprimé {{address}}. Ses e-mails sont conservés.",
+      "policy_added": "Votre administrateur a ajouté des règles d'accès pour votre groupe {{group}}.",
+      "policy_changed": "Votre administrateur a modifié les fonctionnalités ou les modèles que votre groupe {{group}} peut utiliser.",
+      "policy_removed": "Votre administrateur a supprimé les règles d'accès de votre groupe {{group}}.",
+      "groups": "Votre administrateur a modifié vos groupes pour {{groups}}. L'accès aux fonctionnalités dépend de vos groupes.",
+      "groups_none": "Votre administrateur vous a retiré de tous les groupes. L'accès aux fonctionnalités dépend de vos groupes."
+    }
+  },
+  "approvals": {
+    "mail": {
+      "archive": {
+        "ask": "Archiver {{what}}",
+        "done": "{{what}} archivé",
+        "ing": "Archivage de {{what}}"
+      },
+      "inbox": {
+        "ask": "Déplacer {{what}} vers la Boîte de réception",
+        "done": "{{what}} déplacé vers la Boîte de réception",
+        "ing": "Déplacement de {{what}} vers la Boîte de réception"
+      },
+      "trash": {
+        "ask": "Déplacer {{what}} vers la Corbeille",
+        "done": "{{what}} déplacé vers la Corbeille",
+        "ing": "Déplacement de {{what}} vers la Corbeille"
+      },
+      "untrash": {
+        "ask": "Restaurer {{what}} depuis la Corbeille",
+        "done": "{{what}} restauré",
+        "ing": "Restauration de {{what}} depuis la Corbeille"
+      },
+      "spam": {
+        "ask": "Signaler {{what}} comme spam",
+        "done": "{{what}} signalé comme spam",
+        "ing": "Signalement de {{what}} comme spam"
+      },
+      "not_spam": {
+        "ask": "Marquer {{what}} comme non-spam",
+        "done": "{{what}} marqué comme non-spam",
+        "ing": "Marquage de {{what}} comme non-spam"
+      },
+      "delete_forever": {
+        "ask": "Supprimer {{what}} définitivement",
+        "done": "{{what}} supprimé définitivement",
+        "ing": "Suppression de {{what}} définitivement"
+      },
+      "read": {
+        "ask": "Marquer {{what}} comme lu",
+        "done": "{{what}} marqué comme lu",
+        "ing": "Marquage de {{what}} comme lu"
+      },
+      "unread": {
+        "ask": "Marquer {{what}} comme non lu",
+        "done": "{{what}} marqué comme non lu",
+        "ing": "Marquage de {{what}} comme non lu"
+      },
+      "star": {
+        "ask": "Suivre {{what}}",
+        "done": "{{what}} suivi",
+        "ing": "Suivi de {{what}}"
+      },
+      "unstar": {
+        "ask": "Ne plus suivre {{what}}",
+        "done": "{{what}} non suivi",
+        "ing": "Annulation du suivi de {{what}}"
+      },
+      "important": {
+        "ask": "Marquer {{what}} comme important",
+        "done": "{{what}} marqué comme important",
+        "ing": "Marquage de {{what}} comme important"
+      },
+      "not_important": {
+        "ask": "Marquer {{what}} comme non important",
+        "done": "{{what}} marqué comme non important",
+        "ing": "Marquage de {{what}} comme non important"
+      },
+      "add_labels": {
+        "ask": "Ajouter des libellés à {{what}}",
+        "done": "libellés ajoutés à {{what}}",
+        "ing": "Ajout de libellés à {{what}}"
+      },
+      "remove_labels": {
+        "ask": "Supprimer les libellés de {{what}}",
+        "done": "libellés supprimés de {{what}}",
+        "ing": "Suppression des libellés de {{what}}"
+      },
+      "move": {
+        "ask": "Déplacer {{what}}",
+        "done": "{{what}} déplacé",
+        "ing": "Déplacement de {{what}}"
+      },
+      "snooze": {
+        "ask": "Mettre en attente {{what}}",
+        "done": "{{what}} mis en attente",
+        "ing": "Mise en attente de {{what}}"
+      },
+      "unsnooze": {
+        "ask": "Sortir {{what}} de l'attente",
+        "done": "{{what}} sorti de l'attente",
+        "ing": "Sortie de l'attente de {{what}}"
+      },
+      "mute": {
+        "ask": "Mettre {{what}} en sourdine",
+        "done": "{{what}} mis en sourdine",
+        "ing": "Mise en sourdine de {{what}}"
+      },
+      "unmute": {
+        "ask": "Sortir {{what}} de la sourdine",
+        "done": "{{what}} sorti de la sourdine",
+        "ing": "Sortie de la sourdine de {{what}}"
+      },
+      "category": {
+        "ask": "Modifier la catégorie de {{what}}",
+        "done": "{{what}} déplacé",
+        "ing": "Modification de la catégorie de {{what}}"
+      },
+      "show_in_tab": {
+        "ask": "Déplacer {{what}} vers un autre onglet",
+        "done": "{{what}} déplacé vers un autre onglet",
+        "ing": "Déplacement de {{what}} vers un autre onglet"
+      },
+      "follow_up": {
+        "ask": "Me rappeler si aucune réponse à {{what}}",
+        "done": "rappel défini sur {{what}}",
+        "ing": "Définition d'un rappel sur {{what}}"
+      },
+      "cancel_follow_up": {
+        "ask": "Annuler le rappel sur {{what}}",
+        "done": "rappel annulé sur {{what}}",
+        "ing": "Annulation du rappel sur {{what}}"
+      },
+      "other": {
+        "ask": "{{action}} {{what}}",
+        "done": "{{what}} modifié",
+        "ing": "Modification de {{what}}"
+      }
+    },
+    "what": {
+      "the_conversations": "les conversations",
+      "the_messages": "les messages",
+      "messages_one": "{{count}} message",
+      "messages_other": "{{count}} messages",
+      "conversations_one": "{{count}} conversation",
+      "conversations_other": "{{count}} conversations"
+    },
+    "field": {
+      "add_label": "Ajouter un libellé",
+      "add_labels": "Ajouter des libellés",
+      "remove_labels": "Supprimer des libellés",
+      "also": "Également",
+      "then": "Ensuite",
+      "name": "Nom",
+      "matches": "Correspondances",
+      "existing_mail": "E-mails existants",
+      "matches_now": "Correspondances actuelles",
+      "when": "Quand",
+      "recordings": "Enregistrements",
+      "mail": "E-mail",
+      "pick_single": "Sélectionner un seul",
+      "only_if": "Uniquement si",
+      "options": "Options",
+      "errand": "Course",
+      "result_goes_to": "Le résultat est envoyé à",
+      "labels": "Libellés",
+      "until": "Jusqu'au",
+      "messages": "Messages",
+      "from": "De",
+      "to": "À",
+      "cc": "Cc",
+      "bcc": "Cci",
+      "subject": "Objet",
+      "attachments": "Pièces jointes",
+      "remote_images": "Images distantes",
+      "links_to": "Liens vers",
+      "reminders": "Rappels",
+      "show_as": "Afficher comme",
+      "video_link": "Lien vidéo",
+      "status": "Statut",
+      "visibility": "Visibilité",
+      "mail_the_guests": "E-mail aux invités",
+      "note_to_guests": "Note aux invités",
+      "applies_to": "S'applique à",
+      "event": "Événement",
+      "time": "Heure",
+      "title": "Titre",
+      "where": "Lieu",
+      "repeats": "Récurrence",
+      "calendar": "Agenda",
+      "guests": "Invités",
+      "notes": "Notes",
+      "invitations_to": "Invitations pour",
+      "cancellation_to": "Annulation pour",
+      "task": "Tâche",
+      "due": "Échéance",
+      "list": "Liste",
+      "priority": "Priorité",
+      "applies_automatically": "S'applique automatiquement",
+      "enabled": "Activé",
+      "used_for": "Utilisé pour",
+      "about": "À propos",
+      "instructions": "Instructions",
+      "note": "Note",
+      "recipients_now": "Destinataires actuels"
+    },
+    "value": {
+      "apply_existing": "S'applique aussi aux e-mails existants",
+      "no_subject": "(sans objet)",
+      "none": "Aucun",
+      "free": "Libre",
+      "busy": "Occupé",
+      "status_cancelled": "Annulé",
+      "status_confirmed": "Confirmé",
+      "status_tentative": "Provisoire",
+      "class_public": "Public",
+      "class_private": "Privé",
+      "class_confidential": "Confidentiel",
+      "class_default": "Par défaut",
+      "yes": "Oui",
+      "no": "Non",
+      "no_title": "(sans titre)",
+      "no_place": "Aucun lieu",
+      "another_calendar": "un autre agenda"
+    },
+    "flag": {
+      "archive": "Ignorer la Boîte de réception",
+      "mark_read": "Marquer comme lu",
+      "star": "Suivre",
+      "spam": "Envoyer dans Spam",
+      "never_spam": "Ne jamais envoyer dans Spam",
+      "trash": "Déplacer vers Corbeille",
+      "notify": "Me notifier",
+      "important_always": "Toujours marquer comme important",
+      "important_never": "Ne jamais marquer comme important",
+      "category": "Placer dans {{category}}",
+      "forward": "Transférer à {{to}}",
+      "add_to_calendar": "Ajouter l'invitation à mon agenda"
+    },
+    "flag_inline": {
+      "archive": "ignorer la Boîte de réception",
+      "mark_read": "marquer comme lu",
+      "star": "suivre",
+      "spam": "envoyer dans Spam",
+      "never_spam": "ne jamais envoyer dans Spam",
+      "trash": "déplacer dans Corbeille",
+      "notify": "me notifier",
+      "important_always": "toujours marquer comme important",
+      "important_never": "ne jamais marquer comme important",
+      "category": "placer dans {{category}}",
+      "forward": "transférer à {{to}}",
+      "add_to_calendar": "ajouter l'invitation à mon agenda"
+    },
+    "filter": {
+      "title": {
+        "create": "Créer un filtre",
+        "update": "Modifier un filtre",
+        "delete": "Supprimer un filtre",
+        "apply": "Appliquer un filtre aux messages existants"
+      },
+      "who": {
+        "sender": "E-mail de {{sender}}",
+        "senders_one": "E-mail de {{count}} expéditeur",
+        "senders_other": "E-mail de {{count}} expéditeurs",
+        "matching": "E-mails correspondants"
+      },
+      "summary": {
+        "labels_one": "{{who}} reçoit le libellé {{names}}.",
+        "labels_other": "{{who}} reçoit les libellés {{names}}.",
+        "flag": "{{who}} : {{flag}}."
+      }
+    },
+    "match": {
+      "some_one": "{{count}} e-mail au cours des 6 derniers mois, le plus récent « {{subject}} » du {{date}}",
+      "some_other": "{{count}} e-mails au cours des 6 derniers mois, le plus récent « {{subject}} » du {{date}}",
+      "many_one": "Plus de {{count}} e-mail au cours des 6 derniers mois, le plus récent « {{subject}} » du {{date}}",
+      "many_other": "Plus de {{count}} e-mails au cours des 6 derniers mois, le plus récent « {{subject}} » du {{date}}",
+      "none": "Aucun e-mail au cours des 6 derniers mois. Vérifiez la recherche avant d'approuver."
+    },
+    "order": {
+      "title": {
+        "create": "Créer une consigne permanente",
+        "update": "Modifier une consigne permanente",
+        "pause": "Suspendre une consigne permanente",
+        "resume": "Reprendre une consigne permanente",
+        "delete": "Supprimer une consigne permanente"
+      },
+      "title_named": {
+        "create": "Créer une consigne permanente : {{name}}",
+        "update": "Modifier une consigne permanente : {{name}}",
+        "pause": "Suspendre une consigne permanente : {{name}}",
+        "resume": "Reprendre une consigne permanente : {{name}}",
+        "delete": "Supprimer une consigne permanente : {{name}}"
+      },
+      "when": {
+        "message": "Chaque nouvel e-mail",
+        "recording": "Chaque nouvel enregistrement",
+        "schedule": "Selon un planning ({{schedule}}, {{zone}})",
+        "schedule_local": "Selon un planning ({{schedule}}, votre fuseau horaire)"
+      },
+      "when_inline": {
+        "message": "chaque nouvel e-mail",
+        "recording": "chaque nouvel enregistrement",
+        "schedule": "selon un planning ({{schedule}}, {{zone}})",
+        "schedule_local": "selon un planning ({{schedule}}, votre fuseau horaire)"
+      },
+      "deliver": {
+        "brief": "une carte sur l'e-mail",
+        "notify": "une notification",
+        "digest": "un récapitulatif"
+      },
+      "summary_one": "Classe {{when}} dans l'une des {{count}} options.",
+      "summary_other": "Classe {{when}} dans l'une des {{count}} options.",
+      "from_trusted": "Uniquement les e-mails que vous transférez depuis vos adresses de confiance",
+      "from_me": "Uniquement les e-mails de vous ou de vos adresses de confiance"
+    },
+    "who": {
+      "nobody": "personne",
+      "two": "{{first}} et {{second}}",
+      "more_one": "{{first}} et {{count}} autre",
+      "more_other": "{{first}} et {{count}} autres"
+    },
+    "send": {
+      "title": "Envoyer à {{who}}"
+    },
+    "event": {
+      "title": "Modifier un événement",
+      "applies_this": "{{span}} (cette occurrence uniquement)",
+      "applies_following": "Cette occurrence et les suivantes, à partir du {{day}}",
+      "applies_series_rule": "Toute la série ({{rule}})",
+      "applies_series": "Toute la série",
+      "create": "Créer l'événement {{name}}",
+      "change": "Modifier {{name}}",
+      "delete": "Supprimer {{name}}",
+      "cancel": "Annuler {{name}}",
+      "change_occurrence": "Modifier une occurrence de {{name}}",
+      "delete_occurrence": "Supprimer une occurrence de {{name}}",
+      "cancel_occurrence": "Annuler une occurrence de {{name}}",
+      "change_unnamed": "Modifier un événement",
+      "delete_unnamed": "Supprimer un événement",
+      "cancel_unnamed": "Annuler un événement",
+      "quoted": "“{{name}}”"
+    },
+    "scope": {
+      "this": "Cette occurrence uniquement",
+      "following": "Cette occurrence et les suivantes",
+      "all": "Toute la série"
+    },
+    "task": {
+      "title": "Modifier une tâche",
+      "add": "Ajouter la tâche {{name}}",
+      "change": "Modifier la tâche",
+      "complete": "Terminer la tâche",
+      "reopen": "Rouvrir la tâche",
+      "delete": "Supprimer la tâche",
+      "delete_cascade": "Supprimer la tâche et ses sous-tâches",
+      "move": "Déplacer la tâche",
+      "skip": "Ignorer cette occurrence"
+    },
+    "settings": {
+      "title": "Modifier les paramètres"
+    },
+    "skill": {
+      "title": "Modifier une compétence"
+    },
+    "memory": {
+      "title": "Modifier une mémoire"
+    },
+    "generic": {
+      "title": "Approuver cette action"
+    },
+    "draft": {
+      "title_recipients": "Modifier les destinataires du brouillon : {{who}}",
+      "title_change": "Modifier le brouillon pour {{who}}",
+      "title_save": "Enregistrer un brouillon pour {{who}}",
+      "summary": "Rien n'est envoyé. Le brouillon reste dans Brouillons."
+    },
+    "reason": {
+      "read_mail": {
+        "plain": "{{who}} a rédigé ceci après avoir lu un e-mail.",
+        "outsider": "{{who}} a rédigé ceci après avoir lu un e-mail. {{names}} ne faisait pas partie de cette conversation.",
+        "outsiders": "{{who}} a rédigé ceci après avoir lu un e-mail. {{names}} et {{last}} ne faisaient pas partie de cette conversation.",
+        "bcc": "{{who}} a rédigé ce message après avoir lu un e-mail. Le message contient une copie cachée."
+      },
+      "read_mail_agent": {
+        "plain": "Un agent a rédigé ceci après avoir lu un e-mail.",
+        "outsider": "Un agent a rédigé ceci après avoir lu un e-mail. {{names}} ne faisait pas partie de cette conversation.",
+        "outsiders": "Un agent a rédigé ceci après avoir lu un e-mail. {{names}} et {{last}} ne faisaient pas partie de cette conversation.",
+        "bcc": "Un agent a rédigé ce message après avoir lu un e-mail. Le message contient une copie cachée."
+      },
+      "draft_recipients": "Les destinataires du brouillon seraient modifiés.",
+      "forwarded_unverified": "Vous avez transféré cette modification. Personne n'a pu vérifier l'auteur du message, il attend donc votre validation."
+    },
+    "done": {
+      "done": "terminé",
+      "filter_create": "créé le filtre",
+      "filter_update": "modifié le filtre",
+      "filter_delete": "supprimé le filtre",
+      "filter_apply": "appliqué le filtre aux e-mails existants",
+      "order_create": "créé la consigne permanente",
+      "order_update": "modifié la consigne permanente",
+      "order_pause": "mis en pause la consigne permanente",
+      "order_resume": "reprise la consigne permanente",
+      "order_delete": "supprimé la consigne permanente",
+      "sent": "envoyé l'e-mail",
+      "label_create": "créé le libellé",
+      "label_update": "modifié le libellé",
+      "label_delete": "supprimé le libellé",
+      "event_added": "ajouté l'événement",
+      "event_changed": "modifié l'événement",
+      "event_removed": "supprimé l'événement",
+      "rsvp": "envoyé votre réponse",
+      "task_added": "ajouté la tâche",
+      "task_completed": "terminé la tâche",
+      "task_deleted": "supprimé la tâche",
+      "task_changed": "modifié la tâche",
+      "skill_saved": "enregistré la compétence",
+      "memory_saved": "enregistré la mémoire",
+      "memory_forgot": "suppression de la mémoire",
+      "settings_changed": "modifié les paramètres",
+      "unsubscribed": "désabonné",
+      "note_made": "a créé la note",
+      "note_trashed": "l'a déplacée dans la Corbeille",
+      "checked_cleared": "a effacé les éléments cochés",
+      "note_labels": "a modifié les libellés",
+      "note_changed": "a modifié la note"
+    },
+    "outcome": {
+      "pending": "En attente d'approbation",
+      "working": "Approuvé · en cours",
+      "executed": "Approuvé · {{done}}",
+      "denied": "Refusé",
+      "discarded": "Rejeté · aucune modification",
+      "expired": "Expiré",
+      "failed": "Approuvé · échec",
+      "failed_error": "Approuvé · échec : {{error}}"
+    },
+    "step": {
+      "search_mail": "Recherche de « {{q}} » dans vos e-mails",
+      "view": {
+        "inbox": "Consultation de votre Boîte de réception",
+        "all": "Consultation de vos e-mails",
+        "sent": "Consultation des e-mails envoyés",
+        "starred": "Consultation des e-mails suivis",
+        "important": "Consultation des e-mails importants",
+        "drafts": "Consultation de vos brouillons",
+        "snoozed": "Consultation des e-mails en attente",
+        "label": "Consultation d'un libellé"
+      },
+      "search_meaning": "Recherche sémantique de « {{q}} »",
+      "search_web": "Recherche sur le web de « {{q}} »",
+      "read_site": "Lecture de {{site}}",
+      "read_page": "Lecture d'une page web",
+      "passages": "Recherche de passages concernant « {{q}} »",
+      "passages_in": "Recherche de passages concernant « {{q}} » dans « {{subject}} »",
+      "read_conversation_named": "Lecture de « {{subject}} »",
+      "read_conversation": "Lecture d'une conversation",
+      "read_message_named": "Lecture du message « {{subject}} »",
+      "read_message": "Lecture d'un message",
+      "attachment_named": "Ouverture de « {{name}} »",
+      "attachment": "Ouverture d'une pièce jointe",
+      "person": "Recherche de {{email}}",
+      "context_named": "Rassemblement du contexte pour « {{subject}} »",
+      "context": "Rassemblement du contexte",
+      "recall": "Recherche dans la mémoire de « {{q}} »",
+      "remember": "Enregistrement de « {{text}} » dans la mémoire",
+      "note_named": {
+        "get_note": "Lecture de « {{note}} »",
+        "update_note": "Modification de « {{note}} »",
+        "checklist_items": "Modification de « {{note}} »",
+        "delete_note": "Déplacement de « {{note}} » vers la Corbeille",
+        "restore_note": "Restauration de « {{note}} »",
+        "note_history": "Consultation des versions de « {{note}} »"
+      },
+      "search_notes": "Recherche de « {{q}} » dans vos notes",
+      "use_skill": "Utilisation de la compétence /{{name}}",
+      "entity": "Recherche de {{ref}}",
+      "search_calendar_q": "Recherche de « {{q}} » dans l'agenda",
+      "search_calendar": "Recherche dans l'agenda",
+      "find_time": "Recherche d'un créneau",
+      "rsvp": {
+        "accepted": "Acceptation d'une invitation",
+        "declined": "Refus d'une invitation",
+        "tentative": "Réponse « Peut-être » à une invitation",
+        "other": "Réponse à une invitation"
+      },
+      "order_list": "Consultation de vos consignes permanentes",
+      "list": {
+        "create": "Création d'une liste de tâches",
+        "rename": "Renommage d'une liste de tâches",
+        "color": "Modification de la couleur d'une liste de tâches",
+        "delete": "Suppression d'une liste de tâches",
+        "other": "Modification d'une liste de tâches"
+      },
+      "list_named": {
+        "create": "Création de la liste de tâches « {{name}} »",
+        "rename": "Renommage de la liste de tâches « {{name}} »",
+        "color": "Modification de la couleur de la liste de tâches « {{name}} »",
+        "delete": "Suppression de la liste de tâches « {{name}} »",
+        "other": "Modification de la liste de tâches « {{name}} »"
+      },
+      "calendar": {
+        "create": "Création d'un agenda",
+        "rename": "Renommage d'un agenda",
+        "color": "Modification de la couleur d'un agenda",
+        "delete": "Suppression d'un agenda",
+        "other": "Modification d'un agenda"
+      },
+      "calendar_named": {
+        "create": "Création de l'agenda « {{name}} »",
+        "rename": "Renommage de l'agenda « {{name}} »",
+        "color": "Modification de la couleur de l'agenda « {{name}} »",
+        "delete": "Suppression de l'agenda « {{name}} »",
+        "other": "Modification de l'agenda « {{name}} »"
+      },
+      "filter": {
+        "create": "Création d'un filtre",
+        "update": "Modification d'un filtre",
+        "delete": "Suppression d'un filtre",
+        "apply": "Application d'un filtre",
+        "activate": "Activation d'un filtre",
+        "save": "Enregistrement d'un filtre",
+        "other": "Modification d'un filtre"
+      },
+      "filter_named": {
+        "create": "Création du filtre « {{name}} »",
+        "update": "Modification du filtre « {{name}} »",
+        "delete": "Suppression du filtre « {{name}} »",
+        "apply": "Application du filtre « {{name}} »",
+        "activate": "Activation du filtre « {{name}} »",
+        "save": "Enregistrement du filtre « {{name}} »",
+        "other": "Modification du filtre « {{name}} »"
+      },
+      "label": {
+        "create": "Création d'un libellé",
+        "update": "Modification d'un libellé",
+        "delete": "Suppression d'un libellé",
+        "apply": "Application d'un libellé",
+        "activate": "Activation d'un libellé",
+        "save": "Enregistrement d'un libellé",
+        "other": "Modification d'un libellé"
+      },
+      "label_named": {
+        "create": "Création du libellé « {{name}} »",
+        "update": "Modification du libellé « {{name}} »",
+        "delete": "Suppression du libellé « {{name}} »",
+        "apply": "Application du libellé « {{name}} »",
+        "activate": "Activation du libellé « {{name}} »",
+        "save": "Enregistrement du libellé « {{name}} »",
+        "other": "Modification du libellé « {{name}} »"
+      },
+      "layout": {
+        "create": "Création d'une disposition de la boîte de réception",
+        "update": "Modification d'une disposition de la boîte de réception",
+        "delete": "Suppression d'une disposition de la boîte de réception",
+        "apply": "Application d'une disposition de la boîte de réception",
+        "activate": "Activation d'une disposition de la boîte de réception",
+        "save": "Enregistrement d'une disposition de la boîte de réception",
+        "other": "Modification d'une disposition de la boîte de réception"
+      },
+      "layout_named": {
+        "create": "Création de la disposition de la boîte de réception « {{name}} »",
+        "update": "Modification de la disposition de la boîte de réception « {{name}} »",
+        "delete": "Suppression de la disposition de la boîte de réception « {{name}} »",
+        "apply": "Application de la disposition de la boîte de réception « {{name}} »",
+        "activate": "Activation de la disposition de la boîte de réception « {{name}} »",
+        "save": "Enregistrement de la disposition de la boîte de réception « {{name}} »",
+        "other": "Modification de la disposition de la boîte de réception « {{name}} »"
+      },
+      "order": {
+        "create": "Création d'une consigne permanente",
+        "update": "Modification d'une consigne permanente",
+        "delete": "Suppression d'une consigne permanente",
+        "pause": "Mettre en pause une consigne permanente",
+        "resume": "Reprendre une consigne permanente",
+        "other": "Modifier une consigne permanente"
+      },
+      "order_named": {
+        "create": "Créer la consigne permanente « {{name}} »",
+        "update": "Modifier la consigne permanente « {{name}} »",
+        "delete": "Supprimer la consigne permanente « {{name}} »",
+        "pause": "Mettre en pause la consigne permanente « {{name}} »",
+        "resume": "Reprendre la consigne permanente « {{name}} »",
+        "other": "Modifier la consigne permanente « {{name}} »"
+      },
+      "fixed": {
+        "list_labels": "Vérifier vos libellés",
+        "list_calendar": "Vérifier votre agenda",
+        "list_tasks": "Vérifier vos tâches",
+        "create_event": "Ajouter un événement à l'agenda",
+        "create_task": "Ajouter une tâche",
+        "create_draft": "Rédiger un brouillon",
+        "update_draft": "Réviser le brouillon",
+        "send_draft": "Préparer l'envoi",
+        "get_outbox_status": "Vérifier la boîte d'envoi",
+        "apply_label": "Appliquer un libellé",
+        "archive": "Archiver",
+        "show_in_tab": "Déplacer vers un onglet",
+        "list_drafts": "Consulter vos brouillons",
+        "get_draft": "Lire le brouillon",
+        "list_skills": "Vérifier vos compétences",
+        "get_skill": "Lire une compétence",
+        "create_skill": "Enregistrer une nouvelle compétence",
+        "update_skill": "Mettre à jour une compétence",
+        "forget": "Suppression d'une mémoire",
+        "upsert_entity": "Enregistrer une personne ou un projet",
+        "get_configuration": "Vérifier vos paramètres",
+        "update_settings": "Modifier les paramètres",
+        "update_signature": "Modifier votre signature",
+        "update_profile": "Mettre à jour votre profil",
+        "get_brief": "Lire le résumé",
+        "read_screen": "Lecture de l'écran",
+        "list_view": "Lecture de la liste complète",
+        "review_mail": "Début de la revue de la liste",
+        "list_attachments": "Vérifier les pièces jointes",
+        "update_brief": "Mettre à jour le résumé",
+        "get_signals": "Vérification des éléments urgents",
+        "search_events": "Rechercher dans l'agenda",
+        "get_event": "Lire un événement",
+        "get_calendar_defaults": "Vérifier vos agendas",
+        "get_free_busy": "Vérification des disponibilités",
+        "update_event": "Modification d'un événement de l'agenda",
+        "delete_event": "Suppression d'un événement de l'agenda",
+        "cancel_event": "Annulation d'une réunion",
+        "search_tasks": "Recherche dans vos tâches",
+        "update_task": "Modification d'une tâche",
+        "complete_task": "Finalisation d'une tâche",
+        "move_task": "Déplacement d'une tâche",
+        "delete_task": "Suppression d'une tâche",
+        "bulk_tasks": "Modification de plusieurs tâches",
+        "list_reminders": "Vérification de vos rappels",
+        "list_recordings": "Consultation de vos enregistrements",
+        "get_recording": "Lecture d'un enregistrement",
+        "get_transcript": "Lecture d'une transcription",
+        "search_recordings": "Recherche dans vos enregistrements",
+        "get_summary": "Lecture d'un récapitulatif de réunion",
+        "recordings_for_event": "Recherche de l'enregistrement de la réunion",
+        "link_recording": "Liaison d'un enregistrement",
+        "propose_action_items": "Recherche des points d'action",
+        "draft_follow_up": "Rédaction d'un brouillon de suivi",
+        "send_to_speakr": "Envoi d'un fichier à Speakr",
+        "update_recording": "Modification d'un enregistrement dans Speakr",
+        "share_recording": "Création d'un lien de partage",
+        "list_notes": "Consultation de vos notes",
+        "get_note": "Lecture d'une note",
+        "create_note": "Création d'une note",
+        "update_note": "Modification d'une note",
+        "checklist_items": "Modification d'une liste",
+        "delete_note": "Déplacement d'une note vers la Corbeille",
+        "note_history": "Vérification des versions d'une note",
+        "manage_note_labels": "Modification des libellés des notes"
+      }
+    },
+    "count": {
+      "result_one": "{{count}} résultat",
+      "result_other": "{{count}} résultats",
+      "passage_one": "{{count}} passage",
+      "passage_other": "{{count}} passages",
+      "event_one": "{{count}} événement",
+      "event_other": "{{count}} événements",
+      "task_one": "{{count}} tâche",
+      "task_other": "{{count}} tâches",
+      "note_one": "{{count}} note",
+      "note_other": "{{count}} notes",
+      "version_one": "{{count}} version",
+      "version_other": "{{count}} versions",
+      "label_one": "{{count}} libellé",
+      "label_other": "{{count}} libellés",
+      "skill_one": "{{count}} compétence",
+      "skill_other": "{{count}} compétences",
+      "recording_one": "{{count}} enregistrement",
+      "recording_other": "{{count}} enregistrements",
+      "draft_one": "{{count}} brouillon",
+      "draft_other": "{{count}} brouillons",
+      "attachment_one": "{{count}} pièce jointe",
+      "attachment_other": "{{count}} pièces jointes",
+      "conversation_one": "{{count}} conversation",
+      "conversation_other": "{{count}} conversations",
+      "message_one": "{{count}} message",
+      "message_other": "{{count}} messages",
+      "memory_one": "{{count}} élément de mémoire",
+      "memory_other": "{{count}} éléments de mémoire",
+      "item_one": "{{count}} élément",
+      "item_other": "{{count}} éléments"
+    },
+    "result": {
+      "page_read": "page lue",
+      "page_read_cut": "page lue (raccourcie)",
+      "nothing_saved": "rien n'a été enregistré",
+      "nothing_changed": "aucune modification",
+      "open_draft": "modifié dans le brouillon ouvert",
+      "join": "{{first}}, {{rest}}",
+      "already_done": "déjà effectué ci-dessus",
+      "same_again": "même résultat que précédemment",
+      "results_from_one": "{{count}} résultat de {{provider}}",
+      "results_from_other": "{{count}} résultats de {{provider}}",
+      "items_added_one": "{{count}} élément ajouté",
+      "items_added_other": "{{count}} éléments ajoutés",
+      "changes_made_one": "{{count}} modification effectuée",
+      "changes_made_other": "{{count}} modifications effectuées",
+      "waiting_one": "{{count}} en attente de votre validation",
+      "waiting_other": "{{count}} en attente de votre validation",
+      "failed_one": "{{count}} a échoué",
+      "failed_other": "{{count}} ont échoué",
+      "saved_reminds": "enregistré · rappel {{when}}",
+      "saved_no_reminder": "enregistré · aucun rappel",
+      "reviewing_one": "examen de {{count}} conversation",
+      "reviewing_other": "examen de {{count}} conversations",
+      "review_running_one": "un examen de {{count}} conversation est déjà en cours",
+      "review_running_other": "un examen de {{count}} conversations est déjà en cours",
+      "nothing_to_review": "rien à examiner"
+    },
+    "step_outcome": {
+      "approved": "approuvé",
+      "denied": "refusé",
+      "expired": "expiré",
+      "failed": "échec"
+    },
+    "forward": {
+      "title": "Traiter votre note transférée",
+      "summary": "Vous avez transféré ce message depuis une adresse de confiance. {{name}} exécute la demande indiquée dans la note ; chaque étape reste soumise à sa propre autorisation."
+    }
+  },
+  "mail": {
+    "date": {
+      "weekday": {
+        "0": "Lun",
+        "1": "Mar",
+        "2": "Mer",
+        "3": "Jeu",
+        "4": "Ven",
+        "5": "Sam",
+        "6": "Dim"
+      },
+      "month": {
+        "1": "Janv.",
+        "2": "Févr.",
+        "3": "Mars",
+        "4": "Avr.",
+        "5": "Mai",
+        "6": "Juin",
+        "7": "Juil.",
+        "8": "Août",
+        "9": "Sept.",
+        "10": "Oct.",
+        "11": "Nov",
+        "12": "Déc"
+      },
+      "day": "{{weekday}} {{day}} {{month}} {{year}}",
+      "time": "{{hour}}:{{minute}}",
+      "day_time": "{{date}}, {{time}}",
+      "range": "{{start}} – {{end}}",
+      "zone": "{{when}} ({{zone}})"
+    },
+    "quote": {
+      "wrote": "Le {{date}}, {{sender}} a écrit :",
+      "forwarded": "---------- Message transféré ---------",
+      "from": "De : {{value}}",
+      "date": "Date : {{value}}",
+      "subject": "Objet : {{value}}",
+      "to": "À : {{value}}"
+    },
+    "itip": {
+      "subject": {
+        "invitation": "Invitation : {{title}}",
+        "update": "Invitation mise à jour : {{title}}",
+        "cancel": "Annulé : {{title}}",
+        "decline_counter": "Nouveau créneau refusé : {{title}}"
+      },
+      "body": {
+        "invitation": "{{organizer}} vous a invité à cet événement.",
+        "update": "{{organizer}} a mis à jour cet événement.",
+        "cancel": "{{organizer}} a annulé cet événement.",
+        "cancel_occurrence": "{{organizer}} a annulé une occurrence de cet événement.",
+        "decline_counter": "{{organizer}} a refusé le créneau que vous avez proposé. L'événement est inchangé."
+      },
+      "untitled": "(sans titre)",
+      "when": "Quand : {{when}}",
+      "where": "Où : {{where}}"
+    },
+    "rsvp": {
+      "subject": {
+        "accepted": "Accepté : {{title}}",
+        "declined": "Refusé : {{title}}",
+        "tentative": "Accepté sous réserve : {{title}}"
+      },
+      "body": {
+        "accepted": "{{who}} a accepté cette invitation.",
+        "declined": "{{who}} a décliné cette invitation.",
+        "tentative": "{{who}} a accepté cette invitation sous réserve."
+      }
+    },
+    "speakr": {
+      "followup_subject": "Suivi : {{title}}",
+      "followup_notes": "Voici les notes de {{title}}.",
+      "our_meeting": "notre réunion",
+      "task_from_recording": "De l'enregistrement {{title}} : {{link}}",
+      "task_from_recording_at": "De l'enregistrement {{title}} à {{time}} : {{link}}",
+      "task_meeting": "Réunion : {{link}}",
+      "recording": "Enregistrement",
+      "quoted": "“{{title}}”",
+      "signed_in": "Connecté à Speakr en tant que {{who}}.",
+      "signed_in_count_one": "Connecté à Speakr en tant que {{who}}, {{count}} enregistrement.",
+      "signed_in_count_other": "Connecté à Speakr en tant que {{who}}, {{count}} enregistrements.",
+      "token_access": "Accès par jeton : {{scopes}}.",
+      "token_full": "complet",
+      "scope": {
+        "full": "Ce jeton dispose d'un accès complet à votre compte Speakr, y compris la suppression des enregistrements et la modification des webhooks. Le préréglage Intégration (lecture, écriture, envoi) suffit pour Mailr.",
+        "extra_one": "Ce jeton inclut également {{scopes}}, qui ne sont pas utilisés par Mailr. Un jeton sans ces droits est plus sûr.",
+        "extra_other": "Ce jeton inclut également {{scopes}}, qui ne sont pas utilisés par Mailr. Un jeton sans ces droits est plus sûr.",
+        "no_read": "Ce jeton ne peut pas lire les enregistrements. Créez-en un avec l'autorisation de lecture.",
+        "no_write": "Ce jeton ne peut pas modifier. Créez-en un avec l'autorisation d'écriture.",
+        "no_share": "Ce jeton ne peut pas créer de liens de partage. Créez-en un avec l'autorisation de partage.",
+        "no_upload": "Ce jeton ne peut pas envoyer de fichiers, donc la transcription dans Speakr et les nouveaux enregistrements échoueront. Ajoutez l'autorisation d'envoi si vous utilisez ces fonctions.",
+        "no_webhooks": "Sans la portée webhooks, « Recevoir les mises à jour instantanément » nécessite un webhook que vous créez dans Speakr."
+      }
+    }
+  },
+  "import": {
+    "untitled": "(sans titre)"
+  },
+  "trusted": {
+    "mail": {
+      "subject": "Code de confirmation {{code}}",
+      "body": "{{who}} a demandé d'ajouter {{address}} comme adresse de confiance pour {{assistant}}.\n\nCode de confirmation : {{code}}\n\nLe code expire après {{minutes}} minutes. Si vous n'attendiez pas ce message, ignorez-le. Rien n'est modifié tant que le code n'est pas saisi."
+    }
+  },
+  "calendar_forward": {
+    "moved": "{{title}} déplacé à {{when}} (était {{was}})",
+    "cancelled": "{{title}} a été annulé par {{who}}",
+    "changed": "{{title}} modifié : {{what}}",
+    "what": {
+      "title": "titre",
+      "place": "lieu",
+      "description": "description",
+      "guests": "invités",
+      "link": "lien de la réunion",
+      "when": "heure",
+      "details": "détails"
+    }
+  },
+  "reminders": {
+    "detail": {
+      "all_day": "Toute la journée",
+      "today": "aujourd’hui",
+      "tomorrow": "demain",
+      "yesterday": "hier",
+      "date": "{{weekday}} {{day}} {{month}}",
+      "due": "Échéance : {{when}}",
+      "due_at": "Échéance : {{when}}, {{time}}"
+    }
+  }
+}

@@ -1,0 +1,162 @@
+name: Android Release
+
+# Builds and signs the two Android apps (Mailr and the Notes app) and attaches them to the GitHub
+# Release, with a SHA256SUMS file and a build-provenance attestation for each APK. The attestation
+# records the workflow and the commit an APK was built from; it can be checked with
+# `gh attestation verify <file>.apk --repo murtaza-nasir/mailr`.
+#
+# The signing key is read from secrets of the protected `release` environment:
+#   ANDROID_KEYSTORE_BASE64   the keystore file, base64-encoded
+#   ANDROID_STORE_PASSWORD    its password
+#   ANDROID_KEY_ALIAS         the key's alias
+#   ANDROID_KEY_PASSWORD      the key's password
+# Every APK is checked against the expected signing certificate before it is published, so a
+# wrong key never reaches a release (Android refuses an update signed with another key).
+#
+# The APKs have no deploy.properties: the server field is empty on first start, and no app links
+# are set for a particular server.
+#
+# A manual run (workflow_dispatch) builds and signs the APKs and keeps them as a workflow
+# artifact for a few days; nothing is attached to a release.
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: "Skip the test workflow (manual runs only; a release always runs it)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+env:
+  # SHA-256 of the signing certificate (public information; the same as `apksigner verify --print-certs`).
+  EXPECTED_CERT_SHA256: 746b3597042a2944d3df05a79db84661323fe327797865f94f63321505c431a7
+
+jobs:
+  test:
+    # The full test workflow gates the release.
+    if: github.event_name == 'release' || !inputs.skip_tests
+    uses: ./.github/workflows/test.yml
+
+  build:
+    needs: test
+    if: always() && (needs.test.result == 'success' || (needs.test.result == 'skipped' && github.event_name == 'workflow_dispatch'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    environment: release
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: The release tag matches the server, web and changelog versions
+        # The Android versionName is checked against the tag after the build (below).
+        if: github.event_name == 'release'
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          want=${RELEASE_TAG#v}
+          py=$(sed -n 's/^version = "\(.*\)"$/\1/p' backend/pyproject.toml | head -1)
+          web=$(python3 -c 'import json; print(json.load(open("frontend/package.json"))["version"])')
+          log=$(sed -n 's/^## \([0-9][^ ]*\).*/\1/p' CHANGELOG.md | head -1)
+          echo "tag $want, backend/pyproject.toml $py, frontend/package.json $web, CHANGELOG.md $log"
+          if [ "$py" != "$want" ] || [ "$web" != "$want" ] || [ "$log" != "$want" ]; then
+            echo "::error::Set backend/pyproject.toml, frontend/package.json and the newest CHANGELOG.md heading to $want"; exit 1
+          fi
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Write the signing settings
+        working-directory: android
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -z "$KEYSTORE_BASE64" ]; then echo "::error::The release environment has no signing secrets."; exit 1; fi
+          umask 077
+          mkdir -p "$RUNNER_TEMP/signing"
+          printf '%s' "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/signing/release.jks"
+          {
+            echo "storeFile=release.jks"
+            echo "storePassword=$STORE_PASSWORD"
+            echo "keyAlias=$KEY_ALIAS"
+            echo "keyPassword=$KEY_PASSWORD"
+          } > "$RUNNER_TEMP/signing/keystore.properties"
+          echo "MAILR_KEYSTORE_PROPERTIES=$RUNNER_TEMP/signing/keystore.properties" >> "$GITHUB_ENV"
+
+      - name: Build both release APKs
+        working-directory: android
+        run: ./gradlew --no-daemon --console=plain :app:assembleRelease :notes:assembleRelease
+
+      - name: Remove the signing files
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/signing"
+
+      - name: Check signatures and versions
+        id: apks
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          apksigner=$(find "$ANDROID_HOME/build-tools" -maxdepth 2 -name apksigner | sort -V | tail -1)
+          aapt=$(find "$ANDROID_HOME/build-tools" -maxdepth 2 -name aapt2 | sort -V | tail -1)
+          echo "apksigner: ${apksigner:-none}; aapt2: ${aapt:-none}"
+          if [ -z "$apksigner" ] || [ -z "$aapt" ]; then echo "::error::No apksigner or aapt2 under $ANDROID_HOME/build-tools"; exit 1; fi
+          ls -l android/app/build/outputs/apk/release/ android/notes/build/outputs/apk/release/
+          mkdir -p dist
+          for pair in "mailr:android/app/build/outputs/apk/release/app-release.apk" "mailr-notes:android/notes/build/outputs/apk/release/notes-release.apk"; do
+            name=${pair%%:*}; apk=${pair#*:}
+            if [ ! -f "$apk" ]; then echo "::error::$apk was not built (an unsigned build is named *-unsigned.apk)"; exit 1; fi
+            out=$("$apksigner" verify --print-certs "$apk" 2>&1) || { echo "$out"; echo "::error::$apk does not verify"; exit 1; }
+            # "Signer #1 certificate SHA-256 digest: …", or per SDK range in newer apksigner versions.
+            certs=$(printf '%s\n' "$out" | grep -i 'certificate SHA-256 digest:' | awk '{print $NF}' | sort -u)
+            cert=$certs
+            if [ "$(printf '%s\n' "$certs" | grep -c .)" != 1 ]; then printf '%s\n' "$out"; fi
+            if [ "$cert" != "$EXPECTED_CERT_SHA256" ]; then
+              echo "::error::$apk is not signed with the expected certificate ($cert)"; exit 1
+            fi
+            version=$("$aapt" dump badging "$apk" | sed -n "s/.*versionName='\([^']*\)'.*/\1/p")
+            cp "$apk" "dist/$name-$version.apk"
+            echo "$name=$version" >> "$GITHUB_OUTPUT"
+          done
+          mailr_version=$(sed -n 's/^mailr=//p' "$GITHUB_OUTPUT")
+          if [ "$GITHUB_EVENT_NAME" = "release" ] && [ "v$mailr_version" != "$RELEASE_TAG" ]; then
+            echo "::error::The release tag $RELEASE_TAG does not match the app version $mailr_version"; exit 1
+          fi
+          (cd dist && sha256sum -- *.apk > SHA256SUMS && cat SHA256SUMS)
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: dist/*.apk
+
+      - name: Attach the APKs to the release
+        if: github.event_name == 'release'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: gh release upload "$RELEASE_TAG" dist/*.apk dist/SHA256SUMS --clobber --repo "$GITHUB_REPOSITORY"
+
+      - name: Keep the APKs as an artifact
+        if: github.event_name != 'release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-apks
+          path: dist/
+          retention-days: 5

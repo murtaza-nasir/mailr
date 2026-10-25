@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# The backend's static checks, as CI runs them (.github/workflows/test.yml):
+#
+#   tools/check-backend                     ruff (lint) and basedpyright (types)
+#   tools/check-backend --write-baseline    after fixing type errors: record the smaller baseline
+#
+# Ruff's rule set is in backend/pyproject.toml ([tool.ruff.lint]); findings that predate it carry a
+# `# noqa: <code>` on their line. basedpyright compares with backend/.basedpyright/baseline.json:
+# an error recorded there passes, a new one fails. Fixing errors never needs the baseline written
+# first, but write it afterwards so the fixed errors cannot come back unnoticed.
+set -uo pipefail
+ROOT=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
+cd "$ROOT/backend" || exit 2
+[ -x .venv/bin/ruff ] && [ -x .venv/bin/basedpyright ] || {
+  echo "check-backend: backend/.venv lacks ruff or basedpyright (uv sync --all-extras)" >&2; exit 2; }
+
+if [ "${1:-}" = "--write-baseline" ]; then
+  exec .venv/bin/basedpyright --writebaseline
+fi
+
+rc=0
+echo "== ruff"
+.venv/bin/ruff check mailr tests || rc=1
+echo "== basedpyright (new errors only; baseline: backend/.basedpyright/baseline.json)"
+.venv/bin/basedpyright || rc=1
+exit $rc

@@ -1,0 +1,95 @@
+# mailr DAV gateway: phones and desktop apps reach the built-in calendars and contacts here.
+# docs: site/docs/admin/calendars.md, "Phones and desktop apps".
+#
+# It publishes only the calendar and contacts paths of the bundled Stalwart. Everything else on
+# Stalwart's HTTP port stays unreachable: JMAP (mail), the management API, OAuth, the web admin.
+# Your reverse proxy forwards the whole phone host (dav.example.com) to this gateway.
+#
+# Filled in from the environment when the container starts (docker compose sets both):
+#   MAILR_DAV_UPSTREAM        Stalwart's HTTP listener, stalwart:8080
+#   MAILR_DAV_TRUSTED_PROXY   the address of YOUR reverse proxy as this gateway sees it (one
+#                             address or CIDR). Only that proxy's X-Forwarded-For is believed.
+#
+# The same file works without the gateway container, in an nginx that reaches Stalwart directly:
+# replace the two ${...} values by hand.
+
+# The methods calendar and contacts apps use. ACL is not among them: sharing stays in mailr, which
+# writes the people-first ACL. POST and PATCH are not either.
+map $request_method $mailr_dav_method_ok {
+    default    0;
+    OPTIONS    1;
+    GET        1;
+    HEAD       1;
+    PUT        1;
+    DELETE     1;
+    PROPFIND   1;
+    PROPPATCH  1;
+    REPORT     1;
+    MKCOL      1;
+    MKCALENDAR 1;
+    COPY       1;
+    MOVE       1;
+    LOCK       1;
+    UNLOCK     1;
+}
+
+# Basic sign-in only. Stalwart also offers Bearer (OAuth), whose discovery paths are blocked here,
+# and some apps would try it.
+map $upstream_http_www_authenticate $mailr_dav_challenge {
+    ""      "";
+    default 'Basic realm="mailr calendars", charset="UTF-8"';
+}
+
+server {
+    listen 8080;
+    server_name _;
+    server_tokens off;
+    # Redirects name a path only (/dav/cal/), so they keep the host and port the phone used.
+    absolute_redirect off;
+
+    # A calendar item is at most 512 KiB on Stalwart; a contact with a photo can be larger.
+    client_max_body_size 10m;
+
+    # The phone's address, from the reverse proxy in front. real_ip_recursive takes the right-most
+    # address that is not the trusted proxy, so a client cannot choose its address by sending its
+    # own X-Forwarded-For.
+    set_real_ip_from ${MAILR_DAV_TRUSTED_PROXY};
+    real_ip_header X-Forwarded-For;
+    real_ip_recursive on;
+
+    location = /.well-known/caldav  { return 301 /dav/cal/; }
+    location = /.well-known/carddav { return 301 /dav/card/; }
+
+    # The schedule outbox tells whether an address has an account on this server (and scheduling
+    # is off). WebDAV file storage is not offered.
+    location ~ ^/dav/itip/[^/]+/outbox { return 403; }
+    location ^~ /dav/file/ { return 403; }
+
+    location /dav/ {
+        if ($mailr_dav_method_ok = 0) {
+            return 405;
+        }
+        proxy_pass http://${MAILR_DAV_UPSTREAM};
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header Host $host;
+        # Overwritten, never appended: Stalwart takes the FIRST X-Forwarded-For entry (or Forwarded:
+        # for=) from anyone, with x:Http.useXForwarded on.
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header Forwarded "";
+        proxy_set_header X-Forwarded-Proto https;
+        # Cookies of any site on the same host never reach the mail server.
+        proxy_set_header Cookie "";
+        proxy_hide_header WWW-Authenticate;
+        add_header WWW-Authenticate $mailr_dav_challenge always;
+        add_header X-Content-Type-Options nosniff always;
+        add_header Content-Security-Policy "default-src 'none'; sandbox" always;
+        proxy_read_timeout 120s;
+    }
+
+    # Everything else: /jmap, /api, /auth, /admin, /account, /.well-known/oauth-*, /.well-known/jmap.
+    location / {
+        return 404;
+    }
+}

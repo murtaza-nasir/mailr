@@ -1,0 +1,10 @@
+# Startup and note-list code compiled ahead of time on install (see app/src/main/baseline-prof.txt).
+HSPLio/github/murtazanasir/mailr/notesapp/NotesApplication**;->**(**)**
+HSPLio/github/murtazanasir/mailr/notesapp/MainActivity**;->**(**)**
+HSPLio/github/murtazanasir/mailr/notesapp/ui/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/notes/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/look/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/i18n/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/time/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/data/api/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/data/auth/**;->**(**)**

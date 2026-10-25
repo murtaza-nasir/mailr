@@ -1,0 +1,75 @@
+# Known open-tracking images in email (core/trackers.py reads this file).
+#
+# One rule per line: a host, then optionally a regular expression for the path and query.
+# - The host matches itself and its subdomains ("list-manage.com" covers "x.us1.list-manage.com").
+# - "*" as the host matches every host: use it only for paths that are specific to one sender
+#   platform's open pixel (custom tracking domains of SendGrid, Mailgun, SparkPost and others).
+# - Without a path, every image from the host is a tracker. Use that only for hosts that serve
+#   nothing else.
+# The path pattern is matched case-insensitively against "/path?query" from its start.
+#
+# A tracker image is never fetched and is removed from the body; the reader counts it.
+# Add rules as new platforms show up; tests/test_image_proxy.py checks a sample of them.
+
+# Mailchimp / Mandrill
+list-manage.com            /track/open
+mandrillapp.com            /track/open
+# SendGrid (also on customers' own link domains)
+sendgrid.net               /wf/open
+*                          /wf/open\?upn=
+# Mailgun (custom "email." domains): /o/ followed by a zlib/base64 token
+*                          /o/eJ
+# SparkPost
+sparkpostmail.com          /q/
+*                          /q/[^/]+~~/
+# Amazon SES open pixel (clicks use /L0/)
+awstrack.me                /I0/
+# Postmark
+pstmrk.it                  /open
+# Mailjet
+mjt.lu                     /oo/
+# Brevo (Sendinblue)
+*                          /tr/op/
+# Salesforce Marketing Cloud (ExactTarget)
+exct.net                   /open\.aspx
+*                          /open\.aspx\?
+# Marketo
+*                          /trk\?t=1
+# Constant Contact
+rs6.net                    /on\.jsp
+# Campaign Monitor
+createsend1.com            /t/
+cmail19.com                /t/
+cmail20.com                /t/
+# HubSpot
+hubspotemail.net
+track.hubspot.com
+# Customer.io, Intercom
+customer.io                /e/o/
+via.intercom.io            /o/
+# Substack
+substackcdn.com            /open
+# Klaviyo
+trk.klaviyomail.com
+# Google Analytics beacons
+google-analytics.com
+googletagmanager.com
+doubleclick.net
+# Social networks' email open logs
+www.facebook.com           /email_open_log_pic\.php
+www.linkedin.com           /emimp/
+twitter.com                /scribe/ibis
+x.com                      /scribe/ibis
+# Read-receipt services and sales tools
+mailtrack.io
+mltrk.io
+r.superhuman.com
+t.yesware.com
+mailfoogae.appspot.com
+track.mixmax.com
+email.mixmax.com           /api/track
+t.sidekickopen01.com
+t.signaux.com
+t.senal.com
+t.signals.com
+pixel.mathtag.com

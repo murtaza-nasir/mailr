@@ -1,0 +1,1224 @@
+/* The setup guide, the Continue setup card, the import strip and the Get the app page. Only the
+   design tokens are used, so every theme (Classic, Workspace, Focus, Desk, Cards) and both colour
+   schemes draw it in their own palette. Targets are at least 44px; one column on phones. */
+
+.ob-page {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background:
+    radial-gradient(1200px 500px at 50% -120px, color-mix(in srgb, var(--primary-container) 75%, transparent), transparent 70%),
+    var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  -webkit-overflow-scrolling: touch;
+}
+.ob-loading {
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---- top bar: brand, progress, finish later ---- */
+.ob-top {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 24px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid color-mix(in srgb, var(--divider) 60%, transparent);
+}
+.ob-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 18px;
+  color: var(--text);
+}
+.ob-word b {
+  font-weight: 700;
+}
+.ob-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 560px;
+  width: 100%;
+  justify-self: center;
+}
+.ob-progress-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-2);
+  text-align: center;
+}
+.ob-progress-name {
+  font-weight: 400;
+  color: var(--text-3);
+}
+.ob-progress-bar {
+  display: flex;
+  gap: 4px;
+}
+.ob-progress-bar > span {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface-high);
+  transition: background 250ms var(--ease);
+}
+.ob-progress-bar > span.done {
+  background: var(--primary);
+}
+.ob-progress-bar > span.on {
+  background: color-mix(in srgb, var(--primary) 45%, var(--surface-high));
+}
+.ob-later {
+  height: 44px;
+}
+
+/* ---- the step card ---- */
+.ob-main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 32px 16px 48px;
+  animation: ob-in 260ms var(--ease);
+}
+@keyframes ob-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ob-main {
+    animation: none;
+  }
+}
+.ob-card {
+  width: 100%;
+  max-width: 620px;
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-1);
+  border: 1px solid color-mix(in srgb, var(--divider) 70%, transparent);
+  padding: 36px 40px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-self: flex-start;
+}
+.ob-card.wide {
+  max-width: 900px;
+}
+[data-theme='dark'] .ob-card {
+  background: var(--surface-container);
+}
+.ob-head {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.ob-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.ob-icon .lucide {
+  width: 30px;
+  height: 30px;
+}
+.ob-head h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(24px, 4vw, 30px);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  outline: none;
+}
+.ob-lead {
+  margin: 0;
+  max-width: 52ch;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+.ob-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 15px;
+}
+.ob-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 20px;
+  border-top: 1px solid var(--divider);
+}
+.ob-foot .spacer {
+  flex: 1;
+}
+.ob-foot .btn,
+.btn.ob-big {
+  height: 48px;
+  padding: 0 22px;
+  font-size: 16px;
+}
+.ob-next {
+  min-width: 140px;
+}
+.btn.ob-big {
+  align-self: center;
+}
+.ob-hint {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-3);
+}
+.ob-center {
+  text-align: center;
+  margin: 0;
+}
+.ob-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.ob-sub {
+  font-size: 17px;
+  margin: 8px 0 0;
+}
+.ob-note {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--info-container);
+  color: var(--text);
+  line-height: 1.5;
+}
+.ob-note-stack {
+  flex-direction: column;
+}
+.ob-note-stack p {
+  margin: 0;
+}
+.ob-note .lucide {
+  flex: none;
+  color: var(--primary);
+  margin-top: 2px;
+}
+.ob-ok {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: var(--success);
+  font-weight: 600;
+}
+.ob-inline-icon {
+  width: 18px;
+  height: 18px;
+  vertical-align: -3px;
+  color: var(--primary);
+}
+
+/* ---- forms ---- */
+.ob-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ob-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ob-field > label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+.ob-input.input,
+.ob-input.textarea {
+  min-height: 48px;
+  font-size: 16px; /* no zoom on iPhone */
+  border-radius: var(--radius-md);
+}
+.ob-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ob-fieldset legend {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding: 0;
+}
+.ob-row-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+/* ---- choice cards ---- */
+.ob-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ob-choice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 64px;
+  padding: 14px 16px;
+  text-align: start;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+[data-theme='dark'] .ob-choice {
+  background: var(--surface-dim);
+}
+.ob-choice:hover {
+  background: var(--hover);
+}
+.ob-choice.on {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary-container) 55%, var(--surface));
+  box-shadow: 0 0 0 1px var(--primary);
+}
+.ob-choice:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.ob-choice-art {
+  flex: none;
+  color: var(--primary);
+  display: inline-grid;
+  place-items: center;
+}
+.ob-choice-art > .lucide {
+  width: 28px;
+  height: 28px;
+}
+.ob-choice-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.ob-choice-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+.ob-choice-desc {
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+.ob-radio {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--text-3);
+  display: grid;
+  place-items: center;
+}
+.ob-choice.on .ob-radio {
+  border-color: var(--primary);
+}
+.ob-choice.on .ob-radio::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+/* Theme and inbox style cards: the preview on top. */
+.ob-themes,
+.ob-styles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.ob-themes .ob-choice,
+.ob-styles .ob-choice {
+  flex-direction: column;
+  align-items: stretch;
+  position: relative;
+  padding: 12px;
+}
+.ob-themes .ob-choice-art,
+.ob-styles .ob-choice-art {
+  display: block;
+}
+.ob-themes .ob-radio,
+.ob-styles .ob-radio {
+  position: absolute;
+  top: 18px;
+  inset-inline-end: 18px;
+  background: var(--surface);
+}
+.ob-themes .ob-choice-text,
+.ob-styles .ob-choice-text {
+  padding: 4px 4px 2px;
+}
+
+/* Segmented buttons (light/dark, density, phone). */
+.ob-segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius-full);
+  background: var(--surface-high);
+}
+.ob-segmented > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--radius-full);
+  color: var(--text-2);
+  font-weight: 500;
+  font-size: 15px;
+}
+.ob-segmented > button .lucide {
+  width: 18px;
+  height: 18px;
+}
+.ob-segmented > button.on {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-1);
+}
+[data-theme='dark'] .ob-segmented > button.on {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.ob-phones {
+  align-self: center;
+}
+.ob-phones > button {
+  min-width: 120px;
+  justify-content: center;
+}
+
+/* ---- welcome ---- */
+.ob-welcome {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.ob-me {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.ob-avatar {
+  position: relative;
+  flex: none;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  display: grid;
+  place-items: center;
+  font-size: 40px;
+  font-weight: 600;
+  box-shadow: 0 0 0 4px var(--surface), 0 0 0 6px var(--primary-container);
+}
+.ob-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ob-avatar-busy {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+}
+.ob-me-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+.ob-me-actions .btn {
+  height: 44px;
+}
+
+/* ---- accounts ---- */
+.ob-accounts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ob-account {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  background: var(--success-container);
+  color: var(--text);
+}
+[data-theme='dark'] .ob-account {
+  background: color-mix(in srgb, var(--success-container) 30%, var(--surface));
+}
+.ob-account.error {
+  background: var(--danger-container);
+}
+.ob-account-icon {
+  color: var(--success);
+  display: inline-grid;
+}
+.ob-account.error .ob-account-icon {
+  color: var(--danger);
+}
+.ob-account-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.ob-found {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--surface-high);
+  overflow-wrap: anywhere;
+}
+.ob-found > span {
+  flex: 1;
+}
+.ob-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-dim);
+  border: 1px solid var(--divider);
+}
+.ob-why {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  line-height: 1.55;
+}
+.ob-why .lucide {
+  flex: none;
+  color: var(--primary);
+  margin-top: 2px;
+}
+.ob-guide-steps,
+.ob-before ol {
+  margin: 0;
+  padding-inline-start: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  line-height: 1.5;
+}
+.ob-before {
+  border-radius: var(--radius-md);
+  background: var(--warning-container);
+  padding: 10px 14px;
+}
+.ob-before summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+}
+.ob-before summary::-webkit-details-marker {
+  display: none;
+}
+.ob-before[open] summary .lucide {
+  transform: rotate(180deg);
+}
+.ob-before ol {
+  margin: 8px 0 12px;
+}
+.ob-servers summary {
+  cursor: pointer;
+  color: var(--primary);
+  font-weight: 500;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+}
+.ob-signature {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: stretch;
+  padding-top: 8px;
+  border-top: 1px dashed var(--divider);
+}
+.ob-signature .btn {
+  align-self: flex-start;
+  height: 44px;
+}
+
+/* ---- inbox previews ---- */
+.ob-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  border: 1px solid var(--divider);
+  min-height: 140px;
+  font-size: 12px;
+  text-align: start;
+}
+.ob-mini-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--divider);
+  padding-bottom: 4px;
+  margin-bottom: 2px;
+  color: var(--text-3);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.ob-mini-tabs .on {
+  color: var(--primary);
+  font-weight: 600;
+  box-shadow: 0 2px 0 var(--primary);
+}
+.ob-mini-group {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.ob-mini-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: var(--text-3);
+  margin-top: 2px;
+}
+.ob-mini-empty {
+  color: var(--text-3);
+  font-style: italic;
+}
+.ob-mini-row {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 72px) minmax(0, 1fr);
+  gap: 6px;
+  align-items: center;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text-2);
+}
+.ob-mini-row.unread {
+  color: var(--text);
+  font-weight: 600;
+}
+.ob-mini-from,
+.ob-mini-subj {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.ob-mini-imp {
+  width: 12px;
+  height: 12px;
+  color: var(--star);
+  fill: var(--star);
+}
+.ob-mini-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--divider);
+  justify-self: center;
+}
+
+/* ---- phone ---- */
+.ob-phone {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 28px;
+  align-items: start;
+}
+.ob-phone.here {
+  grid-template-columns: 1fr;
+}
+.ob-qr-box {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  border: 1px solid var(--divider);
+}
+.ob-qr-box figcaption {
+  font-size: 13px;
+  color: #3c4043;
+}
+.ob-qr {
+  display: block;
+}
+.ob-install {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ob-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.ob-steps > li {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 12px;
+  align-items: start;
+  line-height: 1.55;
+}
+.ob-steps > li > span:last-child {
+  display: block;
+  padding-top: 4px;
+}
+.ob-steps > li > span:last-child > .btn {
+  display: flex;
+  width: fit-content;
+  margin: 2px 0 8px;
+}
+.ob-steps > li > span:last-child > .ob-hint {
+  display: block;
+}
+.ob-step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  font-weight: 700;
+}
+
+/* ---- notifications ---- */
+.ob-notify {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-dim);
+  text-align: center;
+}
+.ob-notify .banner {
+  text-align: start;
+}
+
+/* ---- get to know you ---- */
+.ob-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.ob-chip {
+  min-height: 40px;
+  padding: 0 16px;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--border);
+  color: var(--text-2);
+  font-size: 14px;
+}
+.ob-chip.on {
+  border-color: var(--primary);
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  font-weight: 600;
+}
+.ob-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ob-chat-log {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: min(52vh, 460px);
+  min-height: 200px;
+  overflow-y: auto;
+  padding: 14px;
+  border-radius: var(--radius-lg);
+  background: var(--surface-dim);
+  border: 1px solid var(--divider);
+}
+.ob-bubble {
+  max-width: 85%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  font-size: 15px;
+}
+.ob-bubble.assistant {
+  align-self: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--divider);
+  border-end-start-radius: 6px;
+}
+.ob-bubble.user {
+  align-self: flex-end;
+  background: var(--primary);
+  color: var(--on-primary);
+  border-end-end-radius: 6px;
+}
+.ob-bubble.typing {
+  display: inline-flex;
+  gap: 4px;
+  padding: 14px 16px;
+}
+.ob-bubble.typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-3);
+  animation: ob-dot 1.2s infinite ease-in-out;
+}
+.ob-bubble.typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.ob-bubble.typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes ob-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+.ob-chat-input {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+.ob-chat-input .textarea {
+  flex: 1;
+  resize: none;
+}
+.ob-chat-input .btn {
+  height: 48px;
+  width: 48px;
+  padding: 0;
+}
+.ob-memories {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.ob-memories li {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.ob-memories li .input {
+  flex: 1;
+}
+.ob-memories .pill {
+  flex: none;
+  min-width: 92px;
+  text-align: center;
+}
+.ob-memories li.off .input {
+  text-decoration: line-through;
+  opacity: 0.55;
+}
+.ob-tip-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+.ob-tip-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--surface-high);
+}
+.ob-tip-dots span.on {
+  background: var(--primary);
+  width: 26px;
+  border-radius: 5px;
+}
+
+/* ---- in the app: the Continue setup card and the import strip ---- */
+.ob-setup-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 12px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(120deg, var(--primary-container), color-mix(in srgb, var(--primary-container) 40%, var(--surface)));
+  color: var(--on-primary-container);
+}
+.ob-setup-icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  color: var(--primary);
+}
+.ob-setup-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  font-size: 14px;
+}
+.ob-setup-text b {
+  font-size: 15px;
+}
+.ob-setup-bar {
+  margin-top: 6px;
+  height: 5px;
+  max-width: 260px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  overflow: hidden;
+}
+.ob-setup-bar span {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+}
+.ob-setup-card .btn.filled {
+  height: 44px;
+}
+/* On a phone and on a short screen (200 % zoom) the card is one strip: the title, the link and the
+   close button on one line, so the mail keeps the height. */
+@media (max-width: 640px), (max-height: 600px) {
+  .ob-setup-card {
+    gap: 8px;
+    margin: 6px 8px;
+    padding-block: 4px;
+    padding-inline: 12px 4px;
+    border-radius: var(--radius-md);
+  }
+  .ob-setup-icon,
+  .ob-setup-text > span,
+  .ob-setup-bar {
+    display: none;
+  }
+  .ob-setup-text b {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ob-setup-card .btn.filled {
+    height: 36px;
+    padding-inline: 12px;
+  }
+}
+.ob-import {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 12px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--info-container);
+  color: var(--text);
+  font-size: 14px;
+}
+.ob-import > .lucide {
+  flex: none;
+  color: var(--primary);
+}
+.ob-import-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.ob-import-sub {
+  font-size: 12px;
+  color: var(--text-3);
+}
+.ob-import-bar {
+  flex: 1;
+  min-width: 60px;
+  max-width: 240px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--surface-high);
+  overflow: hidden;
+}
+.ob-import-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  border-radius: 3px;
+  transition: width 600ms var(--ease);
+}
+.ob-import-bar.busy > span {
+  width: 30%;
+  animation: ob-slide 1.6s infinite ease-in-out;
+}
+@keyframes ob-slide {
+  from {
+    transform: translateX(calc(-100% * var(--dir)));
+  }
+  to {
+    transform: translateX(calc(340% * var(--dir)));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ob-import-bar.busy > span,
+  .ob-bubble.typing span {
+    animation: none;
+  }
+}
+
+/* ---- phones ---- */
+@media (max-width: 640px) {
+  .ob-top {
+    grid-template-columns: 1fr auto;
+    gap: 8px 12px;
+    padding: 10px 16px;
+  }
+  .ob-progress {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .ob-progress-text {
+    text-align: start;
+  }
+  .ob-later span {
+    display: none;
+  }
+  .ob-main {
+    padding: 12px 0 0;
+  }
+  .ob-card {
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding: 24px 16px 0;
+    min-height: 100%;
+    box-shadow: none;
+    border-inline-start: 0;
+    border-inline-end: 0;
+    border-bottom: 0;
+  }
+  .ob-foot {
+    position: sticky;
+    bottom: 0;
+    margin: 0 -16px;
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+    background: var(--surface);
+    box-shadow: 0 -1px 0 var(--divider);
+  }
+  [data-theme='dark'] .ob-foot {
+    background: var(--surface-container);
+  }
+  .ob-foot {
+    gap: 4px;
+  }
+  .ob-foot .btn {
+    padding: 0 12px;
+  }
+  /* Two long labels (Go to my inbox, Show me around) share a 390px row: the skip label wraps. */
+  .ob-foot .ob-skip {
+    flex: 0 1 auto;
+    min-width: 0;
+    white-space: normal;
+    line-height: 1.2;
+    text-align: center;
+  }
+  .ob-foot .ob-next {
+    flex: 1 0 auto;
+  }
+  .ob-back-text,
+  .ob-next .lucide {
+    display: none;
+  }
+  .ob-next {
+    min-width: 0;
+    flex: 1;
+    max-width: 220px;
+  }
+  .ob-me {
+    flex-direction: column;
+    text-align: center;
+  }
+  .ob-me-actions {
+    align-items: center;
+  }
+  .ob-phone {
+    grid-template-columns: 1fr;
+  }
+  .ob-qr-box {
+    justify-self: center;
+  }
+  .ob-import-bar {
+    display: none;
+  }
+  .btn.ob-big {
+    align-self: stretch;
+  }
+}
+
+/* ---- app versions and the Notes app (InstallGuide.tsx) ---- */
+.ob-app-version {
+  display: block;
+}
+.ob-sha {
+  margin-top: 2px;
+}
+.ob-sha summary {
+  cursor: pointer;
+  width: fit-content;
+}
+.ob-sha code {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  word-break: break-all;
+  color: var(--text-2);
+}
+.ob-notes-app {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--divider);
+}
+.ob-notes-app .ob-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+.ob-notes-app .ob-label svg {
+  width: 18px;
+  height: 18px;
+  color: var(--primary);
+}
+.ob-notes-app .ob-hint {
+  margin: 0;
+}
+.ob-notes-app-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ---- notes and lists on the last screen (steps/NotesIntro.tsx) ---- */
+.ob-notes-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--divider);
+}
+.ob-notes-intro .ob-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 16px;
+}
+.ob-notes-intro .ob-label svg {
+  width: 20px;
+  height: 20px;
+  color: var(--primary);
+}
+.ob-notes-intro .ob-hint {
+  margin: 0;
+}
+.ob-notes-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.ob-notes-phone {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+.ob-notes-phone .btn {
+  padding-inline-start: 0;
+}

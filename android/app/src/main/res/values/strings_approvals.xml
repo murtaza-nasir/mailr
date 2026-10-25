@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appr_verb_mail_send">send email</string>
+    <string name="appr_verb_mail_trash">move mail to Trash</string>
+    <string name="appr_verb_mail_spam">report spam</string>
+    <string name="appr_verb_mail_delete">delete mail forever</string>
+    <string name="appr_verb_mail_label">label and organise mail</string>
+    <string name="appr_verb_mail_unsubscribe">unsubscribe from mailing lists</string>
+    <string name="appr_verb_rules_write">change your filters</string>
+    <string name="appr_verb_calendar_create">create calendar events</string>
+    <string name="appr_verb_calendar_update">change calendar events</string>
+    <string name="appr_verb_calendar_delete">delete calendar events</string>
+    <string name="appr_verb_calendar_rsvp">answer invitations</string>
+    <string name="appr_verb_calendar_invite">send invitations and updates to guests</string>
+    <string name="appr_verb_calendar_cancel">cancel events with guests</string>
+    <string name="appr_verb_tasks_create">create tasks</string>
+    <string name="appr_verb_tasks_update">change tasks</string>
+    <string name="appr_verb_tasks_complete">complete tasks</string>
+    <string name="appr_verb_tasks_delete">delete tasks</string>
+    <string name="appr_verb_labels_write">create or change labels</string>
+    <string name="appr_verb_labels_delete">delete labels</string>
+    <string name="appr_verb_contacts_write">change contact groups</string>
+    <string name="appr_verb_memory_write">keep and change memories</string>
+    <string name="appr_verb_prefs_write">change settings, layouts and signatures</string>
+    <string name="appr_allow_12h">Allow for 12 hours</string>
+    <string name="appr_allow_chat">Allow for this chat</string>
+    <plurals name="appr_also_covers">
+        <item quantity="one">" (also approves %d other waiting request)"</item>
+        <item quantity="other">" (also approves %d other waiting requests)"</item>
+    </plurals>
+    <string name="appr_allowed_12h">Allowed for 12 hours.</string>
+    <string name="appr_allowed_chat">Allowed for this chat.</string>
+    <string name="appr_rule_created">Rule created.</string>
+    <plurals name="appr_also_approved">
+        <item quantity="one">%1$s Also approved %2$d other request.</item>
+        <item quantity="other">%1$s Also approved %2$d other requests.</item>
+    </plurals>
+    <plurals name="appr_denied_also">
+        <item quantity="one">Denied. Also denied %d other request.</item>
+        <item quantity="other">Denied. Also denied %d other requests.</item>
+    </plurals>
+    <plurals name="appr_undone_waiting">
+        <item quantity="one">Undone. %d request is waiting again.</item>
+        <item quantity="other">Undone. %d requests are waiting again.</item>
+    </plurals>
+    <plurals name="appr_rule_removed_ran">
+        <item quantity="one">Rule removed. %d request had already run.</item>
+        <item quantity="other">Rule removed. %d requests had already run.</item>
+    </plurals>
+    <plurals name="appr_undone_for">
+        <item quantity="one">Undone for %d request.</item>
+        <item quantity="other">Undone for %d requests.</item>
+    </plurals>
+    <plurals name="appr_already_ran">
+        <item quantity="one">%d request had already run.</item>
+        <item quantity="other">%d requests had already run.</item>
+    </plurals>
+    <string name="appr_session_help_12h">This agent may %1$s for 12 hours, with any input, without asking. Waiting requests of this kind are approved too.</string>
+    <string name="appr_session_help_chat">This agent may %1$s in this chat, with any input, without asking. Waiting requests of this kind are approved too.</string>
+    <string name="appr_always_help">A standing rule for this agent and action. Change it on the web, in Settings → Agents &amp; API. Waiting requests of this kind are approved too.</string>
+    <string name="appr_outcome_done">Done</string>
+    <string name="appr_outcome_running">Running</string>
+    <string name="appr_outcome_failed">Failed</string>
+    <string name="appr_outcome_denied">Denied</string>
+    <string name="appr_outcome_expired">Expired</string>
+    <string name="appr_sending_again">Sending again…</string>
+    <string name="appr_allowed">Allowed</string>
+    <string name="appr_denied">Denied</string>
+    <plurals name="appr_waiting_description">
+        <item quantity="one">%d agent action waiting</item>
+        <item quantity="other">%d agent actions waiting</item>
+    </plurals>
+    <string name="appr_source_this_chat">this chat</string>
+    <string name="appr_source_an_agent">an agent</string>
+    <plurals name="appr_allowed_count">
+        <item quantity="one">Allowed %d request.</item>
+        <item quantity="other">Allowed %d requests.</item>
+    </plurals>
+    <plurals name="appr_skipped">
+        <item quantity="one">" %d had already been decided."</item>
+        <item quantity="other">" %d had already been decided."</item>
+    </plurals>
+    <plurals name="appr_count_approvals">
+        <item quantity="one">%d approval</item>
+        <item quantity="other">%d approvals</item>
+    </plurals>
+    <plurals name="appr_count_not_sent">
+        <item quantity="one">%d not sent</item>
+        <item quantity="other">%d not sent</item>
+    </plurals>
+    <plurals name="appr_count_reminders">
+        <item quantity="one">%d reminder</item>
+        <item quantity="other">%d reminders</item>
+    </plurals>
+    <plurals name="appr_count_reminders_missed">
+        <item quantity="one">%1$d reminder (%2$d missed)</item>
+        <item quantity="other">%1$d reminders (%2$d missed)</item>
+    </plurals>
+    <string name="appr_nothing_waiting">Nothing waiting</string>
+    <string name="appr_waiting_for_you_list">Waiting for you: %1$s</string>
+    <string name="appr_an_agent_action">An agent action</string>
+    <string name="appr_review">Review</string>
+    <string name="appr_an_agent">An agent</string>
+    <string name="appr_arrival_line">Approval request from %1$s</string>
+    <string name="appr_arrival_more">%1$s · %2$d more</string>
+    <string name="appr_allow_each_once">Allow each of these once?</string>
+    <string name="appr_allow_all_n">Allow all %1$d</string>
+    <string name="appr_cancel">Cancel</string>
+    <string name="appr_waiting_for_you">Waiting for you</string>
+    <string name="appr_back">Back</string>
+    <string name="appr_cant_load">Couldn\'t load approvals</string>
+    <string name="appr_try_again">Try again</string>
+    <string name="appr_empty_text">Approvals, unsent messages and due reminders show here.</string>
+    <string name="appr_no_approvals_waiting">No approvals waiting</string>
+    <string name="appr_header_approvals">Approvals · %1$d</string>
+    <string name="appr_header_not_sent">Not sent · %1$d</string>
+    <string name="appr_open_outbox">Open Outbox</string>
+    <string name="appr_header_reminders">Reminders · %1$d</string>
+    <string name="appr_header_missed_reminders">Missed reminders · %1$d</string>
+    <string name="appr_review_all">Review all</string>
+    <string name="appr_missed">Missed</string>
+    <string name="appr_recent_decisions">Recent decisions</string>
+    <plurals name="appr_requests_from">
+        <item quantity="one">%1$d request from %2$s</item>
+        <item quantity="other">%1$d requests from %2$s</item>
+    </plurals>
+    <string name="appr_no_subject">(no subject)</string>
+    <string name="appr_to">To %1$s</string>
+    <string name="appr_retry">Retry</string>
+    <string name="appr_rem_yesterday">yesterday %1$s</string>
+    <string name="appr_rem_tomorrow">tomorrow %1$s</string>
+    <string name="appr_rem_due">Due %1$s</string>
+    <string name="appr_rem_started">Started %1$s</string>
+    <string name="appr_rem_starts">Starts %1$s</string>
+    <string name="appr_rem_missed">Missed · %1$s</string>
+    <string name="appr_open_reminder">Open reminder</string>
+    <string name="appr_no_title">(no title)</string>
+</resources>

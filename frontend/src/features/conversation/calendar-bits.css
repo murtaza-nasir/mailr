@@ -1,0 +1,322 @@
+/* Calendar in the reader: InviteCard additions (status, diff, conflict timeline, proposal, note),
+   the conversation's links, "Schedule a meeting" and "Insert times". */
+
+.invite-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-2);
+}
+.invite-status.ok {
+  color: var(--success, #146c2e);
+}
+.invite-status .lucide {
+  flex: none;
+  margin-top: 1px;
+}
+.invite-diff {
+  margin: 8px 0 0;
+  padding-block: 6px;
+  padding-inline: 26px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--warning-container);
+  color: var(--warning-fg);
+  font-size: 13px;
+}
+.invite-diff li + li {
+  margin-top: 2px;
+}
+.invite-tl {
+  margin-top: 8px;
+}
+.invite-tl-track {
+  position: relative;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  border: 1px solid var(--divider);
+  overflow: hidden;
+}
+[data-theme='dark'] .invite-tl-track {
+  background-color: var(--surface-dim);
+}
+.invite-tl-tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--divider);
+}
+.invite-tl-block {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  border-radius: 4px;
+  background: var(--surface-high);
+  color: var(--text-2);
+  font-size: 11px;
+  line-height: 22px;
+  padding: 0 4px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border: 1px solid var(--border);
+}
+.invite-tl-block.clash {
+  background: var(--warning-container);
+  color: var(--warning-fg);
+  border-color: color-mix(in srgb, var(--warning, #b06000) 50%, transparent);
+}
+.invite-tl-slot {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  border-radius: 5px;
+  border: 2px solid var(--primary);
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+  pointer-events: none;
+}
+.invite-tl-hours {
+  position: relative;
+  height: 16px;
+  font-size: 10.5px;
+  color: var(--text-3);
+}
+.invite-tl-hours span {
+  position: absolute;
+  transform: translateX(calc(-50% * var(--dir)));
+  white-space: nowrap;
+}
+.invite-tl-hours span:first-child {
+  transform: none;
+}
+.invite-tl-hours span:last-child {
+  transform: translateX(calc(-100% * var(--dir)));
+}
+.invite-proposal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  font-size: 13.5px;
+}
+.invite-proposal > span {
+  flex: 1 1 160px;
+  font-weight: 500;
+}
+/* Under a proposal: who gets mail if it is accepted, and an unverified sender's address. */
+.invite-proposal-check {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+  font-size: 12.5px;
+  overflow-wrap: anywhere;
+}
+.invite-proposal-warning {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--warning, #b06000);
+}
+.invite-proposal-warning svg {
+  flex: none;
+}
+.invite-zone-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.invite-zone-note svg {
+  flex: none;
+}
+.invite-note {
+  margin-top: 8px;
+  width: 100%;
+}
+
+/* The links panel: linked events and tasks under the subject. */
+.cl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0 2px;
+}
+.cl-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--divider);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 13px;
+  text-decoration: none;
+}
+.cl-chip:hover {
+  background: var(--hover);
+}
+.cl-chip .lucide {
+  flex: none;
+  color: var(--primary);
+}
+.cl-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 260px;
+  font-weight: 500;
+}
+.cl-status {
+  color: var(--text-2);
+  white-space: nowrap;
+  font-size: 12px;
+}
+.cl-chip.done .lucide {
+  color: var(--success, #146c2e);
+}
+.cl-chip.done .cl-title,
+.cl-chip.past .cl-title,
+.cl-chip.gone .cl-title {
+  color: var(--text-3);
+}
+.cl-chip.gone .cl-title {
+  text-decoration: line-through;
+}
+
+/* "Schedule a meeting": the first step. */
+.sm-pick {
+  width: min(360px, calc(100vw - 16px));
+}
+.sm-form {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+}
+.sm-head {
+  font-size: 15px;
+}
+.sm-field {
+  display: grid;
+  gap: 4px;
+  font-size: 12.5px;
+  color: var(--text-2);
+  flex: 1;
+}
+.sm-people {
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md);
+  padding: 4px 10px 8px;
+  margin: 0;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.sm-people legend {
+  font-size: 12.5px;
+  color: var(--text-2);
+  padding: 0 4px;
+}
+.sm-person {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 8px;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 13.5px;
+}
+.sm-person .sm-addr {
+  grid-column: 2;
+  font-size: 12px;
+  color: var(--text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sm-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sm-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.sm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* "Insert times" in compose. */
+.it {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  width: min(340px, calc(100vw - 16px));
+}
+.it-opts {
+  display: flex;
+  gap: 8px;
+}
+/* The length menu takes the width of its longest option; the range menu takes the rest, so
+   "Next 5 working days" is not cut off. */
+.it-opts .select {
+  flex: none;
+  width: auto;
+}
+.it-opts .select:last-child {
+  flex: 1;
+  min-width: 0;
+}
+.it-slots {
+  display: grid;
+  gap: 4px;
+}
+.it-slot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-container);
+  font-size: 13.5px;
+}
+.it-wait {
+  display: grid;
+  place-items: center;
+  padding: 12px;
+}
+.it-note {
+  margin: 0;
+  font-size: 13px;
+}
+.it-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+.fm-wait {
+  padding: 24px;
+  width: min(420px, 100%);
+}
+@media (max-width: 600px) {
+  .invite-tl-hours span:nth-child(even) {
+    display: none;
+  }
+}
+/* "In your calendar" with Open and Link to this invitation (calendar/from_mail.py). */
+.invite-mine { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+/* A move an email announces in words: the sentence it came from (EventChangeCard). */
+.event-change-quote { margin: 6px 0 0; padding-inline-start: 10px; border-inline-start: 2px solid var(--divider); color: var(--text-2); font-size: 13px; }

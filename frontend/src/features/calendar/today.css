@@ -1,0 +1,339 @@
+/* Today (TodayView.tsx): the first view of Calendar. Theme tokens only, so the five themes and
+   light and dark carry it. The one strong element is the date and the day line; the rest is quiet. */
+
+.today-view {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding: 20px 24px 56px;
+}
+.today-view > * {
+  max-width: 1040px;
+  margin-inline: auto;
+}
+
+.today-head {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+.today-date {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-inline-end: 24px;
+  border-inline-end: 1px solid var(--divider);
+}
+.today-num {
+  font-family: var(--font-display);
+  font-size: 64px;
+  line-height: 0.9;
+  font-weight: 300;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
+.today-wd {
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--text-2);
+}
+.today-hello h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text);
+}
+.today-part {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  stroke-width: 1.75;
+}
+.today-part.morning { color: var(--warning, var(--primary)); }
+.today-part.afternoon { color: var(--warning, var(--primary)); }
+.today-part.evening { color: var(--primary); }
+.today-part.night { color: var(--text-2); }
+.today-summary {
+  margin: 4px 0 0;
+  min-height: 1.4em;
+  color: var(--text-2);
+  font-size: 15px;
+}
+
+/* The day line: the hours, the events in their colours, and now. */
+.today-line {
+  position: relative;
+  padding-bottom: 22px;
+  margin-bottom: 26px;
+}
+.today-track {
+  position: relative;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: var(--surface-container, var(--hover));
+}
+.today-work {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-radius: var(--radius-full);
+  background: var(--hover);
+}
+.today-block {
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  border: 0;
+  padding: 0;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  box-shadow: 0 0 0 2px var(--surface);
+}
+.today-block.past {
+  opacity: 0.45;
+}
+.today-now {
+  position: absolute;
+  top: -6px;
+  bottom: -6px;
+  width: 2px;
+  margin-inline-start: -1px;
+  border-radius: 1px;
+  background: var(--cal-now, var(--danger));
+}
+.today-now::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  inset-inline-start: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: inherit;
+}
+.today-hours {
+  position: absolute;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  top: 18px;
+  height: 16px;
+}
+.today-hours span {
+  position: absolute;
+  transform: translateX(calc(-50% * var(--dir)));
+}
+/* The first and last hours stay inside the page. */
+.today-hours span:first-child {
+  transform: none;
+}
+.today-hours span:last-child {
+  transform: translateX(calc(-100% * var(--dir)));
+}
+.today-hours span {
+  font-size: 11px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+
+.today-cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px 40px;
+}
+@media (min-width: 980px) {
+  .today-cols {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: start;
+  }
+}
+.today-side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.today-sec {
+  min-width: 0;
+  padding-bottom: 12px;
+}
+.today-sec > h3,
+.today-sec .wb-section-head {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.today-sec .wb-section {
+  padding: 0;
+  border: 0;
+}
+.today-rows .cal-row {
+  border-radius: var(--radius-sm);
+}
+.today-empty {
+  margin: 4px 0;
+  color: var(--text-3);
+  font-size: 14px;
+}
+.today-reserve {
+  min-height: 44px;
+}
+.today-skel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.today-skel .skeleton {
+  display: block;
+  height: 36px;
+  border-radius: var(--radius-sm);
+}
+
+.today-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.today-task,
+.today-wait {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  border-radius: var(--radius-sm);
+}
+.today-task:hover,
+.today-wait:hover {
+  background: var(--hover);
+}
+.today-tick {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  margin-inline-start: 6px;
+  padding: 0;
+  border: 2px solid var(--text-3);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--on-primary);
+  cursor: pointer;
+  transition: background var(--dur, 150ms) var(--ease, ease), border-color var(--dur, 150ms) var(--ease, ease);
+}
+.today-tick:hover {
+  border-color: var(--primary);
+}
+.today-tick:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+.today-task.done .today-tick {
+  border-color: var(--primary);
+  background: var(--primary);
+}
+.today-task.done .today-item-title {
+  text-decoration: line-through;
+  color: var(--text-3);
+}
+.today-item-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding: 6px 4px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.today-item-main:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-xs);
+}
+.today-item-title {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text);
+}
+.today-item-meta {
+  font-size: 12px;
+  color: var(--text-2);
+}
+.today-item-meta.overdue {
+  color: var(--danger);
+}
+.today-wait-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  margin-inline-start: 6px;
+  color: var(--text-3);
+}
+.today-wait-acts {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+  padding-inline-end: 4px;
+}
+
+@media (max-width: 720px) {
+  .today-view {
+    padding: 14px 16px 40px;
+  }
+  .today-head {
+    gap: 14px;
+  }
+  .today-date {
+    padding-inline-end: 14px;
+  }
+  .today-num {
+    font-size: 48px;
+  }
+  .today-hello h2 {
+    font-size: 19px;
+  }
+  .today-part {
+    width: 22px;
+    height: 22px;
+  }
+  .today-summary {
+    font-size: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .today-tick {
+    transition: none;
+  }
+}
+
+/* The bell's sections, reused here, take the page's quieter headings. */
+.today-sec .wb-section-head {
+  min-height: 0;
+  padding: 0;
+  font-size: 14px;
+  letter-spacing: normal;
+  text-transform: none;
+}
+.today-sec .wb-section .rm-list,
+.today-sec .approvals-body {
+  padding-inline: 0;
+}
+.today-rows .cal-row {
+  grid-template-columns: 12px minmax(96px, 132px) minmax(0, 1fr) auto auto;
+}

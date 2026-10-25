@@ -1,0 +1,11 @@
+{
+  "using": ["urn:ietf:params:jmap:core", "urn:stalwart:jmap"],
+  "methodCalls": [
+    ["x:CalendarScheduling/set", {"update": {"singleton": {"enable": false, "httpRsvpEnable": false}}}, "calsched"],
+    ["x:CalendarAlarm/set", {"update": {"singleton": {"enable": false}}}, "calalarm"],
+    ["x:WebDav/set", {"update": {"singleton": {"maxResults": 50000, "enableAssistedDiscovery": true}}}, "webdav"],
+    ["x:Calendar/set", {"update": {"singleton": {"defaultDisplayName": "Calendar", "maxAttendees": 100}}}, "calcfg"],
+    ["x:AddressBook/set", {"update": {"singleton": {"defaultDisplayName": "Contacts"}}}, "abcfg"],
+    ["x:Sharing/set", {"update": {"singleton": {"allowDirectoryQueries": false, "maxShares": 50}}}, "sharing"]
+  ]
+}

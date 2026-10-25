@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Chats: earlier Ambrose chats (ui/assistant/ChatList.kt), from the Ambrose top bar. -->
+    <string name="chats_title">Chats</string>
+    <string name="chats_back">Back</string>
+    <string name="chats_close">Close chats</string>
+    <string name="chats_open">Open chat</string>
+    <!-- TalkBack: the row of the chat that is open in the Ambrose screen. -->
+    <string name="chats_current">Open now</string>
+    <string name="chats_untitled">Untitled chat</string>
+    <!-- TalkBack: a row's ⋮ button; %1$s is the chat's title. -->
+    <string name="chats_more">More options for %1$s</string>
+    <string name="chats_delete">Delete</string>
+    <string name="chats_deleted">Chat deleted.</string>
+    <string name="chats_undo">Undo</string>
+    <string name="chats_delete_failed">Couldn\'t delete. Check the connection.</string>
+    <string name="chats_open_failed">Couldn\'t open the chat. Check the connection.</string>
+    <string name="chats_empty_title">No chats yet</string>
+    <!-- %1$s is Ambrose's name. -->
+    <string name="chats_empty_hint">Your chats with %1$s show here.</string>
+    <string name="chats_load_failed">Couldn\'t load chats.</string>
+    <string name="chats_offline_title">You\'re offline</string>
+    <string name="chats_offline_hint">Chats show when you\'re connected.</string>
+    <string name="chats_retry">Retry</string>
+    <!-- Search (the top bar's search icon): GET /agent/sessions?q= over titles, questions and answers. -->
+    <string name="chats_search">Search chats</string>
+    <string name="chats_search_close">Close search</string>
+    <string name="chats_clear_search">Clear search</string>
+    <!-- %1$s is what was searched. -->
+    <string name="chats_no_match">No chats match “%1$s”.</string>
+    <string name="chats_search_failed">Couldn\'t search. Check the connection.</string>
+    <!-- TalkBack: how many chats the search found. -->
+    <plurals name="chats_found">
+        <item quantity="one">%d chat found</item>
+        <item quantity="other">%d chats found</item>
+    </plurals>
+    <!-- Rename (the row's ⋮): a small dialog; Undo in the snackbar. -->
+    <string name="chats_rename">Rename</string>
+    <string name="chats_rename_title">Rename chat</string>
+    <string name="chats_rename_label">Chat title</string>
+    <string name="chats_rename_hint">Leave empty to show the first question.</string>
+    <string name="chats_rename_save">Save</string>
+    <string name="chats_rename_cancel">Cancel</string>
+    <string name="chats_renamed">Chat renamed.</string>
+    <string name="chats_rename_failed">Couldn\'t rename. Check the connection.</string>
+    <!-- Dropped stream (ui/assistant/AssistantViewModel.kt recover): the app re-attaches to the answer. -->
+    <string name="asst_reconnecting">Reconnecting…</string>
+    <!-- The web's "Interrupted" line: the answer's run was lost before it ended. -->
+    <string name="asst_interrupted_incomplete">Interrupted. The reply above is incomplete.</string>
+    <string name="asst_interrupted_empty">Interrupted. No reply received.</string>
+</resources>

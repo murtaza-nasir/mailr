@@ -1,0 +1,5602 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "mailr (typed routes)",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/assistant/trusted-addresses": {
+      "get": {
+        "tags": [
+          "assistant"
+        ],
+        "summary": "List Trusted",
+        "operationId": "list_trusted_api_v1_assistant_trusted_addresses_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response List Trusted Api V1 Assistant Trusted Addresses Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/calendar/agenda": {
+      "get": {
+        "tags": [
+          "calendar"
+        ],
+        "summary": "Agenda Route",
+        "operationId": "agenda_route_api_v1_calendar_agenda_get",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From"
+            }
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "To"
+            }
+          },
+          {
+            "name": "calendar",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Calendar"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Agenda"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/calendar/calendars": {
+      "get": {
+        "tags": [
+          "calendar"
+        ],
+        "summary": "Calendars",
+        "description": "Collections with the components they accept (`events`, `tasks`). Cached; refresh=1\nasks the servers again.",
+        "operationId": "calendars_api_v1_calendar_calendars_get",
+        "parameters": [
+          {
+            "name": "refresh",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Refresh"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/changes": {
+      "get": {
+        "tags": [
+          "mail"
+        ],
+        "summary": "Changes",
+        "operationId": "changes_api_v1_changes_get",
+        "parameters": [
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Since"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 2000,
+              "minimum": 1,
+              "default": 500,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Changes"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/connectors/{cid}/migration": {
+      "post": {
+        "tags": [
+          "calendar"
+        ],
+        "summary": "Start Migration",
+        "description": "Start a preview (dry_run) or the copy. A run already going for this account is returned.",
+        "operationId": "start_migration_api_v1_connectors__cid__migration_post",
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MigrationIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Start Migration Api V1 Connectors  Cid  Migration Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "calendar"
+        ],
+        "summary": "Latest Migration",
+        "description": "The newest run for this account (preview or copy), or {\"status\": \"none\"}.",
+        "operationId": "latest_migration_api_v1_connectors__cid__migration_get",
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Latest Migration Api V1 Connectors  Cid  Migration Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/connectors/{cid}/migration/cutover": {
+      "post": {
+        "tags": [
+          "calendar"
+        ],
+        "summary": "Migration Cutover",
+        "description": "After a copy: the copies become the defaults, and/or this account's copied calendars are\nhidden in Calendar. Both only on request; the account's server is not touched.",
+        "operationId": "migration_cutover_api_v1_connectors__cid__migration_cutover_post",
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CutoverIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Migration Cutover Api V1 Connectors  Cid  Migration Cutover Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/connectors/{cid}/migration/{job_id}": {
+      "get": {
+        "tags": [
+          "calendar"
+        ],
+        "summary": "Migration Status",
+        "operationId": "migration_status_api_v1_connectors__cid__migration__job_id__get",
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cid"
+            }
+          },
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Migration Status Api V1 Connectors  Cid  Migration  Job Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations": {
+      "get": {
+        "tags": [
+          "mail"
+        ],
+        "summary": "List Conversations",
+        "operationId": "list_conversations_api_v1_conversations_get",
+        "parameters": [
+          {
+            "name": "view",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "inbox",
+              "title": "View"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "section",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Section"
+            }
+          },
+          {
+            "name": "sections",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Sections"
+            }
+          },
+          {
+            "name": "exclude",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Exclude"
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Category"
+            }
+          },
+          {
+            "name": "layout",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Layout"
+            }
+          },
+          {
+            "name": "tab",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tab"
+            }
+          },
+          {
+            "name": "sec",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Sec"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Count"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{cid}": {
+      "get": {
+        "tags": [
+          "mail"
+        ],
+        "summary": "Get Conversation",
+        "operationId": "get_conversation_api_v1_conversations__cid__get",
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConversationDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/conversations/{cid}/deadline/dismiss": {
+      "post": {
+        "tags": [
+          "intelligence"
+        ],
+        "summary": "Dismiss",
+        "description": "\"Not a deadline\" on a Due chip: the conversation's deadline decisions become rejected. They\nleave has:deadline and the chip, and a re-run of triage does not add them again. With sender,\nthe senders join the user's list of senders without deadlines, and their other deadlines are\nrejected too.",
+        "operationId": "dismiss_api_v1_conversations__cid__deadline_dismiss_post",
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Cid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/mailr__intel__deadlines__DismissIn"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Dismiss Api V1 Conversations  Cid  Deadline Dismiss Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/counts": {
+      "get": {
+        "tags": [
+          "mail"
+        ],
+        "summary": "Sidebar Counts",
+        "description": "Every sidebar number in one answer: {cursor, views: {view: {unread,\ntotal}}, inbox_count, waiting, approvals, failed}. Each view is counted with the conditions\nits list uses, so a number always equals the length of the list it opens. The live stream\nsends the same object as a `counts` event after each change.",
+        "operationId": "sidebar_counts_api_v1_counts_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SidebarCounts"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/inbox/count": {
+      "get": {
+        "tags": [
+          "layouts"
+        ],
+        "summary": "Inbox Count",
+        "description": "The number by Inbox in the sidebar. With the `inbox_count`\nsetting \"first_tab\" (default) it is the unread conversations the active layout's first tab\nlists: Primary in the Default layout, the whole inbox list in a layout with one tab, the\nfirst tab of a custom layout. Mail that other tabs claim is left out; those tabs show their\nown counts. With \"all\" it is every unread conversation with the Inbox label, as the Inbox\nlabel's own count in GET /labels.",
+        "operationId": "inbox_count_api_v1_inbox_count_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InboxCount"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/labels": {
+      "get": {
+        "tags": [
+          "mail"
+        ],
+        "summary": "List Labels",
+        "operationId": "list_labels_api_v1_labels_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LabelList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/layouts": {
+      "get": {
+        "tags": [
+          "layouts"
+        ],
+        "summary": "Get Layouts",
+        "operationId": "get_layouts_api_v1_layouts_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LayoutsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/layouts/{layout_id}/counts": {
+      "get": {
+        "tags": [
+          "layouts"
+        ],
+        "summary": "Tab Counts",
+        "description": "What each tab shows by its label, counted in one query for the whole layout.\n\nWithout `detail` (older clients): {tab_id: n}, the count of the tab's `badge`. With\n`detail`: {\"tabs\": {tab_id: {...}}} with, for each of the tab's indicators, `unread`\n(counting stops at 1000, shown as \"999+\"), `all` (counting stops at 200,000, shown\nas \"200,000+\") and for \"due\" `due_count`, `earliest_due` (a date), `earliest_due_cid`,\n`earliest_due_from` and `earliest_due_subject`. \"due\" counts deadlines from MAILR_OVERDUE_DAYS\nago (default 7) on. Every count covers the tab's sections\ntogether and leaves out what a claiming tab takes. The first tab's unread is not capped: it\nis the sidebar's Inbox count (GET /inbox/count, `first_tab_unread`).",
+        "operationId": "tab_counts_api_v1_layouts__layout_id__counts_get",
+        "parameters": [
+          {
+            "name": "layout_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Layout Id"
+            }
+          },
+          {
+            "name": "detail",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Detail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TabCounts"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Me",
+        "operationId": "me_api_v1_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Me"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/messages/{mid}/body": {
+      "get": {
+        "tags": [
+          "mail"
+        ],
+        "summary": "Get Body",
+        "description": "The message body for the reader. It changes nothing: no read flag, no receipt, no audit\nentry for a session (only tokens are audited), so the web app may prefetch it.",
+        "operationId": "get_body_api_v1_messages__mid__body_get",
+        "parameters": [
+          {
+            "name": "mid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Mid"
+            }
+          },
+          {
+            "name": "images",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "blocked",
+              "title": "Images"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageBody"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notes": {
+      "get": {
+        "tags": [
+          "notes"
+        ],
+        "summary": "List Notes",
+        "description": "The grid: Notes (not archived), Lists, Archive, Trash, Reminders or one label's notes.",
+        "operationId": "list_notes_api_v1_notes_get",
+        "parameters": [
+          {
+            "name": "view",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "all",
+              "title": "View"
+            }
+          },
+          {
+            "name": "label",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Label"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "manual",
+              "title": "Sort"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NoteList"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/notes/{note_id}": {
+      "get": {
+        "tags": [
+          "notes"
+        ],
+        "summary": "Get Note",
+        "operationId": "get_note_api_v1_notes__note_id__get",
+        "parameters": [
+          {
+            "name": "note_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Note Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Note"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks": {
+      "get": {
+        "tags": [
+          "calendar",
+          "tasks"
+        ],
+        "summary": "List Tasks",
+        "description": "Tasks from the mirror. `smart`: today, overdue, upcoming, scheduled, nodate (no_date),\nhigh, email, all, completed (server-defined, so every client shows the same rows); rows of\nToday and Upcoming carry `section`. `q` takes the search operators (list:, tag: or @tag,\ndue:<fri, is:done, is:overdue, has:email, pri:high).",
+        "operationId": "list_tasks_api_v1_tasks_get",
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "open",
+              "title": "Status"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "list",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "List"
+            }
+          },
+          {
+            "name": "smart",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Smart"
+            }
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Tag"
+            }
+          },
+          {
+            "name": "priority",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Priority"
+            }
+          },
+          {
+            "name": "parent",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Parent"
+            }
+          },
+          {
+            "name": "has_due",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Has Due"
+            }
+          },
+          {
+            "name": "due_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Due Before"
+            }
+          },
+          {
+            "name": "due_after",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Due After"
+            }
+          },
+          {
+            "name": "start_before",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Start Before"
+            }
+          },
+          {
+            "name": "include_future",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Include Future"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Sort"
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Cursor"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 200,
+              "minimum": 1,
+              "default": 200,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskPage"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/tasks/counts": {
+      "get": {
+        "tags": [
+          "calendar",
+          "tasks"
+        ],
+        "summary": "Task Counts",
+        "description": "Open tasks per smart list, per list (by URL; `lists_by_id` by calendar_id) and per tag.",
+        "operationId": "task_counts_api_v1_tasks_counts_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TaskCounts"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccountPicture": {
+        "properties": {
+          "has": {
+            "type": "boolean",
+            "title": "Has"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "upload",
+                  "idp"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version",
+            "description": "Changes when the picture changes (cache-busting)."
+          },
+          "idp_available": {
+            "type": "boolean",
+            "title": "Idp Available"
+          }
+        },
+        "type": "object",
+        "required": [
+          "has",
+          "source",
+          "version",
+          "idp_available"
+        ],
+        "title": "AccountPicture"
+      },
+      "Address": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "title": "Address"
+      },
+      "Agenda": {
+        "properties": {
+          "from": {
+            "type": "string",
+            "title": "From",
+            "description": "An ISO 8601 time, as the server wrote it."
+          },
+          "to": {
+            "type": "string",
+            "title": "To",
+            "description": "An ISO 8601 time, as the server wrote it."
+          },
+          "connected": {
+            "type": "boolean",
+            "title": "Connected"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/Event"
+            },
+            "type": "array",
+            "title": "Events"
+          },
+          "sync": {
+            "$ref": "#/components/schemas/SyncState"
+          }
+        },
+        "type": "object",
+        "required": [
+          "from",
+          "to",
+          "connected",
+          "events",
+          "sync"
+        ],
+        "title": "Agenda",
+        "description": "GET /calendar/agenda: the occurrences between two times."
+      },
+      "AttachedEmailSummary": {
+        "properties": {
+          "subject": {
+            "type": "string",
+            "title": "Subject"
+          },
+          "from_name": {
+            "type": "string",
+            "title": "From Name"
+          },
+          "from_email": {
+            "type": "string",
+            "title": "From Email"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "excerpt": {
+            "type": "string",
+            "title": "Excerpt"
+          },
+          "attachments": {
+            "type": "integer",
+            "title": "Attachments"
+          },
+          "invite": {
+            "type": "boolean",
+            "title": "Invite"
+          }
+        },
+        "type": "object",
+        "required": [
+          "subject",
+          "from_name",
+          "from_email",
+          "date",
+          "excerpt",
+          "attachments"
+        ],
+        "title": "AttachedEmailSummary"
+      },
+      "Attachment": {
+        "properties": {
+          "part": {
+            "type": "integer",
+            "title": "Part"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "size": {
+            "type": "integer",
+            "title": "Size"
+          },
+          "inline": {
+            "type": "boolean",
+            "title": "Inline"
+          },
+          "cid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Cid"
+          },
+          "email": {
+            "$ref": "#/components/schemas/AttachedEmailSummary",
+            "description": "An attached email the server could read."
+          }
+        },
+        "type": "object",
+        "required": [
+          "part",
+          "filename",
+          "type",
+          "size",
+          "inline",
+          "cid"
+        ],
+        "title": "Attachment"
+      },
+      "AttachmentChip": {
+        "properties": {
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "n": {
+            "type": "integer",
+            "title": "N",
+            "description": "how often the same file was sent in the thread"
+          }
+        },
+        "type": "object",
+        "required": [
+          "filename",
+          "type",
+          "n"
+        ],
+        "title": "AttachmentChip"
+      },
+      "Attendee": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "partstat": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Partstat"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Role"
+          },
+          "rsvp": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rsvp"
+          },
+          "comment": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Comment"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "title": "Attendee"
+      },
+      "ChangeEntry": {
+        "properties": {
+          "entity": {
+            "type": "string",
+            "title": "Entity",
+            "description": "conversation, message, label, calendar, event, task, …"
+          },
+          "id": {
+            "type": "integer",
+            "title": "Id",
+            "description": "An id; conversations, messages and approvals carry their public id."
+          },
+          "op": {
+            "type": "string",
+            "enum": [
+              "upsert",
+              "delete"
+            ],
+            "title": "Op"
+          }
+        },
+        "type": "object",
+        "required": [
+          "entity",
+          "id",
+          "op"
+        ],
+        "title": "ChangeEntry"
+      },
+      "Changes": {
+        "properties": {
+          "cursor": {
+            "type": "integer",
+            "title": "Cursor"
+          },
+          "more": {
+            "type": "boolean",
+            "title": "More"
+          },
+          "changes": {
+            "items": {
+              "$ref": "#/components/schemas/ChangeEntry"
+            },
+            "type": "array",
+            "title": "Changes"
+          },
+          "server_time": {
+            "type": "string",
+            "title": "Server Time",
+            "description": "An ISO 8601 time, as the server wrote it."
+          },
+          "reset": {
+            "type": "boolean",
+            "title": "Reset",
+            "description": "The log was pruned past the cursor: resync fully."
+          }
+        },
+        "type": "object",
+        "required": [
+          "cursor",
+          "more",
+          "changes",
+          "server_time"
+        ],
+        "title": "Changes",
+        "description": "GET /changes: what changed since a cursor, the latest operation per object."
+      },
+      "Collection": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "calendar_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calendar Id"
+          },
+          "connector_id": {
+            "type": "integer",
+            "title": "Connector Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color"
+          },
+          "color_local": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color Local"
+          },
+          "default_reminders": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "additionalProperties": {
+                  "items": {
+                    "type": "integer"
+                  },
+                  "type": "array"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Default Reminders"
+          },
+          "events": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Events"
+          },
+          "tasks": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tasks"
+          },
+          "components": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Components"
+          },
+          "read_only": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Read Only"
+          },
+          "tz": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tz"
+          },
+          "hidden": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hidden"
+          },
+          "busy": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Busy"
+          },
+          "notify": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notify"
+          },
+          "sort_order": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sort Order"
+          },
+          "local_only": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local Only"
+          },
+          "shared": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shared"
+          },
+          "sharing": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CollectionSharing"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "shareable": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shareable"
+          },
+          "subscription": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subscription"
+          },
+          "sync": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SyncState"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "connector_id",
+          "name"
+        ],
+        "title": "Collection",
+        "description": "A calendar or task list."
+      },
+      "CollectionList": {
+        "items": {
+          "$ref": "#/components/schemas/Collection"
+        },
+        "type": "array",
+        "title": "CollectionList",
+        "description": "GET /calendar/calendars."
+      },
+      "CollectionSharing": {
+        "properties": {
+          "people": {
+            "type": "integer",
+            "title": "People"
+          },
+          "others": {
+            "type": "integer",
+            "title": "Others"
+          }
+        },
+        "type": "object",
+        "required": [
+          "people",
+          "others"
+        ],
+        "title": "CollectionSharing"
+      },
+      "ConversationDetail": {
+        "properties": {
+          "conversation": {
+            "$ref": "#/components/schemas/ConversationSummary"
+          },
+          "messages": {
+            "items": {
+              "$ref": "#/components/schemas/Message"
+            },
+            "type": "array",
+            "title": "Messages"
+          }
+        },
+        "type": "object",
+        "required": [
+          "conversation",
+          "messages"
+        ],
+        "title": "ConversationDetail",
+        "description": "GET /conversations/{id}."
+      },
+      "ConversationPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ConversationSummary"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total",
+            "description": "Left out with count=false."
+          },
+          "total_capped": {
+            "type": "boolean",
+            "title": "Total Capped",
+            "description": "Counting stopped at `total` (shown as 200,000+)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "next_cursor"
+        ],
+        "title": "ConversationPage",
+        "description": "GET /conversations: one page of a list."
+      },
+      "ConversationSummary": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id",
+            "description": "An id; conversations, messages and approvals carry their public id."
+          },
+          "subject": {
+            "type": "string",
+            "title": "Subject"
+          },
+          "snippet": {
+            "type": "string",
+            "title": "Snippet"
+          },
+          "last_date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Date"
+          },
+          "message_count": {
+            "type": "integer",
+            "title": "Message Count"
+          },
+          "unread_count": {
+            "type": "integer",
+            "title": "Unread Count"
+          },
+          "draft_count": {
+            "type": "integer",
+            "title": "Draft Count"
+          },
+          "has_attachments": {
+            "type": "boolean",
+            "title": "Has Attachments"
+          },
+          "starred": {
+            "type": "boolean",
+            "title": "Starred"
+          },
+          "important": {
+            "type": "boolean",
+            "title": "Important"
+          },
+          "importance_score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Importance Score"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "label_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Label Ids"
+          },
+          "participants": {
+            "items": {
+              "$ref": "#/components/schemas/Participant"
+            },
+            "type": "array",
+            "title": "Participants"
+          },
+          "to_self": {
+            "type": "boolean",
+            "title": "To Self",
+            "description": "A note to self: the user wrote every message, each only to their own addresses."
+          },
+          "recipients": {
+            "items": {
+              "$ref": "#/components/schemas/Participant"
+            },
+            "type": "array",
+            "title": "Recipients",
+            "description": "When only the user wrote in it: whom it went to."
+          },
+          "snoozed_until": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Snoozed Until"
+          },
+          "muted": {
+            "type": "boolean",
+            "title": "Muted"
+          },
+          "follow_up_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Follow Up At"
+          },
+          "nudged_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nudged At"
+          },
+          "primary_action": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PrimaryAction"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "signals": {
+            "items": {
+              "$ref": "#/components/schemas/Signal"
+            },
+            "type": "array",
+            "title": "Signals",
+            "description": "Absent where the route does not compute them."
+          },
+          "attachments_preview": {
+            "items": {
+              "$ref": "#/components/schemas/AttachmentChip"
+            },
+            "type": "array",
+            "title": "Attachments Preview",
+            "description": "list rows only"
+          },
+          "accounts": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Accounts",
+            "description": "The mail accounts it belongs to; only with two or more accounts."
+          },
+          "match_in_attached": {
+            "type": "boolean",
+            "title": "Match In Attached",
+            "description": "A search matched it only inside an attached email."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "subject",
+          "snippet",
+          "last_date",
+          "message_count",
+          "unread_count",
+          "draft_count",
+          "has_attachments",
+          "starred",
+          "important",
+          "importance_score",
+          "category",
+          "label_ids",
+          "participants",
+          "to_self",
+          "recipients",
+          "snoozed_until",
+          "muted",
+          "follow_up_at",
+          "nudged_at",
+          "primary_action"
+        ],
+        "title": "ConversationSummary",
+        "description": "A conversation as a list row and as a thread's header (api/schemas.conversation_out)."
+      },
+      "CutoverIn": {
+        "properties": {
+          "make_default": {
+            "type": "boolean",
+            "title": "Make Default",
+            "default": false
+          },
+          "hide_copied": {
+            "type": "boolean",
+            "title": "Hide Copied",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "CutoverIn"
+      },
+      "Event": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "uid": {
+            "type": "string",
+            "title": "Uid"
+          },
+          "occurrence": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Occurrence"
+          },
+          "recurrence_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recurrence Id"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "start": {
+            "type": "string",
+            "title": "Start"
+          },
+          "end": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End"
+          },
+          "all_day": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "All Day"
+          },
+          "tz": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tz"
+          },
+          "end_tz": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "End Tz"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "transparent": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Transparent"
+          },
+          "class": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Class"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color"
+          },
+          "calendar_color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calendar Color"
+          },
+          "categories": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Categories"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Url"
+          },
+          "sequence": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sequence"
+          },
+          "etag": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Etag"
+          },
+          "recurring": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recurring"
+          },
+          "is_override": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Override"
+          },
+          "rrule": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rrule"
+          },
+          "organizer": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organizer"
+          },
+          "organizer_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Organizer Name"
+          },
+          "attendees": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attendees"
+          },
+          "attendee_list": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/Attendee"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Attendee List"
+          },
+          "reminders": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reminders"
+          },
+          "no_reminders": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "No Reminders"
+          },
+          "calendar": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calendar"
+          },
+          "calendar_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calendar Id"
+          },
+          "connector_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Connector Id"
+          },
+          "href": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Href"
+          },
+          "local_only": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local Only"
+          },
+          "my_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "My Status",
+            "description": "My answer as a guest (ACCEPTED, NEEDS-ACTION…), else null."
+          },
+          "is_organizer": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Is Organizer"
+          },
+          "conversation_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id",
+            "description": "The email the event came from, when it has one."
+          }
+        },
+        "type": "object",
+        "required": [
+          "uid",
+          "summary",
+          "start",
+          "end"
+        ],
+        "title": "Event",
+        "description": "An occurrence in the agenda, with my_status and is_organizer."
+      },
+      "EventChange": {
+        "properties": {
+          "uid": {
+            "type": "string",
+            "title": "Uid"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "old_start": {
+            "type": "string",
+            "title": "Old Start"
+          },
+          "old_end": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Old End"
+          },
+          "new_start": {
+            "type": "string",
+            "title": "New Start"
+          },
+          "new_end": {
+            "type": "string",
+            "title": "New End"
+          },
+          "sentence": {
+            "type": "string",
+            "title": "Sentence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uid",
+          "summary",
+          "old_start",
+          "old_end",
+          "new_start",
+          "new_end",
+          "sentence"
+        ],
+        "title": "EventChange",
+        "description": "A move of one of the user's events that an email announces in words."
+      },
+      "Features": {
+        "properties": {
+          "transcribe": {
+            "type": "boolean",
+            "title": "Transcribe"
+          },
+          "store_mode": {
+            "type": "boolean",
+            "title": "Store Mode"
+          },
+          "store_backup_check": {
+            "type": "boolean",
+            "title": "Store Backup Check"
+          }
+        },
+        "type": "object",
+        "required": [
+          "transcribe",
+          "store_mode",
+          "store_backup_check"
+        ],
+        "title": "Features"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Identity": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "reply_to": {
+            "type": "string",
+            "title": "Reply To"
+          },
+          "signature_html": {
+            "type": "string",
+            "title": "Signature Html"
+          },
+          "is_default": {
+            "type": "boolean",
+            "title": "Is Default"
+          },
+          "connector_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Connector Id"
+          },
+          "receives": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Receives"
+          },
+          "has_avatar": {
+            "type": "boolean",
+            "title": "Has Avatar",
+            "description": "A picture was uploaded (GET /identities/{id}/avatar answers 404 otherwise)."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "name",
+          "reply_to",
+          "signature_html",
+          "is_default",
+          "connector_id",
+          "receives",
+          "has_avatar"
+        ],
+        "title": "Identity",
+        "description": "A send-as address (api/schemas.identity_out)."
+      },
+      "InboxCount": {
+        "properties": {
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "first_tab",
+              "all"
+            ],
+            "title": "Mode"
+          },
+          "layout": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Layout"
+          },
+          "tab": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tab"
+          }
+        },
+        "type": "object",
+        "required": [
+          "count",
+          "mode",
+          "layout",
+          "tab"
+        ],
+        "title": "InboxCount",
+        "description": "GET /inbox/count: the number by Inbox in the sidebar."
+      },
+      "InboxLayout": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "preset": {
+            "type": "boolean",
+            "title": "Preset"
+          },
+          "tab_detail": {
+            "type": "boolean",
+            "title": "Tab Detail"
+          },
+          "hide_empty": {
+            "type": "boolean",
+            "title": "Hide Empty"
+          },
+          "tabs": {
+            "items": {
+              "$ref": "#/components/schemas/LayoutTab"
+            },
+            "type": "array",
+            "title": "Tabs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "tabs"
+        ],
+        "title": "InboxLayout"
+      },
+      "Label": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "inbox",
+                  "sent",
+                  "drafts",
+                  "junk",
+                  "trash",
+                  "archive"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Role"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color"
+          },
+          "show_in_list": {
+            "type": "string",
+            "enum": [
+              "show",
+              "hide",
+              "unread"
+            ],
+            "title": "Show In List"
+          },
+          "show_in_message_list": {
+            "type": "boolean",
+            "title": "Show In Message List"
+          },
+          "sort": {
+            "type": "integer",
+            "title": "Sort"
+          },
+          "home_account_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Home Account Id",
+            "description": "The mail account the label was made in: it is listed under that account even while it holds none of its mail."
+          },
+          "unread": {
+            "type": "integer",
+            "title": "Unread"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "role",
+          "color",
+          "show_in_list",
+          "show_in_message_list",
+          "sort",
+          "home_account_id",
+          "unread",
+          "total"
+        ],
+        "title": "Label",
+        "description": "A label with its list's numbers (GET /labels)."
+      },
+      "LabelList": {
+        "items": {
+          "$ref": "#/components/schemas/Label"
+        },
+        "type": "array",
+        "title": "LabelList"
+      },
+      "LayoutLimits": {
+        "properties": {
+          "tabs": {
+            "type": "integer",
+            "title": "Tabs"
+          },
+          "sections": {
+            "type": "integer",
+            "title": "Sections"
+          },
+          "layouts": {
+            "type": "integer",
+            "title": "Layouts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tabs",
+          "sections",
+          "layouts"
+        ],
+        "title": "LayoutLimits"
+      },
+      "LayoutOptions": {
+        "properties": {
+          "bases": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Bases"
+          },
+          "filters": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "important",
+                "important_unread",
+                "unread",
+                "starred"
+              ]
+            },
+            "type": "array",
+            "title": "Filters"
+          },
+          "icons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Icons"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/LayoutLimits"
+          }
+        },
+        "type": "object",
+        "required": [
+          "bases",
+          "filters",
+          "icons",
+          "limits"
+        ],
+        "title": "LayoutOptions"
+      },
+      "LayoutSection": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "base": {
+            "type": "string",
+            "title": "Base",
+            "description": "A list view: inbox, all, starred, important, snoozed, sent, drafts, archive, label:<id>."
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "filter": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "important",
+                  "important_unread",
+                  "unread",
+                  "starred"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Filter"
+          },
+          "q": {
+            "type": "string",
+            "title": "Q"
+          },
+          "limit": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Limit"
+          },
+          "exclude_above": {
+            "type": "boolean",
+            "title": "Exclude Above"
+          },
+          "inbox_only": {
+            "type": "boolean",
+            "title": "Inbox Only"
+          },
+          "view_all_q": {
+            "type": "string",
+            "title": "View All Q",
+            "description": "The search that lists the whole section."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "base",
+          "category",
+          "filter",
+          "q",
+          "limit",
+          "exclude_above",
+          "inbox_only"
+        ],
+        "title": "LayoutSection"
+      },
+      "LayoutTab": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "icon": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Icon"
+          },
+          "badge": {
+            "type": "string",
+            "enum": [
+              "unread",
+              "all",
+              "none"
+            ],
+            "title": "Badge"
+          },
+          "indicators": {
+            "items": {
+              "type": "string",
+              "enum": [
+                "unread",
+                "all",
+                "due"
+              ]
+            },
+            "type": "array",
+            "title": "Indicators"
+          },
+          "claims": {
+            "type": "boolean",
+            "title": "Claims"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/LayoutSection"
+            },
+            "type": "array",
+            "title": "Sections"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "icon",
+          "badge",
+          "indicators",
+          "sections"
+        ],
+        "title": "LayoutTab"
+      },
+      "LayoutsResponse": {
+        "properties": {
+          "active": {
+            "type": "string",
+            "title": "Active"
+          },
+          "layouts": {
+            "items": {
+              "$ref": "#/components/schemas/InboxLayout"
+            },
+            "type": "array",
+            "title": "Layouts"
+          },
+          "options": {
+            "$ref": "#/components/schemas/LayoutOptions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "active",
+          "layouts",
+          "options"
+        ],
+        "title": "LayoutsResponse",
+        "description": "GET /layouts: the presets and the user's own layouts, and which is active."
+      },
+      "MailAccount": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "color": {
+            "type": "string",
+            "title": "Color"
+          },
+          "addresses": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Addresses"
+          },
+          "identity_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Identity Id"
+          },
+          "local_only": {
+            "type": "boolean",
+            "title": "Local Only"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "address",
+          "name",
+          "color",
+          "addresses",
+          "identity_id",
+          "local_only"
+        ],
+        "title": "MailAccount",
+        "description": "A mail account as the mailbox shows it."
+      },
+      "Me": {
+        "properties": {
+          "user": {
+            "$ref": "#/components/schemas/MeUser"
+          },
+          "csrf": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Csrf"
+          },
+          "scopes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Scopes"
+          },
+          "token": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TokenInfo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "settings": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Settings",
+            "description": "Every user setting, defaults filled in (tools/registry/settings)."
+          },
+          "identities": {
+            "items": {
+              "$ref": "#/components/schemas/Identity"
+            },
+            "type": "array",
+            "title": "Identities"
+          },
+          "counts": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Counts",
+            "description": "The older sidebar numbers: scheduled, approvals, failed, snoozed, drafts, waiting."
+          },
+          "features": {
+            "$ref": "#/components/schemas/Features"
+          },
+          "picture": {
+            "$ref": "#/components/schemas/AccountPicture"
+          },
+          "access": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Access",
+            "description": "What the user's access policy allows."
+          },
+          "setup": {
+            "$ref": "#/components/schemas/SetupInfo"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version",
+            "description": "The server's version: the release it was built from (MAILR_RELEASE), else the package version."
+          }
+        },
+        "type": "object",
+        "required": [
+          "user",
+          "csrf",
+          "scopes",
+          "token"
+        ],
+        "title": "Me",
+        "description": "GET /me: who is signed in, their settings, identities and what they may do."
+      },
+      "MeUser": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "admin",
+              "user"
+            ],
+            "title": "Role"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "last_login_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Login At"
+          },
+          "disabled": {
+            "type": "boolean",
+            "title": "Disabled"
+          },
+          "oidc": {
+            "type": "boolean",
+            "title": "Oidc"
+          },
+          "has_password": {
+            "type": "boolean",
+            "title": "Has Password"
+          },
+          "email_verified": {
+            "type": "boolean",
+            "title": "Email Verified"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "name"
+        ],
+        "title": "MeUser",
+        "description": "The signed-in user (api/schemas.user_out). A token without `read` gets id, email and name only."
+      },
+      "Message": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id",
+            "description": "An id; conversations, messages and approvals carry their public id."
+          },
+          "conversation_id": {
+            "type": "integer",
+            "title": "Conversation Id"
+          },
+          "from": {
+            "$ref": "#/components/schemas/Address"
+          },
+          "to": {
+            "items": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "type": "array",
+            "title": "To"
+          },
+          "cc": {
+            "items": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "type": "array",
+            "title": "Cc"
+          },
+          "bcc": {
+            "items": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "type": "array",
+            "title": "Bcc"
+          },
+          "reply_to": {
+            "items": {
+              "$ref": "#/components/schemas/Address"
+            },
+            "type": "array",
+            "title": "Reply To"
+          },
+          "subject": {
+            "type": "string",
+            "title": "Subject"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "snippet": {
+            "type": "string",
+            "title": "Snippet"
+          },
+          "seen": {
+            "type": "boolean",
+            "title": "Seen"
+          },
+          "flagged": {
+            "type": "boolean",
+            "title": "Flagged"
+          },
+          "important": {
+            "type": "boolean",
+            "title": "Important"
+          },
+          "draft": {
+            "type": "boolean",
+            "title": "Draft"
+          },
+          "answered": {
+            "type": "boolean",
+            "title": "Answered"
+          },
+          "label_ids": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Label Ids"
+          },
+          "has_attachments": {
+            "type": "boolean",
+            "title": "Has Attachments"
+          },
+          "attachments": {
+            "items": {
+              "$ref": "#/components/schemas/Attachment"
+            },
+            "type": "array",
+            "title": "Attachments"
+          },
+          "list_unsubscribe": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "List Unsubscribe"
+          },
+          "list_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "List Id"
+          },
+          "auth_results": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Auth Results",
+            "description": "spf, dkim, dmarc, from_problem…"
+          },
+          "sent_by_me": {
+            "type": "boolean",
+            "title": "Sent By Me"
+          },
+          "origin": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Origin",
+            "description": "\"android-share\": shared in by another app, not the user's words."
+          },
+          "category": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "delivered_to": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Delivered To"
+          },
+          "message_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message Id",
+            "description": "The Message-ID header."
+          },
+          "connector_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Connector Id"
+          },
+          "primary_action": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PrimaryAction"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "event_change": {
+            "$ref": "#/components/schemas/EventChange",
+            "description": "Only when the email announces a move."
+          },
+          "lang": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lang"
+          },
+          "offer_translate": {
+            "type": "boolean",
+            "title": "Offer Translate"
+          },
+          "untrusted": {
+            "type": "boolean",
+            "title": "Untrusted",
+            "description": "Read with an API token: the content is untrusted."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "conversation_id",
+          "from",
+          "to",
+          "cc",
+          "bcc",
+          "reply_to",
+          "subject",
+          "date",
+          "snippet",
+          "seen",
+          "flagged",
+          "important",
+          "draft",
+          "answered",
+          "label_ids",
+          "has_attachments",
+          "attachments",
+          "list_unsubscribe",
+          "list_id",
+          "auth_results",
+          "sent_by_me",
+          "origin",
+          "category",
+          "delivered_to",
+          "message_id",
+          "connector_id",
+          "primary_action",
+          "lang",
+          "offer_translate"
+        ],
+        "title": "Message",
+        "description": "A message in a thread (api/schemas.message_out)."
+      },
+      "MessageBody": {
+        "properties": {
+          "html": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Html"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "remote_images": {
+            "type": "boolean",
+            "title": "Remote Images"
+          },
+          "has_quote": {
+            "type": "boolean",
+            "title": "Has Quote"
+          },
+          "proxied": {
+            "type": "boolean",
+            "title": "Proxied"
+          },
+          "trackers": {
+            "$ref": "#/components/schemas/Trackers"
+          },
+          "links_unwrapped": {
+            "type": "integer",
+            "title": "Links Unwrapped"
+          },
+          "csp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Csp"
+          },
+          "junk": {
+            "type": "boolean",
+            "title": "Junk",
+            "description": "The message is in Spam: images load only after the reader confirms."
+          },
+          "quoted_html_start": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quoted Html Start"
+          },
+          "images_paused": {
+            "type": "string",
+            "title": "Images Paused",
+            "description": "Remote images are paused on the server: why."
+          },
+          "untrusted": {
+            "type": "boolean",
+            "title": "Untrusted"
+          }
+        },
+        "type": "object",
+        "required": [
+          "html",
+          "text",
+          "source",
+          "remote_images",
+          "has_quote",
+          "proxied",
+          "trackers",
+          "links_unwrapped",
+          "csp",
+          "junk"
+        ],
+        "title": "MessageBody",
+        "description": "GET /messages/{id}/body: the sanitised body for the reader."
+      },
+      "MigrationIn": {
+        "properties": {
+          "dry_run": {
+            "type": "boolean",
+            "title": "Dry Run",
+            "default": true
+          },
+          "overwrite": {
+            "type": "boolean",
+            "title": "Overwrite",
+            "default": false
+          },
+          "collections": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "title": "Collections"
+          }
+        },
+        "type": "object",
+        "title": "MigrationIn"
+      },
+      "Note": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "text",
+              "checklist"
+            ],
+            "title": "Kind"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "body": {
+            "type": "string",
+            "title": "Body"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color"
+          },
+          "shopping": {
+            "type": "boolean",
+            "title": "Shopping"
+          },
+          "checked_at_bottom": {
+            "type": "boolean",
+            "title": "Checked At Bottom"
+          },
+          "suggest_usual": {
+            "type": "boolean",
+            "title": "Suggest Usual"
+          },
+          "local_only": {
+            "type": "boolean",
+            "title": "Local Only"
+          },
+          "top_order_mode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Top Order Mode"
+          },
+          "owner": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Owner"
+          },
+          "created_by": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created By"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          },
+          "updated_by": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated By"
+          },
+          "deleted_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deleted At"
+          },
+          "purge_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Purge At"
+          },
+          "version": {
+            "type": "integer",
+            "title": "Version"
+          },
+          "level": {
+            "type": "string",
+            "title": "Level",
+            "description": "The viewer's access: owner, edit or view."
+          },
+          "state": {
+            "$ref": "#/components/schemas/NoteState"
+          },
+          "counts": {
+            "$ref": "#/components/schemas/NoteCounts"
+          },
+          "links": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Links"
+          },
+          "sharing": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sharing"
+          },
+          "changed": {
+            "type": "boolean",
+            "title": "Changed"
+          },
+          "can_delete": {
+            "type": "boolean",
+            "title": "Can Delete"
+          },
+          "can_lower_local_only": {
+            "type": "boolean",
+            "title": "Can Lower Local Only"
+          },
+          "repeat": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Repeat"
+          },
+          "reminders": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Reminders"
+          },
+          "next_reminder": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Reminder"
+          },
+          "preview": {
+            "$ref": "#/components/schemas/NotePreview",
+            "description": "Cards of checklists only."
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/components/schemas/NoteSection"
+            },
+            "type": "array",
+            "title": "Sections",
+            "description": "GET /notes/{id} only."
+          },
+          "top": {
+            "$ref": "#/components/schemas/NoteTop",
+            "description": "GET /notes/{id} only: the items with no section."
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/NoteItem"
+            },
+            "type": "array",
+            "title": "Items",
+            "description": "GET /notes/{id} only."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "body",
+          "color",
+          "shopping",
+          "checked_at_bottom",
+          "suggest_usual",
+          "local_only",
+          "top_order_mode",
+          "owner",
+          "created_by",
+          "created_at",
+          "updated_at",
+          "updated_by",
+          "deleted_at",
+          "purge_at",
+          "version",
+          "level",
+          "state",
+          "counts",
+          "links",
+          "sharing",
+          "changed",
+          "can_delete",
+          "can_lower_local_only",
+          "repeat",
+          "reminders",
+          "next_reminder"
+        ],
+        "title": "Note",
+        "description": "A note as a card (GET /notes) or in full with sections and items (GET /notes/{id})."
+      },
+      "NoteCounts": {
+        "properties": {
+          "items": {
+            "type": "integer",
+            "title": "Items"
+          },
+          "unchecked": {
+            "type": "integer",
+            "title": "Unchecked"
+          },
+          "checked": {
+            "type": "integer",
+            "title": "Checked"
+          },
+          "sections": {
+            "type": "integer",
+            "title": "Sections"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "unchecked",
+          "checked",
+          "sections"
+        ],
+        "title": "NoteCounts"
+      },
+      "NoteItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "section_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section Id"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "key": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Key"
+          },
+          "qty": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Qty"
+          },
+          "extra": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Extra"
+          },
+          "checked": {
+            "type": "boolean",
+            "title": "Checked"
+          },
+          "checked_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checked At"
+          },
+          "checked_by": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checked By"
+          },
+          "order": {
+            "type": "string",
+            "title": "Order"
+          },
+          "rank": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rank"
+          },
+          "added_by": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Added By"
+          },
+          "added_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Added At"
+          },
+          "updated_by": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated By"
+          },
+          "updated_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Updated At"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          },
+          "task_uid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Task Uid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "section_id",
+          "text",
+          "qty",
+          "extra",
+          "checked",
+          "checked_at",
+          "order",
+          "rank",
+          "added_at"
+        ],
+        "title": "NoteItem"
+      },
+      "NoteLabel": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "color": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color"
+          },
+          "order": {
+            "type": "string",
+            "title": "Order"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "color",
+          "order",
+          "count"
+        ],
+        "title": "NoteLabel"
+      },
+      "NoteList": {
+        "properties": {
+          "notes": {
+            "items": {
+              "$ref": "#/components/schemas/Note"
+            },
+            "type": "array",
+            "title": "Notes"
+          },
+          "tables": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Tables"
+          },
+          "labels": {
+            "items": {
+              "$ref": "#/components/schemas/NoteLabel"
+            },
+            "type": "array",
+            "title": "Labels"
+          },
+          "groups": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Groups"
+          }
+        },
+        "type": "object",
+        "required": [
+          "notes",
+          "tables",
+          "labels",
+          "groups"
+        ],
+        "title": "NoteList",
+        "description": "GET /notes: the grid's notes and tables, the viewer's labels and groups."
+      },
+      "NotePreview": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PreviewItem"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "more": {
+            "type": "integer",
+            "title": "More"
+          },
+          "checked": {
+            "type": "integer",
+            "title": "Checked"
+          }
+        },
+        "type": "object",
+        "required": [
+          "items",
+          "more",
+          "checked"
+        ],
+        "title": "NotePreview"
+      },
+      "NoteSection": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "order": {
+            "type": "string",
+            "title": "Order"
+          },
+          "order_mode": {
+            "type": "string",
+            "title": "Order Mode"
+          },
+          "collapsed": {
+            "type": "boolean",
+            "title": "Collapsed"
+          },
+          "trips": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trips"
+          },
+          "unchecked": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unchecked"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "order",
+          "order_mode",
+          "collapsed"
+        ],
+        "title": "NoteSection"
+      },
+      "NoteState": {
+        "properties": {
+          "pinned": {
+            "type": "boolean",
+            "title": "Pinned"
+          },
+          "archived": {
+            "type": "boolean",
+            "title": "Archived"
+          },
+          "labels": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Labels"
+          },
+          "order": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order"
+          },
+          "seen_version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seen Version"
+          },
+          "seen_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seen At"
+          },
+          "calendar_column": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Calendar Column"
+          }
+        },
+        "type": "object",
+        "required": [
+          "pinned",
+          "archived",
+          "labels",
+          "order"
+        ],
+        "title": "NoteState",
+        "description": "The viewer's own state of a note (pinned, archived, labels, order)."
+      },
+      "NoteTop": {
+        "properties": {
+          "order_mode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order Mode"
+          },
+          "collapsed": {
+            "type": "boolean",
+            "title": "Collapsed"
+          },
+          "trips": {
+            "type": "integer",
+            "title": "Trips"
+          },
+          "unchecked": {
+            "type": "integer",
+            "title": "Unchecked"
+          }
+        },
+        "type": "object",
+        "required": [
+          "order_mode",
+          "collapsed",
+          "trips",
+          "unchecked"
+        ],
+        "title": "NoteTop"
+      },
+      "Participant": {
+        "properties": {
+          "email": {
+            "type": "string",
+            "title": "Email"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "me": {
+            "type": "boolean",
+            "title": "Me"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "title": "Participant"
+      },
+      "PreviewItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "qty": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Qty"
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "text",
+          "qty",
+          "section"
+        ],
+        "title": "PreviewItem"
+      },
+      "PrimaryAction": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          },
+          "fact": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fact"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "code": {
+            "type": "string",
+            "title": "Code",
+            "description": "kind \"code\": the one-time code the chip copies."
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "label"
+        ],
+        "title": "PrimaryAction",
+        "description": "The main action an email offers (Track package, Pay, Join…)."
+      },
+      "SetupInfo": {
+        "properties": {
+          "has_accounts": {
+            "type": "boolean",
+            "title": "Has Accounts"
+          },
+          "guide": {
+            "type": "string",
+            "title": "Guide"
+          },
+          "calendar": {
+            "type": "boolean",
+            "title": "Calendar"
+          },
+          "url": {
+            "type": "string",
+            "title": "Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "has_accounts",
+          "guide",
+          "calendar",
+          "url"
+        ],
+        "title": "SetupInfo"
+      },
+      "SidebarCounts": {
+        "properties": {
+          "cursor": {
+            "type": "integer",
+            "title": "Cursor"
+          },
+          "views": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ViewCount"
+            },
+            "type": "object",
+            "title": "Views",
+            "description": "By view: inbox, starred, label:<id>, acct:<id>:<view>, …"
+          },
+          "inbox_count": {
+            "$ref": "#/components/schemas/InboxCount"
+          },
+          "waiting": {
+            "type": "integer",
+            "title": "Waiting"
+          },
+          "approvals": {
+            "type": "integer",
+            "title": "Approvals"
+          },
+          "failed": {
+            "type": "integer",
+            "title": "Failed"
+          },
+          "accounts": {
+            "items": {
+              "$ref": "#/components/schemas/MailAccount"
+            },
+            "type": "array",
+            "title": "Accounts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "cursor",
+          "views",
+          "inbox_count",
+          "waiting",
+          "approvals",
+          "failed",
+          "accounts"
+        ],
+        "title": "SidebarCounts",
+        "description": "GET /counts: every sidebar number. Each view counts what its list shows."
+      },
+      "Signal": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "needs_reply, waiting_on or deadline"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 date (YYYY-MM-DD)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date",
+            "description": "deadline only"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "reason"
+        ],
+        "title": "Signal",
+        "description": "A triage signal on the newest message (Reply needed, Waiting, Due)."
+      },
+      "SyncState": {
+        "properties": {
+          "state": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "State"
+          },
+          "last_sync_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Sync At"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "title": "SyncState"
+      },
+      "TabCounts": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/TabCountsDetail"
+          },
+          {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object"
+          }
+        ],
+        "title": "TabCounts",
+        "description": "GET /layouts/{id}/counts: {tab id: n} (the tab's badge), or with detail=true {\"tabs\": {tab id:\nindicators}}."
+      },
+      "TabCountsDetail": {
+        "properties": {
+          "tabs": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/TabIndicators"
+            },
+            "type": "object",
+            "title": "Tabs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tabs"
+        ],
+        "title": "TabCountsDetail"
+      },
+      "TabIndicators": {
+        "properties": {
+          "unread": {
+            "type": "integer",
+            "title": "Unread"
+          },
+          "all": {
+            "type": "integer",
+            "title": "All"
+          },
+          "due_count": {
+            "type": "integer",
+            "title": "Due Count"
+          },
+          "earliest_due": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 date (YYYY-MM-DD)."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Earliest Due"
+          },
+          "earliest_due_cid": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Earliest Due Cid"
+          },
+          "earliest_due_from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Earliest Due From"
+          },
+          "earliest_due_subject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Earliest Due Subject"
+          }
+        },
+        "type": "object",
+        "title": "TabIndicators",
+        "description": "The tab's indicators; each is there only when the tab shows it."
+      },
+      "Task": {
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Id"
+          },
+          "uid": {
+            "type": "string",
+            "title": "Uid"
+          },
+          "summary": {
+            "type": "string",
+            "title": "Summary"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "completed": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed"
+          },
+          "completed_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completed At"
+          },
+          "due": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due"
+          },
+          "due_all_day": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Due All Day"
+          },
+          "start": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start"
+          },
+          "start_all_day": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start All Day"
+          },
+          "tz": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tz"
+          },
+          "priority": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Priority",
+            "description": "iCalendar: 0 none, 1-4 high, 5 medium, 6-9 low."
+          },
+          "percent": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Percent"
+          },
+          "recurring": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recurring"
+          },
+          "rrule": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rrule"
+          },
+          "repeat_from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Repeat From"
+          },
+          "categories": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Categories"
+          },
+          "sort_order": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sort Order"
+          },
+          "parent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent"
+          },
+          "subtask_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subtask Count"
+          },
+          "open_subtask_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Open Subtask Count"
+          },
+          "reminders": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reminders"
+          },
+          "reminders_at": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reminders At"
+          },
+          "list": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "List",
+            "description": "The task list's URL."
+          },
+          "list_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "List Id"
+          },
+          "connector_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Connector Id"
+          },
+          "href": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Href"
+          },
+          "etag": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Etag"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          },
+          "created": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created"
+          },
+          "last_modified": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Modified"
+          },
+          "local_only": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Local Only"
+          },
+          "section": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Section",
+            "description": "Today and Upcoming: the section the row is in."
+          },
+          "conversation_id": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Conversation Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "uid",
+          "summary",
+          "status",
+          "due"
+        ],
+        "title": "Task",
+        "description": "A task."
+      },
+      "TaskCounts": {
+        "properties": {
+          "smart": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Smart"
+          },
+          "lists": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Lists"
+          },
+          "lists_by_id": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Lists By Id"
+          },
+          "tags": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Tags"
+          },
+          "overdue": {
+            "type": "integer",
+            "title": "Overdue"
+          }
+        },
+        "type": "object",
+        "required": [
+          "smart",
+          "lists",
+          "lists_by_id",
+          "tags",
+          "overdue"
+        ],
+        "title": "TaskCounts",
+        "description": "GET /tasks/counts: open tasks per smart list, per list (by URL, and by calendar id) and per tag."
+      },
+      "TaskPage": {
+        "properties": {
+          "connected": {
+            "type": "boolean",
+            "title": "Connected"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Task"
+            },
+            "type": "array",
+            "title": "Items"
+          },
+          "next_cursor": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Next Cursor"
+          },
+          "sort": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sort"
+          },
+          "sync": {
+            "$ref": "#/components/schemas/SyncState"
+          },
+          "sections": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "integer"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sections",
+            "description": "smart=today|upcoming: rows per section."
+          }
+        },
+        "type": "object",
+        "required": [
+          "connected",
+          "items",
+          "next_cursor",
+          "sort",
+          "sync"
+        ],
+        "title": "TaskPage",
+        "description": "GET /tasks."
+      },
+      "TokenInfo": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "local_only": {
+            "type": "boolean",
+            "title": "Local Only"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "local_only"
+        ],
+        "title": "TokenInfo"
+      },
+      "Trackers": {
+        "properties": {
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          },
+          "domains": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Domains"
+          }
+        },
+        "type": "object",
+        "required": [
+          "count",
+          "domains"
+        ],
+        "title": "Trackers"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "ViewCount": {
+        "properties": {
+          "unread": {
+            "type": "integer",
+            "title": "Unread"
+          },
+          "total": {
+            "type": "integer",
+            "title": "Total"
+          }
+        },
+        "type": "object",
+        "required": [
+          "unread",
+          "total"
+        ],
+        "title": "ViewCount"
+      },
+      "mailr__intel__deadlines__DismissIn": {
+        "properties": {
+          "sender": {
+            "type": "boolean",
+            "title": "Sender",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "DismissIn"
+      }
+    }
+  }
+}

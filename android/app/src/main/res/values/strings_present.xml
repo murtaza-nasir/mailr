@@ -1,0 +1,24 @@
+<resources>
+    <string name="present_image_link">image: %1$s</string>
+    <string name="present_open_source">Open source %1$d</string>
+    <string name="present_open_source_named">Open source %1$d: %2$s</string>
+    <string name="present_status_pending">Waiting for approval</string>
+    <string name="present_status_working">Approved · in progress</string>
+    <string name="present_status_done">Approved · done</string>
+    <string name="present_status_denied">Denied</string>
+    <string name="present_status_expired">Expired</string>
+    <string name="present_status_failed">Approved · failed</string>
+    <string name="present_person_email">"  %1$s"</string>
+    <string name="present_and_more">and %1$d more</string>
+    <string name="present_bullet">• %1$s</string>
+    <string name="present_show_fewer">Show fewer</string>
+    <string name="present_show_all">Show all %1$d</string>
+    <string name="present_hide_syntax">Hide search syntax</string>
+    <string name="present_search_syntax">Search syntax</string>
+    <string name="present_show_less">Show less</string>
+    <string name="present_show_more">Show more</string>
+    <plurals name="present_table_desc">
+        <item quantity="one">Table, %1$d row, %2$s</item>
+        <item quantity="other">Table, %1$d rows, %2$s</item>
+    </plurals>
+</resources>

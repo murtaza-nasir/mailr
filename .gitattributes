@@ -1,0 +1,2 @@
+# One `key: description` line per item, so a union merge keeps both sides' new keys.
+tools/registry/**/*.yaml merge=union

@@ -1,0 +1,173 @@
+/* Inline images in the compose editor (mail.insert_image). */
+.editor-wrap {
+  position: relative;
+}
+.editor-wrap .mail-img {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  line-height: 0;
+  vertical-align: bottom;
+}
+.editor-wrap .mail-img[data-align='left'],
+.editor-wrap .mail-img[data-align='center'],
+.editor-wrap .mail-img[data-align='right'] {
+  display: block;
+  width: fit-content;
+}
+.editor-wrap .mail-img[data-align='left'] { margin-inline-end: auto; }
+.editor-wrap .mail-img[data-align='center'] { margin-inline-start: auto; margin-inline-end: auto; }
+.editor-wrap .mail-img[data-align='right'] { margin-inline-start: auto; }
+.editor-wrap .mail-img img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.editor-wrap .mail-img.selected img,
+.editor-wrap .mail-img.resizing img {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+.mail-img-handle {
+  display: none;
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: var(--primary);
+  border: 2px solid var(--surface, #fff);
+  border-radius: 2px;
+  z-index: 2;
+  touch-action: none;
+}
+.mail-img.selected .mail-img-handle,
+.mail-img.resizing .mail-img-handle {
+  display: block;
+}
+.mail-img-handle.nw { top: -6px; inset-inline-start: -6px; cursor: nwse-resize; }
+.mail-img-handle.ne { top: -6px; inset-inline-end: -6px; cursor: nesw-resize; }
+.mail-img-handle.sw { bottom: -6px; inset-inline-start: -6px; cursor: nesw-resize; }
+.mail-img-handle.se { bottom: -6px; inset-inline-end: -6px; cursor: nwse-resize; }
+.mail-img-progress {
+  display: none;
+  position: absolute;
+  inset-inline-start: 8px;
+  inset-inline-end: 8px;
+  bottom: 8px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgb(0 0 0 / 0.35);
+  overflow: hidden;
+}
+.mail-img-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--primary);
+  transition: width 0.2s;
+}
+.mail-img.uploading img {
+  opacity: 0.6;
+}
+.mail-img.uploading .mail-img-progress {
+  display: block;
+}
+
+.img-toolbar {
+  position: absolute;
+  z-index: 6;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2px;
+  max-width: calc(100% - 8px);
+  padding: 4px 6px;
+  border-radius: var(--radius-sm, 8px);
+  background: var(--surface-high);
+  box-shadow: var(--shadow-2, 0 2px 8px rgb(0 0 0 / 0.25));
+  font-size: 13px;
+  line-height: 20px;
+  cursor: default;
+}
+.img-toolbar .sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 4px;
+  background: var(--divider);
+}
+.img-tb-text {
+  height: 28px;
+  padding: 0 8px;
+  border: none;
+  border-radius: var(--radius-xs, 4px);
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+.img-tb-text:hover,
+.img-tb-text:focus-visible {
+  background: var(--hover, rgb(127 127 127 / 0.12));
+}
+.img-tb-text.active {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.img-tb-text:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.img-tb-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 6px;
+  color: var(--text-2);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.img-alt-form {
+  display: flex;
+  gap: 8px;
+  padding: 2px;
+}
+.img-alt-form .input {
+  width: 260px;
+  max-width: 60vw;
+}
+
+/* Dragging files over the window: the body takes images in place, the strip attaches. */
+.editor-wrap.drop-inline {
+  outline: 2px dashed var(--primary);
+  outline-offset: -4px;
+  border-radius: var(--radius-sm, 8px);
+}
+.editor-wrap.drop-inline::after {
+  content: 'Drop images here to put them in the message';
+  position: sticky;
+  bottom: 4px;
+  float: inline-end;
+  padding: 2px 8px;
+  border-radius: var(--radius-xs, 4px);
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  font-size: 12px;
+  pointer-events: none;
+}
+.dropzone-attach {
+  margin: 4px 16px;
+  padding: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  border: 2px dashed var(--primary);
+  border-radius: var(--radius-sm, 8px);
+  font-size: 14px;
+}
+
+/* A quoted remote image while images are not shown: an outlined box with its description. */
+.mail-img.blocked img {
+  min-height: 24px;
+  outline: 1px dashed var(--border);
+  outline-offset: -1px;
+}

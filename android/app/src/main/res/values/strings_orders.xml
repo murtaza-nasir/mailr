@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings → Ambrose → Standing orders (ui/settings/OrdersScreen.kt). -->
+<resources>
+    <string name="orders_title">Standing orders</string>
+    <string name="orders_settings_sub">Automatic actions by %1$s, such as following your forwarded notes.</string>
+    <string name="orders_intro">When an email arrives, orders run from the top. Actions already done by an order above are skipped. Create, edit and reorder orders on the web.</string>
+    <string name="orders_none">No standing orders yet.</string>
+    <string name="orders_builtin_name">Follow my forwarded notes</string>
+    <string name="orders_builtin">Built in</string>
+    <string name="orders_builtin_desc">When you forward an email from one of your trusted addresses with a note on top, %1$s does what the note says. Only your note counts as an instruction. You can turn this order off, but not delete it.</string>
+    <string name="orders_permission_ask">Ask me</string>
+    <string name="orders_permission_ask_desc">Each note waits as an approval. %1$s starts once you approve.</string>
+    <string name="orders_permission_allow">Allow</string>
+    <string name="orders_permission_allow_desc">%1$s starts on the note at once. Each step still follows its own permission, and sending mail always waits for you.</string>
+    <string name="orders_off">Off: forwarded notes are ordinary mail.</string>
+    <string name="orders_when_mail">When an email arrives</string>
+    <string name="orders_when_routine">Routine</string>
+    <string name="orders_when_recording">When a recording arrives</string>
+    <string name="orders_mail_query">Mail: %1$s</string>
+    <string name="orders_on">%1$s is on</string>
+    <string name="orders_off_label">%1$s is off</string>
+</resources>

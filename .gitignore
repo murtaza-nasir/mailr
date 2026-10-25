@@ -1,0 +1,34 @@
+.env
+.data/
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+dist/
+.data-test/
+
+# a development environment's per-checkout state
+.agent-env
+.agent-env.d/
+
+# per-run test data dirs (MAILR_TEST_DATA_DIR)
+backend/.data-test*/
+
+# the demo instance (mailr demo-seed)
+backend/.data-demo/
+
+# the language-identification model (mailr langid-model; the image downloads it)
+backend/mailr/data/lid.176.ftz
+
+# the Kotlin compiler's build cache and crash logs (Gradle's Kotlin daemon), in every Gradle project
+**/.kotlin/
+
+# generated on demand: never committed
+tools/inventory.json
+tools/coverage-report.md
+
+# the user guide for /help/ (tools/build-help; the image builds its own)
+backend/mailr/help/
+backend/mailr/help.building/
+backend/mailr/help.old/
+.coverage

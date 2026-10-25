@@ -1,0 +1,8 @@
+/* Theme styles. Each theme's rules are scoped by [data-ui-theme='<id>'] on <html>, so Classic
+   (the base styles in styles/) is untouched. Imported last, after the base styles. */
+@import './picker.css';
+@import './shared/palette.css';
+@import './office/office.css';
+@import './focus/focus.css';
+@import './desk/desk.css';
+@import './cards/cards.css';

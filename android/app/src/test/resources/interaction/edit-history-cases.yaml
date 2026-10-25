@@ -1,0 +1,77 @@
+# The editor history: the vectors the web model (frontend/src/lib/editHistory.ts) and
+# the Android one (android/notes-core .../notes/edit/EditHistory.kt) both run. A copy sits in
+# android/app/src/test/resources/interaction/; a vitest checks that the copy matches.
+#
+# Kinds of case:
+#   do      events in order, then what the undo and redo stacks hold (oldest first)
+#             ["t", field, before, after, ms, inputType?]  a field changed
+#             ["op", label]                                  an operation
+#             ["undo"] ["redo"] ["seal"]
+#           a text step shows as [field, before, after]; an operation as ["op", label]
+#           "big": the indexes of the events that removed a lot (Text removed · Undo)
+#           "cap": a smaller cap than 200
+#   classify  [before, after, inputType or null] -> insert | delete | one
+#   big       [before, after] -> true or false
+#   revert    [current, before, after] -> the field after undoing before->after on current (null: cannot)
+#   reapply   [current, before, after] -> the field after redoing it
+idle: 1000
+cap: 200
+cases:
+- {"id": "typing-one-word", "do": [["t","body","","h",0],["t","body","h","he",100],["t","body","he","hel",200],["t","body","hel","hell",300],["t","body","hell","hello",400]], "expect": {"undo": [["body","","hello"]], "redo": []}}
+- {"id": "typing-word-boundary", "do": [["t","body","","h",0],["t","body","h","hi",100],["t","body","hi","hi ",200],["t","body","hi ","hi y",300],["t","body","hi y","hi yo",400]], "expect": {"undo": [["body","","hi "],["body","hi ","hi yo"]], "redo": []}}
+- {"id": "typing-pause", "do": [["t","body","","a",0],["t","body","a","ab",500],["t","body","ab","abc",1600]], "expect": {"undo": [["body","","ab"],["body","ab","abc"]], "redo": []}}
+- {"id": "typing-exactly-idle-joins", "do": [["t","body","","a",0],["t","body","a","ab",1000]], "expect": {"undo": [["body","","ab"]], "redo": []}}
+- {"id": "enter-is-own-step", "do": [["t","body","ab","abc",0],["t","body","abc","abc\n",100],["t","body","abc\n","abc\nd",200]], "expect": {"undo": [["body","ab","abc"],["body","abc","abc\n"],["body","abc\n","abc\nd"]], "redo": []}}
+- {"id": "backspace-run", "do": [["t","body","hello","hell",0],["t","body","hell","hel",100],["t","body","hel","he",200]], "expect": {"undo": [["body","hello","he"]], "redo": []}}
+- {"id": "backspace-word-boundary", "do": [["t","body","hi yo","hi y",0],["t","body","hi y","hi ",100],["t","body","hi ","hi",200],["t","body","hi","h",300]], "expect": {"undo": [["body","hi yo","hi "],["body","hi ","h"]], "redo": []}}
+- {"id": "forward-delete-run", "do": [["t","body","abcd","bcd",0],["t","body","bcd","cd",100]], "expect": {"undo": [["body","abcd","cd"]], "redo": []}}
+- {"id": "typing-then-delete-split", "do": [["t","body","","a",0],["t","body","a","ab",100],["t","body","ab","a",200]], "expect": {"undo": [["body","","ab"],["body","ab","a"]], "redo": []}}
+- {"id": "paste-is-one-step", "do": [["t","body","","h",0],["t","body","h","hi",100],["t","body","hi","hi there",200,"insertFromPaste"],["t","body","hi there","hi there!",300]], "expect": {"undo": [["body","","hi"],["body","hi","hi there"],["body","hi there","hi there!"]], "redo": []}}
+- {"id": "paste-one-char-is-one-step", "do": [["t","body","ab","abc",0],["t","body","abc","abcd",100,"insertFromPaste"]], "expect": {"undo": [["body","ab","abc"],["body","abc","abcd"]], "redo": []}}
+- {"id": "cut-is-one-step", "do": [["t","body","one two","one ",0,"deleteByCut"]], "expect": {"undo": [["body","one two","one "]], "redo": []}}
+- {"id": "replace-all-is-one-step", "do": [["t","body","a cat, a cat","a dog, a dog",0]], "expect": {"undo": [["body","a cat, a cat","a dog, a dog"]], "redo": []}}
+- {"id": "autocorrect-is-one-step", "do": [["t","body","","t",0],["t","body","t","te",100],["t","body","te","teh",200],["t","body","teh","the",300,"insertReplacementText"],["t","body","the","the ",400]], "expect": {"undo": [["body","","teh"],["body","teh","the"],["body","the","the "]], "redo": []}}
+- {"id": "autocorrect-without-input-type", "do": [["t","body","teh","the",0]], "expect": {"undo": [["body","teh","the"]], "redo": []}}
+- {"id": "dictation-insert-is-one-step", "do": [["t","body","Buy ","Buy milk and eggs",0,"insertText"],["t","body","Buy milk and eggs","Buy milk and eggs.",100]], "expect": {"undo": [["body","Buy ","Buy milk and eggs"],["body","Buy milk and eggs","Buy milk and eggs."]], "redo": []}}
+- {"id": "rewrite-is-one-step", "do": [["t","body","draft text","A better text.",0]], "expect": {"undo": [["body","draft text","A better text."]], "redo": []}}
+- {"id": "typing-over-selection", "do": [["t","body","hello","hxo",0],["t","body","hxo","hxyo",100]], "expect": {"undo": [["body","hello","hxo"],["body","hxo","hxyo"]], "redo": []}}
+- {"id": "fields-are-separate", "do": [["t","title","","a",0],["t","body","","b",100],["t","body","b","bc",200]], "expect": {"undo": [["title","","a"],["body","","bc"]], "redo": []}}
+- {"id": "caret-moved-splits", "do": [["t","body","abc","abcd",0],["t","body","abcd","xabcd",100]], "expect": {"undo": [["body","abc","abcd"],["body","abcd","xabcd"]], "redo": []}}
+- {"id": "seal-splits", "do": [["t","body","","a",0],["seal"],["t","body","a","ab",100]], "expect": {"undo": [["body","","a"],["body","a","ab"]], "redo": []}}
+- {"id": "op-between-typing", "do": [["t","title","","a",0],["op","Checked milk"],["t","title","a","ab",100]], "expect": {"undo": [["title","","a"],["op","Checked milk"],["title","a","ab"]], "redo": []}}
+- {"id": "undo-redo", "do": [["t","body","","hi ",0],["t","body","hi ","hi yo",2000],["undo"]], "expect": {"undo": [["body","","hi "]], "redo": [["body","hi ","hi yo"]]}}
+- {"id": "undo-twice-redo-once", "do": [["t","body","","a",0],["op","Colour: Blue"],["undo"],["undo"],["redo"]], "expect": {"undo": [["body","","a"]], "redo": [["op","Colour: Blue"]]}}
+- {"id": "new-edit-drops-redo-tail", "do": [["t","body","","a",0],["op","Deleted milk"],["undo"],["t","body","a","ab",3000]], "expect": {"undo": [["body","","a"],["body","a","ab"]], "redo": []}}
+- {"id": "new-op-drops-redo-tail", "do": [["op","Checked milk"],["undo"],["op","Checked eggs"]], "expect": {"undo": [["op","Checked eggs"]], "redo": []}}
+- {"id": "typing-after-undo-is-new-step", "do": [["t","body","","a",0],["t","body","a","ab",100],["undo"],["t","body","","x",200]], "expect": {"undo": [["body","","x"]], "redo": []}}
+- {"id": "redo-step-does-not-join", "do": [["t","body","","a",0],["undo"],["redo"],["t","body","a","ab",100]], "expect": {"undo": [["body","","a"],["body","a","ab"]], "redo": []}}
+- {"id": "undo-empty", "do": [["undo"],["redo"]], "expect": {"undo": [], "redo": []}}
+- {"id": "no-change-no-step", "do": [["t","body","same","same",0]], "expect": {"undo": [], "redo": []}}
+- {"id": "cap-drops-oldest", "cap": 3, "do": [["op","1"],["op","2"],["op","3"],["op","4"]], "expect": {"undo": [["op","2"],["op","3"],["op","4"]], "redo": []}}
+- {"id": "cap-text", "cap": 2, "do": [["t","body","","a",0],["seal"],["t","body","a","ab",10],["seal"],["t","body","ab","abc",20]], "expect": {"undo": [["body","a","ab"],["body","ab","abc"]], "redo": []}}
+- {"id": "emoji-typed-is-one-char", "do": [["t","body","hi","hi😀",0],["t","body","hi😀","hi😀😀",100]], "expect": {"undo": [["body","hi","hi😀😀"]], "redo": []}}
+- {"id": "big-four-lines", "do": [["t","body","a\nb\nc\nd\ne","a",0]], "expect": {"undo": [["body","a\nb\nc\nd\ne","a"]], "redo": [], "big": [0]}}
+- {"id": "big-not-three-lines", "do": [["t","body","a\nb\nc","",0,"deleteByCut"]], "expect": {"undo": [["body","a\nb\nc",""]], "redo": [], "big": []}}
+- {"id": "big-cleared", "do": [["t","body","Call the plumber on Monday","",0,"deleteByCut"]], "expect": {"undo": [["body","Call the plumber on Monday",""]], "redo": [], "big": [0]}}
+- {"id": "big-not-by-backspace", "do": [["t","body","a","",0]], "expect": {"undo": [["body","a",""]], "redo": [], "big": []}}
+- {"id": "classify-insert", "classify": ["ab","abc",null], "expect": "insert"}
+- {"id": "classify-insert-middle", "classify": ["ac","abc","insertText"], "expect": "insert"}
+- {"id": "classify-delete", "classify": ["abc","ab","deleteContentBackward"], "expect": "delete"}
+- {"id": "classify-newline", "classify": ["ab","ab\n","insertLineBreak"], "expect": "one"}
+- {"id": "classify-paste", "classify": ["ab","abc","insertFromPaste"], "expect": "one"}
+- {"id": "classify-replacement", "classify": ["teh","the",null], "expect": "one"}
+- {"id": "classify-multi-insert", "classify": ["","milk and eggs",null], "expect": "one"}
+- {"id": "classify-emoji", "classify": ["","👍",null], "expect": "insert"}
+- {"id": "big-five-lines", "big": ["1\n2\n3\n4\n5",""], "expect": true}
+- {"id": "big-three-whole-lines", "big": ["1\n2\n3\n4\n5","1\n5"], "expect": false}
+- {"id": "big-four-whole-lines", "big": ["1\n2\n3\n4\n5\n6","1\n6"], "expect": true}
+- {"id": "big-three-lines", "big": ["1\n2\n3\n4","1\n4"], "expect": false}
+- {"id": "big-short-clear", "big": ["milk",""], "expect": false}
+- {"id": "big-addition", "big": ["a","a\nb\nc\nd\ne"], "expect": false}
+- {"id": "revert-plain", "revert": ["hello world","hello","hello world"], "expect": "hello"}
+- {"id": "revert-after-other-edit", "revert": ["Intro. hello world","hello","hello world"], "expect": "Intro. hello"}
+- {"id": "revert-ambiguous", "revert": ["ab ab","a","ab"], "expect": null}
+- {"id": "revert-gone", "revert": ["something else","hello","hello world"], "expect": null}
+- {"id": "revert-deletion", "revert": ["x milk","milk eggs","milk"], "expect": "x milk eggs"}
+- {"id": "reapply-plain", "reapply": ["hello","hello","hello world"], "expect": "hello world"}
+- {"id": "reapply-after-other-edit", "reapply": ["Intro. hello","hello","hello world"], "expect": "Intro. hello world"}

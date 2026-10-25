@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda: the next days, tasks with a circle, the weather, in one of four
+     styles chosen per widget (AgendaStyle); the date is the hidden Talk to Ambrose target. 4×3 by
+     default. Each style's top block keeps one size; the lists under it scroll,
+     so the widget resizes down to 3×2 and 4×2. minResizeHeight stays at Android's two-row value
+     (110dp): a launcher counts rows by its smallest (landscape) cell, so more would forbid two rows.
+     Two rows on a Pixel are about 205dp, which fits every style's top block and a list row
+     (AgendaSize.MIN_HEIGHT). minResizeWidth 230dp is three columns on a Pixel (about 280dp); two
+     columns cannot hold the date and the weather side by side (minWidth is at least as wide, or
+     Android ignores the resize limit; 250dp gives the 4×3 default before Android 12). Redrawn every
+     30 minutes, after each calendar or task change on the phone, after each weather reading, and by
+     AgendaTicks for the now-line and the countdown. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="180dp"
+    android:minResizeWidth="230dp"
+    android:minResizeHeight="110dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="3"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:updatePeriodMillis="1800000"
+    android:configure="io.github.murtazanasir.mailr.ui.agenda.AgendaSettingsActivity"
+    android:widgetFeatures="reconfigurable"
+    android:initialLayout="@layout/glance_default_loading_layout"
+    android:description="@string/agenda_widget_desc" />

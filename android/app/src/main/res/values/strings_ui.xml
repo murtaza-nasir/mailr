@@ -1,0 +1,80 @@
+<resources>
+    <string name="ui_today">Today</string>
+    <string name="ui_tomorrow">Tomorrow</string>
+    <string name="ui_yesterday">Yesterday</string>
+    <string name="ui_day_time">%1$s, %2$s</string>
+    <string name="ui_date_relative">%1$s (%2$s)</string>
+    <string name="ui_just_now">just now</string>
+    <string name="ui_yesterday_lower">yesterday</string>
+    <string name="ui_unknown_participant">(unknown)</string>
+    <string name="ui_me">me</string>
+    <string name="ui_bytes">%1$d B</string>
+    <string name="ui_kilobytes">%1$d KB</string>
+    <string name="ui_megabytes">%1$s MB</string>
+    <!-- Format.relative without "ago" ("Expires in 5 min"). -->
+    <plurals name="ui_minutes_span">
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
+    <plurals name="ui_hours_span">
+        <item quantity="one">%d hr</item>
+        <item quantity="other">%d hr</item>
+    </plurals>
+    <plurals name="ui_days_span">
+        <item quantity="one">%d day</item>
+        <item quantity="other">%d days</item>
+    </plurals>
+    <plurals name="ui_minutes_ago">
+        <item quantity="one">%d min ago</item>
+        <item quantity="other">%d min ago</item>
+    </plurals>
+    <plurals name="ui_hours_ago">
+        <item quantity="one">%d hr ago</item>
+        <item quantity="other">%d hr ago</item>
+    </plurals>
+    <plurals name="ui_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <string name="ui_field_message">Message</string>
+    <string name="ui_field_title">Title</string>
+    <string name="ui_field_notes">Notes</string>
+    <string name="ui_field_to">To</string>
+    <string name="ui_field_cc">Cc</string>
+    <string name="ui_field_bcc">Bcc</string>
+    <string name="ui_field_due">Due</string>
+    <string name="ui_field_start">Start</string>
+    <string name="ui_field_end">End</string>
+    <string name="ui_field_repeat">Repeat</string>
+    <string name="ui_field_tags">Tags</string>
+    <string name="ui_field_guests">Guests</string>
+    <string name="ui_field_video">Video link</string>
+    <string name="ui_selected">Selected</string>
+    <string name="ui_remove_label">Remove label %1$s</string>
+    <string name="ui_important">Important</string>
+    <string name="ui_loading">Loading</string>
+    <string name="ui_snooze_later_today">Later today</string>
+    <string name="ui_snooze_tomorrow">Tomorrow</string>
+    <string name="ui_snooze_weekend">This weekend</string>
+    <string name="ui_snooze_next_week">Next week</string>
+    <string name="ui_snooze_until">Snooze until…</string>
+    <string name="ui_pick_date_time">Pick date &amp; time</string>
+    <string name="ui_label_as">Label as</string>
+    <string name="ui_filter_labels">Filter labels</string>
+    <string name="ui_cancel">Cancel</string>
+    <string name="ui_apply">Apply</string>
+    <string name="ui_live_use_mine">Use mine</string>
+    <string name="ui_live_compare">Compare</string>
+    <string name="ui_live_undo">Undo</string>
+    <string name="ui_live_dismiss">Dismiss</string>
+    <string name="ui_live_gone_draft">This draft was deleted elsewhere.</string>
+    <string name="ui_live_gone_event">This event was deleted elsewhere.</string>
+    <string name="ui_live_gone_task">This task was deleted elsewhere.</string>
+    <string name="ui_live_gone">This %1$s was deleted elsewhere.</string>
+    <string name="ui_live_yours">Yours</string>
+    <string name="ui_live_empty">(empty)</string>
+    <string name="ui_setup_link_signed_in">You are already signed in, so the setup link was not used. To use another server, sign out first.</string>
+    <!-- Group headings in the ⋮ menus' bottom sheets (ActionSheet). -->
+    <string name="ui_menu_organize">Organise</string>
+    <string name="ui_menu_more">More</string>
+</resources>

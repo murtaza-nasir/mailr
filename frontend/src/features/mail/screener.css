@@ -1,0 +1,188 @@
+/* Mail → Screener (ScreenerView.tsx). Colours come from the tokens (styles/tokens.css), so every
+   theme and dark mode follow. */
+.screener-view {
+  padding: 16px 24px 32px;
+  overflow: auto;
+  height: 100%;
+  box-sizing: border-box;
+}
+.screener-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.screener-head h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+}
+.screener-sub {
+  margin: 2px 0 0;
+}
+.screener-intro {
+  color: var(--text-2);
+  margin: 12px 0 16px;
+  max-width: 72ch;
+}
+.screener-empty {
+  display: grid;
+  place-items: center;
+  padding: 48px;
+}
+.screener-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+  max-width: 880px;
+}
+.screener-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  min-width: 0;
+}
+.screener-who {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.screener-names {
+  min-width: 0;
+}
+.screener-name {
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.screener-addr {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.screener-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+  font-size: 12px;
+}
+.screener-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  white-space: nowrap;
+}
+.screener-chip.auth-verified {
+  background: var(--success-container);
+  color: var(--on-success-container);
+}
+.screener-chip.auth-failed {
+  background: var(--danger-container);
+  color: var(--on-danger-container);
+}
+.screener-chip.auth-unknown {
+  background: var(--warning-container);
+  color: var(--warning-fg);
+}
+.screener-meta {
+  font-size: 12px;
+}
+.screener-preview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 12px;
+  text-align: start;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--surface-container);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+.screener-preview:hover {
+  background: var(--hover);
+}
+.screener-preview:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.screener-subject {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.screener-subject.unread {
+  font-weight: 600;
+}
+.screener-date {
+  grid-column: 2;
+  grid-row: 1;
+  font-size: 12px;
+}
+.screener-snippet {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.screener-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.screener-actions .btn .lucide {
+  width: 16px;
+  height: 16px;
+}
+.screener-accounts {
+  display: grid;
+  gap: 4px;
+}
+.screener-decided {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+}
+.screener-decided li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.screener-decided .key {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 900px) {
+  .screener-view {
+    padding: 12px 16px 24px;
+  }
+  .screener-card {
+    padding: 12px;
+  }
+  .screener-actions .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+}

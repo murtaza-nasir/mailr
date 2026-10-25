@@ -1,0 +1,1774 @@
+{
+  "_meta": {
+    "language": "Englisch",
+    "native": "Englisch"
+  },
+  "common": {
+    "no_subject": "(kein Betreff)"
+  },
+  "errors": {
+    "common": {
+      "not_found": "nicht gefunden",
+      "nothing_to_change": "nichts zu ändern",
+      "invalid_email": "ungültige E-Mail-Adresse",
+      "invalid_cursor": "ungültiger Cursor",
+      "too_large": "zu groß",
+      "event_not_found": "Termin nicht gefunden",
+      "task_not_found": "Aufgabe nicht gefunden",
+      "note_not_found": "Notiz nicht gefunden",
+      "table_not_found": "Tabelle nicht gefunden",
+      "list_not_found": "Liste nicht gefunden",
+      "draft_not_found": "Entwurf nicht gefunden",
+      "memory_not_found": "Gedächtnis nicht gefunden",
+      "conversation_not_found": "Unterhaltung nicht gefunden",
+      "not_an_email": "keine E-Mail-Adresse",
+      "unknown_connector": "unbekannter Connector",
+      "uploads_busy": "zu viele Uploads gleichzeitig; versuche es gleich noch einmal"
+    },
+    "mail": {
+      "conversation_not_found": "Unterhaltung nicht gefunden",
+      "message_not_found": "Nachricht nicht gefunden",
+      "attached_email_unreadable": "Diese angehängte E-Mail kann nicht angezeigt werden. Lade sie herunter, um sie an anderer Stelle zu öffnen.",
+      "rule_not_found": "Regel nicht gefunden",
+      "approve_user_only": "nur der Benutzer kann das Senden freigeben",
+      "attachment_expired": "Hochladen der Anlage abgelaufen; füge die Datei erneut hinzu",
+      "attachments_limit": "Anlagen sind auf {{max}} MB begrenzt",
+      "image_proxy_off": "der Bild-Proxy ist deaktiviert",
+      "image_unavailable": "Bild nicht verfügbar",
+      "images_paused": "Bilder sind pausiert",
+      "inline_image_type": "nur PNG-, JPEG-, GIF- und WebP-Bilder können inline angezeigt werden",
+      "message_no_unsubscribe_link": "diese Nachricht hat keinen Abmeldelink",
+      "messages_not_in_conversation": "Nachrichten sind nicht in dieser Unterhaltung",
+      "no_delete_forever_list": "endgültiges Löschen ist für eine ganze Liste nicht verfügbar; leere stattdessen den Papierkorb",
+      "no_identities": "noch keine Identitäten",
+      "no_layout_section": "kein solcher Layout-Abschnitt",
+      "no_such_image": "kein solches Bild",
+      "no_such_part": "kein solcher Teil",
+      "nothing_to_undo": "nichts rückgängig zu machen",
+      "reject_user_only": "nur der Benutzer kann das Senden ablehnen",
+      "unsubscribe_refused": "Abmeldung per E-Mail an {{to}} nicht möglich: {{reason}}",
+      "uploads_full": "deine noch nicht gesendeten Anlagen belegen bereits die {{max}} MB, die dieser Server für dich aufbewahrt; sende oder lösche Entwürfe mit Anlagen und versuche es dann erneut"
+    },
+    "calendar": {
+      "event_not_found": "Termin nicht gefunden",
+      "task_not_found": "Aufgabe nicht gefunden",
+      "calendar_not_found": "Kalender nicht gefunden",
+      "cancel_not_verified": "Niemand hat bestätigt, dass der Organisator diese Absendung gesendet hat. Der Termin bleibt in deinem Kalender.",
+      "link_needs_confirmation": "Wähle zuerst den Organisator aus: {{organizer}} kann diesen Termin ändern.",
+      "link_not_verified": "Niemand hat bestätigt, dass der Absender der Einladung der Organisator ist. Er kann deinen Termin nicht übernehmen.",
+      "account_not_found": "Kalender-Konto nicht gefunden",
+      "accounts_change_user_only": "nur der Benutzer kann Kalender-Konten ändern",
+      "accounts_connect_user_only": "Kalenderkonten werden vom angemeldeten Benutzer verbunden",
+      "accounts_remove_user_only": "Nur der Benutzer kann Kalenderkonten entfernen",
+      "answer_user_only": "Nur der Benutzer kann hier Einladungen beantworten",
+      "builtin_cannot_remove": "Der Mailr-Kalender kann nicht entfernt werden. Du kannst ihn ausblenden.",
+      "builtin_fixed": "Name, Adresse und Anmeldung des Mailr-Kalenders können nicht geändert werden. Du kannst ihn ausblenden.",
+      "choose_a_change": "Wähle mindestens eine Änderung aus",
+      "confirm_calendar_name": "Bestätigung muss dem Namen des Kalenders entsprechen",
+      "copy_caldav_only": "Nur ein verbundenes CalDAV-Konto kann in den Mailr-Kalender kopiert werden",
+      "decline_proposal_user_only": "Nur der Benutzer kann einen vorgeschlagenen Termin ablehnen",
+      "defaults_user_only": "Kalender-Standardeinstellungen werden vom angemeldeten Benutzer festgelegt",
+      "deleted_on_server": "Es wurde auf dem Kalender-Server gelöscht",
+      "event_needs_start": "Ein Termin benötigt einen Start",
+      "file_limit_5mb": "Kalenderdateien sind auf 5 MB begrenzt",
+      "file_no_events": "Die Datei enthält keine Termine",
+      "group_calendar_not_found": "Gruppenkalender nicht gefunden",
+      "group_freebusy_user_only": "Verfügbarkeitsinformationen in deinen Gruppen sind nur für die angemeldete Person sichtbar",
+      "import_max_events": "Maximal {{max}} Termine pro Import",
+      "import_user_only": "Nur der Benutzer kann Kalenderdateien importieren",
+      "invitation_unreadable": "Die Einladung konnte nicht gelesen werden",
+      "message_no_ics": "Diese Nachricht enthält keine Kalenderdatei",
+      "need_sending_address": "Füge zuerst eine Absenderadresse mit ausgehendem Mailserver hinzu",
+      "need_sending_address_reply": "Füge eine Absenderadresse hinzu, bevor du auf Einladungen antwortest",
+      "no_builtin_calendar": "Du hast keinen Mailr-Kalender auf diesem Server",
+      "no_invitation": "Diese Nachricht enthält keine Einladung",
+      "no_proposal": "Diese Nachricht schlägt keinen neuen Termin für diesen Termin vor",
+      "no_unapplied_change": "Diese Nachricht enthält keine nicht angewendete Kalenderänderung",
+      "not_a_guest": "Du bist nicht Gast dieses Termins",
+      "not_a_request": "Dies ist keine Einladungsanfrage ({{method}})",
+      "not_ics": "Die Datei ist keine iCalendar-Datei (.ics)",
+      "organizer_cancels": "Nur der Organisator kann diesen Termin absagen",
+      "proposal_no_time": "Der Vorschlag enthält keine Zeitangabe",
+      "proposal_not_guest": "Der Vorschlag stammt nicht von einem Gast eines Termins, den du organisierst",
+      "proposal_recipients_changed": "Die Gästeliste hat sich geändert; die aktualisierte Einladung ginge an: {{notify}}",
+      "proposal_unverified": "Der Absender des Vorschlags ({{sender}}) konnte nicht überprüft werden; bestätige zuerst, dass du ihm vertraust",
+      "range_62_days": "Der Zeitraum darf maximal 62 Tage betragen",
+      "range_one_year": "Der Zeitraum muss positiv und maximal ein Jahr betragen",
+      "range_positive_62_days": "Der Zeitraum muss positiv und maximal 62 Tage betragen",
+      "read_only": "Dieser Kalender ist schreibgeschützt",
+      "refresh_hours": "Alle {{min}} bis {{max}} Stunden aktualisieren.",
+      "server_read_only": "Änderung abgelehnt: Dieser Kalender ist für dich schreibgeschützt.",
+      "server_rejected_change": "Die Änderung konnte auf dem Kalenderserver nicht gespeichert werden: {{error}}",
+      "server_rejected_request": "Die Anfrage wurde vom Kalenderserver abgelehnt: {{error}}",
+      "server_unexpected": "Unerwartete Antwort vom Kalender-Server: {{error}}",
+      "share_not_by_token": "Kalender können nicht über ein API-Token geteilt werden.",
+      "signin_failed": "Anmeldung am Kalenderserver fehlgeschlagen: {{error}}",
+      "store_rejected_change": "Die Änderung konnte im E-Mail-Speicher nicht gespeichert werden: {{error}}",
+      "subscribe_user_only": "Nur der angemeldete Benutzer kann Kalender abonnieren",
+      "subscription_not_found": "Abonnement nicht gefunden",
+      "unknown_calendar": "Unbekannter Kalender",
+      "unverified_user_only": "Nur der angemeldete Benutzer kann eine Änderung von einem nicht verifizierten Absender anwenden",
+      "window_two_years": "Der Zeitraum muss positiv und maximal zwei Jahre betragen"
+    },
+    "admin": {
+      "user_not_found": "Benutzer nicht gefunden",
+      "endpoint_not_found": "Endpunkt nicht gefunden",
+      "api_key_again": "Gib den API-Schlüssel erneut ein, um eine andere URL zu testen",
+      "cannot_delete_self": "Du kannst dich nicht selbst löschen",
+      "cannot_demote_self": "Du kannst dich nicht selbst herabstufen oder deaktivieren",
+      "egress_from_env": "Der Egress-Proxy ist in der Server-Umgebung festgelegt (MAILR_IMAGE_PROXY_EGRESS).",
+      "list_models_failed": "Modelle konnten nicht aufgelistet werden: {{error}}",
+      "local_only_needs_local": "Nur lokale Modelle erfordern einen lokalen Endpunkt",
+      "local_public": "{{host}} ist eine öffentliche Adresse und kann daher nicht als lokal markiert werden. Verwende eine Adresse in deinem Netzwerk oder auf diesem Rechner oder markiere sie als gehostet.",
+      "local_public_no_host": "Dies ist eine öffentliche Adresse und kann daher nicht als lokal markiert werden. Verwende eine Adresse in deinem Netzwerk oder auf diesem Rechner oder markiere sie als gehostet.",
+      "password_not_by_token": "Passwörter werden von einem angemeldeten Administrator geändert, nicht über ein API-Token",
+      "public_address_first": "Gib zuerst die öffentliche Adresse ein."
+    },
+    "accounts": {
+      "account_not_found": "Konto nicht gefunden",
+      "add_own_accounts": "Füge deine eigenen Konten unter Einstellungen → E-Mail → E-Mail-Konten hinzu",
+      "admin_connects_not_token": "E-Mail-Konten werden von einem angemeldeten Administrator verbunden, nicht über ein API-Token",
+      "admin_local_only": "Ein Administrator verlangt, dass dieses Konto nur lokal bleibt",
+      "backup_check_failed": "die Sicherungsprüfung ist fehlgeschlagen ({{reason}}); beim Anbieter wird nichts gelöscht",
+      "colour_mail_only": "Nur E-Mail-Konten haben eine Farbe",
+      "colour_unknown": "Wähle eine der Kontofarben: Blau, Orange, Grün, Lila, Rosa, Türkis, Rot oder Gelb",
+      "confirm_account_name": "Gib den Kontonamen exakt ein, um zu bestätigen",
+      "disconnected_by_person": "{{person}} hat dieses Konto getrennt. Sprich zuerst mit der Person; sie wird erneut benachrichtigt, wenn du die Verbindung wiederherstellst.",
+      "enter_password": "Gib das Passwort des Kontos ein",
+      "file_too_large_gb": "Die Datei ist größer als {{max}} GB",
+      "first_sync_running": "Die erste Synchronisierung ist noch nicht abgeschlossen",
+      "imap_required": "Der eingehende Server (IMAP) ist erforderlich",
+      "import_daily_limit": "du hast in den letzten 24 Stunden {{max}} GB für Importe hochgeladen, das Maximum, das dieser Server pro Tag annimmt; versuche es später erneut",
+      "import_disk_full": "der Speicher des Servers ist fast voll, daher wurde das Hochladen abgebrochen; bitte den Administrator, Platz freizugeben",
+      "import_space_full": "Unabgeschlossene Importe füllen deinen Import-Speicherplatz; versuche es erneut, wenn sie abgeschlossen sind",
+      "imports_running": "bei dir laufen bereits so viele Importe, wie dieser Server gleichzeitig ausführt ({{max}}); starte diesen, wenn einer davon abgeschlossen ist",
+      "managed_off": "Administratoren können für Mitglieder auf diesem Server keine E-Mail-Konten verbinden. Aktiviere dies unter Einstellungen → Admin → Benutzer.",
+      "mode_not_supported": "Modus für diesen Kontotyp nicht unterstützt",
+      "no_backup_yet": "noch keine Sicherung; E-Mails werden beim Anbieter erst gelöscht, wenn sie gesichert sind. Versuche es nach der ersten täglichen Sicherung erneut.",
+      "no_new_mail_since_sync": "Seit der ersten Synchronisierung sind über dieses Konto keine neuen E-Mails eingegangen; sende dir eine Testnachricht und versuche es erneut",
+      "password_again_change": "Gib das Passwort erneut ein, wenn du den Server änderst",
+      "password_again_test": "Gib das Passwort erneut ein, um einen anderen Server zu testen",
+      "person_has_account": "Diese Person hat dieses Konto bereits",
+      "provider_unsupported": "Dieser Anbieter wird noch nicht unterstützt",
+      "save_sent_imap_only": "nur IMAP-Konten speichern gesendete E-Mails beim Anbieter",
+      "sent_copy_mirror_only": "nur ein IMAP-Konto mit „Synchron halten“ speichert gesendete E-Mails beim Anbieter",
+      "store_needs_mail_export": "„Mailr bewahrt die E-Mails auf“ ist auf diesem Server nicht verfügbar: Es braucht den täglichen E-Mail-Export, den die Verwaltung ausgeschaltet hat. Nutze „Synchron halten“.",
+      "turned_off": "Dieses Konto ist deaktiviert; aktiviere es zuerst",
+      "upload_mbox": "Lade eine .mbox-Datei oder eine .zip mit Maildir-/mbox-Dateien hoch",
+      "upstream_delete_store_only": "E-Mails können nur bei einem Konto mit „Mailr bewahrt die E-Mails auf“ beim Anbieter gelöscht werden",
+      "user_only": "Konten können nur vom angemeldeten Benutzer verwaltet werden"
+    },
+    "auth": {
+      "password_too_short": "Das Passwort muss mindestens {{min}} Zeichen lang sein",
+      "no_account": "Kein Mailr-Konto für diesen Benutzer",
+      "admin_only": "Nur für Administratoren",
+      "current_password_wrong": "Das aktuelle Passwort ist falsch",
+      "handover_app_only": "Nur die angemeldete Mailr-App kann ihre Anmeldung übergeben",
+      "handover_expired": "Diese Übergabe ist abgelaufen oder wurde bereits verwendet; versuche es erneut",
+      "handover_other_app": "Diese Übergabe wurde nicht von dieser App gestartet",
+      "handover_signed_out": "Die Mailr-App ist abgemeldet; melde dich dort oder hier an",
+      "id_token_azp": "Das ID-Token hat einen unerwarteten autorisierten Partei",
+      "id_token_no_expiry": "Das ID-Token hat kein Ablaufdatum",
+      "id_token_other_app": "Das ID-Token wurde nicht für die Mailr-App ausgestellt",
+      "id_token_other_provider": "Das ID-Token wurde von einem anderen Anbieter ausgestellt",
+      "id_token_other_server": "Diese Anmeldung wurde für einen anderen Server gestartet. Überprüfe die Serveradresse und melde dich erneut an.",
+      "id_token_rejected": "ID-Token abgelehnt",
+      "id_token_rejected_why": "ID-Token abgelehnt: {{error}}",
+      "id_token_signature": "Die Signatur des ID-Tokens ist ungültig",
+      "id_token_too_old": "Das ID-Token ist zu alt; melde dich erneut an",
+      "imap_password_user_only": "Nur der Benutzer kann ein IMAP-Passwort erstellen",
+      "local_login_disabled": "Die lokale Anmeldung ist deaktiviert",
+      "native_not_configured": "Die native Anmeldung ist nicht konfiguriert",
+      "native_update_app": "Diese App-Version kann sich nicht mehr anmelden. Aktualisiere die App und melde dich erneut an.",
+      "nonce_mismatch": "Nonce-Abweichung",
+      "oidc_not_configured": "OIDC ist nicht konfiguriert",
+      "password_signin_off": "Die Anmeldung mit Passwort ist auf diesem Server deaktiviert",
+      "password_user_only": "Nur der Benutzer kann das Passwort ändern",
+      "profile_user_only": "Nur der Benutzer kann das Profil ändern",
+      "provider_keys_unavailable": "Die Schlüssel des Anbieters für die Anmeldung konnten nicht abgerufen werden",
+      "provider_not_accepted": "Der Anbieter hat die Anmeldung nicht akzeptiert; versuche es erneut",
+      "provider_refused": "Der Anbieter hat die Anmeldung abgelehnt oder abgebrochen",
+      "revoke_user_only": "Nur der Benutzer kann Sitzungen widerrufen",
+      "sessions_user_only": "Nur der Benutzer kann Sitzungen auflisten",
+      "signin_expired": "Die Anmeldesitzung ist abgelaufen, versuche es erneut",
+      "signin_used": "Diese Anmeldung wurde bereits verwendet; melde dich erneut an",
+      "signs_in_with_sso": "Dieses Konto verwendet Single Sign-On; ein Administrator kann ein Passwort festlegen",
+      "signup_disabled": "Die Registrierung ist deaktiviert",
+      "state_mismatch": "State-Abweichung",
+      "token_unverifiable": "Das Token des Anbieters für die Anmeldung konnte nicht überprüft werden",
+      "token_wrong_app": "Token wurde nicht für diese App ausgestellt",
+      "unknown_session": "Unbekannte Sitzungs-ID",
+      "wrong_credentials": "E-Mail-Adresse oder Passwort falsch"
+    },
+    "outbox": {
+      "message_state": "Nachricht ist {{status}}"
+    },
+    "tables": {
+      "view_not_found": "Ansicht nicht gefunden",
+      "row_not_found": "Zeile nicht gefunden",
+      "column_limit": "Diese Tabelle hat {{max}} Spalten, das Maximum",
+      "calendar_needs_date": "Nur eine Datums-Spalte kann im Kalender angezeigt werden",
+      "choose_import_column": "Wähle mindestens eine Spalte zum Importieren aus",
+      "max_days": "Frage maximal {{max}} Tage ab",
+      "no_matching_column": "Keine Spalte der Datei stimmt mit einer Spalte dieser Tabelle überein",
+      "no_such_column": "Diese Tabelle hat keine solche Spalte",
+      "not_link_column": "Keine Link-Spalte",
+      "tokens_use_tools": "API-Tokens können nur über die Tools von {{name}} auf Tabellen zugreifen"
+    },
+    "websearch": {
+      "provider_not_found": "Anbieter nicht gefunden",
+      "api_key_again": "API-Schlüssel erneut eingeben, um eine andere URL zu testen",
+      "provider_name_taken": "Ein Anbieter mit diesem Namen existiert bereits",
+      "reader_from_env": "Dieser Reader ist in der Serverumgebung festgelegt (MAILR_BROWSER_URL); deaktiviere ihn oder entferne die Variable"
+    },
+    "pictures": {
+      "no_picture": "Kein Bild",
+      "changed_by_user": "Das Bild wurde vom Benutzer geändert",
+      "limit_2mb": "Bilder sind auf 2 MB begrenzt",
+      "no_provider_picture": "Dein Anmeldeanbieter hat kein Bild gesendet; melde dich erneut mit Single Sign-On an",
+      "provider_fetch_failed": "Das Bild konnte nicht vom Anbieter für die Anmeldung abgerufen werden",
+      "provider_host_blocked": "Der Bild-Host deines Anmeldeanbieters ist auf diesem Server blockiert",
+      "removed_by_user": "Bilder wurden vom Benutzer entfernt",
+      "set_by_user": "Bilder wurden vom Benutzer festgelegt",
+      "too_large": "Das Bild ist zu groß",
+      "wrong_type": "Lade ein PNG-, JPEG-, GIF- oder WebP-Bild hoch"
+    },
+    "labels": {
+      "label_not_found": "Label nicht gefunden",
+      "account_not_found": "Mail-Konto nicht gefunden",
+      "name_required": "Ein Label benötigt einen Namen",
+      "limit": "Du hast {{max}} Labels, das Maximum",
+      "name_too_long": "Ein Label-Name darf maximal {{max}} Zeichen lang sein",
+      "choose_own": "Wähle eines deiner Labels aus",
+      "colours_user_only": "Nur der Benutzer kann alle Label-Farben gleichzeitig ändern",
+      "label_not_found_named": "Label nicht gefunden: {{label}}",
+      "name_missing": "Name erforderlich"
+    },
+    "identities": {
+      "identity_not_found": "Identität nicht gefunden",
+      "user_managed": "Identitäten werden vom Benutzer verwaltet"
+    },
+    "people": {
+      "unknown_person": "Unbekannte Person"
+    },
+    "assistant": {
+      "unknown_session": "Unbekannter Chat-Sitzung",
+      "chat_title_too_long": "Ein Chat-Titel darf höchstens {{max}} Zeichen lang sein",
+      "choose_conversation": "Wähle eine Unterhaltung aus",
+      "no_running_turn": "kein laufender Durchlauf in diesem Chat",
+      "order_already_ran": "dieser Auftrag wurde für diese Nachricht bereits ausgeführt",
+      "order_not_found": "Auftrag nicht gefunden",
+      "order_test_needs_query": "füge eine Suche oder eine Frage hinzu, um zu testen",
+      "orders_in_app": "Daueraufträge werden in der App verwaltet (Tokens verwenden das Tool manage_order)",
+      "still_answering": "der Assistent antwortet noch in diesem Chat; stoppe ihn zuerst",
+      "no_title": "Es konnte gerade kein kurzer Titel erstellt werden; versuche es später erneut",
+      "empty_chat": "Dieser Chat enthält keine Frage, aus der ein Titel erstellt werden kann",
+      "unknown_review": "unbekannte Überprüfung",
+      "review_not_running": "diese Überprüfung läuft nicht",
+      "review_not_stopped": "nur eine gestoppte oder fehlgeschlagene Überprüfung kann fortgesetzt werden",
+      "unknown_review_choice": "unbekannte gemerkte Entscheidung",
+      "review_choices_user_only": "gemerkte Entscheidungen aus Prüfungen werden in der App verwaltet"
+    },
+    "notes": {
+      "section_not_found": "Abschnitt nicht gefunden",
+      "group_list_owner_only": "Nur die angemeldete Person kann eine Liste in einer Gruppe erstellen.",
+      "nothing_to_add": "Nichts hinzuzufügen",
+      "section_name_required": "Ein Abschnitt benötigt einen Namen",
+      "section_exists": "Diese Liste hat bereits einen Abschnitt namens {{name}}",
+      "own_access": "Nur der Besitzer kann deinen Zugriff ändern.",
+      "presence_app_only": "Präsenz kommt nur aus der App",
+      "share_not_by_token": "Notizen und Tabellen können nicht über ein API-Token geteilt werden.",
+      "version_not_found": "Version nicht gefunden"
+    },
+    "forwarding": {
+      "user_managed": "Weiterleitungsadressen werden vom angemeldeten Benutzer verwaltet",
+      "agents_cannot_change": "Agenten können Weiterleitungsregeln nicht ändern",
+      "agents_cannot_create": "Agenten können keine Weiterleitungsregeln erstellen",
+      "not_verified": "{{address}} ist keine verifizierte Weiterleitungsadresse (Einstellungen → E-Mail → Filter & Blockierung → Weiterleitungsadressen)",
+      "too_many_codes": "zu viele Bestätigungscodes für diese Adresse; versuche es in einer Stunde erneut",
+      "too_many_wrong": "zu viele falsche Codes; entferne diese Adresse und füge sie später erneut hinzu",
+      "unknown_address": "unbekannte Weiterleitungsadresse",
+      "wrong_code": "falscher Code"
+    },
+    "permissions": {
+      "rule_not_found": "Regel nicht gefunden",
+      "approval_not_found": "Freigabe nicht gefunden",
+      "different_sources": "die Anfragen stammen aus verschiedenen Chats oder Agenten; entscheide sie einzeln",
+      "user_only": "Berechtigungen und Freigaben werden vom angemeldeten Benutzer verwaltet"
+    },
+    "models": {
+      "none_configured": "kein Sprachmodell ist konfiguriert",
+      "call_failed": "der Modellaufruf ist fehlgeschlagen: {{error}}",
+      "choices_in_app": "Modellauswahlen werden in der App getroffen",
+      "endpoint_cannot_do_task": "{{endpoint}} kann diese Aufgabe nicht ausführen",
+      "model_not_allowed": "Dein Administrator hat dieses Modell für dich nicht erlaubt.",
+      "model_not_listed": "dieser Endpunkt listet dieses Modell nicht",
+      "not_embedding_model": "Dieses Modell erzeugt keine Such-Embeddings. Wähle ein Embedding-Modell oder lass Suchindex auf Keine.",
+      "models_not_allowed": "Dein Administrator hat diese Modelle für dich nicht erlaubt: {{models}}",
+      "no_such_endpoint": "kein solcher Endpunkt",
+      "switch_in_app": "diese Einstellung wird in der App geändert"
+    },
+    "settings": {
+      "user_only": "Einstellungen können nur vom Benutzer geändert werden"
+    },
+    "access": {
+      "default_not_allowed": "die Standardauswahl für {{task}} muss eines der erlaubten Modelle sein",
+      "endpoint_cannot_do": "{{endpoint}} kann {{task}} nicht ausführen",
+      "everyone_built_in": "Die Everyone-Richtlinie ist integriert. Bearbeite sie stattdessen.",
+      "everyone_cannot_delete": "Die Everyone-Richtlinie ist fest integriert. Um sie einzuschränken, schalte ihre Schalter aus und erlaube keine Modelle.",
+      "everyone_keeps_name": "Die Everyone-Richtlinie kann nicht umbenannt werden, und keine Gruppe darf diesen Namen verwenden.",
+      "group_has_policy": "Diese Gruppe hat bereits eine Richtlinie",
+      "groups_from_idp": "Die Gruppen dieses Kontos stammen vom Identitätsanbieter; ändere sie dort",
+      "policy_not_found": "Richtlinie nicht gefunden"
+    },
+    "activity": {
+      "entry_not_found": "Eintrag nicht gefunden",
+      "signed_in_only": "Aktivität wird nur für die angemeldete Person angezeigt"
+    },
+    "cleanup": {
+      "categories_by_sender": "Kategorien für Gruppen nach Absender, Domain oder Liste vorschlagen",
+      "forwarding_in_settings": "Erstelle Weiterleitungsfilter unter Einstellungen → E-Mail → Filter & Blockierung",
+      "group_changed_one": "Die Gruppe hat sich geändert: Sie enthält jetzt {{count}} Unterhaltung, nicht {{expected}}. Prüfe die Vorschau erneut.",
+      "group_changed_other": "Die Gruppe hat sich geändert: Sie enthält jetzt {{count}} Unterhaltungen, nicht {{expected}}. Prüfe die Vorschau erneut.",
+      "no_future_search": "Diese Gruppe hat keine Suche, die auf zukünftige E-Mails passt",
+      "no_sorting_model": "Dir ist kein Sortiermodell verfügbar",
+      "no_unsubscribe_link": "Dieses Abonnement hat keinen Abmeldelink"
+    },
+    "contacts": {
+      "accept_user_only": "Nur der angemeldete Benutzer kann eine vorgeschlagene Gruppe akzeptieren",
+      "dismiss_user_only": "Nur der angemeldete Benutzer kann eine vorgeschlagene Gruppe verwerfen",
+      "group_from_address_book": "Diese Gruppe stammt aus deinem Adressbuch; ändere sie dort",
+      "group_max_members": "Eine Gruppe enthält maximal {{max}} Personen",
+      "group_name_required": "Gib der Gruppe einen Namen",
+      "group_not_found": "Gruppe nicht gefunden",
+      "settings_user_only": "Adressbuch-Einstellungen sind nur für den angemeldeten Benutzer",
+      "suggest_user_only": "Nur der angemeldete Benutzer kann nach Gruppenvorschlägen suchen",
+      "suggestion_not_found": "Vorschlag nicht gefunden",
+      "suggestion_user_only": "Nur der angemeldete Benutzer kann einen Vorschlag akzeptieren oder verwerfen"
+    },
+    "dictation": {
+      "bad_answer": "Die Antwort vom Sprachserver konnte nicht gelesen werden.",
+      "empty_clip": "Der Clip ist leer. Versuche es erneut.",
+      "not_audio": "Sende den Clip als Audio (m4a, mp3, wav, webm oder ogg).",
+      "not_set_up": "Diktat über den Server ist nicht eingerichtet.",
+      "server_not_local": "Der Sprachserver muss sich im lokalen Netzwerk befinden.",
+      "timeout": "Der Sprachserver konnte nicht rechtzeitig erreicht werden.",
+      "too_big": "Clips dürfen maximal {{max}} MB groß sein.",
+      "too_long": "Clips dürfen maximal {{max}} Sekunden lang sein.",
+      "transcribe_failed": "Der Clip konnte nicht transkribiert werden.",
+      "unreachable": "Der Sprachserver konnte nicht erreicht werden.",
+      "local_only_unavailable": "Nicht verfügbar bei „Nur lokale Modelle“. Es ist kein lokales Modell für Spracherkennung eingerichtet.",
+      "env_endpoint": "Dieser Endpunkt wird über MAILR_ASR_URL eingerichtet. Die Adresse wird dort geändert."
+    },
+    "filters": {
+      "file_limit_2mb": "Eine Filterdatei ist auf 2 MB begrenzt",
+      "import_user_only": "Nur der angemeldete Benutzer kann Filter importieren",
+      "not_gmail_xml": "Keine Gmail-Filter-XML-Datei",
+      "unknown_label": "Unbekanntes Label in Aktionen"
+    },
+    "intel": {
+      "decision_cannot_accept": "Diese Entscheidung kann nicht akzeptiert werden",
+      "decision_not_found": "Entscheidung nicht gefunden",
+      "decisions_lab_user_only": "Das Entscheidungs-Labor ist nur für den angemeldeten Benutzer",
+      "importance_review_user_only": "Die Wichtigkeitsprüfung ist nur für den angemeldeten Benutzer verfügbar",
+      "index_admin_only": "Nur für Administratoren: Der Suchindex wird von einem Administrator verwaltet",
+      "no_embedding_endpoint": "Kein Embedding-Endpunkt konfiguriert (Einstellungen → Admin → Modelle, Aufgabe „embed“)",
+      "retriage_user_only": "Die erneute Ausführung der Triage ist nur für den angemeldeten Benutzer verfügbar",
+      "translation_failed": "Übersetzung fehlgeschlagen: {{error}}",
+      "unknown_smart_label": "Unbekanntes Smart-Label"
+    },
+    "invites": {
+      "expired": "Diese Einladung ist abgelaufen. Bitte fordere eine neue an.",
+      "invite_not_found": "Einladung nicht gefunden",
+      "link_not_valid": "Dieser Einladungslink ist ungültig. Bitte fordere eine neue an.",
+      "password_min_10": "Verwende mindestens 10 Zeichen.",
+      "revoked": "Diese Einladung wurde zurückgezogen. Bitte fordere eine neue an.",
+      "sign_in_first": "Melde dich zuerst an.",
+      "signs_in_another_way": "Dieses Konto verwendet eine andere Anmelde-Methode. Verwende die Anmelde-Schaltfläche.",
+      "used": "Diese Einladung wurde bereits verwendet. Melde dich an, um fortzufahren.",
+      "wrong_account": "Diese Einladung ist für {{invited}}. Du bist als {{current}} angemeldet. Melde dich ab und öffne den Link erneut."
+    },
+    "knowledge": {
+      "entity_not_found": "Entität nicht gefunden",
+      "only_builtin_reset": "Nur integrierte Skills können zurückgesetzt werden",
+      "skill_no_instructions": "Der Skill hat keine Anweisungen",
+      "skill_not_found": "Skill nicht gefunden",
+      "suggestion_not_found": "Vorschlag nicht gefunden"
+    },
+    "layouts": {
+      "layout_not_found": "Kein solches Layout",
+      "user_only": "Layouts können nur vom Benutzer geändert werden"
+    },
+    "live": {
+      "filter_not_found": "Filter nicht gefunden",
+      "stream_apps_only": "Der Live-Ereignisstrom ist nur für angemeldete Apps verfügbar",
+      "typing_apps_only": "Tippen-Berichte stammen nur von angemeldeten Apps"
+    },
+    "onboarding": {
+      "admins_may_not_connect": "Administratoren können auf diesem Server keine Mailkonten für Mitglieder verbinden.",
+      "already_connected": "Dieses Konto war bereits verbunden; verwalte es unter Admin → Benutzer",
+      "nothing_to_summarise": "Noch nichts zusammenzufassen",
+      "prepare_not_by_token": "Mailkonten werden von einem angemeldeten Administrator vorbereitet, nicht über ein API-Token",
+      "prepare_one_person": "Ein Mailkonto kann nur für eine Person (per E-Mail-Adresse) vorbereitet werden, nicht für eine Gruppe",
+      "preset_exists": "Für diese Adresse oder Gruppe existiert bereits eine Voreinstellung",
+      "preset_not_found": "Preset nicht gefunden",
+      "too_many_presets": "Zu viele Presets; entferne zuerst einige",
+      "user_only": "Der Einrichtungsassistent gehört zum angemeldeten Benutzer"
+    },
+    "phone": {
+      "app_not_on_server": "Keine {{app}}-App auf diesem Server",
+      "mail_server_no_answer": "Der E-Mail-Server konnte nicht erreicht werden. Versuche es später erneut.",
+      "no_such_app": "Keine solche App",
+      "no_such_app_password": "Kein solches App-Passwort",
+      "passwords_not_by_token": "Passwörter für Handy-Apps können nicht über ein API-Token verwaltet werden.",
+      "version_format": "Verwende ein Format wie 1.1.0 oder lasse das Feld leer."
+    },
+    "push": {
+      "target_not_found": "Push-Ziel nicht gefunden",
+      "user_only": "Push-Ziele werden vom angemeldeten Benutzer oder der App-Sitzung verwaltet"
+    },
+    "reminders": {
+      "invalid_token": "Ungültiges Erinnerungs-Token",
+      "notification_expired": "Benachrichtigung abgelaufen; öffne Mailr, um auf die Erinnerung zu reagieren",
+      "push_user_only": "Push-Abonnements werden vom angemeldeten Benutzer verwaltet",
+      "settings_user_only": "Erinnerungseinstellungen werden vom Benutzer geändert",
+      "snooze_too_far": "Die Zurückstellzeit liegt mehr als ein Jahr in der Zukunft",
+      "task_changed": "Die Aufgabe wurde auf einem anderen Gerät geändert; öffne Mailr, um sie abzuschließen"
+    },
+    "screener": {
+      "decision_user_only": "Nur du kannst eine Screener-Entscheidung ändern",
+      "no_such_account": "Kein solches Mail-Konto: {{accounts}}",
+      "no_such_sender": "Kein solcher Absender im Screener",
+      "settings_change_user_only": "Nur du kannst die Screener-Einstellungen ändern",
+      "settings_see_user_only": "Nur du kannst die Screener-Einstellungen sehen"
+    },
+    "spam": {
+      "not_on_list": "Nicht auf der Liste",
+      "user_only": "Die Spam-Liste kann nur vom Benutzer geändert werden"
+    },
+    "speakr": {
+      "account_not_found": "Speakr-Konto nicht gefunden",
+      "account_user_only": "Nur der angemeldete Benutzer kann ein Speakr-Konto ändern",
+      "error": "Speakr: {{error}}",
+      "error_hint": "Speakr: {{error}} {{hint}}",
+      "field_too_long": "Ein Feld ist zu lang",
+      "file_empty": "Die Datei ist leer",
+      "local_only_no_model": "Diese Aufnahme ist lokal und kein lokales Modell ist verfügbar",
+      "merge_in_app": "Teilnehmer werden in der Aufnahmen-App zusammengeführt",
+      "no_model": "Für diese Funktion ist kein Modell konfiguriert",
+      "not_connected": "Kein Speakr-Konto verbunden (Einstellungen → E-Mail → Mail-Konten → Speakr)",
+      "recording_not_found": "Aufnahme in Speakr nicht gefunden",
+      "recording_too_large": "Aufnahmen sind in Mailr auf {{max}} MB begrenzt"
+    },
+    "tasks": {
+      "nothing_to_move": "Nichts zu verschieben"
+    },
+    "templates": {
+      "name_required": "Eine Vorlage benötigt einen Namen",
+      "shortcut_taken": "Eine andere Vorlage verwendet bereits ;{{shortcut}}",
+      "template_not_found": "Vorlage nicht gefunden"
+    },
+    "tokens": {
+      "token_not_found": "Token nicht gefunden",
+      "unknown_token": "Unbekanntes Token",
+      "user_only": "Tokens können nur vom angemeldeten Benutzer verwaltet werden"
+    },
+    "import": {
+      "not_a_zip": "{{name}} ist keine lesbare .zip-Datei",
+      "zip_too_many_files": "{{name}} enthält mehr als {{max}} Dateien",
+      "zip_too_large": "{{name}} entpackt sich auf mehr als {{mb}} MB Notizen",
+      "too_many_notes": "Maximal {{max}} Notizen pro Import",
+      "too_many_contacts": "Maximal {{max}} Kontakte pro Import",
+      "too_many_events": "Maximal {{max}} Termine pro Import",
+      "bad_kind": "Typ muss einer von {{kinds}} sein",
+      "read_only_calendar": "Dieser Kalender ist schreibgeschützt",
+      "already_undone": "Dieser Import wurde bereits rückgängig gemacht.",
+      "user_only": "Nur der angemeldete Benutzer kann importieren",
+      "not_found": "Import nicht gefunden"
+    },
+    "trusted": {
+      "user_managed": "Nur du kannst vertrauenswürdige Adressen ändern, unter Einstellungen → {{name}}",
+      "too_many_codes": "Zu viele Codes für diese Adresse; versuche es in einer Stunde erneut",
+      "too_many_codes_today": "Du kannst täglich höchstens {{max}} Codes senden. Versuche es morgen erneut.",
+      "already_yours": "Dies ist bereits eine deiner eigenen Adressen in Mailr",
+      "already_confirmed": "Diese Adresse ist bereits bestätigt",
+      "address_limit": "Du kannst maximal {{max}} vertrauenswürdige Adressen haben",
+      "not_found": "Unbekannte Adresse",
+      "too_many_wrong": "zu viele falsche Codes; entferne diese Adresse und füge sie später erneut hinzu",
+      "code_expired": "Der Code ist abgelaufen; sende einen neuen",
+      "wrong_code": "Falscher Code"
+    }
+  },
+  "push": {
+    "mail": {
+      "title": "E-Mail von {{name}}",
+      "unknown_sender": "Unbekannter Absender",
+      "body": "Neue Nachricht"
+    },
+    "private": {
+      "follow_up": {
+        "title": "Noch keine Antwort",
+        "body": "Öffne Mailr, um die Unterhaltung zu sehen."
+      },
+      "approval": {
+        "title": "Freigabe erforderlich",
+        "body": "Öffne Mailr, um sie zu prüfen."
+      },
+      "send_failed": {
+        "title": "Nachricht nicht gesendet",
+        "body": "Öffne Mailr, um den Grund zu sehen."
+      },
+      "send_uncertain": {
+        "title": "Möglicherweise gesendet",
+        "body": "Prüfen Sie „Gesendet“ in Mailr, bevor Sie erneut senden."
+      },
+      "reminder": {
+        "title": "Erinnerung",
+        "body": "Öffne Mailr, um sie zu sehen."
+      },
+      "new_mail": {
+        "title": "Mailr",
+        "body": "Neue Nachricht"
+      },
+      "important_mail": {
+        "title": "Mailr",
+        "body": "Neue Nachricht"
+      },
+      "default": {
+        "title": "Mailr",
+        "body": "Öffne Mailr, um sie zu lesen."
+      }
+    },
+    "approval": {
+      "title": "Freigabe-Anfrage von {{actor}}",
+      "agent_email_title": "E-Mail eines Agenten freigeben",
+      "to_single": "An {{first}}.",
+      "to_more_one": "An {{first}} und {{count}} weitere.",
+      "to_more_other": "An {{first}} und {{count}} weitere."
+    },
+    "send_failed": {
+      "title": "Nachricht nicht gesendet",
+      "body": "An {{to}}: {{error}}"
+    },
+    "send_uncertain": {
+      "title": "Möglicherweise gesendet",
+      "body": "An {{to}}: Prüfen Sie „Gesendet“, bevor Sie erneut senden."
+    },
+    "follow_up": {
+      "title": "Keine Antwort von {{who}}",
+      "title_anyone": "Noch keine Antwort"
+    },
+    "reminder": {
+      "missed": "Verpasst: {{title}}",
+      "generic": {
+        "event": "Terminerinnerung",
+        "task": "Aufgabenerinnerung",
+        "note": "Notizerinnerung",
+        "other": "Erinnerung"
+      }
+    },
+    "account": {
+      "title": "{{name}}: Passwort erforderlich",
+      "title_private": "Passwort für E-Mail-Konto erforderlich",
+      "body": "Gib sie erneut unter Einstellungen → E-Mail → E-Mail-Konten ein. Bis dahin gehen keine neuen E-Mails ein."
+    },
+    "test": {
+      "body": "Testbenachrichtigung"
+    }
+  },
+  "health": {
+    "account": {
+      "paused": "Pausiert",
+      "signin": "Passwort erforderlich",
+      "error": "Synchronisierung fehlgeschlagen. Automatischer Wiederholungsversuch.",
+      "first_sync": "Erste Synchronisierung läuft",
+      "not_synced_yet": "Noch nicht synchronisiert",
+      "stale_hours_one": "Nicht synchronisiert seit {{count}} Stunde",
+      "stale_hours_other": "Nicht synchronisiert seit {{count}} Stunden",
+      "stale_days_one": "Nicht synchronisiert seit {{count}} Tag",
+      "stale_days_other": "Nicht synchronisiert seit {{count}} Tagen",
+      "deletions_held_one": "{{count}} Löschung beim Anbieter zurückgehalten: Konto prüfen",
+      "deletions_held_other": "{{count}} Löschungen beim Anbieter zurückgehalten: Konto prüfen",
+      "deletion_paused_export_off": "Löschen beim Anbieter pausiert: Der Mail-Export ist aus",
+      "changes_not_synced_one": "{{count}} Änderung noch nicht mit dem Anbieter synchronisiert",
+      "changes_not_synced_other": "{{count}} Änderungen noch nicht mit dem Anbieter synchronisiert",
+      "sent_not_saved_one": "{{count}} gesendete Nachricht konnte nicht im Gesendet-Ordner von {{provider}} gespeichert werden",
+      "sent_not_saved_other": "{{count}} gesendete Nachrichten konnten nicht im Gesendet-Ordner von {{provider}} gespeichert werden",
+      "syncing": "Synchronisieren",
+      "ok": "Aktuell"
+    },
+    "summary": {
+      "ok_one": "Dein Konto wird synchronisiert.",
+      "ok_other": "Alle {{count}} Konten werden synchronisiert.",
+      "bad": "{{name}}: {{text}}.",
+      "bad_more_one": "{{name}}: {{text}} (und {{count}} weitere).",
+      "bad_more_other": "{{name}}: {{text}} (und {{count}} weitere)."
+    },
+    "check": {
+      "db": "Datenbank",
+      "store": "E-Mail-Speicher",
+      "worker": "Hintergrund-Worker",
+      "sync": "Synchronisierung der E-Mail-Konten",
+      "export": "Täglicher E-Mail-Export",
+      "backup_target": "Backup-Kopie",
+      "calendar_export": "Export von Kalender und Kontakten",
+      "notes_export": "Export von Notizen und Tabellen",
+      "push": "Push-Server (ntfy)",
+      "egress": "Bild-Downloads (VPN)",
+      "proxy": "Reverse-Proxy-Header",
+      "db_dump": "Datenbanksicherung",
+      "disk": "Freier Speicherplatz",
+      "jobs_failed": "Fehlgeschlagene Aufgaben",
+      "store_sync": "Indexierung des Mailspeichers"
+    },
+    "ready": {
+      "reachable": "erreichbar",
+      "db_unreachable": "Datenbank nicht erreichbar",
+      "store_unreachable": "E-Mail-Speicher nicht erreichbar",
+      "store_answered": "Mail-Server hat {{status}} zurückgegeben",
+      "worker_none": "noch kein Worker-Heartbeat",
+      "worker_stale": "kein Worker-Heartbeat seit {{minutes}} Min.",
+      "worker_ok": "Heartbeat vor {{seconds}} s",
+      "sync_none": "keine E-Mail-Konten zur Synchronisierung",
+      "jobs_overdue_one": "{{count}} Aufgabe seit mehr als {{minutes}} Min. überfällig",
+      "jobs_overdue_other": "{{count}} Aufgaben seit mehr als {{minutes}} Min. überfällig",
+      "sync_bad_one": "{{count}} Konto wird nicht synchronisiert",
+      "sync_bad_other": "{{count}} Konten werden nicht synchronisiert",
+      "sync_ok_one": "{{count}} Konto wird synchronisiert",
+      "sync_ok_other": "{{count}} Konten werden synchronisiert",
+      "sync_ok_first_one": "{{count}} Konto wird synchronisiert, {{first}} bei erster Synchronisierung",
+      "sync_ok_first_other": "{{count}} Konten werden synchronisiert, {{first}} bei erster Synchronisierung",
+      "no_mail": "noch keine E-Mails",
+      "mail_export_off": "aus (MAILR_MAIL_EXPORT=false)",
+      "exported_stale_one": "{{stale}} von {{count}} Konto nicht innerhalb von {{hours}} h exportiert",
+      "exported_stale_other": "{{stale}} von {{count}} Konten nicht innerhalb von {{hours}} h exportiert",
+      "exported_ok_one": "{{count}} Konto in den letzten {{hours}} h exportiert",
+      "exported_ok_other": "{{count}} Konten in den letzten {{hours}} h exportiert",
+      "exported_waiting_one": "{{exported}} von {{count}} Konto in den letzten {{hours}} h exportiert, {{waiting}} neu (erster Export ausstehend)",
+      "exported_waiting_other": "{{exported}} von {{count}} Konten in den letzten {{hours}} h exportiert, {{waiting}} neu (erster Export ausstehend)",
+      "copied_stale_one": "{{stale}} von {{count}} Konto nicht innerhalb von {{hours}} h kopiert",
+      "copied_stale_other": "{{stale}} von {{count}} Konten nicht innerhalb von {{hours}} h kopiert",
+      "copied_ok_one": "{{count}} Konto in den letzten {{hours}} h kopiert",
+      "copied_ok_other": "{{count}} Konten in den letzten {{hours}} h kopiert",
+      "copied_waiting_one": "{{exported}} von {{count}} Konto in den letzten {{hours}} h kopiert, {{waiting}} neu (erste Kopie ausstehend)",
+      "copied_waiting_other": "{{exported}} von {{count}} Konten in den letzten {{hours}} h kopiert, {{waiting}} neu (erste Kopie ausstehend)",
+      "target_unwritable": "Backup-Ziel nicht beschreibbar",
+      "target_unconfigured": "Backup-Ziel nicht konfiguriert",
+      "target_missing": "Backup-Ziel fehlt",
+      "target_unmounted": "Backup-Ziel nicht gemountet (keine {{marker}}-Datei)",
+      "not_configured": "nicht konfiguriert",
+      "target_ok_mail_off": "eingebunden und beschreibbar; der Mail-Export ist aus",
+      "no_calendars": "noch keine Kalender",
+      "no_notes": "noch keine Notizen oder Tabellen",
+      "calendar_not_run_one": "{{stale}} von {{count}} Kalenderexport wurde in {{hours}} h nicht ausgeführt",
+      "calendar_not_run_other": "{{stale}} von {{count}} Kalenderexporten wurden in {{hours}} h nicht ausgeführt",
+      "calendar_not_copied_one": "{{stale}} von {{count}} Kalenderexport wurde in {{hours}} h nicht kopiert",
+      "calendar_not_copied_other": "{{stale}} von {{count}} Kalenderexporten wurden in {{hours}} h nicht kopiert",
+      "calendar_ok_one": "{{count}} Kalenderexport in den letzten {{hours}} h",
+      "calendar_ok_other": "{{count}} Kalenderexporte in den letzten {{hours}} h",
+      "calendar_ok_copied_one": "{{count}} Kalenderexport in den letzten {{hours}} h und kopiert",
+      "calendar_ok_copied_other": "{{count}} Kalenderexporte in den letzten {{hours}} h und kopiert",
+      "calendar_waiting_one": "{{exported}} von {{count}} Kalenderexport in den letzten {{hours}} h, {{waiting}} neu (erster Export ausstehend)",
+      "calendar_waiting_other": "{{exported}} von {{count}} Kalenderexporten in den letzten {{hours}} h, {{waiting}} neu (erster Export ausstehend)",
+      "notes_not_run_one": "{{stale}} von {{count}} Notizexport wurde in {{hours}} h nicht ausgeführt",
+      "notes_not_run_other": "{{stale}} von {{count}} Notizexporten wurden in {{hours}} h nicht ausgeführt",
+      "notes_not_copied_one": "{{stale}} von {{count}} Notizexport wurde in {{hours}} h nicht kopiert",
+      "notes_not_copied_other": "{{stale}} von {{count}} Notizexporten wurden in {{hours}} h nicht kopiert",
+      "notes_ok_one": "{{count}} Notizexport in den letzten {{hours}} h",
+      "notes_ok_other": "{{count}} Notizexporte in den letzten {{hours}} h",
+      "notes_ok_copied_one": "{{count}} Notizexport in den letzten {{hours}} h und kopiert",
+      "notes_ok_copied_other": "{{count}} Notizexporte in den letzten {{hours}} h und kopiert",
+      "notes_waiting_one": "{{exported}} von {{count}} Notizexport in den letzten {{hours}} h, {{waiting}} neu (erster Export ausstehend)",
+      "notes_waiting_other": "{{exported}} von {{count}} Notizexporten in den letzten {{hours}} h, {{waiting}} neu (erster Export ausstehend)",
+      "push_none": "kein Push-Server konfiguriert",
+      "push_unreachable": "Push-Server nicht erreichbar",
+      "push_answered": "Push-Server hat {{status}} zurückgegeben",
+      "push_ok": "Push-Server erreichbar",
+      "proxy_untrusted": "Weitergeleitete Header von einer nicht vertrauenswürdigen Adresse wurden ignoriert",
+      "proxy_ok": "keine nicht vertrauenswürdigen weitergeleiteten Header",
+      "dump_off": "Nächtliche Datenbanksicherungen deaktiviert",
+      "dump_none": "Noch keine Datenbanksicherung",
+      "dump_failed": "Die letzte Datenbanksicherung ist fehlgeschlagen",
+      "dump_stale": "Keine Datenbanksicherung in den letzten {{hours}} h",
+      "dump_ok": "Letzte Sicherung vor {{hours}} h ({{mb}} MB)",
+      "disk_unreadable": "Freier Speicherplatz konnte nicht gelesen werden",
+      "disk_full": "{{name}}: nur {{percent}} % frei",
+      "disk_low": "{{name}}: {{percent}} % frei (niedrig)",
+      "disk_ok": "Geringster freier Speicherplatz {{percent}} % ({{name}})",
+      "jobs_failed_one": "{{count}} Aufgabe in der letzten Stunde fehlgeschlagen",
+      "jobs_failed_other": "{{count}} Aufgaben in der letzten Stunde fehlgeschlagen",
+      "jobs_failed_none": "Keine Aufgabe in der letzten Stunde fehlgeschlagen",
+      "timed_out": "Prüfung abgelaufen",
+      "failed": "Prüfung fehlgeschlagen",
+      "store_sync_ok": "keine Nachricht ist bei der Indexierung gescheitert",
+      "store_sync_failed_one": "{{count}} Nachricht im Mailspeicher konnte nicht indexiert werden",
+      "store_sync_failed_other": "{{count}} Nachrichten im Mailspeicher konnten nicht indexiert werden"
+    },
+    "model": {
+      "timeout": "Zeitüberschreitung des Servers.",
+      "connect": "Keine Antwort. Prüfe, ob der Server läuft und die Adresse korrekt ist.",
+      "transport": "Die Verbindung zum Server ist fehlgeschlagen.",
+      "key_refused": "Der API-Schlüssel wurde abgelehnt.",
+      "unknown_model": "Unbekannter Modellname.",
+      "no_path": "Falsche Adresse: Pfad nicht gefunden (404). Die Adresse endet normalerweise auf /v1.",
+      "model_refused": "Dieser Modellname wurde abgelehnt.",
+      "busy": "Der Server ist ausgelastet oder das Kontingent ist erschöpft (429).",
+      "server_failed": "Serverfehler ({{status}}).",
+      "refused": "Anfrage abgelehnt ({{status}}).",
+      "local_only": "Der Inhalt ist nur lokal verfügbar, dieser Endpunkt ist jedoch gehostet.",
+      "said": "{{text}}",
+      "failed": "Der Aufruf ist fehlgeschlagen.",
+      "no_decision": "Keine Entscheidung erhalten. Prüfe Adresse, Schlüssel und Modellname.",
+      "not_openai": "Kein OpenAI-kompatibler Chat-Endpunkt."
+    },
+    "task": {
+      "chat": {
+        "label": "{{name}} und Schreiben",
+        "desc": "Chat, Zusammenfassungen, Briefings, Entwürfe und Daueraufträge."
+      },
+      "classify": {
+        "label": "Sortieren und Entscheidungen",
+        "desc": "Wichtigkeit, Kategorien und Prüfung von Daueraufträgen. Wird für jede neue E-Mail verwendet, daher ein schnelles Modell wählen."
+      },
+      "embed": {
+        "label": "Suchindex",
+        "desc": "Einbettungen für Suche und das Gedächtnis von {{name}}. Ein Modell für den gesamten Server für einen konsistenten Index."
+      },
+      "transcribe": {
+        "label": "Sprache in Text",
+        "desc": "Diktat: Ein gesprochenes Clip wird in Text umgewandelt. Ein gehosteter Dienst erhält nur Clips, die gesprochen wurden, wenn keine lokale Option aktiv ist."
+      }
+    }
+  },
+  "invites": {
+    "mail": {
+      "subject": "Deine Mailr-Einladung",
+      "body": "Öffne diesen Link, um beizutreten: {{url}}",
+      "body_until": "Öffne diesen Link auf einem beliebigen Gerät, um Mailr beizutreten:\n\n{{url}}\n\nEr funktioniert einmal, bis {{date}}."
+    }
+  },
+  "digest": {
+    "meetings": {
+      "line": "**Heutige Termine:** {{items}}",
+      "item": "{{time}} {{title}} ([Vorbereitung]({{url}}))",
+      "untitled": "Termin"
+    },
+    "screener_one": "**Screener:** 1 neuer Absender wartet ([Prüfen]({{url}}))",
+    "screener_other": "**Screener:** {{count}} neue Absender warten ([Prüfen]({{url}}))",
+    "title": "{{name}} · {{order}}",
+    "quiet_line": "• {{title}}: {{body}}"
+  },
+  "assistant": {
+    "quiet_summary_one": "{{name}}: {{count}} Update, während du weg warst",
+    "quiet_summary_other": "{{name}}: {{count}} Updates, während du weg warst",
+    "errand": "Erledigung",
+    "forward": "Deine weitergeleitete Notiz",
+    "commands": {
+      "new": "Neuen Chat starten",
+      "chats": "Chats öffnen oder durchsuchen",
+      "rename": "Diesen Chat umbenennen",
+      "retitle": "Neuen kurzen Titel für diesen Chat erstellen",
+      "delete": "Diesen Chat löschen",
+      "retry": "Letzte Antwort neu schreiben",
+      "copy": "Letzte Antwort kopieren",
+      "note": "Letzte Antwort in einer Notiz speichern",
+      "local": "Diesen Chat auf dem lokalen Modell behalten",
+      "model": "Modell für diesen Chat anzeigen",
+      "help": "Befehle und Fähigkeiten auflisten",
+      "task": "Aufgabe hinzufügen",
+      "event": "Kalendereintrag hinzufügen",
+      "remember": "{{name}} bitten, sich etwas zu merken",
+      "forget": "{{name}} bitten, etwas zu vergessen",
+      "today": "Heute: Kalender, fällige Aufgaben und wichtige E-Mails",
+      "week": "Diese Woche: Termine, Fristen und wartende E-Mails",
+      "summarize": "Offene Unterhaltung zusammenfassen",
+      "reply": "Antwortentwurf für offene Unterhaltung erstellen",
+      "waiting": "Gesendete E-Mails ohne Antwort",
+      "find": "E-Mails durchsuchen",
+      "sweep": "Ganze Liste auf dem Bildschirm prüfen und vorschlagen, was entfernt werden kann, auf einer Karte",
+      "example": {
+        "rename": "/rename Fitness-Log",
+        "task": "/task Bank anrufen Fr 15 Uhr",
+        "event": "/event Zahnarzt Di 10 Uhr für 45 Min",
+        "remember": "/remember mein Fitnessstudio schließt sonntags um 21 Uhr",
+        "forget": "/forget meine alte Telefonnummer",
+        "find": "/find Rechnung vom Klempner"
+      },
+      "app_only": "{{command}} funktioniert nur in der Mailr-Web-App. Diese App unterstützt es noch nicht.",
+      "needs_text": "Gib nach {{command}} ein, was du meinst, z. B.: {{example}}",
+      "model_local": "Dieser Chat nutzt {{model}}, ein lokales Modell auf deinem eigenen Server. Ändere es unter Einstellungen → {{name}} → Modelle.",
+      "model_hosted": "Dieser Chat nutzt {{model}}, ein gehostetes Modell. Ändere es unter Einstellungen → {{name}} → Modelle, oder gib /local ein, um diesen Chat auf dem lokalen Modell zu behalten.",
+      "model_none": "Kein Modell für Chats eingerichtet. Wähle eines unter Einstellungen → {{name}} → Modelle."
+    },
+    "review_past_choice": "deine frühere Entscheidung"
+  },
+  "notify": {
+    "shared": "{{by}} hat „{{name}}“ mit dir geteilt",
+    "local_only_on": "{{by}} hat „Nur lokale Modelle“ für „{{name}}“ aktiviert",
+    "local_only_off": "{{by}} hat „Nur lokale Modelle“ für „{{name}}“ deaktiviert"
+  },
+  "activity": {
+    "what": {
+      "quoted": "“{{title}}”",
+      "untitled": "(kein Titel)",
+      "a_conversation": "eine Unterhaltung",
+      "conversations_one": "{{count}} Unterhaltung",
+      "conversations_other": "{{count}} Unterhaltungen",
+      "a_note": "eine Notiz",
+      "a_list": "eine Liste",
+      "a_table": "eine Tabelle"
+    },
+    "mail": {
+      "archive": "{{what}} archiviert",
+      "inbox": "{{what}} in den Posteingang verschoben",
+      "trash": "{{what}} in den Papierkorb verschoben",
+      "untrash": "{{what}} aus dem Papierkorb wiederhergestellt",
+      "spam": "{{what}} als Spam gemeldet",
+      "not_spam": "{{what}} als kein Spam markiert",
+      "delete_forever": "{{what}} endgültig gelöscht",
+      "star": "{{what}} markiert",
+      "unstar": "Markierung von {{what}} entfernt",
+      "important": "{{what}} als wichtig markiert",
+      "not_important": "{{what}} als nicht wichtig markiert",
+      "add_labels": "{{what}} mit Label versehen",
+      "remove_labels": "Labels von {{what}} entfernt",
+      "move": "{{what}} verschoben",
+      "snooze": "{{what}} zurückgestellt",
+      "unsnooze": "Zurückstellung von {{what}} aufgehoben",
+      "mute": "{{what}} stummgeschaltet",
+      "unmute": "Stummgeschaltet: {{what}}",
+      "category": "Kategorie von {{what}} geändert",
+      "follow_up": "Nachverfolgung für {{what}} festgelegt",
+      "cancel_follow_up": "Nachverfolgung für {{what}} abgebrochen",
+      "restore_labels": "Änderung an {{what}} rückgängig gemacht",
+      "restore_importance": "Änderung an {{what}} rückgängig gemacht",
+      "restore_category": "Änderung an {{what}} rückgängig gemacht",
+      "show_in_tab": "{{what}} in einen Tab verschoben",
+      "restore_tab": "Änderung an {{what}} rückgängig gemacht",
+      "other": "{{what}} geändert",
+      "forward_note": "Begonnen mit deiner weitergeleiteten Notiz in {{what}}"
+    },
+    "calendar": {
+      "created": "Termin {{what}} erstellt",
+      "cancelled": "Termin {{what}} abgesagt",
+      "moved": "Termin {{what}} verschoben",
+      "changed": "Termin {{what}} geändert",
+      "deleted": "Termin {{what}} gelöscht"
+    },
+    "tasks": {
+      "added": "Aufgabe {{what}} hinzugefügt",
+      "skipped": "{{what}} dieses Mal übersprungen",
+      "completed": "{{what}} abgeschlossen",
+      "reopened": "{{what}} wieder geöffnet",
+      "moved": "Aufgabe {{what}} verschoben",
+      "changed": "Aufgabe {{what}} geändert",
+      "deleted": "Aufgabe {{what}} gelöscht"
+    },
+    "notes": {
+      "created": "{{what}} erstellt",
+      "copied": "{{what}} kopiert",
+      "trashed": "{{what}} in den Papierkorb verschoben",
+      "restored": "{{what}} wiederhergestellt",
+      "purged": "{{what}} endgültig gelöscht",
+      "converted": "{{what}} konvertiert",
+      "reverted": "Änderung an {{what}} rückgängig gemacht",
+      "revision_restored": "Frühere Version von {{what}} wiederhergestellt",
+      "edited": "{{what}} bearbeitet",
+      "items_added": "Elemente zu {{what}} hinzugefügt",
+      "item_deleted": "Element aus {{what}} gelöscht",
+      "checked_cleared": "Abgehakte Elemente in {{what}} entfernt",
+      "unchecked_all": "Alle Elemente in {{what}} abgehakt entfernt",
+      "section_deleted": "Abschnitt aus {{what}} gelöscht",
+      "item_to_task": "Aufgabe aus Element in {{what}} erstellt",
+      "captured": "Zu {{what}} hinzugefügt",
+      "items_checked": "Elemente in {{what}} abgehakt",
+      "items_unchecked": "Abhakungen in {{what}} entfernt"
+    },
+    "tables": {
+      "created": "Tabelle {{what}} erstellt",
+      "trashed": "Tabelle {{what}} in den Papierkorb verschoben",
+      "restored": "Tabelle {{what}} wiederhergestellt",
+      "copied": "Tabelle {{what}} kopiert",
+      "rows_added_one": "{{count}} Zeile zu {{what}} hinzugefügt",
+      "rows_added_other": "{{count}} Zeilen zu {{what}} hinzugefügt",
+      "rows_added_some": "Zeilen zu {{what}} hinzugefügt",
+      "rows_deleted_one": "{{count}} Zeile aus {{what}} gelöscht",
+      "rows_deleted_other": "{{count}} Zeilen aus {{what}} gelöscht",
+      "rows_deleted_some": "Zeilen aus {{what}} gelöscht",
+      "rows_restored_one": "{{count}} Zeile in {{what}} wiederhergestellt",
+      "rows_restored_other": "{{count}} Zeilen in {{what}} wiederhergestellt",
+      "rows_restored_some": "Zeilen in {{what}} wiederhergestellt",
+      "edited": "{{what}} bearbeitet",
+      "column_deleted": "Spalte aus {{what}} gelöscht",
+      "reverted": "Änderung an {{what}} rückgängig gemacht"
+    },
+    "account": {
+      "managed_disconnect": "{{address}} wurde getrennt, das dein Administrator verbunden hat. Es wird nicht erneut hinzugefügt, es sei denn, dein Administrator bittet darum.",
+      "managed_disconnected": "{{who}} hat {{address}} getrennt, das du für sie/ihn verbunden hast."
+    },
+    "admin": {
+      "changed": "Dein Administrator hat dein Konto geändert.",
+      "name": "Dein Administrator hat deinen Namen in {{name}} geändert.",
+      "role_added": "Dein Administrator hat dich zum Administrator gemacht.",
+      "role_removed": "Dein Administrator hat deine Administrator-Rolle entfernt.",
+      "disabled": "Dein Administrator hat dein Konto deaktiviert.",
+      "enabled": "Dein Administrator hat dein Konto wieder aktiviert.",
+      "password_set": "Dein Administrator hat ein neues Passwort für dich festgelegt. Du wurdest überall abgemeldet.",
+      "password_reset": "Dein Administrator hat dein Passwort zurückgesetzt. Du wurdest überall abgemeldet.",
+      "password_reset_tokens_one": "Dein Administrator hat dein Passwort zurückgesetzt. Du wurdest überall abgemeldet, und {{count}} API-Token funktioniert nicht mehr.",
+      "password_reset_tokens_other": "Dein Administrator hat dein Passwort zurückgesetzt. Du wurdest überall abgemeldet, und {{count}} API-Token funktionieren nicht mehr.",
+      "email_verified": "Dein Administrator hat deine E-Mail-Adresse als bestätigt markiert.",
+      "email_unverified": "Dein Administrator hat deine E-Mail-Adresse als nicht bestätigt markiert.",
+      "account_local_only": "Dein Administrator hat {{name}} auf nur lokale Modelle beschränkt. Deine E-Mails werden jetzt nur an lokale Modelle gesendet.",
+      "account_connected": "Dein Administrator hat {{address}} für dich verbunden. Du kannst die Verbindung in Einstellungen → E-Mail → E-Mail-Konten trennen.",
+      "account_reconnected": "Dein Administrator hat {{address}} für dich erneut verbunden, nachdem du die Verbindung getrennt hattest. Du kannst die Verbindung in Einstellungen → E-Mail → E-Mail-Konten trennen.",
+      "account_removed": "Dein Administrator hat {{address}} entfernt. Die E-Mails bleiben erhalten.",
+      "policy_added": "Dein Administrator hat Zugriffsregeln für deine Gruppe {{group}} hinzugefügt.",
+      "policy_changed": "Dein Administrator hat die Funktionen oder Modelle geändert, die deine Gruppe {{group}} verwenden darf.",
+      "policy_removed": "Dein Administrator hat die Zugriffsregeln deiner Gruppe {{group}} entfernt.",
+      "groups": "Dein Administrator hat deine Gruppen in {{groups}} geändert. Der Zugriff auf Funktionen hängt von deinen Gruppen ab.",
+      "groups_none": "Dein Administrator hat dich aus allen Gruppen entfernt. Der Zugriff auf Funktionen hängt von deinen Gruppen ab."
+    }
+  },
+  "approvals": {
+    "mail": {
+      "archive": {
+        "ask": "{{what}} archivieren",
+        "done": "{{what}} archiviert",
+        "ing": "{{what}} wird archiviert"
+      },
+      "inbox": {
+        "ask": "{{what}} in den Posteingang verschieben",
+        "done": "{{what}} in den Posteingang verschoben",
+        "ing": "{{what}} wird in den Posteingang verschoben"
+      },
+      "trash": {
+        "ask": "{{what}} in den Papierkorb verschieben",
+        "done": "{{what}} in den Papierkorb verschoben",
+        "ing": "{{what}} wird in den Papierkorb verschoben"
+      },
+      "untrash": {
+        "ask": "{{what}} aus dem Papierkorb wiederherstellen",
+        "done": "{{what}} wiederhergestellt",
+        "ing": "{{what}} wird aus dem Papierkorb wiederhergestellt"
+      },
+      "spam": {
+        "ask": "{{what}} als Spam melden",
+        "done": "{{what}} als Spam gemeldet",
+        "ing": "{{what}} wird als Spam gemeldet"
+      },
+      "not_spam": {
+        "ask": "{{what}} als keinen Spam markieren",
+        "done": "{{what}} als keinen Spam markiert",
+        "ing": "{{what}} wird als keinen Spam markiert"
+      },
+      "delete_forever": {
+        "ask": "{{what}} endgültig löschen",
+        "done": "{{what}} endgültig gelöscht",
+        "ing": "{{what}} wird endgültig gelöscht"
+      },
+      "read": {
+        "ask": "{{what}} als gelesen markieren",
+        "done": "{{what}} als gelesen markiert",
+        "ing": "{{what}} wird als gelesen markiert"
+      },
+      "unread": {
+        "ask": "{{what}} als ungelesen markieren",
+        "done": "{{what}} als ungelesen markiert",
+        "ing": "{{what}} wird als ungelesen markiert"
+      },
+      "star": {
+        "ask": "{{what}} markieren",
+        "done": "{{what}} markiert",
+        "ing": "{{what}} wird markiert"
+      },
+      "unstar": {
+        "ask": "Markierung von {{what}} entfernen",
+        "done": "Markierung von {{what}} entfernt",
+        "ing": "Markierung von {{what}} wird entfernt"
+      },
+      "important": {
+        "ask": "{{what}} als wichtig markieren",
+        "done": "{{what}} als wichtig markiert",
+        "ing": "{{what}} wird als wichtig markiert"
+      },
+      "not_important": {
+        "ask": "{{what}} als nicht wichtig markieren",
+        "done": "{{what}} als nicht wichtig markiert",
+        "ing": "{{what}} wird als nicht wichtig markiert"
+      },
+      "add_labels": {
+        "ask": "Labels zu {{what}} hinzufügen",
+        "done": "{{what}} gelabelt",
+        "ing": "Labels werden zu {{what}} hinzugefügt"
+      },
+      "remove_labels": {
+        "ask": "Labels von {{what}} entfernen",
+        "done": "Labels von {{what}} entfernt",
+        "ing": "Labels werden von {{what}} entfernt"
+      },
+      "move": {
+        "ask": "{{what}} verschieben",
+        "done": "{{what}} verschoben",
+        "ing": "{{what}} wird verschoben"
+      },
+      "snooze": {
+        "ask": "{{what}} zurückstellen",
+        "done": "{{what}} zurückgestellt",
+        "ing": "{{what}} wird zurückgestellt"
+      },
+      "unsnooze": {
+        "ask": "Zurückstellung von {{what}} aufheben",
+        "done": "Zurückstellung von {{what}} aufgehoben",
+        "ing": "{{what}} zurückholen"
+      },
+      "mute": {
+        "ask": "{{what}} stummschalten",
+        "done": "{{what}} stummgeschaltet",
+        "ing": "{{what}} wird stummgeschaltet"
+      },
+      "unmute": {
+        "ask": "{{what}} aktivieren",
+        "done": "{{what}} aktiviert",
+        "ing": "{{what}} wird aktiviert"
+      },
+      "category": {
+        "ask": "Kategorie von {{what}} ändern",
+        "done": "{{what}} verschoben",
+        "ing": "Kategorie von {{what}} wird geändert"
+      },
+      "show_in_tab": {
+        "ask": "{{what}} in einen anderen Tab verschieben",
+        "done": "{{what}} in einen anderen Tab verschoben",
+        "ing": "{{what}} wird in einen anderen Tab verschoben"
+      },
+      "follow_up": {
+        "ask": "Erinnern, wenn keine Antwort auf {{what}} eingeht",
+        "done": "Erinnerung für {{what}} festgelegt",
+        "ing": "Erinnerung für {{what}} wird festgelegt"
+      },
+      "cancel_follow_up": {
+        "ask": "Erinnerung für {{what}} löschen",
+        "done": "Erinnerung für {{what}} gelöscht",
+        "ing": "Erinnerung für {{what}} wird gelöscht"
+      },
+      "other": {
+        "ask": "{{action}} {{what}}",
+        "done": "{{what}} geändert",
+        "ing": "{{what}} wird geändert"
+      }
+    },
+    "what": {
+      "the_conversations": "die Unterhaltungen",
+      "the_messages": "die Nachrichten",
+      "messages_one": "{{count}} Nachricht",
+      "messages_other": "{{count}} Nachrichten",
+      "conversations_one": "{{count}} Unterhaltung",
+      "conversations_other": "{{count}} Unterhaltungen"
+    },
+    "field": {
+      "add_label": "Label hinzufügen",
+      "add_labels": "Labels hinzufügen",
+      "remove_labels": "Labels entfernen",
+      "also": "Auch",
+      "then": "Dann",
+      "name": "Name",
+      "matches": "Übereinstimmungen",
+      "existing_mail": "Vorhandene E-Mails",
+      "matches_now": "Entspricht jetzt",
+      "when": "Wenn",
+      "recordings": "Aufnahmen",
+      "mail": "E-Mail",
+      "pick_single": "Eine auswählen",
+      "only_if": "Nur wenn",
+      "options": "Optionen",
+      "errand": "Erledigung",
+      "result_goes_to": "Ergebnis senden an",
+      "labels": "Labels",
+      "until": "Bis",
+      "messages": "Nachrichten",
+      "from": "Von",
+      "to": "An",
+      "cc": "Cc",
+      "bcc": "Bcc",
+      "subject": "Betreff",
+      "attachments": "Anhänge",
+      "remote_images": "Externe Bilder",
+      "links_to": "Links zu",
+      "reminders": "Erinnerungen",
+      "show_as": "Anzeigen als",
+      "video_link": "Videolink",
+      "status": "Status",
+      "visibility": "Sichtbarkeit",
+      "mail_the_guests": "Gäste mailen",
+      "note_to_guests": "Notiz an Gäste",
+      "applies_to": "Gilt für",
+      "event": "Termin",
+      "time": "Zeit",
+      "title": "Titel",
+      "where": "Ort",
+      "repeats": "Wiederholungen",
+      "calendar": "Kalender",
+      "guests": "Gäste",
+      "notes": "Notizen",
+      "invitations_to": "Einladungen an",
+      "cancellation_to": "Absage an",
+      "task": "Aufgabe",
+      "due": "Fällig am",
+      "list": "Liste",
+      "priority": "Priorität",
+      "applies_automatically": "Automatisch anwenden",
+      "enabled": "Aktiviert",
+      "used_for": "Verwendet für",
+      "about": "Info",
+      "instructions": "Anweisungen",
+      "note": "Notiz",
+      "recipients_now": "Empfänger jetzt"
+    },
+    "value": {
+      "apply_existing": "Gilt auch für vorhandene E-Mails",
+      "no_subject": "(kein Betreff)",
+      "none": "Keine",
+      "free": "Frei",
+      "busy": "Belegt",
+      "status_cancelled": "Abgesagt",
+      "status_confirmed": "Bestätigt",
+      "status_tentative": "Vorläufig",
+      "class_public": "Öffentlich",
+      "class_private": "Privat",
+      "class_confidential": "Vertraulich",
+      "class_default": "Standard",
+      "yes": "Ja",
+      "no": "Nein",
+      "no_title": "(kein Titel)",
+      "no_place": "Kein Ort",
+      "another_calendar": "anderer Kalender"
+    },
+    "flag": {
+      "archive": "Posteingang überspringen",
+      "mark_read": "Als gelesen markieren",
+      "star": "Markieren",
+      "spam": "In Spam verschieben",
+      "never_spam": "Nie in Spam verschieben",
+      "trash": "In Papierkorb verschieben",
+      "notify": "Benachrichtigen",
+      "important_always": "Immer als wichtig markieren",
+      "important_never": "Nie als wichtig markieren",
+      "category": "In {{category}} verschieben",
+      "forward": "An {{to}} weiterleiten",
+      "add_to_calendar": "Einladung in meinen Kalender hinzufügen"
+    },
+    "flag_inline": {
+      "archive": "Posteingang überspringen",
+      "mark_read": "als gelesen markieren",
+      "star": "markieren",
+      "spam": "in Spam verschieben",
+      "never_spam": "nie in Spam verschieben",
+      "trash": "in Papierkorb verschieben",
+      "notify": "mich benachrichtigen",
+      "important_always": "immer als wichtig markieren",
+      "important_never": "nie als wichtig markieren",
+      "category": "in {{category}} verschieben",
+      "forward": "an {{to}} weiterleiten",
+      "add_to_calendar": "Einladung in meinen Kalender hinzufügen"
+    },
+    "filter": {
+      "title": {
+        "create": "Filter erstellen",
+        "update": "Filter ändern",
+        "delete": "Filter löschen",
+        "apply": "Filter auf vorhandene E-Mails anwenden"
+      },
+      "who": {
+        "sender": "E-Mail von {{sender}}",
+        "senders_one": "E-Mail von {{count}} Absender",
+        "senders_other": "E-Mail von {{count}} Absendern",
+        "matching": "Passende E-Mails"
+      },
+      "summary": {
+        "labels_one": "{{who}} erhält das Label {{names}}.",
+        "labels_other": "{{who}} erhält die Labels {{names}}.",
+        "flag": "{{who}}: {{flag}}."
+      }
+    },
+    "match": {
+      "some_one": "{{count}} E-Mail in den letzten 6 Monaten, die neueste „{{subject}}“ am {{date}}",
+      "some_other": "{{count}} E-Mails in den letzten 6 Monaten, die neueste „{{subject}}“ am {{date}}",
+      "many_one": "Mehr als {{count}} E-Mail in den letzten 6 Monaten, die neueste „{{subject}}“ am {{date}}",
+      "many_other": "Mehr als {{count}} E-Mails in den letzten 6 Monaten, die neueste „{{subject}}“ am {{date}}",
+      "none": "Keine E-Mail in den letzten 6 Monaten. Prüfe die Suche, bevor du freigibst."
+    },
+    "order": {
+      "title": {
+        "create": "Dauerauftrag erstellen",
+        "update": "Dauerauftrag ändern",
+        "pause": "Dauerauftrag pausieren",
+        "resume": "Dauerauftrag fortsetzen",
+        "delete": "Dauerauftrag löschen"
+      },
+      "title_named": {
+        "create": "Dauerauftrag erstellen: {{name}}",
+        "update": "Dauerauftrag ändern: {{name}}",
+        "pause": "Dauerauftrag pausieren: {{name}}",
+        "resume": "Dauerauftrag fortsetzen: {{name}}",
+        "delete": "Dauerauftrag löschen: {{name}}"
+      },
+      "when": {
+        "message": "Jede neue E-Mail",
+        "recording": "Jede neue Aufnahme",
+        "schedule": "Zeitplan ({{schedule}}, {{zone}})",
+        "schedule_local": "Zeitplan ({{schedule}}, deine Zeitzone)"
+      },
+      "when_inline": {
+        "message": "jede neue E-Mail",
+        "recording": "jede neue Aufnahme",
+        "schedule": "Zeitplan ({{schedule}}, {{zone}})",
+        "schedule_local": "nach Zeitplan ({{schedule}}, deine Zeitzone)"
+      },
+      "deliver": {
+        "brief": "eine Karte zur E-Mail",
+        "notify": "eine Benachrichtigung",
+        "digest": "eine Zusammenfassung"
+      },
+      "summary_one": "Ordnet {{when}} in eine von {{count}} Optionen ein.",
+      "summary_other": "Ordnet {{when}} in eine von {{count}} Optionen ein.",
+      "from_trusted": "Nur E-Mails, die du von deinen vertrauenswürdigen Adressen weiterleitest",
+      "from_me": "Nur E-Mails von dir oder deinen vertrauenswürdigen Adressen"
+    },
+    "who": {
+      "nobody": "niemand",
+      "two": "{{first}} und {{second}}",
+      "more_one": "{{first}} und {{count}} weitere",
+      "more_other": "{{first}} und {{count}} weitere"
+    },
+    "send": {
+      "title": "An {{who}} senden"
+    },
+    "event": {
+      "title": "Termin ändern",
+      "applies_this": "{{span}} (nur dieser Termin)",
+      "applies_following": "Dieser und folgende Termine ab {{day}}",
+      "applies_series_rule": "Die gesamte Serie ({{rule}})",
+      "applies_series": "Die gesamte Serie",
+      "create": "Termin {{name}} erstellen",
+      "change": "{{name}} ändern",
+      "delete": "{{name}} löschen",
+      "cancel": "{{name}} absagen",
+      "change_occurrence": "Einen Termin von {{name}} ändern",
+      "delete_occurrence": "Einen Termin von {{name}} löschen",
+      "cancel_occurrence": "Einen Termin von {{name}} absagen",
+      "change_unnamed": "Termin ändern",
+      "delete_unnamed": "Termin löschen",
+      "cancel_unnamed": "Termin absagen",
+      "quoted": "“{{name}}”"
+    },
+    "scope": {
+      "this": "Nur dieser Termin",
+      "following": "Dieser und folgende",
+      "all": "Die gesamte Serie"
+    },
+    "task": {
+      "title": "Aufgabe ändern",
+      "add": "Aufgabe {{name}} hinzufügen",
+      "change": "Aufgabe ändern",
+      "complete": "Aufgabe abschließen",
+      "reopen": "Aufgabe wieder öffnen",
+      "delete": "Aufgabe löschen",
+      "delete_cascade": "Aufgabe und Unteraufgaben löschen",
+      "move": "Aufgabe verschieben",
+      "skip": "Diesen Termin überspringen"
+    },
+    "settings": {
+      "title": "Einstellungen ändern"
+    },
+    "skill": {
+      "title": "Skill ändern"
+    },
+    "memory": {
+      "title": "Gedächtnis ändern"
+    },
+    "generic": {
+      "title": "Diese Aktion freigeben"
+    },
+    "draft": {
+      "title_recipients": "Empfänger des Entwurfs ändern: {{who}}",
+      "title_change": "Entwurf an {{who}} ändern",
+      "title_save": "Entwurf an {{who}} speichern",
+      "summary": "Es wird nichts gesendet. Der Entwurf bleibt in Entwürfe."
+    },
+    "reason": {
+      "read_mail": {
+        "plain": "{{who}} hat dies nach dem Lesen von E-Mails geschrieben.",
+        "outsider": "{{who}} hat dies nach dem Lesen von E-Mails geschrieben. {{names}} war nicht an dieser Unterhaltung beteiligt.",
+        "outsiders": "{{who}} hat dies nach dem Lesen von E-Mails geschrieben. {{names}} und {{last}} waren nicht an dieser Unterhaltung beteiligt.",
+        "bcc": "{{who}} hat dies nach dem Lesen einer E-Mail geschrieben. Die Nachricht enthält ein Bcc."
+      },
+      "read_mail_agent": {
+        "plain": "Ein Agent hat dies nach dem Lesen von E-Mails geschrieben.",
+        "outsider": "Ein Agent hat dies nach dem Lesen von E-Mails geschrieben. {{names}} war nicht an dieser Unterhaltung beteiligt.",
+        "outsiders": "Ein Agent hat dies nach dem Lesen von E-Mails geschrieben. {{names}} und {{last}} waren nicht an dieser Unterhaltung beteiligt.",
+        "bcc": "Ein Agent hat dies nach dem Lesen einer E-Mail geschrieben. Die Nachricht enthält ein Bcc."
+      },
+      "draft_recipients": "Die Empfänger des Entwurfs würden sich ändern.",
+      "forwarded_unverified": "Du hast diese Änderung weitergeleitet. Niemand konnte prüfen, wer die Nachricht darin verfasst hat, daher wartet sie auf deine Zustimmung."
+    },
+    "done": {
+      "done": "erledigt",
+      "filter_create": "den Filter erstellt",
+      "filter_update": "den Filter geändert",
+      "filter_delete": "den Filter gelöscht",
+      "filter_apply": "den Filter auf vorhandene E-Mails angewendet",
+      "order_create": "den Dauerauftrag erstellt",
+      "order_update": "den Dauerauftrag geändert",
+      "order_pause": "den Dauerauftrag pausiert",
+      "order_resume": "den Dauerauftrag fortgesetzt",
+      "order_delete": "den Dauerauftrag gelöscht",
+      "sent": "die E-Mail gesendet",
+      "label_create": "das Label erstellt",
+      "label_update": "das Label geändert",
+      "label_delete": "das Label gelöscht",
+      "event_added": "den Termin hinzugefügt",
+      "event_changed": "den Termin geändert",
+      "event_removed": "den Termin entfernt",
+      "rsvp": "deine Antwort gesendet",
+      "task_added": "die Aufgabe hinzugefügt",
+      "task_completed": "die Aufgabe abgeschlossen",
+      "task_deleted": "die Aufgabe gelöscht",
+      "task_changed": "die Aufgabe geändert",
+      "skill_saved": "die Fähigkeit gespeichert",
+      "memory_saved": "das Gedächtnis gespeichert",
+      "memory_forgot": "Gedächtnis gelöscht",
+      "settings_changed": "die Einstellungen geändert",
+      "unsubscribed": "das Abonnement gekündigt",
+      "note_made": "Notiz erstellt",
+      "note_trashed": "in den Papierkorb verschoben",
+      "checked_cleared": "angekreuzte Elemente entfernt",
+      "note_labels": "Labels geändert",
+      "note_changed": "Notiz geändert"
+    },
+    "outcome": {
+      "pending": "Warten auf Freigabe",
+      "working": "Freigegeben · in Bearbeitung",
+      "executed": "Freigegeben · {{done}}",
+      "denied": "Abgelehnt",
+      "discarded": "Verworfen · keine Änderungen",
+      "expired": "Abgelaufen",
+      "failed": "Freigegeben · fehlgeschlagen",
+      "failed_error": "Freigegeben · fehlgeschlagen: {{error}}"
+    },
+    "step": {
+      "search_mail": "E-Mails werden nach „{{q}}“ durchsucht",
+      "view": {
+        "inbox": "Posteingang wird durchsucht",
+        "all": "E-Mails werden durchsucht",
+        "sent": "Gesendete E-Mails werden durchsucht",
+        "starred": "Markierte E-Mails werden durchsucht",
+        "important": "Wichtige E-Mails werden durchsucht",
+        "drafts": "Entwürfe werden durchsucht",
+        "snoozed": "Zurückgestellte E-Mails werden durchsucht",
+        "label": "Label wird durchsucht"
+      },
+      "search_meaning": "Nach Bedeutung von „{{q}}“ wird gesucht",
+      "search_web": "Web wird nach „{{q}}“ durchsucht",
+      "read_site": "{{site}} wird gelesen",
+      "read_page": "Webseite wird gelesen",
+      "passages": "Passagen zu „{{q}}“ werden gefunden",
+      "passages_in": "Passagen zu „{{q}}“ in „{{subject}}“ werden gefunden",
+      "read_conversation_named": "„{{subject}}“ wird gelesen",
+      "read_conversation": "Unterhaltung wird gelesen",
+      "read_message_named": "Nachricht „{{subject}}“ wird gelesen",
+      "read_message": "Nachricht wird gelesen",
+      "attachment_named": "„{{name}}“ wird geöffnet",
+      "attachment": "Anhang wird geöffnet",
+      "person": "{{email}} wird nachgeschlagen",
+      "context_named": "Kontext für „{{subject}}“ wird gesammelt",
+      "context": "Kontext wird gesammelt",
+      "recall": "Gedächtnis wird nach „{{q}}“ durchsucht",
+      "remember": "„{{text}}“ wird im Gedächtnis gespeichert",
+      "note_named": {
+        "get_note": "„{{note}}“ wird gelesen",
+        "update_note": "„{{note}}“ wird geändert",
+        "checklist_items": "„{{note}}“ wird geändert",
+        "delete_note": "„{{note}}“ wird in den Papierkorb verschoben",
+        "restore_note": "„{{note}}“ wird wiederhergestellt",
+        "note_history": "Versionen von „{{note}}“ werden geprüft"
+      },
+      "search_notes": "Notizen werden nach „{{q}}“ durchsucht",
+      "use_skill": "Skill /{{name}} wird verwendet",
+      "entity": "{{ref}} wird nachgeschlagen",
+      "search_calendar_q": "Kalender wird nach „{{q}}“ durchsucht",
+      "search_calendar": "Kalender wird durchsucht",
+      "find_time": "Zeitpunkt wird gefunden",
+      "rsvp": {
+        "accepted": "Einladung wird angenommen",
+        "declined": "Einladung wird abgelehnt",
+        "tentative": "Einladung wird mit „Vielleicht“ beantwortet",
+        "other": "Einladung wird beantwortet"
+      },
+      "order_list": "Daueraufträge werden überprüft",
+      "list": {
+        "create": "Aufgabenliste wird erstellt",
+        "rename": "Aufgabenliste wird umbenannt",
+        "color": "Farbe der Aufgabenliste wird geändert",
+        "delete": "Aufgabenliste wird gelöscht",
+        "other": "Aufgabenliste wird geändert"
+      },
+      "list_named": {
+        "create": "Aufgabenliste „{{name}}“ wird erstellt",
+        "rename": "Aufgabenliste „{{name}}“ wird umbenannt",
+        "color": "Farbe der Aufgabenliste „{{name}}“ wird geändert",
+        "delete": "Aufgabenliste „{{name}}“ wird gelöscht",
+        "other": "Aufgabenliste „{{name}}“ wird geändert"
+      },
+      "calendar": {
+        "create": "Kalender wird erstellt",
+        "rename": "Kalender wird umbenannt",
+        "color": "Farbe des Kalenders wird geändert",
+        "delete": "Kalender wird gelöscht",
+        "other": "Kalender wird geändert"
+      },
+      "calendar_named": {
+        "create": "Kalender „{{name}}“ wird erstellt",
+        "rename": "Kalender „{{name}}“ wird umbenannt",
+        "color": "Farbe des Kalenders „{{name}}“ wird geändert",
+        "delete": "Kalender „{{name}}“ wird gelöscht",
+        "other": "Kalender „{{name}}“ wird geändert"
+      },
+      "filter": {
+        "create": "Filter wird erstellt",
+        "update": "Filter wird geändert",
+        "delete": "Filter wird gelöscht",
+        "apply": "Filter wird angewendet",
+        "activate": "Filter wird aktiviert",
+        "save": "Filter wird gespeichert",
+        "other": "Filter wird geändert"
+      },
+      "filter_named": {
+        "create": "Filter „{{name}}“ wird erstellt",
+        "update": "Filter „{{name}}“ wird geändert",
+        "delete": "Filter „{{name}}“ wird gelöscht",
+        "apply": "Filter „{{name}}“ wird angewendet",
+        "activate": "Filter „{{name}}“ wird aktiviert",
+        "save": "Filter „{{name}}“ wird gespeichert",
+        "other": "Filter „{{name}}“ wird geändert"
+      },
+      "label": {
+        "create": "Label wird erstellt",
+        "update": "Label wird geändert",
+        "delete": "Label wird gelöscht",
+        "apply": "Label wird angewendet",
+        "activate": "Label wird umgeschaltet",
+        "save": "Label wird gespeichert",
+        "other": "Label wird geändert"
+      },
+      "label_named": {
+        "create": "Label „{{name}}“ wird erstellt",
+        "update": "Label „{{name}}“ wird geändert",
+        "delete": "Label „{{name}}“ wird gelöscht",
+        "apply": "Label „{{name}}“ wird angewendet",
+        "activate": "Label „{{name}}“ wird aktiviert",
+        "save": "Label „{{name}}“ wird gespeichert",
+        "other": "Label „{{name}}“ wird geändert"
+      },
+      "layout": {
+        "create": "Posteingangs-Layout wird erstellt",
+        "update": "Posteingangs-Layout wird geändert",
+        "delete": "Posteingangs-Layout wird gelöscht",
+        "apply": "Posteingangs-Layout wird angewendet",
+        "activate": "Posteingangs-Layout wird aktiviert",
+        "save": "Posteingangs-Layout wird gespeichert",
+        "other": "Posteingangs-Layout wird geändert"
+      },
+      "layout_named": {
+        "create": "Posteingangs-Layout „{{name}}“ wird erstellt",
+        "update": "Posteingangs-Layout „{{name}}“ wird geändert",
+        "delete": "Posteingangs-Layout „{{name}}“ wird gelöscht",
+        "apply": "Posteingangs-Layout „{{name}}“ wird angewendet",
+        "activate": "Posteingangs-Layout „{{name}}“ wird aktiviert",
+        "save": "Posteingangs-Layout „{{name}}“ wird gespeichert",
+        "other": "Posteingangs-Layout „{{name}}“ wird geändert"
+      },
+      "order": {
+        "create": "Dauerauftrag wird erstellt",
+        "update": "Dauerauftrag wird geändert",
+        "delete": "Dauerauftrag wird gelöscht",
+        "pause": "Dauerauftrag wird pausiert",
+        "resume": "Dauerauftrag wird fortgesetzt",
+        "other": "Dauerauftrag wird geändert"
+      },
+      "order_named": {
+        "create": "Dauerauftrag „{{name}}“ wird erstellt",
+        "update": "Dauerauftrag „{{name}}“ wird geändert",
+        "delete": "Dauerauftrag „{{name}}“ wird gelöscht",
+        "pause": "Dauerauftrag „{{name}}“ wird pausiert",
+        "resume": "Dauerauftrag „{{name}}“ wird fortgesetzt",
+        "other": "Dauerauftrag „{{name}}“ wird geändert"
+      },
+      "fixed": {
+        "list_labels": "Labels werden geprüft",
+        "list_calendar": "Kalender wird geprüft",
+        "list_tasks": "Aufgaben werden geprüft",
+        "create_event": "Kalendereintrag wird hinzugefügt",
+        "create_task": "Aufgabe wird erstellt",
+        "create_draft": "Entwurf wird erstellt",
+        "update_draft": "Entwurf wird überarbeitet",
+        "send_draft": "Senden wird vorbereitet",
+        "get_outbox_status": "Postausgang wird geprüft",
+        "apply_label": "Label wird angewendet",
+        "archive": "Wird archiviert",
+        "show_in_tab": "Wird in einen Tab verschoben",
+        "list_drafts": "Entwürfe werden geprüft",
+        "get_draft": "Entwurf wird gelesen",
+        "list_skills": "Skills werden geprüft",
+        "get_skill": "Skill wird gelesen",
+        "create_skill": "Neuer Skill wird gespeichert",
+        "update_skill": "Skill wird aktualisiert",
+        "forget": "Gedächtnis wird gelöscht",
+        "upsert_entity": "Person oder Projekt wird gespeichert",
+        "get_configuration": "Einstellungen werden geprüft",
+        "update_settings": "Einstellungen werden geändert",
+        "update_signature": "Signatur wird geändert",
+        "update_profile": "Profil wird aktualisiert",
+        "get_brief": "Briefing wird gelesen",
+        "read_screen": "Bildschirminhalt wird gelesen",
+        "list_view": "Ganze Liste wird gelesen",
+        "review_mail": "Überprüfung der Liste wird gestartet",
+        "list_attachments": "Anhänge werden geprüft",
+        "update_brief": "Briefing wird aktualisiert",
+        "get_signals": "Nach dringenden Elementen wird gesucht",
+        "search_events": "Kalender wird durchsucht",
+        "get_event": "Termin wird gelesen",
+        "get_calendar_defaults": "Kalender werden geprüft",
+        "get_free_busy": "Verfügbarkeit wird geprüft",
+        "update_event": "Kalendereintrag wird geändert",
+        "delete_event": "Kalendereintrag wird gelöscht",
+        "cancel_event": "Termin wird abgesagt",
+        "search_tasks": "Aufgaben werden durchsucht",
+        "update_task": "Aufgabe wird geändert",
+        "complete_task": "Aufgabe wird abgeschlossen",
+        "move_task": "Aufgabe wird verschoben",
+        "delete_task": "Aufgabe wird gelöscht",
+        "bulk_tasks": "Mehrere Aufgaben werden geändert",
+        "list_reminders": "Erinnerungen werden geprüft",
+        "list_recordings": "Aufnahmen werden geprüft",
+        "get_recording": "Aufnahme wird gelesen",
+        "get_transcript": "Transkript wird gelesen",
+        "search_recordings": "Aufnahmen werden durchsucht",
+        "get_summary": "Besprechungszusammenfassung wird gelesen",
+        "recordings_for_event": "Besprechungsaufnahme wird gesucht",
+        "link_recording": "Aufnahme wird verknüpft",
+        "propose_action_items": "Aufgaben werden ermittelt",
+        "draft_follow_up": "Antwortentwurf wird erstellt",
+        "send_to_speakr": "Datei wird an Speakr gesendet",
+        "update_recording": "Aufnahme in Speakr wird geändert",
+        "share_recording": "Freigabelink wird erstellt",
+        "list_notes": "Notizen werden durchsucht",
+        "get_note": "Notiz wird gelesen",
+        "create_note": "Notiz wird erstellt",
+        "update_note": "Notiz wird geändert",
+        "checklist_items": "Liste wird geändert",
+        "delete_note": "Notiz wird in den Papierkorb verschoben",
+        "note_history": "Versionen der Notiz werden geprüft",
+        "manage_note_labels": "Notiz-Labels werden geändert"
+      }
+    },
+    "count": {
+      "result_one": "{{count}} Ergebnis",
+      "result_other": "{{count}} Ergebnisse",
+      "passage_one": "{{count}} Abschnitt",
+      "passage_other": "{{count}} Abschnitte",
+      "event_one": "{{count}} Termin",
+      "event_other": "{{count}} Termine",
+      "task_one": "{{count}} Aufgabe",
+      "task_other": "{{count}} Aufgaben",
+      "note_one": "{{count}} Notiz",
+      "note_other": "{{count}} Notizen",
+      "version_one": "{{count}} Version",
+      "version_other": "{{count}} Versionen",
+      "label_one": "{{count}} Label",
+      "label_other": "{{count}} Labels",
+      "skill_one": "{{count}} Fähigkeit",
+      "skill_other": "{{count}} Fähigkeiten",
+      "recording_one": "{{count}} Aufnahme",
+      "recording_other": "{{count}} Aufnahmen",
+      "draft_one": "{{count}} Entwurf",
+      "draft_other": "{{count}} Entwürfe",
+      "attachment_one": "{{count}} Anhang",
+      "attachment_other": "{{count}} Anhänge",
+      "conversation_one": "{{count}} Unterhaltung",
+      "conversation_other": "{{count}} Unterhaltungen",
+      "message_one": "{{count}} Nachricht",
+      "message_other": "{{count}} Nachrichten",
+      "memory_one": "{{count}} Gedächtnis-Eintrag",
+      "memory_other": "{{count}} Gedächtnis-Einträge",
+      "item_one": "{{count}} Element",
+      "item_other": "{{count}} Elemente"
+    },
+    "result": {
+      "page_read": "Seite gelesen",
+      "page_read_cut": "Seite gelesen (gekürzt)",
+      "nothing_saved": "noch nichts gespeichert",
+      "nothing_changed": "nichts geändert",
+      "open_draft": "im offenen Entwurf geändert",
+      "join": "{{first}}, {{rest}}",
+      "already_done": "bereits oben erledigt",
+      "same_again": "gleiches Ergebnis wie zuvor",
+      "results_from_one": "{{count}} Ergebnis von {{provider}}",
+      "results_from_other": "{{count}} Ergebnisse von {{provider}}",
+      "items_added_one": "{{count}} Element hinzugefügt",
+      "items_added_other": "{{count}} Elemente hinzugefügt",
+      "changes_made_one": "{{count}} Änderung vorgenommen",
+      "changes_made_other": "{{count}} Änderungen vorgenommen",
+      "waiting_one": "{{count}} wartet auf dich",
+      "waiting_other": "{{count}} warten auf dich",
+      "failed_one": "{{count}} fehlgeschlagen",
+      "failed_other": "{{count}} fehlgeschlagen",
+      "saved_reminds": "gespeichert · Erinnerung {{when}}",
+      "saved_no_reminder": "gespeichert · keine Erinnerung",
+      "reviewing_one": "{{count}} Unterhaltung wird überprüft",
+      "reviewing_other": "{{count}} Unterhaltungen werden überprüft",
+      "review_running_one": "Eine Überprüfung von {{count}} Unterhaltung läuft bereits",
+      "review_running_other": "Eine Überprüfung von {{count}} Unterhaltungen läuft bereits",
+      "nothing_to_review": "Nichts zu überprüfen"
+    },
+    "step_outcome": {
+      "approved": "freigegeben",
+      "denied": "abgelehnt",
+      "expired": "abgelaufen",
+      "failed": "fehlgeschlagen"
+    },
+    "forward": {
+      "title": "Auf deine weitergeleitete Notiz reagieren",
+      "summary": "Du hast diese E-Mail von einer vertrauenswürdigen Adresse weitergeleitet. {{name}} führt die in der Notiz angeforderte Aufgabe aus; jeder Schritt unterliegt weiterhin seiner eigenen Berechtigung."
+    }
+  },
+  "mail": {
+    "date": {
+      "weekday": {
+        "0": "Mo",
+        "1": "Di",
+        "2": "Mi",
+        "3": "Do",
+        "4": "Fr",
+        "5": "Sa",
+        "6": "So"
+      },
+      "month": {
+        "1": "Jan",
+        "2": "Feb",
+        "3": "Mär",
+        "4": "Apr",
+        "5": "Mai",
+        "6": "Jun",
+        "7": "Jul",
+        "8": "Aug",
+        "9": "Sep",
+        "10": "Okt",
+        "11": "Nov",
+        "12": "Dez"
+      },
+      "day": "{{weekday}}, {{day}}. {{month}} {{year}}",
+      "time": "{{hour}}:{{minute}}",
+      "day_time": "{{date}}, {{time}}",
+      "range": "{{start}} – {{end}}",
+      "zone": "{{when}} ({{zone}})"
+    },
+    "quote": {
+      "wrote": "Am {{date}} schrieb {{sender}}:",
+      "forwarded": "---------- Weitergeleitete Nachricht ---------",
+      "from": "Von: {{value}}",
+      "date": "Datum: {{value}}",
+      "subject": "Betreff: {{value}}",
+      "to": "An: {{value}}"
+    },
+    "itip": {
+      "subject": {
+        "invitation": "Einladung: {{title}}",
+        "update": "Aktualisierte Einladung: {{title}}",
+        "cancel": "Abgesagt: {{title}}",
+        "decline_counter": "Neuer Termin abgelehnt: {{title}}"
+      },
+      "body": {
+        "invitation": "{{organizer}} hat dich zu diesem Termin eingeladen.",
+        "update": "{{organizer}} hat diesen Termin aktualisiert.",
+        "cancel": "{{organizer}} hat diesen Termin abgesagt.",
+        "cancel_occurrence": "{{organizer}} hat einen Termin dieser Serie abgesagt.",
+        "decline_counter": "{{organizer}} hat deinen vorgeschlagenen Termin abgelehnt. Der Termin bleibt unverändert."
+      },
+      "untitled": "(ohne Titel)",
+      "when": "Wann: {{when}}",
+      "where": "Wo: {{where}}"
+    },
+    "rsvp": {
+      "subject": {
+        "accepted": "Angenommen: {{title}}",
+        "declined": "Abgelehnt: {{title}}",
+        "tentative": "Vorläufig angenommen: {{title}}"
+      },
+      "body": {
+        "accepted": "{{who}} hat diese Einladung angenommen.",
+        "declined": "{{who}} hat diese Einladung abgelehnt.",
+        "tentative": "{{who}} hat diese Einladung vorläufig angenommen."
+      }
+    },
+    "speakr": {
+      "followup_subject": "Nachbereitung: {{title}}",
+      "followup_notes": "Hier sind die Notizen zu {{title}}.",
+      "our_meeting": "unseres Treffen",
+      "task_from_recording": "Aus der Aufnahme {{title}}: {{link}}",
+      "task_from_recording_at": "Aus der Aufnahme {{title}} um {{time}}: {{link}}",
+      "task_meeting": "Treffen: {{link}}",
+      "recording": "Aufnahme",
+      "quoted": "“{{title}}”",
+      "signed_in": "Bei Speakr als {{who}} angemeldet.",
+      "signed_in_count_one": "Bei Speakr als {{who}} angemeldet, {{count}} Aufnahme.",
+      "signed_in_count_other": "Bei Speakr als {{who}} angemeldet, {{count}} Aufnahmen.",
+      "token_access": "Token-Zugriff: {{scopes}}.",
+      "token_full": "voll",
+      "scope": {
+        "full": "Dieses Token hat vollen Zugriff auf dein Speakr-Konto, einschließlich dem Löschen von Aufnahmen und dem Ändern von Webhooks. Die Integration-Voreinstellung (read, write, upload) reicht für Mailr aus.",
+        "extra_one": "Dieses Token umfasst auch {{scopes}}, die von Mailr nicht verwendet werden. Ein Token ohne diese Berechtigung ist sicherer.",
+        "extra_other": "Dieses Token umfasst auch {{scopes}}, die von Mailr nicht verwendet werden. Ein Token ohne diese Berechtigungen ist sicherer.",
+        "no_read": "Dieses Token kann keine Aufnahmen lesen. Erstelle eines mit der read-Berechtigung.",
+        "no_write": "Dieses Token kann nicht bearbeiten. Erstelle eines mit der write-Berechtigung.",
+        "no_share": "Dieses Token kann keine Freigabelinks erstellen. Erstelle eines mit der share-Berechtigung.",
+        "no_upload": "Dieses Token kann nicht hochladen, daher schlagen Transcribe in Speakr und neue Aufnahmen fehl. Füge die upload-Berechtigung hinzu, wenn du diese Funktionen nutzt.",
+        "no_webhooks": "Ohne den Webhooks-Scope benötigt „Sofortige Updates abrufen“ einen Webhook, den du in Speakr erstellst."
+      }
+    }
+  },
+  "import": {
+    "untitled": "(kein Titel)"
+  },
+  "trusted": {
+    "mail": {
+      "subject": "Bestätigungscode {{code}}",
+      "body": "{{who}} hat angefragt, {{address}} als vertrauenswürdige Adresse für {{assistant}} hinzuzufügen.\n\nBestätigungscode: {{code}}\n\nDer Code ist {{minutes}} Minuten gültig. Wenn du diese Nachricht nicht erwartet hast, ignoriere sie. Es wird nichts geändert, bis der Code eingegeben wird."
+    }
+  },
+  "calendar_forward": {
+    "moved": "{{title}} verschoben auf {{when}} (war {{was}})",
+    "cancelled": "{{title}} wurde von {{who}} abgesagt",
+    "changed": "{{title}} geändert: {{what}}",
+    "what": {
+      "title": "Titel",
+      "place": "Ort",
+      "description": "Beschreibung",
+      "guests": "Gäste",
+      "link": "Meeting-Link",
+      "when": "Zeit",
+      "details": "Details"
+    }
+  },
+  "reminders": {
+    "detail": {
+      "all_day": "Ganztägig",
+      "today": "heute",
+      "tomorrow": "morgen",
+      "yesterday": "gestern",
+      "date": "{{weekday}}, {{day}}. {{month}}",
+      "due": "Fällig {{when}}",
+      "due_at": "Fällig {{when}}, {{time}}"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+# Per-deployment build settings. Copy to deploy.properties (gitignored) and edit.
+# Each key can also come from an environment variable at build time (it wins over the file);
+# build.sh passes these variables into the Docker build.
+
+# Hosts whose https links open in the app (citation/share links /c/ and /mail/, Calendar /calendar,
+# Tasks /tasks; in the Notes app, notes /notes/n/ and tables /tables/t/). Comma-separated. Both apps read it. Unset: no https app links; the mailr:// scheme still works.
+# Env: MAILR_APP_LINK_HOSTS
+appLinkHosts=mail.example.com,mailr.example.com
+
+# The server address the first-run screen starts with (the field stays editable).
+# Unset: the field starts empty.
+# Env: MAILR_DEFAULT_SERVER
+defaultServer=https://mail.example.com

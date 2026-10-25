@@ -1,0 +1,1774 @@
+{
+  "_meta": {
+    "language": "Español",
+    "native": "Español"
+  },
+  "common": {
+    "no_subject": "(sin asunto)"
+  },
+  "errors": {
+    "common": {
+      "not_found": "no encontrado",
+      "nothing_to_change": "nada que cambiar",
+      "invalid_email": "correo no válido",
+      "invalid_cursor": "cursor no válido",
+      "too_large": "demasiado grande",
+      "event_not_found": "evento no encontrado",
+      "task_not_found": "tarea no encontrada",
+      "note_not_found": "nota no encontrada",
+      "table_not_found": "tabla no encontrada",
+      "list_not_found": "lista no encontrada",
+      "draft_not_found": "borrador no encontrado",
+      "memory_not_found": "memoria no encontrada",
+      "conversation_not_found": "conversación no encontrada",
+      "not_an_email": "no es una dirección de correo",
+      "unknown_connector": "conector desconocido",
+      "uploads_busy": "demasiadas subidas a la vez; inténtalo de nuevo en un momento"
+    },
+    "mail": {
+      "conversation_not_found": "conversación no encontrada",
+      "message_not_found": "mensaje no encontrado",
+      "attached_email_unreadable": "este correo adjunto no se puede mostrar; descárgalo para abrirlo en otro lugar",
+      "rule_not_found": "regla no encontrada",
+      "approve_user_only": "solo el usuario puede aprobar envíos",
+      "attachment_expired": "la subida del adjunto ha caducado; vuelve a adjuntar el archivo",
+      "attachments_limit": "los adjuntos están limitados a {{max}} MB",
+      "image_proxy_off": "el proxy de imágenes está desactivado",
+      "image_unavailable": "imagen no disponible",
+      "images_paused": "las imágenes están pausadas",
+      "inline_image_type": "solo se pueden mostrar imágenes PNG, JPEG, GIF y WebP en línea",
+      "message_no_unsubscribe_link": "este mensaje no tiene enlace de cancelación de suscripción",
+      "messages_not_in_conversation": "los mensajes no están en esta conversación",
+      "no_delete_forever_list": "no se puede eliminar definitivamente una lista completa; vacía la Papelera en su lugar",
+      "no_identities": "no hay identidades todavía",
+      "no_layout_section": "no existe esa sección de diseño",
+      "no_such_image": "no existe esa imagen",
+      "no_such_part": "no existe esa parte",
+      "nothing_to_undo": "nada que deshacer",
+      "reject_user_only": "solo el usuario puede rechazar envíos",
+      "unsubscribe_refused": "no se cancela la suscripción por correo a {{to}}: {{reason}}",
+      "uploads_full": "tus adjuntos pendientes de enviar ya ocupan los {{max}} MB que este servidor guarda para ti; envía o elimina borradores con adjuntos y vuelve a intentarlo"
+    },
+    "calendar": {
+      "event_not_found": "evento no encontrado",
+      "task_not_found": "tarea no encontrada",
+      "calendar_not_found": "calendario no encontrado",
+      "cancel_not_verified": "nadie ha verificado que el organizador haya enviado esta cancelación, así que el evento permanece en tu calendario",
+      "link_needs_confirmation": "elige primero al organizador: {{organizer}} podría modificar este evento",
+      "link_not_verified": "nadie ha verificado que el remitente de la invitación sea su organizador, así que no puede asumir el control de tu evento",
+      "account_not_found": "cuenta de calendario no encontrada",
+      "accounts_change_user_only": "solo el usuario puede cambiar las cuentas de calendario",
+      "accounts_connect_user_only": "las cuentas de calendario las conecta el usuario que ha iniciado sesión",
+      "accounts_remove_user_only": "solo el usuario puede eliminar cuentas de calendario",
+      "answer_user_only": "solo el usuario puede responder a las invitaciones aquí",
+      "builtin_cannot_remove": "No se puede eliminar el calendario de Mailr. Puedes ocultarlo.",
+      "builtin_fixed": "No se puede cambiar el nombre, la dirección ni el inicio de sesión del calendario de Mailr. Puedes ocultarlo.",
+      "choose_a_change": "elige al menos un cambio",
+      "confirm_calendar_name": "la confirmación debe ser el nombre del calendario",
+      "copy_caldav_only": "solo se puede copiar una cuenta CalDAV conectada al calendario de Mailr",
+      "decline_proposal_user_only": "solo el usuario puede rechazar una hora propuesta",
+      "defaults_user_only": "los valores predeterminados del calendario los establece el usuario que ha iniciado sesión",
+      "deleted_on_server": "se eliminó en el servidor de calendario",
+      "event_needs_start": "un evento requiere una hora de inicio",
+      "file_limit_5mb": "los archivos de calendario están limitados a 5 MB",
+      "file_no_events": "el archivo no tiene eventos",
+      "group_calendar_not_found": "calendario de grupo no encontrado",
+      "group_freebusy_user_only": "la disponibilidad (ocupado/libre) en tus grupos es solo para la persona que ha iniciado sesión",
+      "import_max_events": "máximo {{max}} eventos en una importación",
+      "import_user_only": "solo el usuario puede importar archivos de calendario",
+      "invitation_unreadable": "no se pudo leer la invitación",
+      "message_no_ics": "este mensaje no tiene archivo de calendario",
+      "need_sending_address": "añade primero una dirección de envío con un servidor de correo saliente",
+      "need_sending_address_reply": "añade una dirección de envío antes de responder a las invitaciones",
+      "no_builtin_calendar": "no tienes ningún calendario de Mailr en este servidor",
+      "no_invitation": "este mensaje no tiene invitación",
+      "no_proposal": "este mensaje no propone una nueva hora para este evento",
+      "no_unapplied_change": "este mensaje no tiene cambios de calendario sin aplicar",
+      "not_a_guest": "no eres invitado de este evento",
+      "not_a_request": "esto no es una solicitud de invitación ({{method}})",
+      "not_ics": "el archivo no es un archivo iCalendar (.ics)",
+      "organizer_cancels": "solo el organizador puede cancelar este evento",
+      "proposal_no_time": "la propuesta no tiene hora",
+      "proposal_not_guest": "la propuesta no proviene de un invitado de un evento que tú organizas",
+      "proposal_recipients_changed": "la lista de invitados ha cambiado; la invitación actualizada iría a: {{notify}}",
+      "proposal_unverified": "no se pudo verificar al remitente de la propuesta ({{sender}}); confirma primero que confías en él",
+      "range_62_days": "el rango debe ser de un máximo de 62 días",
+      "range_one_year": "el rango debe ser positivo y de un máximo de un año",
+      "range_positive_62_days": "el rango debe ser positivo y de un máximo de 62 días",
+      "read_only": "este calendario es de solo lectura",
+      "refresh_hours": "Actualizar cada {{min}} a {{max}} horas.",
+      "server_read_only": "Cambio rechazado: este calendario es de solo lectura para ti.",
+      "server_rejected_change": "no se pudo guardar el cambio en el servidor de calendario: {{error}}",
+      "server_rejected_request": "el servidor de calendario rechazó la solicitud: {{error}}",
+      "server_unexpected": "Respuesta inesperada del servidor de calendario: {{error}}",
+      "share_not_by_token": "No se pueden compartir calendarios mediante un token de API.",
+      "signin_failed": "no se pudo iniciar sesión en el servidor de calendario: {{error}}",
+      "store_rejected_change": "no se pudo guardar el cambio en el almacén de correo: {{error}}",
+      "subscribe_user_only": "solo el usuario conectado puede suscribirse a calendarios",
+      "subscription_not_found": "Suscripción no encontrada",
+      "unknown_calendar": "Calendario desconocido",
+      "unverified_user_only": "Solo el usuario conectado puede aplicar un cambio de un remitente no verificado",
+      "window_two_years": "El intervalo debe ser positivo y de un máximo de dos años"
+    },
+    "admin": {
+      "user_not_found": "Usuario no encontrado",
+      "endpoint_not_found": "Endpoint no encontrado",
+      "api_key_again": "Introduce la clave de API de nuevo para probar una URL diferente",
+      "cannot_delete_self": "No puedes eliminarte a ti mismo",
+      "cannot_demote_self": "No puedes degradar ni desactivar tu propia cuenta",
+      "egress_from_env": "El proxy de salida está configurado en el entorno del servidor (MAILR_IMAGE_PROXY_EGRESS).",
+      "list_models_failed": "no se pudo listar los modelos: {{error}}",
+      "local_only_needs_local": "el correo solo local requiere un punto de conexión local",
+      "local_public": "{{host}} es una dirección pública, por lo que no se puede marcar como local. Usa una dirección de tu red o de esta máquina, o márcala como alojada.",
+      "local_public_no_host": "Esta es una dirección pública, por lo que no se puede marcar como local. Usa una dirección de tu red o de esta máquina, o márcala como alojada.",
+      "password_not_by_token": "Las contraseñas las cambia un administrador conectado, no un token de API",
+      "public_address_first": "Introduce primero la dirección pública."
+    },
+    "accounts": {
+      "account_not_found": "Cuenta no encontrada",
+      "add_own_accounts": "Añade tus propias cuentas en Ajustes → Correo → Cuentas de correo",
+      "admin_connects_not_token": "Las cuentas de correo las conecta un administrador conectado, no un token de API",
+      "admin_local_only": "Un administrador requiere que esta cuenta permanezca solo local",
+      "backup_check_failed": "la comprobación de la copia de seguridad falló ({{reason}}); no se elimina el correo del proveedor",
+      "colour_mail_only": "solo las cuentas de correo tienen un color",
+      "colour_unknown": "elige uno de los colores de cuenta: azul, naranja, verde, morado, rosa, turquesa, rojo o amarillo",
+      "confirm_account_name": "Escribe el nombre de la cuenta exactamente para confirmar",
+      "disconnected_by_person": "{{person}} ha desconectado esta cuenta. Habla con esa persona primero; se le notificará de nuevo si te reconectas.",
+      "enter_password": "Introduce la contraseña de la cuenta",
+      "file_too_large_gb": "El archivo es mayor de {{max}} GB",
+      "first_sync_running": "La primera sincronización aún no ha terminado",
+      "imap_required": "Se requiere un servidor de entrada (IMAP)",
+      "import_daily_limit": "has subido {{max}} GB para importaciones en las últimas 24 horas, el máximo que este servidor acepta en un día; vuelve a intentarlo más tarde",
+      "import_disk_full": "el disco del servidor está casi lleno, así que se detuvo la subida; pide al administrador que libere espacio",
+      "import_space_full": "Las importaciones sin terminar ocupan tu espacio de importación; inténtalo de nuevo cuando finalicen",
+      "imports_running": "ya tienes en curso tantas importaciones como este servidor ejecuta a la vez ({{max}}); inicia esta cuando una de ellas termine",
+      "managed_off": "Los administradores no pueden conectar cuentas de correo para los miembros en este servidor. Actívalo en Ajustes → Administración → Usuarios.",
+      "mode_not_supported": "Modo no compatible con este tipo de cuenta",
+      "no_backup_yet": "aún no hay copia de seguridad; el correo se elimina del proveedor solo después de tener copia. Inténtalo de nuevo tras la primera copia diaria.",
+      "no_new_mail_since_sync": "No hay correo nuevo a través de esta cuenta desde su primera sincronización; envíate un mensaje de prueba e inténtalo de nuevo",
+      "password_again_change": "Introduce la contraseña de nuevo al cambiar el servidor",
+      "password_again_test": "Introduce la contraseña de nuevo para probar un servidor diferente",
+      "person_has_account": "Esta persona ya tiene esta cuenta",
+      "provider_unsupported": "este proveedor aún no es compatible",
+      "save_sent_imap_only": "solo las cuentas IMAP guardan el correo enviado en el proveedor",
+      "sent_copy_mirror_only": "solo una cuenta IMAP con «Mantener sincronizado» guarda el correo enviado en el proveedor",
+      "store_needs_mail_export": "«Mailr guarda el correo» no está disponible en este servidor: necesita la exportación diaria del correo, que el administrador desactivó. Usa «Mantener sincronizado».",
+      "turned_off": "esta cuenta está desactivada; actívala primero",
+      "upload_mbox": "sube un archivo .mbox o un .zip con archivos Maildir / mbox",
+      "upstream_delete_store_only": "el correo solo se puede eliminar del proveedor en una cuenta con «Mailr guarda el correo»",
+      "user_only": "solo el usuario conectado puede gestionar las cuentas"
+    },
+    "auth": {
+      "password_too_short": "la contraseña debe tener al menos {{min}} caracteres",
+      "no_account": "no hay ninguna cuenta de Mailr para este usuario",
+      "admin_only": "solo administradores",
+      "current_password_wrong": "la contraseña actual es incorrecta",
+      "handover_app_only": "solo la aplicación de Mailr conectada puede transferir su sesión",
+      "handover_expired": "esta transferencia ha caducado o ya se ha utilizado; inténtalo de nuevo",
+      "handover_other_app": "esta transferencia no la ha iniciado esta aplicación",
+      "handover_signed_out": "la aplicación de Mailr ha cerrado sesión; inicia sesión allí o aquí",
+      "id_token_azp": "El token de identificación tiene una parte autorizada inesperada",
+      "id_token_no_expiry": "El token de identificación no tiene fecha de caducidad",
+      "id_token_other_app": "El token de identificación no fue emitido para la aplicación Mailr",
+      "id_token_other_provider": "El token de identificación fue emitido por un proveedor diferente",
+      "id_token_other_server": "este inicio de sesión se inició para otro servidor; comprueba la dirección del servidor e inicia sesión de nuevo",
+      "id_token_rejected": "Token de identificación rechazado",
+      "id_token_rejected_why": "Token de identificación rechazado: {{error}}",
+      "id_token_signature": "La firma del token de identificación no es válida",
+      "id_token_too_old": "El token de identificación es demasiado antiguo; vuelve a iniciar sesión",
+      "imap_password_user_only": "solo el usuario puede crear una contraseña de IMAP",
+      "local_login_disabled": "el inicio de sesión local está desactivado",
+      "native_not_configured": "el inicio de sesión nativo no está configurado",
+      "native_update_app": "esta versión de la aplicación ya no puede iniciar sesión; actualiza la aplicación e inicia sesión de nuevo",
+      "nonce_mismatch": "no coincide el nonce",
+      "oidc_not_configured": "OIDC no está configurado",
+      "password_signin_off": "el inicio de sesión con contraseña está desactivado en este servidor",
+      "password_user_only": "solo el usuario puede cambiar la contraseña",
+      "profile_user_only": "solo el usuario puede cambiar el perfil",
+      "provider_keys_unavailable": "no se pudieron obtener las claves del proveedor de inicio de sesión",
+      "provider_not_accepted": "el proveedor de inicio de sesión no ha aceptado la sesión; inténtalo de nuevo",
+      "provider_refused": "el proveedor de inicio de sesión ha rechazado o cancelado la sesión",
+      "revoke_user_only": "solo el usuario puede revocar sesiones",
+      "sessions_user_only": "solo el usuario puede listar sesiones",
+      "signin_expired": "la sesión de inicio de sesión ha caducado, inténtalo de nuevo",
+      "signin_used": "esta sesión de inicio de sesión ya se ha utilizado; vuelve a iniciar sesión",
+      "signs_in_with_sso": "esta cuenta usa inicio de sesión único; un administrador puede establecer una contraseña",
+      "signup_disabled": "el registro está desactivado",
+      "state_mismatch": "no coincide el estado",
+      "token_unverifiable": "no se pudo verificar el token del proveedor de inicio de sesión",
+      "token_wrong_app": "el token no se ha emitido para esta aplicación",
+      "unknown_session": "identificador de sesión desconocido",
+      "wrong_credentials": "correo o contraseña incorrectos"
+    },
+    "outbox": {
+      "message_state": "el mensaje está {{status}}"
+    },
+    "tables": {
+      "view_not_found": "vista no encontrada",
+      "row_not_found": "fila no encontrada",
+      "column_limit": "Esta tabla tiene {{max}} columnas, el máximo permitido",
+      "calendar_needs_date": "Solo una columna de fecha puede mostrarse en el calendario",
+      "choose_import_column": "Elige al menos una columna para importar",
+      "max_days": "Solicita como máximo {{max}} días",
+      "no_matching_column": "Ninguna columna del archivo coincide con una columna de esta tabla",
+      "no_such_column": "Esta tabla no tiene esa columna",
+      "not_link_column": "no es una columna de enlace",
+      "tokens_use_tools": "Los tokens de API solo pueden acceder a las tablas a través de las herramientas de {{name}}"
+    },
+    "websearch": {
+      "provider_not_found": "proveedor no encontrado",
+      "api_key_again": "introduce la clave de API de nuevo para probar una URL diferente",
+      "provider_name_taken": "ya existe un proveedor con este nombre",
+      "reader_from_env": "este lector está configurado en el entorno del servidor (MAILR_BROWSER_URL); desactívalo o elimina la variable"
+    },
+    "pictures": {
+      "no_picture": "no hay imagen",
+      "changed_by_user": "la imagen ha sido modificada por el usuario",
+      "limit_2mb": "las imágenes están limitadas a 2 MB",
+      "no_provider_picture": "tu proveedor de inicio de sesión no ha enviado una imagen; inicia sesión de nuevo con inicio de sesión único",
+      "provider_fetch_failed": "no se pudo obtener la imagen de tu proveedor de inicio de sesión",
+      "provider_host_blocked": "el host de la imagen de tu proveedor de inicio de sesión está bloqueado en este servidor",
+      "removed_by_user": "las imágenes han sido eliminadas por el usuario",
+      "set_by_user": "las imágenes han sido establecidas por el usuario",
+      "too_large": "la imagen es demasiado grande",
+      "wrong_type": "sube una imagen PNG, JPEG, GIF o WebP"
+    },
+    "labels": {
+      "label_not_found": "etiqueta no encontrada",
+      "account_not_found": "No se encontró la cuenta de correo",
+      "name_required": "Una etiqueta requiere un nombre",
+      "limit": "Tienes {{max}} etiquetas, el máximo permitido",
+      "name_too_long": "El nombre de una etiqueta puede tener como máximo {{max}} caracteres",
+      "choose_own": "elige una de tus etiquetas",
+      "colours_user_only": "solo el usuario puede cambiar todos los colores de las etiquetas a la vez",
+      "label_not_found_named": "etiqueta no encontrada: {{label}}",
+      "name_missing": "nombre requerido"
+    },
+    "identities": {
+      "identity_not_found": "identidad no encontrada",
+      "user_managed": "las identidades son gestionadas por el usuario"
+    },
+    "people": {
+      "unknown_person": "persona desconocida"
+    },
+    "assistant": {
+      "unknown_session": "sesión de chat desconocida",
+      "chat_title_too_long": "el título de un chat puede tener un máximo de {{max}} caracteres",
+      "choose_conversation": "elige una conversación",
+      "no_running_turn": "no hay ninguna tarea en ejecución en este chat",
+      "order_already_ran": "esta orden ya se ejecutó en ese mensaje",
+      "order_not_found": "orden no encontrada",
+      "order_test_needs_query": "añade una búsqueda o una pregunta para probar",
+      "orders_in_app": "las órdenes permanentes se gestionan en la app (los tokens usan la herramienta manage_order)",
+      "still_answering": "el asistente sigue respondiendo en este chat; detenlo primero",
+      "no_title": "no se pudo generar un título breve ahora; inténtalo más tarde",
+      "empty_chat": "este chat no tiene ninguna pregunta de la que generar un título",
+      "unknown_review": "revisión desconocida",
+      "review_not_running": "esta revisión no se está ejecutando",
+      "review_not_stopped": "solo se puede continuar una revisión detenida o fallida",
+      "unknown_review_choice": "decisión recordada desconocida",
+      "review_choices_user_only": "las decisiones de revisión recordadas se gestionan en la app"
+    },
+    "notes": {
+      "section_not_found": "sección no encontrada",
+      "group_list_owner_only": "Solo la persona conectada puede crear una lista en un grupo.",
+      "nothing_to_add": "Nada que añadir",
+      "section_name_required": "Una sección requiere un nombre",
+      "section_exists": "Esta lista ya tiene una sección llamada {{name}}",
+      "own_access": "Solo el propietario puede cambiar tu acceso.",
+      "presence_app_only": "La presencia proviene solo de la app",
+      "share_not_by_token": "Las notas y las tablas no se pueden compartir mediante un token de API.",
+      "version_not_found": "versión no encontrada"
+    },
+    "forwarding": {
+      "user_managed": "las direcciones de reenvío las gestiona el usuario conectado",
+      "agents_cannot_change": "los agentes no pueden cambiar las reglas de reenvío",
+      "agents_cannot_create": "los agentes no pueden crear reglas de reenvío",
+      "not_verified": "{{address}} no es una dirección de reenvío verificada (Ajustes → Correo → Filtros y bloqueo → Direcciones de reenvío)",
+      "too_many_codes": "demasiados códigos de confirmación para esta dirección; inténtalo de nuevo en una hora",
+      "too_many_wrong": "demasiados códigos incorrectos; elimina esta dirección y añádela de nuevo más tarde",
+      "unknown_address": "dirección de reenvío desconocida",
+      "wrong_code": "código incorrecto"
+    },
+    "permissions": {
+      "rule_not_found": "regla no encontrada",
+      "approval_not_found": "aprobación no encontrada",
+      "different_sources": "las solicitudes provienen de chats o agentes diferentes; decídelas una por una",
+      "user_only": "los permisos y las aprobaciones los gestiona el usuario conectado"
+    },
+    "models": {
+      "none_configured": "no hay ningún modelo de lenguaje configurado",
+      "call_failed": "la llamada al modelo falló: {{error}}",
+      "choices_in_app": "las elecciones de modelos se realizan en la app",
+      "endpoint_cannot_do_task": "{{endpoint}} no puede realizar esta tarea",
+      "model_not_allowed": "Tu administrador no te ha permitido usar este modelo.",
+      "model_not_listed": "ese endpoint no incluye este modelo",
+      "not_embedding_model": "Este modelo no genera embeddings de búsqueda. Elige un modelo de embeddings o deja Índice de búsqueda en Ninguno.",
+      "models_not_allowed": "Tu administrador no te ha permitido usar estos modelos: {{models}}",
+      "no_such_endpoint": "no existe ese endpoint",
+      "switch_in_app": "este cambio se realiza en la app"
+    },
+    "settings": {
+      "user_only": "los ajustes solo los puede cambiar el usuario"
+    },
+    "access": {
+      "default_not_allowed": "el valor predeterminado para {{task}} debe ser uno de los modelos permitidos",
+      "endpoint_cannot_do": "{{endpoint}} no puede realizar {{task}}",
+      "everyone_built_in": "La política Todos está integrada. Edítala en su lugar.",
+      "everyone_cannot_delete": "La política Todos está integrada. Para limitarla, desactiva sus interruptores y no permitas ningún modelo.",
+      "everyone_keeps_name": "No se puede cambiar el nombre de la política Todos y ningún grupo puede usar ese nombre.",
+      "group_has_policy": "ese grupo ya tiene una política",
+      "groups_from_idp": "los grupos de esta cuenta provienen del proveedor de identidad; cámbialos allí",
+      "policy_not_found": "política no encontrada"
+    },
+    "activity": {
+      "entry_not_found": "entrada no encontrada",
+      "signed_in_only": "La Actividad solo se muestra a la persona con sesión iniciada"
+    },
+    "cleanup": {
+      "categories_by_sender": "sugiere categorías para grupos por remitente, dominio o lista",
+      "forwarding_in_settings": "crea filtros de reenvío en Ajustes → Correo → Filtros y bloqueo",
+      "group_changed_one": "el grupo cambió: ahora tiene {{count}} conversación, no {{expected}}. Vuelve a revisar la vista previa.",
+      "group_changed_other": "el grupo cambió: ahora tiene {{count}} conversaciones, no {{expected}}. Vuelve a revisar la vista previa.",
+      "no_future_search": "este grupo no tiene ninguna búsqueda que coincida con su correo futuro",
+      "no_sorting_model": "no hay ningún modelo de clasificación disponible para ti",
+      "no_unsubscribe_link": "esta suscripción no tiene enlace de cancelación de suscripción"
+    },
+    "contacts": {
+      "accept_user_only": "solo el usuario con sesión iniciada puede aceptar un grupo sugerido",
+      "dismiss_user_only": "solo el usuario con sesión iniciada puede descartar un grupo sugerido",
+      "group_from_address_book": "este grupo proviene de tu libreta de direcciones; cámbialo allí",
+      "group_max_members": "un grupo admite como máximo {{max}} personas",
+      "group_name_required": "dale un nombre al grupo",
+      "group_not_found": "grupo no encontrado",
+      "settings_user_only": "los ajustes de la libreta de direcciones son para el usuario con sesión iniciada",
+      "suggest_user_only": "solo el usuario con sesión iniciada puede buscar sugerencias de grupos",
+      "suggestion_not_found": "sugerencia no encontrada",
+      "suggestion_user_only": "solo el usuario con sesión iniciada puede aceptar o descartar una sugerencia"
+    },
+    "dictation": {
+      "bad_answer": "No se pudo leer la respuesta del servidor de voz.",
+      "empty_clip": "El clip está vacío. Inténtalo de nuevo.",
+      "not_audio": "Envía el clip como audio (m4a, mp3, wav, webm u ogg).",
+      "not_set_up": "La dictación a través del servidor no está configurada.",
+      "server_not_local": "El servidor de voz debe estar en la red local.",
+      "timeout": "No se pudo contactar al servidor de voz a tiempo.",
+      "too_big": "Los clips pueden tener hasta {{max}} MB.",
+      "too_long": "Los clips pueden tener hasta {{max}} segundos.",
+      "transcribe_failed": "No se pudo transcribir el clip.",
+      "unreachable": "No se pudo conectar con el servidor de voz.",
+      "local_only_unavailable": "No disponible con solo modelos locales. No hay ningún modelo local configurado para transcripción de voz a texto.",
+      "env_endpoint": "Este endpoint se configura mediante MAILR_ASR_URL, por lo que su dirección se cambia allí."
+    },
+    "filters": {
+      "file_limit_2mb": "un archivo de filtros está limitado a 2 MB",
+      "import_user_only": "solo el usuario conectado puede importar filtros",
+      "not_gmail_xml": "no es un archivo XML de filtros de Gmail",
+      "unknown_label": "etiqueta desconocida en las acciones"
+    },
+    "intel": {
+      "decision_cannot_accept": "esta decisión no se puede aceptar",
+      "decision_not_found": "decisión no encontrada",
+      "decisions_lab_user_only": "el laboratorio de decisiones es para el usuario con sesión iniciada",
+      "importance_review_user_only": "la revisión de importancia es para el usuario conectado",
+      "index_admin_only": "solo administradores: el índice de búsqueda lo gestiona un administrador",
+      "no_embedding_endpoint": "no hay ningún endpoint de incrustación configurado (Ajustes → Admin → Modelos, tarea 'embed')",
+      "retriage_user_only": "volver a ejecutar la clasificación es para el usuario conectado",
+      "translation_failed": "no se pudo traducir: {{error}}",
+      "unknown_smart_label": "etiqueta inteligente desconocida"
+    },
+    "invites": {
+      "expired": "Esta invitación ha caducado. Pide una nueva.",
+      "invite_not_found": "invitación no encontrada",
+      "link_not_valid": "Este enlace de invitación no es válido. Pide uno nuevo.",
+      "password_min_10": "Usa al menos 10 caracteres.",
+      "revoked": "Esta invitación fue retirada. Pide una nueva.",
+      "sign_in_first": "Inicia sesión primero.",
+      "signs_in_another_way": "Esta cuenta usa un método de inicio de sesión diferente. Usa el botón de inicio de sesión.",
+      "used": "Esta invitación ya se ha utilizado. Inicia sesión para continuar.",
+      "wrong_account": "Esta invitación es para {{invited}}. Has iniciado sesión como {{current}}. Cierra sesión y abre el enlace de nuevo."
+    },
+    "knowledge": {
+      "entity_not_found": "entidad no encontrada",
+      "only_builtin_reset": "solo se pueden restablecer las habilidades integradas",
+      "skill_no_instructions": "la habilidad no tiene instrucciones",
+      "skill_not_found": "habilidad no encontrada",
+      "suggestion_not_found": "sugerencia no encontrada"
+    },
+    "layouts": {
+      "layout_not_found": "diseño no encontrado",
+      "user_only": "los diseños solo pueden ser modificados por el usuario"
+    },
+    "live": {
+      "filter_not_found": "filtro no encontrado",
+      "stream_apps_only": "el flujo de eventos en vivo es para aplicaciones conectadas",
+      "typing_apps_only": "los informes de escritura provienen de las aplicaciones conectadas"
+    },
+    "onboarding": {
+      "admins_may_not_connect": "Los administradores no pueden conectar cuentas de correo para los miembros en este servidor.",
+      "already_connected": "esta cuenta ya estaba conectada; gestiona la cuenta en Admin → Usuarios",
+      "nothing_to_summarise": "nada que resumir todavía",
+      "prepare_not_by_token": "las cuentas de correo son preparadas por un administrador conectado, no por un token de API",
+      "prepare_one_person": "una cuenta de correo puede ser preparada para una persona (por dirección de correo), no para un grupo",
+      "preset_exists": "ya existe una configuración preestablecida para esa dirección o grupo",
+      "preset_not_found": "No se encontró la configuración",
+      "too_many_presets": "demasiadas configuraciones preestablecidas; elimina algunas primero",
+      "user_only": "la guía de configuración pertenece al usuario conectado"
+    },
+    "phone": {
+      "app_not_on_server": "no hay aplicación {{app}} en este servidor",
+      "mail_server_no_answer": "No se pudo contactar al servidor de correo. Inténtalo de nuevo más tarde.",
+      "no_such_app": "aplicación no encontrada",
+      "no_such_app_password": "contraseña de aplicación no encontrada",
+      "passwords_not_by_token": "Las contraseñas de la aplicación Phone no se pueden gestionar mediante un token de API.",
+      "version_format": "Usa una versión como 1.1.0, o déjala vacía."
+    },
+    "push": {
+      "target_not_found": "no se ha encontrado el destino de push",
+      "user_only": "los destinos de push los gestiona el usuario conectado o la sesión de la aplicación"
+    },
+    "reminders": {
+      "invalid_token": "token de recordatorio no válido",
+      "notification_expired": "la notificación ha caducado; abre Mailr para actuar sobre el recordatorio",
+      "push_user_only": "las suscripciones de push las gestiona el usuario conectado",
+      "settings_user_only": "los ajustes de recordatorios los cambia el usuario",
+      "snooze_too_far": "la fecha de posposición es posterior a un año",
+      "task_changed": "la tarea ha cambiado en otro dispositivo; abre Mailr para completarla"
+    },
+    "screener": {
+      "decision_user_only": "solo tú puedes cambiar una decisión de Screener",
+      "no_such_account": "no existe esa cuenta de correo: {{accounts}}",
+      "no_such_sender": "no existe ese remitente en Screener",
+      "settings_change_user_only": "solo tú puedes cambiar los ajustes de Screener",
+      "settings_see_user_only": "solo tú puedes ver los ajustes de Screener"
+    },
+    "spam": {
+      "not_on_list": "no está en la lista",
+      "user_only": "la lista de spam solo la puede cambiar el usuario"
+    },
+    "speakr": {
+      "account_not_found": "No se encontró la cuenta de Speakr",
+      "account_user_only": "solo el usuario conectado puede cambiar una cuenta de Speakr",
+      "error": "Speakr: {{error}}",
+      "error_hint": "Speakr: {{error}} {{hint}}",
+      "field_too_long": "un campo es demasiado largo",
+      "file_empty": "el archivo está vacío",
+      "local_only_no_model": "Esta grabación es solo local y no hay ningún modelo local disponible",
+      "merge_in_app": "Los participantes se combinan en la aplicación Grabaciones",
+      "no_model": "No hay ningún modelo configurado para esto",
+      "not_connected": "no hay ninguna cuenta de Speakr conectada (Ajustes → Correo → Cuentas de correo → Speakr)",
+      "recording_not_found": "no se ha encontrado la grabación en Speakr",
+      "recording_too_large": "las grabaciones están limitadas a {{max}} MB en Mailr"
+    },
+    "tasks": {
+      "nothing_to_move": "no hay nada que mover"
+    },
+    "templates": {
+      "name_required": "una plantilla requiere un nombre",
+      "shortcut_taken": "otra plantilla ya usa ;{{shortcut}}",
+      "template_not_found": "no se ha encontrado la plantilla"
+    },
+    "tokens": {
+      "token_not_found": "no se ha encontrado el token",
+      "unknown_token": "token desconocido",
+      "user_only": "los tokens solo los puede gestionar el usuario conectado"
+    },
+    "import": {
+      "not_a_zip": "{{name}} no es un archivo .zip legible",
+      "zip_too_many_files": "{{name}} tiene más de {{max}} archivos",
+      "zip_too_large": "{{name}} se descomprime en más de {{mb}} MB de notas",
+      "too_many_notes": "máximo {{max}} notas en una importación",
+      "too_many_contacts": "máximo {{max}} contactos en una importación",
+      "too_many_events": "máximo {{max}} eventos en una importación",
+      "bad_kind": "el tipo debe ser uno de {{kinds}}",
+      "read_only_calendar": "este calendario es de solo lectura",
+      "already_undone": "Esta importación ya se ha deshecho.",
+      "user_only": "solo el usuario conectado puede importar",
+      "not_found": "importación no encontrada"
+    },
+    "trusted": {
+      "user_managed": "solo tú puedes cambiar las direcciones de confianza, en Ajustes → {{name}}",
+      "too_many_codes": "demasiados códigos para esta dirección; inténtalo de nuevo en una hora",
+      "too_many_codes_today": "puedes enviar un máximo de {{max}} códigos al día; inténtalo de nuevo mañana",
+      "already_yours": "esta dirección ya es una de tus propias direcciones en Mailr",
+      "already_confirmed": "esta dirección ya está confirmada",
+      "address_limit": "puedes tener como máximo {{max}} direcciones de confianza",
+      "not_found": "dirección desconocida",
+      "too_many_wrong": "demasiados códigos incorrectos; elimina esta dirección y añádela de nuevo más tarde",
+      "code_expired": "el código ha caducado; envía uno nuevo",
+      "wrong_code": "código incorrecto"
+    }
+  },
+  "push": {
+    "mail": {
+      "title": "Correo de {{name}}",
+      "unknown_sender": "remitente desconocido",
+      "body": "Nuevo mensaje"
+    },
+    "private": {
+      "follow_up": {
+        "title": "Sin respuesta aún",
+        "body": "Abre Mailr para ver la conversación."
+      },
+      "approval": {
+        "title": "Se necesita aprobación",
+        "body": "Abre Mailr para revisarlo."
+      },
+      "send_failed": {
+        "title": "Mensaje no enviado",
+        "body": "Abre Mailr para ver por qué."
+      },
+      "send_uncertain": {
+        "title": "Puede que se haya enviado",
+        "body": "Revise Enviados en Mailr antes de volver a enviarlo."
+      },
+      "reminder": {
+        "title": "Recordatorio",
+        "body": "Abre Mailr para verlo."
+      },
+      "new_mail": {
+        "title": "Mailr",
+        "body": "Nuevo mensaje"
+      },
+      "important_mail": {
+        "title": "Mailr",
+        "body": "Nuevo mensaje"
+      },
+      "default": {
+        "title": "Mailr",
+        "body": "Abre Mailr para leerlo."
+      }
+    },
+    "approval": {
+      "title": "Solicitud de aprobación de {{actor}}",
+      "agent_email_title": "Aprobar un correo de un agente",
+      "to_single": "Para {{first}}.",
+      "to_more_one": "Para {{first}} y {{count}} más.",
+      "to_more_other": "Para {{first}} y {{count}} más."
+    },
+    "send_failed": {
+      "title": "Mensaje no enviado",
+      "body": "Para {{to}}: {{error}}"
+    },
+    "send_uncertain": {
+      "title": "Puede que se haya enviado",
+      "body": "Para {{to}}: revise Enviados antes de volver a enviarlo."
+    },
+    "follow_up": {
+      "title": "Sin respuesta de {{who}}",
+      "title_anyone": "Sin respuesta aún"
+    },
+    "reminder": {
+      "missed": "Perdido: {{title}}",
+      "generic": {
+        "event": "Recordatorio de evento",
+        "task": "Recordatorio de tarea",
+        "note": "Recordatorio de nota",
+        "other": "Recordatorio"
+      }
+    },
+    "account": {
+      "title": "{{name}}: se requiere contraseña",
+      "title_private": "Se requiere la contraseña de la cuenta de correo",
+      "body": "Vuelve a introducirlo en Ajustes → Correo → Cuentas de correo. No llegará correo nuevo hasta entonces."
+    },
+    "test": {
+      "body": "Notificación de prueba"
+    }
+  },
+  "health": {
+    "account": {
+      "paused": "Pausada",
+      "signin": "Contraseña obligatoria",
+      "error": "Error de sincronización. Reintentando automáticamente.",
+      "first_sync": "Sincronizando por primera vez",
+      "not_synced_yet": "Aún no sincronizada",
+      "stale_hours_one": "No sincronizada durante {{count}} hora",
+      "stale_hours_other": "No sincronizada durante {{count}} horas",
+      "stale_days_one": "No sincronizada durante {{count}} día",
+      "stale_days_other": "No sincronizada durante {{count}} días",
+      "deletions_held_one": "Se retuvo {{count}} eliminación en el proveedor: revisa la cuenta",
+      "deletions_held_other": "Se retuvieron {{count}} eliminaciones en el proveedor: revisa la cuenta",
+      "deletion_paused_export_off": "Eliminación en el proveedor en pausa: la exportación del correo está desactivada",
+      "changes_not_synced_one": "{{count}} cambio no sincronizado aún con el proveedor",
+      "changes_not_synced_other": "{{count}} cambios no sincronizados aún con el proveedor",
+      "sent_not_saved_one": "No se pudo guardar {{count}} mensaje enviado en la carpeta Enviados de {{provider}}",
+      "sent_not_saved_other": "No se pudieron guardar {{count}} mensajes enviados en la carpeta Enviados de {{provider}}",
+      "syncing": "Sincronizando",
+      "ok": "Actualizada"
+    },
+    "summary": {
+      "ok_one": "Tu cuenta se está sincronizando.",
+      "ok_other": "Las {{count}} cuentas se están sincronizando.",
+      "bad": "{{name}}: {{text}}.",
+      "bad_more_one": "{{name}}: {{text}} (y {{count}} más).",
+      "bad_more_other": "{{name}}: {{text}} (y {{count}} más)."
+    },
+    "check": {
+      "db": "Base de datos",
+      "store": "Almacén de correo",
+      "worker": "Proceso en segundo plano",
+      "sync": "Sincronización de cuentas de correo",
+      "export": "Exportación diaria de correo",
+      "backup_target": "Copia de seguridad",
+      "calendar_export": "Exportación de calendario y contactos",
+      "notes_export": "Exportación de notas y tablas",
+      "push": "Servidor de notificaciones (ntfy)",
+      "egress": "Salida de imágenes (VPN)",
+      "proxy": "Cabeceras del proxy inverso",
+      "db_dump": "Volcado de la base de datos",
+      "disk": "Espacio libre en disco",
+      "jobs_failed": "Tareas fallidas",
+      "store_sync": "Indexación del almacén de correo"
+    },
+    "ready": {
+      "reachable": "accesible",
+      "db_unreachable": "base de datos inaccesible",
+      "store_unreachable": "almacén de correo inaccesible",
+      "store_answered": "El almacén de correo devolvió {{status}}",
+      "worker_none": "aún no hay señal de vida del proceso",
+      "worker_stale": "sin señal de vida del proceso durante {{minutes}} min",
+      "worker_ok": "señal de vida hace {{seconds}} s",
+      "sync_none": "no hay cuentas de correo para sincronizar",
+      "jobs_overdue_one": "{{count}} tarea con más de {{minutes}} min de retraso",
+      "jobs_overdue_other": "{{count}} tareas con más de {{minutes}} min de retraso",
+      "sync_bad_one": "{{count}} cuenta no sincronizada",
+      "sync_bad_other": "{{count}} cuentas no sincronizadas",
+      "sync_ok_one": "{{count}} cuenta sincronizando",
+      "sync_ok_other": "{{count}} cuentas sincronizando",
+      "sync_ok_first_one": "{{count}} cuenta sincronizando, {{first}} en la primera sincronización",
+      "sync_ok_first_other": "{{count}} cuentas sincronizando, {{first}} en la primera sincronización",
+      "no_mail": "aún no hay correo",
+      "mail_export_off": "desactivada (MAILR_MAIL_EXPORT=false)",
+      "exported_stale_one": "{{stale}} de {{count}} cuenta no exportada en {{hours}} h",
+      "exported_stale_other": "{{stale}} de {{count}} cuentas no exportadas en {{hours}} h",
+      "exported_ok_one": "{{count}} cuenta exportada en las últimas {{hours}} h",
+      "exported_ok_other": "{{count}} cuentas exportadas en las últimas {{hours}} h",
+      "exported_waiting_one": "{{exported}} de {{count}} cuenta exportada en las últimas {{hours}} h, {{waiting}} nuevas (primera exportación pendiente)",
+      "exported_waiting_other": "{{exported}} de {{count}} cuentas exportadas en las últimas {{hours}} h, {{waiting}} nuevas (primera exportación pendiente)",
+      "copied_stale_one": "{{stale}} de {{count}} cuenta no copiada en {{hours}} h",
+      "copied_stale_other": "{{stale}} de {{count}} cuentas no copiadas en {{hours}} h",
+      "copied_ok_one": "{{count}} cuenta copiada en las últimas {{hours}} h",
+      "copied_ok_other": "{{count}} cuentas copiadas en las últimas {{hours}} h",
+      "copied_waiting_one": "{{exported}} de {{count}} cuenta copiada en las últimas {{hours}} h, {{waiting}} nuevas (primera copia pendiente)",
+      "copied_waiting_other": "{{exported}} de {{count}} cuentas copiadas en las últimas {{hours}} h, {{waiting}} nuevas (primera copia pendiente)",
+      "target_unwritable": "destino de copia de seguridad no escribible",
+      "target_unconfigured": "destino de copia de seguridad no configurado",
+      "target_missing": "falta el destino de copia de seguridad",
+      "target_unmounted": "destino de copia de seguridad no montado (sin archivo {{marker}})",
+      "not_configured": "no configurado",
+      "target_ok_mail_off": "montado y con escritura; la exportación del correo está desactivada",
+      "no_calendars": "aún no hay calendarios",
+      "no_notes": "aún no hay notas ni tablas",
+      "calendar_not_run_one": "{{stale}} de {{count}} exportación de calendario no ejecutada en {{hours}} h",
+      "calendar_not_run_other": "{{stale}} de {{count}} exportaciones de calendario no ejecutadas en {{hours}} h",
+      "calendar_not_copied_one": "{{stale}} de {{count}} exportación de calendario no copiada en {{hours}} h",
+      "calendar_not_copied_other": "{{stale}} de {{count}} exportaciones de calendario no copiadas en {{hours}} h",
+      "calendar_ok_one": "{{count}} exportación de calendario en las últimas {{hours}} h",
+      "calendar_ok_other": "{{count}} exportaciones de calendario en las últimas {{hours}} h",
+      "calendar_ok_copied_one": "{{count}} exportación de calendario en las últimas {{hours}} h y copiada",
+      "calendar_ok_copied_other": "{{count}} exportaciones de calendario en las últimas {{hours}} h y copiadas",
+      "calendar_waiting_one": "{{exported}} de {{count}} exportación de calendario en las últimas {{hours}} h, {{waiting}} nuevas (primera exportación pendiente)",
+      "calendar_waiting_other": "{{exported}} de {{count}} exportaciones de calendario en las últimas {{hours}} h, {{waiting}} nuevas (primera exportación pendiente)",
+      "notes_not_run_one": "{{stale}} de {{count}} exportación de notas no ejecutada en {{hours}} h",
+      "notes_not_run_other": "{{stale}} de {{count}} exportaciones de notas no ejecutadas en {{hours}} h",
+      "notes_not_copied_one": "{{stale}} de {{count}} exportación de notas no copiada en {{hours}} h",
+      "notes_not_copied_other": "{{stale}} de {{count}} exportaciones de notas no copiadas en {{hours}} h",
+      "notes_ok_one": "{{count}} exportación de notas en las últimas {{hours}} h",
+      "notes_ok_other": "{{count}} exportaciones de notas en las últimas {{hours}} h",
+      "notes_ok_copied_one": "{{count}} exportación de notas en las últimas {{hours}} h y copiada",
+      "notes_ok_copied_other": "{{count}} exportaciones de notas en las últimas {{hours}} h y copiadas",
+      "notes_waiting_one": "{{exported}} de {{count}} exportación de notas en las últimas {{hours}} h, {{waiting}} nuevas (primera exportación pendiente)",
+      "notes_waiting_other": "{{exported}} de {{count}} exportaciones de notas en las últimas {{hours}} h, {{waiting}} nuevas (primera exportación pendiente)",
+      "push_none": "no hay servidor de push configurado",
+      "push_unreachable": "servidor de push inaccesible",
+      "push_answered": "El servidor de push devolvió {{status}}",
+      "push_ok": "servidor de push accesible",
+      "proxy_untrusted": "se ignoraron las cabeceras reenviadas de una dirección no confiable",
+      "proxy_ok": "no hay cabeceras reenviadas no confiables",
+      "dump_off": "volcados nocturnos de la base de datos desactivados",
+      "dump_none": "aún no hay volcado de la base de datos",
+      "dump_failed": "el último volcado de la base de datos falló",
+      "dump_stale": "no hay volcado de la base de datos en las últimas {{hours}} h",
+      "dump_ok": "último volcado hace {{hours}} h ({{mb}} MB)",
+      "disk_unreadable": "no se pudo leer el espacio libre",
+      "disk_full": "{{name}}: solo {{percent}} % libre",
+      "disk_low": "{{name}}: {{percent}} % libre (bajo)",
+      "disk_ok": "espacio libre más bajo {{percent}} % ({{name}})",
+      "jobs_failed_one": "{{count}} tarea falló en la última hora",
+      "jobs_failed_other": "{{count}} tareas fallaron en la última hora",
+      "jobs_failed_none": "ninguna tarea falló en la última hora",
+      "timed_out": "prueba agotada",
+      "failed": "la comprobación falló",
+      "store_sync_ok": "ningún mensaje ha fallado al indexarse",
+      "store_sync_failed_one": "{{count}} mensaje del almacén de correo no se pudo indexar",
+      "store_sync_failed_other": "{{count}} mensajes del almacén de correo no se pudieron indexar"
+    },
+    "model": {
+      "timeout": "El servidor agotó el tiempo de espera.",
+      "connect": "Sin respuesta. Comprueba que el servidor esté en ejecución y que la dirección sea correcta.",
+      "transport": "La conexión con el servidor falló.",
+      "key_refused": "La clave de API fue rechazada.",
+      "unknown_model": "Nombre de modelo desconocido.",
+      "no_path": "Dirección incorrecta: no existe esa ruta (404). La dirección suele terminar en /v1.",
+      "model_refused": "Este nombre de modelo fue rechazado.",
+      "busy": "El servidor está ocupado o ha agotado la cuota (429).",
+      "server_failed": "Error del servidor ({{status}}).",
+      "refused": "Solicitud rechazada ({{status}}).",
+      "local_only": "El contenido es solo local y este punto de acceso está alojado.",
+      "said": "{{text}}",
+      "failed": "La llamada falló.",
+      "no_decision": "No se devolvió ninguna decisión. Comprueba la dirección, la clave y el nombre del modelo.",
+      "not_openai": "No es un punto de acceso de chat compatible con OpenAI."
+    },
+    "task": {
+      "chat": {
+        "label": "{{name}} y escritura",
+        "desc": "Chat, resúmenes, informes, redacción y órdenes permanentes."
+      },
+      "classify": {
+        "label": "Clasificación y decisiones",
+        "desc": "Importancia, categorías y comprobaciones de órdenes permanentes. Se usa para cada correo nuevo, así que elige un modelo rápido."
+      },
+      "embed": {
+        "label": "Índice de búsqueda",
+        "desc": "Incrustaciones para la búsqueda y la memoria de {{name}}. Un modelo para todo el servidor, para un índice coherente."
+      },
+      "transcribe": {
+        "label": "Voz a texto",
+        "desc": "Dictado: un clip de voz se convierte en texto. Un servicio alojado solo recibe clips hablados cuando no hay nada abierto en modo solo local."
+      }
+    }
+  },
+  "invites": {
+    "mail": {
+      "subject": "Tu invitación a Mailr",
+      "body": "Abre este enlace para unirte: {{url}}",
+      "body_until": "Abre este enlace en cualquier dispositivo para unirte a Mailr:\n\n{{url}}\n\nFunciona una sola vez, hasta el {{date}}."
+    }
+  },
+  "digest": {
+    "meetings": {
+      "line": "**Reuniones de hoy:** {{items}}",
+      "item": "{{time}} {{title}} ([preparación]({{url}}))",
+      "untitled": "Reunión"
+    },
+    "screener_one": "**Screener:** 1 nuevo remitente esperando ([revisar]({{url}}))",
+    "screener_other": "**Screener:** {{count}} nuevos remitentes esperando ([revisar]({{url}}))",
+    "title": "{{name}} · {{order}}",
+    "quiet_line": "• {{title}}: {{body}}"
+  },
+  "assistant": {
+    "quiet_summary_one": "{{name}}: {{count}} novedad mientras no estabas",
+    "quiet_summary_other": "{{name}}: {{count}} novedades mientras no estabas",
+    "errand": "Recado",
+    "forward": "Tu nota reenviada",
+    "commands": {
+      "new": "Iniciar un chat nuevo",
+      "chats": "Abrir tus chats o buscarlos",
+      "rename": "Cambiar el nombre de este chat",
+      "retitle": "Crear un título nuevo y breve para este chat",
+      "delete": "Eliminar este chat",
+      "retry": "Volver a escribir la última respuesta",
+      "copy": "Copiar la última respuesta",
+      "note": "Guardar la última respuesta en una nota",
+      "local": "Mantener este chat en tu modelo local",
+      "model": "Mostrar qué modelo responde en este chat",
+      "help": "Listar los comandos y tus habilidades",
+      "task": "Añadir una tarea",
+      "event": "Añadir un evento de calendario",
+      "remember": "Pedirle a {{name}} que recuerde algo",
+      "forget": "Pedirle a {{name}} que olvide algo",
+      "today": "Hoy: calendario, tareas vencidas y correo que te necesita",
+      "week": "Esta semana: eventos, plazos y correo que te espera",
+      "summarize": "Resumir la conversación abierta",
+      "reply": "Redactar una respuesta a la conversación abierta",
+      "waiting": "Correos enviados que aún esperan respuesta",
+      "find": "Buscar en tu correo",
+      "sweep": "Revisa toda la lista en pantalla y propón qué limpiar, en una tarjeta",
+      "example": {
+        "rename": "/rename Registro de fitness",
+        "task": "/task llamar al banco vie 15h",
+        "event": "/event dentista mar 10h durante 45 min",
+        "remember": "/remember mi gimnasio cierra a las 21h los domingos",
+        "forget": "/forget mi antiguo número de teléfono",
+        "find": "/find factura del fontanero"
+      },
+      "app_only": "{{command}} funciona en la aplicación web de Mailr. Esta aplicación aún no lo tiene.",
+      "needs_text": "Escribe lo que quieres decir después de {{command}}, por ejemplo: {{example}}",
+      "model_local": "Este chat usa {{model}}, un modelo local en tu propio servidor. Cámbialo en Ajustes → {{name}} → Modelos.",
+      "model_hosted": "Este chat usa {{model}}, un modelo alojado. Cámbialo en Ajustes → {{name}} → Modelos, o escribe /local para mantener este chat en tu modelo local.",
+      "model_none": "No hay ningún modelo configurado para el chat. Elige uno en Ajustes → {{name}} → Modelos."
+    },
+    "review_past_choice": "tu decisión anterior"
+  },
+  "notify": {
+    "shared": "{{by}} ha compartido “{{name}}” contigo",
+    "local_only_on": "{{by}} ha activado Solo modelos locales para “{{name}}”",
+    "local_only_off": "{{by}} ha desactivado Solo modelos locales para “{{name}}”"
+  },
+  "activity": {
+    "what": {
+      "quoted": "“{{title}}”",
+      "untitled": "(sin título)",
+      "a_conversation": "una conversación",
+      "conversations_one": "{{count}} conversación",
+      "conversations_other": "{{count}} conversaciones",
+      "a_note": "una nota",
+      "a_list": "una lista",
+      "a_table": "una tabla"
+    },
+    "mail": {
+      "archive": "{{what}} archivado",
+      "inbox": "{{what}} movido a Recibidos",
+      "trash": "{{what}} movido a Papelera",
+      "untrash": "{{what}} restaurado de la Papelera",
+      "spam": "{{what}} marcado como spam",
+      "not_spam": "{{what}} marcado como no spam",
+      "delete_forever": "{{what}} eliminado definitivamente",
+      "star": "{{what}} destacado",
+      "unstar": "{{what}} sin destacar",
+      "important": "{{what}} marcado como importante",
+      "not_important": "{{what}} marcado como no importante",
+      "add_labels": "{{what}} etiquetado",
+      "remove_labels": "Etiquetas eliminadas de {{what}}",
+      "move": "{{what}} movido",
+      "snooze": "{{what}} pospuesto",
+      "unsnooze": "{{what}} sin posponer",
+      "mute": "{{what}} silenciado",
+      "unmute": "{{what}} sin silenciar",
+      "category": "Categoría de {{what}} cambiada",
+      "follow_up": "Seguimiento establecido en {{what}}",
+      "cancel_follow_up": "Seguimiento cancelado en {{what}}",
+      "restore_labels": "Cambio en {{what}} deshecho",
+      "restore_importance": "Cambio en {{what}} deshecho",
+      "restore_category": "Cambio en {{what}} deshecho",
+      "show_in_tab": "{{what}} movido a una pestaña",
+      "restore_tab": "Cambio en {{what}} deshecho",
+      "other": "{{what}} modificado",
+      "forward_note": "Iniciado en tu nota reenviada en {{what}}"
+    },
+    "calendar": {
+      "created": "Evento {{what}} creado",
+      "cancelled": "Evento {{what}} cancelado",
+      "moved": "Evento {{what}} movido",
+      "changed": "Evento {{what}} modificado",
+      "deleted": "Evento {{what}} eliminado"
+    },
+    "tasks": {
+      "added": "Tarea {{what}} añadida",
+      "skipped": "{{what}} omitida esta vez",
+      "completed": "Completaste {{what}}",
+      "reopened": "Reabriste {{what}}",
+      "moved": "Moviste la tarea {{what}}",
+      "changed": "Modificaste la tarea {{what}}",
+      "deleted": "Eliminaste la tarea {{what}}"
+    },
+    "notes": {
+      "created": "Creaste {{what}}",
+      "copied": "Copiaste {{what}}",
+      "trashed": "Moviste {{what}} a la Papelera",
+      "restored": "Restauraste {{what}}",
+      "purged": "Eliminaste {{what}} definitivamente",
+      "converted": "Convertiste {{what}}",
+      "reverted": "Deshiciste un cambio en {{what}}",
+      "revision_restored": "Restauraste una versión anterior de {{what}}",
+      "edited": "Editaste {{what}}",
+      "items_added": "Añadiste elementos a {{what}}",
+      "item_deleted": "Eliminaste un elemento de {{what}}",
+      "checked_cleared": "Desmarcaste los elementos marcados de {{what}}",
+      "unchecked_all": "Desmarcaste todos los elementos de {{what}}",
+      "section_deleted": "Eliminaste una sección de {{what}}",
+      "item_to_task": "Creaste una tarea a partir de un elemento de {{what}}",
+      "captured": "Añadiste a {{what}}",
+      "items_checked": "Marcaste elementos en {{what}}",
+      "items_unchecked": "Desmarcaste elementos en {{what}}"
+    },
+    "tables": {
+      "created": "Creaste la tabla {{what}}",
+      "trashed": "Moviste la tabla {{what}} a la Papelera",
+      "restored": "Restauraste la tabla {{what}}",
+      "copied": "Copiaste la tabla {{what}}",
+      "rows_added_one": "Añadiste {{count}} fila a {{what}}",
+      "rows_added_other": "Añadiste {{count}} filas a {{what}}",
+      "rows_added_some": "Añadiste filas a {{what}}",
+      "rows_deleted_one": "Eliminaste {{count}} fila de {{what}}",
+      "rows_deleted_other": "Eliminaste {{count}} filas de {{what}}",
+      "rows_deleted_some": "Eliminaste filas de {{what}}",
+      "rows_restored_one": "Restauraste {{count}} fila en {{what}}",
+      "rows_restored_other": "Restauraste {{count}} filas en {{what}}",
+      "rows_restored_some": "Restauraste filas en {{what}}",
+      "edited": "Editaste {{what}}",
+      "column_deleted": "Eliminaste una columna de {{what}}",
+      "reverted": "Deshiciste un cambio en {{what}}"
+    },
+    "account": {
+      "managed_disconnect": "Desconectaste {{address}}, que tu administrador había conectado. No se volverá a añadir a menos que tu administrador lo solicite.",
+      "managed_disconnected": "{{who}} desconectó {{address}}, que tú habías conectado para ellos."
+    },
+    "admin": {
+      "changed": "Tu administrador modificó tu cuenta.",
+      "name": "Tu administrador cambió tu nombre a {{name}}.",
+      "role_added": "Tu administrador te ha convertido en administrador.",
+      "role_removed": "Tu administrador ha eliminado tu rol de administrador.",
+      "disabled": "Tu administrador ha desactivado tu cuenta.",
+      "enabled": "Tu administrador ha vuelto a activar tu cuenta.",
+      "password_set": "Tu administrador ha establecido una nueva contraseña para ti. Se ha cerrado tu sesión en todos los dispositivos.",
+      "password_reset": "Tu administrador ha restablecido tu contraseña. Se ha cerrado tu sesión en todos los dispositivos.",
+      "password_reset_tokens_one": "Tu administrador ha restablecido tu contraseña. Se ha cerrado tu sesión en todos los dispositivos y {{count}} token de API ha dejado de funcionar.",
+      "password_reset_tokens_other": "Tu administrador ha restablecido tu contraseña. Se ha cerrado tu sesión en todos los dispositivos y {{count}} tokens de API han dejado de funcionar.",
+      "email_verified": "Tu administrador ha marcado tu dirección de correo electrónico como verificada.",
+      "email_unverified": "Tu administrador ha marcado tu dirección de correo electrónico como no verificada.",
+      "account_local_only": "Tu administrador ha configurado {{name}} como solo local. Su correo ahora solo se envía a modelos locales.",
+      "account_connected": "Tu administrador ha conectado {{address}} para ti. Puedes desconectarlo en Ajustes → Correo → Cuentas de correo.",
+      "account_reconnected": "Tu administrador ha vuelto a conectar {{address}} para ti después de que lo desconectaste. Puedes desconectarlo en Ajustes → Correo → Cuentas de correo.",
+      "account_removed": "Tu administrador ha eliminado {{address}}. Su correo permanece.",
+      "policy_added": "Tu administrador ha añadido reglas de acceso para tu grupo {{group}}.",
+      "policy_changed": "Tu administrador ha cambiado las funciones o modelos que tu grupo {{group}} puede usar.",
+      "policy_removed": "Tu administrador ha eliminado las reglas de acceso de tu grupo {{group}}.",
+      "groups": "Tu administrador ha cambiado tus grupos a {{groups}}. El acceso a las funciones depende de tus grupos.",
+      "groups_none": "Tu administrador te ha eliminado de todos los grupos. El acceso a las funciones depende de tus grupos."
+    }
+  },
+  "approvals": {
+    "mail": {
+      "archive": {
+        "ask": "Archivar {{what}}",
+        "done": "archivado {{what}}",
+        "ing": "Archivando {{what}}"
+      },
+      "inbox": {
+        "ask": "Mover {{what}} a Recibidos",
+        "done": "movido {{what}} a Recibidos",
+        "ing": "Moviendo {{what}} a Recibidos"
+      },
+      "trash": {
+        "ask": "Mover {{what}} a Papelera",
+        "done": "movido {{what}} a Papelera",
+        "ing": "Moviendo {{what}} a Papelera"
+      },
+      "untrash": {
+        "ask": "Restaurar {{what}} de la Papelera",
+        "done": "restaurado {{what}}",
+        "ing": "Restaurando {{what}} de la Papelera"
+      },
+      "spam": {
+        "ask": "Marcar {{what}} como spam",
+        "done": "marcado {{what}} como spam",
+        "ing": "Marcando {{what}} como spam"
+      },
+      "not_spam": {
+        "ask": "Marcar {{what}} como no spam",
+        "done": "marcado {{what}} como no spam",
+        "ing": "Marcando {{what}} como no spam"
+      },
+      "delete_forever": {
+        "ask": "Eliminar {{what}} definitivamente",
+        "done": "eliminado {{what}} definitivamente",
+        "ing": "Eliminando {{what}} definitivamente"
+      },
+      "read": {
+        "ask": "Marcar {{what}} como leído",
+        "done": "marcado {{what}} como leído",
+        "ing": "Marcando {{what}} como leído"
+      },
+      "unread": {
+        "ask": "Marcar {{what}} como no leído",
+        "done": "marcado {{what}} como no leído",
+        "ing": "Marcando {{what}} como no leído"
+      },
+      "star": {
+        "ask": "Destacar {{what}}",
+        "done": "destacado {{what}}",
+        "ing": "Destacando {{what}}"
+      },
+      "unstar": {
+        "ask": "Quitar estrella a {{what}}",
+        "done": "quitada la estrella a {{what}}",
+        "ing": "Quitando la estrella a {{what}}"
+      },
+      "important": {
+        "ask": "Marcar {{what}} como importante",
+        "done": "marcado {{what}} como importante",
+        "ing": "Marcando {{what}} como importante"
+      },
+      "not_important": {
+        "ask": "Marcar {{what}} como no importante",
+        "done": "marcado {{what}} como no importante",
+        "ing": "Marcando {{what}} como no importante"
+      },
+      "add_labels": {
+        "ask": "Añadir etiquetas a {{what}}",
+        "done": "etiquetado {{what}}",
+        "ing": "Añadiendo etiquetas a {{what}}"
+      },
+      "remove_labels": {
+        "ask": "Quitar etiquetas de {{what}}",
+        "done": "etiquetas quitadas de {{what}}",
+        "ing": "Quitando etiquetas de {{what}}"
+      },
+      "move": {
+        "ask": "Mover {{what}}",
+        "done": "{{what}} movido",
+        "ing": "Moviendo {{what}}"
+      },
+      "snooze": {
+        "ask": "Posponer {{what}}",
+        "done": "{{what}} pospuesto",
+        "ing": "Posponiendo {{what}}"
+      },
+      "unsnooze": {
+        "ask": "Quitar posposición de {{what}}",
+        "done": "posposición quitada de {{what}}",
+        "ing": "Quitando posposición de {{what}}"
+      },
+      "mute": {
+        "ask": "Silenciar {{what}}",
+        "done": "{{what}} silenciado",
+        "ing": "Silenciando {{what}}"
+      },
+      "unmute": {
+        "ask": "Activar sonido de {{what}}",
+        "done": "sonido activado de {{what}}",
+        "ing": "Activando sonido de {{what}}"
+      },
+      "category": {
+        "ask": "Cambiar la categoría de {{what}}",
+        "done": "{{what}} movido",
+        "ing": "Cambiando la categoría de {{what}}"
+      },
+      "show_in_tab": {
+        "ask": "Mover {{what}} a otra pestaña",
+        "done": "{{what}} movido a otra pestaña",
+        "ing": "Moviendo {{what}} a otra pestaña"
+      },
+      "follow_up": {
+        "ask": "Recordarme si no hay respuesta a {{what}}",
+        "done": "recordatorio establecido en {{what}}",
+        "ing": "Estableciendo recordatorio en {{what}}"
+      },
+      "cancel_follow_up": {
+        "ask": "Cancelar el recordatorio en {{what}}",
+        "done": "recordatorio cancelado en {{what}}",
+        "ing": "Cancelando el recordatorio en {{what}}"
+      },
+      "other": {
+        "ask": "{{action}} {{what}}",
+        "done": "{{what}} modificado",
+        "ing": "Modificando {{what}}"
+      }
+    },
+    "what": {
+      "the_conversations": "las conversaciones",
+      "the_messages": "los mensajes",
+      "messages_one": "{{count}} mensaje",
+      "messages_other": "{{count}} mensajes",
+      "conversations_one": "{{count}} conversación",
+      "conversations_other": "{{count}} conversaciones"
+    },
+    "field": {
+      "add_label": "Añadir etiqueta",
+      "add_labels": "Añadir etiquetas",
+      "remove_labels": "Quitar etiquetas",
+      "also": "Además",
+      "then": "Después",
+      "name": "Nombre",
+      "matches": "Coincidencias",
+      "existing_mail": "Correo existente",
+      "matches_now": "Coincide ahora",
+      "when": "Cuando",
+      "recordings": "Grabaciones",
+      "mail": "Correo",
+      "pick_single": "Elegir uno",
+      "only_if": "Solo si",
+      "options": "Opciones",
+      "errand": "Recado",
+      "result_goes_to": "El resultado va a",
+      "labels": "Etiquetas",
+      "until": "Hasta",
+      "messages": "Mensajes",
+      "from": "De",
+      "to": "Para",
+      "cc": "Cc",
+      "bcc": "Cco",
+      "subject": "Asunto",
+      "attachments": "Adjuntos",
+      "remote_images": "Imágenes remotas",
+      "links_to": "Enlaces a",
+      "reminders": "Recordatorios",
+      "show_as": "Mostrar como",
+      "video_link": "Enlace de vídeo",
+      "status": "Estado",
+      "visibility": "Visibilidad",
+      "mail_the_guests": "Correo a invitados",
+      "note_to_guests": "Nota para los invitados",
+      "applies_to": "Se aplica a",
+      "event": "Evento",
+      "time": "Hora",
+      "title": "Título",
+      "where": "Lugar",
+      "repeats": "Repetición",
+      "calendar": "Calendario",
+      "guests": "Invitados",
+      "notes": "Notas",
+      "invitations_to": "Invitaciones a",
+      "cancellation_to": "Cancelación de",
+      "task": "Tarea",
+      "due": "Vencimiento",
+      "list": "Lista",
+      "priority": "Prioridad",
+      "applies_automatically": "Se aplica automáticamente",
+      "enabled": "Activado",
+      "used_for": "Usado para",
+      "about": "Acerca de",
+      "instructions": "Instrucciones",
+      "note": "Nota",
+      "recipients_now": "Destinatarios ahora"
+    },
+    "value": {
+      "apply_existing": "También se aplica a correos existentes",
+      "no_subject": "(sin asunto)",
+      "none": "Ninguno",
+      "free": "Libre",
+      "busy": "Ocupado",
+      "status_cancelled": "Cancelado",
+      "status_confirmed": "Confirmado",
+      "status_tentative": "Provisional",
+      "class_public": "Público",
+      "class_private": "Privado",
+      "class_confidential": "Confidencial",
+      "class_default": "Predeterminado",
+      "yes": "Sí",
+      "no": "No",
+      "no_title": "(sin título)",
+      "no_place": "Sin lugar",
+      "another_calendar": "otro calendario"
+    },
+    "flag": {
+      "archive": "Omitir Recibidos",
+      "mark_read": "Marcar como leído",
+      "star": "Destacar",
+      "spam": "Enviar a Spam",
+      "never_spam": "Nunca enviar a Spam",
+      "trash": "Mover a Papelera",
+      "notify": "Notificarme",
+      "important_always": "Marcar siempre como importante",
+      "important_never": "Nunca marcar como importante",
+      "category": "Poner en {{category}}",
+      "forward": "Reenviar a {{to}}",
+      "add_to_calendar": "Añadir la invitación a mi calendario"
+    },
+    "flag_inline": {
+      "archive": "omitir Recibidos",
+      "mark_read": "marcar como leído",
+      "star": "destacar",
+      "spam": "enviar a Spam",
+      "never_spam": "nunca enviar a Spam",
+      "trash": "mover a Papelera",
+      "notify": "notificarme",
+      "important_always": "siempre marcar como importante",
+      "important_never": "nunca marcar como importante",
+      "category": "poner en {{category}}",
+      "forward": "reenviar a {{to}}",
+      "add_to_calendar": "añadir la invitación a mi calendario"
+    },
+    "filter": {
+      "title": {
+        "create": "Crear un filtro",
+        "update": "Cambiar un filtro",
+        "delete": "Eliminar un filtro",
+        "apply": "Aplicar un filtro a correos existentes"
+      },
+      "who": {
+        "sender": "Correos de {{sender}}",
+        "senders_one": "Correos de {{count}} remitente",
+        "senders_other": "Correos de {{count}} remitentes",
+        "matching": "Correos coincidentes"
+      },
+      "summary": {
+        "labels_one": "{{who}} recibe la etiqueta {{names}}.",
+        "labels_other": "{{who}} recibe las etiquetas {{names}}.",
+        "flag": "{{who}}: {{flag}}."
+      }
+    },
+    "match": {
+      "some_one": "{{count}} correo en los últimos 6 meses, el más reciente “{{subject}}” el {{date}}",
+      "some_other": "{{count}} correos en los últimos 6 meses, el más reciente “{{subject}}” el {{date}}",
+      "many_one": "Más de {{count}} correo en los últimos 6 meses, el más reciente “{{subject}}” el {{date}}",
+      "many_other": "Más de {{count}} correos en los últimos 6 meses, el más reciente “{{subject}}” el {{date}}",
+      "none": "No hay correos en los últimos 6 meses. Revisa la búsqueda antes de aprobar."
+    },
+    "order": {
+      "title": {
+        "create": "Crear una orden permanente",
+        "update": "Cambiar una orden permanente",
+        "pause": "Pausar una orden permanente",
+        "resume": "Reanudar una orden permanente",
+        "delete": "Eliminar una orden permanente"
+      },
+      "title_named": {
+        "create": "Crear una orden permanente: {{name}}",
+        "update": "Cambiar una orden permanente: {{name}}",
+        "pause": "Pausar una orden permanente: {{name}}",
+        "resume": "Reanudar una orden permanente: {{name}}",
+        "delete": "Eliminar una orden permanente: {{name}}"
+      },
+      "when": {
+        "message": "Cada correo nuevo",
+        "recording": "Cada grabación nueva",
+        "schedule": "Según un horario ({{schedule}}, {{zone}})",
+        "schedule_local": "Según un horario ({{schedule}}, tu zona horaria)"
+      },
+      "when_inline": {
+        "message": "cada correo nuevo",
+        "recording": "cada grabación nueva",
+        "schedule": "según un horario ({{schedule}}, {{zone}})",
+        "schedule_local": "según un horario ({{schedule}}, tu zona horaria)"
+      },
+      "deliver": {
+        "brief": "una tarjeta en el correo",
+        "notify": "una notificación",
+        "digest": "un resumen"
+      },
+      "summary_one": "Ordena {{when}} en una de {{count}} opción.",
+      "summary_other": "Ordena {{when}} en una de {{count}} opciones.",
+      "from_trusted": "Solo el correo que reenvíes desde tus direcciones de confianza",
+      "from_me": "Solo correo de ti o de tus direcciones de confianza"
+    },
+    "who": {
+      "nobody": "nadie",
+      "two": "{{first}} y {{second}}",
+      "more_one": "{{first}} y {{count}} más",
+      "more_other": "{{first}} y {{count}} más"
+    },
+    "send": {
+      "title": "Enviar a {{who}}"
+    },
+    "event": {
+      "title": "Cambiar un evento",
+      "applies_this": "{{span}} (solo esta ocurrencia)",
+      "applies_following": "Esta y las siguientes ocurrencias, desde {{day}}",
+      "applies_series_rule": "Toda la serie ({{rule}})",
+      "applies_series": "Toda la serie",
+      "create": "Crear evento {{name}}",
+      "change": "Cambiar {{name}}",
+      "delete": "Eliminar {{name}}",
+      "cancel": "Cancelar {{name}}",
+      "change_occurrence": "Cambiar una ocurrencia de {{name}}",
+      "delete_occurrence": "Eliminar una ocurrencia de {{name}}",
+      "cancel_occurrence": "Cancelar una ocurrencia de {{name}}",
+      "change_unnamed": "Cambiar un evento",
+      "delete_unnamed": "Eliminar un evento",
+      "cancel_unnamed": "Cancelar un evento",
+      "quoted": "“{{name}}”"
+    },
+    "scope": {
+      "this": "Solo esta ocurrencia",
+      "following": "Esta y las siguientes",
+      "all": "Toda la serie"
+    },
+    "task": {
+      "title": "Cambiar una tarea",
+      "add": "Añadir tarea {{name}}",
+      "change": "Cambiar tarea",
+      "complete": "Completar tarea",
+      "reopen": "Reabrir tarea",
+      "delete": "Eliminar tarea",
+      "delete_cascade": "Eliminar tarea y sus subtareas",
+      "move": "Mover tarea",
+      "skip": "Omitir esta ocurrencia"
+    },
+    "settings": {
+      "title": "Cambiar ajustes"
+    },
+    "skill": {
+      "title": "Cambiar una habilidad"
+    },
+    "memory": {
+      "title": "Cambiar un recuerdo"
+    },
+    "generic": {
+      "title": "Aprobar esta acción"
+    },
+    "draft": {
+      "title_recipients": "Cambiar los destinatarios del borrador: {{who}}",
+      "title_change": "Cambiar el borrador a {{who}}",
+      "title_save": "Guardar un borrador para {{who}}",
+      "summary": "No se envía nada. El borrador permanece en Borradores."
+    },
+    "reason": {
+      "read_mail": {
+        "plain": "{{who}} escribió esto después de leer el correo.",
+        "outsider": "{{who}} escribió esto después de leer el correo. {{names}} no estaba en esa conversación.",
+        "outsiders": "{{who}} escribió esto después de leer el correo. {{names}} y {{last}} no estaban en esa conversación.",
+        "bcc": "{{who}} escribió esto después de leer el correo. El mensaje tiene un CCO."
+      },
+      "read_mail_agent": {
+        "plain": "Un agente escribió esto después de leer el correo.",
+        "outsider": "Un agente escribió esto después de leer el correo. {{names}} no estaba en esa conversación.",
+        "outsiders": "Un agente escribió esto después de leer el correo. {{names}} y {{last}} no estaban en esa conversación.",
+        "bcc": "Un agente escribió esto después de leer el correo. El mensaje tiene un CCO."
+      },
+      "draft_recipients": "Los destinatarios del borrador cambiarían.",
+      "forwarded_unverified": "Has reenviado este cambio. Nadie pudo verificar quién escribió el mensaje interno, así que espera tu aprobación."
+    },
+    "done": {
+      "done": "hecho",
+      "filter_create": "creó el filtro",
+      "filter_update": "modificó el filtro",
+      "filter_delete": "eliminó el filtro",
+      "filter_apply": "aplicó el filtro al correo existente",
+      "order_create": "creó la orden permanente",
+      "order_update": "modificó la orden permanente",
+      "order_pause": "pausó la orden permanente",
+      "order_resume": "reanudó la orden permanente",
+      "order_delete": "eliminó la orden permanente",
+      "sent": "envió el correo",
+      "label_create": "creó la etiqueta",
+      "label_update": "modificó la etiqueta",
+      "label_delete": "eliminó la etiqueta",
+      "event_added": "añadió el evento",
+      "event_changed": "modificó el evento",
+      "event_removed": "eliminó el evento",
+      "rsvp": "envió tu respuesta",
+      "task_added": "añadió la tarea",
+      "task_completed": "completó la tarea",
+      "task_deleted": "eliminó la tarea",
+      "task_changed": "modificó la tarea",
+      "skill_saved": "guardó la habilidad",
+      "memory_saved": "guardó la memoria",
+      "memory_forgot": "eliminó el recuerdo",
+      "settings_changed": "modificó los ajustes",
+      "unsubscribed": "se dio de baja",
+      "note_made": "creó la nota",
+      "note_trashed": "la movió a la Papelera",
+      "checked_cleared": "desmarcó los elementos seleccionados",
+      "note_labels": "cambió las etiquetas",
+      "note_changed": "modificó la nota"
+    },
+    "outcome": {
+      "pending": "Esperando aprobación",
+      "working": "Aprobado · en curso",
+      "executed": "Aprobado · {{done}}",
+      "denied": "Denegado",
+      "discarded": "Descartado · sin cambios",
+      "expired": "Caducado",
+      "failed": "Aprobado · fallido",
+      "failed_error": "Aprobado · fallido: {{error}}"
+    },
+    "step": {
+      "search_mail": "Buscando en tu correo “{{q}}”",
+      "view": {
+        "inbox": "Revisando tu Recibidos",
+        "all": "Revisando tu correo",
+        "sent": "Revisando los Enviados",
+        "starred": "Revisando los Destacados",
+        "important": "Revisando los Importantes",
+        "drafts": "Revisando tus Borradores",
+        "snoozed": "Revisando los Pospuestos",
+        "label": "Revisando una etiqueta"
+      },
+      "search_meaning": "Buscando por significado “{{q}}”",
+      "search_web": "Buscando en la web “{{q}}”",
+      "read_site": "Leyendo {{site}}",
+      "read_page": "Leyendo una página web",
+      "passages": "Buscando pasajes sobre “{{q}}”",
+      "passages_in": "Buscando pasajes sobre “{{q}}” en “{{subject}}”",
+      "read_conversation_named": "Leyendo “{{subject}}”",
+      "read_conversation": "Leyendo una conversación",
+      "read_message_named": "Leyendo el mensaje “{{subject}}”",
+      "read_message": "Leyendo un mensaje",
+      "attachment_named": "Abriendo “{{name}}”",
+      "attachment": "Abriendo un adjunto",
+      "person": "Buscando información sobre {{email}}",
+      "context_named": "Recopilando contexto para “{{subject}}”",
+      "context": "Recopilando contexto",
+      "recall": "Buscando en la memoria “{{q}}”",
+      "remember": "Guardando “{{text}}” en la memoria",
+      "note_named": {
+        "get_note": "Leyendo “{{note}}”",
+        "update_note": "Modificando “{{note}}”",
+        "checklist_items": "Modificando “{{note}}”",
+        "delete_note": "Moviendo “{{note}}” a la Papelera",
+        "restore_note": "Restaurando “{{note}}”",
+        "note_history": "Comprobando versiones de “{{note}}”"
+      },
+      "search_notes": "Buscando en tus Notas “{{q}}”",
+      "use_skill": "Usando la habilidad /{{name}}",
+      "entity": "Buscando {{ref}}",
+      "search_calendar_q": "Buscando en el calendario “{{q}}”",
+      "search_calendar": "Buscando en el calendario",
+      "find_time": "Buscando una hora",
+      "rsvp": {
+        "accepted": "Aceptando una invitación",
+        "declined": "Rechazando una invitación",
+        "tentative": "Respondiendo «quizás» a una invitación",
+        "other": "Respondiendo a una invitación"
+      },
+      "order_list": "Comprobando tus órdenes permanentes",
+      "list": {
+        "create": "Creando una lista de tareas",
+        "rename": "Cambiando el nombre de una lista de tareas",
+        "color": "Cambiando el color de una lista de tareas",
+        "delete": "Eliminando una lista de tareas",
+        "other": "Modificando una lista de tareas"
+      },
+      "list_named": {
+        "create": "Creando la lista de tareas “{{name}}”",
+        "rename": "Cambiando el nombre de la lista de tareas “{{name}}”",
+        "color": "Cambiando el color de la lista de tareas “{{name}}”",
+        "delete": "Eliminando la lista de tareas “{{name}}”",
+        "other": "Modificando la lista de tareas “{{name}}”"
+      },
+      "calendar": {
+        "create": "Creando un calendario",
+        "rename": "Cambiando el nombre de un calendario",
+        "color": "Cambiando el color de un calendario",
+        "delete": "Eliminando un calendario",
+        "other": "Modificando un calendario"
+      },
+      "calendar_named": {
+        "create": "Creando el calendario “{{name}}”",
+        "rename": "Cambiando el nombre del calendario “{{name}}”",
+        "color": "Cambiando el color del calendario “{{name}}”",
+        "delete": "Eliminando el calendario “{{name}}”",
+        "other": "Modificando el calendario “{{name}}”"
+      },
+      "filter": {
+        "create": "Creando un filtro",
+        "update": "Modificando un filtro",
+        "delete": "Eliminando un filtro",
+        "apply": "Aplicando un filtro",
+        "activate": "Activando o desactivando un filtro",
+        "save": "Guardando un filtro",
+        "other": "Modificando un filtro"
+      },
+      "filter_named": {
+        "create": "Creando el filtro “{{name}}”",
+        "update": "Modificando el filtro “{{name}}”",
+        "delete": "Eliminando el filtro “{{name}}”",
+        "apply": "Aplicando el filtro “{{name}}”",
+        "activate": "Activando o desactivando el filtro “{{name}}”",
+        "save": "Guardando el filtro “{{name}}”",
+        "other": "Modificando el filtro “{{name}}”"
+      },
+      "label": {
+        "create": "Creando una etiqueta",
+        "update": "Modificando una etiqueta",
+        "delete": "Eliminando una etiqueta",
+        "apply": "Aplicando una etiqueta",
+        "activate": "Cambiando una etiqueta",
+        "save": "Guardando una etiqueta",
+        "other": "Modificando una etiqueta"
+      },
+      "label_named": {
+        "create": "Creando la etiqueta “{{name}}”",
+        "update": "Modificando la etiqueta “{{name}}”",
+        "delete": "Eliminando la etiqueta “{{name}}”",
+        "apply": "Aplicando la etiqueta “{{name}}”",
+        "activate": "Cambiando la etiqueta “{{name}}”",
+        "save": "Guardando la etiqueta “{{name}}”",
+        "other": "Modificando la etiqueta “{{name}}”"
+      },
+      "layout": {
+        "create": "Creando un diseño de Recibidos",
+        "update": "Modificando un diseño de Recibidos",
+        "delete": "Eliminando un diseño de Recibidos",
+        "apply": "Aplicando un diseño de Recibidos",
+        "activate": "Cambiando un diseño de Recibidos",
+        "save": "Guardando un diseño de Recibidos",
+        "other": "Modificando un diseño de Recibidos"
+      },
+      "layout_named": {
+        "create": "Creando el diseño de Recibidos “{{name}}”",
+        "update": "Modificando el diseño de Recibidos “{{name}}”",
+        "delete": "Eliminando el diseño de Recibidos “{{name}}”",
+        "apply": "Aplicando el diseño de Recibidos “{{name}}”",
+        "activate": "Cambiando el diseño de Recibidos “{{name}}”",
+        "save": "Guardando el diseño de Recibidos “{{name}}”",
+        "other": "Modificando el diseño de Recibidos “{{name}}”"
+      },
+      "order": {
+        "create": "Creando una orden permanente",
+        "update": "Modificando una orden permanente",
+        "delete": "Eliminando una orden permanente",
+        "pause": "Pausando una orden permanente",
+        "resume": "Reanudando una orden permanente",
+        "other": "Modificando una orden permanente"
+      },
+      "order_named": {
+        "create": "Creando la orden permanente “{{name}}”",
+        "update": "Modificando la orden permanente “{{name}}”",
+        "delete": "Eliminando la orden permanente “{{name}}”",
+        "pause": "Pausando la orden permanente “{{name}}”",
+        "resume": "Reanudando la orden permanente “{{name}}”",
+        "other": "Modificando la orden permanente “{{name}}”"
+      },
+      "fixed": {
+        "list_labels": "Comprobando tus etiquetas",
+        "list_calendar": "Comprobando tu calendario",
+        "list_tasks": "Comprobando tus tareas",
+        "create_event": "Creando un evento de calendario",
+        "create_task": "Creando una tarea",
+        "create_draft": "Redactando un borrador",
+        "update_draft": "Revisando el borrador",
+        "send_draft": "Preparando el envío",
+        "get_outbox_status": "Comprobando la bandeja de salida",
+        "apply_label": "Aplicando una etiqueta",
+        "archive": "Archivando",
+        "show_in_tab": "Cambiando de pestaña",
+        "list_drafts": "Consultando tus borradores",
+        "get_draft": "Leyendo el borrador",
+        "list_skills": "Comprobando tus habilidades",
+        "get_skill": "Leyendo una habilidad",
+        "create_skill": "Guardando una nueva habilidad",
+        "update_skill": "Actualizando una habilidad",
+        "forget": "Eliminando un recuerdo",
+        "upsert_entity": "Guardando una persona o proyecto",
+        "get_configuration": "Comprobando tus ajustes",
+        "update_settings": "Cambiando los ajustes",
+        "update_signature": "Cambiando tu firma",
+        "update_profile": "Actualizando tu perfil",
+        "get_brief": "Leyendo el resumen",
+        "read_screen": "Leyendo lo que hay en pantalla",
+        "list_view": "Leyendo la lista completa",
+        "review_mail": "Iniciando una revisión de la lista",
+        "list_attachments": "Comprobando los adjuntos",
+        "update_brief": "Actualizando el resumen",
+        "get_signals": "Comprobando si hay elementos urgentes",
+        "search_events": "Buscando en el calendario",
+        "get_event": "Leyendo un evento",
+        "get_calendar_defaults": "Comprobando tus calendarios",
+        "get_free_busy": "Comprobando disponibilidad",
+        "update_event": "Cambiando un evento de calendario",
+        "delete_event": "Eliminando un evento de calendario",
+        "cancel_event": "Cancelando una reunión",
+        "search_tasks": "Buscando en tus tareas",
+        "update_task": "Cambiando una tarea",
+        "complete_task": "Completando una tarea",
+        "move_task": "Moviendo una tarea",
+        "delete_task": "Eliminando una tarea",
+        "bulk_tasks": "Cambiando varias tareas",
+        "list_reminders": "Comprobando tus recordatorios",
+        "list_recordings": "Consultando tus grabaciones",
+        "get_recording": "Leyendo una grabación",
+        "get_transcript": "Leyendo una transcripción",
+        "search_recordings": "Buscando en tus grabaciones",
+        "get_summary": "Leyendo un resumen de reunión",
+        "recordings_for_event": "Buscando la grabación de la reunión",
+        "link_recording": "Vinculando una grabación",
+        "propose_action_items": "Buscando elementos de acción",
+        "draft_follow_up": "Redactando un borrador de seguimiento",
+        "send_to_speakr": "Enviando un archivo a Speakr",
+        "update_recording": "Modificando una grabación en Speakr",
+        "share_recording": "Creando un enlace para compartir",
+        "list_notes": "Consultando tus notas",
+        "get_note": "Leyendo una nota",
+        "create_note": "Creando una nota",
+        "update_note": "Modificando una nota",
+        "checklist_items": "Modificando una lista",
+        "delete_note": "Moviendo una nota a la Papelera",
+        "note_history": "Consultando las versiones de una nota",
+        "manage_note_labels": "Modificando etiquetas de notas"
+      }
+    },
+    "count": {
+      "result_one": "{{count}} resultado",
+      "result_other": "{{count}} resultados",
+      "passage_one": "{{count}} pasaje",
+      "passage_other": "{{count}} pasajes",
+      "event_one": "{{count}} evento",
+      "event_other": "{{count}} eventos",
+      "task_one": "{{count}} tarea",
+      "task_other": "{{count}} tareas",
+      "note_one": "{{count}} nota",
+      "note_other": "{{count}} notas",
+      "version_one": "{{count}} versión",
+      "version_other": "{{count}} versiones",
+      "label_one": "{{count}} etiqueta",
+      "label_other": "{{count}} etiquetas",
+      "skill_one": "{{count}} habilidad",
+      "skill_other": "{{count}} habilidades",
+      "recording_one": "{{count}} grabación",
+      "recording_other": "{{count}} grabaciones",
+      "draft_one": "{{count}} borrador",
+      "draft_other": "{{count}} borradores",
+      "attachment_one": "{{count}} adjunto",
+      "attachment_other": "{{count}} adjuntos",
+      "conversation_one": "{{count}} conversación",
+      "conversation_other": "{{count}} conversaciones",
+      "message_one": "{{count}} mensaje",
+      "message_other": "{{count}} mensajes",
+      "memory_one": "{{count}} memoria",
+      "memory_other": "{{count}} memorias",
+      "item_one": "{{count}} elemento",
+      "item_other": "{{count}} elementos"
+    },
+    "result": {
+      "page_read": "página leída",
+      "page_read_cut": "página leída (resumida)",
+      "nothing_saved": "nada guardado todavía",
+      "nothing_changed": "sin cambios",
+      "open_draft": "cambiado en el borrador abierto",
+      "join": "{{first}}, {{rest}}",
+      "already_done": "ya realizado anteriormente",
+      "same_again": "mismo resultado que antes",
+      "results_from_one": "{{count}} resultado de {{provider}}",
+      "results_from_other": "{{count}} resultados de {{provider}}",
+      "items_added_one": "{{count}} elemento añadido",
+      "items_added_other": "{{count}} elementos añadidos",
+      "changes_made_one": "{{count}} cambio realizado",
+      "changes_made_other": "{{count}} cambios realizados",
+      "waiting_one": "{{count}} pendiente para ti",
+      "waiting_other": "{{count}} pendientes para ti",
+      "failed_one": "{{count}} fallido",
+      "failed_other": "{{count}} fallidos",
+      "saved_reminds": "guardado · aviso {{when}}",
+      "saved_no_reminder": "guardado · sin aviso",
+      "reviewing_one": "revisando {{count}} conversación",
+      "reviewing_other": "revisando {{count}} conversaciones",
+      "review_running_one": "ya se está ejecutando una revisión de {{count}} conversación",
+      "review_running_other": "ya se está ejecutando una revisión de {{count}} conversaciones",
+      "nothing_to_review": "nada que revisar"
+    },
+    "step_outcome": {
+      "approved": "aprobado",
+      "denied": "denegado",
+      "expired": "caducado",
+      "failed": "fallido"
+    },
+    "forward": {
+      "title": "Actuar sobre tu nota reenviada",
+      "summary": "Has reenviado esto desde una dirección de confianza. {{name}} realiza la solicitud indicada en la nota; cada paso sigue sujeto a su propio permiso."
+    }
+  },
+  "mail": {
+    "date": {
+      "weekday": {
+        "0": "Lun",
+        "1": "Mar",
+        "2": "Mié",
+        "3": "Jue",
+        "4": "Vie",
+        "5": "Sáb",
+        "6": "Dom"
+      },
+      "month": {
+        "1": "Ene",
+        "2": "Feb",
+        "3": "Mar",
+        "4": "Abr",
+        "5": "May",
+        "6": "Jun",
+        "7": "Jul",
+        "8": "Ago",
+        "9": "Sep",
+        "10": "Oct",
+        "11": "Nov",
+        "12": "Dic"
+      },
+      "day": "{{weekday}} {{day}} {{month}} {{year}}",
+      "time": "{{hour}}:{{minute}}",
+      "day_time": "{{date}}, {{time}}",
+      "range": "{{start}} – {{end}}",
+      "zone": "{{when}} ({{zone}})"
+    },
+    "quote": {
+      "wrote": "El {{date}}, {{sender}} escribió:",
+      "forwarded": "---------- Mensaje reenviado ---------",
+      "from": "De: {{value}}",
+      "date": "Fecha: {{value}}",
+      "subject": "Asunto: {{value}}",
+      "to": "Para: {{value}}"
+    },
+    "itip": {
+      "subject": {
+        "invitation": "Invitación: {{title}}",
+        "update": "Invitación actualizada: {{title}}",
+        "cancel": "Cancelado: {{title}}",
+        "decline_counter": "Nuevo horario rechazado: {{title}}"
+      },
+      "body": {
+        "invitation": "{{organizer}} te ha invitado a este evento.",
+        "update": "{{organizer}} ha actualizado este evento.",
+        "cancel": "{{organizer}} ha cancelado este evento.",
+        "cancel_occurrence": "{{organizer}} ha cancelado una ocurrencia de este evento.",
+        "decline_counter": "{{organizer}} ha rechazado la hora propuesta. El evento no ha cambiado."
+      },
+      "untitled": "(sin título)",
+      "when": "Cuándo: {{when}}",
+      "where": "Dónde: {{where}}"
+    },
+    "rsvp": {
+      "subject": {
+        "accepted": "Aceptado: {{title}}",
+        "declined": "Rechazado: {{title}}",
+        "tentative": "Aceptado provisionalmente: {{title}}"
+      },
+      "body": {
+        "accepted": "{{who}} ha aceptado esta invitación.",
+        "declined": "{{who}} ha rechazado esta invitación.",
+        "tentative": "{{who}} ha aceptado provisionalmente esta invitación."
+      }
+    },
+    "speakr": {
+      "followup_subject": "Seguimiento: {{title}}",
+      "followup_notes": "Aquí están las notas de {{title}}.",
+      "our_meeting": "nuestra reunión",
+      "task_from_recording": "De la grabación {{title}}: {{link}}",
+      "task_from_recording_at": "De la grabación {{title}} a las {{time}}: {{link}}",
+      "task_meeting": "Reunión: {{link}}",
+      "recording": "Grabación",
+      "quoted": "“{{title}}”",
+      "signed_in": "Has iniciado sesión en Speakr como {{who}}.",
+      "signed_in_count_one": "Has iniciado sesión en Speakr como {{who}}, {{count}} grabación.",
+      "signed_in_count_other": "Has iniciado sesión en Speakr como {{who}}, {{count}} grabaciones.",
+      "token_access": "Acceso de token: {{scopes}}.",
+      "token_full": "completo",
+      "scope": {
+        "full": "Este token tiene acceso completo a tu cuenta de Speakr, incluida la eliminación de grabaciones y la modificación de webhooks. El preset de Integración (lectura, escritura, subida) es suficiente para Mailr.",
+        "extra_one": "Este token también tiene {{scopes}}, que no se usa en Mailr. Un token sin él es más seguro.",
+        "extra_other": "Este token también tiene {{scopes}}, que no se usan en Mailr. Un token sin ellos es más seguro.",
+        "no_read": "Este token no puede leer grabaciones. Crea uno con el permiso de lectura.",
+        "no_write": "Este token no puede editar. Crea uno con el permiso de escritura.",
+        "no_share": "Este token no puede crear enlaces compartidos. Crea uno con el permiso de compartir.",
+        "no_upload": "Este token no puede subir archivos, por lo que Transcribir en Speakr y las nuevas grabaciones fallarán. Añade el permiso de subida si los usas.",
+        "no_webhooks": "Sin el ámbito de webhooks, «Obtener actualizaciones al instante» requiere un webhook que crees en Speakr."
+      }
+    }
+  },
+  "import": {
+    "untitled": "(sin título)"
+  },
+  "trusted": {
+    "mail": {
+      "subject": "Código de confirmación {{code}}",
+      "body": "{{who}} ha solicitado añadir {{address}} como dirección de confianza para {{assistant}}.\n\nCódigo de confirmación: {{code}}\n\nEl código caduca tras {{minutes}} minutos. Si no esperabas este mensaje, ignóralo. No se realizará ningún cambio hasta que se introduzca el código."
+    }
+  },
+  "calendar_forward": {
+    "moved": "{{title}} se ha movido a {{when}} (antes {{was}})",
+    "cancelled": "{{title}} ha sido cancelado por {{who}}",
+    "changed": "{{title}} ha cambiado: {{what}}",
+    "what": {
+      "title": "título",
+      "place": "lugar",
+      "description": "descripción",
+      "guests": "invitados",
+      "link": "enlace de la reunión",
+      "when": "hora",
+      "details": "detalles"
+    }
+  },
+  "reminders": {
+    "detail": {
+      "all_day": "Todo el día",
+      "today": "hoy",
+      "tomorrow": "mañana",
+      "yesterday": "ayer",
+      "date": "{{weekday}} {{day}} {{month}}",
+      "due": "Vence {{when}}",
+      "due_at": "Vence {{when}}, {{time}}"
+    }
+  }
+}

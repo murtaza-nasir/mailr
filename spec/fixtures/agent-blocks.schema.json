@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:mailr:schema:agent-blocks:v1",
+  "title": "mailr agent display model, version 1",
+  "description": "What the assistant shows: approval displays, their outcomes, tool steps and timeline items. Produced by backend/mailr/agent/present.py. Every value carries `text`, the plain wording a renderer shows for a type it does not know.",
+  "type": "object",
+  "properties": {
+    "version": {"const": 1},
+    "approvals": {"type": "array", "items": {"$ref": "#/$defs/approvalFixture"}},
+    "steps": {"type": "array", "items": {"$ref": "#/$defs/stepFixture"}}
+  },
+  "required": ["version", "approvals", "steps"],
+  "$defs": {
+    "msg": {
+      "description": "A catalogue key (backend/mailr/i18n/en.json, approvals.*) and its parameters; a parameter may itself be a msg. Apps render it with their own copy of the catalogue, and show the English text beside it for a key they lack.",
+      "type": "object",
+      "properties": {
+        "key": {"type": "string", "minLength": 1},
+        "params": {"type": "object",
+                   "additionalProperties": {"anyOf": [{"type": ["string", "number", "boolean", "null"]}, {"$ref": "#/$defs/msg"}]}}
+      },
+      "required": ["key", "params"],
+      "additionalProperties": false
+    },
+    "approvalFixture": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "action": {"type": "string"},
+        "display": {"$ref": "#/$defs/display"},
+        "outcomes": {"type": "array", "items": {"$ref": "#/$defs/outcome"}},
+        "expect": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+      },
+      "required": ["name", "action", "display", "outcomes", "expect"],
+      "additionalProperties": false
+    },
+    "stepFixture": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "args": {"type": "object"},
+        "label": {"type": "string"},
+        "label_msg": {"$ref": "#/$defs/msg"},
+        "icon": {"$ref": "#/$defs/stepIcon"}
+      },
+      "required": ["name", "label", "icon"],
+      "additionalProperties": false
+    },
+    "display": {
+      "type": "object",
+      "properties": {
+        "v": {"const": 1},
+        "icon": {"enum": ["filter", "order", "trash", "spam", "delete", "archive", "label", "snooze", "mail", "send",
+                          "event", "task", "memory", "skill", "settings", "people", "recording", "unsubscribe",
+                          "draft", "note", "action"]},
+        "title": {"type": "string", "minLength": 1},
+        "summary": {"type": ["string", "null"]},
+        "danger": {"type": "boolean"},
+        "reason": {"type": ["string", "null"]},
+        "fields": {"type": "array", "items": {"$ref": "#/$defs/field"}},
+        "text": {"type": "string"},
+        "title_msg": {"$ref": "#/$defs/msg"},
+        "summary_msg": {"$ref": "#/$defs/msg"},
+        "reason_msg": {"$ref": "#/$defs/msg"}
+      },
+      "required": ["v", "icon", "title", "summary", "danger", "reason", "fields", "text"],
+      "additionalProperties": false
+    },
+    "field": {
+      "type": "object",
+      "properties": {"label": {"type": "string"}, "label_msg": {"$ref": "#/$defs/msg"}, "value": {"$ref": "#/$defs/value"}},
+      "required": ["label", "value"],
+      "additionalProperties": false
+    },
+    "labelRef": {
+      "type": "object",
+      "properties": {"name": {"type": "string"}, "color": {"type": ["string", "null"]}},
+      "required": ["name", "color"],
+      "additionalProperties": false
+    },
+    "person": {
+      "type": "object",
+      "properties": {"name": {"type": ["string", "null"]}, "email": {"type": "string"}},
+      "required": ["name", "email"],
+      "additionalProperties": false
+    },
+    "condition": {
+      "type": "object",
+      "properties": {
+        "field": {"type": "string"},
+        "neg": {"type": "boolean"},
+        "values": {"type": "array", "items": {"type": "string"}},
+        "labels": {"type": "array", "items": {"$ref": "#/$defs/labelRef"}},
+        "text": {"type": "string"}
+      },
+      "required": ["field", "neg", "values", "text"],
+      "additionalProperties": false
+    },
+    "value": {
+      "type": "object",
+      "required": ["t", "text"],
+      "properties": {"t": {"type": "string"}, "text": {"type": "string"}},
+      "oneOf": [
+        {"properties": {"t": {"const": "text"}, "msg": {"$ref": "#/$defs/msg"},
+                        "msgs": {"type": "array", "items": {"$ref": "#/$defs/msg"}}}, "additionalProperties": true},
+        {"properties": {"t": {"const": "labels"}, "items": {"type": "array", "items": {"$ref": "#/$defs/labelRef"}}},
+         "required": ["items"]},
+        {"properties": {"t": {"const": "people"}, "items": {"type": "array", "items": {"$ref": "#/$defs/person"}},
+                        "more": {"type": "integer", "minimum": 0}}, "required": ["items", "more"]},
+        {"properties": {"t": {"const": "query"}, "raw": {"type": "string"},
+                        "conditions": {"type": "array", "items": {"$ref": "#/$defs/condition"}}},
+         "required": ["raw", "conditions"]},
+        {"properties": {"t": {"const": "when"}, "start": {"type": ["string", "null"]}, "end": {"type": ["string", "null"]},
+                        "all_day": {"type": "boolean"}}, "required": ["start", "end", "all_day"]},
+        {"properties": {"t": {"const": "count"}, "n": {"type": "integer"}, "noun": {"type": "string"}},
+         "required": ["n", "noun"]},
+        {"properties": {"t": {"const": "diff"}, "before": {"type": "string"}, "after": {"type": "string"},
+                        "after_msg": {"$ref": "#/$defs/msg"}},
+         "required": ["before", "after"]},
+        {"properties": {"t": {"const": "list"}, "items": {"type": "array", "items": {"type": "string"}},
+                        "msgs": {"type": "array", "items": {"anyOf": [{"$ref": "#/$defs/msg"}, {"type": "null"}]}},
+                        "more": {"type": "integer", "minimum": 0}}, "required": ["items", "more"]},
+        {"properties": {"t": {"const": "quote"}}},
+        {"properties": {"t": {"const": "choices"}, "items": {"type": "array", "items": {"$ref": "#/$defs/choice"}}},
+         "required": ["items"]}
+      ]
+    },
+    "choice": {
+      "type": "object",
+      "properties": {
+        "name": {"type": "string"},
+        "description": {"type": "string"},
+        "then": {"type": "array", "items": {"$ref": "#/$defs/field"}},
+        "text": {"type": "string"}
+      },
+      "required": ["name", "description", "then", "text"],
+      "additionalProperties": false
+    },
+    "outcome": {
+      "type": "object",
+      "properties": {
+        "state": {"enum": ["pending", "approved", "executing", "executed", "denied", "expired", "failed"]},
+        "text": {"type": "string", "minLength": 1},
+        "msg": {"$ref": "#/$defs/msg"}
+      },
+      "required": ["state", "text"],
+      "additionalProperties": false
+    },
+    "stepIcon": {"enum": ["search", "read", "person", "calendar", "task", "draft", "send", "label", "recording",
+                          "memory", "settings", "note", "other"]},
+    "step": {
+      "type": "object",
+      "description": "A tool step in a timeline `steps` item.",
+      "properties": {
+        "id": {"type": "string"}, "name": {"type": "string"}, "label": {"type": "string"},
+        "label_msg": {"$ref": "#/$defs/msg"}, "summary_msg": {"$ref": "#/$defs/msg"},
+        "icon": {"$ref": "#/$defs/stepIcon"},
+        "status": {"enum": ["running", "done", "failed", "waiting"]},
+        "ok": {"type": "boolean"}, "summary": {"type": ["string", "null"]}, "count": {"type": ["integer", "null"]},
+        "ms": {"type": ["integer", "null"]}, "approval_id": {"type": ["integer", "string", "null"]},
+        "repeat_of": {"type": "string", "description": "A call repeated with the same arguments: the id of the step it repeats. It was not run again; clients fold it into that step's line (\"×3\")."}
+      },
+      "required": ["name", "label"]
+    },
+    "timelineItem": {
+      "description": "One item of an assistant turn's `timeline` (GET /agent/sessions/{id}).",
+      "oneOf": [
+        {"type": "object", "properties": {"type": {"const": "text"}, "content": {"type": "string"},
+                                          "citations": {"type": "array"}, "final": {"type": "boolean"}},
+         "required": ["type", "content"]},
+        {"type": "object", "properties": {"type": {"const": "steps"},
+                                          "steps": {"type": "array", "items": {"$ref": "#/$defs/step"}}},
+         "required": ["type", "steps"]},
+        {"type": "object", "properties": {"type": {"const": "approval"}, "approval": {"type": "object",
+          "properties": {"id": {}, "action": {"type": "string"}, "status": {"type": "string"},
+                         "display": {"$ref": "#/$defs/display"}, "outcome": {"$ref": "#/$defs/outcome"}},
+          "required": ["id", "action", "status", "display", "outcome"]}},
+         "required": ["type", "approval"]},
+        {"type": "object", "properties": {"type": {"const": "resume"}, "approval_ids": {"type": "array"},
+                                          "text": {"type": "string"}},
+         "required": ["type", "text"]}
+      ]
+    }
+  }
+}

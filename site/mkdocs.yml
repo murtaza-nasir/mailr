@@ -1,0 +1,248 @@
+site_name: Mailr
+copyright: Copyright © 2026 the Mailr authors. Gmail is a trademark of Google LLC. Mailr is not affiliated with or endorsed by Google.
+site_description: Self-hosted webmail with a calendar, tasks, notes and an AI assistant, which can run entirely on local models.
+site_url: https://murtaza-nasir.github.io/mailr/
+repo_url: https://github.com/murtaza-nasir/mailr
+repo_name: mailr
+edit_uri: ""
+docs_dir: docs
+
+theme:
+  name: material
+  custom_dir: overrides
+  # No web fonts: the public site makes no requests to font services (the in-app copy at /help/ does
+  # the same through mkdocs.help.yml).
+  font: false
+  logo: assets/images/logo.png
+  favicon: assets/images/favicon.png
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.path
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+
+validation:
+  anchors: warn
+  unrecognized_links: warn
+
+plugins:
+  - search:
+      # Underscores are not separators, so MAILR_* variables and setting keys such as
+      # keyboard_shortcuts are found as typed.
+      separator: '[\s\-\.]+'
+  # Languages. English is the default and is built at the site root. A
+  # translated page sits beside its English one with the language before the extension
+  # (user-guide/inbox.de.md, a translated nav title in nav_translations); a page without a
+  # translation shows the English one. To add a language, add it below with `build: true`.
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      # true adds the language switcher; it needs navigation.instant off (or a plain, non-contextual
+      # switcher in extra.alternate). Turn it on with the second language.
+      reconfigure_material: false
+      reconfigure_search: true
+      languages:
+        - locale: en
+          default: true
+          name: English
+          build: true
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      title: On this page
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/murtaza-nasir/mailr
+  # Privacy-friendly page analytics, added only when these are set at build time.
+  mailr_analytics:
+    src: !ENV [MAILR_DOCS_ANALYTICS_SRC, ""]
+    host: !ENV [MAILR_DOCS_ANALYTICS_HOST, ""]
+    id: !ENV [MAILR_DOCS_ANALYTICS_ID, ""]
+
+extra_css:
+  - stylesheets/extra.css
+
+# Mermaid from the site itself (hooks/build.py places it), never from a CDN.
+extra_javascript:
+  - assets/vendor/mermaid.min.js
+
+# Strips the coverage markers and places Mermaid (hooks/build.py).
+hooks:
+  - hooks/build.py
+
+nav:
+  - Home: index.md
+  - Getting started:
+    - getting-started/index.md
+    - Run a server:
+      - Install with Docker Compose: getting-started/install.md
+      - Set up the first admin: getting-started/first-admin.md
+    - Join a server:
+      - Joining with an invite: getting-started/start-here.md
+      - The setup guide: getting-started/your-first-sign-in.md
+      - Connect your accounts: getting-started/connect-accounts.md
+      - Install the phone app: getting-started/phone.md
+  - User guide:
+    - user-guide/index.md
+    - Mail:
+      - The inbox: user-guide/inbox.md
+      - Tabs and layouts: user-guide/tabs-and-layouts.md
+      - Reading mail: user-guide/reading.md
+      - Writing mail: user-guide/writing.md
+      - Make Mailr your email app: user-guide/email-links.md
+      - Search: user-guide/search.md
+      - Labels, filters and favourites: user-guide/organize.md
+      - Subscriptions and cleanup: user-guide/subscriptions-and-cleanup.md
+      - Triage signals and importance: user-guide/triage.md
+      - The Screener: user-guide/screener.md
+      - Snooze, follow-ups and reminders: user-guide/snooze-and-reminders.md
+      - Waiting for you: user-guide/waiting.md
+    - Calendar and tasks:
+      - Calendar: user-guide/calendar.md
+      - Calendar sharing and import: user-guide/calendar-sharing.md
+      - Calendar on phones and computers: user-guide/phone-calendar.md
+      - Invitations: user-guide/invitations.md
+      - Tasks: user-guide/tasks.md
+      - Quick add: user-guide/quick-add.md
+    - Notes and tables:
+      - Notes and checklists: user-guide/notes.md
+      - Tables: user-guide/tables.md
+    - Ambrose, the assistant:
+      - Ask Ambrose: user-guide/assistant.md
+      - Standing orders and briefs: user-guide/standing-orders.md
+      - Trusted addresses: user-guide/forwarded-notes.md
+      - Approvals: user-guide/approvals.md
+    - People and recordings:
+      - People & groups: user-guide/people.md
+      - Recordings (Speakr): user-guide/recordings.md
+    - Your account and devices:
+      - Settings: user-guide/settings.md
+      - Styles and appearance: user-guide/appearance.md
+      - Notifications: user-guide/notifications.md
+      - Activity: user-guide/activity.md
+      - The web app on your phone: user-guide/phone.md
+      - Keyboard shortcuts: user-guide/keyboard-shortcuts.md
+  - Android app:
+    - android/index.md
+    - Mail on the phone: android/mail.md
+    - Calendar, tasks and reminders: android/calendar-and-reminders.md
+    - Notes, lists and tables: android/notes.md
+    - The separate Notes app: android/notes-app.md
+    - Ask, dictation and sharing: android/assistant-and-sharing.md
+    - App settings: android/settings.md
+  - Admin guide:
+    - admin/index.md
+    - Install and run:
+      - Deployment: admin/deployment.md
+      - Scaling: admin/scaling.md
+      - Configuration: admin/configuration.md
+      - Reverse proxy: admin/reverse-proxy.md
+      - Upgrades: admin/upgrades.md
+      - Backups: admin/backups.md
+    - Users and sign-in:
+      - Sign-in and OIDC: admin/sign-in.md
+      - Users: admin/users.md
+      - Organisations and small businesses: admin/organisations.md
+      - Access policies: admin/access.md
+    - Mail:
+      - The mail server: admin/mail-server.md
+      - Account modes: admin/store-and-mirror.md
+      - Image proxy and VPN egress: admin/image-proxy.md
+    - Features:
+      - Models: admin/models.md
+      - Web search: admin/web-search.md
+      - Built-in calendars: admin/calendars.md
+      - Phone apps: admin/phone-apps.md
+      - Push notifications: admin/push.md
+      - Dictation server: admin/dictation.md
+      - Languages: admin/languages.md
+    - Operations:
+      - Security and permissions: admin/security.md
+      - Monitoring: admin/monitoring.md
+      - Error reports: admin/errors.md
+      - Troubleshooting: admin/troubleshooting.md
+  - Agents & API:
+    - agents/index.md
+    - Tokens and scopes: agents/tokens.md
+    - MCP for Claude Code and other agents: agents/mcp.md
+    - REST API: agents/rest-api.md
+    - Agent tools: agents/tools.md
+    - Skills: agents/skills.md
+    - Approvals for agents: agents/approvals.md
+  - Reference:
+    - reference/index.md
+    - Settings: reference/settings.md
+    - Environment variables: reference/environment.md
+    - Search operators: reference/search-operators.md
+    - Quick-add grammar: reference/quick-add.md
+    - Keyboard shortcuts: reference/keyboard-shortcuts.md
+    - Command line: reference/cli.md
+    - API routes: reference/api-routes.md
+  - Philosophy: philosophy.md
+  - Licence: license.md

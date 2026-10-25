@@ -1,0 +1,46 @@
+# Golden vectors for mailto: links (RFC 6068), which open mailr's composer.
+#
+# Run by frontend/src/lib/mailto.test.ts (vitest) and by Android's MailtoTest (JUnit, which reads the
+# copy in android/app/src/test/resources/interaction/; that copy is checked against this file in vitest).
+# Same restricted shape as quickadd-cases.yaml: `key: <json>` lines, `  - <json>` cases, `#` comments.
+#
+# The rules (frontend/src/lib/mailto.ts, android ui/Mailto.kt):
+# 1. The scheme is case-insensitive. Before `?`: addresses, separated by commas.
+# 2. `to`, `cc` and `bcc` fields add addresses and may repeat; `subject` and `body` set the text.
+#    Field names are case-insensitive. Every other field is ignored.
+# 3. Percent-decoding is UTF-8. `+` stays a plus sign. A broken escape is kept as written.
+# 4. Encoded words (RFC 2047) in the subject and in display names are decoded.
+# 5. An address needs an "@"; others are dropped. Each address is kept once per field.
+# 6. The body keeps its line breaks (CRLF becomes LF). The subject is one line.
+# 7. Addresses lose bidi controls and invisible characters (joiners too); names lose bidi controls.
+#    A link fills at most 50 recipients (To, Cc and Bcc together)
+#    and 50,000 characters of body; the unit tests on both sides check those limits.
+# Expected addresses are "email" or "Name <email>".
+cases:
+  - {"id": "plain", "url": "mailto:alice@example.com", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "upper-scheme", "url": "MAILTO:alice@example.com", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "empty", "url": "mailto:", "to": [], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "subject-body", "url": "mailto:alice@example.com?subject=Hi%20there&body=Line%20one%0D%0ALine%20two", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "Hi there", "body": "Line one\nLine two"}
+  - {"id": "several-to", "url": "mailto:alice@example.com,bob@example.org", "to": ["alice@example.com", "bob@example.org"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "to-field-adds", "url": "mailto:alice@example.com?to=bob@example.org&to=carol@example.net", "to": ["alice@example.com", "bob@example.org", "carol@example.net"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "cc-bcc", "url": "mailto:?cc=dana@example.com,erin@example.com&bcc=frank@example.com", "to": [], "cc": ["dana@example.com", "erin@example.com"], "bcc": ["frank@example.com"], "subject": "", "body": ""}
+  - {"id": "field-names-any-case", "url": "mailto:alice@example.com?Subject=Hello&CC=bob@example.org&BODY=x", "to": ["alice@example.com"], "cc": ["bob@example.org"], "bcc": [], "subject": "Hello", "body": "x"}
+  - {"id": "plus-stays", "url": "mailto:alice+news@example.com?subject=1+1", "to": ["alice+news@example.com"], "cc": [], "bcc": [], "subject": "1+1", "body": ""}
+  - {"id": "encoded-amp-in-body", "url": "mailto:alice@example.com?body=Tom%20%26%20Jerry%3D1", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "", "body": "Tom & Jerry=1"}
+  - {"id": "utf8", "url": "mailto:alice@example.com?subject=Caf%C3%A9%20%E2%98%95", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "Café ☕", "body": ""}
+  - {"id": "encoded-word-subject", "url": "mailto:alice@example.com?subject=%3D%3Futf-8%3FB%3FQ2Fmw6k%3D%3F%3D", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "Café", "body": ""}
+  - {"id": "encoded-word-q", "url": "mailto:alice@example.com?subject=%3D%3Fiso-8859-1%3FQ%3FGr%3DFC%3DDFe_aus_Wien%3F%3D", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "Grüße aus Wien", "body": ""}
+  - {"id": "display-name", "url": "mailto:%22Dana%20Lee%22%20%3Cdana@example.com%3E", "to": ["Dana Lee <dana@example.com>"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "display-name-comma", "url": "mailto:?to=%22Lee%2C%20Dana%22%20%3Cdana@example.com%3E%2Cbob@example.org", "to": ["Lee, Dana <dana@example.com>", "bob@example.org"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "not-an-address-dropped", "url": "mailto:hello,alice@example.com", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "kept-once", "url": "mailto:alice@example.com?to=Alice@Example.com", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "other-fields-ignored", "url": "mailto:alice@example.com?in-reply-to=%3C1@x%3E&from=evil@example.com&attach=/etc/passwd", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "broken-escape-kept", "url": "mailto:alice@example.com?subject=100%25%20sure%20%ZZ", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "100% sure %ZZ", "body": ""}
+  - {"id": "subject-one-line", "url": "mailto:alice@example.com?subject=a%0D%0Ab", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "a b", "body": ""}
+  - {"id": "fragment-ignored", "url": "mailto:alice@example.com?subject=Hi#part", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "Hi", "body": ""}
+  - {"id": "no-value", "url": "mailto:alice@example.com?subject&body=", "to": ["alice@example.com"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "bidi-address-cleaned", "url": "mailto:%E2%80%AEmoc.ynapmoc@evil.example", "to": ["moc.ynapmoc@evil.example"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "invisible-address-cleaned", "url": "mailto:?cc=ceo%E2%80%8B@example.com,ann%E2%81%A0%E2%80%8D@example.com", "to": [], "cc": ["ceo@example.com", "ann@example.com"], "bcc": [], "subject": "", "body": ""}
+  - {"id": "bidi-name-cleaned", "url": "mailto:%22Dana%E2%80%AE%20Lee%22%20%3Cdana@example.com%3E", "to": ["Dana Lee <dana@example.com>"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "control-in-address-dropped", "url": "mailto:a%07b@example.com,bob@example.org", "to": ["bob@example.org"], "cc": [], "bcc": [], "subject": "", "body": ""}
+  - {"id": "not-mailto", "url": "https://example.com/?to=alice@example.com", "none": true}

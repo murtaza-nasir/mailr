@@ -1,0 +1,558 @@
+.compose-dock {
+  position: fixed;
+  inset-inline-end: calc(var(--rail-w) + 8px);
+  transition: inset-inline-end var(--dur) var(--ease);
+  bottom: 0;
+  z-index: 55;
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  pointer-events: none;
+}
+.compose-win {
+  pointer-events: auto;
+  width: 540px;
+  height: min(620px, calc(100vh - 80px));
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+}
+[data-theme='dark'] .compose-win {
+  background: var(--surface-container);
+}
+.compose-win.minimized {
+  width: 280px;
+  height: 40px;
+}
+.compose-win.maximized {
+  position: fixed;
+  inset: 5vh 5vw;
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-md);
+  z-index: 85;
+}
+.compose-max-scrim {
+  pointer-events: auto;
+  position: fixed;
+  inset: 0;
+  z-index: 84;
+  background: var(--scrim);
+}
+.compose-head {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 40px;
+  padding-block: 0;
+  padding-inline: 16px 8px;
+  background: var(--surface-high);
+  cursor: pointer;
+  flex: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+[data-theme='light'] .compose-head {
+  background: #eff5f7;
+}
+.compose-head .title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.compose-head .icon-btn {
+  --icon-btn: calc(28px * var(--dz, 1));
+  --icon: calc(16px * var(--dzi, 1));
+}
+
+.compose-form {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+/* Send's complaint about the recipients (ComposeForm), under the address fields. */
+.compose-field-error {
+  margin: 4px 16px 0;
+  color: var(--danger);
+  font-size: 13px;
+}
+.compose-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  margin: 0 16px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 14px;
+}
+.compose-field > .lbl {
+  color: var(--text-3);
+  flex: none;
+  min-width: 34px;
+}
+.compose-field input.plain,
+.compose-field select.plain {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  padding: 8px 0;
+}
+.compose-field select.plain {
+  cursor: pointer;
+}
+.compose-field .cc-links {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}
+.compose-field .cc-links button {
+  color: var(--text-2);
+  font-size: 14px;
+}
+.compose-field .cc-links button:hover {
+  text-decoration: underline;
+}
+
+.recips {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 4px 0;
+}
+.recips input {
+  flex: 1;
+  min-width: 120px;
+  border: 0;
+  background: transparent;
+  padding: 4px 0;
+}
+.recip-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  max-width: 260px;
+  padding-block: 0;
+  padding-inline: 2px 4px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  background: var(--surface);
+}
+[data-theme='dark'] .recip-chip {
+  background: var(--surface-high);
+}
+.recip-chip.invalid {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.recip-chip .avatar {
+  width: 20px;
+  height: 20px;
+  font-size: 10px;
+}
+.recip-chip .nm {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.recip-chip button {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  color: var(--text-3);
+}
+.recip-chip button:hover {
+  background: var(--hover);
+}
+.recip-chip button .lucide {
+  width: 14px;
+  height: 14px;
+}
+.suggest {
+  position: absolute;
+  top: 100%;
+  inset-inline-start: 0;
+  z-index: 70;
+  min-width: 320px;
+  max-width: 440px;
+  padding: 6px 0;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-2);
+}
+[data-theme='dark'] .suggest {
+  background: var(--surface-high);
+}
+.suggest-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 6px 16px;
+  text-align: start;
+}
+.suggest-item[data-active='true'],
+.suggest-item:hover {
+  background: var(--hover);
+}
+.suggest-item .who {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.suggest-item .who span:last-child {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+.editor-wrap {
+  flex: 1;
+  min-height: 120px;
+  overflow: auto;
+  padding: 8px 16px;
+  cursor: text;
+}
+.editor-wrap .ProseMirror {
+  min-height: 100%;
+  outline: none;
+  font-size: 14px;
+  line-height: 20px;
+  word-break: break-word;
+}
+.editor-wrap .ProseMirror p {
+  margin: 0;
+}
+.editor-wrap .ProseMirror blockquote {
+  margin-block: 0;
+  margin-inline: 0.8ex 0;
+  border-inline-start: 1px solid var(--border);
+  padding-inline-start: 1ex;
+  color: var(--text-2);
+}
+.editor-wrap .ProseMirror ul,
+.editor-wrap .ProseMirror ol {
+  padding-inline-start: 24px;
+  margin: 4px 0;
+}
+.editor-wrap .ProseMirror img {
+  max-width: 100%;
+}
+.editor-wrap .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: inline-start;
+  color: var(--text-3);
+  pointer-events: none;
+  height: 0;
+}
+.editor-wrap .signature {
+  color: var(--text-3);
+}
+.show-trimmed {
+  margin: 4px 0;
+}
+
+.fmt-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin: 0 16px 4px;
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-container);
+}
+[data-theme='light'] .fmt-bar {
+  background: #eff5f7;
+}
+.fmt-bar .icon-btn {
+  --icon-btn: calc(30px * var(--dz, 1));
+  --icon: calc(18px * var(--dzi, 1));
+  border-radius: var(--radius-xs);
+}
+/* An editor in a bordered box (signatures, templates): the bar spans the box, inset by the same
+   small gap on three sides, and the text lines up with the first button's icon. */
+.card.editor-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+.editor-card > .fmt-bar {
+  margin: 6px 6px 0;
+}
+.fmt-bar .sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 4px;
+  background: var(--divider);
+}
+
+.compose-atts {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 16px;
+}
+.compose-att {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding-block: 0;
+  padding-inline: 12px 4px;
+  border-radius: var(--radius-xs);
+  background: var(--surface-container);
+  font-size: 13px;
+  max-width: 440px;
+}
+[data-theme='light'] .compose-att {
+  background: #f5f5f5;
+}
+.compose-att .nm {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--primary);
+  font-weight: 500;
+}
+.compose-att .progress {
+  width: 80px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--divider);
+  overflow: hidden;
+}
+.compose-att .progress span {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+}
+
+.compose-foot {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-block: 10px 12px;
+  padding-inline: 16px 12px;
+  flex: none;
+}
+.send-split {
+  display: inline-flex;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.send-split button {
+  height: 36px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: inherit;
+}
+.send-split .main-btn {
+  padding-block: 0;
+  padding-inline: 20px 16px;
+}
+.send-split .more-btn {
+  width: 32px;
+  display: grid;
+  place-items: center;
+  border-inline-start: 1px solid rgba(0, 0, 0, 0.2);
+}
+.send-split button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+}
+.send-split button:disabled {
+  opacity: 0.6;
+}
+.compose-foot .icon-btn {
+  --icon-btn: calc(36px * var(--dz, 1));
+}
+.compose-foot .status {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-inline-start: 4px;
+  white-space: nowrap;
+}
+.dropzone {
+  position: absolute;
+  inset: 40px 0 0 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  font-size: 18px;
+  font-family: var(--font-display);
+  border: 2px dashed var(--primary);
+  border-radius: var(--radius-sm);
+  opacity: 0.95;
+}
+
+.ai-bar {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  margin: 4px 16px;
+  padding: 8px;
+  border-radius: var(--radius-md);
+  background: var(--primary-container);
+}
+.ai-bar textarea {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--on-primary-container);
+  padding: 6px;
+  font: inherit;
+  line-height: 20px;
+  resize: none;
+  height: 32px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+.ai-bar > .lucide { margin-bottom: 7px; flex: none; }
+.ai-bar textarea::placeholder {
+  color: var(--on-primary-container);
+  opacity: 0.7;
+}
+.ai-bar .lucide {
+  color: var(--on-primary-container);
+}
+
+/* With the calendar/tasks/assistant panel open, compose windows dock to its left (as Gmail
+   does), so the panel stays readable and usable next to a draft. */
+body:has(.side-panel) .compose-dock {
+  inset-inline-end: calc(var(--rail-w) + var(--panel-w) + 16px);
+}
+
+@media (max-width: 900px) {
+  body:has(.side-panel) .compose-dock,
+  .compose-dock {
+    inset-inline-end: 0;
+    inset-inline-start: 0;
+  }
+  .compose-win,
+  .compose-win.minimized {
+    position: fixed;
+    inset: 0;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+  }
+  .compose-win.minimized {
+    top: auto;
+    height: 48px;
+  }
+}
+.editor-wrap.signature p {
+  margin: 0;
+}
+
+/* Fields inside the compose box show their own focus state, not the global ring. */
+.recips input:focus-visible,
+.compose-field input.plain:focus-visible,
+.compose-field select.plain:focus-visible,
+.editor-wrap .ProseMirror:focus-visible,
+.ai-bar textarea:focus-visible,
+.chat-input textarea:focus-visible,
+.search-box input:focus-visible,
+.menu-search input:focus-visible {
+  outline: none;
+}
+
+.compose-notice {
+  margin: 8px 12px 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm, 8px);
+  font-size: 13px;
+  background: var(--warning-container, #fef7e0);
+  color: var(--warning-fg);
+}
+.compose-notice a {
+  color: inherit;
+  font-weight: 600;
+}
+.compose-notice.restored {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-block: 4px;
+}
+.compose-foot .status {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.send-split {
+  flex: none;
+}
+.send-split .main-btn {
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .compose-foot {
+    flex-wrap: wrap;
+    row-gap: 4px;
+  }
+}
+
+/* Assistant / Help me write changed the draft: what changed, with Undo. */
+.assist-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 4px 12px;
+  padding-block: 6px;
+  padding-inline: 10px 6px;
+  border-radius: var(--radius-md);
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  font-size: 13px;
+}
+.assist-note > svg { margin-top: 3px; flex: none; }
+.assist-note-text { flex: 1; min-width: 0; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.assist-note-text > span:first-child { font-weight: 500; }
+.assist-change del { opacity: 0.75; }
+.assist-change ins { text-decoration: none; font-weight: 500; background: color-mix(in srgb, var(--primary) 18%, transparent); border-radius: 3px; padding: 0 2px; }
+.assist-note .btn.text { color: inherit; }
+/* Proposed recipients: warning colours, nothing applied until Accept. */
+.assist-note.assist-proposal { background: var(--primary-container); color: var(--on-primary-container); }
+.assist-proposal .assist-change { flex-basis: 100%; }
+.assist-proposal .assist-change del { text-decoration: line-through; }
+.compose-form.assist-flash .editor-wrap { animation: assist-flash 1.6s var(--ease); }
+@keyframes assist-flash {
+  0% { background: color-mix(in srgb, var(--primary) 14%, transparent); }
+  100% { background: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .compose-form.assist-flash .editor-wrap { animation: none; }
+}
+
+/* The inline slot while a reply or a draft loads (ConversationView openInline). */
+.compose-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 120px;
+  padding: 16px;
+  color: var(--text-2);
+  font-size: 14px;
+}

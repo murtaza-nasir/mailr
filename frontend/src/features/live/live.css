@@ -1,0 +1,70 @@
+/* Live editing bars (features/live/LiveBars.tsx), shared by every editor and theme. */
+.live-editing {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 12px;
+  padding: 4px 10px;
+  border-radius: var(--radius-md, 10px);
+  font-size: 13px;
+  color: var(--text-2, inherit);
+  background: color-mix(in srgb, var(--primary, #3366cc) 8%, transparent);
+}
+.live-dot {
+  width: 8px;
+  height: 8px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--primary, #3366cc);
+  animation: live-pulse 1.2s ease-in-out infinite;
+}
+@keyframes live-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 1; }
+}
+.live-conflict {
+  margin: 4px 12px;
+  padding-block: 6px;
+  padding-inline: 10px 8px;
+  border-radius: var(--radius-md, 10px);
+  background: var(--warning-container, #fef7e0);
+  color: var(--warning-fg, inherit);
+  font-size: 13px;
+}
+.live-conflict-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 8px;
+}
+.live-conflict-head .grow { flex: 1 1 200px; min-width: 0; }
+.live-conflict .btn.text { color: inherit; }
+.live-compare { margin-top: 6px; display: grid; gap: 8px; }
+.live-compare-label { font-weight: 600; margin-bottom: 2px; }
+.live-compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.live-compare-side {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm, 8px);
+  background: var(--surface, #fff);
+  color: var(--text, inherit);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.live-compare-side del, .live-compare-side ins { text-decoration: none; }
+.live-compare-side.mine del { background: color-mix(in srgb, var(--danger, #c00) 10%, transparent); }
+.live-compare-side.theirs ins { background: color-mix(in srgb, var(--primary, #36c) 12%, transparent); }
+@media (max-width: 600px) {
+  .live-compare-row { grid-template-columns: 1fr; }
+}
+/* What a remote change replaced, for a moment. */
+.live-changed { animation: live-changed 2.4s ease-out; border-radius: 4px; }
+@keyframes live-changed {
+  0% { background: color-mix(in srgb, var(--primary, #36c) 22%, transparent); }
+  100% { background: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .live-dot, .live-changed { animation: none; }
+}

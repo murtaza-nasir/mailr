@@ -1,0 +1,73 @@
+# Golden vectors for the citation marker grammar (backend/mailr/intel/citegrammar.py).
+#
+# Run by backend/tests/test_citegrammar.py (pytest), frontend/src/features/rail/assistant/citeGrammar.test.ts
+# (vitest) and Android's CiteGrammarTest (JUnit, which reads the copy in
+# android/app/src/test/resources/interaction/; that copy is checked against this file in vitest).
+# Same restricted shape as quickadd-cases.yaml: `key: <json>` lines, `  - <json>` cases, `#` comments.
+#
+# A marker is `[[kind:id…]]`, or a legacy `[c:12]`, `[event:uid]`, `[task:uid]` that is not the text of a
+# Markdown link. The rules:
+# 1. Kind: m, p, c, r, event, task, web, note, table, in any case, with spaces around the colon; message, msg, passage,
+#    conversation, thread and recording are read as m, p, c, c, c and r.
+# 2. A quoted part ("…", “…”) runs from the first quotation mark to the last. It is the quote of a
+#    message or recording, or a title the model added to an event or task (ignored, used as the fallback).
+# 3. Spaces around "@" are dropped; "|" and "," before the quote are allowed.
+# 4. m, p and c take digits; r takes digits and an optional @seconds or @clock; event and task take
+#    the first word. An event's occurrence is the last "@" followed by an ISO date or instant; a task
+#    keeps "@…" in its id. web takes the first word, which must start with http:// or https:// and a
+#    host; its quoted part is a title. note takes the first word: a note id of letters and digits, and
+#    after "#" one item id (letters, digits and dashes), which is `at`; its quoted part is a title. Words
+#    after the id without quotation marks are ignored.
+# 5. `markers`: what can be read, in order. `clean`: the text a reader sees where no numbered link
+#    replaced a marker: a marker that can be read is left out with the spaces before it; one that names
+#    a kind but cannot be read becomes its quoted text (or nothing); `[[…]]` without a kind stays; a marker
+#    left open at the end is dropped. `stream`: the same while the answer streams, where a `[` or `[[` at
+#    the end is hidden too. Numbered links `[n](mailr-cite:n)` stay as they are.
+cases:
+  - {"id": "event-title-owner-report", "in": "mentions \"until 11 AM\" [[event:2ad60b43-fa20-4375-955f-8a5e03b55a29@2026-05-20T13:00:00+00:00 \"Chinatown walk (until ~11 AM)\"]], but that's not it.", "markers": [{"kind": "event", "id": "2ad60b43-fa20-4375-955f-8a5e03b55a29", "at": "2026-05-20T13:00:00+00:00", "quote": "Chinatown walk (until ~11 AM)"}], "clean": "mentions \"until 11 AM\", but that's not it.", "stream": "mentions \"until 11 AM\", but that's not it."}
+  - {"id": "event-plain", "in": "Lunch [[event:2ad60b43-fa20-4375-955f-8a5e03b55a29@2026-05-20T13:00:00+00:00]].", "markers": [{"kind": "event", "id": "2ad60b43-fa20-4375-955f-8a5e03b55a29", "at": "2026-05-20T13:00:00+00:00", "quote": null}], "clean": "Lunch.", "stream": "Lunch."}
+  - {"id": "event-spaces-capital", "in": "Lunch [[ Event : 2ad60b43-fa20-4375-955f-8a5e03b55a29 @ 2026-05-20T13:00:00Z ]].", "markers": [{"kind": "event", "id": "2ad60b43-fa20-4375-955f-8a5e03b55a29", "at": "2026-05-20T13:00:00Z", "quote": null}], "clean": "Lunch.", "stream": "Lunch."}
+  - {"id": "event-uid-with-at", "in": "See [[event:abc@google.com@20261005T090000Z]] now", "markers": [{"kind": "event", "id": "abc@google.com", "at": "20261005T090000Z", "quote": null}], "clean": "See now", "stream": "See now"}
+  - {"id": "event-uid-with-at-no-occ", "in": "See [[event:abc@google.com]] now", "markers": [{"kind": "event", "id": "abc@google.com", "at": null, "quote": null}], "clean": "See now", "stream": "See now"}
+  - {"id": "event-title-pipe", "in": "See [[event:2ad60b43-fa20-4375-955f-8a5e03b55a29@2026-05-20 | \"Walk\"]]", "markers": [{"kind": "event", "id": "2ad60b43-fa20-4375-955f-8a5e03b55a29", "at": "2026-05-20", "quote": "Walk"}], "clean": "See", "stream": "See"}
+  - {"id": "event-title-unquoted", "in": "See [[event:2ad60b43-fa20-4375-955f-8a5e03b55a29@2026-05-20T13:00:00+00:00 Chinatown walk]] ok", "markers": [{"kind": "event", "id": "2ad60b43-fa20-4375-955f-8a5e03b55a29", "at": "2026-05-20T13:00:00+00:00", "quote": null}], "clean": "See ok", "stream": "See ok"}
+  - {"id": "event-curly-title", "in": "See [[event:2ad60b43-fa20-4375-955f-8a5e03b55a29@2026-05-20T13:00:00+00:00 “Walk”]] ok", "markers": [{"kind": "event", "id": "2ad60b43-fa20-4375-955f-8a5e03b55a29", "at": "2026-05-20T13:00:00+00:00", "quote": "Walk"}], "clean": "See ok", "stream": "See ok"}
+  - {"id": "task-plain", "in": "Due [[task:t-77]].", "markers": [{"kind": "task", "id": "t-77", "at": null, "quote": null}], "clean": "Due.", "stream": "Due."}
+  - {"id": "task-with-date-suffix", "in": "Due [[task:abc@2026-10-02]].", "markers": [{"kind": "task", "id": "abc@2026-10-02", "at": null, "quote": null}], "clean": "Due.", "stream": "Due."}
+  - {"id": "task-title", "in": "Due [[task:t-77 \"Record the class\"]].", "markers": [{"kind": "task", "id": "t-77", "at": null, "quote": "Record the class"}], "clean": "Due.", "stream": "Due."}
+  - {"id": "message-quote", "in": "Due Sep 30 [[m:12 \"nominations close\"]]. Next", "markers": [{"kind": "m", "id": "12", "at": null, "quote": "nominations close"}], "clean": "Due Sep 30. Next", "stream": "Due Sep 30. Next"}
+  - {"id": "message-quote-inner-quotes", "in": "She said [[m:5 \"she wrote \"yes\" twice\"]].", "markers": [{"kind": "m", "id": "5", "at": null, "quote": "she wrote \"yes\" twice"}], "clean": "She said.", "stream": "She said."}
+  - {"id": "message-pipe-quote", "in": "See [[m:5|\"x y\"]] and [[m:6, “z”]].", "markers": [{"kind": "m", "id": "5", "at": null, "quote": "x y"}, {"kind": "m", "id": "6", "at": null, "quote": "z"}], "clean": "See and.", "stream": "See and."}
+  - {"id": "message-long-name", "in": "See [[message:5]] and [[conversation:9]].", "markers": [{"kind": "m", "id": "5", "at": null, "quote": null}, {"kind": "c", "id": "9", "at": null, "quote": null}], "clean": "See and.", "stream": "See and."}
+  - {"id": "conversation-and-legacy", "in": "See [[c:3065]] and [c:77].", "markers": [{"kind": "c", "id": "3065", "at": null, "quote": null}, {"kind": "c", "id": "77", "at": null, "quote": null}], "clean": "See and.", "stream": "See and."}
+  - {"id": "passage", "in": "See [[p:88123]]!", "markers": [{"kind": "p", "id": "88123", "at": null, "quote": null}], "clean": "See!", "stream": "See!"}
+  - {"id": "recording-moment", "in": "We ship Friday [[r:12@754 \"agreed to ship\"]]. Then [[r:13@1:02:03]] and [[r:14]].", "markers": [{"kind": "r", "id": "12", "at": "754", "quote": "agreed to ship"}, {"kind": "r", "id": "13", "at": "1:02:03", "quote": null}, {"kind": "r", "id": "14", "at": null, "quote": null}], "clean": "We ship Friday. Then and.", "stream": "We ship Friday. Then and."}
+  - {"id": "legacy-event", "in": "See [event:abc@2026-10-02T15:00:00Z] and [task:t1].", "markers": [{"kind": "event", "id": "abc", "at": "2026-10-02T15:00:00Z", "quote": null}, {"kind": "task", "id": "t1", "at": null, "quote": null}], "clean": "See and.", "stream": "See and."}
+  - {"id": "web-plain", "in": "Version 7.2 is stable [[web:https://www.kernel.org/releases.html?x=1&y=2]].", "markers": [{"kind": "web", "id": "https://www.kernel.org/releases.html?x=1&y=2", "at": null, "quote": null}], "clean": "Version 7.2 is stable.", "stream": "Version 7.2 is stable."}
+  - {"id": "web-title", "in": "Per the guide [[web:https://docs.example.org/guide \"Install guide\"]] it works", "markers": [{"kind": "web", "id": "https://docs.example.org/guide", "at": null, "quote": "Install guide"}], "clean": "Per the guide it works", "stream": "Per the guide it works"}
+  - {"id": "web-spaces-capital", "in": "Open late [[ Web : https://example.com/hours ]].", "markers": [{"kind": "web", "id": "https://example.com/hours", "at": null, "quote": null}], "clean": "Open late.", "stream": "Open late."}
+  - {"id": "web-at-in-path", "in": "A post [[web:https://blog.example.com/@someone/post-1]] says so", "markers": [{"kind": "web", "id": "https://blog.example.com/@someone/post-1", "at": null, "quote": null}], "clean": "A post says so", "stream": "A post says so"}
+  - {"id": "web-not-a-url", "in": "See [[web:example.com \"Example site\"]] here", "markers": [], "clean": "See Example site here", "stream": "See Example site here"}
+  - {"id": "web-no-host", "in": "See [[web:https:// \"Nothing\"]] here", "markers": [], "clean": "See Nothing here", "stream": "See Nothing here"}
+  - {"id": "partial-web", "in": "Stable since May [[web:https://www.kernel.org/rel", "markers": [], "clean": "Stable since May", "stream": "Stable since May"}
+  - {"id": "markdown-link-not-legacy", "in": "Open [event:x](https://example.com) now", "markers": [], "clean": "Open [event:x](https://example.com) now", "stream": "Open [event:x](https://example.com) now"}
+  - {"id": "unknown-kind-with-title", "in": "See [[doc:42 \"Budget memo\"]] here", "markers": [], "clean": "See Budget memo here", "stream": "See Budget memo here"}
+  - {"id": "note-plain", "in": "On your list [[note:n3k9x2m4q7ab]].", "markers": [{"kind": "note", "id": "n3k9x2m4q7ab", "at": null, "quote": null}], "clean": "On your list.", "stream": "On your list."}
+  - {"id": "note-item", "in": "Milk is there [[note:n3k9x2m4q7ab#0192f0c4-7b1e-7c3a-9d2e-4f5a6b7c8d9e]] already.", "markers": [{"kind": "note", "id": "n3k9x2m4q7ab", "at": "0192f0c4-7b1e-7c3a-9d2e-4f5a6b7c8d9e", "quote": null}], "clean": "Milk is there already.", "stream": "Milk is there already."}
+  - {"id": "note-title-spaces-capital", "in": "See [[ Note : n3k9x2m4q7ab \"Shopping\"]] now", "markers": [{"kind": "note", "id": "n3k9x2m4q7ab", "at": null, "quote": "Shopping"}], "clean": "See now", "stream": "See now"}
+  - {"id": "note-bad-id", "in": "See [[note:not/an/id \"Shopping\"]] now", "markers": [], "clean": "See Shopping now", "stream": "See Shopping now"}
+  - {"id": "note-empty-item", "in": "See [[note:n3k9x2m4q7ab#]] now", "markers": [], "clean": "See now", "stream": "See now"}
+  - {"id": "bad-id-with-title", "in": "See [[m:abc \"Budget memo\"]] here", "markers": [], "clean": "See Budget memo here", "stream": "See Budget memo here"}
+  - {"id": "bad-id-no-title", "in": "See [[m:abc]] here", "markers": [], "clean": "See here", "stream": "See here"}
+  - {"id": "not-a-marker", "in": "The list [[1,2],[3,4]] stays and [[wiki page]] too.", "markers": [], "clean": "The list [[1,2],[3,4]] stays and [[wiki page]] too.", "stream": "The list [[1,2],[3,4]] stays and [[wiki page]] too."}
+  - {"id": "server-link-kept", "in": "Lunch [1](mailr-cite:1) and [2](mailr-cite:2).", "markers": [], "clean": "Lunch [1](mailr-cite:1) and [2](mailr-cite:2).", "stream": "Lunch [1](mailr-cite:1) and [2](mailr-cite:2)."}
+  - {"id": "partial-event", "in": "Lunch [[event:2ad60b43-fa20-4375-955f-8a5e03b55a29@2026-05-2", "markers": [], "clean": "Lunch", "stream": "Lunch"}
+  - {"id": "partial-open", "in": "Lunch at noon [", "markers": [], "clean": "Lunch at noon [", "stream": "Lunch at noon"}
+  - {"id": "partial-after-link", "in": "Lunch [1](mailr-cite:1) then [[m:1", "markers": [], "clean": "Lunch [1](mailr-cite:1) then", "stream": "Lunch [1](mailr-cite:1) then"}
+  - {"id": "newline-not-marker", "in": "a [[m:1\nb]] c", "markers": [], "clean": "a [[m:1\nb]] c", "stream": "a [[m:1\nb]] c"}
+# Tables: a table, or a row after "#" (a UUID); spaces around "#" are dropped.
+  - {"id": "table-plain", "in": "See [[table:t3k9x2m4q7ab]].", "markers": [{"kind": "table", "id": "t3k9x2m4q7ab", "at": null, "quote": null}], "clean": "See.", "stream": "See."}
+  - {"id": "table-row", "in": "Logged [[table:t3k9x2m4q7ab#0192f0c4-5b6a-7c8d-9e0f-a1b2c3d4e5f6]] today", "markers": [{"kind": "table", "id": "t3k9x2m4q7ab", "at": "0192f0c4-5b6a-7c8d-9e0f-a1b2c3d4e5f6", "quote": null}], "clean": "Logged today", "stream": "Logged today"}
+  - {"id": "table-row-spaces-title", "in": "Squat [[ Table : t3k9x2m4q7ab # 0192F0C4-5B6A-7C8D-9E0F-A1B2C3D4E5F6 \"Squat, 3 Oct\"]] done", "markers": [{"kind": "table", "id": "t3k9x2m4q7ab", "at": "0192f0c4-5b6a-7c8d-9e0f-a1b2c3d4e5f6", "quote": "Squat, 3 Oct"}], "clean": "Squat done", "stream": "Squat done"}
+  - {"id": "table-bad-id-with-title", "in": "See [[table:workouts \"Workouts\"]] here", "markers": [], "clean": "See Workouts here", "stream": "See Workouts here"}
+  - {"id": "table-bad-row", "in": "See [[table:t3k9x2m4q7ab#12]] here", "markers": [], "clean": "See here", "stream": "See here"}

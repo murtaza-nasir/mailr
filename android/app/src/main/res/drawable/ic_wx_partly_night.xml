@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Weather: partly cloudy (night), for the Agenda widget. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24">
+    <group android:translateX="-1" android:translateY="-1.5" android:scaleX="0.62" android:scaleY="0.62">
+        <path android:fillColor="#FFE7C76B" android:pathData="M15.2,3.2a8.6,8.6 0 1,0 5.6,13.9a7,7 0 0,1 -5.6,-13.9z" />
+    </group>
+    <group android:translateY="1.5">
+        <path android:fillColor="#FFAEBBCB" android:pathData="M6.6,19H17.4A3.6,3.6 0 0,0 17.9,11.84A5.6,5.6 0 0,0 7.3,10.9A4.05,4.05 0 0,0 6.6,19Z" />
+    </group>
+</vector>

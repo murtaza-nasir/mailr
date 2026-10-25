@@ -1,0 +1,1302 @@
+/* Workspace (internal id 'office'): a three-pane desktop workspace. Neutral greys, a deep ocean
+   title bar, 4px corners, white panels floating on a grey canvas.
+   Everything here is scoped by [data-ui-theme='office']. */
+
+[data-ui-theme='office'] {
+  --font: 'Noto Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Noto Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --topbar-h: 48px;
+  --rail-w: 0px;
+  --panel-w: 340px;
+  --o-list-w: clamp(320px, 31vw, 440px);
+  --dur: 100ms;
+}
+[data-ui-theme='office'][data-theme='light'] {
+  --bg: #f0f0f0;
+  --surface: #ffffff;
+  --surface-dim: #fafafa;
+  --surface-container: #f5f5f5;
+  --surface-high: #ebebeb;
+  --text: #242424;
+  --text-2: #424242;
+  --text-3: #616161;
+  --border: #d1d1d1;
+  --divider: #e6e6e6;
+  --primary: #17607a;
+  --on-primary: #ffffff;
+  --primary-container: #e4f1f5;
+  --on-primary-container: #0e4a5e;
+  --compose-bg: #17607a;
+  --compose-fg: #ffffff;
+  --nav-active: #dcedf2;
+  --nav-active-fg: #242424;
+  --hover: rgba(0, 0, 0, 0.045);
+  --pressed: rgba(0, 0, 0, 0.09);
+  --row-selected: #cfe6ee;
+  --row-focused-bar: #17607a;
+  --row-read-bg: #ffffff;
+  --row-unread-bg: #ffffff;
+  --chip-bg: #f0f0f0;
+  --chip-fg: #424242;
+  --star: #b8401f;
+  --input-bg: #ffffff;
+  --input-bg-focus: #ffffff;
+  --focus-ring: #17607a;
+  --tooltip-bg: #242424;
+  --o-title-bg: #17607a;
+  --o-title-fg: #ffffff;
+  --o-title-hover: rgba(255, 255, 255, 0.14);
+  --o-search-bg: #ffffff;
+  --o-card-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.14);
+  --o-row-line: #f0f0f0;
+}
+[data-ui-theme='office'][data-theme='dark'] {
+  --bg: #141414;
+  --surface: #242424;
+  --surface-dim: #1f1f1f;
+  --surface-container: #1c1c1c;
+  --surface-high: #333333;
+  --text: #f0f0f0;
+  --text-2: #d6d6d6;
+  --text-3: #adadad;
+  --border: #4a4a4a;
+  --divider: #333333;
+  --primary: #6fc0d8;
+  --on-primary: #0a0a0a;
+  --primary-container: #0d3a48;
+  --on-primary-container: #c8e9f2;
+  --compose-bg: #17607a;
+  --compose-fg: #ffffff;
+  --nav-active: #0f4251;
+  --nav-active-fg: #ffffff;
+  --hover: rgba(255, 255, 255, 0.06);
+  --pressed: rgba(255, 255, 255, 0.1);
+  --row-selected: #0f4251;
+  --row-focused-bar: #6fc0d8;
+  --row-read-bg: #242424;
+  --row-unread-bg: #242424;
+  --chip-bg: #333333;
+  --chip-fg: #d6d6d6;
+  --star: #e8805e;
+  --input-bg: #2e2e2e;
+  --input-bg-focus: #2e2e2e;
+  --focus-ring: #6fc0d8;
+  --tooltip-bg: #f0f0f0;
+  --o-title-bg: #0c3440;
+  --o-title-fg: #ffffff;
+  --o-title-hover: rgba(255, 255, 255, 0.1);
+  --o-search-bg: #1a4654;
+  --o-card-shadow: 0 0 2px rgba(0, 0, 0, 0.5), 0 1px 2px rgba(0, 0, 0, 0.5);
+  --o-row-line: #2e2e2e;
+}
+
+/* ---------- controls: square corners ---------- */
+
+[data-ui-theme='office'] .icon-btn {
+  border-radius: var(--radius-sm);
+}
+[data-ui-theme='office'] .btn {
+  border-radius: var(--radius-sm);
+  font-family: var(--font);
+  font-weight: 600;
+}
+[data-ui-theme='office'] .btn.filled {
+  background: var(--compose-bg);
+  color: var(--compose-fg);
+}
+[data-ui-theme='office'] .checkbox {
+  border-radius: 3px;
+  border-width: 1.5px;
+}
+[data-ui-theme='office'] .checkbox.hit24 {
+  border-width: 0;
+}
+[data-ui-theme='office'] .checkbox.hit24::before {
+  border-radius: 3px;
+  border-width: 1.5px;
+}
+[data-ui-theme='office'] .popover {
+  border-radius: var(--radius-md);
+}
+
+/* ---------- frame ---------- */
+
+[data-ui-theme='office'] .office-app {
+  grid-template-rows: var(--topbar-h) 1fr;
+  grid-template-columns: 48px auto 1fr auto;
+  grid-template-areas:
+    'top top top top'
+    'appbar side main panel';
+}
+.office-app .o-titlebar {
+  grid-area: top;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-block: 0;
+  padding-inline: 6px 8px;
+  background: var(--o-title-bg);
+  color: var(--o-title-fg);
+  min-width: 0;
+}
+.office-app .o-titlebar .icon-btn {
+  --icon-btn: calc(36px * var(--dz, 1));
+  color: inherit;
+}
+.office-app .o-titlebar .icon-btn:hover {
+  background: var(--o-title-hover);
+}
+/* Ambrose's button on the dark title bar: the bar's own text colour. */
+.office-app .o-titlebar .ambrose-btn {
+  color: inherit;
+  border-color: color-mix(in srgb, currentColor 45%, transparent);
+}
+.office-app .o-titlebar .ambrose-btn svg {
+  color: inherit;
+}
+.office-app .o-titlebar .ambrose-btn:hover {
+  background: var(--o-title-hover);
+}
+.office-app .o-titlebar .ambrose-btn.active {
+  background: var(--o-title-hover);
+  border-color: currentColor;
+  color: inherit;
+}
+.office-app .o-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 216px;
+  flex: none;
+  padding-inline-start: 4px;
+  color: inherit;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+}
+.office-app .o-brand svg,
+.office-app .o-brand img,
+.office-app .o-brand .logo-mark {
+  width: 24px;
+  height: 24px;
+}
+.office-app .o-titlebar .search {
+  max-width: 580px;
+}
+.office-app .o-titlebar .search-box {
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--o-search-bg);
+  color: var(--text);
+}
+.office-app .o-titlebar .search-box .icon-btn {
+  --icon-btn: calc(28px * var(--dz, 1));
+  --icon: calc(18px * var(--dzi, 1));
+  color: var(--text-2);
+}
+.office-app .o-titlebar .search-box .icon-btn:hover {
+  background: var(--hover);
+}
+.office-app .o-titlebar .search-box.open {
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+.office-app .o-titlebar .search-box input {
+  font-size: 14px;
+}
+.office-app .o-titlebar .search-box input::placeholder {
+  color: var(--text-3);
+}
+.office-app .o-titlebar .search-panel {
+  top: 32px;
+  color: var(--text);
+}
+.office-app .o-title-right {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-inline-start: auto;
+  padding-inline-start: 12px;
+}
+.office-app .account-btn {
+  margin-inline-start: 4px;
+  padding: 2px;
+}
+.office-app .account-btn:hover {
+  background: var(--o-title-hover);
+}
+
+/* app bar */
+.office-app .o-appbar {
+  grid-area: appbar;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0 12px;
+}
+.office-app .o-app {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  color: var(--text-2);
+}
+.office-app .o-app svg {
+  width: 20px;
+  height: 20px;
+}
+.office-app .o-app:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+.office-app .o-app.active {
+  color: var(--primary);
+  background: var(--surface);
+  box-shadow: var(--o-card-shadow);
+}
+.office-app .o-app.active::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -4px;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+
+/* folder pane */
+.office-app .o-folders {
+  grid-area: side;
+  width: 228px;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-block: 6px 16px;
+  padding-inline: 4px 8px;
+}
+.office-app.folders-collapsed .o-folders {
+  display: none;
+}
+.office-app .o-new-mail {
+  display: none;
+}
+.office-app .o-section-head {
+  display: flex;
+  align-items: center;
+  height: var(--nav-h);
+  padding-inline-end: 2px;
+}
+.office-app .o-section-toggle {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 6px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: start;
+}
+.office-app .o-section-toggle span,
+.office-app .o-section-toggle .o-section-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.office-app .o-section-toggle:hover {
+  background: var(--hover);
+}
+.office-app .o-section-toggle .lucide {
+  width: 16px;
+  height: 16px;
+  color: var(--text-2);
+}
+.office-app .o-section {
+  margin-bottom: 6px;
+}
+.office-app .o-section .o-section {
+  margin: 0;
+}
+.office-app .o-section .o-section .o-section-toggle {
+  padding-inline-start: 28px;
+  font-weight: 400;
+}
+.office-app .o-section .o-section .nav-item {
+  padding-inline-start: 48px;
+}
+.office-app .o-folders .nav-item {
+  height: var(--nav-h);
+  gap: 10px;
+  padding-block: 0;
+  /* nested labels indent by --depth, so a label tree keeps its shape (an account's folders too) */
+  padding-inline: calc(28px + var(--depth, 0) * 12px) 8px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  letter-spacing: 0;
+  color: var(--text);
+}
+.office-app .o-folders .nav-item .lucide {
+  width: 18px;
+  height: 18px;
+  color: var(--text-2);
+}
+.office-app .o-folders .nav-item.active {
+  background: var(--nav-active);
+  color: var(--nav-active-fg);
+  font-weight: 600;
+}
+.office-app .o-folders .nav-item.active::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+.office-app .o-folders .nav-item.active .lucide {
+  color: var(--primary);
+}
+.office-app .o-folders .nav-item.unread {
+  font-weight: 600;
+}
+.office-app .o-folders .nav-item .count {
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 12px;
+}
+.office-app .o-folders .nav-item .label-dot span {
+  border-radius: 2px;
+  transform: none;
+  width: 10px;
+  height: 10px;
+}
+
+/* workspace */
+.office-app .o-work {
+  grid-area: main;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  min-height: 0;
+  padding-block: 8px;
+  padding-inline: 0 8px;
+}
+.office-app .o-split {
+  flex: 1;
+  display: flex;
+  gap: 8px;
+  min-height: 0;
+  min-width: 0;
+}
+.office-app .main.o-main {
+  flex: 1;
+  margin: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--o-card-shadow);
+}
+.office-app .o-split.with-reader .main.o-main {
+  flex: 0 0 var(--o-list-w);
+}
+.office-app.on-settings .o-split.with-reader .main.o-main {
+  flex: 1 1 60%;
+}
+.office-app .o-list-title {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px 2px;
+  flex: none;
+}
+.office-app .o-list-title h1 {
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ribbon */
+.office-app .ribbon {
+  flex: none;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--o-card-shadow);
+}
+.office-app .rb-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 2px 8px 0;
+}
+.office-app .rb-tab {
+  position: relative;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 14px;
+  color: var(--text-2);
+  border-radius: var(--radius-sm);
+}
+.office-app .rb-tab:hover {
+  color: var(--text);
+  background: var(--hover);
+}
+.office-app .rb-tab[aria-selected='true'] {
+  color: var(--text);
+  font-weight: 600;
+}
+.office-app .rb-tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 10px;
+  inset-inline-end: 10px;
+  bottom: 2px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+.office-app .rb-body {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  padding: 2px 8px 6px;
+  container-type: inline-size;
+  overflow: hidden;
+}
+.office-app .rb-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-inline-start: 6px;
+  margin-inline-start: 2px;
+  border-inline-start: 1px solid var(--divider);
+  flex: none;
+}
+.office-app .rb-seg {
+  display: flex;
+  gap: 2px;
+}
+.office-app .rb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--text);
+  white-space: nowrap;
+  /* Buttons never shrink: when the ribbon runs out of room, whole groups drop their labels and
+     then move to More (useToolbarFit). A cut label ("Com…") is worse than none. */
+  flex: none;
+}
+.office-app .rb-btn > svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  color: var(--primary);
+}
+.office-app .rb-btn:hover:not(:disabled) {
+  background: var(--hover);
+}
+.office-app .rb-btn:active:not(:disabled) {
+  background: var(--pressed);
+}
+.office-app .rb-btn:disabled {
+  color: var(--text-3);
+  opacity: 0.55;
+}
+.office-app .rb-btn:disabled > svg {
+  color: var(--text-3);
+}
+.office-app .rb-btn.icon-only .lbl {
+  display: none;
+}
+.office-app .rb-btn.on {
+  background: var(--nav-active);
+  font-weight: 600;
+}
+.office-app .rb-btn.primary {
+  padding-block: 0;
+  padding-inline: 10px 12px;
+  background: var(--compose-bg);
+  color: var(--compose-fg);
+  font-weight: 600;
+}
+.office-app .rb-btn.primary > svg {
+  color: inherit;
+}
+.office-app .rb-btn.primary:hover {
+  background: var(--compose-bg);
+  filter: brightness(1.08);
+}
+/* list */
+.office-app .cat-tabs-wrap {
+  border-bottom: 0;
+}
+.office-app .cat-tabs {
+  gap: 20px;
+  padding: 0 16px;
+  scroll-padding: 0 16px;
+}
+.office-app .cat-tab {
+  height: 36px;
+  min-width: 0;
+  max-width: none;
+  flex: none;
+  gap: 6px;
+  padding: 0 2px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-2);
+}
+.office-app .cat-tab .lucide {
+  display: none;
+}
+.office-app .cat-tab:hover {
+  background: none;
+  color: var(--text);
+}
+.office-app .cat-tab[aria-selected='true'] {
+  color: var(--text);
+  font-weight: 600;
+}
+/* The name keeps the width of its bold form, so selecting a tab never widens it. */
+.office-app .cat-tab-name {
+  display: inline-flex;
+  flex-direction: column;
+}
+.office-app .cat-tab-name::after {
+  content: attr(data-text);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  font-weight: 600;
+}
+.office-app .cat-tab[aria-selected='true']::after {
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  height: 3px;
+  border-radius: 2px;
+  bottom: 2px;
+}
+.office-app .cat-tab .new,
+.office-app .cat-tab .count,
+.office-app .cat-tab .due {
+  margin-inline-start: 0;
+  padding: 0;
+  background: none;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+.office-app .cat-tab .count {
+  color: var(--text-3);
+}
+.office-app .cat-tab .due {
+  color: var(--warning-fg);
+}
+.office-app .cat-tab .due.urgent {
+  color: var(--danger);
+}
+.office-app .cat-tab .ti-sep {
+  display: inline;
+}
+.office-app .cat-tab .ti-num,
+.office-app .cat-tab .ti-dot {
+  margin-inline-start: 0;
+}
+.office-app .toolbar {
+  height: 36px;
+  padding-block: 0;
+  padding-inline: 10px 8px;
+  border-bottom: 1px solid var(--divider);
+}
+.office-app .toolbar .icon-btn {
+  --icon-btn: calc(28px * var(--dz, 1));
+  --icon: calc(16px * var(--dzi, 1));
+}
+.office-app .toolbar .sel-group {
+  border-radius: var(--radius-sm);
+}
+.office-app .list-scroll {
+  background: var(--surface);
+}
+/* A message item is three 20px lines (two in compact) between its paddings and the rule below:
+   --o-row-h. An inbox section's rows sit under date headings (--o-group-h), so a section with one
+   conversation is a heading and a row tall, and its empty state is too (list.css .section-empty):
+   deleting the last row moves nothing below the section. */
+[data-ui-theme='office'] {
+  --o-row-h: 77px;
+  --o-group-h: 32px;
+}
+[data-ui-theme='office'][data-density='compact'] {
+  --o-row-h: 51px;
+}
+[data-ui-theme='office'][data-density='comfortable'] {
+  --o-row-h: 85px;
+}
+.office-app .list-pane,
+.office-app .list-pane.narrow {
+  --section-empty-h: calc(var(--o-group-h) + var(--o-row-h));
+}
+.office-app .o-row {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: var(--o-row-h);
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--o-row-line);
+  background: var(--surface);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+.office-app .o-row:hover {
+  background: var(--surface-container);
+}
+.office-app .o-row.selected,
+.office-app .o-row.focused {
+  background: var(--row-selected);
+}
+.office-app .o-row.unread::before,
+.office-app .o-row.focused::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--primary);
+}
+.office-app .o-row:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--focus-ring);
+}
+.office-app .o-lead {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  margin-top: 2px;
+}
+.office-app .o-avatar .avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+}
+.office-app .o-check {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+  border-radius: var(--radius-sm);
+}
+.office-app .o-row:hover .o-check,
+.office-app .o-row.selected .o-check {
+  display: grid;
+}
+.office-app .o-row:hover .o-avatar,
+.office-app .o-row.selected .o-avatar {
+  visibility: hidden;
+}
+.office-app .o-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.office-app .o-row .o-body {
+  gap: 0;
+}
+.office-app .o-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 20px;
+  white-space: nowrap;
+}
+.office-app .o-sender {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  color: var(--text);
+}
+.office-app .o-row.unread .o-sender {
+  font-weight: 600;
+}
+.office-app .o-draft {
+  color: var(--danger);
+  font-weight: 400;
+}
+.office-app .o-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  color: var(--text-3);
+}
+.office-app .o-icons .lucide {
+  width: 14px;
+  height: 14px;
+}
+.office-app .o-icons .o-flag {
+  color: var(--star);
+  fill: var(--star);
+}
+.office-app .o-hover {
+  display: none;
+  align-items: center;
+  flex: none;
+  margin-block: -2px;
+  margin-inline: 0 -4px;
+}
+.office-app .o-hover .icon-btn {
+  --icon-btn: calc(24px * var(--dz, 1));
+  --icon: calc(15px * var(--dzi, 1));
+  color: var(--text-2);
+}
+.office-app .o-hover .o-flag-on {
+  color: var(--star);
+}
+.office-app .o-row:hover .o-hover,
+.office-app .o-row:focus-within .o-hover {
+  display: flex;
+}
+.office-app .o-row:hover .o-icons,
+.office-app .o-row:focus-within .o-icons {
+  display: none;
+}
+.office-app .o-subject {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13.5px;
+  color: var(--text);
+}
+.office-app .o-row.unread .o-subject {
+  color: var(--primary);
+  font-weight: 600;
+}
+.office-app .o-count {
+  flex: none;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.office-app .o-date {
+  flex: none;
+  font-size: 12px;
+  color: var(--text-2);
+}
+.office-app .o-row.unread .o-date {
+  font-weight: 600;
+  color: var(--text);
+}
+.office-app .o-preview {
+  font-size: 13px;
+  color: var(--text-3);
+}
+.office-app .o-preview .label-chip {
+  height: 16px;
+  line-height: 16px;
+  font-size: 11px;
+  padding: 0 4px;
+  border-radius: 2px;
+  flex: none;
+}
+.office-app .o-snippet {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+[data-ui-theme='office'][data-density='compact'] .o-row {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  align-items: center;
+}
+[data-ui-theme='office'][data-density='compact'] .o-preview {
+  display: none;
+}
+[data-ui-theme='office'][data-density='compact'] .o-lead {
+  width: 20px;
+  height: 20px;
+  margin: 0;
+}
+[data-ui-theme='office'][data-density='compact'] .o-avatar {
+  display: none;
+}
+[data-ui-theme='office'][data-density='compact'] .o-check {
+  display: grid;
+}
+[data-ui-theme='office'][data-density='comfortable'] .o-row {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+/* An inbox section's header sits a level above the date groups: the tinted band with the name in
+   the accent colour, so "Unread" never reads like "Earlier this week". */
+.office-app .section-head {
+  color: var(--primary);
+}
+.office-app .o-group {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: var(--o-group-h);
+  padding: 0 12px;
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: start;
+}
+.office-app .o-group:hover {
+  background: var(--surface-container);
+}
+.office-app .o-caret {
+  width: 7px;
+  height: 7px;
+  border-inline-end: 1.5px solid var(--text-2);
+  border-bottom: 1.5px solid var(--text-2);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--dur) var(--ease);
+}
+.office-app .o-caret.closed {
+  transform: rotate(-45deg);
+}
+.office-app .o-group-count {
+  font-weight: 400;
+  color: var(--text-3);
+}
+
+/* reading area */
+.office-app .o-reader {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--o-card-shadow);
+  overflow: hidden;
+}
+.office-app .o-reader.hidden {
+  display: none;
+}
+.office-app .o-tabs {
+  display: flex;
+  align-items: flex-end;
+  flex: none;
+  height: 38px;
+  padding: 0 6px;
+  background: var(--surface-container);
+  border-bottom: 1px solid var(--divider);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.office-app .o-tabs::-webkit-scrollbar {
+  display: none;
+}
+.office-app .o-tab {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 0 1 220px;
+  min-width: 112px;
+  height: 32px;
+  padding-inline-end: 4px;
+  margin-bottom: -1px;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  color: var(--text-2);
+}
+.office-app .o-tab:hover {
+  background: var(--hover);
+}
+.office-app .o-tab.active {
+  background: var(--surface);
+  border-color: var(--divider);
+  color: var(--text);
+}
+.office-app .o-tab.active::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -1px;
+  inset-inline-end: -1px;
+  top: -1px;
+  height: 2px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: var(--primary);
+}
+.office-app .o-tab-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  padding-block: 0;
+  padding-inline: 10px 4px;
+  font-size: 13px;
+  text-align: start;
+}
+.office-app .o-tab-main .lucide {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  color: var(--text-3);
+}
+.office-app .o-tab.active .o-tab-main .lucide {
+  color: var(--primary);
+}
+.office-app .o-tab.active .o-tab-main {
+  font-weight: 600;
+}
+.office-app .o-tab.preview .o-tab-title {
+  font-style: italic;
+}
+.office-app .o-tab-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.office-app .o-tab .icon-btn.xs {
+  --icon-btn: calc(22px * var(--dz, 1));
+  --icon: calc(14px * var(--dzi, 1));
+  opacity: 0.75;
+}
+.office-app .o-tab .icon-btn.xs:hover {
+  opacity: 1;
+}
+.office-app .o-panels {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.office-app .o-compose {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.office-app .o-compose[hidden] {
+  display: none;
+}
+.office-app .o-empty {
+  padding: 24px;
+}
+.office-app .o-empty .lucide {
+  color: var(--primary);
+  opacity: 0.6;
+}
+.office-app .o-empty-title {
+  margin: 12px 0 4px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.office-app .o-empty-hint {
+  margin: 0 auto;
+  max-width: 300px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--text-3);
+}
+
+/* conversation inside the reading pane: messages as cards on a tinted canvas */
+.office-app .o-reader .conv-view-head {
+  height: 40px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--divider);
+}
+.office-app .o-reader .conv-view-head .icon-btn {
+  --icon-btn: calc(32px * var(--dz, 1));
+  --icon: calc(18px * var(--dzi, 1));
+}
+.office-app .o-reader .conv-scroll {
+  background: var(--surface-container);
+}
+.office-app .o-reader .conv-inner {
+  max-width: none;
+  padding: 0 12px 32px;
+}
+.office-app .o-reader .conv-subject {
+  padding: 14px 4px 10px;
+}
+.office-app .o-reader .conv-subject .title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+}
+.office-app .o-reader .conv-subject [aria-label='Open in full view'] {
+  display: none;
+}
+.office-app .o-reader .summary-card {
+  margin: 0 0 8px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--divider);
+}
+.office-app .o-reader .msg {
+  margin: 0 0 8px;
+  padding-block: 12px 0;
+  padding-inline: 12px 0;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.office-app .o-reader .msg.collapsed {
+  padding-block: 8px;
+  padding-inline: 12px 0;
+}
+.office-app .o-reader .msg:last-of-type {
+  border-bottom: 1px solid var(--divider);
+}
+.office-app .o-reader .older-pill {
+  margin: 0 0 8px;
+  border-color: transparent;
+}
+.office-app .o-reader .reply-bar {
+  padding: 8px 0;
+}
+.office-app .o-reader .reply-bar .btn {
+  height: 32px;
+  background: var(--surface);
+}
+.office-app .o-reader .inline-compose {
+  margin: 0 0 8px;
+}
+.office-app .o-reader .inline-compose > span {
+  display: none;
+}
+.office-app .o-reader .deleted-note {
+  margin: 0 0 8px;
+}
+
+/* settings in the workspace */
+.office-app .settings-head h1 {
+  font-weight: 600;
+  font-size: 20px;
+}
+.office-app .settings-tab.active {
+  color: var(--text);
+  font-weight: 600;
+}
+.office-app .settings-tab.active::after {
+  height: 3px;
+  border-radius: 2px;
+}
+
+/* side panel */
+.office-app .side-panel {
+  margin-block: 8px;
+  margin-inline: 0 8px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--o-card-shadow);
+}
+.office-app .side-panel-head {
+  height: 44px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--font);
+}
+.office-app .side-panel-head h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+@media (max-width: 1280px) {
+  .office-app .side-panel {
+    inset-inline-end: 8px;
+    top: calc(var(--topbar-h) + 8px);
+    bottom: 8px;
+    margin: 0;
+  }
+  .office-app .panel-scrim {
+    inset: var(--topbar-h) 0 0 0;
+  }
+}
+
+/* compose windows (phones; on wide screens drafts are tabs) */
+.office-app .compose-win {
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+.office-app .compose-head {
+  background: var(--surface-container);
+}
+
+/* ---------- Calendar and Tasks ---------- */
+
+/* The apps draw their own left column: on wide screens the folder pane steps aside. */
+@media (min-width: 901px) {
+  .office-app.on-app .o-folders {
+    display: none;
+  }
+}
+/* The module switcher at the foot of the folder pane. */
+.office-app .o-modules {
+  position: sticky;
+  bottom: -16px;
+  display: flex;
+  justify-content: space-around;
+  gap: 4px;
+  margin: 8px 0 -16px;
+  padding: 6px 4px 10px;
+  background: var(--bg);
+  border-top: 1px solid var(--divider);
+}
+.office-app .o-module {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  color: var(--text-2);
+}
+.office-app .o-module svg {
+  width: 20px;
+  height: 20px;
+}
+.office-app .o-module:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+.office-app .o-module.active {
+  color: var(--primary);
+  background: var(--surface);
+  box-shadow: var(--o-card-shadow);
+}
+/* ---------- phones ---------- */
+
+@media (max-width: 900px) {
+  [data-ui-theme='office'] .office-app {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'top'
+      'main';
+  }
+  .office-app .o-appbar {
+    display: none;
+  }
+  .office-app .o-brand {
+    width: auto;
+  }
+  .office-app .o-brand span {
+    display: none;
+  }
+  .office-app .o-title-right .hide-mobile {
+    display: none;
+  }
+  .office-app .o-folders,
+  .office-app.folders-collapsed .o-folders {
+    display: block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    inset-inline-start: 0;
+    z-index: 70;
+    width: min(300px, 85vw);
+    padding: 12px 8px;
+    background: var(--surface);
+    box-shadow: var(--shadow-3);
+    transform: translateX(calc(-100% * var(--dir)));
+    transition: transform 200ms var(--ease);
+  }
+  .office-app .o-folders.mobile-open {
+    transform: none;
+  }
+  .office-app .o-new-mail {
+    display: flex;
+    width: calc(100% - 8px);
+    margin: 0 4px 12px;
+  }
+  .office-app .o-work {
+    padding: 0;
+    gap: 0;
+  }
+  .office-app .main.o-main {
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .office-app .o-row .o-hover {
+    display: none !important;
+  }
+  .office-app .o-row .o-icons {
+    display: flex !important;
+  }
+  .office-app .o-row:hover .o-avatar {
+    visibility: visible;
+  }
+  .office-app .o-row:hover .o-check {
+    display: none;
+  }
+  .office-app .o-row.selected .o-check {
+    display: grid;
+  }
+  .office-app .o-row.selected .o-avatar {
+    visibility: hidden;
+  }
+  .office-app .compose-fab {
+    border-radius: var(--radius-lg);
+    background: var(--compose-bg);
+    color: var(--compose-fg);
+  }
+  .office-app .side-panel {
+    inset-inline-end: 0;
+    inset-inline-start: 0;
+    top: var(--topbar-h);
+    bottom: 0;
+    border-radius: 0;
+  }
+}
+
+.office-app .toast {
+  border-radius: var(--radius-md);
+}
+[data-ui-theme='office'][data-theme='light'] {
+  --toast-action: #6fc0d8;
+}
+[data-ui-theme='office'][data-theme='dark'] {
+  --toast-action: #17607a;
+}
+
+/* the divider sits in the gap between list and reader (two gaps around it, net one) */
+.office-app .o-split > .split-handle {
+  margin-block: 0;
+  margin-inline: -9px -8px;
+}
+
+/* The subject keeps its own width so signal chips follow it; the date stays at the right. */
+.office-app .o-line .o-subject {
+  flex: 0 1 auto;
+}
+.office-app .o-line .o-date {
+  margin-inline-start: auto;
+}

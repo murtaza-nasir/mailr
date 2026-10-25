@@ -1,0 +1,20 @@
+# User settings: calendar.
+# One line per key, `key: plain description`; `key: {internal: why}` for a key that is not a setting
+# a person chooses. A key may appear in only one file of this folder. The settings map test
+# (frontend/src/features/settings/groups.test.ts) checks that Settings has a place for each one.
+
+calendar_add_new_invites: "Add new invitations to the calendar as 'needs action' (off by default)."
+calendar_default_duration: "The length of a new event, in minutes."
+calendar_snap: The minutes a dragged event snaps to.
+calendar_working_hours: Your working hours and days (used by Find a time).
+calendar_dim_past: Dim events that have ended.
+calendar_week_numbers: Show week numbers.
+calendar_conflicts: "Show an 'Overlaps' line for events that clash."
+calendar_video_template: "The video call link added to events ({id} becomes a room name)."
+morning_hour: "The hour of 'morning' reminders and date-only reminders."
+calendar_purged_rev: {internal: internal bookkeeping of the calendar mirror}
+calendar_kinds: {internal: cache of which collections take events or tasks}
+calendar_defaults: {internal: "stored by the default calendar / task list choice (actions calendar.set_default, list.set_default)"}
+collection_prefs: {internal: "stored per calendar by the calendar actions (calendar.default_reminders, calendar.color)"}
+calendar_view: "The view Calendar opens on: the last one you chose (Today at first)."
+calendar_share_free_busy: "Share my free/busy with my groups: people in your groups see when you are busy in Find a time (off by default; no titles or places)."

@@ -1,0 +1,7 @@
+# Documentation site (MkDocs Material). Build: mkdocs build --strict (from site/).
+mkdocs>=1.6,<2
+mkdocs-material>=9.5
+mkdocs-material-extensions>=1.3
+pymdown-extensions>=10.5
+pygments>=2.17
+mkdocs-static-i18n>=1.3,<2  # languages: site/mkdocs.yml plugins.i18n

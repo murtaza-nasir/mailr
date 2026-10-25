@@ -1,0 +1,73 @@
+<resources>
+    <string name="sharing_getting_ready">Preparing…</string>
+    <string name="sharing_send_to_yourself">Send to yourself</string>
+    <string name="sharing_sent_to_yourself">Sent to yourself</string>
+    <string name="sharing_will_send_online">Queued until you\'re back online</string>
+    <string name="sharing_not_sent">Not sent</string>
+    <string name="sharing_couldnt_send">Couldn\'t send to yourself</string>
+    <string name="sharing_sign_in_first">Sign in to Mailr first</string>
+    <string name="sharing_nothing_to_send">Nothing to send</string>
+    <string name="sharing_sign_in_then_share">Sign in to Mailr, then share again.</string>
+    <string name="sharing_scheduled">Scheduled</string>
+    <string name="sharing_sending">Sending…</string>
+    <string name="sharing_undo">Undo</string>
+    <string name="sharing_too_late_undo_sent">Too late to undo. Already sent.</string>
+    <string name="sharing_too_large">%1$s is over %2$s and can\'t be attached.</string>
+    <string name="sharing_size_limit">35 MB</string>
+    <string name="sharing_couldnt_read">Couldn\'t read what was shared.</string>
+    <string name="sharing_couldnt_reach_undo">Couldn\'t reach Mailr to undo.</string>
+    <string name="sharing_already_sent">Already sent.</string>
+    <string name="sharing_close">Close</string>
+    <string name="sharing_cancel">Cancel</string>
+    <string name="sharing_labels_for_note">Labels for this note</string>
+    <string name="sharing_note_to_self">Note to self</string>
+    <string name="sharing_add_note">Add a note</string>
+    <string name="sharing_sent_note">Note: %1$s</string>
+    <string name="sharing_image_named">Image: %1$s</string>
+    <string name="sharing_more_count">+%1$d</string>
+    <string name="sharing_subject">Subject</string>
+    <string name="sharing_page_title_later">Replaced by the page title, if it has one.</string>
+    <string name="sharing_note">Note</string>
+    <string name="sharing_note_optional">Note (optional)</string>
+    <string name="sharing_note_placeholder">What do you want to remember?</string>
+    <string name="sharing_note_why">Reason for saving</string>
+    <string name="sharing_labels">Labels</string>
+    <string name="sharing_filters_file_it">Filters still apply</string>
+    <string name="sharing_pick_labels">Pick labels…</string>
+    <string name="sharing_more">More…</string>
+    <string name="sharing_more_labels">More labels</string>
+    <string name="sharing_label_named">Label %1$s</string>
+    <string name="sharing_picked">Picked</string>
+    <string name="sharing_not_picked">Not picked</string>
+    <string name="sharing_send_without_note">Send without note</string>
+    <string name="sharing_preparing">Preparing…</string>
+    <string name="sharing_send">Send</string>
+    <string name="sharing_labels_list">Labels: %1$s</string>
+    <string name="sharing_sending_to_yourself">Sending to yourself…</string>
+    <string name="sharing_then_share_again">Then share again.</string>
+    <string name="sharing_subtitle_sep">" · "</string>
+    <string name="sharing_try_again">Try again</string>
+    <string name="sharing_open_mailr">Open Mailr</string>
+    <string name="sharing_undoing">Undoing…</string>
+    <string name="sharing_too_late_undo">Too late to undo</string>
+    <string name="sharing_sign_in_to_send">Sign in to Mailr to send this.</string>
+    <string name="sharing_your_share">Your share</string>
+    <string name="sharing_no_space">Not enough free space.</string>
+    <string name="sharing_cant_read_file">Couldn\'t read %1$s</string>
+    <plurals name="sharing_images_n">
+        <item quantity="one">%d image</item>
+        <item quantity="other">%d images</item>
+    </plurals>
+    <plurals name="sharing_picked_n">
+        <item quantity="one">%d picked</item>
+        <item quantity="other">%d picked</item>
+    </plurals>
+    <plurals name="sharing_files_n">
+        <item quantity="one">%d file</item>
+        <item quantity="other">%d files</item>
+    </plurals>
+    <plurals name="sharing_files_and_more_n">
+        <item quantity="one">%1$s and %2$d more</item>
+        <item quantity="other">%1$s and %2$d more</item>
+    </plurals>
+</resources>

@@ -1,0 +1,34 @@
+name: "CLA Reminder"
+on:
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+
+jobs:
+  cla-reminder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Post CLA Reminder"
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const prNumber = context.payload.pull_request?.number;
+            if (!prNumber) return;
+            const body = `Thank you for your contribution!
+
+            By submitting this pull request, you agree to the terms of the [Contributor License Agreement (CLA)](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/CLA.md).
+
+            **Key points:**
+            - You keep the copyright of your contribution.
+            - You grant permission to use it under Mailr's dual-licence model (AGPLv3 and commercial).
+            - Your contribution can then be included in both the open-source and the commercial versions of Mailr.
+
+            If you have questions about the CLA, please ask here.`.replace(/^ {12}/gm, '');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber,
+              body,
+            });

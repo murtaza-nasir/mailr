@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# The typed API contract's generated files (backend/README.md, "Typed API contract"):
+#
+#   tools/api-types           write frontend/src/api/openapi.json (the typed routes' OpenAPI document)
+#                             and frontend/src/api/schema.gen.ts (their TypeScript types)
+#   tools/api-types --check   change nothing; exit 1 when either file is out of date
+#
+# Run it after changing a response model in backend/mailr/api/contract or typing another route.
+# tests/test_api_contract.py fails while the files are stale; CI runs --check.
+set -uo pipefail
+ROOT=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
+PY="$ROOT/backend/.venv/bin/python"
+[ -x "$PY" ] || { echo "api-types: backend/.venv is missing (uv sync --all-extras)" >&2; exit 2; }
+OPENAPI="$ROOT/frontend/src/api/openapi.json"
+TS="$ROOT/frontend/src/api/schema.gen.ts"
+cd "$ROOT/backend" || exit 2
+
+if [ "${1:-}" = "--check" ]; then
+  rc=0
+  "$PY" -m mailr.api.contract.export --check "$OPENAPI" || rc=1
+  "$PY" -m mailr.api.contract.typescript "$OPENAPI" --check "$TS" || rc=1
+  [ $rc = 0 ] && echo "api-types: up to date"
+  exit $rc
+fi
+[ $# = 0 ] || { sed -n '2,9p' "$0" >&2; exit 2; }
+"$PY" -m mailr.api.contract.export --write "$OPENAPI" || exit 1
+"$PY" -m mailr.api.contract.typescript "$OPENAPI" --write "$TS" || exit 1
+echo "api-types: wrote ${OPENAPI#"$ROOT"/} and ${TS#"$ROOT"/}"

@@ -1,0 +1,81 @@
+# Table views on the phone: the rows a view shows and their order,
+# as the server's tables/views.py evaluates them (clean_spec, apply_filters, sort_rows). The Notes module's
+# ViewEval evaluates a view from the phone's rows when it is offline, and both run these vectors:
+# backend/tests/test_table_view_cases.py and android/app/src/test/.../TableViewCasesTest.kt (the copy in
+# android/app/src/test/resources/interaction, which the pytest checks is the same file).
+# One line per value: "key: <json>" or, under cases:, "- <json>". expect: the row ids in order.
+columns: [{"id": "c0", "name": "Item", "type": "text"}, {"id": "c1", "name": "Amount", "type": "number"}, {"id": "c2", "name": "Price", "type": "currency", "config": {"currency": "USD"}}, {"id": "c3", "name": "Due", "type": "date"}, {"id": "c4", "name": "At", "type": "datetime"}, {"id": "c5", "name": "Done", "type": "checkbox"}, {"id": "c6", "name": "Status", "type": "select", "config": {"options": [{"id": "o1", "name": "Open"}, {"id": "o2", "name": "Doing"}, {"id": "o3", "name": "Done"}]}}, {"id": "c7", "name": "Tags", "type": "multi_select", "config": {"options": [{"id": "t1", "name": "red"}, {"id": "t2", "name": "green"}, {"id": "t3", "name": "blue"}]}}, {"id": "c8", "name": "Link", "type": "link", "config": {"multiple": true}}]
+rows: [{"id": "r1", "order": "a1", "cells": {"c0": "apple", "c1": "10", "c2": "2.5", "c3": "2026-10-01", "c4": {"at": "2026-10-05T09:00", "tz": "Europe/London"}, "c5": true, "c6": "o2", "c7": ["t1", "t2"], "c8": [{"kind": "row", "row": "x1"}]}}, {"id": "r2", "order": "a2", "cells": {"c0": "Banana", "c1": "-3", "c2": "100", "c3": "2026-09-28", "c4": {"at": "2026-10-05T08:30", "tz": "America/New_York"}, "c5": false, "c6": "o1", "c7": ["t3"], "c8": [{"kind": "note", "id": "n9"}]}}, {"id": "r3", "order": "a3", "cells": {"c0": "cherry pie", "c1": "10", "c3": "2026-10-08", "c6": "o3", "c7": [], "c8": []}}, {"id": "r4", "order": "a4", "cells": {"c0": "apple crumble", "c1": "2.5", "c2": "0.99", "c4": {"at": "2026-10-04T23:30", "tz": "UTC"}, "c5": true, "c7": ["t2"], "c8": [{"kind": "row", "row": "x2"}]}}, {"id": "r5", "order": "a5", "cells": {"c0": "", "c1": "1000", "c2": "5", "c3": "2026-10-05", "c5": false, "c6": "o2", "c7": ["t1"]}}, {"id": "r6", "order": "a6", "cells": {"c0": "Éclair", "c2": "3", "c3": "2026-10-12", "c4": {"at": "2026-10-06T00:15", "tz": "Asia/Tokyo"}, "c6": "o1", "c7": ["t3", "t1"]}}, {"id": "r7", "order": "a7", "cells": {"c0": "date", "c1": "0", "c2": "0", "c3": "2026-10-04", "c4": {"at": "2026-10-05T23:30", "tz": "America/Los_Angeles"}, "c5": true, "c6": "o2", "c8": [{"kind": "row", "row": "x1"}, {"kind": "note", "id": "n9"}]}}, {"id": "r8", "order": "a7", "cells": {"c0": "Apple", "c1": "10", "c2": "2.50", "c3": "2026-10-10", "c6": "o3", "c7": ["t2", "t3"]}}]
+titles: {"row:x1": "Zebra", "row:x2": "alpha", "note:n9": "Mango"}
+today: "2026-10-05"
+tz: "America/New_York"
+primary: "c0"
+cases:
+- {"id": "manual-order", "spec": {}, "expect": ["r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8"], "note": "no keys: the manual order, then the id"}
+- {"id": "sort-text-asc", "spec": {"sort": [{"col": "c0", "dir": "asc"}]}, "expect": ["r1", "r8", "r4", "r2", "r3", "r7", "r6", "r5"], "note": "text: case-folded; an empty cell last"}
+- {"id": "sort-text-desc", "spec": {"sort": [{"col": "c0", "dir": "desc"}]}, "expect": ["r6", "r7", "r3", "r2", "r4", "r1", "r8", "r5"], "note": "empty last in either direction"}
+- {"id": "sort-number-asc", "spec": {"sort": [{"col": "c1", "dir": "asc"}]}, "expect": ["r2", "r7", "r4", "r1", "r3", "r8", "r5", "r6"], "note": "numbers as numbers, ties by manual order"}
+- {"id": "sort-number-desc", "spec": {"sort": [{"col": "c1", "dir": "desc"}]}, "expect": ["r5", "r1", "r3", "r8", "r4", "r7", "r2", "r6"]}
+- {"id": "sort-currency-asc", "spec": {"sort": [{"col": "c2", "dir": "asc"}]}, "expect": ["r7", "r4", "r1", "r8", "r6", "r5", "r2", "r3"], "note": "2.5 and 2.50 tie"}
+- {"id": "sort-date-asc", "spec": {"sort": [{"col": "c3", "dir": "asc"}]}, "expect": ["r2", "r1", "r7", "r5", "r3", "r8", "r6", "r4"]}
+- {"id": "sort-date-desc", "spec": {"sort": [{"col": "c3", "dir": "desc"}]}, "expect": ["r6", "r8", "r3", "r5", "r7", "r1", "r2", "r4"]}
+- {"id": "sort-datetime-asc", "spec": {"sort": [{"col": "c4", "dir": "asc"}]}, "expect": ["r4", "r1", "r2", "r6", "r7", "r3", "r5", "r8"], "note": "instants, each in its own zone"}
+- {"id": "sort-checkbox-desc", "spec": {"sort": [{"col": "c5", "dir": "desc"}]}, "expect": ["r1", "r4", "r7", "r2", "r3", "r5", "r6", "r8"], "note": "unchecked counts as empty: last"}
+- {"id": "sort-checkbox-asc", "spec": {"sort": [{"col": "c5", "dir": "asc"}]}, "expect": ["r1", "r4", "r7", "r2", "r3", "r5", "r6", "r8"]}
+- {"id": "sort-select-asc", "spec": {"sort": [{"col": "c6", "dir": "asc"}]}, "expect": ["r2", "r6", "r1", "r5", "r7", "r3", "r8", "r4"], "note": "option order, not names"}
+- {"id": "sort-select-desc", "spec": {"sort": [{"col": "c6", "dir": "desc"}]}, "expect": ["r3", "r8", "r1", "r5", "r7", "r2", "r6", "r4"]}
+- {"id": "sort-multi-asc", "spec": {"sort": [{"col": "c7", "dir": "asc"}]}, "expect": ["r5", "r1", "r4", "r8", "r2", "r6", "r3", "r7"], "note": "the options in the cell's order, compared as a sequence"}
+- {"id": "sort-link-asc", "spec": {"sort": [{"col": "c8", "dir": "asc"}]}, "expect": ["r4", "r2", "r1", "r7", "r3", "r5", "r6", "r8"], "note": "linked titles, case-folded"}
+- {"id": "sort-two-keys", "spec": {"sort": [{"col": "c6", "dir": "asc"}, {"col": "c1", "dir": "desc"}]}, "expect": ["r2", "r6", "r5", "r1", "r7", "r3", "r8", "r4"]}
+- {"id": "sort-three-keys", "spec": {"sort": [{"col": "c5", "dir": "desc"}, {"col": "c6", "dir": "desc"}, {"col": "c0", "dir": "asc"}]}, "expect": ["r1", "r7", "r4", "r8", "r3", "r5", "r2", "r6"]}
+- {"id": "text-contains", "spec": {"filters": [{"col": "c0", "op": "contains", "value": "APPLE"}]}, "expect": ["r1", "r4", "r8"]}
+- {"id": "text-not-contains", "spec": {"filters": [{"col": "c0", "op": "not_contains", "value": "apple"}]}, "expect": ["r2", "r3", "r5", "r6", "r7"], "note": "an empty cell contains nothing"}
+- {"id": "text-is", "spec": {"filters": [{"col": "c0", "op": "is", "value": "banana"}]}, "expect": ["r2"]}
+- {"id": "text-is-alias", "spec": {"filters": [{"col": "c0", "op": "eq", "value": "apple"}]}, "expect": ["r1", "r8"], "note": "eq is is for text"}
+- {"id": "text-is-not", "spec": {"filters": [{"col": "c0", "op": "is_not", "value": "apple"}]}, "expect": ["r2", "r3", "r4", "r5", "r6", "r7"]}
+- {"id": "text-starts", "spec": {"filters": [{"col": "c0", "op": "starts_with", "value": "app"}]}, "expect": ["r1", "r4", "r8"]}
+- {"id": "text-ends", "spec": {"filters": [{"col": "c0", "op": "ends_with", "value": "PIE"}]}, "expect": ["r3"]}
+- {"id": "text-empty", "spec": {"filters": [{"col": "c0", "op": "empty"}]}, "expect": ["r5"]}
+- {"id": "text-not-empty", "spec": {"filters": [{"col": "c0", "op": "not_empty"}]}, "expect": ["r1", "r2", "r3", "r4", "r6", "r7", "r8"]}
+- {"id": "number-eq", "spec": {"filters": [{"col": "c1", "op": "eq", "value": "10"}]}, "expect": ["r1", "r3", "r8"]}
+- {"id": "number-eq-alias", "spec": {"filters": [{"col": "c1", "op": "=", "value": 10}]}, "expect": ["r1", "r3", "r8"], "note": "= and a JSON number"}
+- {"id": "number-ne", "spec": {"filters": [{"col": "c1", "op": "ne", "value": "10"}]}, "expect": ["r2", "r4", "r5", "r6", "r7"], "note": "ne keeps empty cells"}
+- {"id": "number-lt", "spec": {"filters": [{"col": "c1", "op": "lt", "value": "2.5"}]}, "expect": ["r2", "r7"]}
+- {"id": "number-lte", "spec": {"filters": [{"col": "c1", "op": "lte", "value": "2.5"}]}, "expect": ["r2", "r4", "r7"]}
+- {"id": "number-gt", "spec": {"filters": [{"col": "c1", "op": "gt", "value": "1,000"}]}, "expect": [], "note": "a typed number with a thousands separator"}
+- {"id": "number-gte", "spec": {"filters": [{"col": "c1", "op": "gte", "value": "1,000"}]}, "expect": ["r5"]}
+- {"id": "number-between", "spec": {"filters": [{"col": "c1", "op": "between", "value": ["0", "10"]}]}, "expect": ["r1", "r3", "r4", "r7", "r8"], "note": "inclusive"}
+- {"id": "number-empty", "spec": {"filters": [{"col": "c1", "op": "empty"}]}, "expect": ["r6"]}
+- {"id": "currency-lt", "spec": {"filters": [{"col": "c2", "op": "<", "value": "$3"}]}, "expect": ["r1", "r4", "r7", "r8"], "note": "a currency symbol in the value"}
+- {"id": "date-is", "spec": {"filters": [{"col": "c3", "op": "is", "value": "2026-10-05"}]}, "expect": ["r5"]}
+- {"id": "date-is-today", "spec": {"filters": [{"col": "c3", "op": "is", "value": "today"}]}, "expect": ["r5"], "note": "date words read against today"}
+- {"id": "date-before-today", "spec": {"filters": [{"col": "c3", "op": "before", "value": "today"}]}, "expect": ["r1", "r2", "r7"]}
+- {"id": "date-after-fri", "spec": {"filters": [{"col": "c3", "op": "after", "value": "fri"}]}, "expect": ["r6", "r8"], "note": "fri: the next Friday after today"}
+- {"id": "date-on-or-before-month", "spec": {"filters": [{"col": "c3", "op": "on_or_before", "value": "oct 4"}]}, "expect": ["r1", "r2", "r7"], "note": "month names"}
+- {"id": "date-on-or-after-numeric", "spec": {"filters": [{"col": "c3", "op": "on_or_after", "value": "10/8/2026"}]}, "expect": ["r3", "r6", "r8"], "note": "numeric dates month first"}
+- {"id": "date-between", "spec": {"filters": [{"col": "c3", "op": "between", "value": ["2026-10-01", "tomorrow"]}]}, "expect": ["r1", "r5", "r7"]}
+- {"id": "date-last-days", "spec": {"filters": [{"col": "c3", "op": "last_days", "value": 7}]}, "expect": ["r1", "r2", "r5", "r7"], "note": "today and the 7 days before"}
+- {"id": "date-next-days", "spec": {"filters": [{"col": "c3", "op": "next_days", "value": "3"}]}, "expect": ["r3", "r5"]}
+- {"id": "date-alias-lt", "spec": {"filters": [{"col": "c3", "op": "lt", "value": "2026-10-02"}]}, "expect": ["r1", "r2"], "note": "lt is before"}
+- {"id": "date-empty", "spec": {"filters": [{"col": "c3", "op": "empty"}]}, "expect": ["r4"]}
+- {"id": "datetime-is", "spec": {"filters": [{"col": "c4", "op": "is", "value": "2026-10-05"}]}, "expect": ["r1", "r2", "r6"], "note": "the day in the viewer's zone (New York)"}
+- {"id": "datetime-before", "spec": {"filters": [{"col": "c4", "op": "before", "value": "2026-10-05"}]}, "expect": ["r4"]}
+- {"id": "datetime-not-empty", "spec": {"filters": [{"col": "c4", "op": "not_empty"}]}, "expect": ["r1", "r2", "r4", "r6", "r7"]}
+- {"id": "checkbox-checked", "spec": {"filters": [{"col": "c5", "op": "checked"}]}, "expect": ["r1", "r4", "r7"]}
+- {"id": "checkbox-not-checked", "spec": {"filters": [{"col": "c5", "op": "not_checked"}]}, "expect": ["r2", "r3", "r5", "r6", "r8"], "note": "a missing box is not checked"}
+- {"id": "select-is", "spec": {"filters": [{"col": "c6", "op": "is", "value": "o1"}]}, "expect": ["r2", "r6"]}
+- {"id": "select-is-name", "spec": {"filters": [{"col": "c6", "op": "is", "value": "doing"}]}, "expect": ["r1", "r5", "r7"], "note": "an option by its name, any case"}
+- {"id": "select-is-not", "spec": {"filters": [{"col": "c6", "op": "is_not", "value": "o2"}]}, "expect": ["r2", "r3", "r4", "r6", "r8"], "note": "is_not keeps empty cells"}
+- {"id": "select-any-of", "spec": {"filters": [{"col": "c6", "op": "any_of", "value": ["o1", "Done"]}]}, "expect": ["r2", "r3", "r6", "r8"]}
+- {"id": "select-none-of", "spec": {"filters": [{"col": "c6", "op": "none_of", "value": ["o1", "o3"]}]}, "expect": ["r1", "r4", "r5", "r7"]}
+- {"id": "select-empty", "spec": {"filters": [{"col": "c6", "op": "empty"}]}, "expect": ["r4"]}
+- {"id": "multi-has-any", "spec": {"filters": [{"col": "c7", "op": "has_any", "value": ["t1", "blue"]}]}, "expect": ["r1", "r2", "r5", "r6", "r8"]}
+- {"id": "multi-has-all", "spec": {"filters": [{"col": "c7", "op": "has_all", "value": ["t1", "t3"]}]}, "expect": ["r6"]}
+- {"id": "multi-has-none", "spec": {"filters": [{"col": "c7", "op": "has_none", "value": "t2"}]}, "expect": ["r2", "r3", "r5", "r6", "r7"], "note": "one value, not a list"}
+- {"id": "multi-empty", "spec": {"filters": [{"col": "c7", "op": "empty"}]}, "expect": ["r3", "r7"], "note": "[] is empty"}
+- {"id": "link-links-to", "spec": {"filters": [{"col": "c8", "op": "links_to", "value": {"kind": "row", "row": "x1"}}]}, "expect": ["r1", "r7"]}
+- {"id": "link-links-to-key", "spec": {"filters": [{"col": "c8", "op": "links_to", "value": "note:n9"}]}, "expect": ["r2", "r7"], "note": "a reference key"}
+- {"id": "link-not-links-to", "spec": {"filters": [{"col": "c8", "op": "not_links_to", "value": [{"kind": "row", "row": "x1"}, "note:n9"]}]}, "expect": ["r3", "r4", "r5", "r6", "r8"]}
+- {"id": "link-empty", "spec": {"filters": [{"col": "c8", "op": "empty"}]}, "expect": ["r3", "r5", "r6", "r8"]}
+- {"id": "filters-and-sort", "spec": {"filters": [{"col": "c6", "op": "is_not", "value": "o3"}, {"col": "c1", "op": "not_empty"}], "sort": [{"col": "c2", "dir": "desc"}]}, "expect": ["r2", "r5", "r1", "r4", "r7"], "note": "every filter must match"}
+- {"id": "filter-and-sort-dates", "spec": {"filters": [{"col": "c3", "op": "on_or_after", "value": "yesterday"}], "sort": [{"col": "c4", "dir": "desc"}, {"col": "c0", "dir": "asc"}]}, "expect": ["r7", "r6", "r8", "r3", "r5"]}

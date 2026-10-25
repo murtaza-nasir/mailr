@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Today widget's afternoon picture: a high sun and a small cloud. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp" android:height="48dp" android:viewportWidth="48" android:viewportHeight="48">
+    <group>
+        <clip-path android:pathData="M24,0a24,24 0,1 1,0 48a24,24 0,1 1,0 -48z" />
+        <path android:fillColor="#FFBFE3FF" android:pathData="M0,0h48v48h-48z" />
+        <path android:strokeColor="#FFFFB300" android:strokeWidth="2.5" android:strokeLineCap="round"
+            android:pathData="M22,5L22,8.5M22,31.5L22,35M7,20L10.5,20M33.5,20L37,20M11.4,9.4L13.9,11.9M30.1,28.1L32.6,30.6M32.6,9.4L30.1,11.9M13.9,28.1L11.4,30.6" />
+        <path android:fillColor="#FFFFCA28" android:pathData="M22,12a8,8 0,1 1,0 16a8,8 0,1 1,0 -16z" />
+        <path android:fillColor="#FFFFFFFF" android:pathData="M19,39h19a5,5 0,0 0,-1.5 -9.8a7,7 0,0 0,-13.2 1.3a4.3,4.3 0,0 0,-4.3 8.5z" />
+    </group>
+</vector>

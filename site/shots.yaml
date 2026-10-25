@@ -1,0 +1,3725 @@
+# Screenshot manifest for the documentation site.
+#
+# Every image under docs/assets/shots/ has one entry here: the page that shows it and how to
+# reproduce it against the demo instance. The screenshot pipeline reads this file and overwrites the
+# placeholder PNGs.
+#
+# Demo instance: `mailr demo-seed --now 2026-10-02T10:40` (add --speakr-url/--speakr-token for
+# rec-* shots; set MAILR_DEMO_ASSISTANT=1 for assistant shots). Sign in as alex@northwind.example.
+# Browser: timezone America/Chicago, clock fixed at the seed's --now, signed in before the steps.
+#
+# Fields
+#   name       file name without .png (docs/assets/shots/<name>.png)
+#   page       the docs page that shows it
+#   platform   web | android (android = a Roborazzi capture in the app's docs test set)
+#   theme      web: classic | office (Workspace) | focus | desk | cards; android: material
+#   scheme     light | dark
+#   viewport   desktop 1440x900 | laptop 1280x800 | phone 390x844 | wide 1680x1000 | hd 1920x1080 (web);
+#              android-phone | android-fold | android-tablet
+#   route      the web route to open first (android: the screen)
+#   state      seed and settings needed before the steps
+#   steps      what to do, in order
+#   capture    full page, or the element to crop to
+
+viewports:
+  desktop:
+    width: 1440
+    height: 900
+  laptop:
+    width: 1280
+    height: 800
+  phone:
+    width: 390
+    height: 844
+  wide:
+    width: 1680
+    height: 1000
+  hd:
+    width: 1920
+    height: 1080
+shots:
+- name: home-hero
+  page: index.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: hd
+  route: /mail/inbox
+  state: seeded demo (mailr demo-seed --now 2026-10-02T10:40); reading_pane=right; the Calendar side panel open (the rail's Calendar button, remembered per browser in localStorage mailr.panel)
+  steps:
+  - goto /mail/inbox
+  - click the conversation "Lumen kickoff" (Dana Whitfield) so it opens in the right-hand reading pane
+  - wait for the message body and the calendar side panel to render
+  capture: full page
+  also_used_by: README.md
+- name: home-calendar
+  page: index.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week
+  state: seeded demo; Work, Personal and Clinic board calendars visible
+  steps:
+  - goto /calendar
+  - press w for the week view
+  - wait for the events of the current week to render
+  capture: full page
+  also_used_by: README.md
+- name: home-tasks
+  page: index.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /tasks
+  state: seeded demo
+  steps:
+  - goto /tasks
+  - open the "Studio" list
+  - wait for the deck task with its subtasks to render
+  capture: full page
+- name: home-assistant
+  page: index.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo with MAILR_DEMO_ASSISTANT=1; re-seed after the shot
+  steps:
+  - goto /mail/inbox
+  - press Ctrl+. to open the assistant panel
+  - type "What needs my attention today?" and press Enter
+  - wait for the answer with its citations
+  capture: full page
+  also_used_by: README.md
+- name: home-dark
+  page: index.md
+  platform: web
+  theme: classic
+  scheme: dark
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; theme=dark, reading_pane=right
+  steps:
+  - goto /mail/inbox
+  - 'click the conversation "Invitation: Bluefin kickoff" (Jordan Lee), so the invitation card shows in the dark scheme'
+  - wait for the message body
+  capture: full page
+- name: home-android
+  page: index.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: inbox screen
+  roborazzi: DocsShotsTest.homeAndroid
+  state: demo inbox fixture (the seeded demo conversations)
+  steps:
+  - render the inbox list on a phone-size device
+  capture: full screen
+  also_used_by: README.md
+- name: setup-inbox-overview
+  page: getting-started/index.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=classic, theme=light, reading_pane=none, side panel closed
+  steps:
+  - goto /mail/inbox
+  - wait for the conversation list to show its first rows
+  capture: full page
+- name: setup-sign-in
+  page: getting-started/first-admin.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /login
+  state: signed out (fresh browser context, no session cookie); OIDC not configured, so only email and password
+    show
+  steps:
+  - goto /login
+  - wait for the "Welcome back" heading
+  capture: full page
+- name: setup-ui-tour
+  page: getting-started/first-admin.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=classic, theme=light; side panel showing the calendar (localStorage mailr.panel=calendar)
+  steps:
+  - goto /mail/inbox
+  - if the side panel is closed, open the Calendar side panel from the right-hand rail
+  - wait for the list and today's agenda in the panel
+  capture: full page
+- name: setup-accounts-list
+  page: getting-started/connect-accounts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/accounts
+  state: seeded demo (three accounts, one local-only)
+  steps:
+  - goto /settings/mail/accounts
+  - wait for the "Mail accounts" section to list three accounts
+  capture: element the "Mail accounts" section
+- name: setup-add-account-address
+  page: getting-started/connect-accounts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/accounts
+  state: seeded demo
+  steps:
+  - goto /settings/mail/accounts
+  - click "Add account"
+  - fill "Email address" with jordan@example.org and "Your name (for outgoing mail)" with Jordan Lee
+  capture: element the "Add a mail account" dialog
+- name: setup-add-account-sign-in
+  page: getting-started/connect-accounts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/accounts
+  state: seeded demo
+  steps:
+  - goto /settings/mail/accounts
+  - click "Add account"
+  - fill "Email address" with jordan@fastmail.example and the name with Jordan Lee, then continue
+  - on the Sign in step, choose the provider "Other (manual settings)" if no settings were found, and fill IMAP
+    host imap.example.org, SMTP host smtp.example.org
+  - do not press Test
+  capture: element the "Add a mail account" dialog, step 2
+- name: setup-add-account-mode
+  page: getting-started/connect-accounts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/accounts
+  state: seeded demo; reach step 3 by pointing the wizard at the demo's fake upstream (IMAP localhost:12143, the
+    demo account's credentials) so Test succeeds
+  steps:
+  - goto /settings/mail/accounts
+  - click "Add account", enter a demo upstream address, continue
+  - fill the manual server settings for the fake upstream, press Test, continue to step 3 (Mode)
+  - select "Mailr keeps the mail" so the retention field and the warning banner show
+  capture: element the "Add a mail account" dialog, step 3
+- name: setup-send-as
+  page: getting-started/connect-accounts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/writing
+  state: seeded demo (identities with signatures)
+  steps:
+  - goto /settings/mail/writing
+  - scroll to "Send mail as"
+  - open the edit dialog of alex@northwind.example
+  capture: element the identity edit dialog over the "Send mail as" section
+- name: setup-imap-access
+  page: getting-started/connect-accounts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/accounts
+  state: seeded demo; MAILR_IMAP_HOSTNAME=mail.example.com for the demo server
+  steps:
+  - goto /settings/mail/accounts
+  - scroll to "Phone and desktop apps"
+  capture: element the "Phone and desktop apps" section
+- name: theme-picker
+  page: user-guide/appearance.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/look
+  state: seeded demo
+  steps:
+  - goto /settings/look
+  - scroll the Style picker into view
+  capture: element the Style picker
+- name: theme-classic-light
+  page: user-guide/appearance.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=classic, theme=light, reading_pane=none
+  steps:
+  - goto /mail/inbox
+  capture: full page
+- name: theme-classic-dark
+  page: user-guide/appearance.md
+  platform: web
+  theme: classic
+  scheme: dark
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=classic, theme=dark, reading_pane=none
+  steps:
+  - goto /mail/inbox
+  capture: full page
+- name: theme-workspace-light
+  page: user-guide/appearance.md
+  platform: web
+  theme: office
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=office, theme=light
+  steps:
+  - goto /mail/inbox
+  - click the conversation "Lumen" (the Lumen client thread) so the tabbed reading pane shows it
+  capture: full page
+- name: theme-workspace-dark
+  page: user-guide/appearance.md
+  platform: web
+  theme: office
+  scheme: dark
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=office, theme=dark
+  steps:
+  - goto /mail/inbox
+  - click the Lumen client thread so the reading pane shows it
+  capture: full page
+- name: theme-focus-light
+  page: user-guide/appearance.md
+  platform: web
+  theme: focus
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=focus, theme=light
+  steps:
+  - goto /mail/inbox
+  capture: full page
+- name: theme-focus-dark
+  page: user-guide/appearance.md
+  platform: web
+  theme: focus
+  scheme: dark
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=focus, theme=dark
+  steps:
+  - goto /mail/inbox
+  - press Control+K to open the command palette
+  capture: full page
+- name: theme-desk-light
+  page: user-guide/appearance.md
+  platform: web
+  theme: desk
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=desk, theme=light
+  steps:
+  - goto /mail/inbox
+  - click the first conversation row so the preview shows below the table
+  - hover the next row (Jordan Lee) so its quick actions show over its date
+  capture: full page
+- name: theme-desk-dark
+  page: user-guide/appearance.md
+  platform: web
+  theme: desk
+  scheme: dark
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=desk, theme=dark
+  steps:
+  - goto /mail/inbox
+  - click the first conversation row
+  capture: full page
+- name: theme-cards-light
+  page: user-guide/appearance.md
+  platform: web
+  theme: cards
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=cards, ui_accent=violet, theme=light, inbox_type=default (the built-in Default inbox, where Cards bundles with card_bundles flat; custom layout tabs never bundle)
+  steps:
+  - goto /mail/inbox
+  - wait for the Notifications and Newsletters bundle cards
+  capture: full page
+- name: theme-cards-dark
+  page: user-guide/appearance.md
+  platform: web
+  theme: cards
+  scheme: dark
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=cards, ui_accent=teal, theme=dark, inbox_type=default (the built-in Default inbox, where Cards bundles with card_bundles flat; custom layout tabs never bundle)
+  steps:
+  - goto /mail/inbox
+  capture: full page
+- name: theme-quick-settings
+  page: user-guide/appearance.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=classic, theme=light
+  steps:
+  - goto /mail/inbox
+  - click the "Quick settings" gear in the top bar
+  capture: element the Quick settings panel with a margin of the page behind it
+- name: theme-classic-compact-right
+  page: user-guide/appearance.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; ui_theme=classic, theme=light, density=compact, reading_pane=right
+  steps:
+  - goto /mail/inbox
+  - click the Lumen client thread so it opens in the right pane
+  capture: full page
+- name: theme-classic-phone
+  page: user-guide/appearance.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: phone
+  route: /mail/inbox
+  state: seeded demo; ui_theme=classic, theme=light
+  steps:
+  - goto /mail/inbox
+  capture: full page (viewport only)
+- name: pwa-phone-inbox
+  page: user-guide/phone.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: phone
+  route: /mail/inbox
+  state: seeded demo; ui_theme=classic, theme=light; an iPhone (WebKit through frontend/scripts/webkit-server.sh, iPhone user agent and touch), opened from the Home Screen (display-mode standalone)
+  steps:
+  - goto /mail/inbox
+  - wait for the rows and the tab bar
+  capture: full page (viewport only)
+- name: pwa-ios-install
+  page: user-guide/phone.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: phone
+  route: /mail/inbox
+  state: seeded demo; an iPhone in Safari (not installed), install banner not dismissed (localStorage mailr.install.dismissedAt empty)
+  steps:
+  - goto /mail/inbox
+  - tap How in the "Use Mailr like an app" banner
+  - wait for the install sheet with the Share → Add to Home Screen picture
+  capture: full page (viewport only)
+- name: pwa-phone-menu
+  page: user-guide/phone.md
+  platform: web
+  theme: cards
+  scheme: dark
+  viewport: phone
+  route: /mail/inbox
+  state: seeded demo; ui_theme=cards, ui_accent=violet, theme=dark; an iPhone opened from the Home Screen
+  steps:
+  - goto /mail/inbox
+  - tap your picture in the top bar
+  - wait for the account menu (a sheet from the bottom)
+  capture: full page (viewport only)
+- name: pwa-phone-swipe
+  page: user-guide/phone.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: phone
+  route: /mail/inbox
+  state: seeded demo; an iPhone opened from the Home Screen
+  steps:
+  - goto /mail/inbox
+  - put a finger on the second conversation and move it 42% of the width to the right, without lifting it
+  capture: full page (viewport only)
+- name: theme-cards-phone-dark
+  page: user-guide/appearance.md
+  platform: web
+  theme: cards
+  scheme: dark
+  viewport: phone
+  route: /mail/inbox
+  state: seeded demo; ui_theme=cards, ui_accent=violet, theme=dark
+  steps:
+  - goto /mail/inbox
+  capture: full page (viewport only)
+- name: admin-status
+  page: admin/index.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/diagnostics
+  state: seeded demo; Alex is an admin
+  steps:
+  - goto /settings/admin/diagnostics
+  - wait for the "Diagnostics" tiles
+  capture: full page
+- name: admin-status-detail
+  page: admin/troubleshooting.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/diagnostics
+  state: seeded demo
+  steps:
+  - goto /settings/admin/diagnostics
+  - wait for the "Diagnostics" section with its checks and its "Mail accounts" table
+  capture: element the "Diagnostics" section
+- name: admin-users
+  page: admin/users.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/users
+  state: seeded demo; first create a token "Home server agent" marked local-only (POST /api/v1/tokens) and use it
+    once (GET /api/v1/me with it), so the Local-only agents column has an entry
+  steps:
+  - goto /settings/admin/users
+  - scroll to the "Users" section
+  capture: element the "Users" section
+- name: admin-access-policy
+  page: admin/access.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/access
+  state: seeded demo; first add a policy for the group "staff" (any endpoint for both tasks; Assistant, Choose
+    models, Decisions lab, Agents & API tokens and Mark agents as local-only on; Hosted models off) through
+    POST /api/v1/admin/access/policies
+  steps:
+  - goto /settings/admin/access
+  - click edit on the "staff" policy
+  - scroll the dialog to the switches
+  capture: element the "Policy for staff" dialog
+- name: admin-add-user
+  page: admin/users.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/users
+  state: seeded demo
+  steps:
+  - goto /settings/admin/users
+  - click "Add user"
+  - fill "Email (sign-in)" with sam@northwind.example and "Name" with Sam Okafor; leave the password empty; choose
+    "User"
+  capture: element the "Add user" dialog
+- name: admin-policies
+  page: admin/users.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/data
+  state: seeded demo; the local-only domains field must not be empty (the empty field shows a placeholder), so first
+    save "harborclinic.example" under Data policies (PUT /api/v1/admin/policies {"local_only_domains":["harborclinic.example"]})
+  steps:
+  - goto /settings/admin/data
+  - scroll to the "Data policies" section
+  capture: element the "Data policies" section
+- name: admin-models
+  page: admin/models.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/models
+  state: seeded demo (the "demo" local endpoint is registered)
+  steps:
+  - goto /settings/admin/models
+  - scroll to the "Model endpoints" section
+  capture: element the "Model endpoints" section; do NOT open the empty Add endpoint dialog (its placeholders are
+    not demo values)
+- name: admin-model-defaults
+  page: admin/models.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/models
+  state: seeded demo
+  steps:
+  - goto /settings/admin/models
+  - scroll to the "Which model does what" section
+  capture: element the "Which model does what" section
+- name: admin-local-policy
+  page: admin/models.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/models
+  state: seeded demo (the household rule at its default, Each person chooses)
+  steps:
+  - goto /settings/admin/models
+  - scroll to the "Hosted models for everyone" section
+  capture: element the "Hosted models for everyone" section
+- name: admin-image-proxy
+  page: admin/image-proxy.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/data
+  state: seeded demo; image proxy on; egress proxy saved as http://localhost:8888 (PUT /api/v1/admin/policies {"image_proxy_egress":"http://localhost:8888"}; the server checks that the host resolves, so the compose service name egress does not work on the demo)
+    so the field is not empty; the recipe answers GET /api/v1/admin/policies with a passing egress check through the
+    fictional exit 198.51.100.24 (the demo runs no worker to check)
+  steps:
+  - goto /settings/admin/data
+  - scroll to the "Image proxy" section
+  capture: element the "Image proxy" section
+- name: admin-phone-apps
+  page: admin/phone-apps.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/phones
+  state: seeded demo; the recipe answers GET /api/v1/admin/phone-apps with both apps published (mailr 0.6.2 with
+    0.6.1 kept as the fallback, mailr Notes 1.0.2), the mailr floor 0.5.0 from the environment and the Notes floor 1.0.0
+  steps:
+  - goto /settings/admin/phones
+  - scroll to the "Phone apps" section
+  capture: element the "Phone apps" section
+- name: admin-push-setup
+  page: admin/push.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/phones
+  state: seeded demo; the recipe answers GET /api/v1/admin/push-setup with the server's own ntfy
+    (ntfy.northwind.example), four people on phones, two through it, one through ntfy.sh, one with no push app
+  steps:
+  - goto /settings/admin/phones
+  - scroll to "Instant notifications on phones"
+  capture: element the "Instant notifications on phones" panel
+- name: get-app-phone
+  page: getting-started/phone.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: phone
+  route: /get-app
+  state: signed out is fine; an Android user agent; the recipe answers GET /api/v1/app/releases with both apps
+    published (mailr 0.6.2, mailr Notes 1.0.2)
+  steps:
+  - goto /get-app
+  capture: full page
+- name: admin-web-search
+  page: admin/web-search.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/web-search
+  state: seeded demo; the recipe answers GET /api/v1/admin/websearch with two providers (Exa first, a SearXNG on
+    the local network at searxng.northwind.example second; an egress proxy set) and the test of Exa with three
+    results on example domains
+  steps:
+  - goto /settings/admin/web-search
+  - in the "Web search" section, click test on the Exa row
+  - wait for the test result under the table
+  capture: element the "Web search" section
+- name: admin-page-readers
+  page: admin/web-search.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/web-search
+  state: seeded demo; the recipe answers GET /api/v1/admin/websearch with two page readers (a browserless at
+    browserless.northwind.example on the local network first, Jina Reader on the internet second; an egress proxy
+    set) and the test of the browserless reader reading a page on example.org
+  steps:
+  - goto /settings/admin/web-search
+  - in the "Page readers" section, click test on the browserless row
+  - wait for the test result under the table
+  capture: element the "Page readers" section
+- name: admin-calendars
+  page: admin/calendars.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/calendars
+  state: seeded demo; built-in calendars off (the default)
+  steps:
+  - goto /settings/admin/calendars
+  - scroll to the "Calendars" section
+  capture: element the "Calendars" section
+- name: admin-group-calendars
+  page: admin/calendars.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/calendars
+  state: seeded demo; the recipe answers GET /api/v1/admin/calendars (on, everyone, sharing with anyone) and GET
+    /api/v1/admin/calendars/groups with an example family (Family, members can edit; School, members can view, one
+    editor) and a staff group with no calendar, because the demo keeps built-in calendars off and runs no Stalwart
+    calendar
+  steps:
+  - goto /settings/admin/calendars
+  - wait for the group calendar rows
+  capture: element the "Calendars" section, with Sharing between users and Group calendars
+- name: admin-egress-check
+  page: admin/image-proxy.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/data
+  state: seeded demo; egress proxy saved as http://localhost:8888; the demo runs no worker, so the recipe answers
+    GET /api/v1/admin/policies with a passing egress check through the fictional exit 198.51.100.24 (a documentation
+    address), never a real one
+  steps:
+  - goto /settings/admin/data
+  - scroll to the "Image proxy" section
+  capture: element the "Egress proxy" field and the "Egress check" line under it
+- name: admin-arm-deletion
+  page: admin/store-and-mirror.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/accounts
+  state: seeded demo with the personal account (alex.rivera@example.net) set to "Mailr keeps the mail" (mode store); if no seeded account
+    has that mode, switch one with PATCH /api/v1/connectors/{id} {"mode":"store"} before the shot
+  steps:
+  - goto /settings/mail/accounts
+  - on that account, choose the action that arms upstream deletion
+  - type the account name in "Type the account name to confirm"
+  capture: element the "Arm upstream deletion?" dialog
+- name: admin-account-controls
+  page: admin/store-and-mirror.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/accounts
+  state: seeded demo
+  steps:
+  - goto /settings/mail/accounts
+  - hover or open the controls of the work account so Sync now, Pause, Resync from scratch and Remove account show
+  capture: element the "Mail accounts" section with the controls visible
+- name: settings-picture
+  page: user-guide/appearance.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/you
+  state: seeded demo; Alex's account picture is the generated illustration the seed uploads (mailr/dev/demo.py avatar_png); Alex is an admin and sends from three own domains, so Gravatar and Libravatar and the BIMI cards show
+  steps:
+  - goto /settings/you
+  - open "Publish your picture" in the "Your picture" section (do not press the check buttons)
+  capture: element the "Your picture" section
+- name: mail-overview
+  page: user-guide/index.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; Studio layout active; the Calendar side panel open (localStorage mailr.panel=calendar)
+  steps:
+  - open the Calendar side panel from the right-hand rail
+  - goto /mail/inbox
+  - wait for the Inbox tab rows and the calendar panel to render
+  capture: full page
+- name: mail-inbox
+  page: user-guide/inbox.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; Studio layout active; side panel closed
+  steps:
+  - goto /mail/inbox
+  - wait for the "Important and unread" section to render
+  capture: full page
+- name: mail-inbox-dark
+  page: user-guide/inbox.md
+  platform: web
+  theme: classic
+  scheme: dark
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; settings theme=dark
+  steps:
+  - 'PATCH /api/v1/me/settings {"theme": "dark"}'
+  - goto /mail/inbox
+  - wait for rows
+  capture: full page
+- name: mail-selection
+  page: user-guide/inbox.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - 'tick the checkboxes of the rows "Thursday studio review", "Climbing Saturday?" and "Accepted: Design critique"
+    (all three on the first screen of the Inbox tab)'
+  - wait for the selection toolbar
+  capture: element the list pane (toolbar and rows)
+- name: mail-row-menu
+  page: user-guide/inbox.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - 'right-click the row "Re: Lumen Coffee: rebrand brief"'
+  - hover "Create from email" so its submenu opens (Task, Event, Meeting with these people, Note, Checklist, Link)
+  capture: element the list pane with the open menu
+- name: mail-tabs
+  page: user-guide/tabs-and-layouts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; Studio layout (Inbox, Code, Bills, Updates, Reading)
+  steps:
+  - goto /mail/inbox
+  - click the "Bills" tab
+  - wait for the Bills and Receipts sections
+  capture: element the list pane including the tab strip
+- name: mail-layout-editor
+  page: user-guide/tabs-and-layouts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/inbox
+  state: seeded demo
+  steps:
+  - goto /settings/mail/inbox
+  - under "Your layouts", choose Edit on "Studio"
+  - select the "Bills" tab in the editor
+  - wait for the section preview counts ("Counting…" gone)
+  capture: element the layout editor dialog
+- name: mail-layout-editor-counted
+  page: user-guide/tabs-and-layouts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/inbox
+  state: seeded demo
+  steps:
+  - goto /settings/mail/inbox
+  - under "Your layouts", choose Edit on "Studio"
+  - select the first tab ("Inbox") in the editor, marked "Counted in the sidebar"
+  - wait for the section preview counts ("Counting…" gone)
+  capture: element the layout editor dialog
+- name: settings-inbox-count
+  page: user-guide/tabs-and-layouts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/inbox
+  state: seeded demo (inbox_count unset, so "Inbox tab only")
+  steps:
+  - goto /settings/mail/inbox
+  - scroll to the "Inbox count" row
+  capture: element the "Inbox count" row
+- name: mail-account-folders
+  page: user-guide/inbox.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo (three accounts); account_folders on; Clients/Lumen Coffee pinned to alex@northwind.example; every More folders closed (account_folders_more_open empty); the clinic account's group closed on this device (localStorage mailr.nav.acct.<id> = 0)
+  steps:
+  - goto /mail/inbox
+  - wait for the Accounts section of the sidebar and scroll it into view
+  capture: element the sidebar's Accounts section (the account groups)
+- name: mail-accounts-hint
+  page: user-guide/inbox.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo (three accounts); account_folders off; account_folders_hint_dismissed false (every other shot sets it true)
+  steps:
+  - goto /mail/inbox
+  - wait for the one-line hint "Show each account separately" below Drafts in the sidebar
+  capture: element from Drafts to More in the sidebar, the hint between them
+- name: mail-layout-inbox-only
+  page: user-guide/tabs-and-layouts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/inbox
+  state: seeded demo (Studio layout)
+  steps:
+  - goto /settings/mail/inbox
+  - under "Your layouts", choose Edit on "Studio"
+  - select the first tab ("Inbox") in the editor
+  - tick "Only mail in the Inbox" on the Clients section (not saved)
+  capture: element the Clients section of the layout editor
+- name: mail-move-to-inbox
+  page: user-guide/inbox.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo (Studio layout); one Finance/Bills conversation archived first
+  steps:
+  - goto /mail/inbox
+  - click the "Bills" tab
+  - hover the archived bill's row, then its Move to Inbox button
+  capture: element the Bills section
+- name: mail-tabs-detail
+  page: user-guide/tabs-and-layouts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; Studio layout with "Show more on tabs when there is room" turned on
+  steps:
+  - goto /settings/mail/inbox, edit "Studio", tick "Show more on tabs when there is room", Save layout
+  - goto /mail/inbox
+  capture: element the tab strip
+- name: mail-section-actions
+  page: user-guide/tabs-and-layouts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - hover the "Everything else" section header
+  - click its ⋯ menu
+  capture: element the section header with the open menu
+- name: mail-section-confirm
+  page: user-guide/tabs-and-layouts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - hover the "Everything else" section header
+  - click its Archive all button
+  capture: element the confirmation dialog
+- name: mail-tabs-everyday-dark
+  page: user-guide/tabs-and-layouts.md
+  platform: web
+  theme: classic
+  scheme: dark
+  viewport: wide
+  route: /mail/inbox
+  state: seeded demo; the seeded "Everyday" layout (Inbox, Financial, Later, Code, Shopping) made active with
+    "Show more on tabs when there is room" on (PUT /api/v1/layouts with tab_detail=true, active=everyday)
+  steps:
+  - goto /mail/inbox
+  - wait for the Inbox tab's "Important" section (important mail with a deadline, Due chips) and the "Unread" section
+  capture: full page
+  also_used_by: index.md, README.md
+- name: mail-tabs-everyday-light
+  page: user-guide/tabs-and-layouts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: wide
+  route: /mail/inbox
+  state: seeded demo; the seeded "Everyday" layout made active (PUT /api/v1/layouts active=everyday), tab
+    detail off (the short tab indicators)
+  steps:
+  - goto /mail/inbox
+  - wait for the "Important" and "Unread" sections
+  capture: full page
+- name: mail-tabs-workspace
+  page: user-guide/tabs-and-layouts.md
+  platform: web
+  theme: office
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; settings ui_theme=office
+  steps:
+  - 'PATCH /api/v1/me/settings {"ui_theme": "office"}'
+  - goto /mail/inbox
+  - wait for rows
+  capture: full page
+- name: mail-reader
+  page: user-guide/reading.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox/<conversation>
+  state: seeded demo (summary cards precomputed by the seed)
+  steps:
+  - goto /mail/inbox
+  - 'click the row "Re: Lumen Coffee: rebrand brief"'
+  - wait for the Summary card and the last message
+  capture: full page
+- name: mail-reader-notes
+  page: user-guide/reading.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox/<conversation>
+  state: seeded demo; a checklist "Lumen rebrand checklist"
+  steps:
+  - goto /mail/inbox
+  - 'click the row "Re: Lumen Coffee: rebrand brief"'
+  - click Create from email in the toolbar, then Link to a note or table…, search "Lumen rebrand" and pick the checklist
+  - wait for its chip on the subject line, dismiss the toast, move the pointer away
+  capture: full page
+- name: mail-images-trackers
+  page: user-guide/reading.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/all/<conversation>
+  state: seeded demo; images=always; The Grid hero image is in the proxy cache
+  steps:
+  - goto /mail/search?q=subject:%22The%20Grid%20%23118%22
+  - 'click the row "The Grid #118: Variable fonts in production"'
+  - wait for the hero image and the "trackers blocked" line
+  capture: element the message card
+- name: mail-images-paused
+  page: admin/image-proxy.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/all/<conversation>
+  state: seeded demo; images=always; remote content paused as with MAILR_REQUIRE_EGRESS and the VPN egress down. The demo
+    has no VPN, so the recipe asks the server for the body with images blocked and adds the server's own reason
+    (images_paused, core/egress.py)
+  steps:
+  - goto /mail/search?q=subject:%22The%20Grid%20%23118%22
+  - 'click the row "The Grid #118: Variable fonts in production"'
+  - wait for the "Images are not displayed" bar
+  capture: element the message card
+- name: mail-translate
+  page: user-guide/reading.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/all/<conversation>
+  state: seeded demo; the scripted demo model answers translations
+  steps:
+  - goto /mail/search?q=from:lucia@casaverde.example
+  - click the row "Propuesta para el nuevo catálogo"
+  - click "Translate to English" in the bar above the message
+  - wait for the translated text and "Show original"
+  capture: element the message card
+- name: mail-reply-suggestions
+  page: user-guide/reading.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox/<conversation>
+  state: seeded demo (suggestions cached for Theo; a thread with a draft shows none, so not Dana's)
+  steps:
+  - goto /mail/inbox
+  - 'click the row "Climbing Saturday?" (Theo Martin)'
+  - scroll to the bottom of the conversation
+  capture: element the last message card with the three suggestion chips
+- name: mail-to-event
+  page: user-guide/reading.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox/<conversation>
+  state: seeded demo; scripted demo model
+  steps:
+  - goto /mail/inbox
+  - click the row "Climbing Saturday?" (Theo suggests Saturday around 10, so the form fills a time)
+  - open the message's ⋮ menu and choose "Create event"
+  - wait for the form to fill ("Reading the email for a date…" gone)
+  capture: element the event form
+- name: mail-attached-email
+  page: user-guide/reading.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: '/mail/search?q=subject:"New access cards"'
+  state: 'seeded demo (the archived "Fwd: New access cards from Monday", forwarded as an attachment)'
+  steps:
+  - 'goto /mail/search?q=subject:"New access cards"'
+  - 'click the row "Fwd: New access cards from Monday"'
+  - wait for the attached email's card to show its body
+  capture: the message
+- name: mail-attachments
+  page: user-guide/reading.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/attachments
+  state: seeded demo
+  steps:
+  - goto /mail/attachments
+  - wait for the file list
+  capture: full page
+- name: mail-subscriptions
+  page: user-guide/subscriptions-and-cleanup.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/subscriptions
+  state: seeded demo (the backlog of older newsletter issues, offers and shipping notices)
+  steps:
+  - goto /mail/subscriptions
+  - wait for the subscription rows
+  capture: full page
+- name: mail-cleanup
+  page: user-guide/subscriptions-and-cleanup.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/cleanup
+  state: seeded demo
+  steps:
+  - goto /mail/cleanup (grouped by sender, archived mail)
+  - wait for the group rows
+  capture: full page
+- name: mail-cleanup-preview
+  page: user-guide/subscriptions-and-cleanup.md
+  platform: web
+  theme: cards
+  scheme: dark
+  viewport: desktop
+  route: /mail/cleanup
+  state: seeded demo; ui_theme=cards, theme=dark
+  steps:
+  - goto /mail/cleanup
+  - click Trash on the row "updates@parcelpoint.example"
+  - wait for the preview's samples
+  capture: element the preview dialog
+- name: mail-compose
+  page: user-guide/writing.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo (templates ;thx ;fu ;inv)
+  steps:
+  - goto /mail/inbox
+  - press c
+  - type "dana@lumencoffee.example" in To and pick Dana Whitfield
+  - 'type "Lumen Coffee: weekly update" in Subject'
+  - in the body type ";fu" then Space
+  - wait for the template text with "Hi Dana,"
+  capture: element the compose window
+- name: mail-inline-image
+  page: user-guide/writing.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; any small PNG fixture (e.g. a studio logo) for upload
+  steps:
+  - goto /mail/inbox
+  - press c, then click "Insert image" and choose the PNG fixture
+  - wait for the upload progress to finish
+  - click the image so its handles and toolbar show
+  capture: element the compose window
+- name: mail-templates-settings
+  page: user-guide/writing.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/writing
+  state: seeded demo
+  steps:
+  - goto /settings/mail/writing
+  - click Edit on "Meeting follow-up"
+  capture: full page
+- name: mail-schedule-send
+  page: user-guide/writing.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - press c, fill To with "priya.shah@northwind.example", Subject "Offsite budget"
+  - click "More send options" (the arrow next to Send)
+  capture: element the compose window with the open menu
+- name: mail-not-sent
+  page: user-guide/writing.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; a reply to Marco in "Bluefin landing page" sent, and its outbox row set to failed (550 5.1.1)
+  steps:
+  - open the "Bluefin landing page" conversation
+  - wait for the Not sent line on the reply (Retry, Edit, Details)
+  capture: element the reply's message card
+- name: mail-outbox
+  page: user-guide/writing.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/outbox
+  state: as mail-not-sent
+  steps:
+  - goto /mail/outbox
+  - wait for the row that says Not sent; the Outbox entry shows in the mail nav
+  capture: full page
+- name: mail-search-results
+  page: user-guide/search.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/search?q=invoice%20has:attachment
+  state: seeded demo
+  steps:
+  - goto /mail/search?q=invoice%20has%3Aattachment
+  - wait for results and the refine chips
+  capture: full page
+- name: mail-search-advanced
+  page: user-guide/search.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - click "Show search options" in the search box
+  - fill From "dana", Has the words "brief"
+  capture: element the advanced search form
+- name: mail-label-menu
+  page: user-guide/organize.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - tick the row "Homepage hero options for Bluefin"
+  - press l
+  capture: element the list pane with the Label as menu
+- name: mail-labels-settings
+  page: user-guide/organize.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/labels
+  state: seeded demo (14 coloured labels with nesting)
+  steps:
+  - goto /settings/mail/labels
+  capture: full page
+- name: mail-filter-editor
+  page: user-guide/organize.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/filters
+  state: seeded demo
+  steps:
+  - goto /settings/mail/filters
+  - click Edit on the filter "Forgehub notifications"
+  - wait for the "Matches:" count
+  capture: element the filter editor
+- name: mail-favorites
+  page: user-guide/organize.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo (favorites Inbox, Starred, Clients/Lumen Coffee, Finance/Bills, Drafts, Sent)
+  steps:
+  - goto /mail/inbox
+  - right-click the favorite "Finance/Bills" in the sidebar
+  capture: element the sidebar with the open menu
+- name: mail-why-panel
+  page: user-guide/triage.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/all/<conversation>
+  state: seeded demo
+  steps:
+  - goto /mail/search?q=from:notifications@forgehub.example
+  - 'click the row "[northwind/website] Run failed: deploy-preview on main"'
+  - click "Why these labels" in the reader toolbar
+  capture: element the reader with the open panel
+- name: mail-review-importance
+  page: user-guide/triage.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/ambrose/importance
+  state: seeded demo (two borderline calls in the last 24 hours)
+  steps:
+  - goto /settings/ambrose/importance
+  - scroll to "Review importance", choose the range "3 days"
+  capture: element the Review importance section
+- name: mail-signals
+  page: user-guide/triage.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo (Reply needed on six emails, Waiting on the Bluefin quote, Due chips on bills)
+  steps:
+  - goto /mail/search?q=is:needs_reply%20OR%20is:waiting%20OR%20has:deadline
+  - wait for rows with chips
+  capture: element the list pane
+- name: mail-primary-actions
+  page: user-guide/triage.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo
+  steps:
+  - goto /mail/search?q=%22energy%20bill%22%20OR%20%22verification%20code%22%20OR%20%22package%20arrives%22
+  - wait for the "Pay bill", "Copy code" and "Track package" chips
+  capture: element the list pane
+- name: mail-spam-settings
+  page: user-guide/triage.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/spam
+  state: seeded demo
+  steps:
+  - goto /settings/mail/spam
+  capture: full page
+- name: mail-snooze-menu
+  page: user-guide/snooze-and-reminders.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; browser clock 2026-10-02 10:40 (a Friday)
+  steps:
+  - goto /mail/inbox
+  - right-click the row "Offsite agenda (draft)" and hover "Snooze"
+  capture: element the list pane with the open submenu
+- name: mail-no-reply
+  page: user-guide/snooze-and-reminders.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo ("Invoice NW-2026-031" came back with No reply)
+  steps:
+  - goto /mail/search?q=is:nudged
+  - wait for the row "Invoice NW-2026-031" with its "No reply" chip
+  capture: element the list pane
+- name: mail-reminder-tray
+  page: user-guide/snooze-and-reminders.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo with reminders (one fired, one missed, one snooze come due), seeded at the demo's pinned time like every other shot; the tray asks with the page's clock (GET /reminders/active?now=), so the server's own clock plays no part
+  steps:
+  - goto /mail/inbox
+  - click the bell in the top bar
+  capture: element the top bar with the open bell (Waiting for you)
+- name: mail-reminder-clear-all
+  page: user-guide/snooze-and-reminders.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: as mail-reminder-tray
+  steps:
+  - goto /mail/inbox
+  - click the bell in the top bar
+  - wait for Clear all on the Reminders section
+  capture: element the open bell
+- name: mail-reminder-sheet
+  page: user-guide/snooze-and-reminders.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: as mail-reminder-tray
+  steps:
+  - goto /mail/inbox
+  - click the bell, then the fired event reminder row
+  capture: element the reminder sheet
+- name: mail-reminder-triage
+  page: user-guide/snooze-and-reminders.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: as mail-reminder-tray
+  steps:
+  - goto /mail/inbox
+  - click the bell, then "Review all"
+  - click "Next reminder" once
+  capture: element the triage queue
+- name: mail-notification-settings
+  page: user-guide/notifications.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/notifications
+  state: seeded demo; browser notification permission granted in the context
+  steps:
+  - context.grantPermissions(['notifications'])
+  - goto /settings/notifications
+  capture: full page
+- name: mail-reminder-notification
+  page: user-guide/notifications.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: a rendered mock of the system notification is not reproducible in headless Chromium; capture the in-page
+    reminder notice instead (desktop notifications off), which shows the same title, when line and buttons; seeded at the pinned time like mail-reminder-tray
+  steps:
+  - 'PUT /api/v1/reminders/settings {"web": {"desktop": false, "push": false}}'
+  - goto /mail/inbox; the demo runs no worker, so replay the event-stream message a firing reminder sends (window event "mailr:reminder" with the fired event reminder from GET /api/v1/reminders/active)
+  - wait for the in-page reminder notice with Open and Ask
+  capture: element the reminder notice
+- name: mail-shortcut-help
+  page: user-guide/keyboard-shortcuts.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - press ?
+  capture: element the shortcut help dialog
+- name: cal-week
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-02
+  state: seeded demo; Work, Personal and Clinic board calendars visible; tasks shown on calendar
+  steps:
+  - goto /calendar/week/2026-10-02
+  - wait for the event "Lumen moodboard session" in the Friday column
+  capture: full page
+- name: cal-settings
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/calendar
+  state: seeded demo (Radicale account connected with Work, Personal, Clinic board, Studio, Errands)
+  steps:
+  - goto /settings/calendar
+  - wait for the section "Calendars and task lists"
+  capture: full page
+- name: cal-builtin-settings
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/calendar
+  state: seeded demo (Radicale account connected); the connector list answers with the built-in "Mailr calendar"
+    added, because the demo turns built-in calendars off and runs no Stalwart calendar
+  steps:
+  - goto /settings/calendar
+  - wait for the "Mailr calendar" card
+  capture: element the "Calendar and task accounts" section
+- name: cal-migrate-preview
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/calendar
+  state: seeded demo; the connector list answers with the mailr calendar and a Davis account added, and the migration
+    routes answer with a finished preview (the e2e spec's mocks, e2e/calendar-migrate-data.ts), because the demo runs
+    no Davis and keeps built-in calendars off
+  steps:
+  - goto /settings/calendar
+  - click "Copy into my Mailr calendar…" on the Davis card
+  - wait for the preview table
+  capture: element the dialog
+- name: cal-migrate-done
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/calendar
+  state: as cal-migrate-preview, then the copy finishes (one item too large) and both Switch over boxes are ticked
+  steps:
+  - goto /settings/calendar
+  - click "Copy into my Mailr calendar…" on the Davis card
+  - click "Copy … items"
+  - tick both Switch over choices
+  capture: element the dialog
+- name: cal-shared-group
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-02
+  state: seeded demo; GET /api/v1/calendar/calendars answers with two group calendars of the family group added
+    (Family, members can edit; School, view only), because the demo runs no Stalwart calendar
+  steps:
+  - goto /calendar/week/2026-10-02
+  - wait for the Shared heading
+  capture: element the Shared group of the calendar list in the left column
+- name: cal-shared-user
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-02
+  state: seeded demo; GET /api/v1/calendar/calendars answers with two calendars people share added (Clinic rota
+    by Rosa Alvarez, view only; Trips by Sam Alvarez, edit), because the demo runs no Stalwart calendar
+  steps:
+  - goto /calendar/week/2026-10-02
+  - wait for the Shared heading
+  capture: element the Shared group of the calendar list in the left column
+- name: cal-share-dialog
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-02
+  state: seeded demo; the first calendar is marked shareable and the share routes answer with two people (Rosa
+    Alvarez, edit and share; Sam Alvarez, view) and three more to add, because the demo runs no Stalwart calendar
+  steps:
+  - goto /calendar/week/2026-10-02
+  - open the first calendar's menu, choose Share…
+  capture: element the Share dialog
+- name: cal-week-workspace
+  page: user-guide/calendar.md
+  platform: web
+  theme: office
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-02
+  state: seeded demo; ui_theme office
+  steps:
+  - set ui_theme to office (PATCH /api/v1/me/settings {"ui_theme":"office"})
+  - goto /calendar/week/2026-10-02
+  - click the event "Lumen moodboard session" (Friday 10:30)
+  - wait for the event details in the reading pane
+  capture: full page
+- name: cal-month
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/month/2026-10-02
+  state: seeded demo
+  steps:
+  - goto /calendar/month/2026-10-02
+  - wait for the all-day bar "Northwind offsite"
+  capture: full page
+- name: cal-schedule-dark
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: dark
+  viewport: desktop
+  route: /calendar/schedule/2026-10-02
+  state: seeded demo; theme dark (setting theme=dark, or emulate prefers-color-scheme dark with theme=system)
+  steps:
+  - set theme to dark
+  - goto /calendar/schedule/2026-10-02
+  - wait for the day header of today with "Lunch with Mei"
+  capture: full page
+- name: cal-left-column-menu
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-02
+  state: seeded demo
+  steps:
+  - goto /calendar/week/2026-10-02
+  - click the options button of the calendar "Work" in the left column (aria-label "Options for Work")
+  - wait for the menu with "Show only this", "Colour", "Rename…", "Default reminders…", "Delete…"
+  capture: element left column with the open menu
+- name: cal-quick-create
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-02
+  state: seeded demo
+  steps:
+  - goto /calendar/week/2026-10-02
+  - click the empty slot on Monday 5 Oct at 11:00
+  - 'type "Design review with Sam mon 11am #Work +meet"'
+  - wait for the chip row (date, time, calendar Work, video, guest Sam suggested)
+  capture: element quick create popover with the surrounding grid
+- name: cal-editor
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-02
+  state: seeded demo
+  steps:
+  - goto /calendar/week/2026-10-02
+  - click the event "Lumen moodboard session" (Friday 10:30)
+  - press e (or click Edit in the details)
+  - wait for the editor dialog with the Title field filled
+  capture: element editor dialog
+- name: cal-event-detail
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-08
+  state: seeded demo
+  steps:
+  - goto /calendar/week/2026-10-08
+  - click the event "Lumen concept review" (Thursday 8 Oct, 2 PM; made from Dana's email)
+  - wait for the event details popover (guests, Join, linked email chip)
+  capture: element event details popover with the surrounding grid
+- name: cal-meeting-prep
+  page: user-guide/calendar.md
+  platform: web
+  theme: office
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-08
+  state: seeded demo; the window made 1500 px tall so the pane fits the whole pack
+  steps:
+  - goto /calendar/week/2026-10-08
+  - click the event "Lumen concept review" (Thursday 8 Oct, 2 PM)
+  - click "Meeting prep" in the event details and wait for its sections
+  capture: element the reading pane with the event details and the meeting prep open
+- name: cal-find-time
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-02
+  state: seeded demo; working hours 09:00–17:00 Monday to Friday (default)
+  steps:
+  - goto /calendar/week/2026-10-02
+  - press f
+  - set Duration to 60 minutes
+  - wait for the ranked slots and the per-day timelines
+  capture: element Find a time dialog
+- name: cal-search
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/search?q=lumen
+  state: seeded demo
+  steps:
+  - goto /calendar/week/2026-10-02
+  - press /
+  - type "lumen"
+  - wait for results under "Upcoming" and "Past"
+  capture: full page
+- name: cal-day-phone
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: phone
+  route: /calendar/day/2026-10-02
+  state: seeded demo
+  steps:
+  - goto /calendar/day/2026-10-02
+  - wait for "Lunch with Mei" at 12:15
+  capture: full page
+- name: cal-invite-card
+  page: user-guide/invitations.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: '/mail/inbox/<conversation "Invitation: Bluefin kickoff">'
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - 'click the conversation "Invitation: Bluefin kickoff" from Marco Silva'
+  - 'expand the first message "Invitation: Bluefin kickoff" if collapsed'
+  - wait for the invitation card with "Going?" Yes / Maybe / No and the day timeline
+  capture: element reader top (invitation card and message header)
+- name: cal-invite-update
+  page: user-guide/invitations.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: '/mail/inbox/<conversation "Invitation: Bluefin kickoff">'
+  state: seeded demo (the organizer's update moves the kickoff to the roof terrace)
+  steps:
+  - goto /mail/inbox
+  - 'click the conversation "Invitation: Bluefin kickoff"'
+  - 'scroll to the message "Updated invitation: Bluefin kickoff"'
+  - wait for its card with "What changed"
+  capture: element the updated message's invitation card
+- name: cal-invite-counter
+  page: user-guide/invitations.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: '/mail/inbox/<conversation "New time proposed: Design critique">'
+  state: seeded demo (Mei's counter proposal on Alex's Design critique)
+  steps:
+  - goto /mail/all
+  - 'click the conversation "New time proposed: Design critique" from Mei Tanaka'
+  - wait for the card "Mei Tanaka proposes …" with Accept and Decline
+  capture: element reader top (card and message header)
+- name: cal-schedule-meeting
+  page: user-guide/invitations.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: '/mail/inbox/<conversation "Lumen Coffee: rebrand brief">'
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - 'click the conversation "Re: Lumen Coffee: rebrand brief" from Dana Whitfield'
+  - click Create from email in the reader's toolbar, then Meeting with these people
+  - wait for the popover with the title, the ticked guests (Dana Whitfield, Jordan Lee) and Length
+  capture: element popover with the reader behind it
+- name: cal-insert-times
+  page: user-guide/invitations.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: '/mail/inbox/<conversation "Lumen Coffee: rebrand brief">'
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - 'click the conversation "Re: Lumen Coffee: rebrand brief"'
+  - press r to reply
+  - click the compose toolbar button "Insert times"
+  - wait for the popover "Insert times you are free" with three slots
+  capture: element compose form with the popover
+- name: notes-grid
+  page: user-guide/notes.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /notes
+  state: seeded demo plus notes made through the API (recipe seedNotes) - a pinned "Shopping" list (Costco and Corner market sections, quantities), "Lisbon trip", "Packing list", "Gift ideas", "Wi-Fi at the studio", "Q4 offsite"; labels Home, Travel, Work
+  steps:
+  - goto /notes
+  - wait for the cards
+  capture: full page
+- name: notes-checklist
+  page: user-guide/notes.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /notes/n/<Shopping>
+  state: as notes-grid; "coffee beans" checked on three days a week apart, so it is a usual item
+  steps:
+  - open the Shopping list
+  - wait for the usual strip
+  - type "Costco: 2 oat milk" in the top add line (the chips show the section and the quantity)
+  capture: the open note
+- name: notes-history
+  page: user-guide/notes.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /notes/n/<Lisbon trip>
+  state: as notes-grid; a later edit of "Lisbon trip" (the fado line)
+  steps:
+  - open "Lisbon trip"
+  - Version history, then select the oldest version
+  capture: the open note
+- name: notes-assistant
+  page: user-guide/notes.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /notes/n/<Shopping>
+  state: as notes-grid; the demo model (MAILR_DEMO_ASSISTANT=1) scripts "shopping" + "costco" as one checklist_items call
+  steps:
+  - open the Shopping list
+  - press Ctrl+. to open the assistant panel
+  - type "Add oat milk and 2 cans of chickpeas to my shopping list under Costco" into "Message the assistant" and press Enter
+  - wait for the answer and for "chickpeas" in the list
+  capture: full page
+- name: notes-share
+  page: user-guide/notes.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /notes/n/<Shopping>
+  state: as notes-grid; the share routes of the Shopping list answer with Sam Okafor at View, the Household group at
+    Edit and three people to add, because the demo has one mailr user
+  steps:
+  - open the Shopping list
+  - click Share in the editor's toolbar
+  capture: element the Share dialog
+- name: notes-reminder
+  page: user-guide/notes.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /notes/n/<Lisbon trip>
+  state: as notes-grid; a reminder on "Lisbon trip" a few days ahead at 9:00
+  steps:
+  - open "Lisbon trip"
+  - wait for the reminder chip under the text
+  capture: the open note
+- name: notes-templates
+  page: user-guide/notes.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /notes
+  state: as notes-grid; the Shopping list saved as the template "Weekly shop"
+  steps:
+  - goto /notes
+  - click "New from template" in the capture bar
+  capture: element the New from template dialog
+- name: notes-links
+  page: user-guide/notes.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /tasks/task/<print the concept deck>
+  state: as notes-grid; the item "print the concept deck" of "Studio errands" made a task, with the note "Concept deck outline" and the table "Print quotes" linked to it
+  steps:
+  - open the task "print the concept deck"
+  - wait for the links panel
+  capture: element the task pane
+- name: notes-phone
+  page: user-guide/notes.md
+  platform: web
+  theme: cards
+  scheme: light
+  viewport: phone
+  route: /notes
+  state: as notes-grid
+  steps:
+  - goto /notes
+  - wait for the cards
+  capture: full page
+- name: tables-grid
+  page: user-guide/tables.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /tables/t/<Workouts>
+  state: seeded demo plus tables made through the API (recipe seedTables) - "Workouts" (Session, Exercise select, Date, Weight, Reps, Done, Notes; ten rows, one weight kept as text "about 105"; footers max, sum and percent checked) and "Filament stock"
+  steps:
+  - open the Workouts table
+  - click the Weight cell of the fifth row
+  capture: full page
+- name: tables-row-form
+  page: user-guide/tables.md
+  platform: web
+  theme: office
+  scheme: light
+  viewport: desktop
+  route: /tables/t/<Workouts>/r/<seventh row>
+  state: as tables-grid
+  steps:
+  - open the seventh row's form (the Workspace theme opens it in the reading pane)
+  capture: full page
+- name: tables-history
+  page: user-guide/tables.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /tables/t/<Workouts>
+  state: as tables-grid; a later edit of the fifth row's weight (82.5 → 85)
+  steps:
+  - ⋮ → History
+  - expand the newest session
+  capture: element the History dialog
+- name: tables-import
+  page: user-guide/tables.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /notes/tables
+  state: seeded demo
+  steps:
+  - New table → Import CSV
+  - paste four expense lines (one amount "about 30") and Preview
+  - type the name Expenses
+  capture: element the import dialog with the detected types
+- name: tables-phone
+  page: user-guide/tables.md
+  platform: web
+  theme: cards
+  scheme: light
+  viewport: phone
+  route: /tables/t/<Workouts>
+  state: as tables-grid; the phone columns are Exercise and Weight
+  steps:
+  - open the Workouts table on a phone
+  capture: full page
+- name: tasks-today
+  page: user-guide/tasks.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /tasks/today
+  state: seeded demo (overdue "Book the offsite venue", "Return the library books"; Studio and Errands lists; tags)
+  steps:
+  - goto /tasks/today
+  - wait for the groups "Overdue" and "Today"
+  capture: full page
+- name: tasks-today-dark
+  page: user-guide/tasks.md
+  platform: web
+  theme: classic
+  scheme: dark
+  viewport: desktop
+  route: /tasks/today
+  state: seeded demo; theme dark
+  steps:
+  - set theme to dark
+  - goto /tasks/today
+  - wait for the group "Overdue"
+  capture: full page
+- name: tasks-quickadd
+  page: user-guide/tasks.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /tasks/today
+  state: seeded demo
+  steps:
+  - goto /tasks/today
+  - press n
+  - 'type "Call Dana fri 3pm !! #Studio @phone"'
+  - wait for the chip row (date, time, priority, list Studio, tag phone)
+  capture: element header, quick-add bar and the first rows
+- name: tasks-pane
+  page: user-guide/tasks.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /tasks/task/<uid of "Prepare the Lumen concept deck">
+  state: seeded demo (three subtasks, one done)
+  steps:
+  - goto /tasks/all
+  - click the task "Prepare the Lumen concept deck"
+  - wait for the details pane with Subtasks 1/3
+  capture: full page
+- name: tasks-bulk
+  page: user-guide/tasks.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /tasks/all
+  state: seeded demo
+  steps:
+  - goto /tasks/all
+  - focus "Weekly timesheet" and press x
+  - focus "Submit the expense report" and press x
+  - focus "Return the library books" and press x (j and k move the focus)
+  - wait for the selection bar "3 selected"
+  capture: full page
+- name: tasks-waiting
+  page: user-guide/tasks.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /tasks/waiting
+  state: seeded demo (the follow-up on "Quote for the Bluefin landing page"; "Invoice NW-2026-031" has already come back with No reply, so it is in the inbox, not here)
+  steps:
+  - goto /tasks/waiting
+  - wait for the grey follow-up row
+  capture: full page
+- name: tasks-desk
+  page: user-guide/tasks.md
+  platform: web
+  theme: desk
+  scheme: light
+  viewport: desktop
+  route: /tasks/all
+  state: seeded demo; ui_theme desk
+  steps:
+  - set ui_theme to desk
+  - goto /tasks/all
+  - click the task "Renew the studio insurance"
+  capture: full page
+- name: tasks-phone
+  page: user-guide/tasks.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: phone
+  route: /tasks/today
+  state: seeded demo
+  steps:
+  - goto /tasks/today
+  - wait for the group "Overdue"
+  capture: full page
+- name: cal-quickadd-chips
+  page: user-guide/quick-add.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-02
+  state: seeded demo
+  steps:
+  - goto /calendar/week/2026-10-02
+  - press c
+  - type "Lunch with Mei fri 12:15 at Café Luna"
+  - wait for highlighted tokens and chips (Fri 12:15–13:15, Café Luna, guest Mei Tanaka unconfirmed)
+  capture: element quick create popover
+- name: tasks-quickadd-phone
+  page: user-guide/quick-add.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: phone
+  route: /tasks/today
+  state: seeded demo
+  steps:
+  - goto /tasks/today
+  - tap the quick-add bar
+  - 'type "Pay rent every month on the 1st #Errands"'
+  - wait for the chip row (repeat, date, list Errands)
+  capture: full page
+- name: people-list
+  page: user-guide/people.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/people
+  state: seeded demo
+  steps:
+  - goto /settings/mail/people
+  - click "Priya Shah" in the list
+  - wait for her card
+  capture: full page
+- name: people-card
+  page: user-guide/people.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/people
+  state: seeded demo (Dana's title and phone found in her signature, not yet accepted)
+  steps:
+  - goto /settings/mail/people
+  - type "Dana" in "Search by name, address or organisation"
+  - click "Dana Whitfield"
+  - wait for "Found in their signature" with Accept and Dismiss
+  capture: element person card
+- name: people-groups
+  page: user-guide/people.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/people
+  state: seeded demo (groups Northwind team and Clients; suggested group "Book club")
+  steps:
+  - goto /settings/mail/people
+  - scroll to "Groups"
+  - wait for "Suggested groups" with the Book club suggestion
+  capture: element Groups and Suggested groups sections
+- name: people-group-chip
+  page: user-guide/people.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox?compose=1
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - press c
+  - type "Northwind" in To and choose the group "Northwind team"
+  - click the chip "Northwind team · 4 of 4" to open the member list
+  capture: element compose window
+- name: rec-app
+  page: user-guide/recordings.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /recordings
+  state: seeded demo with Speakr (four demo recordings synced)
+  steps:
+  - goto /recordings
+  - 'click "Lumen Coffee: kickoff call"'
+  - wait for the Summary tab
+  capture: full page
+- name: rec-connect
+  page: user-guide/recordings.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/accounts
+  state: seeded demo with Speakr
+  steps:
+  - goto /settings/mail/accounts
+  - scroll to the card "Recordings (Speakr)"
+  capture: element the Recordings (Speakr) card
+- name: rec-sheet-transcript
+  page: user-guide/recordings.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: '/recordings/<cid>/<rid of "Lumen Coffee: kickoff call">'
+  state: seeded demo with Speakr; recordings uploaded with --audio-dir so transcripts are not empty
+  steps:
+  - goto /recordings
+  - 'click "Lumen Coffee: kickoff call"'
+  - click the tab "Transcript"
+  capture: full page
+- name: rec-event-section
+  page: user-guide/recordings.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-02
+  state: seeded demo with Speakr (today's "Studio standup" recording linked or suggested)
+  steps:
+  - goto /calendar/week/2026-10-02
+  - click the event "Studio standup" on Friday
+  - wait for the Recording section (summary lines, Open recording, Follow-up email, Add tasks)
+  capture: element event details popover
+- name: rec-action-items
+  page: user-guide/recordings.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: '/recordings/<cid>/<rid of "Lumen Coffee: kickoff call">'
+  state: seeded demo with Speakr; the demo model endpoint serves the action items
+  steps:
+  - goto /recordings
+  - 'click "Lumen Coffee: kickoff call"'
+  - click "Add tasks"
+  - wait for the "Proposed tasks" list
+  capture: element Proposed tasks dialog
+- name: rec-speakers
+  page: user-guide/recordings.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: '/recordings/<cid>/<rid of "Lumen Coffee: kickoff call">'
+  state: seeded demo with Speakr
+  steps:
+  - goto /recordings
+  - 'click "Lumen Coffee: kickoff call" (its speakers are the cleanest of the demo recordings)'
+  - click the tab "People"
+  capture: element recording sheet
+- name: rec-new-recording
+  page: user-guide/recordings.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /recordings
+  state: seeded demo with Speakr; Chromium launched with --use-fake-ui-for-media-stream --use-fake-device-for-media-stream
+  steps:
+  - goto /recordings
+  - press n
+  - type "Lumen packaging check-in" in Title
+  - click Record and wait 5 seconds
+  - type "- Decisions" in the notes
+  capture: element New recording dialog
+- name: rec-app-phone
+  page: user-guide/recordings.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: phone
+  route: /recordings
+  state: seeded demo with Speakr
+  steps:
+  - goto /recordings
+  - wait for the four recordings in the list
+  capture: full page
+- name: assistant-ask-panel
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; fresh seed
+  steps:
+  - goto /mail/inbox
+  - press Ctrl+. to open the assistant panel
+  - type "What needs my attention today?" into "Message the assistant" and press Enter
+  - wait for the final answer with numbered citation chips (no Stop button visible)
+  capture: full page
+- name: assistant-chats
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; GET /agent/sessions and GET /agent/sessions/docs-c1 answered by the recipe (five earlier chats; the demo has no chat history)
+  steps:
+  - goto /mail/inbox, press Ctrl+. to open the Ambrose panel
+  - click History (Chats) in the panel header and open the first chat
+  - click History again, so the list shows that chat marked Open now
+  capture: element the assistant panel
+- name: assistant-chats-search
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; GET /agent/sessions?q= answered by the recipe (two results with marked matches; the demo has no chat history)
+  steps:
+  - goto /mail/inbox, press Ctrl+. to open the Ambrose panel
+  - click History (Chats) in the panel header
+  - type "bluefin" in Search chats and wait for the two results
+  capture: element the assistant panel
+- name: assistant-review-card
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; the chat "Clean up the shop mail" holds a finished /sweep review of the Fieldnote Paper Co. and Atlas Outfitters mail (demo.py _seed_review), its card waiting for approval
+  steps:
+  - goto /mail/inbox, press Ctrl+. to open the Ambrose panel
+  - click History (Chats) in the panel header and open "Clean up the shop mail"
+  - in the move menu of Atlas Outfitters under Move to Trash, choose Archive, so the card shows an Archive group and "4 changed by you" beside Apply
+  capture: element the review progress line and the review card (full height)
+- name: assistant-ask-about-event
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-08
+  state: seeded demo
+  steps:
+  - goto /calendar/week/2026-10-08
+  - click the "Lumen concept review" event (Thursday 8 Oct, 2 PM) to open its quick-action sheet
+  - press Shift+A (or click Ask on the sheet)
+  - wait for the Ask box with the event chip ([data-testid=ask-chip])
+  capture: full page
+- name: assistant-ask-phone-dark
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: dark
+  viewport: phone
+  route: /mail/inbox
+  state: seeded demo; theme setting dark
+  steps:
+  - set the account setting theme=dark (PATCH /api/v1/me/settings {"theme":"dark"})
+  - goto /mail/inbox and open the conversation with Dana Whitfield about the Lumen kickoff
+  - click Ask assistant in the conversation toolbar ([data-testid=reader-ask])
+  - wait for [data-testid=ask-capture] as a bottom sheet with the conversation chip
+  capture: full page
+- name: assistant-citations
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: fresh seed
+  steps:
+  - goto /mail/inbox, press Ctrl+. to open the assistant panel
+  - type "What did Lucía ask for?" and press Enter
+  - wait for the final answer
+  - hover the first citation chip so its quote tooltip shows
+  capture: element the assistant panel
+- name: assistant-web-search
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /tasks
+  state: fresh seed (the seed registers the web search provider "Web (demo)", the demo's own degoog-style
+    service on 127.0.0.1, which MAILR_OUTBOUND_ALLOW allows)
+  steps:
+  - goto /tasks (the inbox shows local-only mail, which turns web search off for the chat), press Ctrl+. to open
+    the assistant panel
+  - type "How long should coffee rest after roasting?" and press Enter
+  - wait for the final answer with its web citation chips
+  capture: element the assistant panel
+- name: assistant-draft-card
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: fresh seed
+  steps:
+  - goto /mail/inbox, press Ctrl+. to open the assistant panel
+  - type "Draft a reply to Dana confirming Thursday" and press Enter
+  - wait for the draft card in the chat
+  capture: element the assistant panel
+- name: assistant-memory
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/ambrose/memory
+  state: seeded demo plus six notes added with POST /api/v1/assistant/memories (Mom's birthday, Dana's preference, deep-work Fridays, the Lumen board, two more); the last two set to status suggested in the database, as the background learner would leave them
+  steps:
+  - goto /settings/ambrose/memory
+  - wait for the Memory section and the To review list
+  capture: full page
+- name: assistant-local-models
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/ambrose/models
+  state: seeded demo; Local models only for me turned on with PUT /api/v1/me/local-models {"on":true}
+  steps:
+  - goto /settings/ambrose/models
+  - wait for the "Local models only" section
+  capture: element the "Local models only" section
+- name: assistant-model-use
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/ambrose/models
+  state: seeded demo; the recipe answers GET /api/v1/me/model-use with a month of example use (Ambrose, summaries,
+    sorting new mail and the search index on the local demo model, translation on a hosted example model)
+  steps:
+  - goto /settings/ambrose/models
+  - scroll to the "Model use" section
+  capture: element the "Model use" section
+- name: assistant-answer-model
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /tasks
+  state: fresh seed (the demo model is a local endpoint)
+  steps:
+  - goto /tasks, press Ctrl+. to open the assistant panel
+  - type "What needs my attention today?" and press Enter
+  - wait for the final answer and its Local chip
+  capture: element the assistant panel
+- name: assistant-orders-builtin
+  page: user-guide/standing-orders.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/ambrose/orders
+  state: seeded demo; the built-in order Follow my forwarded notes at the top (Ask me), the demo's own orders
+    below it
+  steps:
+  - goto /settings/ambrose/orders
+  - wait for the built-in order
+  capture: element the "When mail arrives" section
+- name: assistant-trusted-addresses
+  page: user-guide/forwarded-notes.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/ambrose/forwards
+  state: seeded demo; handled_elsewhere=["memory@northwind.example"]; the trusted-addresses listing is fixed in the
+    recipe (the demo has no forwarded mail) with a confirmed address (alex.rivera@lakeside.example, last mail
+    verified), one waiting for its code (arivera@consulting.example) and one suggestion (alex@rivera-family.example)
+  steps:
+  - PATCH /api/v1/me/settings {"handled_elsewhere":["memory@northwind.example"]}
+  - goto /settings/ambrose/forwards
+  - wait for "Suggested addresses" and the address under "Addresses for other assistants"
+  capture: element the "Trusted addresses" and "Addresses for other assistants" sections
+- name: assistant-orders-list
+  page: user-guide/standing-orders.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/ambrose/orders
+  state: seeded demo (orders Client asks, Bills, Morning summary routine, Newsletter digest paused; Speakr connector
+    seeded if available so "When a recording arrives" shows)
+  steps:
+  - goto /settings/ambrose/orders
+  - wait for "When mail arrives" and "Routines" lists
+  capture: full page
+- name: assistant-order-editor
+  page: user-guide/standing-orders.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/ambrose/orders
+  state: seeded demo
+  steps:
+  - goto /settings/ambrose/orders
+  - click Edit on the "Bills" order
+  - type "Add a task to pay it two days before the due date." into "Work for Ambrose" (the seeded order has none, and the empty field shows a placeholder)
+  - wait for the editor dialog with search, question, instant actions and work for the assistant
+  capture: element the editor dialog
+- name: assistant-order-test
+  page: user-guide/standing-orders.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/ambrose/orders
+  state: seeded demo
+  steps:
+  - goto /settings/ambrose/orders
+  - click "Test and run on recent mail" on the "Client asks" order
+  - wait for the list of matched (Would run) and skipped conversations
+  capture: element the Test dialog
+- name: assistant-brief-top
+  page: user-guide/standing-orders.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; brief_position=top
+  steps:
+  - PATCH /api/v1/me/settings {"brief_position":"top"}
+  - goto /mail/inbox and open the Lumen thread with Dana (it carries the "Client asks" brief)
+  - wait for the brief card above the messages
+  capture: full page
+- name: assistant-brief-side
+  page: user-guide/standing-orders.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; brief_position=side
+  steps:
+  - PATCH /api/v1/me/settings {"brief_position":"side"}
+  - goto /mail/inbox and open the Lumen thread with Dana
+  - wait for the brief card beside the messages
+  - restore brief_position=top afterwards
+  capture: full page
+- name: assistant-approval-card
+  page: user-guide/approvals.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: fresh seed
+  steps:
+  - goto /mail/inbox, press Ctrl+. to open the assistant panel
+  - type "Remind Marco about the quote" and press Enter
+  - wait for the approval card (Allow once, Allow for this chat, Always allow…, Deny)
+  capture: element the assistant panel
+- name: assistant-approvals-settings
+  page: user-guide/approvals.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/agents#approvals
+  state: 'seeded demo (four approvals waiting: order, filter, send, the review card; two decided)'
+  steps:
+  - goto /settings/agents#approvals
+  - wait for the Approvals section with pending cards and recent decisions
+  capture: element the Approvals section
+- name: approval-grant-covers
+  page: user-guide/approvals.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; a token "Claude Code" (read, label) asks twice to create a label (POST /api/v1/labels
+    {"name":"Receipts"}, then {"name":"Travel"}, with Authorization Bearer)
+  steps:
+  - goto /mail/inbox
+  - open the bell (Waiting for you) in the header
+  - wait for the "Create label “Travel”" card, whose grants say "(also approves 1 other waiting)"
+  capture: element that card with its "Requested by" line
+- name: assistant-skill-editor
+  page: agents/skills.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/ambrose/skills
+  state: seeded demo (built-in skills)
+  steps:
+  - goto /settings/ambrose/skills
+  - click Edit on the "formal" skill
+  - type "hi dana, thursday works, see you then" into "Sample text" under Try it and click Run
+  - wait for the rewritten text
+  capture: element the skill dialog
+- name: agents-settings-overview
+  page: agents/index.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/agents
+  state: seeded demo; create one token first (POST /api/v1/tokens {"name":"Claude Code on workstation","scopes":["read","draft"]})
+    so the list is not empty
+  steps:
+  - goto /settings/agents
+  - wait for API tokens, Approvals and Permissions sections
+  capture: full page
+- name: agents-token-create
+  page: agents/tokens.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/agents
+  state: seeded demo
+  steps:
+  - goto /settings/agents
+  - click Create token
+  - type "Claude Code on workstation" into Name
+  - tick the send scope so the send policy shows
+  capture: element the Create API token dialog
+- name: agents-audit-log
+  page: agents/tokens.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/agents
+  state: seeded demo; a token created and used for a few calls (GET /api/v1/agent/tools, POST /api/v1/agent/tools/search_conversations
+    {"q":"is:unread"}) with Authorization Bearer
+  steps:
+  - goto /settings/agents
+  - pick that token in "Filter by token" under Audit log
+  capture: element the Audit log section
+- name: agents-permissions
+  page: agents/approvals.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/agents
+  state: seeded demo; add a rule POST /api/v1/permissions {"subject":"*","action":"mail.send","effect":"allow","constraints":{"replies_only":true,"known_only":true,"max_per_day":10}}
+  steps:
+  - goto /settings/agents
+  - scroll to Permissions
+  - choose "Every agent (default for all)" under Rules for, so the conditional rule shows
+  capture: element the Permissions section
+- name: android-onboarding-server
+  page: getting-started/phone.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: onboarding, server address
+  roborazzi: DocsShotsTest.onboardingServer
+  state: server field prefilled with https://mail.example.com
+  steps:
+  - record phone-light-onboarding-server
+  capture: screen
+- name: android-setup-link
+  page: getting-started/phone.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: onboarding, a setup link opened
+  roborazzi: DocsShotsTest.onboardingSetupLink
+  state: signed out; a mailr://setup link for https://mail.example.com was opened
+  steps:
+  - record phone-light-setup-link
+  capture: screen
+- name: android-move-suggestion
+  page: user-guide/invitations.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Mail tab, a conversation
+  roborazzi: DocsShotsTest.moveSuggestion
+  state: demo-like fixture; Dana asks to move the Lumen kickoff from Tue 6 Oct to Wed 7 Oct, 10 AM (event_change on the message)
+  steps:
+  - record android-move-suggestion
+  capture: screen
+- name: android-standing-orders
+  page: android/settings.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Settings → Ambrose → Standing orders
+  roborazzi: DocsShotsTest.standingOrders
+  state: the built-in order Follow my forwarded notes (Ask me) above four of the demo's orders, Newsletter digest off
+  steps:
+  - record android-standing-orders
+  capture: screen
+- name: android-trusted-addresses
+  page: android/settings.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Settings → Ambrose → Trusted addresses
+  roborazzi: DocsShotsTest.trustedAddresses
+  state: a confirmed address (alex.rivera@lakeside.example), one waiting for its code (arivera@consulting.example), a suggestion and memory@northwind.example under Addresses for other assistants; a tall phone (h1240dp) so the whole page fits
+  steps:
+  - record android-trusted-addresses
+  capture: screen
+- name: android-inbox
+  page: android/index.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Mail tab, inbox
+  roborazzi: DocsShotsTest.inbox
+  state: demo-like fixture (Alex Rivera, Northwind Studio)
+  steps:
+  - record phone-light-inbox
+  capture: screen
+- name: android-list-detail-fold
+  page: android/index.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-fold
+  route: Mail tab, list and conversation side by side (unfolded)
+  roborazzi: DocsShotsTest.listDetailFold
+  state: fixture conversation open
+  steps:
+  - record fold-unfolded-light-list-detail
+  capture: screen
+- name: android-priority-inbox
+  page: android/mail.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Mail tab, custom inbox sections
+  roborazzi: DocsShotsTest.priorityInbox
+  state: fixture with Important, Unread and Everything else sections
+  steps:
+  - record phone-light-priority
+  capture: screen
+- name: android-drawer
+  page: android/mail.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: mail drawer with Favorites
+  roborazzi: DocsShotsTest.drawer
+  state: favorites Inbox, Starred, Clients/Lumen; labels below
+  steps:
+  - record phone-light favorites list
+  capture: screen
+- name: android-conversation
+  page: android/mail.md
+  platform: android
+  theme: material
+  scheme: dark
+  viewport: android-phone
+  route: conversation reader
+  roborazzi: DocsShotsTest.conversation
+  state: fixture thread with a brief card
+  steps:
+  - record phone-dark-conversation
+  capture: screen
+- name: android-attached-email
+  page: android/mail.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: conversation reader
+  roborazzi: DocsShotsTest.attachedEmail
+  state: 'fixture: "Fwd: New access cards from Monday", forwarded as an attachment, its card open'
+  steps:
+  - record android-attached-email
+  capture: screen
+- name: android-compose
+  page: android/mail.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: composer
+  roborazzi: DocsShotsTest.compose
+  state: reply to Dana with the microphone button visible
+  steps:
+  - record phone-light-compose
+  capture: screen
+- name: android-calendar-week
+  page: android/calendar-and-reminders.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Calendar tab, week view
+  roborazzi: DocsShotsTest.calendarWeek
+  state: fixture week with standup, 1:1 and the Lumen review
+  steps:
+  - record phone-light-calendar-week
+  capture: screen
+- name: android-notes-grid
+  page: android/notes.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Notes tab, the grid
+  roborazzi: NotesScreenshotTest.grid
+  state: 'a pinned shopping list with sections and quantities, a text note, a packing list, a table'
+- name: android-notes-list
+  page: android/notes.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Notes tab, a shopping list open
+  roborazzi: NotesScreenshotTest.checklist
+  state: 'sections Costco and Corner market, quantity chips, the checked fold open'
+- name: android-tasks-today
+  page: android/calendar-and-reminders.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Tasks tab, Today with quick add text
+  roborazzi: DocsShotsTest.tasksToday
+  state: 'quick add field "Call Dana fri 3pm !! #Work @phone every week"'
+  steps:
+  - record phone-light tasks quickadd
+  capture: screen
+- name: android-reminder-sheet
+  page: android/calendar-and-reminders.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: reminder quick-action sheet, snooze choices
+  roborazzi: DocsShotsTest.reminderSheet
+  state: event reminder for the Lumen review
+  steps:
+  - record phone-light sheet event-snooze
+  capture: screen
+- name: android-fullscreen-event
+  page: android/calendar-and-reminders.md
+  platform: android
+  theme: material
+  scheme: dark
+  viewport: android-phone
+  route: full-screen reminder alert
+  roborazzi: DocsShotsTest.fullScreenEvent
+  state: event starting in 5 minutes with a video link
+  steps:
+  - record phone-dark fullscreen-event
+  capture: screen
+- name: android-assistant
+  page: android/assistant-and-sharing.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Assistant tab with an answer
+  roborazzi: DocsShotsTest.assistant
+  state: answer with citation chips
+  steps:
+  - record phone-light-assistant
+  capture: screen
+- name: android-approvals
+  page: android/assistant-and-sharing.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Approvals screen
+  roborazzi: DocsShotsTest.approvals
+  state: a pending send to Marco and recent decisions
+  steps:
+  - record phone-light approvals screen
+  capture: screen
+- name: android-waiting
+  page: android/assistant-and-sharing.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Waiting for you
+  roborazzi: DocsShotsTest.waiting
+  state: an approval, a message not sent, a reminder now and a missed one
+  steps:
+  - record phone-light Waiting for you
+  capture: screen
+- name: android-translate
+  page: android/mail.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: conversation reader
+  roborazzi: DocsShotsTest.translate
+  state: a message from Lucía translated from Spanish, Show original
+  steps:
+  - record phone-light conversation reader
+  capture: screen
+- name: android-account-health
+  page: android/settings.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Settings screen
+  roborazzi: DocsShotsTest.accountHealth
+  state: two mail accounts, one needs its password again
+  steps:
+  - record phone-light Settings screen
+  capture: screen
+- name: android-approval-grant
+  page: android/assistant-and-sharing.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Approvals screen
+  roborazzi: DocsShotsTest.approvalGrant
+  state: two waiting label creates from the token Claude Code
+  steps:
+  - record phone-light approvals screen
+  - tap Allow… on the first card
+  capture: screen
+- name: android-ask-capture
+  page: android/assistant-and-sharing.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Ask capture over a task reminder
+  roborazzi: DocsShotsTest.askCapture
+  state: task "Renew the studio insurance" attached
+  steps:
+  - record phone-light capture-task
+  capture: screen
+- name: android-send-to-self
+  page: android/assistant-and-sharing.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Send to self card for a shared link
+  roborazzi: DocsShotsTest.sendToSelf
+  state: a link shared from the browser; Reading picked on the last Send to self
+  steps:
+  - share a link to "Send to self"
+  - type a note
+  capture: screen
+- name: android-ask-listening
+  page: android/assistant-and-sharing.md
+  platform: android
+  theme: material
+  scheme: dark
+  viewport: android-phone
+  route: Ask capture while dictating
+  roborazzi: DocsShotsTest.askListening
+  state: microphone on, level meter moving
+  steps:
+  - record phone-dark capture-listening
+  capture: screen
+- name: android-settings
+  page: android/settings.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Settings screen
+  roborazzi: DocsShotsTest.settings
+  state: default preferences, account Alex Rivera on https://mail.example.com
+  steps:
+  - record phone-light-settings
+  capture: screen
+- name: setup-welcome
+  page: getting-started/your-first-sign-in.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /setup/welcome
+  state: seeded demo; the setup guide opened at its first step (opening it starts the guide, so the demo is re-seeded after)
+  steps:
+  - goto /setup/welcome
+  - wait for "Welcome to Mailr, Alex!"
+  capture: full page
+- name: setup-welcome-phone
+  page: getting-started/your-first-sign-in.md
+  platform: web
+  theme: cards
+  scheme: light
+  viewport: phone
+  route: /setup/welcome
+  state: seeded demo; the setup guide on a phone-sized screen
+  steps:
+  - goto /setup/welcome
+  - wait for "Welcome to Mailr, Alex!"
+  capture: full page
+- name: setup-connect-gmail
+  page: getting-started/your-first-sign-in.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /setup/accounts
+  state: seeded demo
+  steps:
+  - goto /setup/accounts
+  - type alex.rivera@northwind.example (answered as a Google Workspace address) and click Next
+  - wait for the Google app-password help; open "First, 2-Step Verification must be on"
+  capture: the connect form
+- name: setup-look
+  page: getting-started/your-first-sign-in.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /setup/look
+  state: seeded demo
+  steps:
+  - goto /setup/look
+  capture: the step card
+- name: setup-inbox-style
+  page: getting-started/your-first-sign-in.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /setup/inbox
+  state: seeded demo (the previews show Alex's own newest mail)
+  steps:
+  - goto /setup/inbox
+  - wait for "Previews show your own newest emails."
+  capture: the step card
+- name: setup-phone
+  page: getting-started/your-first-sign-in.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /setup/phone
+  state: seeded demo
+  steps:
+  - goto /setup/phone
+  - choose Android
+  capture: the step card
+- name: setup-about-chat
+  page: getting-started/your-first-sign-in.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /setup/about
+  state: seeded demo with the scripted demo model (MAILR_DEMO_ASSISTANT=1)
+  steps:
+  - goto /setup/about
+  - click Start ("Have a quick chat" is chosen)
+  - answer "I lead design at a small branding studio." and "Keeping up with client threads, and quotes and invoices."
+  capture: the step card
+- name: setup-about-review
+  page: getting-started/your-first-sign-in.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /setup/about
+  state: seeded demo with the scripted demo model (MAILR_DEMO_ASSISTANT=1)
+  steps:
+  - goto /setup/about and click Start
+  - answer the five questions
+  - click "Show me what you learned"
+  capture: the step card with the summary to review
+- name: setup-done-dark
+  page: getting-started/your-first-sign-in.md
+  platform: web
+  theme: cards
+  scheme: dark
+  viewport: desktop
+  route: /setup/done
+  state: seeded demo
+  steps:
+  - goto /setup/done
+  - click "Show me around"
+  capture: full page
+- name: setup-done-notes
+  page: getting-started/your-first-sign-in.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /setup/done
+  state: seeded demo
+  steps:
+  - goto /setup/done
+  capture: element the guide's card (section.ob-card), with the Notes and lists card
+- name: setup-done-notes-phone
+  page: getting-started/your-first-sign-in.md
+  platform: web
+  theme: cards
+  scheme: light
+  viewport: phone
+  route: /setup/done
+  state: seeded demo; an Android user agent
+  steps:
+  - goto /setup/done
+  capture: full page
+- name: admin-managed-account
+  page: admin/users.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/users
+  state: seeded demo; the setting "Administrators may connect mail accounts for members" on, a member Sam Okafor
+    (sam@northwind.example) with one account an administrator connected (orders@northwind.example)
+  steps:
+  - goto /settings/admin/users
+  - click "mail accounts" in Sam Okafor's row
+  - fill sam@northwind.example, click "Find servers" (mail.northwind.example), fill a password, click "Test"
+  capture: the dialog
+- name: admin-prepare-user
+  page: admin/users.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/users
+  state: seeded demo
+  steps:
+  - goto /settings/admin/users
+  - click "Prepare a new user"
+  - fill sam@northwind.example; Style Cards, Inbox style Simple, Notifications Important mail; note "Sam starts on Monday"
+  capture: the dialog
+- name: mail-screener
+  page: user-guide/screener.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/screener
+  state: seeded demo (four first-time senders on the personal account, held while the seed ran); the Screener turned on with PUT /screener/settings
+  steps:
+  - turn the Screener on
+  - goto /mail/screener
+  - wait for the sender cards
+  capture: full page
+- name: mail-screener-phone
+  page: user-guide/screener.md
+  platform: web
+  theme: cards
+  scheme: light
+  viewport: phone
+  route: /mail/screener
+  state: seeded demo; the Screener turned on with PUT /screener/settings
+  steps:
+  - turn the Screener on
+  - goto /mail/screener
+  - wait for the sender cards
+  capture: full page
+- name: mail-screener-settings
+  page: user-guide/screener.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/spam#screener
+  state: seeded demo; the Screener turned on with PUT /screener/settings
+  steps:
+  - turn the Screener on
+  - goto /settings/mail/spam#screener (the page scrolls to the Screener section)
+  capture: full page
+- name: admin-phone-access
+  page: admin/calendars.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/calendars
+  state: seeded demo; GET /api/v1/admin/calendars answers with built-in calendars and phone access on for
+    https://dav.northwind.example, and the phone access check answers with every line passing, because the demo
+    runs no gateway
+  steps:
+  - goto /settings/admin/calendars
+  - click "Check the public address"
+  capture: element the "Phones and desktop apps" part of the Calendars section, with the check result
+- name: settings-phone-apps
+  page: user-guide/phone-calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/calendar
+  state: seeded demo; the connector list gains the built-in "Mailr calendar" and GET /api/v1/me/dav answers with
+    phone access on and one app password, because the demo keeps built-in calendars and phone access off
+  steps:
+  - goto /settings/calendar
+  - wait for the app password list
+  capture: element the "Phones and other apps" section
+- name: settings-phone-password
+  page: user-guide/phone-calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/calendar
+  state: as settings-phone-apps; making a password answers with an example password (not a real one)
+  steps:
+  - goto /settings/calendar
+  - click "New app password", type "Sam’s iPhone", click "Make password"
+  capture: element the "App password for Sam’s iPhone" dialog
+- name: android-notesapp-signin
+  page: android/notes-app.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: The Notes app, first start, server checked
+  roborazzi: NotesAppScreenshotTest.signin
+  state: 'the sign-in step for mail.example.com with single sign-on and a password'
+- name: android-notesapp-grid
+  page: android/notes-app.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: The Notes app, the grid
+  roborazzi: NotesAppScreenshotTest.grid
+  state: 'a pinned shopping list with sections and quantities, a text note, a packing list, a gate code, a table'
+- name: android-notesapp-capture
+  page: android/notes-app.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Quick capture, Add to list
+  roborazzi: NotesAppScreenshotTest.capture
+  state: 'Shopping chosen, the line "Corner market: 2 limes, coffee" and its summary'
+- name: android-notesapp-share
+  page: android/notes-app.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: The share sheet, Add to a list
+  roborazzi: NotesAppScreenshotTest.share
+  state: 'a shared recipe of five lines, Shopping chosen (opened last)'
+- name: android-notesapp-widgets
+  page: android/notes-app.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Home screen with the Checklist, Table and Quick capture widgets (Glance RemoteViews)
+  roborazzi: NotesAppScreenshotTest.widgets
+  state: 'the shopping list, the Workouts table with Weight, the capture buttons'
+- name: waiting-bell
+  page: user-guide/waiting.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; a token "Claude Code" (read, label) asks to create the label "Receipts"; a reply to Marco in "Bluefin landing page" not sent, as mail-not-sent
+  steps:
+  - goto /mail/inbox
+  - click the bell in the top bar
+  - wait for the Approvals and Not sent sections
+  capture: element the top bar with the open bell
+- name: waiting-allow-all
+  page: user-guide/approvals.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /mail/inbox
+  state: seeded demo; a token "Claude Code" (read, label) asks three times to create a label (Receipts, Travel, School)
+  steps:
+  - goto /mail/inbox
+  - click the bell, then "Allow all 3" on the line "3 requests from Claude Code"
+  - wait for the list of the three requests
+  capture: element the open bell
+- name: mail-create-from
+  page: user-guide/reading.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: '/mail/inbox/<conversation "Lumen Coffee: rebrand brief">'
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - 'click the conversation "Re: Lumen Coffee: rebrand brief"'
+  - click Create from email in the reader's toolbar
+  capture: element the toolbar with the open menu
+- name: mail-copy-address
+  page: user-guide/reading.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: '/mail/inbox/<conversation "Lumen Coffee: rebrand brief">'
+  state: seeded demo
+  steps:
+  - goto /mail/inbox
+  - 'click the conversation "Re: Lumen Coffee: rebrand brief"'
+  - point at Dana Whitfield's name in her open message, then at the copy button beside her address
+  capture: element that message's header
+- name: search-scope
+  page: user-guide/search.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/week/2026-10-02
+  state: seeded demo
+  steps:
+  - goto /calendar/week/2026-10-02
+  - click the search box at the top, then its chip "Calendar"
+  - wait for the menu All, Mail, Calendar, Tasks, Notes
+  capture: element the search box with the open menu
+- name: notes-create-from
+  page: user-guide/notes.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /notes/n/<Shopping>
+  state: seeded demo with the notes of notes-grid
+  steps:
+  - goto the Shopping list
+  - click Create from note in the note's toolbar
+  capture: element the note with the open menu
+- name: settings-email-links
+  page: user-guide/email-links.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/writing#email-links
+  state: seeded demo
+  steps:
+  - goto /settings/mail/writing
+  - scroll to the "Email links" section
+  capture: element the "Email links" section
+- name: settings-region
+  page: user-guide/settings.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/you/region
+  state: seeded demo
+  steps:
+  - goto /settings/you/region
+  capture: full page
+- name: settings-look-desk-dark
+  page: user-guide/settings.md
+  platform: web
+  theme: desk
+  scheme: dark
+  viewport: desktop
+  route: /settings/look
+  state: seeded demo
+  steps:
+  - goto /settings/look
+  capture: full page
+- name: look-colours-custom
+  page: user-guide/appearance.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/look/look#colours
+  state: seeded demo; ui_accent={seed:#b04a7a, harmony:complementary}
+  steps:
+  - goto /settings/look/look#colours
+  - wait for the colour wheel
+  capture: the Colours section
+- name: look-colours-cards-dark
+  page: user-guide/appearance.md
+  platform: web
+  theme: cards
+  scheme: dark
+  viewport: desktop
+  route: /settings/look/look#colours
+  state: seeded demo; ui_accent={preset:cards.teal}
+  steps:
+  - goto /settings/look/look#colours
+  capture: the Colours section
+- name: settings-spam-focus
+  page: user-guide/settings.md
+  platform: web
+  theme: focus
+  scheme: light
+  viewport: desktop
+  route: /settings/mail/spam
+  state: seeded demo
+  steps:
+  - goto /settings/mail/spam
+  - choose Strict under How strict, so the Saved toast with Undo shows
+  capture: full page
+- name: settings-ambrose-office
+  page: user-guide/settings.md
+  platform: web
+  theme: office
+  scheme: light
+  viewport: desktop
+  route: /settings/ambrose/about
+  state: seeded demo
+  steps:
+  - goto /settings/ambrose/about
+  capture: full page
+- name: settings-mail-phone-cards
+  page: user-guide/settings.md
+  platform: web
+  theme: cards
+  scheme: dark
+  viewport: phone
+  route: /settings/mail/writing
+  state: seeded demo
+  steps:
+  - goto /settings/mail/writing
+  capture: full page
+- name: cal-today
+  page: user-guide/calendar.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /calendar/today/2026-10-02
+  state: seeded demo; the day's events, tasks due, mail waiting on a reply and approvals
+  steps:
+  - goto /calendar/today/2026-10-02
+  - wait for the agenda's first event
+  capture: full page
+- name: cal-today-phone
+  page: user-guide/calendar.md
+  platform: web
+  theme: cards
+  scheme: dark
+  viewport: phone
+  route: /calendar/today/2026-10-02
+  state: seeded demo, as cal-today
+  steps:
+  - goto /calendar/today/2026-10-02
+  - wait for the agenda's first event
+  capture: full page
+- name: admin-invite
+  page: admin/users.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/admin/users
+  state: seeded demo (an invite for cleo@northwind.example is made, so the next shot re-seeds)
+  steps:
+  - goto /settings/admin/users
+  - click "Invite someone"
+  - fill cleo@northwind.example and "Cleo Rivera"; open "Setup defaults" and choose Style Cards
+  - click "Make the link" and wait for the QR code
+  capture: the dialog
+- name: join-page
+  page: getting-started/start-here.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: phone
+  route: /join/<token>
+  state: seeded demo; an invite for cleo@northwind.example made through the API, then signed out
+  steps:
+  - make an invite for cleo@northwind.example ("Cleo Rivera") as the demo admin
+  - sign out, goto the invite link
+  - wait for "Welcome, Cleo"
+  capture: full page
+- name: calendar-import-ics
+  page: user-guide/calendar.md
+  platform: web
+  theme: office
+  scheme: light
+  viewport: desktop
+  route: /calendar
+  state: seeded demo; a generated .ics file with three school events
+  steps:
+  - goto /calendar
+  - click the top bar's More (⋮), then "Import an .ics file…"
+  - choose the file terms.ics and wait for the counts
+  capture: the dialog
+- name: calendar-subscribe
+  page: user-guide/calendar.md
+  platform: web
+  theme: cards
+  scheme: dark
+  viewport: phone
+  route: /calendar/today/2026-10-02
+  state: seeded demo, as cal-today
+  steps:
+  - goto /calendar/today/2026-10-02
+  - wait for the agenda's first event
+  capture: full page
+- name: settings-activity
+  page: user-guide/activity.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /settings/you/activity
+  state: seeded demo; a conversation archived, one starred and then undone, a list created
+  steps:
+  - archive the first inbox conversation, star the second, create the list "Weekend errands" (API)
+  - undo the star from its Activity entry (API)
+  - goto /settings/you/activity
+  capture: full page
+- name: android-today-widget
+  page: android/calendar-and-reminders.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: home screen with the Today widget and the 1x1 Talk to Ambrose widget
+  roborazzi: DocsShotsTest.todayWidget
+  state: Today widget at 9:10 with 3 events and 3 tasks; 1x1 Talk to Ambrose below
+  steps:
+  - record the Today widget and the Talk to Ambrose widget
+  capture: screen
+- name: android-agenda-widget
+  page: android/calendar-and-reminders.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: home screen with the Agenda widget and the 1x1 Talk to Ambrose widget
+  roborazzi: DocsShotsTest.agendaWidget
+  state: Agenda widget in its default style (week strip) at 9:10 on the demo workday, 5 days, 4 tasks, weather 18° partly cloudy; 1x1 Talk to Ambrose below
+  steps:
+  - record the Agenda widget and the Talk to Ambrose widget
+  capture: screen
+- name: android-agenda-styles
+  page: android/calendar-and-reminders.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: home screen with the four Agenda widget styles
+  roborazzi: DocsShotsTest.agendaStyles
+  state: the four styles at 4x3 (glass timeline, paper and rail, week strip, numeral duotone) on a made-up wallpaper, 14:05 on Wednesday 7 October, sample events and five tasks, weather 72° partly cloudy
+  steps:
+  - record the four Agenda widget styles
+  capture: screen
+- name: android-calendar-month
+  page: android/calendar-and-reminders.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Calendar tab, Month view, the demo workday picked
+  roborazzi: DocsShotsTest.calendarMonth
+  state: the demo month with daily standups, reviews and run club; the picked day's events listed below
+  steps:
+  - record the phone month with its day list
+  capture: screen
+- name: android-activity
+  page: android/settings.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Settings → Activity
+  roborazzi: DocsShotsTest.activity
+  state: five rows; you, Ambrose, Research agent, the administrator (Sam Lee), one undone
+  steps:
+  - open Settings, then Activity
+  capture: screen
+- name: notes-repeat
+  page: user-guide/notes.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /notes/n/<Shopping>
+  state: as notes-grid; the Shopping list repeats weekly on Sunday (PATCH repeat FREQ=WEEKLY;BYDAY=SU)
+  steps:
+  - open the Shopping list
+  - ⋮ → Repeat: weekly on Sunday
+  capture: element the Repeat this list dialog
+- name: notes-offline
+  page: user-guide/notes.md
+  platform: web
+  theme: cards
+  scheme: dark
+  viewport: phone
+  route: /notes/n/<Shopping>
+  state: as notes-grid; the browser offline once the list is open
+  steps:
+  - open the Shopping list
+  - go offline
+  - tick milk, add "dish soap"
+  capture: the open note
+- name: notes-local-only-locked
+  page: user-guide/notes.md
+  platform: web
+  theme: office
+  scheme: light
+  viewport: desktop
+  route: /notes/n/<Shopping>
+  state: as notes-grid; the note answers as a list Sam Okafor shared at Edit and share with Local models only on, and
+    its share routes offer Mei Tanaka of the Household group, because the demo has one mailr user
+  steps:
+  - open the Shopping list
+  - open the editor's ⋮ menu
+  capture: the open note and the menu
+- name: tables-calendar
+  page: user-guide/tables.md
+  platform: web
+  theme: desk
+  scheme: dark
+  viewport: desktop
+  route: /calendar/month/2026-10-02
+  state: seeded demo; a table Birthdays (Name, Day) with three October dates, its Day column on the calendar
+  steps:
+  - open the month
+  capture: full page
+- name: tables-add-row-form
+  page: user-guide/tables.md
+  platform: web
+  theme: focus
+  scheme: light
+  viewport: phone
+  route: /tables/t/<Workouts>/add
+  state: as tables-grid
+  steps:
+  - open the Add-a-row link of Workouts
+  capture: full page
+  route: /calendar
+  state: seeded demo
+  steps:
+  - goto /calendar
+  - tap the top bar's More (⋮), then "Subscribe to a calendar link…"
+  - fill https://calendars.example.com/holidays/us.ics and the name "US holidays"; choose every day
+  capture: the dialog
+- name: notes-import-keep
+  page: user-guide/notes.md
+  platform: web
+  theme: focus
+  scheme: dark
+  viewport: desktop
+  route: /notes
+  state: seeded demo; four generated Keep .json notes (a list, two notes, one from Keep's trash)
+  steps:
+  - goto /notes
+  - click the top bar's More (⋮), then "Import from Google Keep…"
+  - choose the four .json files and wait for the counts
+  capture: the dialog
+- name: android-invite-card
+  page: android/mail.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: conversation reader
+  roborazzi: DocsShotsTest.inviteCard
+  state: fixture invitation from Dana with a clash and three suggested replies
+  steps:
+  - record phone-light-invite-card
+  capture: screen
+- name: android-finish-on-web
+  page: getting-started/start-here.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: mail list
+  roborazzi: DocsShotsTest.finishOnWeb
+  state: an account with no mail account connected
+  steps:
+  - record phone-light-finish-on-web
+  capture: screen
+- name: android-memory
+  page: android/assistant-and-sharing.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Ambrose tab → ⋮ → Memory
+  roborazzi: DocsShotsTest.memory
+  state: two suggestions to review (Dana Whitfield, you), About you with a pinned preference, Priya Shah and Theo Martin under People
+  steps:
+  - open the Ambrose tab, then ⋮ → Memory
+  capture: screen
+- name: android-chats
+  page: android/assistant-and-sharing.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Ambrose tab → Chats (the clock button in the top bar)
+  roborazzi: DocsShotsTest.chats
+  state: five earlier chats with titles, times and the start of each answer; the open chat (Priya) marked
+  steps:
+  - open the Ambrose tab, then tap Chats in the top bar
+  capture: screen
+- name: android-assistant-commands
+  page: android/assistant-and-sharing.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Ambrose tab, a chat open, "/" typed in the message box
+  roborazzi: DocsShotsTest.assistantCommands
+  state: the chat with Priya's free times; the picker lists the chat's commands under This chat, Add and Ask, then two skills
+  steps:
+  - open the Ambrose tab and type / in the message box
+  capture: screen
+- name: android-review-card
+  page: android/assistant-and-sharing.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Ambrose tab, the chat "Clean up the shop mail"
+  roborazzi: DocsShotsTest.reviewCard
+  state: the demo's finished /sweep review (demo.py _seed_review) as its card, with the progress line; Atlas Outfitters moved from Move to Trash to Archive in its move menu
+  steps:
+  - open the chat with the finished review
+  - in the move menu of Atlas Outfitters under Move to Trash, choose Archive, so the card shows an Archive group and "4 changed by you" beside Apply
+  capture: screen
+- name: android-person-card
+  page: android/assistant-and-sharing.md
+  platform: android
+  theme: material
+  scheme: light
+  viewport: android-phone
+  route: Memory → People → Open card (Priya Shah)
+  roborazzi: DocsShotsTest.personCard
+  state: Priya Shah, VIP, art director at Northwind Studio, group Studio team; two memories under Ambrose's memory
+  steps:
+  - open Memory, then Open card beside Priya Shah
+  capture: screen

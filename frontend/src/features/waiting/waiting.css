@@ -1,0 +1,162 @@
+/* "Waiting for you" (features/waiting): the bell's popover. Theme colours come from the tokens; the
+   reminder rows, the banner and the approval cards keep their own styles. */
+
+.wb-bell.urgent {
+  color: var(--danger);
+}
+.popover.wb-pop {
+  width: min(440px, calc(100vw - 16px));
+  max-width: calc(100vw - 16px);
+  max-height: min(760px, calc(100vh - 72px));
+}
+.wb-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: inherit;
+}
+.wb-head {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px 6px;
+}
+.wb-head b {
+  font-size: 15px;
+}
+.wb-scroll {
+  overflow-y: auto;
+  min-height: 0;
+  flex: 1;
+}
+.wb-section + .wb-section {
+  border-top: 1px solid var(--divider);
+}
+.wb-section-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding-block: 6px 2px;
+  padding-inline: 16px 8px;
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.wb-section-head h3 {
+  font: inherit;
+  margin: 0;
+}
+.wb-section-head .spacer,
+.wb-foot .spacer {
+  flex: 1;
+}
+.wb-section-head .btn {
+  text-transform: none;
+  letter-spacing: normal;
+}
+.wb-approvals .approvals-body {
+  overflow: visible;
+}
+.wb-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.wb-line {
+  padding: 4px 16px;
+  margin: 0;
+}
+
+/* "Allow all n from this chat": a line over the group, and the list it decides. */
+.wb-allow {
+  border-radius: var(--radius-md);
+  background: var(--surface-high);
+  padding-block: 6px;
+  padding-inline: 12px 8px;
+  font-size: 13px;
+}
+.wb-allow-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+}
+.wb-allow-row span {
+  flex: 1;
+  color: var(--text-2);
+}
+.wb-allow-confirm p {
+  margin: 4px 0;
+  font-weight: 500;
+}
+.wb-allow-confirm ol {
+  margin: 0 0 8px;
+  padding-inline-start: 20px;
+  display: grid;
+  gap: 2px;
+}
+.wb-allow-actions {
+  display: flex;
+  gap: 8px;
+  padding-bottom: 4px;
+}
+
+/* Not sent */
+.wb-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 6px 8px;
+  display: grid;
+  gap: 2px;
+}
+.wb-notsent-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-block: 6px;
+  padding-inline: 10px 4px;
+}
+.wb-bad {
+  flex: none;
+  color: var(--danger);
+}
+.wb-row-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.wb-row-title {
+  font-weight: 500;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wb-row-sub {
+  font-size: 12px;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wb-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px 6px 8px;
+  border-top: 1px solid var(--divider);
+}
+
+@media (max-width: 600px) {
+  .popover.wb-pop {
+    width: calc(100vw - 16px);
+  }
+}
+[data-ui-theme='office'] .wb-allow {
+  border-radius: var(--radius-sm);
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="push_live_title">Live connection</string>
+    <string name="push_live_text">New mail arrives instantly. Turn off in Settings → Notifications.</string>
+    <string name="push_checking_mail">Checking for new mail</string>
+    <string name="push_approval_waiting">An agent request is waiting for your approval</string>
+    <string name="push_send_failed_to">To %1$s: %2$s</string>
+    <string name="push_send_failed_generic">A message wasn\'t sent. Open Scheduled to retry.</string>
+    <string name="push_send_failed_title">Message not sent</string>
+    <string name="push_send_uncertain_title">May have been sent</string>
+    <string name="push_register_message">Mailr: new mail and approvals</string>
+    <string name="push_err_network">No connection to the push server</string>
+    <string name="push_err_action_required">Open %1$s to finish setup</string>
+    <string name="push_err_action_required_default">Open the push app to finish setup</string>
+    <string name="push_err_vapid_required">%1$s requires a server key that isn\'t set on this server</string>
+    <string name="push_err_vapid_required_default">The push app requires a server key that isn\'t set on this server</string>
+    <string name="push_err_internal">Couldn\'t register Mailr with %1$s</string>
+    <string name="push_err_internal_default">Couldn\'t register Mailr with the push app</string>
+    <string name="push_err_unavailable">Couldn\'t reach %1$s\'s server</string>
+    <string name="push_err_unavailable_default">Couldn\'t reach the push app\'s server</string>
+    <string name="push_test_not_registered">Not registered for push yet</string>
+    <string name="push_test_offline">Offline, or the server can\'t be reached</string>
+</resources>

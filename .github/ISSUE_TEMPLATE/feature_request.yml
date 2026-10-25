@@ -1,0 +1,46 @@
+name: Feature request
+description: A new feature or a change to an existing one.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: The task or situation the feature is for, and what is difficult about it now.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+      description: How the feature would work, from the point of view of the person using it.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Workarounds in use now, and other approaches that were considered.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      options:
+        - Web app
+        - Android app
+        - Notes app (Android)
+        - Ambrose (the assistant)
+        - Mail
+        - Calendar, tasks or contacts
+        - Notes and tables
+        - Agents, API or MCP
+        - Administration and deployment
+        - Documentation
+        - Other
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, examples or links to similar features elsewhere.

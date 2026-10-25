@@ -1,0 +1,95 @@
+/* The sign-in screen (LoginPage.tsx): one centred card on a soft wash of the theme's primary. */
+.login-page {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px 16px;
+  overflow: auto;
+  background:
+    radial-gradient(1100px 600px at 15% -10%, color-mix(in srgb, var(--primary) 16%, transparent), transparent 70%),
+    radial-gradient(900px 520px at 110% 110%, color-mix(in srgb, var(--primary) 12%, transparent), transparent 70%),
+    var(--bg);
+}
+.login-card {
+  width: min(420px, 100%);
+  padding: 40px 40px 28px;
+  border-radius: 28px;
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--divider) 70%, transparent);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 12px 40px -12px color-mix(in srgb, var(--primary) 28%, rgba(0, 0, 0, 0.35));
+  text-align: center;
+}
+[data-theme='dark'] .login-card { background: var(--surface-container); }
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.login-word {
+  font-family: var(--font-display);
+  font-size: 26px;
+  letter-spacing: -0.3px;
+  color: var(--text-2);
+}
+.login-word b { font-weight: 600; color: var(--text); }
+.login-title {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: 26px;
+  line-height: 34px;
+  font-weight: 500;
+}
+.login-sub { margin: 0 0 16px; color: var(--text-2); font-size: 14px; }
+.login-apps {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 28px;
+  padding: 0;
+  list-style: none;
+}
+.login-apps li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--text-2);
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+}
+.login-apps svg { width: 14px; height: 14px; color: var(--primary); }
+.login-actions { text-align: start; }
+.login-sso, .login-submit { height: 48px; width: 100%; justify-content: center; font-size: 15px; border-radius: 999px; }
+.login-sso svg, .login-submit svg { width: 18px; height: 18px; }
+.login-loading { display: flex; justify-content: center; padding: 14px 0 22px; }
+.login-or {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--text-2);
+}
+.login-or span { flex: 1; height: 1px; background: var(--divider); }
+.login-foot {
+  margin: 24px 0 0;
+  font-size: 12px;
+  color: var(--text-2);
+  opacity: 0.8;
+}
+@media (max-width: 480px) {
+  .login-card { padding: 32px 22px 22px; border-radius: 24px; }
+}
+
+/* /join/:token on an Android phone: the app links under the sign-in. */
+.join-phone {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--divider);
+}

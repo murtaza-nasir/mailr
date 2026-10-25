@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/murtaza-nasir/mailr/security/advisories/new
+    about: Security issues are reported privately through GitHub's private vulnerability reporting, never in a public issue. See SECURITY.md.
+  - name: Documentation
+    url: https://murtaza-nasir.github.io/mailr/
+    about: Installation, the user guide, the admin guide, agents and the API, and the reference.

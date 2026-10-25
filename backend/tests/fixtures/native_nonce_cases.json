@@ -1,0 +1,50 @@
+{
+  "_comment": "Server-bound native sign-in nonce: canonical origins and nonce = base64url(SHA-256(origin|seed)) without padding. Read by backend/tests/test_native_auth.py and, from the identical copy in android/app/src/test/resources, AndroidHardeningTest.",
+  "origins": [
+    {
+      "in": "https://Mail.Example.com/",
+      "out": "https://mail.example.com"
+    },
+    {
+      "in": "https://mail.example.com:443",
+      "out": "https://mail.example.com"
+    },
+    {
+      "in": "HTTP://192.168.1.20:8025/",
+      "out": "http://192.168.1.20:8025"
+    },
+    {
+      "in": "http://example.com:80",
+      "out": "http://example.com"
+    },
+    {
+      "in": "https://example.com:8443//",
+      "out": "https://example.com:8443"
+    },
+    {
+      "in": "https://example.com/mailr/",
+      "out": "https://example.com/mailr"
+    },
+    {
+      "in": "http://[::1]:8025",
+      "out": "http://[::1]:8025"
+    }
+  ],
+  "nonces": [
+    {
+      "origin": "https://mail.example.com",
+      "seed": "q3Jx9w_Vb-0kZ1yT4nR8sA",
+      "nonce": "b8BiCrasM4XCzlvCxLahA3NpPwMC8BhQZtn_5PYmkuY"
+    },
+    {
+      "origin": "https://mail-example.evil.example",
+      "seed": "q3Jx9w_Vb-0kZ1yT4nR8sA",
+      "nonce": "rWNs0tlXkS18PbIZKp-73hcPOD-Gz8FEn_Ln7A_crO8"
+    },
+    {
+      "origin": "http://192.168.1.20:8025",
+      "seed": "0123456789abcdef0123",
+      "nonce": "CIFuE2wg28R6txdnN3T4QJn9HqElNv52rlmZX1TRND0"
+    }
+  ]
+}

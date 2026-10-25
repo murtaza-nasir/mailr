@@ -1,0 +1,333 @@
+# Golden vectors for the quick-add grammar of events and tasks.
+#
+# Run by frontend/src/lib/quickadd.test.ts (vitest) and by Android's QuickAddGrammarTest (JUnit, which
+# reads the copy in android/app/src/test/resources/interaction/; that copy is checked against this file in vitest).
+#
+# Format: plain YAML, but every value is written as a JSON flow mapping or list on one line, so it
+# can be read without a YAML library. Keep that shape: a top-level `key: <json>` line, or a case line
+# `  - {...}` under `cases:`. Lines starting with `#` are comments.
+#
+# A case: id, mode (event | task), in (the typed text), optional now (local wall time in tz),
+# optional opts (overrides of the options below), and expect. `expect.title` and `expect.tokens`
+# are always checked (tokens as "kind:text" in input order; a missing list means no tokens).
+# Every other field is checked only when present.
+#
+# "now" is Thu 1 Oct 2026 10:12 in Chicago. Oct 2026: Fri 2, Sat 3, Sun 4, Mon 5, Thu 8, Fri 9,
+# Mon 12, Fri 30, Sat 31. US daylight time ends Sun 1 Nov 2026 and starts Sun 14 Mar 2027.
+
+now: "2026-10-01T10:12"
+tz: "America/Chicago"
+options: {"dateOrder": "mdy", "defaultDuration": 60, "morningHour": 9, "afternoonHour": 14, "eveningHour": 18}
+calendars: [{"id": "c-work", "name": "Work"}, {"id": "c-personal", "name": "Personal"}, {"id": "c-family", "name": "Family"}]
+lists: [{"id": "l-inbox", "name": "Inbox"}, {"id": "l-work", "name": "Work"}, {"id": "l-groceries", "name": "Groceries"}, {"id": "l-bills", "name": "Bills"}, {"id": "l-home", "name": "Home projects"}]
+people: [{"name": "Dana Whitfield", "email": "dana@example.com"}, {"name": "Dana Ortiz", "email": "dortiz@example.org"}, {"name": "Lee Park", "email": "lee@example.com"}]
+
+# Typing (quick add once crashed while text was typed). Every prefix of each line, one
+# code point at a time, in both modes, must parse without an error, with every token's text at its place.
+typing: ["Call Dana fri 3pm !! @phone", "tom", "tomorrow", "every mon", "every! 3 days", "#Work", "#Home projects", "Pay rent every month on the 1st !! #Bills", "Buy milk 🥛 tmrw 9", "Dentist 12–14 oct", "Review at 15:3", "Call mom at 9 ", "Remind me in 2h", "!!!", "@", "#", "every", "3:", "fri 3p", "next week", "Ünïcödé façade 10am", "a b c", "👩‍👩‍👧 party sat 7pm", "\"quoted next week\" fri", "Lunch with Dana tomorrow 12:30 at Café Luna", "Supplier call fri 14:00 at Back office"]
+
+cases:
+# ---- ambiguity: a month word needs a day number, "at" needs a capital or a known place
+  - {"id": "amb-meet-may", "mode": "event", "in": "Meet May", "expect": {"title": "Meet May", "start": null, "guests": [], "location": null}}
+  - {"id": "amb-call-march", "mode": "task", "in": "Call March", "expect": {"title": "Call March", "due": null}}
+  - {"id": "amb-may-with-day", "mode": "task", "in": "may 12 dentist", "expect": {"title": "dentist", "tokens": ["date:may 12"], "due": "2027-05-12"}}
+  - {"id": "amb-at-home-task", "mode": "task", "in": "Stretch at home 3pm", "expect": {"title": "Stretch at home", "tokens": ["time:3pm"], "due": "2026-10-01T15:00"}}
+  - {"id": "amb-tom-name", "mode": "task", "in": "Call Tom", "expect": {"title": "Call Tom", "due": null}}
+
+# ---- product spec golden cases
+  - {"id": "golden-lunch", "mode": "event", "in": "Lunch with Dana tomorrow 12:30 at Café Luna", "expect": {"title": "Lunch with Dana", "tokens": ["guest:Dana", "date:tomorrow", "time:12:30", "location:at Café Luna"], "start": "2026-10-02T12:30", "end": "2026-10-02T13:30", "all_day": false, "location": "Café Luna", "guests": [{"text": "Dana", "email": null, "confirmed": false, "matches": [{"name": "Dana Whitfield", "email": "dana@example.com"}, {"name": "Dana Ortiz", "email": "dortiz@example.org"}]}]}}
+  # A series whose time has passed today still starts today (the rule the product spec left open).
+  - {"id": "golden-standup", "mode": "event", "in": "Standup weekdays 9:15 for 15 min #Work", "expect": {"title": "Standup", "tokens": ["repeat:weekdays", "time:9:15", "duration:for 15 min", "collection:#Work"], "start": "2026-10-01T09:15", "end": "2026-10-01T09:30", "rrule": "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR", "duration": 15, "list_or_calendar": {"id": "c-work", "name": "Work", "create": false}, "repeat_from": null}}
+  - {"id": "golden-flight", "mode": "event", "in": "Flight to Lisbon 12–14 oct", "expect": {"title": "Flight to Lisbon", "tokens": ["span:12–14 oct"], "start": "2026-10-12", "end": "2026-10-15", "all_day": true}}
+  - {"id": "golden-call-mom", "mode": "task", "in": "Call mom at 9", "expect": {"title": "Call mom", "tokens": ["time:at 9"], "due": "2026-10-02T09:00", "due_all_day": false}}
+  - {"id": "golden-rent", "mode": "task", "in": "Pay rent every month on the 1st !! #Bills", "expect": {"title": "Pay rent", "tokens": ["repeat:every month on the 1st", "priority:!!", "collection:#Bills"], "due": "2026-11-01", "due_all_day": true, "rrule": "FREQ=MONTHLY;BYMONTHDAY=1", "repeat_from": "due", "priority": 5, "list_or_calendar": {"id": "l-bills", "name": "Bills", "create": false}}}
+  - {"id": "golden-water", "mode": "task", "in": "Water plants every! 3 days", "expect": {"title": "Water plants", "tokens": ["repeat:every! 3 days"], "due": "2026-10-04", "due_all_day": true, "rrule": "FREQ=DAILY;INTERVAL=3", "repeat_from": "completion"}}
+  - {"id": "golden-quoted", "mode": "task", "in": "Read \"The next week\" report fri", "expect": {"title": "Read \"The next week\" report", "tokens": ["date:fri"], "due": "2026-10-02", "due_all_day": true}}
+  - {"id": "golden-may", "mode": "task", "in": "may need to call", "expect": {"title": "may need to call", "due": null, "rrule": null}}
+
+# ---- times (event)
+  - {"id": "ev-time-ahead", "mode": "event", "in": "Dentist 3pm", "expect": {"title": "Dentist", "tokens": ["time:3pm"], "start": "2026-10-01T15:00", "end": "2026-10-01T16:00", "all_day": false}}
+  - {"id": "ev-time-past", "mode": "event", "in": "Coffee 9am", "expect": {"title": "Coffee", "tokens": ["time:9am"], "start": "2026-10-02T09:00", "end": "2026-10-02T10:00"}}
+  - {"id": "ev-at-bare-hour", "mode": "event", "in": "Call at 9", "expect": {"title": "Call", "tokens": ["time:at 9"], "start": "2026-10-02T09:00"}}
+  - {"id": "ev-at-24h", "mode": "event", "in": "Review at 15", "expect": {"title": "Review", "tokens": ["time:at 15"], "start": "2026-10-01T15:00"}}
+  - {"id": "ev-bare-number", "mode": "event", "in": "Review 9", "expect": {"title": "Review 9", "start": null, "end": null, "all_day": false}}
+  - {"id": "ev-noon", "mode": "event", "in": "Lunch noon", "expect": {"title": "Lunch", "tokens": ["time:noon"], "start": "2026-10-01T12:00", "end": "2026-10-01T13:00"}}
+  - {"id": "ev-at-noon-fri", "mode": "event", "in": "Lunch at noon fri", "expect": {"title": "Lunch", "tokens": ["time:at noon", "date:fri"], "start": "2026-10-02T12:00"}}
+  - {"id": "ev-midnight", "mode": "event", "in": "Launch midnight", "expect": {"title": "Launch", "tokens": ["time:midnight"], "start": "2026-10-02T00:00", "end": "2026-10-02T01:00"}}
+  - {"id": "ev-3p", "mode": "event", "in": "Gym 3p", "expect": {"title": "Gym", "tokens": ["time:3p"], "start": "2026-10-01T15:00"}}
+  - {"id": "ev-330p", "mode": "event", "in": "Call 3:30p", "expect": {"title": "Call", "tokens": ["time:3:30p"], "start": "2026-10-01T15:30"}}
+  - {"id": "ev-330-pm-words", "mode": "event", "in": "Call 3:30 pm tomorrow", "expect": {"title": "Call", "tokens": ["time:3:30 pm", "date:tomorrow"], "start": "2026-10-02T15:30"}}
+  - {"id": "ev-12am", "mode": "event", "in": "Deploy 12am sat", "expect": {"title": "Deploy", "tokens": ["time:12am", "date:sat"], "start": "2026-10-03T00:00"}}
+  - {"id": "ev-12pm", "mode": "event", "in": "Deploy 12pm", "expect": {"title": "Deploy", "tokens": ["time:12pm"], "start": "2026-10-01T12:00"}}
+  - {"id": "ev-invalid-meridiem", "mode": "event", "in": "Room 13pm", "expect": {"title": "Room 13pm", "start": null}}
+  - {"id": "ev-default-duration", "mode": "event", "in": "Standup 4pm", "opts": {"defaultDuration": 30}, "expect": {"title": "Standup", "tokens": ["time:4pm"], "start": "2026-10-01T16:00", "end": "2026-10-01T16:30", "duration": null}}
+
+# ---- ranges and durations (event)
+  - {"id": "ev-range-carry", "mode": "event", "in": "Workshop 3-4pm", "expect": {"title": "Workshop", "tokens": ["time:3-4pm"], "start": "2026-10-01T15:00", "end": "2026-10-01T16:00"}}
+  - {"id": "ev-range-colon", "mode": "event", "in": "Planning 9:30–11 tomorrow", "expect": {"title": "Planning", "tokens": ["time:9:30–11", "date:tomorrow"], "start": "2026-10-02T09:30", "end": "2026-10-02T11:00"}}
+  - {"id": "ev-range-to", "mode": "event", "in": "Seminar 2 to 4pm fri", "expect": {"title": "Seminar", "tokens": ["time:2 to 4pm", "date:fri"], "start": "2026-10-02T14:00", "end": "2026-10-02T16:00"}}
+  # No meridiem anywhere: a bare 1 to 6 is an afternoon hour; 7 to 12 and "02:00" stay as written.
+  - {"id": "ev-range-from-bare", "mode": "event", "in": "Office hours from 2 to 4 tomorrow", "expect": {"title": "Office hours", "tokens": ["time:from 2 to 4", "date:tomorrow"], "start": "2026-10-02T14:00", "end": "2026-10-02T16:00"}}
+  - {"id": "ev-range-nine-to-five", "mode": "event", "in": "Workshop from 9 to 5 tomorrow", "expect": {"title": "Workshop", "tokens": ["time:from 9 to 5", "date:tomorrow"], "start": "2026-10-02T09:00", "end": "2026-10-02T17:00"}}
+  - {"id": "ev-at-bare-afternoon", "mode": "event", "in": "Call at 3 tomorrow", "expect": {"title": "Call", "tokens": ["time:at 3", "date:tomorrow"], "start": "2026-10-02T15:00"}}
+  - {"id": "ev-at-zero-padded", "mode": "event", "in": "Backup at 03:00 tomorrow", "expect": {"title": "Backup", "tokens": ["time:at 03:00", "date:tomorrow"], "start": "2026-10-02T03:00"}}
+  - {"id": "ev-range-from-14", "mode": "event", "in": "Office hours from 14 to 16 tomorrow", "expect": {"title": "Office hours", "tokens": ["time:from 14 to 16", "date:tomorrow"], "start": "2026-10-02T14:00", "end": "2026-10-02T16:00"}}
+  - {"id": "ev-range-11-1pm", "mode": "event", "in": "Brunch 11-1pm sat", "expect": {"title": "Brunch", "tokens": ["time:11-1pm", "date:sat"], "start": "2026-10-03T11:00", "end": "2026-10-03T13:00"}}
+  - {"id": "ev-range-overnight", "mode": "event", "in": "Party 10pm-1am sat", "expect": {"title": "Party", "tokens": ["time:10pm-1am", "date:sat"], "start": "2026-10-03T22:00", "end": "2026-10-04T01:00"}}
+  - {"id": "ev-range-spaced", "mode": "event", "in": "Talk 3pm - 4:30pm", "expect": {"title": "Talk", "tokens": ["time:3pm - 4:30pm"], "start": "2026-10-01T15:00", "end": "2026-10-01T16:30"}}
+  - {"id": "ev-range-start-meridiem", "mode": "event", "in": "Sync 3pm-4 tomorrow", "expect": {"title": "Sync", "tokens": ["time:3pm-4", "date:tomorrow"], "start": "2026-10-02T15:00", "end": "2026-10-02T16:00"}}
+  - {"id": "ev-range-chapters", "mode": "event", "in": "Read chapters 3-4", "expect": {"title": "Read chapters 3-4", "start": null}}
+  - {"id": "ev-duration-45", "mode": "event", "in": "Call Dana fri 3pm for 45 min", "expect": {"title": "Call Dana", "tokens": ["date:fri", "time:3pm", "duration:for 45 min"], "start": "2026-10-02T15:00", "end": "2026-10-02T15:45", "duration": 45, "guests": []}}
+  - {"id": "ev-duration-2h", "mode": "event", "in": "Deep work 9am tomorrow for 2h", "expect": {"title": "Deep work", "tokens": ["time:9am", "date:tomorrow", "duration:for 2h"], "start": "2026-10-02T09:00", "end": "2026-10-02T11:00", "duration": 120}}
+  - {"id": "ev-duration-1h30", "mode": "event", "in": "Workshop mon 1pm for 1h30", "expect": {"title": "Workshop", "tokens": ["date:mon", "time:1pm", "duration:for 1h30"], "start": "2026-10-05T13:00", "end": "2026-10-05T14:30", "duration": 90}}
+  - {"id": "ev-duration-hour-min", "mode": "event", "in": "Review mon 1pm for 1 hour 30 min", "expect": {"title": "Review", "tokens": ["date:mon", "time:1pm", "duration:for 1 hour 30 min"], "end": "2026-10-05T14:30", "duration": 90}}
+  - {"id": "ev-duration-an-hour", "mode": "event", "in": "Chat tomorrow 4pm for an hour", "expect": {"title": "Chat", "tokens": ["date:tomorrow", "time:4pm", "duration:for an hour"], "end": "2026-10-02T17:00", "duration": 60}}
+  - {"id": "ev-duration-decimal", "mode": "event", "in": "Exam fri 9am for 1.5 hours", "expect": {"title": "Exam", "tokens": ["date:fri", "time:9am", "duration:for 1.5 hours"], "end": "2026-10-02T10:30", "duration": 90}}
+  - {"id": "ev-duration-no-clock", "mode": "event", "in": "Focus block tomorrow for 2h", "expect": {"title": "Focus block", "tokens": ["date:tomorrow", "duration:for 2h"], "start": "2026-10-02", "end": "2026-10-03", "all_day": true, "duration": 120}}
+  # A bare duration right after the time or date keeps the weekday before it.
+  - {"id": "ev-bare-duration-45m", "mode": "event", "in": "Design sync thu 3pm 45m", "expect": {"title": "Design sync", "tokens": ["date:thu", "time:3pm", "duration:45m"], "start": "2026-10-08T15:00", "end": "2026-10-08T15:45", "duration": 45}}
+  - {"id": "ev-bare-duration-45-min", "mode": "event", "in": "Design sync thursday 3pm 45 min", "expect": {"title": "Design sync", "tokens": ["date:thursday", "time:3pm", "duration:45 min"], "start": "2026-10-08T15:00", "end": "2026-10-08T15:45", "duration": 45}}
+  - {"id": "ev-bare-duration-1h", "mode": "event", "in": "Review fri 10am 1h", "expect": {"title": "Review", "tokens": ["date:fri", "time:10am", "duration:1h"], "start": "2026-10-02T10:00", "end": "2026-10-02T11:00", "duration": 60}}
+  - {"id": "ev-bare-duration-1h30", "mode": "event", "in": "Workshop mon 1pm 1h30", "expect": {"title": "Workshop", "tokens": ["date:mon", "time:1pm", "duration:1h30"], "start": "2026-10-05T13:00", "end": "2026-10-05T14:30", "duration": 90}}
+  - {"id": "ev-bare-duration-after-date", "mode": "event", "in": "Call tomorrow 4pm 90 minutes", "expect": {"title": "Call", "tokens": ["date:tomorrow", "time:4pm", "duration:90 minutes"], "start": "2026-10-02T16:00", "end": "2026-10-02T17:30", "duration": 90}}
+  - {"id": "ev-bare-amount-in-title", "mode": "event", "in": "Run 5k 45 min fri", "expect": {"title": "Run 5k 45 min", "tokens": ["date:fri"], "duration": null}}
+  - {"id": "ev-all-day", "mode": "event", "in": "Offsite all day fri", "expect": {"title": "Offsite", "tokens": ["duration:all day", "date:fri"], "start": "2026-10-02", "end": "2026-10-03", "all_day": true}}
+  - {"id": "ev-all-day-no-date", "mode": "event", "in": "Holiday all-day", "expect": {"title": "Holiday", "tokens": ["duration:all-day"], "start": "2026-10-01", "end": "2026-10-02", "all_day": true}}
+  - {"id": "ev-for-not-duration", "mode": "event", "in": "Shopping for gifts sat", "expect": {"title": "Shopping for gifts", "tokens": ["date:sat"], "start": "2026-10-03", "duration": null}}
+
+# ---- dates (event)
+  - {"id": "ev-date-month-day", "mode": "event", "in": "Mom's birthday oct 14", "expect": {"title": "Mom's birthday", "tokens": ["date:oct 14"], "start": "2026-10-14", "end": "2026-10-15", "all_day": true}}
+  - {"id": "ev-date-day-month", "mode": "event", "in": "Conference 12 oct", "expect": {"title": "Conference", "tokens": ["date:12 oct"], "start": "2026-10-12", "all_day": true}}
+  - {"id": "ev-date-ordinal-of", "mode": "event", "in": "Conference 12th of October", "expect": {"title": "Conference", "tokens": ["date:12th of October"], "start": "2026-10-12"}}
+  - {"id": "ev-date-iso", "mode": "event", "in": "Deadline 2026-10-20", "expect": {"title": "Deadline", "tokens": ["date:2026-10-20"], "start": "2026-10-20", "all_day": true}}
+  - {"id": "ev-date-slash-mdy", "mode": "event", "in": "Dinner 10/15 7pm", "expect": {"title": "Dinner", "tokens": ["date:10/15", "time:7pm"], "start": "2026-10-15T19:00"}}
+  - {"id": "ev-date-slash-dmy", "mode": "event", "in": "Dinner 15/10 7pm", "opts": {"dateOrder": "dmy"}, "expect": {"title": "Dinner", "tokens": ["date:15/10", "time:7pm"], "start": "2026-10-15T19:00"}}
+  - {"id": "ev-date-slash-ambiguous-dmy", "mode": "event", "in": "Dinner 12/10", "opts": {"dateOrder": "dmy"}, "expect": {"title": "Dinner", "tokens": ["date:12/10"], "start": "2026-10-12"}}
+  - {"id": "ev-date-slash-ambiguous-mdy", "mode": "event", "in": "Dinner 12/10", "expect": {"title": "Dinner", "tokens": ["date:12/10"], "start": "2026-12-10"}}
+  - {"id": "ev-date-slash-past", "mode": "event", "in": "Party 9/5", "expect": {"title": "Party", "tokens": ["date:9/5"], "start": "2027-09-05"}}
+  - {"id": "ev-date-slash-year", "mode": "event", "in": "Party 9/5/27", "expect": {"title": "Party", "tokens": ["date:9/5/27"], "start": "2027-09-05"}}
+  - {"id": "ev-date-slash-mid", "mode": "event", "in": "Pay 1/2 of invoice", "expect": {"title": "Pay 1/2 of invoice", "start": null}}
+  - {"id": "ev-date-the-12th", "mode": "event", "in": "Rent review the 12th", "expect": {"title": "Rent review", "tokens": ["date:the 12th"], "start": "2026-10-12"}}
+  - {"id": "ev-date-the-1st-today", "mode": "event", "in": "Payroll on the 1st", "expect": {"title": "Payroll", "tokens": ["date:on the 1st"], "start": "2026-10-01"}}
+  - {"id": "ev-date-the-31st-skips", "mode": "event", "in": "Dues the 31st", "now": "2026-11-05T09:00", "expect": {"title": "Dues", "tokens": ["date:the 31st"], "start": "2026-12-31"}}
+  - {"id": "ev-date-year", "mode": "event", "in": "Graduation may 15 2027", "expect": {"title": "Graduation", "tokens": ["date:may 15 2027"], "start": "2027-05-15"}}
+  - {"id": "ev-date-next-year", "mode": "event", "in": "Call March 3", "expect": {"title": "Call", "tokens": ["date:March 3"], "start": "2027-03-03"}}
+  - {"id": "ev-date-today-month", "mode": "event", "in": "Kickoff oct 1", "expect": {"title": "Kickoff", "tokens": ["date:oct 1"], "start": "2026-10-01"}}
+  - {"id": "ev-date-yesterday-month", "mode": "event", "in": "Kickoff sep 30", "expect": {"title": "Kickoff", "tokens": ["date:sep 30"], "start": "2027-09-30"}}
+  - {"id": "ev-date-leap", "mode": "event", "in": "Leap party feb 29", "expect": {"title": "Leap party", "tokens": ["date:feb 29"], "start": "2028-02-29"}}
+  - {"id": "ev-date-invalid", "mode": "event", "in": "Party feb 30", "expect": {"title": "Party feb 30", "start": null}}
+  - {"id": "ev-today", "mode": "event", "in": "Gym today", "expect": {"title": "Gym", "tokens": ["date:today"], "start": "2026-10-01", "all_day": true}}
+  - {"id": "ev-tom-lower", "mode": "event", "in": "Dinner tom 7pm", "expect": {"title": "Dinner", "tokens": ["date:tom", "time:7pm"], "start": "2026-10-02T19:00"}}
+  - {"id": "ev-tmrw", "mode": "event", "in": "Dinner tmrw 7pm", "expect": {"title": "Dinner", "tokens": ["date:tmrw", "time:7pm"], "start": "2026-10-02T19:00"}}
+  - {"id": "ev-day-after-tomorrow", "mode": "event", "in": "Dentist day after tomorrow 11am", "expect": {"title": "Dentist", "tokens": ["date:day after tomorrow", "time:11am"], "start": "2026-10-03T11:00"}}
+  - {"id": "ev-plus-3d", "mode": "event", "in": "Ping +3d", "expect": {"title": "Ping", "tokens": ["date:+3d"], "start": "2026-10-04"}}
+  - {"id": "ev-plus-2w", "mode": "event", "in": "Ping +2w", "expect": {"title": "Ping", "tokens": ["date:+2w"], "start": "2026-10-15"}}
+
+# ---- weekdays (event)
+  - {"id": "ev-next-fri", "mode": "event", "in": "Retro next fri", "expect": {"title": "Retro", "tokens": ["date:next fri"], "start": "2026-10-09"}}
+  - {"id": "ev-next-thu", "mode": "event", "in": "Retro next thu", "expect": {"title": "Retro", "tokens": ["date:next thu"], "start": "2026-10-08"}}
+  - {"id": "ev-next-mon", "mode": "event", "in": "Retro next monday", "expect": {"title": "Retro", "tokens": ["date:next monday"], "start": "2026-10-12"}}
+  - {"id": "ev-this-fri", "mode": "event", "in": "Drinks this fri 6pm", "expect": {"title": "Drinks", "tokens": ["date:this fri", "time:6pm"], "start": "2026-10-02T18:00"}}
+  - {"id": "ev-this-thu-is-today", "mode": "event", "in": "Drinks this thu 6pm", "expect": {"title": "Drinks", "tokens": ["date:this thu", "time:6pm"], "start": "2026-10-01T18:00"}}
+  - {"id": "ev-bare-thu-next", "mode": "event", "in": "Drinks thu", "expect": {"title": "Drinks", "tokens": ["date:thu"], "start": "2026-10-08"}}
+  - {"id": "ev-on-friday", "mode": "event", "in": "Demo on friday 2pm", "expect": {"title": "Demo", "tokens": ["date:on friday", "time:2pm"], "start": "2026-10-02T14:00"}}
+  - {"id": "ev-on-weekday-mid", "mode": "event", "in": "Demo on tue for the board", "expect": {"title": "Demo for the board", "tokens": ["date:on tue"], "start": "2026-10-06"}}
+  - {"id": "ev-weekday-mid-title", "mode": "event", "in": "Read Sunday papers", "expect": {"title": "Read Sunday papers", "start": null}}
+  - {"id": "ev-weekday-before-at", "mode": "event", "in": "Workout fri at home", "expect": {"title": "Workout at home", "tokens": ["date:fri"], "start": "2026-10-02", "location": null}}
+  - {"id": "ev-weekday-capital", "mode": "event", "in": "Picnic Saturday", "expect": {"title": "Picnic", "tokens": ["date:Saturday"], "start": "2026-10-03"}}
+
+# ---- relative (event)
+  - {"id": "ev-in-2h", "mode": "event", "in": "Call back in 2h", "expect": {"title": "Call back", "tokens": ["date:in 2h"], "start": "2026-10-01T12:12", "end": "2026-10-01T13:12"}}
+  - {"id": "ev-in-30-min", "mode": "event", "in": "Stretch in 30 min", "expect": {"title": "Stretch", "tokens": ["date:in 30 min"], "start": "2026-10-01T10:42"}}
+  - {"id": "ev-in-an-hour", "mode": "event", "in": "Leave in an hour", "expect": {"title": "Leave", "tokens": ["date:in an hour"], "start": "2026-10-01T11:12"}}
+  - {"id": "ev-in-3-days", "mode": "event", "in": "Follow up in 3 days", "expect": {"title": "Follow up", "tokens": ["date:in 3 days"], "start": "2026-10-04", "all_day": true}}
+  - {"id": "ev-in-2-weeks", "mode": "event", "in": "Check-in in 2 weeks", "expect": {"title": "Check-in", "tokens": ["date:in 2 weeks"], "start": "2026-10-15"}}
+  - {"id": "ev-in-a-week", "mode": "event", "in": "Check-in in a week 3pm", "expect": {"title": "Check-in", "tokens": ["date:in a week", "time:3pm"], "start": "2026-10-08T15:00"}}
+  - {"id": "ev-next-week", "mode": "event", "in": "Planning next week", "expect": {"title": "Planning", "tokens": ["date:next week"], "start": "2026-10-05"}}
+  - {"id": "ev-this-weekend", "mode": "event", "in": "Hike this weekend", "expect": {"title": "Hike", "tokens": ["date:this weekend"], "start": "2026-10-03"}}
+  - {"id": "ev-next-weekend", "mode": "event", "in": "Camping next weekend", "expect": {"title": "Camping", "tokens": ["date:next weekend"], "start": "2026-10-10"}}
+  - {"id": "ev-next-month", "mode": "event", "in": "Budget review next month", "expect": {"title": "Budget review", "tokens": ["date:next month"], "start": "2026-11-01"}}
+  - {"id": "ev-end-of-month", "mode": "event", "in": "Report end of month", "expect": {"title": "Report", "tokens": ["date:end of month"], "start": "2026-10-31"}}
+  - {"id": "ev-end-of-the-month", "mode": "event", "in": "Report end of the month 5pm", "expect": {"title": "Report", "tokens": ["date:end of the month", "time:5pm"], "start": "2026-10-31T17:00"}}
+  - {"id": "ev-eom-february", "mode": "event", "in": "Close books eom", "now": "2027-02-10T09:00", "expect": {"title": "Close books", "tokens": ["date:eom"], "start": "2027-02-28"}}
+  - {"id": "ev-in-1-month-clamp", "mode": "event", "in": "Renew in 1 month", "now": "2027-01-31T09:00", "expect": {"title": "Renew", "tokens": ["date:in 1 month"], "start": "2027-02-28"}}
+  - {"id": "ev-next-month-december", "mode": "event", "in": "Plan next month", "now": "2026-12-15T09:00", "expect": {"title": "Plan", "tokens": ["date:next month"], "start": "2027-01-01"}}
+
+# ---- day parts (event)
+  - {"id": "ev-tonight", "mode": "event", "in": "Dinner tonight", "expect": {"title": "Dinner", "tokens": ["date:tonight"], "start": "2026-10-01T20:00", "end": "2026-10-01T21:00"}}
+  - {"id": "ev-tonight-at-9", "mode": "event", "in": "Movie tonight at 9", "expect": {"title": "Movie", "tokens": ["date:tonight", "time:at 9"], "start": "2026-10-01T21:00"}}
+  - {"id": "ev-tonight-9pm", "mode": "event", "in": "Movie tonight 9:30pm", "expect": {"title": "Movie", "tokens": ["date:tonight", "time:9:30pm"], "start": "2026-10-01T21:30"}}
+  - {"id": "ev-tomorrow-morning", "mode": "event", "in": "Run tomorrow morning", "expect": {"title": "Run", "tokens": ["date:tomorrow morning"], "start": "2026-10-02T09:00"}}
+  - {"id": "ev-fri-evening", "mode": "event", "in": "Dinner fri evening", "expect": {"title": "Dinner", "tokens": ["date:fri evening"], "start": "2026-10-02T18:00"}}
+  - {"id": "ev-this-afternoon", "mode": "event", "in": "Nap this afternoon", "expect": {"title": "Nap", "tokens": ["date:this afternoon"], "start": "2026-10-01T14:00"}}
+  - {"id": "ev-this-morning-past", "mode": "event", "in": "Log run this morning", "expect": {"title": "Log run", "tokens": ["date:this morning"], "start": "2026-10-01T09:00"}}
+  - {"id": "ev-in-the-morning", "mode": "event", "in": "Call bank in the morning", "expect": {"title": "Call bank", "tokens": ["time:in the morning"], "start": "2026-10-02T09:00"}}
+  - {"id": "ev-morning-setting", "mode": "event", "in": "Run tomorrow morning", "opts": {"morningHour": 7}, "expect": {"title": "Run", "tokens": ["date:tomorrow morning"], "start": "2026-10-02T07:00"}}
+  - {"id": "ev-morning-title", "mode": "event", "in": "Morning run tomorrow", "expect": {"title": "Morning run", "tokens": ["date:tomorrow"], "start": "2026-10-02", "all_day": true}}
+
+# ---- multi-day spans (event)
+  - {"id": "ev-span-weekdays", "mode": "event", "in": "Lake trip fri to sun", "expect": {"title": "Lake trip", "tokens": ["span:fri to sun"], "start": "2026-10-02", "end": "2026-10-05", "all_day": true}}
+  - {"id": "ev-span-month-first", "mode": "event", "in": "Conference oct 28-30", "expect": {"title": "Conference", "tokens": ["span:oct 28-30"], "start": "2026-10-28", "end": "2026-10-31"}}
+  - {"id": "ev-span-cross-month", "mode": "event", "in": "Vacation oct 30 - nov 2", "expect": {"title": "Vacation", "tokens": ["span:oct 30 - nov 2"], "start": "2026-10-30", "end": "2026-11-03"}}
+  - {"id": "ev-span-cross-year", "mode": "event", "in": "Ski trip dec 30 to jan 2", "expect": {"title": "Ski trip", "tokens": ["span:dec 30 to jan 2"], "start": "2026-12-30", "end": "2027-01-03"}}
+  - {"id": "ev-span-from", "mode": "event", "in": "Retreat from 12 oct to 14 oct", "expect": {"title": "Retreat", "tokens": ["span:from 12 oct to 14 oct"], "start": "2026-10-12", "end": "2026-10-15"}}
+  - {"id": "ev-span-not-task", "mode": "task", "in": "Flight to Lisbon 12–14 oct", "expect": {"title": "Flight to Lisbon 12–14 oct", "due": null}}
+
+# ---- repeat (event)
+  - {"id": "ev-rep-daily", "mode": "event", "in": "Vitamins daily 8am", "expect": {"title": "Vitamins", "tokens": ["repeat:daily", "time:8am"], "start": "2026-10-01T08:00", "rrule": "FREQ=DAILY"}}
+  - {"id": "ev-rep-every-mon", "mode": "event", "in": "1:1 with Lee every mon 10am", "expect": {"title": "1:1 with Lee", "tokens": ["guest:Lee", "repeat:every mon", "time:10am"], "start": "2026-10-05T10:00", "rrule": "FREQ=WEEKLY;BYDAY=MO", "guests": [{"text": "Lee", "email": null, "confirmed": false, "matches": [{"name": "Lee Park", "email": "lee@example.com"}]}]}}
+  - {"id": "ev-rep-mon-and-thu", "mode": "event", "in": "Yoga every mon and thu 6pm", "expect": {"title": "Yoga", "tokens": ["repeat:every mon and thu", "time:6pm"], "start": "2026-10-01T18:00", "rrule": "FREQ=WEEKLY;BYDAY=MO,TH"}}
+  - {"id": "ev-rep-day-list", "mode": "event", "in": "Gym every mon, wed and fri 7am", "expect": {"title": "Gym", "tokens": ["repeat:every mon, wed and fri", "time:7am"], "start": "2026-10-02T07:00", "rrule": "FREQ=WEEKLY;BYDAY=MO,WE,FR"}}
+  - {"id": "ev-rep-2-weeks-date", "mode": "event", "in": "Payday every 2 weeks fri", "expect": {"title": "Payday", "tokens": ["repeat:every 2 weeks", "date:fri"], "start": "2026-10-02", "all_day": true, "rrule": "FREQ=WEEKLY;INTERVAL=2"}}
+  - {"id": "ev-rep-2-weeks-on", "mode": "event", "in": "Sprint review every 2 weeks on tue 3pm", "expect": {"title": "Sprint review", "tokens": ["repeat:every 2 weeks on tue", "time:3pm"], "start": "2026-10-06T15:00", "rrule": "FREQ=WEEKLY;INTERVAL=2;BYDAY=TU"}}
+  - {"id": "ev-rep-last-fri", "mode": "event", "in": "Town hall every last fri 4pm", "expect": {"title": "Town hall", "tokens": ["repeat:every last fri", "time:4pm"], "start": "2026-10-30T16:00", "rrule": "FREQ=MONTHLY;BYDAY=-1FR"}}
+  - {"id": "ev-rep-first-mon", "mode": "event", "in": "Board meeting every first mon", "expect": {"title": "Board meeting", "tokens": ["repeat:every first mon"], "start": "2026-10-05", "all_day": true, "rrule": "FREQ=MONTHLY;BYDAY=1MO"}}
+  - {"id": "ev-rep-month-on-1st", "mode": "event", "in": "Rent every month on the 1st", "expect": {"title": "Rent", "tokens": ["repeat:every month on the 1st"], "start": "2026-10-01", "all_day": true, "rrule": "FREQ=MONTHLY;BYMONTHDAY=1"}}
+  - {"id": "ev-rep-yearly", "mode": "event", "in": "Anniversary oct 14 yearly", "expect": {"title": "Anniversary", "tokens": ["date:oct 14", "repeat:yearly"], "start": "2026-10-14", "rrule": "FREQ=YEARLY"}}
+  - {"id": "ev-rep-every-year", "mode": "event", "in": "Anniversary every year oct 14", "expect": {"title": "Anniversary", "tokens": ["repeat:every year", "date:oct 14"], "start": "2026-10-14", "rrule": "FREQ=YEARLY"}}
+  - {"id": "ev-rep-weekly-is-title", "mode": "event", "in": "Weekly review fri 4pm", "expect": {"title": "Weekly review", "tokens": ["date:fri", "time:4pm"], "start": "2026-10-02T16:00", "rrule": null}}
+  - {"id": "ev-rep-every-weekday", "mode": "event", "in": "Standup every weekday 9:15", "expect": {"title": "Standup", "tokens": ["repeat:every weekday", "time:9:15"], "start": "2026-10-01T09:15", "rrule": "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR"}}
+  - {"id": "ev-rep-every-3-days", "mode": "event", "in": "Water every 3 days", "expect": {"title": "Water", "tokens": ["repeat:every 3 days"], "start": "2026-10-01", "all_day": true, "rrule": "FREQ=DAILY;INTERVAL=3"}}
+  - {"id": "ev-rep-other-week", "mode": "event", "in": "Cleaners every other week thu", "expect": {"title": "Cleaners", "tokens": ["repeat:every other week", "date:thu"], "start": "2026-10-08", "rrule": "FREQ=WEEKLY;INTERVAL=2"}}
+  - {"id": "ev-rep-bang-event", "mode": "event", "in": "Backup every! 3 days", "expect": {"title": "Backup", "tokens": ["repeat:every! 3 days"], "start": "2026-10-01", "rrule": "FREQ=DAILY;INTERVAL=3", "repeat_from": null}}
+  - {"id": "ev-rep-weekend", "mode": "event", "in": "Farmers market every weekend 9am", "expect": {"title": "Farmers market", "tokens": ["repeat:every weekend", "time:9am"], "start": "2026-10-03T09:00", "rrule": "FREQ=WEEKLY;BYDAY=SA,SU"}}
+  - {"id": "ev-rep-every-unknown", "mode": "event", "in": "Every time counts", "expect": {"title": "Every time counts", "rrule": null}}
+
+# ---- location (event)
+  - {"id": "ev-loc-at-home-text", "mode": "event", "in": "Workout at home 3pm", "expect": {"title": "Workout at home", "tokens": ["time:3pm"], "start": "2026-10-01T15:00", "location": null}}
+  - {"id": "ev-loc-at-home-known", "mode": "event", "in": "Workout at home 3pm", "opts": {"places": ["home"]}, "expect": {"title": "Workout", "tokens": ["location:at home", "time:3pm"], "location": "home"}}
+  - {"id": "ev-loc-in-room", "mode": "event", "in": "Exam review in Room 204 tomorrow 10am", "expect": {"title": "Exam review", "tokens": ["location:in Room 204", "date:tomorrow", "time:10am"], "start": "2026-10-02T10:00", "location": "Room 204"}}
+  - {"id": "ev-loc-at-sign", "mode": "event", "in": "Dinner @ Café Luna fri 7pm", "expect": {"title": "Dinner", "tokens": ["location:@ Café Luna", "date:fri", "time:7pm"], "start": "2026-10-02T19:00", "location": "Café Luna"}}
+  - {"id": "ev-loc-at-attached", "mode": "event", "in": "Drinks @Hopleaf sat 8pm", "expect": {"title": "Drinks", "tokens": ["location:@Hopleaf", "date:sat", "time:8pm"], "location": "Hopleaf"}}
+  - {"id": "ev-loc-connector", "mode": "event", "in": "Dinner at Bank of America Plaza fri", "expect": {"title": "Dinner", "tokens": ["location:at Bank of America Plaza", "date:fri"], "location": "Bank of America Plaza", "start": "2026-10-02"}}
+  - {"id": "ev-loc-comma-stops", "mode": "event", "in": "Lunch at Café Luna, then errands tomorrow", "expect": {"title": "Lunch, then errands", "tokens": ["location:at Café Luna", "date:tomorrow"], "location": "Café Luna"}}
+  - {"id": "ev-loc-lowercase", "mode": "event", "in": "Pick up at the store 5pm", "expect": {"title": "Pick up at the store", "tokens": ["time:5pm"], "location": null}}
+  - {"id": "ev-loc-in-month", "mode": "event", "in": "Meet in May", "expect": {"title": "Meet in May", "location": null, "start": null}}
+  # After "at" the place runs to the end of the line or the next token, so a lowercase word is part of it.
+  - {"id": "ev-loc-at-rest-of-line", "mode": "event", "in": "Supplier call fri 14:00 at Back office", "expect": {"title": "Supplier call", "tokens": ["date:fri", "time:14:00", "location:at Back office"], "start": "2026-10-02T14:00", "end": "2026-10-02T15:00", "location": "Back office"}}
+  - {"id": "ev-loc-at-rest-stops-weekday", "mode": "event", "in": "Lunch at Back office fri", "expect": {"title": "Lunch", "tokens": ["location:at Back office", "date:fri"], "start": "2026-10-02", "location": "Back office"}}
+  - {"id": "ev-loc-at-rest-stops-with", "mode": "event", "in": "Lunch at Back office with Dana tomorrow", "expect": {"title": "Lunch with Dana", "tokens": ["location:at Back office", "guest:Dana", "date:tomorrow"], "start": "2026-10-02", "location": "Back office"}}
+  - {"id": "ev-loc-at-rest-stops-repeat", "mode": "event", "in": "Supplier call at Back office weekly", "expect": {"title": "Supplier call", "tokens": ["location:at Back office", "repeat:weekly"], "location": "Back office", "rrule": "FREQ=WEEKLY"}}
+  - {"id": "ev-loc-at-rest-stops-comma", "mode": "event", "in": "Supplier call at Back office, then lunch fri", "expect": {"title": "Supplier call, then lunch", "tokens": ["location:at Back office", "date:fri"], "start": "2026-10-02", "location": "Back office"}}
+  - {"id": "ev-loc-at-rest-docs", "mode": "event", "in": "Supplier call at Back office fri 2pm", "expect": {"title": "Supplier call", "tokens": ["location:at Back office", "date:fri", "time:2pm"], "start": "2026-10-02T14:00", "location": "Back office"}}
+  - {"id": "ev-loc-in-capitals-only", "mode": "event", "in": "Review in Room 204 upstairs 3pm", "expect": {"title": "Review upstairs", "tokens": ["location:in Room 204", "time:3pm"], "start": "2026-10-01T15:00", "location": "Room 204"}}
+  - {"id": "ev-loc-not-task", "mode": "task", "in": "Pick up at Costco", "expect": {"title": "Pick up at Costco"}}
+
+# ---- guests (event): suggestions, and the words stay in the title
+  - {"id": "ev-guest-email", "mode": "event", "in": "Sync with dana@example.com mon 2pm", "expect": {"title": "Sync with dana@example.com", "tokens": ["guest:dana@example.com", "date:mon", "time:2pm"], "start": "2026-10-05T14:00", "guests": [{"text": "dana@example.com", "email": "dana@example.com", "confirmed": true, "matches": [{"name": "Dana Whitfield", "email": "dana@example.com"}]}]}}
+  - {"id": "ev-guest-two", "mode": "event", "in": "Dinner with Dana and Lee sat 7pm", "expect": {"title": "Dinner with Dana and Lee", "tokens": ["guest:Dana", "guest:Lee", "date:sat", "time:7pm"], "start": "2026-10-03T19:00", "guests": [{"text": "Dana", "email": null, "confirmed": false, "matches": [{"name": "Dana Whitfield", "email": "dana@example.com"}, {"name": "Dana Ortiz", "email": "dortiz@example.org"}]}, {"text": "Lee", "email": null, "confirmed": false, "matches": [{"name": "Lee Park", "email": "lee@example.com"}]}]}}
+  - {"id": "ev-guest-lowercase", "mode": "event", "in": "Catch up with dana tomorrow", "expect": {"title": "Catch up with dana", "tokens": ["date:tomorrow"], "guests": []}}
+  - {"id": "ev-guest-full-name", "mode": "event", "in": "Interview with Dana Whitfield fri 10am", "expect": {"title": "Interview with Dana Whitfield", "tokens": ["guest:Dana Whitfield", "date:fri", "time:10am"], "guests": [{"text": "Dana Whitfield", "email": null, "confirmed": false, "matches": [{"name": "Dana Whitfield", "email": "dana@example.com"}]}]}}
+  - {"id": "ev-guest-unknown", "mode": "event", "in": "Lunch with Tom tomorrow", "expect": {"title": "Lunch with Tom", "tokens": ["guest:Tom", "date:tomorrow"], "start": "2026-10-02", "guests": [{"text": "Tom", "email": null, "confirmed": false, "matches": []}]}}
+  - {"id": "ev-guest-weekday-after", "mode": "event", "in": "Lunch fri with Dana", "expect": {"title": "Lunch with Dana", "tokens": ["date:fri", "guest:Dana"], "start": "2026-10-02"}}
+
+# ---- calendar, video, reminders (event)
+  - {"id": "ev-cal-prefix", "mode": "event", "in": "Lunch fri #fam", "expect": {"title": "Lunch", "tokens": ["date:fri", "collection:#fam"], "list_or_calendar": {"id": "c-family", "name": "Family", "create": false}}}
+  - {"id": "ev-cal-unknown", "mode": "event", "in": "Party sat #Gala", "expect": {"title": "Party sat #Gala", "list_or_calendar": null, "start": null}}
+  - {"id": "ev-cal-digits", "mode": "event", "in": "Fix issue #12 tomorrow", "expect": {"title": "Fix issue #12", "tokens": ["date:tomorrow"], "list_or_calendar": null}}
+  - {"id": "ev-video-plus", "mode": "event", "in": "Sync +meet tomorrow 3pm", "expect": {"title": "Sync", "tokens": ["video:+meet", "date:tomorrow", "time:3pm"], "video": true}}
+  - {"id": "ev-video-bare", "mode": "event", "in": "Team sync fri 3pm video", "expect": {"title": "Team sync", "tokens": ["date:fri", "time:3pm", "video:video"], "video": true}}
+  - {"id": "ev-video-weekday", "mode": "event", "in": "Team sync fri video", "expect": {"title": "Team sync", "tokens": ["date:fri", "video:video"], "video": true, "start": "2026-10-02"}}
+  - {"id": "ev-video-title", "mode": "event", "in": "Edit video tomorrow", "expect": {"title": "Edit video", "tokens": ["date:tomorrow"], "video": false}}
+  - {"id": "ev-video-not-task", "mode": "task", "in": "Record lecture fri video", "expect": {"title": "Record lecture fri video", "due": null, "video": false}}
+  - {"id": "ev-remind-before", "mode": "event", "in": "Flight fri 7am remind 2h before", "expect": {"title": "Flight", "tokens": ["date:fri", "time:7am", "reminder:remind 2h before"], "start": "2026-10-02T07:00", "reminders": [{"minutes": 120, "at": null}]}}
+  - {"id": "ev-remind-at", "mode": "event", "in": "Concert sat 8pm remind me at 5pm", "expect": {"title": "Concert", "tokens": ["date:sat", "time:8pm", "reminder:remind me at 5pm"], "reminders": [{"minutes": 180, "at": "2026-10-03T17:00"}]}}
+  - {"id": "ev-remind-day-before", "mode": "event", "in": "Trash day mon remind 1 day before", "expect": {"title": "Trash day", "tokens": ["date:mon", "reminder:remind 1 day before"], "start": "2026-10-05", "all_day": true, "reminders": [{"minutes": 1440, "at": null}]}}
+  - {"id": "ev-remind-absolute", "mode": "event", "in": "Doctor oct 20 10am remind tom 9am", "expect": {"title": "Doctor", "tokens": ["date:oct 20", "time:10am", "reminder:remind tom 9am"], "start": "2026-10-20T10:00", "reminders": [{"minutes": 25980, "at": "2026-10-02T09:00"}]}}
+  - {"id": "ev-remind-two", "mode": "event", "in": "Exam mon 9am remind 1 day before remind 30m before", "expect": {"title": "Exam", "tokens": ["date:mon", "time:9am", "reminder:remind 1 day before", "reminder:remind 30m before"], "reminders": [{"minutes": 1440, "at": null}, {"minutes": 30, "at": null}]}}
+
+# ---- quoted text, keep as text, clean-up (event)
+  - {"id": "ev-quoted", "mode": "event", "in": "\"Meeting tomorrow\" recap fri", "expect": {"title": "\"Meeting tomorrow\" recap", "tokens": ["date:fri"], "start": "2026-10-02"}}
+  - {"id": "ev-quoted-curly", "mode": "event", "in": "“Next week” planning mon 9am", "expect": {"title": "“Next week” planning", "tokens": ["date:mon", "time:9am"], "start": "2026-10-05T09:00"}}
+  - {"id": "ev-quoted-open", "mode": "event", "in": "Notes \"tomorrow at 3pm", "expect": {"title": "Notes \"tomorrow at 3pm", "start": null}}
+  - {"id": "ev-quoted-weekday-blocks", "mode": "event", "in": "Watch fri \"Friday Night Lights\"", "expect": {"title": "Watch fri \"Friday Night Lights\"", "start": null}}
+  - {"id": "ev-keep-date", "mode": "event", "in": "Lunch tomorrow at noon", "opts": {"keep": ["tomorrow"]}, "expect": {"title": "Lunch tomorrow", "tokens": ["time:at noon"], "start": "2026-10-01T12:00"}}
+  - {"id": "ev-keep-case", "mode": "event", "in": "Sunday brunch sunday", "opts": {"keep": ["SUNDAY"]}, "expect": {"title": "Sunday brunch sunday", "start": null}}
+  - {"id": "ev-empty-title", "mode": "event", "in": "tomorrow 3pm", "expect": {"title": "", "tokens": ["date:tomorrow", "time:3pm"], "start": "2026-10-02T15:00"}}
+  - {"id": "ev-punctuation", "mode": "event", "in": "Call bank, tomorrow, then email", "expect": {"title": "Call bank, then email", "tokens": ["date:tomorrow"], "start": "2026-10-02"}}
+  - {"id": "ev-trailing-punct", "mode": "event", "in": "Dinner with the team on friday.", "expect": {"title": "Dinner with the team", "tokens": ["date:on friday"], "start": "2026-10-02"}}
+  - {"id": "ev-plain-title", "mode": "event", "in": "Buy 3 apples", "expect": {"title": "Buy 3 apples", "start": null, "end": null, "all_day": false, "rrule": null, "location": null, "guests": [], "list_or_calendar": null, "video": false, "reminders": [], "due": null}}
+  - {"id": "ev-monday-com", "mode": "event", "in": "Monday.com invoice", "expect": {"title": "Monday.com invoice", "start": null}}
+  - {"id": "ev-task-fields-null", "mode": "event", "in": "Party !!! @home sat", "expect": {"title": "Party !!! @home", "tokens": ["date:sat"], "priority": 0, "tags": [], "due": null, "start_date": null}}
+
+# ---- daylight saving and month ends
+  - {"id": "dst-fall-wall-clock", "mode": "event", "in": "Night shift nov 1 1am for 2h", "expect": {"title": "Night shift", "tokens": ["date:nov 1", "time:1am", "duration:for 2h"], "start": "2026-11-01T01:00", "end": "2026-11-01T03:00"}}
+  - {"id": "dst-fall-in-2h", "mode": "event", "in": "Check servers in 2h", "now": "2026-11-01T00:30", "expect": {"title": "Check servers", "tokens": ["date:in 2h"], "start": "2026-11-01T01:30", "end": "2026-11-01T02:30"}}
+  - {"id": "dst-spring-in-1h", "mode": "event", "in": "Call in 1h", "now": "2027-03-14T01:30", "expect": {"title": "Call", "tokens": ["date:in 1h"], "start": "2027-03-14T03:30"}}
+  - {"id": "dst-day-after", "mode": "event", "in": "Standup nov 2 9am", "expect": {"title": "Standup", "tokens": ["date:nov 2", "time:9am"], "start": "2026-11-02T09:00"}}
+  - {"id": "dst-week-across", "mode": "event", "in": "Retro next week 4pm", "now": "2026-10-28T10:00", "expect": {"title": "Retro", "tokens": ["date:next week", "time:4pm"], "start": "2026-11-02T16:00"}}
+  - {"id": "dst-task-fall-tomorrow", "mode": "task", "in": "Reset clocks tomorrow 8am", "now": "2026-10-31T21:00", "expect": {"title": "Reset clocks", "tokens": ["date:tomorrow", "time:8am"], "due": "2026-11-01T08:00"}}
+  - {"id": "eom-time-ahead-rolls-month", "mode": "task", "in": "Lock doors 7am", "now": "2026-10-31T22:00", "expect": {"title": "Lock doors", "tokens": ["time:7am"], "due": "2026-11-01T07:00"}}
+  - {"id": "eom-tomorrow-new-year", "mode": "event", "in": "Brunch tomorrow 11am", "now": "2026-12-31T23:30", "expect": {"title": "Brunch", "tokens": ["date:tomorrow", "time:11am"], "start": "2027-01-01T11:00"}}
+  - {"id": "eom-the-31st-today", "mode": "task", "in": "File report the 31st", "now": "2026-10-31T08:00", "expect": {"title": "File report", "tokens": ["date:the 31st"], "due": "2026-10-31"}}
+  - {"id": "eom-monthly-31st", "mode": "event", "in": "Close books every month on the 31st", "now": "2026-11-02T09:00", "expect": {"title": "Close books", "tokens": ["repeat:every month on the 31st"], "start": "2026-12-31", "rrule": "FREQ=MONTHLY;BYMONTHDAY=31"}}
+  - {"id": "eom-task-monthly-clamp", "mode": "task", "in": "Pay card monthly", "now": "2027-01-31T09:00", "expect": {"title": "Pay card", "tokens": ["repeat:monthly"], "due": "2027-02-28", "rrule": "FREQ=MONTHLY"}}
+
+# ---- tasks
+  - {"id": "tk-priority-p1", "mode": "task", "in": "Ship release p1", "expect": {"title": "Ship release", "tokens": ["priority:p1"], "priority": 1}}
+  - {"id": "tk-priority-p2", "mode": "task", "in": "Ship release P2 fri", "expect": {"title": "Ship release", "tokens": ["priority:P2", "date:fri"], "priority": 5, "due": "2026-10-02"}}
+  - {"id": "tk-priority-low", "mode": "task", "in": "Taxes !", "expect": {"title": "Taxes", "tokens": ["priority:!"], "priority": 9}}
+  - {"id": "tk-priority-first-only", "mode": "task", "in": "Urgent !!! not ! really", "expect": {"title": "Urgent not ! really", "tokens": ["priority:!!!"], "priority": 1}}
+  - {"id": "tk-priority-attached", "mode": "task", "in": "Wow!!! party", "expect": {"title": "Wow!!! party", "priority": 0}}
+  - {"id": "tk-tags", "mode": "task", "in": "Buy stamps @errand @Phone", "expect": {"title": "Buy stamps", "tokens": ["tag:@errand", "tag:@Phone"], "tags": ["errand", "Phone"]}}
+  - {"id": "tk-tags-dedupe", "mode": "task", "in": "Call @phone back @Phone", "expect": {"title": "Call back", "tokens": ["tag:@phone", "tag:@Phone"], "tags": ["phone"]}}
+  - {"id": "tk-tag-not-email", "mode": "task", "in": "Email dana@example.com about lunch", "expect": {"title": "Email dana@example.com about lunch", "tags": []}}
+  - {"id": "tk-list-prefix", "mode": "task", "in": "Milk #groc", "expect": {"title": "Milk", "tokens": ["collection:#groc"], "list_or_calendar": {"id": "l-groceries", "name": "Groceries", "create": false}}}
+  - {"id": "tk-list-squashed", "mode": "task", "in": "Fix shelf #homeproj", "expect": {"title": "Fix shelf", "tokens": ["collection:#homeproj"], "list_or_calendar": {"id": "l-home", "name": "Home projects", "create": false}}}
+  - {"id": "tk-list-word-prefix", "mode": "task", "in": "Paint fence #home sat", "expect": {"title": "Paint fence", "tokens": ["collection:#home", "date:sat"], "due": "2026-10-03", "list_or_calendar": {"id": "l-home", "name": "Home projects", "create": false}}}
+  - {"id": "tk-list-exact", "mode": "task", "in": "Draft memo #work", "expect": {"title": "Draft memo", "tokens": ["collection:#work"], "list_or_calendar": {"id": "l-work", "name": "Work", "create": false}}}
+  - {"id": "tk-list-unknown", "mode": "task", "in": "Book flights #Travel", "expect": {"title": "Book flights", "tokens": ["collection:#Travel"], "list_or_calendar": {"id": null, "name": "Travel", "create": true}}}
+  - {"id": "tk-list-first-only", "mode": "task", "in": "Pack #Travel #Groceries", "expect": {"title": "Pack #Groceries", "tokens": ["collection:#Travel"], "list_or_calendar": {"id": null, "name": "Travel", "create": true}}}
+  - {"id": "tk-start-and-due", "mode": "task", "in": "Draft grant start mon due oct 20", "expect": {"title": "Draft grant", "tokens": ["start:start mon", "date:due oct 20"], "start_date": "2026-10-05", "due": "2026-10-20", "due_all_day": true}}
+  - {"id": "tk-start-from", "mode": "task", "in": "Study for exam from oct 10", "expect": {"title": "Study for exam", "tokens": ["start:from oct 10"], "start_date": "2026-10-10", "due": null}}
+  - {"id": "tk-starts", "mode": "task", "in": "Prep taxes starts 12 oct", "expect": {"title": "Prep taxes", "tokens": ["start:starts 12 oct"], "start_date": "2026-10-12"}}
+  - {"id": "tk-start-not-event", "mode": "event", "in": "Kickoff start mon", "expect": {"title": "Kickoff start", "tokens": ["date:mon"], "start": "2026-10-05"}}
+  - {"id": "tk-remind-before", "mode": "task", "in": "Submit report fri 5pm remind 1h before", "expect": {"title": "Submit report", "tokens": ["date:fri", "time:5pm", "reminder:remind 1h before"], "due": "2026-10-02T17:00", "reminders": [{"minutes": 60, "at": null}]}}
+  - {"id": "tk-remind-at-date-only", "mode": "task", "in": "Pay bill fri remind at 9am", "expect": {"title": "Pay bill", "tokens": ["date:fri", "reminder:remind at 9am"], "due": "2026-10-02", "due_all_day": true, "reminders": [{"minutes": -540, "at": "2026-10-02T09:00"}]}}
+  - {"id": "tk-remind-tom", "mode": "task", "in": "Renew passport remind tom 9am", "expect": {"title": "Renew passport", "tokens": ["reminder:remind tom 9am"], "due": null, "reminders": [{"minutes": null, "at": "2026-10-02T09:00"}]}}
+  - {"id": "tk-remind-no-anchor", "mode": "task", "in": "Stretch remind at 3pm", "expect": {"title": "Stretch", "tokens": ["reminder:remind at 3pm"], "due": null, "reminders": [{"minutes": null, "at": "2026-10-01T15:00"}]}}
+  - {"id": "tk-remind-incomplete", "mode": "task", "in": "Remind me to call Dana", "expect": {"title": "Remind me to call Dana", "reminders": []}}
+  - {"id": "tk-by-time", "mode": "task", "in": "Finish slides by 5pm", "expect": {"title": "Finish slides", "tokens": ["time:by 5pm"], "due": "2026-10-01T17:00", "due_all_day": false}}
+  - {"id": "tk-by-date", "mode": "task", "in": "Finish report by fri", "expect": {"title": "Finish report", "tokens": ["date:by fri"], "due": "2026-10-02"}}
+  - {"id": "tk-due-word", "mode": "task", "in": "Grant report due oct 15", "expect": {"title": "Grant report", "tokens": ["date:due oct 15"], "due": "2026-10-15", "due_all_day": true}}
+  - {"id": "tk-tonight", "mode": "task", "in": "Take out trash tonight", "expect": {"title": "Take out trash", "tokens": ["date:tonight"], "due": "2026-10-01T20:00", "due_all_day": false}}
+  - {"id": "tk-today", "mode": "task", "in": "Call plumber today", "expect": {"title": "Call plumber", "tokens": ["date:today"], "due": "2026-10-01", "due_all_day": true}}
+  - {"id": "tk-time-ahead", "mode": "task", "in": "Pick up kids 3:15pm", "expect": {"title": "Pick up kids", "tokens": ["time:3:15pm"], "due": "2026-10-01T15:15"}}
+  - {"id": "tk-24h-past", "mode": "task", "in": "Backup 08:30", "expect": {"title": "Backup", "tokens": ["time:08:30"], "due": "2026-10-02T08:30"}}
+  - {"id": "tk-range-not-task", "mode": "task", "in": "Call 3-4pm", "expect": {"title": "Call 3-4pm", "due": null}}
+  - {"id": "tk-duration-not-task", "mode": "task", "in": "Workout for 45 min", "expect": {"title": "Workout for 45 min", "due": null, "duration": null}}
+  - {"id": "tk-rep-weekdays-time", "mode": "task", "in": "Check email weekdays 9am", "expect": {"title": "Check email", "tokens": ["repeat:weekdays", "time:9am"], "due": "2026-10-02T09:00", "rrule": "FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR", "repeat_from": "due"}}
+  - {"id": "tk-rep-daily-ahead", "mode": "task", "in": "Walk dog daily 6pm", "expect": {"title": "Walk dog", "tokens": ["repeat:daily", "time:6pm"], "due": "2026-10-01T18:00", "rrule": "FREQ=DAILY"}}
+  - {"id": "tk-rep-daily-date-only", "mode": "task", "in": "Journal daily", "expect": {"title": "Journal", "tokens": ["repeat:daily"], "due": "2026-10-02", "due_all_day": true, "rrule": "FREQ=DAILY", "repeat_from": "due"}}
+  - {"id": "tk-rep-monthly", "mode": "task", "in": "Backup monthly", "expect": {"title": "Backup", "tokens": ["repeat:monthly"], "due": "2026-11-01", "rrule": "FREQ=MONTHLY"}}
+  - {"id": "tk-rep-yearly-date", "mode": "task", "in": "Renew domain yearly oct 20", "expect": {"title": "Renew domain", "tokens": ["repeat:yearly", "date:oct 20"], "due": "2026-10-20", "rrule": "FREQ=YEARLY"}}
+  - {"id": "tk-rep-every-mon", "mode": "task", "in": "Plan week every mon", "expect": {"title": "Plan week", "tokens": ["repeat:every mon"], "due": "2026-10-05", "rrule": "FREQ=WEEKLY;BYDAY=MO"}}
+  - {"id": "tk-rep-every-thu-date-only", "mode": "task", "in": "Team notes every thu", "expect": {"title": "Team notes", "tokens": ["repeat:every thu"], "due": "2026-10-08", "rrule": "FREQ=WEEKLY;BYDAY=TH"}}
+  - {"id": "tk-rep-every-thu-ahead", "mode": "task", "in": "Team notes every thu 4pm", "expect": {"title": "Team notes", "tokens": ["repeat:every thu", "time:4pm"], "due": "2026-10-01T16:00"}}
+  - {"id": "tk-rep-bang-week", "mode": "task", "in": "Clean fridge every! week", "expect": {"title": "Clean fridge", "tokens": ["repeat:every! week"], "due": "2026-10-08", "rrule": "FREQ=WEEKLY", "repeat_from": "completion"}}
+  - {"id": "tk-rep-every-15th", "mode": "task", "in": "Invoice every 15th", "expect": {"title": "Invoice", "tokens": ["repeat:every 15th"], "due": "2026-10-15", "rrule": "FREQ=MONTHLY;BYMONTHDAY=15"}}
+  - {"id": "tk-rep-month-on-day", "mode": "task", "in": "Pay sitter every month on day 20", "expect": {"title": "Pay sitter", "tokens": ["repeat:every month on day 20"], "due": "2026-10-20", "rrule": "FREQ=MONTHLY;BYMONTHDAY=20"}}
+  - {"id": "tk-rep-month-last-fri", "mode": "task", "in": "Timesheet every month on the last fri", "expect": {"title": "Timesheet", "tokens": ["repeat:every month on the last fri"], "due": "2026-10-30", "rrule": "FREQ=MONTHLY;BYDAY=-1FR"}}
+  - {"id": "tk-rep-none", "mode": "task", "in": "Buy milk", "expect": {"title": "Buy milk", "rrule": null, "repeat_from": null, "due": null, "due_all_day": false}}
+  - {"id": "tk-in-2-hours", "mode": "task", "in": "Stretch in 2 hours", "expect": {"title": "Stretch", "tokens": ["date:in 2 hours"], "due": "2026-10-01T12:12"}}
+  - {"id": "tk-next-week-priority", "mode": "task", "in": "Report next week !!!", "expect": {"title": "Report", "tokens": ["date:next week", "priority:!!!"], "due": "2026-10-05", "priority": 1}}
+  - {"id": "tk-keep-tag", "mode": "task", "in": "Call @home", "opts": {"keep": ["@home"]}, "expect": {"title": "Call @home", "tags": []}}
+  - {"id": "tk-full", "mode": "task", "in": "Call Dana fri 3pm !! #Work @phone", "expect": {"title": "Call Dana", "tokens": ["date:fri", "time:3pm", "priority:!!", "collection:#Work", "tag:@phone"], "due": "2026-10-02T15:00", "priority": 5, "tags": ["phone"], "list_or_calendar": {"id": "l-work", "name": "Work", "create": false}, "guests": []}}
+  - {"id": "tk-event-fields-null", "mode": "task", "in": "Lunch with Dana tomorrow at Café Luna", "expect": {"title": "Lunch with Dana at Café Luna", "tokens": ["date:tomorrow"], "start": null, "end": null, "location": null, "guests": [], "due": "2026-10-02"}}
+  - {"id": "tk-quoted-hash", "mode": "task", "in": "Tweet \"#launch day\" tomorrow", "expect": {"title": "Tweet \"#launch day\"", "tokens": ["date:tomorrow"], "list_or_calendar": null}}
+
+# ---- compatibility: the Kotlin QuickAdd.parse tests (now Tue 29 Sep 2026 12:00, task mode, no lists)
+  - {"id": "compat-bank", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "Call the bank tomorrow 3pm", "expect": {"title": "Call the bank", "tokens": ["date:tomorrow", "time:3pm"], "due": "2026-09-30T15:00"}}
+  - {"id": "compat-rent", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "Pay rent on friday !!", "expect": {"title": "Pay rent", "tokens": ["date:on friday", "priority:!!"], "due": "2026-10-02", "priority": 5}}
+  - {"id": "compat-standup", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "standup at 9:30", "expect": {"title": "standup", "tokens": ["time:at 9:30"], "due": "2026-09-30T09:30"}}
+  - {"id": "compat-stretch", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "stretch in 2 hours", "expect": {"title": "stretch", "tokens": ["date:in 2 hours"], "due": "2026-09-29T14:00"}}
+  - {"id": "compat-report", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "report next week !!!", "expect": {"title": "report", "tokens": ["date:next week", "priority:!!!"], "due": "2026-10-05", "priority": 1}}
+  - {"id": "compat-monday-com", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "Monday.com invoice", "expect": {"title": "Monday.com invoice", "due": null}}
+  - {"id": "compat-sunday-papers", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "Read Sunday papers", "expect": {"title": "Read Sunday papers", "due": null}}
+  - {"id": "compat-apples", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "Buy 3 apples", "expect": {"title": "Buy 3 apples", "due": null}}
+  - {"id": "compat-issue-12", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "Fix issue #12", "expect": {"title": "Fix issue #12", "due": null, "list_or_calendar": null}}
+  - {"id": "compat-sunday", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "Call mom sunday", "expect": {"title": "Call mom", "tokens": ["date:sunday"], "due": "2026-10-04"}}
+  - {"id": "compat-sunday-5pm", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "Call mom sunday 5pm", "expect": {"title": "Call mom", "tokens": ["date:sunday", "time:5pm"], "due": "2026-10-04T17:00"}}
+  - {"id": "compat-this-weekend", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "Clean garage this weekend", "expect": {"title": "Clean garage", "tokens": ["date:this weekend"], "due": "2026-10-03"}}
+  - {"id": "compat-next-sat", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "Brunch next sat", "expect": {"title": "Brunch", "tokens": ["date:next sat"], "due": "2026-10-10"}}
+  - {"id": "compat-in-3-days", "mode": "task", "now": "2026-09-29T12:00", "opts": {"lists": []}, "in": "Return library books in 3 days", "expect": {"title": "Return library books", "tokens": ["date:in 3 days"], "due": "2026-10-02", "due_all_day": true}}

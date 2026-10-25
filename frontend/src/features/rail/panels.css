@@ -1,0 +1,224 @@
+/* The calendar and tasks side panels (CalendarPanel, TasksPanel) and the event quick-add line. */
+
+.ql {
+  margin: 0 0 10px;
+}
+.ql-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-container);
+  color: var(--text-2);
+  border: 1px solid transparent;
+}
+.ql-line:focus-within {
+  background: var(--surface);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.ql-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+}
+.ql-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+  align-items: center;
+}
+.ql-chip {
+  font-size: 12px;
+  line-height: 20px;
+  padding: 0 8px;
+  border-radius: var(--radius-full);
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.ql-hint {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-inline-start: auto;
+}
+.cp-rows {
+  display: grid;
+  /* One column no wider than the panel: an auto column grew to a long title's width and the row
+     ran past the panel's edge instead of cutting the title with its ellipsis. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2px;
+}
+.cp-panel .cal-row {
+  grid-template-columns: 10px minmax(0, 1fr) auto;
+  grid-template-areas: 'bar main rsvp' 'bar time meta';
+  column-gap: 10px;
+  row-gap: 1px;
+  padding: 7px 10px;
+  text-align: start;
+  border-radius: var(--radius-sm);
+  background: var(--surface-container);
+}
+.cp-panel .cal-row-bar {
+  grid-area: bar;
+  align-self: start;
+  margin-top: 5px;
+}
+.cp-panel .cal-row-time {
+  grid-area: time;
+  font-size: 12px;
+}
+.cp-panel .cal-row-main {
+  grid-area: main;
+  align-items: flex-start;
+}
+/* Start-aligned, the title and the place took their full length and ran past the panel; at most
+   the row's width, they end in their ellipsis. */
+.cp-panel .cal-row-main > * {
+  max-width: 100%;
+}
+.cp-panel .cal-row-meta {
+  grid-area: meta;
+}
+.cp-panel .cal-row-rsvp {
+  grid-area: rsvp;
+}
+.cp-panel .cal-row:hover {
+  background: var(--surface-high);
+}
+.cp-empty,
+.tp-empty {
+  padding: 18px 4px;
+  text-align: center;
+  font-size: 13px;
+}
+.tp-panel {
+  --tk-pad: 18px;
+  --tk-row-pad-y: 6px;
+  padding: 0 4px 16px;
+}
+.tp-quick {
+  padding: 4px 4px 8px;
+}
+.tp-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.tp-section {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 10px 10px 4px;
+}
+.tp-done-toggle {
+  justify-self: start;
+  margin: 8px 4px 0;
+}
+.tp-panel .tk-row {
+  grid-template-columns: 30px minmax(0, 1fr);
+  padding-inline-start: 6px;
+  border-radius: var(--radius-sm);
+  border-bottom: 0;
+}
+.tp-panel .tk-handle-cell {
+  display: none;
+}
+
+/* Mail search: events and tasks above the mail results (SearchGlance). */
+.sg {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 8px 16px;
+  margin: 8px 16px 4px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface-dim);
+  border: 1px solid var(--divider);
+}
+.sg-col {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.sg-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-2);
+}
+.sg-head .btn {
+  margin-inline-start: auto;
+}
+.sg-row {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px;
+  border-radius: var(--radius-sm);
+  color: inherit;
+  text-decoration: none;
+  font-size: 13.5px;
+}
+.sg-row:hover,
+.sg-row:focus-visible {
+  background: var(--hover);
+  outline: none;
+}
+.sg-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+.sg-ring {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid var(--text-3);
+}
+.sg-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.sg-when {
+  font-size: 12px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .sg {
+    margin: 6px 8px;
+  }
+  .sg-row {
+    grid-template-columns: 14px minmax(0, 1fr);
+  }
+  .sg-when {
+    grid-column: 2;
+  }
+}
+
+/* The calendar panel's "Calendars shown" menu (calendar.toggle_visibility). */
+.cp-cals { position: relative; margin-inline-start: auto; }
+.cp-cals-dot { position: absolute; top: 4px; inset-inline-end: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--primary); }
+.cp-cals-list { display: grid; gap: 2px; padding: 6px; min-width: 200px; }
+.cp-cal { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+.cp-cal:hover { background: var(--hover, rgba(127, 127, 127, 0.08)); }
+
+/* "No mail matches" under the other groups of an All search. */
+.list-quiet-empty {
+  margin: 0;
+  padding: 12px 16px;
+  font-size: 14px;
+}

@@ -1,0 +1,15 @@
+# User settings: reminders.
+# One line per key, `key: plain description`; `key: {internal: why}` for a key that is not a setting
+# a person chooses. A key may appear in only one file of this folder. The settings map test
+# (frontend/src/features/settings/groups.test.ts) checks that Settings has a place for each one.
+
+reminders.events: Reminders for calendar events.
+reminders.tasks: Reminders for tasks.
+reminders.default_timed_event: The reminder an event gets when it has none (minutes before).
+reminders.default_all_day_event: The reminder an all-day event gets when it has none.
+reminders.default_task: Remind me of a task at its due time when it has no reminder.
+reminders.morning_hour: The hour date-only reminders fire.
+reminders.web: "Where web reminders appear: desktop notifications and browser push."
+reminders.missed: Show reminders that fired while you were away.
+reminders.sound: Play a sound with a reminder.
+reminders.repeat: Remind again every few minutes until you act (off by default).

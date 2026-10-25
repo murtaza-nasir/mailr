@@ -1,0 +1,1004 @@
+/* Focus: keyboard-first and quiet. One centred column on a single plane, large type,
+   monochrome with one indigo accent, a serif for what you read. Scoped by [data-ui-theme='focus']. */
+
+[data-ui-theme='focus'] {
+  --font: 'Inter', 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Noto Sans', sans-serif;
+  --font-display: 'Inter', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Noto Sans', sans-serif;
+  --f-serif: 'Iowan Old Style', 'Palatino Linotype', Charter, 'Noto Serif', Georgia, ui-serif, serif;
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --topbar-h: 64px;
+  --rail-w: 0px;
+  --panel-w: 380px;
+  --f-col: min(920px, calc(100% - 48px));
+  --row-h: 52px;
+  /* The phone row: sender, subject and snippet (the media query below). */
+  --f-row-h-phone: 106px;
+}
+/* An empty section is one row tall (list.css .section-empty). */
+.focus-app .list-pane,
+.focus-app .list-pane.narrow {
+  --section-empty-h: var(--row-h);
+}
+[data-ui-theme='focus'][data-density='compact'] {
+  --row-h: 40px;
+}
+[data-ui-theme='focus'][data-density='comfortable'] {
+  --row-h: 60px;
+}
+[data-ui-theme='focus'][data-theme='light'] {
+  --bg: #fbfbfa;
+  --surface: #ffffff;
+  --surface-dim: #f6f6f4;
+  --surface-container: #f2f2f0;
+  --surface-high: #eaeae7;
+  --text: #1c1c1a;
+  --text-2: #4d4d49;
+  --text-3: #6e6e69;
+  --border: #deded9;
+  --divider: #ececea;
+  --primary: #5151cd;
+  --on-primary: #ffffff;
+  --primary-container: #ececfb;
+  --on-primary-container: #33339a;
+  --compose-bg: #1c1c1a;
+  --compose-fg: #fbfbfa;
+  --nav-active: #efefec;
+  --nav-active-fg: #1c1c1a;
+  --hover: rgba(28, 28, 26, 0.04);
+  --pressed: rgba(28, 28, 26, 0.08);
+  --row-selected: #ececfb;
+  --row-focused-bar: #5151cd;
+  --row-read-bg: transparent;
+  --row-unread-bg: transparent;
+  --chip-bg: #efefec;
+  --chip-fg: #4d4d49;
+  --star: #b8860b;
+  --important: #b8860b;
+  --important-border: #8a6508;
+  --input-bg: #f2f2f0;
+  --input-bg-focus: #ffffff;
+  --focus-ring: #5151cd;
+  --tooltip-bg: #1c1c1a;
+  --shadow-1: 0 1px 2px rgba(28, 28, 26, 0.06), 0 1px 1px rgba(28, 28, 26, 0.04);
+  --shadow-2: 0 4px 16px rgba(28, 28, 26, 0.08), 0 1px 3px rgba(28, 28, 26, 0.06);
+  --shadow-3: 0 16px 48px rgba(28, 28, 26, 0.14), 0 2px 6px rgba(28, 28, 26, 0.06);
+}
+[data-ui-theme='focus'][data-theme='dark'] {
+  --bg: #111113;
+  --surface: #18181b;
+  --surface-dim: #141416;
+  --surface-container: #1c1c20;
+  --surface-high: #26262b;
+  --text: #ededef;
+  --text-2: #b8b8bf;
+  --text-3: #8e8e97;
+  --border: #303036;
+  --divider: #222226;
+  /* The violet four HCT tones down from #9494f5 so white text on it (buttons, the today pill) reaches
+     APCA Lc 60 and WCAG 3:1, the engine's rule for fills; links on the surfaces keep 4.5:1. */
+  --primary: #8989e9;
+  --on-primary: #ffffff;
+  --primary-container: #26264d;
+  --on-primary-container: #dcdcff;
+  --compose-bg: #ededef;
+  --compose-fg: #111113;
+  --nav-active: #1f1f23;
+  --nav-active-fg: #ededef;
+  --hover: rgba(237, 237, 239, 0.045);
+  --pressed: rgba(237, 237, 239, 0.08);
+  --row-selected: #23233f;
+  --row-focused-bar: #8989e9;
+  --row-read-bg: transparent;
+  --row-unread-bg: transparent;
+  --chip-bg: #222226;
+  --chip-fg: #b8b8bf;
+  --star: #e6c16a;
+  --important: #e6c16a;
+  --important-border: #b8963e;
+  --input-bg: #1c1c20;
+  --input-bg-focus: #1c1c20;
+  --focus-ring: #8989e9;
+  --tooltip-bg: #ededef;
+}
+
+/* ---------- controls ---------- */
+
+[data-ui-theme='focus'] .btn {
+  border-radius: var(--radius-sm);
+}
+[data-ui-theme='focus'] .btn.filled {
+  background: var(--compose-bg);
+  color: var(--compose-fg);
+}
+[data-ui-theme='focus'] kbd {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 18px;
+  min-width: 20px;
+  padding: 0 5px;
+  text-align: center;
+  border-radius: 4px;
+  background: var(--surface);
+  color: var(--text-2);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 0 var(--border);
+}
+
+/* ---------- frame ---------- */
+
+[data-ui-theme='focus'] .focus-app {
+  grid-template-rows: var(--topbar-h) 1fr;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    'top'
+    'main';
+}
+.focus-app .f-top {
+  grid-area: top;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 20px;
+  min-width: 0;
+}
+.focus-app .f-where {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 10px;
+  margin-inline-start: -10px;
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  white-space: nowrap;
+  flex: none;
+}
+.focus-app .f-where:hover {
+  background: var(--hover);
+}
+.focus-app .f-brand {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.focus-app .f-slash {
+  color: var(--text-3);
+}
+.focus-app .f-view {
+  font-weight: 500;
+  color: var(--text-2);
+}
+.focus-app .f-where .lucide {
+  width: 16px;
+  height: 16px;
+  color: var(--text-3);
+}
+.focus-app .f-top .search {
+  max-width: 460px;
+  margin: 0 auto;
+}
+.focus-app .f-top .search-box {
+  height: 38px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--divider);
+}
+.focus-app .f-top .search-box.focused,
+.focus-app .f-top .search-box.open {
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border), var(--shadow-2);
+}
+.focus-app .f-top .search-box.open {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+.focus-app .f-top .search-box input {
+  font-size: 14.5px;
+}
+.focus-app .f-top .search-box .icon-btn {
+  --icon-btn: calc(32px * var(--dz, 1));
+  --icon: calc(18px * var(--dzi, 1));
+  color: var(--text-3);
+}
+.focus-app .f-top .search-panel {
+  top: 38px;
+  background: var(--surface);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+.focus-app .f-top-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+}
+.focus-app .f-cmd {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding-block: 0;
+  padding-inline: 10px 6px;
+  border-radius: var(--radius-sm);
+  color: var(--text-2);
+}
+.focus-app .f-cmd:hover {
+  background: var(--hover);
+}
+.focus-app .f-cmd .lucide {
+  width: 16px;
+  height: 16px;
+}
+.focus-app .f-apps {
+  display: flex;
+  gap: 2px;
+  padding: 0 6px;
+  margin: 0 2px;
+  border-inline-start: 1px solid var(--divider);
+  border-inline-end: 1px solid var(--divider);
+}
+.focus-app .f-top .icon-btn {
+  color: var(--text-3);
+}
+.focus-app .f-apps .icon-btn.active {
+  color: var(--text);
+  background: var(--hover);
+}
+.focus-app .f-top .icon-btn:hover {
+  color: var(--text);
+}
+.focus-app .f-top .icon-btn.active {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.focus-app .f-compose {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding-block: 0;
+  padding-inline: 12px 14px;
+  margin-inline-start: 4px;
+  border-radius: var(--radius-sm);
+  background: var(--compose-bg);
+  color: var(--compose-fg);
+  font-weight: 500;
+  font-size: 14px;
+}
+.focus-app .f-compose .lucide {
+  width: 16px;
+  height: 16px;
+}
+.focus-app .f-compose:hover {
+  opacity: 0.9;
+}
+.focus-app .account-btn {
+  margin-inline-start: 4px;
+}
+.focus-app .main.f-main {
+  margin: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* ---------- the list column ---------- */
+
+.focus-app .list-pane > .cat-tabs-wrap,
+.focus-app .list-pane > .toolbar,
+.focus-app .list-pane > .search-chips,
+.focus-app .list-pane > .select-all-banner,
+.focus-app .list-scroll > * {
+  width: var(--f-col);
+  margin-inline: auto;
+}
+.focus-app .cat-tabs-wrap {
+  border-bottom: 0;
+}
+.focus-app .cat-tabs {
+  gap: 28px;
+  padding-top: 8px;
+}
+.focus-app .cat-tabs-wrap .scroll-tabs-btn {
+  margin-top: 4px; /* centred on the tabs, below the strip's top padding */
+}
+.focus-app .cat-tab {
+  height: 44px;
+  min-width: 0;
+  max-width: none;
+  flex: none;
+  gap: 6px;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-3);
+}
+.focus-app .cat-tab .lucide {
+  display: none;
+}
+.focus-app .cat-tab:hover {
+  background: none;
+  color: var(--text);
+}
+.focus-app .cat-tab[aria-selected='true'] {
+  color: var(--text);
+}
+.focus-app .cat-tab[aria-selected='true']::after {
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  height: 2px;
+  bottom: 6px;
+  border-radius: 2px;
+}
+.focus-app .cat-tab .new,
+.focus-app .cat-tab .count,
+.focus-app .cat-tab .due {
+  margin: 0;
+  padding: 0;
+  background: none;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+.focus-app .cat-tab .count {
+  color: var(--text-3);
+}
+.focus-app .cat-tab .due {
+  color: var(--warning-fg);
+}
+.focus-app .cat-tab .due.urgent {
+  color: var(--danger);
+}
+.focus-app .cat-tab .ti-sep {
+  display: inline;
+}
+.focus-app .cat-tab .ti-num,
+.focus-app .cat-tab .ti-dot {
+  margin-inline-start: 0;
+}
+.focus-app .toolbar {
+  height: 44px;
+  padding: 0;
+  gap: 4px;
+}
+.focus-app .toolbar .icon-btn {
+  --icon-btn: calc(32px * var(--dz, 1));
+  --icon: calc(18px * var(--dzi, 1));
+  color: var(--text-3);
+}
+.focus-app .toolbar .icon-btn:hover {
+  color: var(--text);
+}
+.focus-app .toolbar .sel-group {
+  margin-inline-start: -2px;
+}
+.focus-app .list-scroll {
+  padding-bottom: 80px;
+}
+.focus-app .row-skeleton {
+  border-bottom: 0;
+}
+.focus-app .list-footer {
+  padding: 16px 0;
+}
+
+.focus-app .f-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: var(--row-h);
+  padding-block: 0;
+  padding-inline: 0 8px;
+  border-radius: var(--radius-md);
+  font-size: 15px;
+  color: var(--text-2);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+.focus-app .f-row:hover {
+  background: var(--hover);
+}
+.focus-app .f-row.focused {
+  background: var(--nav-active);
+  box-shadow: inset 2px 0 0 var(--primary);
+}
+.focus-app .f-row.selected {
+  background: var(--row-selected);
+}
+.focus-app .f-row:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--focus-ring);
+}
+.focus-app .f-gutter {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 100%;
+  flex: none;
+}
+.focus-app .f-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.focus-app .f-row.unread .f-dot {
+  background: var(--primary);
+}
+.focus-app .f-check {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+}
+.focus-app .f-row:hover .f-check,
+.focus-app .f-row.selected .f-check {
+  display: grid;
+}
+.focus-app .f-row:hover .f-dot,
+.focus-app .f-row.selected .f-dot {
+  visibility: hidden;
+}
+.focus-app .f-sender {
+  flex: 0 0 188px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.focus-app .f-row.unread .f-sender,
+.focus-app .f-row.unread .f-subject {
+  color: var(--text);
+  font-weight: 600;
+}
+.focus-app .f-n {
+  margin-inline-start: 6px;
+  font-size: 12px;
+  color: var(--text-3);
+  font-weight: 400;
+}
+.focus-app .f-draft {
+  color: var(--danger);
+  font-weight: 400;
+}
+.focus-app .f-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.focus-app .f-subject {
+  flex: none;
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-2);
+}
+.focus-app .f-snippet {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-3);
+}
+.focus-app .f-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+  font-size: 13px;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+.focus-app .f-meta .lucide {
+  width: 15px;
+  height: 15px;
+}
+.focus-app .f-meta .f-star {
+  color: var(--star);
+  fill: var(--star);
+}
+.focus-app .f-row.unread .f-date {
+  color: var(--text);
+  font-weight: 600;
+}
+.focus-app .f-actions {
+  display: none;
+  align-items: center;
+  gap: 0;
+  flex: none;
+}
+.focus-app .f-actions .icon-btn {
+  color: var(--text-2);
+}
+.focus-app .f-actions .icon-btn.on {
+  color: var(--star);
+}
+.focus-app .f-row:hover .f-actions,
+.focus-app .f-row:focus-within .f-actions {
+  display: flex;
+}
+.focus-app .f-row:hover .f-meta,
+.focus-app .f-row:focus-within .f-meta {
+  display: none;
+}
+
+/* ---------- reading column ---------- */
+
+.focus-app .conv-view-head {
+  width: min(800px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 0;
+  height: 52px;
+  border-bottom: 0;
+}
+.focus-app .conv-view-head .icon-btn {
+  --icon-btn: calc(34px * var(--dz, 1));
+  --icon: calc(18px * var(--dzi, 1));
+  color: var(--text-3);
+}
+.focus-app .conv-view-head .icon-btn:hover {
+  color: var(--text);
+}
+.focus-app .conv-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 8px 24px 120px;
+}
+.focus-app .conv-subject {
+  --subject-line: 42px;
+  padding: 20px 0 24px;
+}
+.focus-app .conv-subject .title {
+  font-family: var(--f-serif);
+  font-size: 34px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.focus-app .conv-subject .actions {
+  margin: calc((var(--subject-line) - 40px) / 2) 0;
+}
+.focus-app .summary-card {
+  margin: 0 0 20px;
+  border-radius: var(--radius-md);
+  background: var(--surface-container);
+}
+.focus-app .msg {
+  padding: 20px 0 4px;
+  gap: 14px;
+}
+.focus-app .msg.collapsed {
+  padding: 14px 0;
+}
+.focus-app .msg.collapsed:hover {
+  background: none;
+}
+.focus-app .msg-head .who .name {
+  font-size: 15px;
+  font-weight: 600;
+}
+.focus-app .msg-body .text-body {
+  font-size: 16px;
+  line-height: 26px;
+}
+.focus-app .older-pill span {
+  inset-inline-start: 0;
+}
+.focus-app .reply-bar {
+  padding: 20px 0;
+}
+.focus-app .reply-bar .btn {
+  border-radius: var(--radius-sm);
+}
+.focus-app .inline-compose {
+  margin: 12px 0 16px;
+}
+.focus-app .inline-compose > span {
+  display: none;
+}
+.focus-app .inline-compose .box {
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 0 1px var(--border), var(--shadow-2);
+}
+.focus-app .deleted-note {
+  margin-inline-end: 0;
+}
+
+/* ---------- settings ---------- */
+
+.focus-app .settings-head,
+.focus-app .settings-tabs-wrap,
+.focus-app .settings-body > * {
+  width: min(1040px, calc(100% - 48px));
+  margin-inline: auto;
+}
+.focus-app .settings-head {
+  padding: 24px 0 4px;
+}
+.focus-app .settings-head h1 {
+  font-family: var(--f-serif);
+  font-size: 30px;
+  line-height: 38px;
+  font-weight: 500;
+}
+.focus-app .settings-tabs {
+  padding: 0;
+  scroll-padding: 0;
+  gap: 20px;
+}
+.focus-app .settings-tab {
+  padding: 0;
+  font-weight: 500;
+}
+.focus-app .settings-tab:hover {
+  background: none;
+  color: var(--text);
+}
+.focus-app .settings-tab.active {
+  color: var(--text);
+}
+.focus-app .settings-tab.active::after {
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  height: 2px;
+}
+.focus-app .settings-body {
+  padding-inline: 0;
+}
+
+/* ---------- panels, compose, hints ---------- */
+
+.focus-app .f-scrim {
+  position: fixed;
+  /* Below the top bar: Ambrose's button and the apps stay in reach while a panel is open. */
+  inset: var(--topbar-h) 0 0 0;
+  z-index: 39;
+  background: rgba(0, 0, 0, 0.16);
+}
+.focus-app .side-panel {
+  position: fixed;
+  inset-inline-end: 12px;
+  top: calc(var(--topbar-h) + 4px);
+  bottom: 12px;
+  z-index: 40;
+  margin: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--divider);
+  box-shadow: var(--shadow-3);
+}
+/* With room beside it, a panel pushes the page aside as Classic's does instead of covering the
+   rows' times and chips and the setup card's buttons. Narrower, it stays an
+   overlay over a scrim. */
+@media (min-width: 1181px) {
+  .focus-app:has(> .side-panel) > .f-main {
+    margin-inline-end: calc(var(--panel-w) + 24px);
+  }
+  .focus-app:has(> .side-panel) > .f-scrim {
+    display: none;
+  }
+}
+.focus-app .side-panel-head {
+  text-transform: none;
+  letter-spacing: 0;
+}
+.focus-app .side-panel-head h2 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+[data-ui-theme='focus'] .focus-app .compose-dock,
+[data-ui-theme='focus'] body:has(.side-panel) .compose-dock {
+  left: 50%; /* rtl: centred with translateX(-50%) */
+  right: auto; /* rtl: centred with left: 50% */
+  transform: translateX(-50%); /* rtl: centred with left: 50% */
+}
+.focus-app .compose-win {
+  width: min(760px, calc(100vw - 32px));
+  height: min(640px, calc(100vh - 96px));
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  border: 1px solid var(--border);
+  border-bottom: 0;
+  box-shadow: 0 -8px 48px rgba(0, 0, 0, 0.16);
+}
+.focus-app .compose-win.minimized {
+  width: 260px;
+  height: 40px;
+}
+.focus-app .compose-win.maximized {
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-lg);
+}
+.focus-app .compose-head {
+  background: var(--surface);
+  border-bottom: 1px solid var(--divider);
+}
+[data-theme='dark'] .focus-app .compose-win,
+[data-theme='dark'] .focus-app .compose-head {
+  background: var(--surface);
+}
+.focus-app .f-hints {
+  position: fixed;
+  left: 50%; /* rtl: centred with translateX(-50%) */
+  bottom: 16px;
+  transform: translateX(-50%); /* rtl: centred with left: 50% */
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 7px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--divider);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-1);
+  font-size: 12.5px;
+  color: var(--text-3);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.focus-app .f-hints span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.focus-app .f-hints kbd + kbd {
+  margin-inline-start: -2px;
+}
+body:has(.compose-win) .focus-app .f-hints {
+  display: none;
+}
+.focus-app .compose-fab {
+  background: var(--compose-bg);
+  color: var(--compose-fg);
+  border-radius: var(--radius-lg);
+}
+
+/* ---------- narrower screens ---------- */
+
+@media (max-width: 1180px) {
+  .focus-app .f-cmd kbd {
+    display: none;
+  }
+}
+/* Phones: the bottom bar is the app switcher. */
+html[data-phone] .focus-app .f-apps {
+  display: none;
+}
+@media (max-width: 900px) {
+  [data-ui-theme='focus'] {
+    --topbar-h: 56px;
+    --f-col: calc(100% - 24px);
+  }
+  .focus-app .f-top {
+    gap: 8px;
+    padding-block: 0;
+    padding-inline: 12px 8px;
+  }
+  .focus-app .f-slash,
+  .focus-app .f-brand,
+  .focus-app .f-cmd,
+  .focus-app .f-compose,
+  .focus-app .f-hints {
+    display: none;
+  }
+  .focus-app .f-where {
+    margin-inline-start: -6px;
+    padding: 0 6px;
+    font-size: 17px;
+  }
+  .focus-app .f-view {
+    color: var(--text);
+    font-weight: 600;
+  }
+  .focus-app .f-top .search {
+    margin: 0;
+  }
+  .focus-app .cat-tabs {
+    gap: 20px;
+    scroll-padding: 0;
+  }
+  .focus-app .f-row {
+    display: grid;
+    grid-template-columns: 24px 1fr auto;
+    grid-template-areas:
+      'gutter sender meta'
+      'mark text text';
+    align-items: center;
+    align-content: center;
+    column-gap: 8px;
+    row-gap: 2px;
+    height: auto;
+    padding-block: 10px;
+    padding-inline: 0 6px;
+  }
+  .focus-app .f-row:has(.f-snippet) {
+    min-height: var(--f-row-h-phone);
+  }
+  .focus-app .list-pane,
+  .focus-app .list-pane.narrow {
+    --section-empty-h: var(--f-row-h-phone);
+  }
+  .focus-app .f-gutter {
+    grid-area: gutter;
+    width: 24px;
+    align-self: start;
+    height: 20px;
+  }
+  .focus-app .f-sender {
+    grid-area: sender;
+  }
+  /* The importance marker sits in the row's start column, under the unread dot, not on a line
+     of its own below the row. */
+  .focus-app .f-marker {
+    grid-area: mark;
+    align-self: start;
+    justify-self: center;
+    display: grid;
+    place-items: center;
+    height: 20px;
+    --importance-box: 20px;
+  }
+  .focus-app .f-marker > * {
+    min-width: 0;
+    min-height: 0;
+  }
+  .focus-app .f-meta {
+    grid-area: meta;
+    display: flex !important;
+  }
+  .focus-app .f-text {
+    grid-area: text;
+    flex-direction: column;
+    gap: 0;
+  }
+  .focus-app .f-subject {
+    max-width: 100%;
+  }
+  .focus-app .f-snippet {
+    width: 100%;
+  }
+  .focus-app .f-actions {
+    display: none !important;
+  }
+  .focus-app .f-row:hover .f-check {
+    display: none;
+  }
+  .focus-app .f-row:hover .f-dot {
+    visibility: visible;
+  }
+  .focus-app .f-row.selected .f-check {
+    display: grid;
+  }
+  .focus-app .conv-view-head {
+    width: calc(100% - 16px);
+  }
+  .focus-app .conv-inner {
+    padding: 0 16px 96px;
+  }
+  .focus-app .conv-subject {
+    --subject-line: 34px;
+    padding: 8px 0 16px;
+  }
+  .focus-app .conv-subject .title {
+    font-size: 26px;
+  }
+  [data-ui-theme='focus'] .focus-app .compose-dock,
+  [data-ui-theme='focus'] body:has(.side-panel) .compose-dock {
+    left: 0; /* rtl: undoes the centring above, both sides */
+    right: 0; /* rtl: undoes the centring above, both sides */
+    transform: none;
+  }
+  /* The window fills the screen, as in the other styles (it was 32px short of the edge). */
+  .focus-app .compose-win,
+  .focus-app .compose-win.maximized {
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    border: 0;
+  }
+  .focus-app .compose-win.minimized {
+    width: auto;
+    height: 48px;
+  }
+  .focus-app .side-panel {
+    inset: var(--topbar-h) 0 0 0;
+    border-radius: 0;
+    border: 0;
+  }
+}
+.focus-app .conv-subject .title .label-chip {
+  font-family: var(--font);
+}
+
+.focus-app .toast {
+  border-radius: var(--radius-sm);
+}
+/* toasts take the hints' place while they show */
+body:has(.toast) .focus-app .f-hints {
+  opacity: 0;
+}
+[data-ui-theme='focus'][data-theme='light'] {
+  --toast-action: #a9a9ff;
+}
+[data-ui-theme='focus'][data-theme='dark'] {
+  --toast-action: #5151cd;
+}
+.focus-app .conv-inner.with-side {
+  max-width: 1280px;
+}
+
+/* The drop shelf: targets for a conversation drag, under the top bar. */
+.focus-app .f-shelf {
+  position: fixed;
+  top: calc(var(--topbar-h) + 4px);
+  left: 50%; /* rtl: centred with translateX(-50%) */
+  transform: translateX(-50%); /* rtl: centred with left: 50% */
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: calc(100% - 32px);
+  padding: 6px;
+  overflow-x: auto;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: 0 0 0 1px var(--border), var(--shadow-3);
+  animation: f-shelf-in 140ms var(--ease);
+}
+.focus-app .f-shelf-target {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--radius-md);
+  color: var(--text-2);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.focus-app .f-shelf-target .lucide {
+  width: 16px;
+  height: 16px;
+}
+.focus-app .f-shelf-target .label-dot {
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+}
+.focus-app .f-shelf-target .label-dot span {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  transform: rotate(45deg);
+  background: var(--text-2);
+}
+.focus-app .f-shelf-target .label-dot span:not([style]) {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+.focus-app .f-shelf-sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 4px;
+  background: var(--divider);
+}
+@keyframes f-shelf-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .focus-app .f-shelf {
+    animation: none;
+  }
+}

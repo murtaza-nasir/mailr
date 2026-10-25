@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="asst_unavailable_code">%1$s is unavailable (%2$d).</string>
+    <string name="asst_connection_lost">Connection lost.</string>
+    <string name="asst_retry">Retry</string>
+    <string name="asst_retry_cd">Retry: ask the same question again</string>
+    <string name="asst_needs_ok">Waiting for your approval</string>
+    <string name="asst_failed">Couldn\'t get an answer.</string>
+    <string name="asst_suggest_reply">What needs a reply from me this week?</string>
+    <string name="asst_suggest_summary">Summarise today\'s important mail</string>
+    <string name="asst_suggest_invoice">Find the latest invoice</string>
+    <string name="asst_suggest_calendar">What\'s on my calendar tomorrow?</string>
+    <string name="asst_new_chat">New chat</string>
+    <!-- TalkBack: the open chat's title in the Ambrose top bar (a tap renames it); %1$s is the title. -->
+    <string name="asst_chat_title_cd">Chat: %1$s</string>
+    <string name="asst_jump_latest">Jump to latest</string>
+    <string name="asst_off">%1$s is off</string>
+    <string name="asst_mail_works">Mail works as usual.</string>
+    <string name="asst_welcome">Ask about your mail, calendar and tasks</string>
+    <string name="asst_welcome_sub">Answers include links to their sources.</string>
+    <string name="asst_open_draft">Open draft: %1$s</string>
+    <string name="asst_no_subject">(no subject)</string>
+    <string name="asst_draft">draft</string>
+    <string name="asst_thinking">Working…</string>
+    <string name="asst_hide_steps">Hide steps</string>
+    <string name="asst_show_steps">Show steps</string>
+    <string name="asst_step_waiting">%1$s · waiting for approval</string>
+    <string name="asst_step_summary">%1$s · %2$s</string>
+    <string name="asst_step_repeated">%1$s ×%2$d</string>
+    <plurals name="asst_steps">
+        <item quantity="one">%d step</item>
+        <item quantity="other">%d steps</item>
+    </plurals>
+    <plurals name="asst_steps_waiting">
+        <item quantity="one">%d step · waiting for approval</item>
+        <item quantity="other">%d steps · waiting for approval</item>
+    </plurals>
+    <string name="asst_waiting_approval">waiting for approval</string>
+    <string name="asst_failed_desc">Failed</string>
+    <string name="asst_tool_search_mail">Searching your mail</string>
+    <string name="asst_tool_passages">Finding relevant passages</string>
+    <string name="asst_tool_read_conversation">Reading a conversation</string>
+    <string name="asst_tool_read_message">Reading a message</string>
+    <string name="asst_tool_person">Looking up a person</string>
+    <string name="asst_tool_context">Gathering context</string>
+    <string name="asst_tool_calendar">Checking your calendar</string>
+    <string name="asst_tool_tasks">Checking your tasks</string>
+    <string name="asst_tool_draft">Writing a draft</string>
+    <string name="asst_sources">Sources</string>
+    <string name="asst_quote_not_verified">Quote not verified</string>
+    <string name="asst_web_page">Web page</string>
+    <string name="asst_web_source_desc">Web source %1$d: %2$s, %3$s. Opens in browser</string>
+    <string name="asst_note_list">List</string>
+    <string name="asst_note_note">Note</string>
+    <string name="asst_note_source_desc">%1$s %2$d: %3$s</string>
+    <string name="asst_note_source_desc_snippet">%1$s %2$d: %3$s, %4$s</string>
+    <string name="asst_recording">Recording</string>
+    <string name="asst_recording_source_desc">Recording %1$d: %2$s</string>
+    <string name="asst_recording_source_desc_at">Recording %1$d: %2$s at %3$s</string>
+    <string name="asst_quote_not_in_transcript">Quote not in transcript</string>
+    <string name="asst_about_event">this event</string>
+    <string name="asst_about_task">this task</string>
+    <string name="asst_about_recording">this recording</string>
+    <string name="asst_about_conversation">this conversation</string>
+    <string name="asst_about_approval">this approval</string>
+    <string name="asst_about_table">this table</string>
+    <string name="asst_about_note">this note</string>
+    <string name="asst_about">About: %1$s</string>
+    <string name="asst_remove_context">Remove context</string>
+    <string name="asst_ask_event">Ask about this event…</string>
+    <string name="asst_ask_task">Ask about this task…</string>
+    <string name="asst_ask_recording">Ask about this recording…</string>
+    <string name="asst_ask_conversation">Ask about this conversation…</string>
+    <string name="asst_ask_approval">Ask about this approval…</string>
+    <string name="asst_ask_note">Ask about this note…</string>
+    <string name="asst_ask_name">Ask %1$s · / for skills</string>
+    <string name="asst_stop_dictation">Stop dictation</string>
+    <string name="asst_dictate">Dictate</string>
+    <string name="asst_stop">Stop</string>
+    <string name="asst_send">Send</string>
+    <string name="asst_voice_recording">Recording. Tap stop when done.</string>
+    <string name="asst_voice_listening">Listening…</string>
+    <string name="asst_voice_transcribing">Transcribing…</string>
+    <string name="asst_get_model">Get the model</string>
+    <string name="asst_after_approval">After your approval</string>
+    <string name="asst_step_approved">approved</string>
+    <string name="asst_step_denied">denied</string>
+    <string name="asst_step_expired">expired</string>
+    <string name="asst_step_failed">failed</string>
+    <!-- "Used memories · 2" under an answer: the notes that went into the prompt. -->
+    <plurals name="asst_used_memories">
+        <item quantity="one">Used memory · %d</item>
+        <item quantity="other">Used memories · %d</item>
+    </plurals>
+    <plurals name="asst_memories_deleted">
+        <item quantity="one">%d memory was deleted.</item>
+        <item quantity="other">%d memories were deleted.</item>
+    </plurals>
+    <string name="asst_memory_you">You</string>
+    <string name="asst_memory_edit">Edit memory</string>
+    <string name="asst_memory_text">Memory</string>
+    <string name="asst_memory_save">Save</string>
+    <string name="asst_memory_delete">Delete</string>
+    <string name="asst_memory_not_saved">Couldn\'t save. Check the connection.</string>
+    <!-- Slash commands in the chat (agent/commands.py; the web's rail.assistant.commands.*). -->
+    <string name="asst_cmd_picker">Commands and skills</string>
+    <string name="asst_cmd_needs_chat">Start a chat first: %1$s works on the open chat.</string>
+    <string name="asst_cmd_needs_text">Type what you mean after %1$s, for example: %2$s</string>
+    <string name="asst_cmd_no_answer">There is no answer in this chat yet.</string>
+    <string name="asst_cmd_no_title">No short title could be made just now. Try again later.</string>
+    <string name="asst_cmd_local_on">From your next message, %1$s answers this chat on your local model only.</string>
+    <string name="asst_cmd_local_already">This chat already stays on your local model.</string>
+    <string name="asst_cmd_local_chip">Local only</string>
+    <string name="asst_cmd_local_off">Stop keeping this chat local</string>
+    <string name="asst_cmd_group_chat">This chat</string>
+    <string name="asst_cmd_group_add">Add</string>
+    <string name="asst_cmd_group_ask">Ask</string>
+    <string name="asst_cmd_group_skills">Skills</string>
+    <string name="asst_cmd_help_hint">Type / at the start of a message to see these as you write.</string>
+    <string name="asst_cmd_copy_sources">%1$s\n\nSources:\n%2$s</string>
+    <string name="asst_cmd_copy_failed">Couldn\'t copy the answer.</string>
+    <!-- `/note`: the last answer saved to a text note (the web's notes.fromAnswer.*). -->
+    <string name="asst_note_saved">Saved to a note</string>
+    <plurals name="asst_note_saved_links">
+        <item quantity="one">Saved to a note (%1$d link couldn\'t be made)</item>
+        <item quantity="other">Saved to a note (%1$d links couldn\'t be made)</item>
+    </plurals>
+    <string name="asst_note_failed">Couldn\'t save the answer to a note</string>
+    <string name="asst_note_from">From %1$s</string>
+    <string name="asst_note_open">Open</string>
+    <!-- Bulk review in the chat (agent/review.py; the web's rail.assistant.review.*). Numbers arrive formatted. -->
+    <plurals name="asst_review_reviewing">
+        <item quantity="one">Reviewing %1$s: %2$s conversation</item>
+        <item quantity="other">Reviewing %1$s: %2$s conversations</item>
+    </plurals>
+    <string name="asst_review_done_of">%1$s of %2$s checked</string>
+    <string name="asst_review_stopping">Stopping after this batch…</string>
+    <string name="asst_review_stopped">Review stopped at %1$s of %2$s</string>
+    <string name="asst_review_failed">The review stopped: %1$s</string>
+    <plurals name="asst_review_ready">
+        <item quantity="one">Review of %1$s conversation is ready: check the card below.</item>
+        <item quantity="other">Review of %1$s conversations is ready: check the card below.</item>
+    </plurals>
+    <plurals name="asst_review_nothing">
+        <item quantity="one">Reviewed %1$s conversation: nothing to change.</item>
+        <item quantity="other">Reviewed %1$s conversations: nothing to change.</item>
+    </plurals>
+    <string name="asst_review_applied">Review applied.</string>
+    <string name="asst_review_stop">Stop</string>
+    <string name="asst_review_continue">Continue</string>
+    <string name="asst_review_could_not_change">Could not change the review</string>
+    <plurals name="asst_review_set_aside">
+        <item quantity="one">%1$s kept without asking (starred, important, replied to, people you write to, invitations)</item>
+        <item quantity="other">%1$s kept without asking (starred, important, replied to, people you write to, invitations)</item>
+    </plurals>
+    <string name="asst_review_move_trash">Move to Trash</string>
+    <string name="asst_review_move_archive">Archive</string>
+    <string name="asst_review_move_read">Mark read</string>
+    <string name="asst_review_move_label">Label “%1$s”</string>
+    <!-- A review card's move menu (the web's rail.assistant.review.keep, notSure, moveFor, conversationsFrom). -->
+    <string name="asst_review_keep">Keep</string>
+    <string name="asst_review_not_sure">Not sure</string>
+    <string name="asst_review_move_for">What happens to %1$s</string>
+    <string name="asst_review_conversations_from">Conversations from %1$s</string>
+    <!-- A sender's "Always …" on a review card: a filter for their future mail (the web's rail.assistant.review.always*). -->
+    <string name="asst_review_always_trash">Always move to Trash</string>
+    <string name="asst_review_always_archive">Always archive</string>
+    <string name="asst_review_always_read">Always mark read</string>
+    <string name="asst_review_always_label">Always label “%1$s”</string>
+    <string name="asst_review_always_tip">Make a filter for future mail from %1$s</string>
+    <string name="asst_review_filter_made">Filter made</string>
+    <string name="asst_review_filter_made_for">Filter made for future mail from %1$s</string>
+    <string name="asst_review_filter_failed">Could not make the filter</string>
+    <string name="asst_review_filter_undo_failed">Undo failed</string>
+    <string name="asst_review_kept_lead">Kept:</string>
+    <plurals name="asst_review_aside_excepted">
+        <item quantity="one">%1$s you said to keep</item>
+        <item quantity="other">%1$s you said to keep</item>
+    </plurals>
+    <plurals name="asst_review_aside_starred">
+        <item quantity="one">%1$s starred</item>
+        <item quantity="other">%1$s starred</item>
+    </plurals>
+    <plurals name="asst_review_aside_important">
+        <item quantity="one">%1$s important</item>
+        <item quantity="other">%1$s important</item>
+    </plurals>
+    <plurals name="asst_review_aside_replied">
+        <item quantity="one">%1$s you replied to</item>
+        <item quantity="other">%1$s you replied to</item>
+    </plurals>
+    <plurals name="asst_review_aside_known">
+        <item quantity="one">%1$s from people you write to</item>
+        <item quantity="other">%1$s from people you write to</item>
+    </plurals>
+    <plurals name="asst_review_aside_invitation">
+        <item quantity="one">%1$s invitation</item>
+        <item quantity="other">%1$s invitations</item>
+    </plurals>
+    <plurals name="asst_review_aside_other">
+        <item quantity="one">%1$s other</item>
+        <item quantity="other">%1$s other</item>
+    </plurals>
+    <plurals name="asst_review_aside_model">
+        <item quantity="one">%1$s still useful</item>
+        <item quantity="other">%1$s still useful</item>
+    </plurals>
+    <plurals name="asst_review_aside_by_you">
+        <item quantity="one">%1$s you chose to keep</item>
+        <item quantity="other">%1$s you chose to keep</item>
+    </plurals>
+    <plurals name="asst_review_kept_by_you_rows">
+        <item quantity="one">%1$s kept: you chose Keep</item>
+        <item quantity="other">%1$s kept: you chose Keep</item>
+    </plurals>
+    <plurals name="asst_review_kept_rows">
+        <item quantity="one">%1$s kept: still useful</item>
+        <item quantity="other">%1$s kept: still useful</item>
+    </plurals>
+    <plurals name="asst_review_unsure_rows">
+        <item quantity="one">%1$s left alone: not sure</item>
+        <item quantity="other">%1$s left alone: not sure</item>
+    </plurals>
+    <plurals name="asst_review_and_more">
+        <item quantity="one">and %1$s more</item>
+        <item quantity="other">and %1$s more</item>
+    </plurals>
+    <string name="asst_review_apply">Apply</string>
+    <string name="asst_review_discard">Discard</string>
+    <plurals name="asst_review_changed_by_you">
+        <item quantity="one">%1$s changed by you</item>
+        <item quantity="other">%1$s changed by you</item>
+    </plurals>
+</resources>

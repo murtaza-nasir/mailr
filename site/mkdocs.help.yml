@@ -1,0 +1,39 @@
+# The user guide as it is built into the mailr image and served at /help/ to signed-in people
+# (backend/mailr/core/helpdocs.py; build: site/build_help.py, or tools/build-help in a checkout).
+# Everything else comes from mkdocs.yml, which stays the public site's configuration.
+INHERIT: mkdocs.yml
+
+# Relative links, so the pages work under /help/ on any server; no canonical public address.
+site_url: ""
+
+# No requests to other sites from a private page: no GitHub repository facts, no web fonts.
+repo_url: ""
+repo_name: ""
+
+theme:
+  font: false
+  # mkdocs.yml's features without navigation.instant and navigation.instant.progress: instant
+  # loading needs site_url and the sitemap. Keep the rest the same as mkdocs.yml
+  # (backend/tests/test_helpdocs.py compares the two lists).
+  features:
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.path
+    - navigation.indexes
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+
+# The theme fetches Mermaid from a CDN when a page has a diagram and the library is missing; this
+# copy, placed by build_help.py, is used instead.
+extra_javascript:
+  - assets/vendor/mermaid.min.js

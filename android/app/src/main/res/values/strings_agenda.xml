@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Agenda home-screen widget and its settings. -->
+<resources>
+    <string name="agenda_today">Today</string>
+    <string name="agenda_tomorrow">Tomorrow</string>
+    <string name="agenda_until">Until %s</string>
+    <string name="agenda_degrees">%d°</string>
+    <string name="agenda_high_low">%1$d° / %2$d°</string>
+    <string name="agenda_tasks">Tasks</string>
+    <string name="agenda_overdue">Overdue</string>
+    <string name="agenda_nothing_today">Nothing else today</string>
+    <string name="agenda_empty">Nothing planned soon</string>
+    <string name="agenda_no_tasks">No tasks due</string>
+    <string name="agenda_sign_in">Sign in to see your agenda</string>
+    <string name="agenda_talk_cd">Talk to %1$s. %2$s %3$s %4$s</string>
+    <string name="agenda_weather_cd">%1$s, high %2$s, low %3$s. Opens the weather app</string>
+    <string name="agenda_day_cd">%s. Opens this day in the calendar</string>
+    <string name="agenda_set_weather">Set weather</string>
+    <string name="agenda_overdue_note">Overdue · %s</string>
+    <string name="agenda_no_date">No date</string>
+    <string name="agenda_plus">+%d</string>
+    <string name="agenda_to_do">To do</string>
+    <string name="agenda_tasks_count">Tasks · %d</string>
+    <string name="agenda_all_day_short">all day</string>
+    <string name="agenda_high_low_dot">%1$d° · %2$d°</string>
+    <string name="agenda_high_low_short">%1$d/%2$d</string>
+    <string name="agenda_week_line">Week %1$d · %2$s</string>
+    <plurals name="agenda_events_today">
+        <item quantity="one">%d event today</item>
+        <item quantity="other">%d events today</item>
+    </plurals>
+    <string name="agenda_in_min">%1$s · in %2$d min</string>
+    <string name="agenda_now_until">Now · until %s</string>
+    <string name="agenda_minutes">%d min</string>
+    <string name="agenda_hours">%d h</string>
+    <string name="agenda_hours_minutes">%1$d h %2$d min</string>
+    <!-- The four styles, chosen per widget in its settings. -->
+    <string name="agenda_style_glass">Glass timeline</string>
+    <string name="agenda_style_paper">Paper &amp; rail</string>
+    <string name="agenda_style_week">Week strip</string>
+    <string name="agenda_style_numeral">Numeral duotone</string>
+
+    <!-- Settings (opened when the widget is placed, and from its long-press menu). -->
+    <string name="agenda_settings_title">Agenda widget</string>
+    <string name="agenda_settings_style">Style</string>
+    <string name="agenda_settings_columns">Line up days and times</string>
+    <string name="agenda_settings_columns_body">Days, times and titles in columns, so every title starts at the same place.</string>
+    <string name="agenda_settings_city_hint">Pick a city for the weather.</string>
+    <string name="agenda_settings_days">Days to list</string>
+    <string name="agenda_settings_days_body">As many days as fit the widget.</string>
+    <string name="agenda_settings_weather">Weather</string>
+    <string name="agenda_settings_weather_body">Temperature and today\'s high and low.</string>
+    <string name="agenda_settings_where">Weather for</string>
+    <string name="agenda_settings_here">Approximate location</string>
+    <string name="agenda_settings_here_body">Rounded to about 10 km.</string>
+    <string name="agenda_settings_here_denied">Location is off for Mailr. Pick a city or allow approximate location in phone settings.</string>
+    <string name="agenda_settings_city">A city</string>
+    <string name="agenda_settings_city_search">Search cities</string>
+    <string name="agenda_settings_city_none">No city found</string>
+    <string name="agenda_settings_city_picked">Weather for %s</string>
+    <string name="agenda_settings_units">Units</string>
+    <string name="agenda_settings_units_auto">Automatic</string>
+    <string name="agenda_settings_units_c">°C</string>
+    <string name="agenda_settings_units_f">°F</string>
+    <string name="agenda_settings_app">Weather app</string>
+    <string name="agenda_settings_app_body">Opens when you tap the weather.</string>
+    <string name="agenda_settings_app_default">Let Android choose</string>
+    <string name="agenda_settings_app_any">Choose any app</string>
+    <string name="agenda_settings_app_weather">Weather apps</string>
+    <string name="agenda_settings_app_all">All apps</string>
+    <string name="agenda_settings_privacy">Forecasts are requested from Open-Meteo by this phone, without an account. Only the rounded location or the city is sent. Weather data is never sent through your server or to a language model.</string>
+    <string name="agenda_settings_done">Done</string>
+    <string name="agenda_settings_search_failed">City search requires a connection. Try again when you\'re back online.</string>
+    <!-- The word for weather in this language: a weather search, and apps named with it. -->
+    <string name="agenda_weather_word">weather</string>
+    <string name="agenda_no_weather_app">No weather app found</string>
+</resources>

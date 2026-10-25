@@ -1,0 +1,13 @@
+# User settings: assistant.
+# One line per key, `key: plain description`; `key: {internal: why}` for a key that is not a setting
+# a person chooses. A key may appear in only one file of this folder. The settings map test
+# (frontend/src/features/settings/groups.test.ts) checks that Settings has a place for each one.
+
+brief_position: "Where an assistant brief sits: above the messages or beside them."
+reply_suggestions: Offer short suggested replies under personal email.
+llm_triage: "Let a language model help sort new mail (categories, importance, signals)."
+models: Which model you use for each assistant task.
+meeting_prep_digest: "End a routine's digest with today's meetings and links to their meeting prep."
+local_models_only: "Local models only for me: Ambrose and every other model feature use only the local models of this server for your mail, notes and tables. Stricter only; the household rule can lock it."
+handled_elsewhere: "Addresses for other assistants: your own addresses (an alias, say) that another program reads and acts on. Standing orders leave mail sent only to them alone, unless an order names the address."
+sweep_rules: "Your standing rules for bulk reviews (/sweep, reviews in chat and routines): plain text up to 2000 characters, followed in every review before what you ask for in one review."

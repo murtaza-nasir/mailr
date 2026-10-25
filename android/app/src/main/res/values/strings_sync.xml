@@ -1,0 +1,121 @@
+<resources>
+    <string name="sync_action_archive">Archive</string>
+    <string name="sync_action_mark_read">Mark read</string>
+    <string name="sync_action_reply">Reply</string>
+    <string name="sync_reply_empty">Reply is empty.</string>
+    <string name="sync_reply_nothing">Nothing to reply to.</string>
+    <string name="sync_reply_not_sent">Reply not sent</string>
+    <string name="sync_reply_timeout">No answer from the server in time. Check Sent before replying again.</string>
+    <string name="sync_assistant_done">Done</string>
+    <string name="sync_no_reply_from">No reply from %1$s</string>
+    <string name="sync_no_reply_yet">No reply yet</string>
+    <string name="sync_no_subject">(no subject)</string>
+    <string name="sync_new_message">New message</string>
+    <string name="sync_agent_wants">%1$s requests approval to %2$s</string>
+    <string name="sync_an_agent">An agent</string>
+    <string name="sync_waiting_ok">Waiting for your OK</string>
+    <string name="sync_agent_waiting_ok">An agent request is waiting for your approval</string>
+    <string name="sync_allow_once">Allow once</string>
+    <string name="sync_deny">Deny</string>
+    <string name="sync_message_not_sent">Message not sent</string>
+    <string name="sync_account_reenter">Enter the password again on the web: Settings → Mail → Mail accounts.</string>
+    <string name="sync_account_password">Mail account password required</string>
+    <string name="sync_new_mail">New mail</string>
+    <string name="sync_push_test">Test notification · push works</string>
+    <string name="sync_not_synced">Not synced. Rejected by the server.</string>
+    <string name="sync_not_synced_reason">Not synced. Rejected by the server: “%1$s”.</string>
+    <plurals name="sync_approvals_waiting">
+        <item quantity="one">%d approval waiting</item>
+        <item quantity="other">%d approvals waiting</item>
+    </plurals>
+    <plurals name="sync_new_conversations">
+        <item quantity="one">%d new conversation</item>
+        <item quantity="other">%d new conversations</item>
+    </plurals>
+    <plurals name="sync_queued_archive">
+        <item quantity="one">Archive %d conversation</item>
+        <item quantity="other">Archive %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_trash">
+        <item quantity="one">Move %d conversation to Trash</item>
+        <item quantity="other">Move %d conversations to Trash</item>
+    </plurals>
+    <plurals name="sync_queued_untrash">
+        <item quantity="one">Restore %d conversation</item>
+        <item quantity="other">Restore %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_spam">
+        <item quantity="one">Report spam: %d conversation</item>
+        <item quantity="other">Report spam: %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_not_spam">
+        <item quantity="one">Not spam: %d conversation</item>
+        <item quantity="other">Not spam: %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_delete_forever">
+        <item quantity="one">Delete forever %d conversation</item>
+        <item quantity="other">Delete forever %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_read">
+        <item quantity="one">Mark read: %d conversation</item>
+        <item quantity="other">Mark read: %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_unread">
+        <item quantity="one">Mark unread: %d conversation</item>
+        <item quantity="other">Mark unread: %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_star">
+        <item quantity="one">Star %d conversation</item>
+        <item quantity="other">Star %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_unstar">
+        <item quantity="one">Unstar %d conversation</item>
+        <item quantity="other">Unstar %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_important">
+        <item quantity="one">Mark important: %d conversation</item>
+        <item quantity="other">Mark important: %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_not_important">
+        <item quantity="one">Mark not important: %d conversation</item>
+        <item quantity="other">Mark not important: %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_snooze">
+        <item quantity="one">Snooze %d conversation</item>
+        <item quantity="other">Snooze %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_mute">
+        <item quantity="one">Mute %d conversation</item>
+        <item quantity="other">Mute %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_unmute">
+        <item quantity="one">Unmute %d conversation</item>
+        <item quantity="other">Unmute %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_add_labels">
+        <item quantity="one">Add labels to %d conversation</item>
+        <item quantity="other">Add labels to %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_remove_labels">
+        <item quantity="one">Remove labels from %d conversation</item>
+        <item quantity="other">Remove labels from %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_move">
+        <item quantity="one">Move %d conversation</item>
+        <item quantity="other">Move %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_follow_up">
+        <item quantity="one">Follow up on %d conversation</item>
+        <item quantity="other">Follow up on %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_cancel_follow_up">
+        <item quantity="one">Cancel follow-up for %d conversation</item>
+        <item quantity="other">Cancel follow-up for %d conversations</item>
+    </plurals>
+    <plurals name="sync_queued_other">
+        <item quantity="one">%1$s: %2$d conversation</item>
+        <item quantity="other">%1$s: %2$d conversations</item>
+    </plurals>
+    <string name="sync_offline">offline</string>
+    <string name="sync_summary_more">+%1$d more</string>
+</resources>

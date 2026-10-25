@@ -1,0 +1,54 @@
+{
+  "using": ["urn:ietf:params:jmap:core", "urn:stalwart:jmap"],
+  "methodCalls": [
+    ["x:Domain/set", {"create": {"dom": {
+      "name": "@MAILR_DOMAIN@",
+      "certificateManagement": {"@type": "Manual"},
+      "dkimManagement": {"@type": "Manual"},
+      "dnsManagement": {"@type": "Manual"}
+    }}}, "domain"],
+
+    ["x:SystemSettings/set", {"update": {"singleton": {
+      "defaultHostname": "@STALWART_HOSTNAME@",
+      "defaultDomainId": "#dom"
+    }}}, "settings"],
+
+    ["x:NetworkListener/query", {}, "lq"],
+    ["x:NetworkListener/set", {"#destroy": {"resultOf": "lq", "name": "x:NetworkListener/query", "path": "/ids"}}, "ld"],
+    ["x:NetworkListener/set", {"create": {
+      "http":  {"name": "http",  "protocol": "http", "bind": {"[::]:8080": true}, "useTls": false},
+      "imap":  {"name": "imap",  "protocol": "imap", "bind": {"[::]:143": true},  "useTls": true, "tlsImplicit": false},
+      "imaps": {"name": "imaps", "protocol": "imap", "bind": {"[::]:993": true},  "useTls": true, "tlsImplicit": true}
+    }}, "lc"],
+
+    ["x:Tracer/query", {}, "tq"],
+    ["x:Tracer/set", {"#destroy": {"resultOf": "tq", "name": "x:Tracer/query", "path": "/ids"}}, "td"],
+    ["x:Tracer/set", {"create": {"out": {"@type": "Stdout", "ansi": false, "buffered": false, "level": "info", "enable": true}}}, "tc"],
+
+    ["x:DnsResolver/set", {"update": {"singleton": {"@type": "Custom", "servers": {"0": {"address": "@MAILR_RESOLVER_IP@"}}}}}, "dns"],
+
+    ["x:Imap/set", {"update": {"singleton": {"allowPlainTextAuth": false}}}, "imapcfg"],
+
+    ["x:Application/query", {}, "aq"],
+    ["x:Application/set", {"#destroy": {"resultOf": "aq", "name": "x:Application/query", "path": "/ids"}}, "ad"],
+    ["x:Application/set", {"create": {"webui": {
+      "description": "Stalwart Web Interface (disabled by mailr provisioning)",
+      "enabled": false,
+      "resourceUrl": "https://github.com/stalwartlabs/webui/releases/latest/download/webui.zip",
+      "urlPrefix": {"/admin": true, "/account": true}
+    }}}, "ac"],
+
+    ["x:Asn/set", {"update": {"singleton": {"@type": "Disabled"}}}, "asn"],
+
+    ["x:AllowedIp/set", {"create": {"docker": {"address": "@MAILR_TRUSTED_NET@", "reason": "mailr backend (app and worker): never auto-ban"}}}, "allow"],
+
+    ["x:Account/set", {"create": {"svc": {
+      "@type": "User",
+      "name": "@MAILR_SVC_USER@",
+      "domainId": "#dom",
+      "description": "mailr backend service account",
+      "roles": {"@type": "Admin"},
+      "credentials": {"0": {"@type": "Password", "secret": "@MAILR_SVC_PASSWORD@"}}
+    }}}, "svc"]
+  ]
+}

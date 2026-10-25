@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Today widget's night picture: a crescent moon and stars. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp" android:height="48dp" android:viewportWidth="48" android:viewportHeight="48">
+    <group>
+        <clip-path android:pathData="M24,0a24,24 0,1 1,0 48a24,24 0,1 1,0 -48z" />
+        <path android:fillColor="#FF283593" android:pathData="M0,0h48v48h-48z" />
+        <path android:fillColor="#FFFFE082" android:pathData="M22,12a12,12 0,1 1,0 24a12,12 0,1 1,0 -24z" />
+        <path android:fillColor="#FF283593" android:pathData="M29,8a10.5,10.5 0,1 1,0 21a10.5,10.5 0,1 1,0 -21z" />
+        <path android:fillColor="#FFFFF59D" android:pathData="M36,30l1,2.3l2.3,1l-2.3,1l-1,2.3l-1,-2.3l-2.3,-1l2.3,-1z" />
+        <path android:fillColor="#FFFFF59D" android:pathData="M12,7l0.8,1.7l1.7,0.8l-1.7,0.8l-0.8,1.7l-0.8,-1.7l-1.7,-0.8l1.7,-0.8z" />
+        <path android:fillColor="#B3FFFFFF" android:pathData="M40,14a1.2,1.2 0,1 1,0 2.4a1.2,1.2 0,1 1,0 -2.4z" />
+        <path android:fillColor="#B3FFFFFF" android:pathData="M9,30a1,1 0,1 1,0 2a1,1 0,1 1,0 -2z" />
+    </group>
+</vector>

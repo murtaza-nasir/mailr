@@ -1,0 +1,294 @@
+<resources>
+    <string name="mail_folder_inbox">Inbox</string>
+    <string name="mail_folder_starred">Starred</string>
+    <string name="mail_folder_snoozed">Snoozed</string>
+    <string name="mail_folder_important">Important</string>
+    <string name="mail_folder_sent">Sent</string>
+    <string name="mail_folder_drafts">Drafts</string>
+    <string name="mail_folder_scheduled">Scheduled</string>
+    <string name="mail_folder_all">All mail</string>
+    <string name="mail_folder_spam">Spam</string>
+    <string name="mail_folder_trash">Trash</string>
+    <string name="mail_category_primary">Primary</string>
+    <string name="mail_category_purchases">Purchases</string>
+    <string name="mail_category_social">Social</string>
+    <string name="mail_category_updates">Updates</string>
+    <string name="mail_category_forums">Forums</string>
+    <string name="mail_category_promotions">Promotions</string>
+    <string name="mail_favorites">Favourites</string>
+    <string name="mail_favorites_empty">Long-press a folder or label to add it here.</string>
+    <string name="mail_screener">Screener</string>
+    <string name="mail_outbox">Outbox</string>
+    <string name="mail_approvals">Waiting for you</string>
+    <string name="mail_labels">Labels</string>
+    <string name="mail_settings">Settings</string>
+    <string name="mail_favorites_options">Favourites options</string>
+    <string name="mail_count_capped">999+</string>
+    <string name="mail_favorites_add">Add to Favourites</string>
+    <string name="mail_favorites_remove">Remove from Favourites</string>
+    <string name="mail_favorites_up">Move up in Favourites</string>
+    <string name="mail_favorites_down">Move down in Favourites</string>
+    <string name="mail_restore">Restore</string>
+    <string name="mail_delete_forever">Delete forever</string>
+    <string name="mail_not_spam">Not spam</string>
+    <string name="mail_delete_forever_title">Delete forever?</string>
+    <string name="mail_cancel">Cancel</string>
+    <plurals name="mail_delete_forever_text">
+        <item quantity="one">Deletes this conversation on every device. This can\'t be undone.</item>
+        <item quantity="other">Deletes these %d conversations on every device. This can\'t be undone.</item>
+    </plurals>
+    <string name="mail_shown_in_one">Shown in %1$s.</string>
+    <string name="mail_show_in_tab">Show in tab</string>
+    <string name="mail_category">Category</string>
+    <string name="mail_tab_overdue">Overdue</string>
+    <string name="mail_tab_due">Due %1$s</string>
+    <string name="mail_tab_due_more">" · %1$d"</string>
+    <string name="mail_tab_due_from">" (%1$s)"</string>
+    <string name="mail_tab_overdue_suffix">, overdue</string>
+    <string name="mail_tab_new">%1$s new</string>
+    <string name="mail_tab_total_capped">%1$s+</string>
+    <string name="mail_row_open">Open conversation</string>
+    <string name="mail_row_select">Select</string>
+    <string name="mail_row_state_unread">"Unread. "</string>
+    <string name="mail_row_state_starred">"Starred. "</string>
+    <string name="mail_row_state_important">"Important. "</string>
+    <string name="mail_archive">Archive</string>
+    <string name="mail_move_to_inbox">Move to Inbox</string>
+    <string name="mail_delete">Delete</string>
+    <string name="mail_mark_read">Mark read</string>
+    <string name="mail_mark_unread">Mark unread</string>
+    <string name="mail_snooze">Snooze</string>
+    <string name="mail_row_count">"  %1$d"</string>
+    <string name="mail_row_draft">"  Draft"</string>
+    <string name="mail_snoozed">Snoozed</string>
+    <string name="mail_no_subject">(no subject)</string>
+    <string name="mail_row_attachments">"Attachments: "</string>
+    <string name="mail_unstar">Unstar</string>
+    <string name="mail_star">Star</string>
+    <string name="mail_note_to_self">Note to self</string>
+    <!-- A list row of a conversation only the user wrote in: whom it went to ("To: Dana Whitfield"). -->
+    <string name="mail_to_recipients">To: %1$s</string>
+    <string name="mail_attachment_more">" +%1$d"</string>
+    <string name="mail_has_attachments">Has attachments</string>
+    <string name="mail_attachment_named">Attachment %1$s</string>
+    <string name="mail_signal_reply_needed">Reply needed</string>
+    <string name="mail_signal_waiting">Waiting</string>
+    <string name="mail_signal_deadline">Deadline</string>
+    <string name="mail_signal_due">Due %1$s</string>
+    <string name="mail_no_reply">No reply</string>
+    <string name="mail_match_in_attached">In an attached email</string>
+    <string name="mail_swipe_read">Read</string>
+    <string name="mail_swipe_unread">Unread</string>
+    <string name="mail_code_label">Code</string>
+    <string name="mail_code_copied">Code copied</string>
+    <string name="mail_code_copy">Copy %1$s</string>
+    <string name="mail_pending_signin">Sign in again to sync</string>
+    <string name="mail_pending_retrying">Retrying soon</string>
+    <string name="mail_pending_retrying_error">Retrying soon (%1$s)</string>
+    <string name="mail_pending_waiting">Waiting to sync</string>
+    <string name="mail_pending_draft">Draft: %1$s</string>
+    <string name="mail_pending_draft_failed">Saved on this phone. Couldn\'t sync: %1$s</string>
+    <string name="mail_pending_draft_saved">Saved on this phone. Waiting to sync.</string>
+    <string name="mail_pending_waiting_suffix">" · %1$d waiting"</string>
+    <string name="mail_pending_show">Show pending changes</string>
+    <string name="mail_details">Details</string>
+    <string name="mail_pending_title">Pending changes</string>
+    <string name="mail_pending_session_ended">Session ended. Sign in again to sync these changes. Nothing is lost.</string>
+    <string name="mail_pending_in_sync">All synced.</string>
+    <string name="mail_discard">Discard</string>
+    <string name="mail_open">Open</string>
+    <string name="mail_retry">Retry</string>
+    <string name="mail_discard_draft_title">Discard draft?</string>
+    <string name="mail_discard_draft_text">The draft is only on this phone. This can\'t be undone.</string>
+    <string name="mail_outbox_not_sent">Not sent. %1$s</string>
+    <string name="mail_outbox_maybe_sent">May have been sent. %1$s</string>
+    <string name="mail_outbox_sending">Sending…</string>
+    <string name="mail_outbox_waiting">Waiting to send</string>
+    <string name="mail_outbox_empty">Nothing waiting to send.</string>
+    <string name="mail_outbox_to">To %1$s</string>
+    <string name="mail_back">Back</string>
+    <string name="mail_screener_cant_load">Couldn\'t load the Screener</string>
+    <string name="mail_try_again">Try again</string>
+    <string name="mail_screener_no_senders">No new senders</string>
+    <string name="mail_screener_off">The Screener is off</string>
+    <string name="mail_screener_no_senders_body">Mail from first-time senders waits here for your decision.</string>
+    <string name="mail_screener_off_body">Turn it on in the web app: Settings → Mail → Spam &amp; Screener.</string>
+    <string name="mail_screener_read">Read</string>
+    <string name="mail_screener_allow">Allow</string>
+    <string name="mail_screener_block">Block</string>
+    <plurals name="mail_shown_in_n">
+        <item quantity="one">%1$d conversation shown in %2$s.</item>
+        <item quantity="other">%1$d conversations shown in %2$s.</item>
+    </plurals>
+    <plurals name="mail_tab_due_title">
+        <item quantity="one">%1$d due · earliest %2$s</item>
+        <item quantity="other">%1$d due · earliest %2$s</item>
+    </plurals>
+    <plurals name="mail_tab_conversations">
+        <item quantity="one">%1$s conversation</item>
+        <item quantity="other">%1$s conversations</item>
+    </plurals>
+    <plurals name="mail_attachments_n">
+        <item quantity="one">%d attachment</item>
+        <item quantity="other">%d attachments</item>
+    </plurals>
+    <plurals name="mail_pending_failed">
+        <item quantity="one">%d change couldn\'t sync</item>
+        <item quantity="other">%d changes couldn\'t sync</item>
+    </plurals>
+    <plurals name="mail_pending_offline">
+        <item quantity="one">%d change waiting to sync</item>
+        <item quantity="other">%d changes waiting to sync</item>
+    </plurals>
+    <string name="mail_empty_no_results">No results</string>
+    <string name="mail_empty_inbox">All done</string>
+    <string name="mail_empty_snoozed">Nothing snoozed</string>
+    <string name="mail_empty_starred">No starred conversations</string>
+    <string name="mail_empty_drafts">No drafts</string>
+    <string name="mail_empty_scheduled">Nothing scheduled</string>
+    <string name="mail_empty_spam">No spam</string>
+    <string name="mail_empty_trash">Trash is empty</string>
+    <string name="mail_empty_other">Nothing here</string>
+    <string name="mail_empty_body_search">Try different words or fewer filters.</string>
+    <string name="mail_empty_body_inbox">New mail shows here.</string>
+    <string name="mail_empty_body_snoozed">Snoozed conversations return to Inbox at the time you pick.</string>
+    <string name="mail_compose">Compose</string>
+    <string name="mail_cant_load">Couldn\'t load mail</string>
+    <string name="mail_search_mail">Search mail</string>
+    <string name="mail_open_navigation">Open navigation</string>
+    <string name="mail_search_in">Search in %1$s</string>
+    <string name="mail_clear_selection">Clear selection</string>
+    <string name="mail_selected">%1$d selected</string>
+    <string name="mail_more_actions">More actions</string>
+    <string name="mail_select_all">Select all</string>
+    <string name="mail_label_as">Label as…</string>
+    <string name="mail_show_in_tab_menu">Show in tab…</string>
+    <string name="mail_category_menu">Category…</string>
+    <string name="mail_mark_important">Mark important</string>
+    <string name="mail_mark_not_important">Mark not important</string>
+    <string name="mail_mute">Mute</string>
+    <string name="mail_unmute">Unmute</string>
+    <string name="mail_report_spam">Report spam</string>
+    <plurals name="mail_done_archive">
+        <item quantity="one">Conversation archived</item>
+        <item quantity="other">%d conversations archived</item>
+    </plurals>
+    <plurals name="mail_done_trash">
+        <item quantity="one">Conversation moved to Trash</item>
+        <item quantity="other">%d conversations moved to Trash</item>
+    </plurals>
+    <plurals name="mail_done_spam">
+        <item quantity="one">Conversation reported as spam</item>
+        <item quantity="other">%d conversations reported as spam</item>
+    </plurals>
+    <plurals name="mail_done_not_spam">
+        <item quantity="one">Conversation moved to Inbox</item>
+        <item quantity="other">%d conversations moved to Inbox</item>
+    </plurals>
+    <plurals name="mail_done_read">
+        <item quantity="one">Marked as read</item>
+        <item quantity="other">%d marked as read</item>
+    </plurals>
+    <plurals name="mail_done_unread">
+        <item quantity="one">Marked as unread</item>
+        <item quantity="other">%d marked as unread</item>
+    </plurals>
+    <plurals name="mail_done_star">
+        <item quantity="one">Conversation starred</item>
+        <item quantity="other">%d conversations starred</item>
+    </plurals>
+    <plurals name="mail_done_unstar">
+        <item quantity="one">Conversation unstarred</item>
+        <item quantity="other">%d conversations unstarred</item>
+    </plurals>
+    <plurals name="mail_done_snooze">
+        <item quantity="one">Conversation snoozed</item>
+        <item quantity="other">%d conversations snoozed</item>
+    </plurals>
+    <plurals name="mail_done_mute">
+        <item quantity="one">Conversation muted</item>
+        <item quantity="other">%d conversations muted</item>
+    </plurals>
+    <plurals name="mail_done_important">
+        <item quantity="one">Conversation marked important</item>
+        <item quantity="other">%d conversations marked important</item>
+    </plurals>
+    <plurals name="mail_done_not_important">
+        <item quantity="one">Conversation marked not important</item>
+        <item quantity="other">%d conversations marked not important</item>
+    </plurals>
+    <plurals name="mail_done_labels">
+        <item quantity="one">Labels updated</item>
+        <item quantity="other">Labels updated on %d conversations</item>
+    </plurals>
+    <plurals name="mail_done_move">
+        <item quantity="one">Conversation moved</item>
+        <item quantity="other">%d conversations moved</item>
+    </plurals>
+    <plurals name="mail_done_inbox">
+        <item quantity="one">Conversation moved to the Inbox</item>
+        <item quantity="other">%d conversations moved to the Inbox</item>
+    </plurals>
+    <plurals name="mail_done_untrash">
+        <item quantity="one">Conversation restored</item>
+        <item quantity="other">%d conversations restored</item>
+    </plurals>
+    <plurals name="mail_done_delete_forever">
+        <item quantity="one">Conversation deleted forever</item>
+        <item quantity="other">%d conversations deleted forever</item>
+    </plurals>
+    <plurals name="mail_done_other">
+        <item quantity="one">Conversation updated</item>
+        <item quantity="other">%d conversations updated</item>
+    </plurals>
+    <string name="mail_will_sync_online">" (queued until you\'re back online)"</string>
+    <string name="mail_couldnt_sync">Couldn\'t sync: %1$s</string>
+    <string name="mail_favorites_added">Added to Favourites.</string>
+    <string name="mail_favorites_removed">Removed from Favourites.</string>
+    <string name="mail_undo">Undo</string>
+    <string name="mail_couldnt_undo">Couldn\'t undo.</string>
+    <string name="mail_favorites_save_failed">Couldn\'t save Favourites. %1$s</string>
+    <string name="mail_category_set">Category set to %1$s.</string>
+    <string name="mail_search_chip_unread">Unread</string>
+    <string name="mail_search_chip_starred">Starred</string>
+    <string name="mail_search_chip_attachment">Has attachment</string>
+    <string name="mail_search_chip_week">Last 7 days</string>
+    <string name="mail_search_chip_important">Important</string>
+    <string name="mail_search_chip_sent_by_me">Sent by me</string>
+    <string name="mail_search_placeholder">Search in mail</string>
+    <string name="mail_search_clear">Clear</string>
+    <string name="mail_search_for">Search for “%1$s”</string>
+    <string name="mail_search_tip">Try operators like from:alice, has:attachment, older_than:1y, label:work or -is:read.</string>
+    <string name="mail_all_accounts">All accounts</string>
+    <string name="mail_accounts">Accounts</string>
+    <string name="mail_account_folder">%1$s · %2$s</string>
+    <string name="mail_account_named">Account: %1$s</string>
+    <string name="mail_more_folders">More folders</string>
+    <string name="mail_more_folders_unread">More folders, %1$d unread</string>
+    <string name="mail_folder_options">Folder options</string>
+    <string name="mail_pin_to">Pin to %1$s</string>
+    <string name="mail_unpin">Unpin</string>
+    <string name="mail_pin_up">Move up</string>
+    <string name="mail_pin_down">Move down</string>
+    <string name="mail_pinned_to">Pinned to %1$s</string>
+    <string name="mail_unpinned">Unpinned. Moved to More folders.</string>
+    <string name="mail_pins_save_failed">Couldn\'t save the pinned folders. %1$s</string>
+    <string name="mail_account_options">Options for %1$s</string>
+    <string name="mail_new_folder">New folder</string>
+    <string name="mail_new_folder_inside">New folder inside</string>
+    <string name="mail_new_folder_in">New folder in %1$s</string>
+    <string name="mail_new_folder_name">Name</string>
+    <string name="mail_new_folder_parent">Inside</string>
+    <string name="mail_new_folder_top">No parent (top level)</string>
+    <string name="mail_new_folder_hint">Created as a label under this account and as a folder on the account\'s server.</string>
+    <string name="mail_new_folder_exists">A label with this name already exists.</string>
+    <string name="mail_new_folder_failed">Couldn\'t create the folder. %1$s</string>
+    <string name="mail_new_folder_create">Create</string>
+    <string name="mail_search_offline_results">Offline results: mail on this phone only</string>
+    <string name="mail_offline_showing">Can\'t reach the server · showing the mail on this phone</string>
+    <string name="mail_section_show_more">Show %1$d more</string>
+    <string name="mail_section_show_all">Show all %1$d</string>
+    <string name="mail_section_show_fewer">Show fewer</string>
+    <string name="mail_section_show_only">Show only %1$s</string>
+    <string name="mail_section_back">Back to all sections</string>
+</resources>

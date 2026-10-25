@@ -1,0 +1,223 @@
+name: Tests
+
+# The automated checks for every pull request and every push to main: the backend suite against
+# real services, the frontend checks, the documentation build, the product-name check and the
+# Android unit tests. docker-publish.yml runs the same workflow before it publishes an image.
+#
+# The backend tests need Postgres with pgvector and the development services of
+# deploy/dev/docker-compose.yml: a Stalwart mail store, a second Stalwart that plays the upstream
+# mail provider, and Radicale (CalDAV). They run with the development-only accounts that compose
+# file defines; nothing here reads a secret.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    services:
+      postgres:
+        # The same image as deploy/docker-compose.yml. The tests create their own databases
+        # (backend/mailr/dev/testdb.py), so the user must be allowed to create them.
+        image: pgvector/pgvector:pg17@sha256:cf134a767f474095eeba57e0117be8e568e011a63f33fbf252f14c9b760f8e6f
+        env:
+          POSTGRES_USER: mailr
+          POSTGRES_PASSWORD: mailr
+          POSTGRES_DB: mailr
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U mailr"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+          --shm-size 256m
+
+    env:
+      MAILR_DATABASE_URL: postgresql+asyncpg://mailr:mailr@localhost:5432/mailr
+      MAILR_DEV: "true"
+      # The development accounts of deploy/dev/docker-compose.yml (not secrets).
+      MAILR_STALWART_URL: http://localhost:18080
+      MAILR_STALWART_ADMIN_USER: mailr-svc@mailr.internal
+      MAILR_STALWART_ADMIN_PASSWORD: dev-svc-pass
+      MAILR_STALWART_DOMAIN: mailr.internal
+      # The Stalwart calendar tests (backend/tests/*_stalwart.py, serial) against the same dev
+      # Stalwart: its service account, its IMAPS port and its container (the DAV gateway test).
+      # conftest sets the same defaults locally (tests/dev_services.py).
+      MAILR_TEST_STALWART_URL: http://localhost:18080
+      MAILR_TEST_STALWART_ADMIN: mailr-svc@mailr.internal:dev-svc-pass
+      MAILR_TEST_STALWART_IMAPS: 127.0.0.1:11993
+      MAILR_TEST_STALWART_CONTAINER: mailr-dev-stalwart-1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Start the development services
+        run: docker compose -f deploy/dev/docker-compose.yml up -d
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: backend/uv.lock
+
+      - name: Install the backend
+        working-directory: backend
+        run: uv sync --frozen --all-extras --python 3.13
+
+      - name: Lint (ruff)
+        # The rule set is in backend/pyproject.toml; older findings carry a noqa on their line.
+        working-directory: backend
+        run: uv run --frozen ruff check mailr tests
+
+      - name: Type check (basedpyright, new errors only)
+        # Errors recorded in backend/.basedpyright/baseline.json pass; any other error fails.
+        working-directory: backend
+        run: uv run --frozen basedpyright
+
+      - name: The typed API's generated files are current (tools/api-types --check)
+        # frontend/src/api/openapi.json and schema.gen.ts come from backend/mailr/api/contract.
+        run: tools/api-types --check
+
+      - name: The other generated files are current (tools/generate --check)
+        # The apps' copies of the server texts, Android's web tokens and Windows zone names.
+        run: tools/generate --check
+
+      - name: A secret key for this run
+        run: |
+          key=$(openssl rand -base64 32)
+          echo "::add-mask::$key"
+          echo "MAILR_SECRET_KEY=$key" >> "$GITHUB_ENV"
+
+      - name: Wait for the mail servers and Radicale
+        # Stalwart provisions its accounts on first start and then restarts once; the service
+        # account signs in only after that.
+        run: |
+          ok=0
+          for _ in $(seq 1 120); do
+            if curl -fsS -o /dev/null -u mailr-svc@mailr.internal:dev-svc-pass http://localhost:18080/jmap/session \
+              && curl -fsS -o /dev/null -u up-svc@upstream.test:up-svc-pass http://localhost:18091/jmap/session \
+              && curl -sS -o /dev/null http://localhost:15232/; then
+              ok=1; break
+            fi
+            sleep 2
+          done
+          if [ "$ok" != 1 ]; then
+            docker compose -f deploy/dev/docker-compose.yml logs --tail 100
+            exit 1
+          fi
+
+      - name: Backend tests (parallel)
+        working-directory: backend
+        run: uv run --frozen python -m pytest -n 4 --dist worksteal -q -rfE -p no:cacheprovider
+
+      - name: Backend tests (serial)
+        # Tests marked `serial` (fixed ports, shared outside state) are skipped under xdist and
+        # run here in one process. Exit code 5 means none were selected.
+        working-directory: backend
+        run: |
+          set +e
+          uv run --frozen python -m pytest -p no:xdist -m serial -q -rfE -p no:cacheprovider
+          rc=$?
+          [ "$rc" = 5 ] && rc=0
+          exit $rc
+
+      - name: Development service logs
+        if: failure()
+        run: docker compose -f deploy/dev/docker-compose.yml logs --tail 200
+
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: frontend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Type check
+        run: npx tsc -b
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests (Vitest)
+        run: npx vitest run
+
+      - name: Build
+        run: npm run build
+
+  docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Install MkDocs (pinned, with hashes)
+        run: pip install --require-hashes --no-deps -r site/requirements-docs.lock
+
+      - name: Build the documentation (strict)
+        working-directory: site
+        run: mkdocs build --strict
+
+      - name: Product name in user-facing text
+        run: python3 tools/product_name.py --check
+
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: android
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Unit tests (both apps)
+        # Debug builds only: no signing key and no deploy.properties are needed. The screenshot tests
+        # render every screen and compare nothing: the reference images are not in this repository
+        # (android/README.md, "Build").
+        run: ./gradlew --no-daemon --console=plain testDebugUnitTest

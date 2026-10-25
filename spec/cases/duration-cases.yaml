@@ -1,0 +1,22 @@
+# Golden vectors for the duration picker: the amount and unit wheels of the when sheet.
+#
+# Run by frontend/src/lib/whenSheet.test.ts (vitest) and by Android's QuickChoicesTest (JUnit, which
+# reads the copy in android/app/src/test/resources/interaction/; that copy is checked against this file in vitest).
+# Same restricted shape as quickadd-cases.yaml: `key: <json>` lines, `  - <json>` cases, `#` comments.
+#
+# The rules:
+# 1. Each unit has its own amount list. It covers the whole useful range of that unit, so any
+#    amount is reachable on the amount wheel alone. The amount wheel never changes the unit.
+# 2. When the unit changes, the amount stays when the new unit has it. Otherwise it moves to the
+#    nearest value; on a tie, the smaller one.
+units: {"minutes": [1, 2, 3, 4, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55], "hours": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], "days": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30], "weeks": [1, 2, 3, 4, 5, 6, 7, 8]}
+cases:
+  - {"id": "keep-hours-2", "amount": 2, "to": "hours", "expect": 2}
+  - {"id": "keep-days-2", "amount": 2, "to": "days", "expect": 2}
+  - {"id": "keep-hours-15", "amount": 15, "to": "hours", "expect": 15}
+  - {"id": "minutes-12-to-10", "amount": 12, "to": "minutes", "expect": 10}
+  - {"id": "minutes-7-to-5", "amount": 7, "to": "minutes", "expect": 5}
+  - {"id": "hours-45-to-23", "amount": 45, "to": "hours", "expect": 23}
+  - {"id": "days-45-to-30", "amount": 45, "to": "days", "expect": 30}
+  - {"id": "weeks-23-to-8", "amount": 23, "to": "weeks", "expect": 8}
+  - {"id": "minutes-23-to-25", "amount": 23, "to": "minutes", "expect": 25}

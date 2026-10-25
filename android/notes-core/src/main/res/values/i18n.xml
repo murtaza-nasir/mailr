@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- The languages the apps have text for. Keep in step with res/xml/locales_config.xml
+         in app/ and notes/; I18nInfraTest checks it. -->
+    <string-array name="i18n_languages" translatable="false">
+        <item>en</item>
+        <item>de</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>pt-BR</item>
+        <item>ru</item>
+        <item>zh-Hans</item>
+    </string-array>
+</resources>

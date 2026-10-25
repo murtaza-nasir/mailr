@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="more_approval_needed_desc">Approval needed: %1$s</string>
+    <string name="more_approval_outcome_desc">%1$s: %2$s</string>
+    <string name="more_an_agent">An agent</string>
+    <string name="more_ask_about_approval">Ask %1$s about this approval</string>
+    <string name="more_ask_ambrose">Ask %1$s</string>
+    <string name="more_hide_details">Hide details</string>
+    <string name="more_details">Details</string>
+    <string name="more_cant_undo">This can\'t be undone from Mailr.</string>
+    <string name="more_expires_in">Expires in %1$s</string>
+    <string name="more_deny">Deny</string>
+    <string name="more_allow_menu">More ways to allow</string>
+    <string name="more_always_allow">Always allow</string>
+    <string name="more_allow_once">Allow once</string>
+</resources>

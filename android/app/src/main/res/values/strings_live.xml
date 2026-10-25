@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="live_someone">Someone</string>
+    <string name="live_an_agent">An agent</string>
+    <string name="live_updated_device">Updated on another device</string>
+    <string name="live_updated_by">Updated by %1$s</string>
+    <string name="live_use_other_copy">Use the other copy</string>
+    <string name="live_use_theirs">Use %1$s\'s</string>
+    <!-- The Compare dialog's name for the other version. -->
+    <string name="live_theirs_other_copy">The other copy</string>
+    <string name="live_theirs">%1$s\'s</string>
+    <string name="live_changed_device_draft">Draft changed on another device</string>
+    <string name="live_changed_by_draft">%1$s changed this draft</string>
+    <string name="live_editing_draft">%1$s is editing this draft…</string>
+    <string name="live_changed_device_event">Event changed on another device</string>
+    <string name="live_changed_by_event">%1$s changed this event</string>
+    <string name="live_editing_event">%1$s is editing this event…</string>
+    <string name="live_changed_device_task">Task changed on another device</string>
+    <string name="live_changed_by_task">%1$s changed this task</string>
+    <string name="live_editing_task">%1$s is editing this task…</string>
+    <string name="live_changed_device_other">This %1$s changed on another device</string>
+    <string name="live_changed_by_other">%1$s changed this %2$s</string>
+    <string name="live_editing_other">%1$s is editing this %2$s…</string>
+</resources>

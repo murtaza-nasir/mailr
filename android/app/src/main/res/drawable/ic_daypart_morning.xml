@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Today widget's morning picture: the sun coming up over a hill. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp" android:height="48dp" android:viewportWidth="48" android:viewportHeight="48">
+    <group>
+        <clip-path android:pathData="M24,0a24,24 0,1 1,0 48a24,24 0,1 1,0 -48z" />
+        <path android:fillColor="#FFFFE7C2" android:pathData="M0,0h48v48h-48z" />
+        <path android:fillColor="#FFFFA726" android:pathData="M13,31a11,11 0,0 1,22 0z" />
+        <path android:strokeColor="#FFFFA726" android:strokeWidth="2.5" android:strokeLineCap="round"
+            android:pathData="M24,10L24,14M12.5,15.5L15.3,18.3M35.5,15.5L32.7,18.3M7,25L10.5,25.5M41,25L37.5,25.5" />
+        <path android:fillColor="#FF8BC34A" android:pathData="M0,31C10,27 20,29 28,31C36,33 42,31 48,29L48,48L0,48z" />
+        <path android:fillColor="#FF689F38" android:pathData="M0,38C12,35 26,37 48,36L48,48L0,48z" />
+    </group>
+</vector>

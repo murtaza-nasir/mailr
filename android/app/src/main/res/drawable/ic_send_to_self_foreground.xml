@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "Send to self": an arrow that loops over and drops back into the envelope. 108dp canvas. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M42,52h32a5,5 0,0 1,5 5v16a5,5 0,0 1,-5 5H42a5,5 0,0 1,-5 -5V57a5,5 0,0 1,5 -5z" />
+    <path
+        android:strokeColor="#188038"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000"
+        android:pathData="M42,58l8,7.5 8,-7.5 8,7.5 8,-7.5" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000"
+        android:pathData="M30,60V43a9,9 0,0 1,9 -9h19a9,9 0,0 1,9 9v2" />
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="4.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000"
+        android:pathData="M61,41l6,6 6,-6" />
+</vector>

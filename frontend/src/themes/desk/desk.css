@@ -1,0 +1,1437 @@
+/* Desk: a dense desktop mail client with a sortable table. Cool slate greys, small type, tables
+   with tabular numbers, an ocean-blue selection bar. Scoped by [data-ui-theme='desk']. */
+
+[data-ui-theme='desk'] {
+  --font: system-ui, -apple-system, BlinkMacSystemFont, 'Noto Sans', 'Inter', Cantarell, Ubuntu, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: var(--font);
+  --radius-xs: 2px;
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --topbar-h: 44px;
+  --rail-w: 0px;
+  --panel-w: 320px;
+  --row-h: 26px;
+  /* The two-line row of a narrow list (reading pane on the right, phones). */
+  --d-row-h-narrow: 55px;
+  --d-cols: 28px 22px 20px var(--d-from, 210px) minmax(180px, 1fr) var(--d-labels, 150px) 40px 136px;
+  --dur: 80ms;
+}
+[data-ui-theme='desk'][data-density='compact'] {
+  --row-h: 22px;
+}
+[data-ui-theme='desk'][data-density='comfortable'] {
+  --row-h: 32px;
+}
+[data-ui-theme='desk'][data-theme='light'] {
+  --bg: #eef2f4;
+  --d-chrome: #eef2f4;
+  --surface: #ffffff;
+  --surface-dim: #f8fafb;
+  --surface-container: #e9eef1;
+  --surface-high: #dfe6e9;
+  --text: #151a1d;
+  --text-2: #3a4347;
+  --text-3: #57626a;
+  --border: #cbd5da;
+  --divider: #dce3e7;
+  --primary: #1d6a8a;
+  --on-primary: #ffffff;
+  --primary-container: #d5eaf1;
+  --on-primary-container: #06323f;
+  --compose-bg: #1d6a8a;
+  --compose-fg: #ffffff;
+  --nav-active: #d5eaf1;
+  --nav-active-fg: #151a1d;
+  --hover: rgba(21, 26, 29, 0.05);
+  --pressed: rgba(21, 26, 29, 0.1);
+  --row-selected: #d5eaf1;
+  --d-sel: #1d6a8a;
+  --d-sel-fg: #ffffff;
+  --d-stripe: #f4f7f8;
+  --row-read-bg: #ffffff;
+  --row-unread-bg: #ffffff;
+  --chip-bg: #e3e9ec;
+  --chip-fg: #3a4347;
+  --star: #d48a00;
+  --input-bg: #ffffff;
+  --input-bg-focus: #ffffff;
+  --focus-ring: #1d6a8a;
+  --tooltip-bg: #151a1d;
+}
+[data-ui-theme='desk'][data-theme='dark'] {
+  --bg: #191d20;
+  --d-chrome: #202528;
+  --surface: #282d31;
+  --surface-dim: #23282b;
+  --surface-container: #2f3539;
+  --surface-high: #383f44;
+  --text: #f6f9fa;
+  --text-2: #d3dadd;
+  --text-3: #a3adb2;
+  --border: #4a5359;
+  --divider: #363d42;
+  --primary: #6cbfdc;
+  --on-primary: #0b0e10;
+  --primary-container: #164556;
+  --on-primary-container: #d5eaf1;
+  --compose-bg: #1d6a8a;
+  --compose-fg: #ffffff;
+  --nav-active: #164556;
+  --nav-active-fg: #f6f9fa;
+  --hover: rgba(246, 249, 250, 0.06);
+  --pressed: rgba(246, 249, 250, 0.1);
+  --row-selected: #164556;
+  --d-sel: #1d6a8a;
+  --d-sel-fg: #ffffff;
+  --d-stripe: #2c3236;
+  --row-read-bg: #282d31;
+  --row-unread-bg: #282d31;
+  --chip-bg: #383f44;
+  --chip-fg: #d3dadd;
+  --star: #ffc53d;
+  --input-bg: #191d20;
+  --input-bg-focus: #191d20;
+  --focus-ring: #6cbfdc;
+  --tooltip-bg: #f6f9fa;
+}
+
+[data-ui-theme='desk'] body {
+  font-size: 13px;
+}
+[data-ui-theme='desk'] .icon-btn,
+[data-ui-theme='desk'] .btn {
+  border-radius: var(--radius-sm);
+}
+[data-ui-theme='desk'] .btn {
+  font-family: var(--font);
+  height: 30px;
+  font-weight: 500;
+}
+[data-ui-theme='desk'] .btn.sm {
+  height: 26px;
+}
+
+/* ---------- frame ---------- */
+
+[data-ui-theme='desk'] .desk-app {
+  grid-template-rows: var(--topbar-h) 1fr 24px;
+  grid-template-columns: auto auto 1fr auto;
+  grid-template-areas:
+    'top top top top'
+    'spaces side main panel'
+    'status status status status';
+}
+.desk-app .d-toolbar {
+  grid-area: top;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding-block: 0;
+  padding-inline: 6px 8px;
+  min-width: 0;
+  background: var(--d-chrome);
+  border-bottom: 1px solid var(--divider);
+}
+.desk-app .d-menu {
+  display: none;
+}
+.desk-app .d-tools {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  padding: 0 4px;
+  border-inline-end: 1px solid var(--divider);
+  /* Tools never shrink: out of room, groups drop their labels and then move to More
+     (useToolbarFit). A cut label ("Archi…") is worse than none. */
+  flex: none;
+}
+.desk-app .d-tools:nth-last-of-type(1),
+.desk-app .d-apps {
+  border-inline-end: 0;
+}
+.desk-app .d-apps {
+  border-inline-start: 1px solid var(--divider);
+  margin-inline-start: 6px;
+}
+.desk-app .d-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding: 0 7px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text);
+  white-space: nowrap;
+}
+.desk-app .d-tool > svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-2);
+}
+.desk-app .d-tool {
+  flex: none;
+}
+.desk-app .d-tool > svg {
+  flex: none;
+}
+.desk-app .d-tool-compose > svg {
+  color: var(--primary);
+}
+.desk-app .d-tool:hover:not(:disabled) {
+  background: var(--hover);
+}
+.desk-app .d-tool:active:not(:disabled) {
+  background: var(--pressed);
+}
+.desk-app .d-tool:disabled {
+  opacity: 0.42;
+}
+.desk-app .d-tool.on {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.desk-app .d-tool.on > svg {
+  color: inherit;
+}
+/* Ambrose in Desk's toolbar is one more toolbar button: the same height, text size, square
+   hover and "on" state as Get Mail or Compose, with the icon in the accent colour like Compose's. */
+.desk-app .d-toolbar .ambrose-btn {
+  height: 30px;
+  gap: 5px;
+  margin-block: 0;
+  margin-inline: 6px 2px;
+  padding: 0 7px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 400;
+}
+.desk-app .d-toolbar .ambrose-btn svg {
+  width: 16px;
+  height: 16px;
+}
+.desk-app .d-toolbar .ambrose-btn:active {
+  background: var(--pressed);
+}
+.desk-app .d-toolbar .ambrose-btn.active {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.desk-app .d-toolbar .search {
+  flex: 0 1 300px;
+  /* The search gives way a little; then the tools fold (DeskShell, useToolbarFit). */
+  min-width: 240px;
+  max-width: 300px;
+}
+.desk-app .d-toolbar .search-box {
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.desk-app .d-toolbar .search-box.focused,
+.desk-app .d-toolbar .search-box.open {
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+.desk-app .d-toolbar .search-box.open {
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+.desk-app .d-toolbar .search-box input {
+  font-size: 13px;
+}
+.desk-app .d-toolbar .search-box .icon-btn {
+  --icon-btn: calc(26px * var(--dz, 1));
+  --icon: calc(16px * var(--dzi, 1));
+}
+.desk-app .d-toolbar .search-panel {
+  top: 30px;
+  inset-inline-start: auto;
+  width: min(620px, 90vw);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+.desk-app .d-toolbar .icon-btn.sm {
+  --icon-btn: calc(30px * var(--dz, 1));
+  --icon: calc(16px * var(--dzi, 1));
+}
+.desk-app .account-btn {
+  margin-inline-start: 4px;
+  padding: 1px;
+}
+.desk-app .account-btn .avatar {
+  width: 26px;
+  height: 26px;
+  font-size: 12px;
+}
+
+/* ---------- spaces bar (Mail, Calendar, Tasks) ---------- */
+
+.desk-app .d-spaces {
+  grid-area: spaces;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 40px;
+  padding: 6px 0;
+  background: var(--d-chrome);
+  border-inline-end: 1px solid var(--divider);
+}
+.desk-app .d-space {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  color: var(--text-2);
+}
+.desk-app .d-space svg {
+  width: 18px;
+  height: 18px;
+}
+.desk-app .d-space:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+.desk-app .d-space.active {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+/* Calendar and Tasks draw their own left column: on wide screens the folder pane steps aside. */
+@media (min-width: 901px) {
+  .desk-app.on-app .d-folders {
+    display: none;
+  }
+}
+
+/* ---------- folder pane ---------- */
+
+.desk-app .d-folders {
+  grid-area: side;
+  width: 248px;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--d-chrome);
+  border-inline-end: 1px solid var(--divider);
+  font-size: 13px;
+  padding-bottom: 12px;
+}
+.desk-app .d-folders-head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr 34px 40px;
+  column-gap: 4px;
+  align-items: center;
+  height: 26px;
+  padding-block: 0;
+  padding-inline: 10px 8px;
+  background: var(--d-chrome);
+  border-bottom: 1px solid var(--divider);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+.desk-app .d-folders-head > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.desk-app .d-folders-head .n {
+  text-align: end;
+}
+.desk-app .d-account {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  font-weight: 600;
+  overflow: hidden;
+}
+.desk-app .d-account .lucide {
+  width: 15px;
+  height: 15px;
+  color: var(--text-2);
+  flex: none;
+}
+.desk-app .d-account .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.desk-app .d-folder {
+  display: grid;
+  /* The count columns are as wide as four digits and a separator, so names keep the rest. */
+  grid-template-columns: 16px 1fr 34px 40px;
+  column-gap: 4px;
+  align-items: center;
+  width: 100%;
+  height: calc(24px * var(--dz, 1));
+  padding-block: 0;
+  padding-inline: 10px 8px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  text-align: start;
+}
+.desk-app .d-folder > .lucide {
+  width: 15px;
+  height: 15px;
+  color: var(--text-2);
+}
+.desk-app .d-folder .name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.desk-app .d-folder .n {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
+.desk-app .d-folder .unread-n {
+  font-weight: 700;
+  color: var(--primary);
+}
+.desk-app .d-folder .total-n {
+  color: var(--text-3);
+}
+.desk-app .d-folder:hover {
+  background: var(--hover);
+}
+.desk-app .d-folder.active {
+  background: var(--d-sel);
+  color: var(--d-sel-fg);
+}
+.desk-app .d-folder.active > .lucide,
+.desk-app .d-folder.active .n {
+  color: inherit;
+}
+.desk-app .d-folder.unread .name {
+  font-weight: 700;
+}
+.desk-app .d-group {
+  grid-template-columns: 16px 1fr auto;
+  color: var(--text-2);
+}
+.desk-app .d-group .lucide {
+  width: 14px;
+  height: 14px;
+}
+/* An account's heading: caret, dot (in the icon column) and the address right after it. */
+.desk-app .d-group.acct-group-toggle {
+  grid-template-columns: 16px 16px 1fr auto;
+}
+.desk-app .acct-lead {
+  width: 16px;
+  height: 16px;
+}
+.desk-app .d-group-toggle {
+  grid-column: 1 / 3;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 100%;
+  font-size: 13px;
+  color: var(--text-2);
+}
+.desk-app .d-group-toggle .lucide {
+  flex: none;
+}
+.desk-app .d-group .icon-btn.xs {
+  --icon-btn: calc(20px * var(--dz, 1));
+  --icon: calc(14px * var(--dzi, 1));
+}
+.desk-app .d-labels-tree .nav-item {
+  height: 24px;
+  gap: 6px;
+  border-radius: 0;
+  font-size: 13px;
+  letter-spacing: 0;
+  padding-inline-end: 8px;
+}
+.desk-app .d-labels-tree .nav-item .label-dot {
+  width: 15px;
+  height: 15px;
+}
+.desk-app .d-labels-tree .nav-item .label-dot span {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  transform: none;
+}
+.desk-app .d-labels-tree .nav-item .count {
+  color: var(--primary);
+  font-weight: 700;
+}
+.desk-app .d-labels-tree .nav-item.active {
+  background: var(--d-sel);
+  color: var(--d-sel-fg);
+  font-weight: 400;
+}
+.desk-app .d-labels-tree .nav-item.active .count {
+  color: inherit;
+}
+.desk-app .d-labels-tree .nav-item {
+  margin-inline-start: 16px;
+  width: calc(100% - 16px);
+}
+
+/* ---------- main: table over preview ---------- */
+
+.desk-app .main.d-main {
+  margin: 0;
+  border-radius: 0;
+  background: var(--surface);
+}
+/* The list takes most of the height (at 46 % the table above the preview was a
+   strip of eight rows); a height dragged on the handle still applies. */
+.desk-app .split.below > .list-pane {
+  flex: 0 0 var(--list-h, 62%);
+  border-bottom: 1px solid var(--border);
+}
+.desk-app .cat-tabs-wrap {
+  border-bottom: 1px solid var(--divider);
+  background: var(--surface-dim);
+}
+.desk-app .cat-tabs {
+  gap: 0;
+  padding: 0 4px;
+  scroll-padding: 0 4px;
+}
+.desk-app .cat-tabs-wrap .scroll-tabs-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+}
+.desk-app .cat-tabs-wrap .scroll-tabs-btn .lucide {
+  width: 14px;
+  height: 14px;
+}
+.desk-app .cat-tab {
+  height: 30px;
+  min-width: 0;
+  max-width: none;
+  flex: none;
+  gap: 6px;
+  padding: 0 12px;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+.desk-app .cat-tab .lucide {
+  width: 14px;
+  height: 14px;
+}
+.desk-app .cat-tab[aria-selected='true'] {
+  background: var(--surface);
+  color: var(--text);
+}
+.desk-app .cat-tab[aria-selected='true']::after {
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  height: 2px;
+  border-radius: 0;
+}
+.desk-app .cat-tab .ti-num,
+.desk-app .cat-tab .ti-dot {
+  margin-inline-start: 0;
+}
+.desk-app .cat-tab .new,
+.desk-app .cat-tab .count,
+.desk-app .cat-tab .due {
+  margin-inline-start: 0;
+  font-size: 10.5px;
+  padding: 0 5px;
+  border-radius: var(--radius-sm);
+}
+.desk-app .toolbar {
+  height: 30px;
+  padding: 0 6px;
+  border-bottom: 1px solid var(--divider);
+  background: var(--surface-dim);
+}
+.desk-app .toolbar .icon-btn {
+  --icon-btn: calc(26px * var(--dz, 1));
+  --icon: calc(15px * var(--dzi, 1));
+}
+.desk-app .toolbar .sel-group {
+  height: 24px;
+  border-radius: var(--radius-sm);
+}
+.desk-app .checkbox {
+  width: 14px;
+  height: 14px;
+  border-width: 1.5px;
+  border-radius: 2px;
+}
+.desk-app .list-scroll {
+  background: var(--surface);
+}
+.desk-app .d-head {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--surface);
+}
+.desk-app .d-quick {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--divider);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.desk-app .d-quick-label {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-inline-end: 4px;
+  white-space: nowrap;
+}
+.desk-app .d-toggle {
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 12px;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.desk-app .d-toggle:hover {
+  background: var(--hover);
+}
+.desk-app .d-toggle.on {
+  background: var(--d-sel);
+  border-color: var(--d-sel);
+  color: var(--d-sel-fg);
+}
+.desk-app .d-quick-note {
+  margin-inline-start: 8px;
+  font-size: 12px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+/* Content-aware columns (DeskTable useContentColumns sets the -need and -w numbers on the grid):
+   From and Labels as wide as their widest row on screen, or a width you dragged if that is
+   narrower; From never more than a third of the table; # as wide as its numbers, or nothing. */
+.desk-app .list-grid {
+  --d-from-w: min(var(--d-from, 200px), var(--d-from-need, 200px), 32%);
+  --d-labels-w: min(var(--d-labels, 150px), var(--d-labels-need, 150px));
+  --d-cols: 28px 22px 20px var(--d-from-w) minmax(180px, 1fr) var(--d-labels-w) var(--d-count-w, 40px) 136px;
+}
+/* While measuring, the columns change at once (reduced motion turns every change into a short
+   transition, base.css, and the widths read would be the old ones). */
+.desk-app .list-grid[data-measuring] .d-row,
+.desk-app .list-grid[data-measuring] .d-cols {
+  transition-property: none !important;
+}
+.desk-app .list-grid[data-no-count] .d-count {
+  visibility: hidden;
+  padding: 0;
+  border: 0;
+}
+.desk-app .d-cols {
+  display: grid;
+  grid-template-columns: var(--d-cols);
+  height: 26px;
+  background: var(--surface-dim);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.desk-app .d-cols .d-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 0;
+  border-inline-end: 1px solid var(--divider);
+}
+.desk-app .d-cols .d-cell:last-child {
+  border-inline-end: 0;
+}
+.desk-app .d-sort {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  height: 100%;
+  padding: 0 6px;
+  color: inherit;
+  text-align: start;
+  font-weight: inherit;
+}
+.desk-app .d-cols .d-star .d-sort,
+.desk-app .d-cols .d-att .d-sort {
+  justify-content: center;
+  padding: 0;
+}
+.desk-app .d-sort:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+.desk-app .d-sort > svg {
+  width: 13px;
+  height: 13px;
+  flex: none;
+}
+.desk-app .d-sort span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.desk-app .d-cols .sorted {
+  color: var(--text);
+}
+.desk-app .d-cols .d-arrow {
+  color: var(--primary);
+}
+.desk-app .d-cols .d-count .d-sort {
+  justify-content: flex-end;
+}
+.desk-app .d-resize {
+  position: absolute;
+  inset-inline-end: -4px;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  z-index: 1;
+  cursor: col-resize;
+}
+.desk-app .d-resize:hover {
+  background: linear-gradient(90deg, transparent 3px, var(--primary) 3px, var(--primary) 5px, transparent 5px);
+}
+.desk-app .d-row {
+  display: grid;
+  grid-template-columns: var(--d-cols);
+  align-items: center;
+  height: var(--row-h);
+  font-size: 13px;
+  color: var(--text);
+  cursor: default;
+  user-select: none;
+  outline: none;
+  background: var(--surface);
+}
+.desk-app .d-row:nth-child(even) {
+  background: var(--d-stripe);
+}
+.desk-app .d-row:hover {
+  background: var(--hover);
+}
+.desk-app .d-row.selected {
+  background: var(--row-selected);
+}
+.desk-app .d-row.focused {
+  background: var(--d-sel);
+  color: var(--d-sel-fg);
+}
+.desk-app .d-row:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--focus-ring);
+}
+.desk-app .d-row .d-cell {
+  min-width: 0;
+  padding: 0 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.desk-app .d-row .d-sel,
+.desk-app .d-row .d-star,
+.desk-app .d-row .d-att {
+  display: grid;
+  place-items: center;
+  padding: 0;
+}
+.desk-app .d-row.unread .d-from,
+.desk-app .d-row.unread .d-subject,
+.desk-app .d-row.unread .d-date {
+  font-weight: 700;
+}
+.desk-app .d-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-block: 0 1px;
+  margin-inline: 0 6px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.desk-app .d-dot.on {
+  background: var(--primary);
+}
+.desk-app .d-row.focused .d-dot.on {
+  background: currentColor;
+}
+.desk-app .d-to {
+  color: var(--text-3);
+  font-weight: 400;
+}
+.desk-app .d-row.focused .d-to,
+.desk-app .d-row.focused .d-count,
+.desk-app .d-row.focused .d-date,
+.desk-app .d-row.focused .d-att {
+  color: inherit;
+}
+.desk-app .d-draft {
+  color: var(--danger);
+  font-weight: 400;
+}
+/* Red on the focused row's fill was 1.08:1 (light) and 3.53:1 (dark). There "Draft" takes the
+   row's own text colour, set apart by weight. */
+.desk-app .d-row.focused .d-draft {
+  color: inherit;
+  font-weight: 600;
+}
+.desk-app .d-snippet {
+  color: var(--text-3);
+  font-weight: 400;
+  margin-inline-start: 0.3em;
+}
+.desk-app .d-row.selected .d-snippet,
+.desk-app .d-row.focused .d-snippet {
+  color: inherit;
+  opacity: 0.8;
+}
+.desk-app .d-starbtn {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-sm);
+  color: var(--text-3);
+  opacity: 0.45;
+}
+.desk-app .d-starbtn svg {
+  width: 14px;
+  height: 14px;
+}
+.desk-app .d-row:hover .d-starbtn,
+.desk-app .d-starbtn:focus-visible {
+  opacity: 0.9;
+}
+.desk-app .d-starbtn.on {
+  opacity: 1;
+  color: var(--star);
+}
+.desk-app .d-starbtn.on svg {
+  fill: var(--star);
+}
+.desk-app .d-row.focused .d-starbtn {
+  color: inherit;
+}
+.desk-app .d-att svg {
+  width: 13px;
+  height: 13px;
+  color: var(--text-3);
+}
+.desk-app .d-labels .label-chip {
+  height: 16px;
+  line-height: 16px;
+  font-size: 11px;
+  padding: 0 4px;
+  border-radius: 2px;
+  margin-inline-end: 3px;
+}
+.desk-app .d-count {
+  text-align: end;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+.desk-app .d-date {
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The row's quick actions (DeskTable, RowQuickActions): Archive or Move to Inbox, Delete, Read or
+   Unread, Snooze. They sit over the Date cell, at the row's end, on hover and when the keyboard
+   focus is on one of them, with the row's own fill under them, so no column moves and the date
+   shows otherwise (also on the cursor row as j and k move it). Hidden, they stay in the row's tab
+   order (a Tab into them shows them) but take no clicks. */
+.desk-app .d-row {
+  position: relative;
+}
+.desk-app .d-actions {
+  --d-act-bg: var(--surface);
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: 136px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1px;
+  padding-inline: 4px;
+  background: var(--d-act-bg);
+  border-inline-start: 1px solid var(--divider);
+  opacity: 0;
+  pointer-events: none;
+}
+.desk-app .d-row:nth-child(even) .d-actions {
+  --d-act-bg: var(--d-stripe);
+}
+.desk-app .d-row:hover .d-actions {
+  --d-act-bg: linear-gradient(var(--hover), var(--hover)), var(--surface);
+}
+.desk-app .d-row.selected .d-actions {
+  --d-act-bg: var(--row-selected);
+}
+.desk-app .d-row.focused .d-actions {
+  --d-act-bg: var(--d-sel);
+  border-inline-start-color: transparent;
+}
+/* Clear of the focused row's ring. */
+.desk-app .d-row:focus-visible .d-actions {
+  inset-block: 2px;
+  inset-inline-end: 2px;
+  width: 134px;
+}
+.desk-app .d-row:hover .d-actions,
+.desk-app .d-row:has(:focus-visible) .d-actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+.desk-app .d-act {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: min(calc(var(--row-h) - 4px), 24px);
+  padding: 0;
+  border-radius: var(--radius-sm);
+  color: var(--text-2);
+}
+.desk-app .d-act svg {
+  width: 15px;
+  height: 15px;
+}
+.desk-app .d-act:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+.desk-app .d-act:active {
+  background: var(--pressed);
+}
+.desk-app .d-act:focus-visible {
+  outline-offset: -2px;
+}
+.desk-app .d-row.focused .d-act {
+  color: inherit;
+}
+.desk-app .d-row.focused .d-act:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+/* The selection bar is the ring's colour: the ring takes the row's text colour there. */
+.desk-app .d-row.focused .d-act:focus-visible {
+  outline-color: var(--d-sel-fg);
+}
+/* Touch screens: a tap leaves a sticky :hover; the buttons would cover the date until the next tap.
+   A swipe or a long press (the row's menu) does their work. A keyboard still shows them. */
+@media (hover: none) {
+  .desk-app .d-row:hover:not(:has(:focus-visible)) .d-actions {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* preview pane */
+.desk-app .reader-pane {
+  background: var(--surface);
+}
+.desk-app .reader-empty {
+  font-size: 13px;
+}
+.desk-app .reader-pane .conv-view-head {
+  height: 32px;
+  padding: 0 6px;
+  border-bottom: 1px solid var(--divider);
+  background: var(--surface-dim);
+}
+.desk-app .reader-pane .conv-view-head .icon-btn {
+  --icon-btn: calc(26px * var(--dz, 1));
+  --icon: calc(15px * var(--dzi, 1));
+}
+.desk-app .reader-pane .conv-inner {
+  max-width: none;
+  padding-block: 0 24px;
+  padding-inline: 0 12px;
+}
+.desk-app .conv-subject {
+  --subject-line: 24px;
+  padding-block: 10px 8px;
+  padding-inline: 16px 8px;
+}
+.desk-app .conv-subject .title {
+  font-size: 17px;
+  font-weight: 600;
+}
+.desk-app .conv-subject .actions .icon-btn {
+  --icon-btn: calc(28px * var(--dz, 1));
+  --icon: calc(16px * var(--dzi, 1));
+}
+.desk-app .conv-subject .actions {
+  margin: -2px 0;
+}
+.desk-app .summary-card {
+  margin-block: 0 10px;
+  margin-inline: 16px 0;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+}
+.desk-app .msg {
+  padding-block: 10px 0;
+  padding-inline: 16px 0;
+  gap: 12px;
+}
+.desk-app .msg.collapsed {
+  padding-block: 6px;
+  padding-inline: 16px 0;
+}
+.desk-app .msg .avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+}
+.desk-app .msg-head .who .name {
+  font-size: 13px;
+}
+.desk-app .msg-body .text-body {
+  font-size: 13.5px;
+}
+.desk-app .reply-bar {
+  padding-block: 12px;
+  padding-inline: 60px 0;
+}
+.desk-app .reply-bar .btn {
+  height: 30px;
+  padding-block: 0;
+  padding-inline: 10px 14px;
+}
+.desk-app .inline-compose {
+  margin-block: 8px 12px;
+  margin-inline: 16px 12px;
+}
+.desk-app .inline-compose > span {
+  width: 32px !important;
+}
+
+/* status bar */
+.desk-app .d-status {
+  grid-area: status;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 0 10px;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--d-chrome);
+  border-top: 1px solid var(--divider);
+  font-size: 12px;
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+.desk-app .d-status-where {
+  font-weight: 600;
+  color: var(--text);
+}
+.desk-app .d-status-sel {
+  color: var(--primary);
+  font-weight: 600;
+}
+.desk-app .d-sync {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.desk-app .d-sync::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--success);
+}
+.desk-app .d-sync.busy::before {
+  background: var(--primary);
+}
+
+/* settings, panels, compose */
+.desk-app .settings-head h1 {
+  font-size: 18px;
+  font-weight: 600;
+}
+.desk-app .settings-tab {
+  height: 34px;
+  font-size: 13px;
+}
+.desk-app .settings-tab.active::after {
+  border-radius: 0;
+  height: 2px;
+}
+.desk-app .set-row {
+  padding: 14px 0;
+}
+.desk-app .side-panel {
+  margin: 0;
+  border-radius: 0;
+  border-inline-start: 1px solid var(--divider);
+  background: var(--surface);
+}
+.desk-app .side-panel-head {
+  height: 34px;
+  padding-inline-start: 12px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-family: var(--font);
+  background: var(--d-chrome);
+  border-bottom: 1px solid var(--divider);
+}
+.desk-app .side-panel-head h2 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+@media (max-width: 1280px) {
+  .desk-app .side-panel {
+    inset-inline-end: 0;
+    top: var(--topbar-h);
+    bottom: 24px;
+  }
+  .desk-app .panel-scrim {
+    inset: var(--topbar-h) 0 24px 0;
+  }
+}
+.desk-app .compose-dock {
+  bottom: 24px;
+}
+.desk-app .compose-win {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  border: 1px solid var(--border);
+  border-bottom: 0;
+}
+.desk-app .compose-head {
+  height: 32px;
+  background: var(--d-chrome);
+  border-bottom: 1px solid var(--divider);
+  font-size: 13px;
+}
+
+/* ---------- phones ---------- */
+
+@media (max-width: 900px) {
+  [data-ui-theme='desk'] .desk-app {
+    grid-template-rows: 48px 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'top'
+      'main';
+  }
+  .desk-app .d-status {
+    display: none;
+  }
+  .desk-app .d-menu {
+    display: inline-grid;
+    --icon-btn: calc(36px * var(--dz, 1));
+  }
+  .desk-app .d-tools,
+  .desk-app .d-tool-more,
+  .desk-app .d-toolbar .spacer,
+  .desk-app .d-toolbar .hide-mobile {
+    display: none;
+  }
+  .desk-app .d-tools:first-of-type {
+    display: flex;
+    order: 3;
+    border: 0;
+    padding: 0;
+  }
+  .desk-app .d-tools:first-of-type .d-tool-refresh {
+    display: none;
+  }
+  .desk-app .d-tool .lbl {
+    display: none;
+  }
+  .desk-app .d-toolbar .search {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    order: 2;
+  }
+  .desk-app .d-toolbar .icon-btn.sm {
+    order: 4;
+  }
+  .desk-app .account-btn {
+    order: 5;
+  }
+  .desk-app .d-folders {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    inset-inline-start: 0;
+    z-index: 70;
+    width: min(300px, 85vw);
+    box-shadow: var(--shadow-3);
+    transform: translateX(calc(-100% * var(--dir)));
+    transition: transform 200ms var(--ease);
+  }
+  .desk-app .d-folders.mobile-open {
+    transform: none;
+  }
+  .desk-app .d-spaces {
+    display: none;
+  }
+  .desk-app .conv-subject .title {
+    font-size: 18px;
+  }
+  .desk-app .compose-dock {
+    bottom: 0;
+  }
+}
+@media (max-width: 900px) {
+  .desk-app .d-row.narrow .d-dot {
+    display: none;
+  }
+}
+
+/* toasts sit above the status bar */
+.desk-app .toasts {
+  bottom: 36px;
+}
+.desk-app .toast {
+  border-radius: var(--radius-md);
+}
+[data-ui-theme='desk'][data-theme='light'] {
+  --toast-action: #6cbfdc;
+}
+[data-ui-theme='desk'][data-theme='dark'] {
+  --toast-action: #1d6a8a;
+}
+
+/* The two-line row (from and date, then subject): whenever the list is narrow, which includes a
+   wide screen with the reading pane open. It used to apply only below 900 px, so a narrow list
+   kept the eight table columns and squeezed the subject to a few letters. */
+.desk-app .d-row.narrow {
+  grid-template-columns: 30px 1fr auto;
+  grid-template-areas:
+    'sel from date'
+    'sel subject subject';
+  height: auto;
+  min-height: var(--d-row-h-narrow);
+  padding-block: 6px;
+  padding-inline: 0 8px;
+  row-gap: 1px;
+}
+/* An empty section is one row tall (list.css .section-empty). */
+.desk-app .list-pane {
+  --section-empty-h: var(--row-h);
+}
+.desk-app .list-pane.narrow {
+  --section-empty-h: var(--d-row-h-narrow);
+}
+.desk-app .d-row.narrow .d-sel {
+  grid-area: sel;
+  align-self: start;
+  height: 20px;
+}
+.desk-app .d-row.narrow .d-from {
+  grid-area: from;
+  padding-inline-start: 0;
+}
+.desk-app .d-row.narrow .d-date {
+  grid-area: date;
+}
+.desk-app .d-row.narrow .d-subject {
+  grid-area: subject;
+  padding-inline-start: 0;
+}
+.desk-app .d-row.narrow .d-star,
+.desk-app .d-row.narrow .d-att,
+.desk-app .d-row.narrow .d-labels,
+.desk-app .d-row.narrow .d-count {
+  display: none;
+}
+
+/* Subject text ellipsizes on its own; signal chips follow it. */
+.desk-app .d-subject {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  /* The action chip turns into a round icon when the column is narrow (below). */
+  container: dsubject / inline-size;
+}
+/* The suggested action keeps its whole label (up to about 16em) and the subject gives way; a pill
+   squeezed down to its icon left a wide empty pill or "View P…". */
+.desk-app .d-subject .action-chip-wrap {
+  flex: none;
+  min-width: 0;
+  max-width: 16em;
+}
+@container dsubject (max-width: 520px) {
+  .desk-app .d-subject .action-chip-wrap { max-width: none; }
+  .desk-app .d-subject .action-chip {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    justify-content: center;
+  }
+  .desk-app .d-subject a.action-chip .action-label { display: none; }
+  /* The code chip too: its words ("Copy 480204") showed as "py 4" inside the round icon. They
+     stay readable to screen readers; the title names the action. */
+  .desk-app .d-subject button.action-chip { font-size: 0; }
+}
+.desk-app .d-subject-text {
+  flex: 0 1 auto;
+  min-width: min(6em, 40%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.desk-app .d-subject .d-snippet {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* A favorite label in the folder tree: the label's dot in the icon column. */
+.desk-app .d-folder > .label-dot {
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+}
+.desk-app .d-folder > .label-dot span {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: var(--text-2);
+}
+.desk-app .d-folder > .label-dot span:not([style]) {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.5px currentColor;
+}
+.desk-app .d-folder.d-fav-head {
+  display: flex;
+  gap: 6px;
+  height: 28px;
+  padding-inline-start: 10px;
+  font-weight: 600;
+  color: var(--text);
+}
+.desk-app .d-fav-head .lucide {
+  flex: none;
+  color: var(--text-2);
+}
+
+/* A section header is a thin group row, as in a spreadsheet: a grey band ruled above and below,
+   no gap, a small bold name. Its checkbox sits over the table's checkbox column. */
+.desk-app .section + .section {
+  padding-top: 0;
+}
+.desk-app .section-head {
+  height: 28px;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  color: var(--text);
+  background: var(--surface-high);
+  border-top: 1px solid var(--divider);
+}
+.desk-app .section-head .section-check-hit {
+  margin-inline-start: -10px;
+}
+
+/* Sent's count column: follow-ups still waiting for a reply, not the ever-growing total. */
+.desk-app .d-folder .waiting-n {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  color: var(--warning-fg, var(--text-2));
+}
+/* Desk's smaller box keeps the 24 px hit area. */
+.desk-app .checkbox.hit24 {
+  width: 24px;
+  height: 24px;
+  margin: -5px;
+  border: 0;
+}
+.desk-app .checkbox.hit24::before {
+  width: 14px;
+  height: 14px;
+  border-width: 1.5px;
+}
+.desk-app .nt-row .checkbox.hit24 {
+  margin-top: 1px;
+}
+.desk-app .nt-card-item .checkbox.hit24 {
+  margin-top: -3px;
+}
+/* The From cell is a row: the sender gives way with its own ellipsis while the unread dot, marker,
+   "Draft", account dot and mute icon keep their size. As an inline block capped at the cell's width
+   the name could not share the line, so the cell's ellipsis cut it to a bare "…";
+   the account dot also touched the name. */
+.desk-app .d-row .d-from {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.desk-app .d-row .d-from > * {
+  flex: none;
+}
+/* The sender in its own direction, cut off at its own end. */
+.desk-app .d-row .d-from > .d-from-name {
+  flex: 0 1 auto;
+  min-width: 2ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.desk-app .d-row .d-from .row-accounts {
+  margin-inline-end: 0;
+}
+.desk-app .d-row .d-from > .d-dot {
+  margin-inline-end: 2px; /* with the 4 px gap: the 6 px it had before */
+}
+
+/* Desk on a touch screen keeps its density, with 44 px targets: the toolbar and folder entries grow,
+   the checkboxes and filter chips get a larger box or an invisible overlay. */
+@media (pointer: coarse) {
+  .desk-app .d-tool {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .desk-app .d-folder {
+    min-height: 44px;
+  }
+  .desk-app .checkbox {
+    width: 18px;
+    height: 18px;
+  }
+  .desk-app .d-quick {
+    height: 44px;
+  }
+  .desk-app .d-toolbar .search-box {
+    min-height: 44px;
+  }
+  .desk-app .d-toggle {
+    position: relative;
+  }
+  .desk-app .d-toggle::after {
+    content: '';
+    position: absolute;
+    inset: -11px 0;
+  }
+  .desk-app .cat-tab {
+    min-height: 44px;
+  }
+}

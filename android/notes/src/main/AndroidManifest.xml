@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Notes app. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- Voice add: the phone's on-device recognizer listens for "add milk to Shopping".
+         Asked for the first time voice add is used; the audio stays on the phone. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- Note reminders ring on time: USE_EXACT_ALARM (Android 13+), SCHEDULE_EXACT_ALARM on 12/12L.
+         Without either the reminder fires a little late (an inexact alarm). -->
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" android:maxSdkVersion="32" />
+    <!-- "Continue as <name>": the mailr app's account and its sign-in hand-over (session-core
+         Handover). Declared here as well as in the mailr app, so either app may be installed first;
+         only apps signed with the same certificate hold it. -->
+    <permission
+        android:name="${mailrApplicationId}.permission.SIGN_IN_HANDOVER"
+        android:label="@string/notesapp_permission_handover"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="${mailrApplicationId}.permission.SIGN_IN_HANDOVER" />
+
+    <application
+        android:name=".NotesApplication"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:localeConfig="@xml/locales_config"
+        android:enableOnBackInvokedCallback="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Notes.Splash"
+        tools:targetApi="35">
+
+        <!-- No task affinity (as in the mailr app): another app cannot slip its own
+             screen into this task. The sign-in answer comes through auth/AuthRedirectActivity. -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- mailr-notes://note/<id>[/item/<item>], …/table/<id>[/row/<row>], …/new?kind=…,
+                 …/setup?server=… (the short forms n/, t/, r/ too). https app links for /notes/n/ and
+                 /tables/t/ come from deploy.properties (appLinkHosts) as a manifest overlay. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="mailr-notes" />
+            </intent-filter>
+            <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
+        </activity>
+
+        <!-- Quick capture (the tile, the capture widget, "+" on the checklist widget): a sheet over
+             whatever is on screen. -->
+        <activity
+            android:name=".capture.CaptureActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:taskAffinity="${applicationId}.capture"
+            android:launchMode="singleInstance"
+            android:label="@string/capture_label"
+            android:theme="@style/Theme.Notes.Overlay"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- The share target (android.notesshare): text and links; images are refused for now. -->
+        <activity
+            android:name=".capture.ShareActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:taskAffinity="${applicationId}.share"
+            android:label="@string/share_label"
+            android:theme="@style/Theme.Notes.Overlay"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/*" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+
+        <!-- The Quick Settings tile "New note". -->
+        <service
+            android:name=".capture.NewNoteTile"
+            android:exported="true"
+            android:icon="@drawable/ic_note"
+            android:label="@string/tile_new_note"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE" android:value="false" />
+        </service>
+
+        <!-- Widgets (android.noteswidget), each picked when placed and re-pickable later. -->
+        <activity
+            android:name=".widget.WidgetPickActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.Notes.Overlay">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <receiver android:name=".widget.ChecklistWidgetReceiver" android:exported="true" android:label="@string/widget_checklist">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_checklist" />
+        </receiver>
+        <receiver android:name=".widget.NoteWidgetReceiver" android:exported="true" android:label="@string/widget_note">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_note" />
+        </receiver>
+        <receiver android:name=".widget.TableWidgetReceiver" android:exported="true" android:label="@string/widget_table">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_table" />
+        </receiver>
+        <receiver android:name=".widget.CaptureWidgetReceiver" android:exported="true" android:label="@string/widget_capture">
+            <intent-filter><action android:name="android.appwidget.action.APPWIDGET_UPDATE" /></intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_capture" />
+        </receiver>
+
+        <!-- Note reminders: the alarm, its notification's Snooze and Dismiss, and a reboot. -->
+        <receiver android:name=".reminders.NoteAlarmReceiver" android:exported="false" />
+        <receiver android:name=".reminders.NoteBootReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- AppAuth's receiver is replaced: it would answer in a task of its own (MainActivity has no
+             task affinity) and the sign-in would read as cancelled. auth/AuthRedirectActivity.kt. -->
+        <activity
+            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            android:exported="false"
+            tools:node="replace" />
+        <!-- singleTop keeps AppAuth's activity in MainActivity's task, where the redirect finds it. -->
+        <activity
+            android:name="net.openid.appauth.AuthorizationManagementActivity"
+            android:launchMode="singleTop"
+            tools:replace="android:launchMode" />
+        <activity
+            android:name=".auth.AuthRedirectActivity"
+            android:exported="true"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- AppAuth's redirect has no host (<scheme>:/oauth2redirect). -->
+                <data android:scheme="${appAuthRedirectScheme}" android:path="/oauth2redirect" tools:ignore="AppLinkUrlError" />
+            </intent-filter>
+        </activity>
+
+        <!-- WorkManager starts from NotesApplication (Configuration.Provider). -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data android:name="androidx.work.WorkManagerInitializer" android:value="androidx.startup" tools:node="remove" />
+        </provider>
+    </application>
+
+    <queries>
+        <!-- Custom Tabs for the OIDC sign-in. -->
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+        <!-- The speech recognizer for dictation in quick capture. -->
+        <intent>
+            <action android:name="android.speech.action.RECOGNIZE_SPEECH" />
+        </intent>
+        <!-- The on-device speech recognizer for voice add. -->
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+        <!-- "Open in mailr": the mailr app answers mailr://; "Continue as" reads its account and asks
+             its HandoverActivity. -->
+        <package android:name="${mailrPackage}" />
+        <package android:name="${mailrPackage}.debug" />
+    </queries>
+</manifest>

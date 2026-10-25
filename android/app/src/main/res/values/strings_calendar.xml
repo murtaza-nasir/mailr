@@ -1,0 +1,1010 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Pending changes: what a queued calendar or task change does (data/cal/CalendarRepository.kt). %s is the title. -->
+    <string name="cal_op_create_event">Create event %s</string>
+    <string name="cal_op_change_event">Change event %s</string>
+    <string name="cal_op_delete_event">Delete event %s</string>
+    <string name="cal_op_answer">Answer %s</string>
+    <string name="cal_op_move">Move %s</string>
+    <string name="cal_op_add_task">Add task %s</string>
+    <string name="cal_op_change_task">Change task %s</string>
+    <string name="cal_op_complete_task">Complete %s</string>
+    <string name="cal_op_reopen_task">Reopen %s</string>
+    <string name="cal_op_delete_task">Delete task %s</string>
+    <string name="cal_op_move_task">Move task %s</string>
+    <string name="cal_op_skip">Skip %s</string>
+    <!-- %s: the calendar's name -->
+    <string name="cal_op_change_calendar">Change %s</string>
+    <string name="cal_op_keep_my_change">Keep my change</string>
+    <string name="cal_op_snooze_reminder">Snooze reminder</string>
+    <string name="cal_op_restore_reminder">Restore reminder</string>
+    <string name="cal_op_dismiss_reminder">Dismiss reminder</string>
+    <string name="cal_op_remind_before">Remind before</string>
+    <string name="cal_error_task_not_found">task not found</string>
+    <string name="cal_error_cannot_change_calendars">Calendars can\'t be changed on this server yet.</string>
+    <string name="cal_error_cannot_delete_calendars">Calendars can\'t be deleted on this server yet.</string>
+    <string name="cal_error_cannot_export_calendars">Calendars can\'t be exported from this server yet.</string>
+    <string name="cal_error_download_failed">Couldn\'t download “%s”</string>
+    <!-- The Today widget (ui/today) -->
+    <string name="today_greeting_morning">Good morning</string>
+    <string name="today_greeting_afternoon">Good afternoon</string>
+    <string name="today_greeting_evening">Good evening</string>
+    <string name="today_greeting_night">Good evening</string>
+    <plurals name="today_events">
+        <item quantity="one">%d event</item>
+        <item quantity="other">%d events</item>
+    </plurals>
+    <plurals name="today_tasks">
+        <item quantity="one">%d task</item>
+        <item quantity="other">%d tasks</item>
+    </plurals>
+    <string name="today_nothing_due">Nothing due</string>
+    <string name="today_empty">Nothing due today.</string>
+    <string name="today_no_title">(no title)</string>
+    <string name="today_all_day">All day</string>
+    <!-- A task's note: %s is a date or a time -->
+    <string name="today_overdue_note">Overdue · %s</string>
+    <string name="today_due_note">Due %s</string>
+    <plurals name="today_more">
+        <item quantity="one">%d more</item>
+        <item quantity="other">%d more</item>
+    </plurals>
+    <string name="today_open_calendar">Open calendar</string>
+    <!-- TalkBack for the header: %1$s greeting, %2$s date, %3$s "2 events · 3 tasks" -->
+    <string name="today_header_cd">%1$s. %2$s. %3$s. Opens the calendar</string>
+    <string name="today_date_summary">%1$s · %2$s</string>
+    <string name="today_undo">Undo</string>
+    <string name="today_undo_cd">Undo: %s is open again</string>
+    <string name="today_sign_in">Sign in to see your day</string>
+    <string name="today_now">Now</string>
+    <!-- The compact widget's line: %1$s time or "Now", %2$s title -->
+    <string name="today_next_line">%1$s · %2$s</string>
+    <string name="today_next_overdue">Overdue · %s</string>
+    <string name="today_next_due">Due · %s</string>
+    <string name="today_event_cd">%1$s, %2$s</string>
+    <string name="today_complete_cd">Complete %s</string>
+    <string name="today_talk">Talk to %1$s</string>
+    <!-- Colour swatches and priorities (ui/calendar/CalendarColors.kt) -->
+    <string name="cal_colour_tomato">Tomato</string>
+    <string name="cal_colour_flamingo">Flamingo</string>
+    <string name="cal_colour_tangerine">Tangerine</string>
+    <string name="cal_colour_banana">Banana</string>
+    <string name="cal_colour_sage">Sage</string>
+    <string name="cal_colour_basil">Basil</string>
+    <string name="cal_colour_peacock">Peacock</string>
+    <string name="cal_colour_blueberry">Blueberry</string>
+    <string name="cal_colour_lavender">Lavender</string>
+    <string name="cal_colour_grape">Grape</string>
+    <string name="cal_colour_graphite">Graphite</string>
+    <string name="cal_colour_cocoa">Cocoa</string>
+    <string name="cal_priority_none">None</string>
+    <string name="cal_priority_low">Low</string>
+    <string name="cal_priority_medium">Medium</string>
+    <string name="cal_priority_high">High</string>
+    <!-- Download a copy (.ics) of a calendar or list (ui/calendar/IcsExport.kt) -->
+    <string name="cal_export_default_name">calendar</string>
+    <string name="cal_export_open_failed">Couldn\'t open the file</string>
+    <string name="cal_export_saved">Saved a copy of “%s”</string>
+    <string name="cal_export_offline">Offline. Downloading a copy requires a connection.</string>
+    <string name="cal_export_failed">Couldn\'t save a copy: %s</string>
+    <string name="cal_export_download_first">Download a copy first</string>
+    <!-- Banners over the calendar (ui/calendar/Banners.kt) -->
+    <string name="cal_banner_reminders_off">Reminders are off</string>
+    <string name="cal_banner_reminders_off_body">Allow notifications to get event and task reminders.</string>
+    <string name="cal_banner_turn_on">Turn on</string>
+    <string name="cal_banner_late">Reminders may be late</string>
+    <string name="cal_banner_late_body">Allow alarms &amp; reminders so they arrive on time.</string>
+    <string name="cal_banner_allow">Allow</string>
+    <string name="cal_banner_offline">Offline</string>
+    <string name="cal_banner_offline_body">Showing what\'s on this phone. Changes are sent when you\'re back online.</string>
+    <!-- Shared calendar words -->
+    <string name="cal_could_not_do">Couldn\'t do that: %s</string>
+    <string name="cal_error_fallback">error</string>
+    <string name="cal_undo">Undo</string>
+    <string name="cal_tasks_changes_saved">Task changes saved</string>
+    <!-- The task editor's Undo or Redo (TaskHistory.kt): the field changed elsewhere since that step. -->
+    <string name="cal_task_changed_elsewhere">Can\'t undo this step. The item changed elsewhere since then.</string>
+    <string name="cal_tasks_priority_changed">Priority changed</string>
+    <string name="cal_close">Close</string>
+    <string name="cal_previous">Previous</string>
+    <string name="cal_next">Next</string>
+    <!-- The reminder queue (ui/calendar/ReminderActivity.kt) -->
+    <string name="cal_all_caught_up">All caught up</string>
+    <!-- "2 of 5" -->
+    <string name="cal_page_of">%1$d of %2$d</string>
+    <string name="cal_back">Back</string>
+    <string name="cal_clear">Clear</string>
+    <string name="cal_no_title">(no title)</string>
+    <string name="cal_open_event">Open event</string>
+    <!-- Event search (ui/calendar/CalendarSearch.kt) -->
+    <string name="cal_search_failed_dot">Couldn\'t search.</string>
+    <string name="cal_search_failed">Couldn\'t search</string>
+    <string name="cal_search_placeholder">Search events</string>
+    <string name="cal_search_recent">Recent</string>
+    <!-- The operators (with:, cal:, after:, is:invite, has:video, loc:) are what the search understands: keep them in English -->
+    <string name="cal_search_tips">Try with:dana, cal:work, after:mon, is:invite, has:video, loc:office</string>
+    <string name="cal_search_no_match">No events match</string>
+    <string name="cal_search_no_match_body">Check the spelling or try fewer words.</string>
+    <string name="cal_search_upcoming">Upcoming</string>
+    <string name="cal_search_past">Past</string>
+    <string name="cal_repeats">Repeats</string>
+    <string name="cal_video_link">Video link</string>
+    <string name="cal_more_options">More options</string>
+    <string name="cal_save">Save</string>
+    <string name="cal_save_and_invite">Save &amp; invite…</string>
+    <string name="cal_default_calendar">Default calendar</string>
+    <!-- Quick create (ui/calendar/QuickCreate.kt) -->
+    <!-- An example of what to type; quick create understands English words (fri, at, with), so a translation keeps it typeable -->
+    <string name="cal_quick_placeholder">Lunch with Dana fri 12:30 at Café Luna</string>
+    <string name="cal_quick_new_event_cd">New event</string>
+    <!-- %1$s first day, %2$s last day -->
+    <string name="cal_quick_when_all_day_span">%1$s – %2$s · All day</string>
+    <string name="cal_quick_when_all_day">%s · All day</string>
+    <!-- %1$s day, %2$s start time, %3$s end time -->
+    <string name="cal_quick_when_timed">%1$s, %2$s – %3$s</string>
+    <string name="cal_quick_keep_as_text_cd">Keep “%s” as text</string>
+    <string name="cal_quick_calendar_cd">Calendar: %s, tap to change</string>
+    <string name="cal_quick_calendar_default">default</string>
+    <string name="cal_quick_keep_calendar_word">Keep calendar word as text</string>
+    <string name="cal_quick_remove_guest">Remove guest %s</string>
+    <string name="cal_quick_guest_cd">Guest %s</string>
+    <string name="cal_quick_suggested_guest_cd">Suggested guest %s, tap to add</string>
+    <string name="cal_quick_no_one_called">No one called “%s”</string>
+    <string name="cal_quick_keep_as_text">Keep as text</string>
+    <!-- The full-screen reminder alert (ui/calendar/ReminderAlertActivity.kt) -->
+    <string name="cal_alert_close_cd">Close; the reminder stays</string>
+    <string name="cal_alert_snooze_10_min">Snooze 10 min</string>
+    <string name="cal_alert_more_choices">More choices</string>
+    <plurals name="cal_alert_starts_in">
+        <item quantity="one">Starts in %d min</item>
+        <item quantity="other">Starts in %d min</item>
+    </plurals>
+    <string name="cal_alert_starts_now">Starts now</string>
+    <plurals name="cal_alert_started_ago">
+        <item quantity="one">Started %d min ago</item>
+        <item quantity="other">Started %d min ago</item>
+    </plurals>
+    <plurals name="cal_alert_due_in">
+        <item quantity="one">Due in %d min</item>
+        <item quantity="other">Due in %d min</item>
+    </plurals>
+    <string name="cal_alert_due_now">Due now</string>
+    <plurals name="cal_alert_overdue">
+        <item quantity="one">%d min overdue</item>
+        <item quantity="other">%d min overdue</item>
+    </plurals>
+    <!-- The when sheet's panel (ui/calendar/WhenSheetPanel.kt) -->
+    <string name="cal_wheel_amount">Amount</string>
+    <string name="cal_wheel_unit">Unit</string>
+    <!-- A unit on the Remind before wheel: "minutes before" -->
+    <string name="cal_wheel_unit_before">%s before</string>
+    <string name="cal_when_custom_before">Custom, before it starts</string>
+    <string name="cal_when_custom">Custom</string>
+    <string name="cal_when_from_now">From now</string>
+    <string name="cal_when_result_cd">Result</string>
+    <string name="cal_when_already_passed">%s (already passed)</string>
+    <string name="cal_pick_date_time">Pick date &amp; time…</string>
+    <!-- Repeat rules (ui/calendar/Recurrence.kt) -->
+    <string name="cal_rec_custom_repeat">Custom repeat</string>
+    <string name="cal_rec_every_weekday">Every weekday</string>
+    <string name="cal_rec_daily">Daily</string>
+    <string name="cal_rec_weekly">Weekly</string>
+    <string name="cal_rec_monthly">Monthly</string>
+    <string name="cal_rec_yearly">Yearly</string>
+    <plurals name="cal_rec_every_days">
+        <item quantity="one">Every %d day</item>
+        <item quantity="other">Every %d days</item>
+    </plurals>
+    <plurals name="cal_rec_every_weeks">
+        <item quantity="one">Every %d week</item>
+        <item quantity="other">Every %d weeks</item>
+    </plurals>
+    <plurals name="cal_rec_every_months">
+        <item quantity="one">Every %d month</item>
+        <item quantity="other">Every %d months</item>
+    </plurals>
+    <plurals name="cal_rec_every_years">
+        <item quantity="one">Every %d year</item>
+        <item quantity="other">Every %d years</item>
+    </plurals>
+    <!-- %1$s "Every 2 weeks", %2$s "Mon, Thu" -->
+    <string name="cal_rec_on_days">%1$s on %2$s</string>
+    <!-- %1$s "Monthly", %2$s "second", %3$s "Tuesday" -->
+    <string name="cal_rec_on_nth">%1$s on the %2$s %3$s</string>
+    <string name="cal_rec_on_month_day">%1$s on day %2$d</string>
+    <!-- %1$s the rule, %2$d the count; the English text has always read "1 times" -->
+    <plurals name="cal_rec_count">
+        <item quantity="one">%1$s, once</item>
+        <item quantity="other">%1$s, %2$d times</item>
+    </plurals>
+    <string name="cal_rec_until">%1$s, until %2$s</string>
+    <string name="cal_rec_ordinal_first">first</string>
+    <string name="cal_rec_ordinal_second">second</string>
+    <string name="cal_rec_ordinal_third">third</string>
+    <string name="cal_rec_ordinal_fourth">fourth</string>
+    <string name="cal_rec_ordinal_last">last</string>
+    <string name="cal_rec_ordinal_nth">%dth</string>
+    <string name="cal_rec_does_not_repeat">Does not repeat</string>
+    <string name="cal_rec_preset_weekdays">Every weekday (Mon–Fri)</string>
+    <string name="cal_rec_preset_weekly_on">Weekly on %s</string>
+    <string name="cal_rec_preset_two_weeks_on">Every 2 weeks on %s</string>
+    <!-- %1$s "second", %2$s "Tuesday" -->
+    <string name="cal_rec_preset_monthly_nth">Monthly on the %1$s %2$s</string>
+    <string name="cal_rec_preset_monthly_day">Monthly on day %d</string>
+    <string name="cal_rec_preset_yearly_on">Yearly on %s</string>
+    <string name="cal_done">Done</string>
+    <string name="cal_cancel">Cancel</string>
+    <string name="cal_custom_more">Custom…</string>
+    <!-- Wheels (ui/calendar/Wheels.kt) -->
+    <!-- "Thu 2 Oct, 9:05 AM (in 2 days)": %1$s the moment, %2$s "in 2 days" -->
+    <string name="cal_moment_relative">%1$s (%2$s)</string>
+    <string name="cal_moment_remind">Reminds you %s</string>
+    <string name="cal_moment_arrow">→ %s</string>
+    <string name="cal_wheel_day">Day</string>
+    <string name="cal_wheel_hour">Hour</string>
+    <string name="cal_wheel_minute">Minute</string>
+    <string name="cal_no_time">No time</string>
+    <string name="cal_offset_too_soon">Starts too soon for another reminder.</string>
+    <string name="cal_remind_me">Remind me</string>
+    <string name="cal_other_date">Other date…</string>
+    <!-- Editor pickers (ui/calendar/Pickers.kt) -->
+    <string name="cal_ok">OK</string>
+    <string name="cal_add">Add</string>
+    <string name="cal_selected">Selected</string>
+    <string name="cal_open_email">Open email</string>
+    <string name="cal_open_the_email">Open the email</string>
+    <string name="cal_no_reminders">No reminders</string>
+    <string name="cal_remove_reminder_cd">Remove reminder %s</string>
+    <string name="cal_add_reminder">Add reminder</string>
+    <string name="cal_custom_reminder">Custom reminder</string>
+    <string name="cal_how_long_before">Time before</string>
+    <string name="cal_up_to_4_weeks">Up to 4 weeks before.</string>
+    <string name="cal_repeat">Repeat</string>
+    <string name="cal_custom_rule">Custom: %s</string>
+    <string name="cal_rec_every">Every</string>
+    <plurals name="cal_rec_unit_day">
+        <item quantity="one">day</item>
+        <item quantity="other">days</item>
+    </plurals>
+    <plurals name="cal_rec_unit_week">
+        <item quantity="one">week</item>
+        <item quantity="other">weeks</item>
+    </plurals>
+    <plurals name="cal_rec_unit_month">
+        <item quantity="one">month</item>
+        <item quantity="other">months</item>
+    </plurals>
+    <plurals name="cal_rec_unit_year">
+        <item quantity="one">year</item>
+        <item quantity="other">years</item>
+    </plurals>
+    <string name="cal_rec_on">On</string>
+    <string name="cal_rec_ends">Ends</string>
+    <string name="cal_rec_end_never">Never</string>
+    <string name="cal_rec_end_on">On %s</string>
+    <string name="cal_rec_end_after">After</string>
+    <string name="cal_rec_end_times">times</string>
+    <!-- Meeting prep (ui/calendar/MeetingPrep.kt) -->
+    <string name="cal_prep_load_failed">Couldn\'t load the prep.</string>
+    <string name="cal_prep_title">Meeting prep</string>
+    <string name="cal_prep_hide">Hide meeting prep</string>
+    <string name="cal_prep_show">Show meeting prep</string>
+    <!-- After the title: " · 2 threads, 1 task" -->
+    <string name="cal_prep_counts">" · %s"</string>
+    <string name="cal_prep_nothing_yet">Nothing yet</string>
+    <string name="cal_prep_gathering">Gathering…</string>
+    <string name="cal_prep_empty">Nothing to prepare: no earlier recordings, threads, tasks or notes with these guests.</string>
+    <string name="cal_prep_empty_hidden">Nothing to prepare: no earlier recordings, threads, tasks or notes with these guests. Some local-only items are hidden.</string>
+    <string name="cal_prep_summary_failed">Couldn\'t write the summary.</string>
+    <string name="cal_prep_summarising">Summarising…</string>
+    <string name="cal_prep_summarise">Summarise</string>
+    <string name="cal_prep_last_time">Last time</string>
+    <string name="cal_prep_recording">Recording</string>
+    <!-- %s: a date -->
+    <string name="cal_prep_due">due %s</string>
+    <plurals name="cal_prep_open_action_items">
+        <item quantity="one">%d open action item</item>
+        <item quantity="other">%d open action items</item>
+    </plurals>
+    <!-- %1$s "3 open action items", %2$d how many are done -->
+    <string name="cal_prep_action_items_done">%1$s, %2$d done</string>
+    <string name="cal_prep_open_items">Open items</string>
+    <string name="cal_prep_asked">Asked: “%s”</string>
+    <string name="cal_prep_waiting">Waiting: %s</string>
+    <string name="cal_prep_since">since %s</string>
+    <string name="cal_prep_no_subject">(no subject)</string>
+    <string name="cal_prep_you_said">You said: “%s”</string>
+    <string name="cal_prep_recent_threads">Recent threads</string>
+    <!-- %s: the date of the last message -->
+    <string name="cal_prep_you_wrote_last">%s · you wrote last</string>
+    <string name="cal_prep_tasks">Tasks</string>
+    <string name="cal_prep_memories">Memories</string>
+    <string name="cal_prep_files">Files</string>
+    <string name="cal_prep_you_sent">you sent</string>
+    <string name="cal_prep_hidden">Some local-only items are hidden.</string>
+    <string name="cal_all_day">All day</string>
+    <string name="cal_now">Now</string>
+    <string name="cal_video_call">Video call</string>
+    <string name="cal_from_an_email">From an email</string>
+    <string name="cal_invitation">Invitation</string>
+    <string name="cal_not_synced_yet">Not synced yet</string>
+    <string name="cal_select">Select</string>
+    <string name="cal_read_only_calendar">Read-only calendar</string>
+    <!-- Day, schedule and month views (ui/calendar/CalendarViews.kt) -->
+    <!-- A multi-day all-day event: "Day 2 of 3" -->
+    <string name="cal_day_of">Day %1$d of %2$d</string>
+    <string name="cal_until_time">Until %s</string>
+    <string name="cal_from_time">From %s</string>
+    <string name="cal_schedule_empty">Nothing scheduled</string>
+    <string name="cal_schedule_empty_body">Next few weeks are clear. Tap + to add an event.</string>
+    <string name="cal_nothing_else_today">Nothing else today</string>
+    <string name="cal_nothing_planned">Nothing planned</string>
+    <!-- A month day with more events than its chips show: "+2". -->
+    <string name="cal_month_more">+%d</string>
+    <string name="cal_month_day_no_events">%s, no events</string>
+    <!-- TalkBack for a month cell: %1$s the day, %2$d events; the English text has always read "1 events" -->
+    <plurals name="cal_month_day_events">
+        <item quantity="one">%1$s, %2$d event</item>
+        <item quantity="other">%1$s, %2$d events</item>
+    </plurals>
+    <string name="cal_nothing_planned_tap">Nothing planned. Tap to add an event.</string>
+    <!-- A link that is not a known meeting provider: "Join on example.com" -->
+    <string name="cal_join_on">Join on %s</string>
+    <string name="cal_duplicate">Duplicate</string>
+    <string name="cal_delete">Delete</string>
+    <string name="cal_complete">Complete</string>
+    <!-- The time grid (ui/calendar/TimeGrid.kt) -->
+    <string name="cal_open_day">Open day</string>
+    <plurals name="cal_grid_more_events_cd">
+        <item quantity="one">%d more event</item>
+        <item quantity="other">%d more events</item>
+    </plurals>
+    <string name="cal_grid_show_them">Show them</string>
+    <string name="cal_grid_new_event_cd">New event %s, tap again to create</string>
+    <plurals name="cal_grid_more">
+        <item quantity="one">%d more</item>
+        <item quantity="other">%d more</item>
+    </plurals>
+    <!-- TalkBack for an event block, joined with commas: "Standup, 9:00 AM to 9:15 AM, tentative" -->
+    <string name="cal_grid_time_to">%1$s to %2$s</string>
+    <string name="cal_grid_continued">continued from the day before</string>
+    <string name="cal_grid_tentative_lower">tentative</string>
+    <string name="cal_grid_declined_lower">declined</string>
+    <string name="cal_grid_needs_reply_lower">needs reply</string>
+    <string name="cal_grid_not_synced_lower">not synced yet</string>
+    <string name="cal_grid_move_earlier">Move earlier 15 min</string>
+    <string name="cal_grid_move_later">Move later 15 min</string>
+    <string name="cal_grid_next_day">Next day</string>
+    <string name="cal_grid_previous_day">Previous day</string>
+    <string name="cal_grid_reschedule_more">Reschedule…</string>
+    <string name="cal_grid_tentative">Tentative</string>
+    <string name="cal_grid_declined">Declined</string>
+    <string name="cal_grid_needs_reply">Needs reply</string>
+    <!-- %1$s the event, %2$s the new time -->
+    <string name="cal_grid_moving_to_cd">%1$s, moving to %2$s</string>
+    <string name="cal_grid_drag_start">Drag to change the start</string>
+    <string name="cal_grid_drag_end">Drag to change the end</string>
+    <!-- %1$s the task, %2$s its time -->
+    <string name="cal_grid_task_cd">Task %1$s, due %2$s</string>
+    <string name="cal_grid_less">Less</string>
+    <string name="cal_grid_show_less">Show less</string>
+    <string name="cal_grid_show_all">Show all</string>
+    <string name="cal_send">Send</string>
+    <string name="cal_retry">Retry</string>
+    <!-- Sheets and banners (ui/calendar/CalendarSheets.kt) -->
+    <string name="cal_scope_this_occurrence">This occurrence</string>
+    <string name="cal_scope_all">All</string>
+    <string name="cal_scope_this_event">This event</string>
+    <string name="cal_scope_following">This and following events</string>
+    <string name="cal_scope_all_events">All events</string>
+    <string name="cal_scope_all_task_hint">Later ones move to the new day too.</string>
+    <string name="cal_scope_all_event_hint">Changed occurrences keep their own time.</string>
+    <plurals name="cal_send_cancellation">
+        <item quantity="one">Send cancellation to %d guest?</item>
+        <item quantity="other">Send cancellation to %d guests?</item>
+    </plurals>
+    <plurals name="cal_send_invitation">
+        <item quantity="one">Send invitation to %d new guest?</item>
+        <item quantity="other">Send invitation to %d new guests?</item>
+    </plurals>
+    <plurals name="cal_send_update">
+        <item quantity="one">Send update to %d guest?</item>
+        <item quantity="other">Send update to %d guests?</item>
+    </plurals>
+    <string name="cal_send_cancellation_body">Guests get a cancellation email.</string>
+    <string name="cal_send_invitation_body">Guests get an invitation by email. Your outbox approval rules apply.</string>
+    <string name="cal_send_update_body">Guests get the new details by email.</string>
+    <string name="cal_dont_send">Don\'t send</string>
+    <string name="cal_conflict_title">Changed elsewhere</string>
+    <string name="cal_conflict_body_task">This task changed on another device while your change was waiting.</string>
+    <string name="cal_conflict_body_event">This event changed on another device while your change was waiting.</string>
+    <string name="cal_conflict_theirs">Their version</string>
+    <string name="cal_conflict_yours">Your version</string>
+    <string name="cal_conflict_keep_theirs">Keep theirs</string>
+    <string name="cal_conflict_use_mine">Use mine</string>
+    <string name="cal_conflict_keep_both">Keep both</string>
+    <string name="cal_calendar_colour">Calendar colour</string>
+    <string name="cal_previous_year">Previous year</string>
+    <string name="cal_next_year">Next year</string>
+    <!-- %1$s the month, %2$d the year -->
+    <string name="cal_go_to_month">Go to %1$s %2$d</string>
+    <string name="cal_pick_a_day">Pick a day…</string>
+    <!-- %s: "Lisbon (UTC+1)" -->
+    <string name="cal_travel_banner">Your phone is in %s. Show times in:</string>
+    <string name="cal_travel_home">Home (%s)</string>
+    <plurals name="cal_offline_waiting">
+        <item quantity="one">Offline · %d change waiting</item>
+        <item quantity="other">Offline · %d changes waiting</item>
+    </plurals>
+    <string name="cal_offline_showing">Offline · showing what\'s on this phone</string>
+    <!-- %1$s the account, %2$s the error -->
+    <string name="cal_account_not_syncing">%1$s isn\'t syncing.</string>
+    <string name="cal_account_password">%1$s stopped accepting the calendar password. Enter it again on the web, in Settings → Calendar &amp; tasks.</string>
+    <string name="cal_remove_from_my_calendar">Remove from my calendar</string>
+    <string name="cal_open_on_web">Open on web</string>
+    <string name="cal_details">Details</string>
+    <string name="cal_hide_details">Hide details</string>
+    <string name="cal_all_hidden">All calendars are hidden</string>
+    <plurals name="cal_synced_minutes_ago">
+        <item quantity="one">Synced %d min ago</item>
+        <item quantity="other">Synced %d min ago</item>
+    </plurals>
+    <plurals name="cal_synced_hours_ago">
+        <item quantity="one">Synced %d h ago</item>
+        <item quantity="other">Synced %d h ago</item>
+    </plurals>
+    <plurals name="cal_synced_days_ago">
+        <item quantity="one">Synced %d d ago</item>
+        <item quantity="other">Synced %d d ago</item>
+    </plurals>
+    <string name="cal_current">Current</string>
+    <!-- Guests, Find a time and the zone picker (ui/calendar/EditorSheets.kt) -->
+    <string name="cal_guests">Guests</string>
+    <string name="cal_guests_placeholder">Add people by name or email</string>
+    <string name="cal_guests_50_plus">50+ guests</string>
+    <string name="cal_guests_add_one">Add %s</string>
+    <plurals name="cal_guests_add_many">
+        <item quantity="one">Add %d address</item>
+        <item quantity="other">Add %d addresses</item>
+    </plurals>
+    <string name="cal_guests_none">No guests yet. Type a name or paste addresses.</string>
+    <string name="cal_partstat_going">Going</string>
+    <string name="cal_partstat_not_going">Not going</string>
+    <string name="cal_partstat_maybe">Maybe</string>
+    <string name="cal_partstat_awaiting">Awaiting reply</string>
+    <string name="cal_guest_optional">Optional</string>
+    <string name="cal_guest_remove_cd">Remove %s</string>
+    <string name="cal_find_this_week">This week</string>
+    <string name="cal_find_next_week">Next week</string>
+    <string name="cal_find_next_5_days">Next 5 working days</string>
+    <string name="cal_find_needs_connection">Find a time requires a connection.</string>
+    <string name="cal_find_failed">Couldn\'t search for free time.</string>
+    <string name="cal_find_title">Find a time</string>
+    <string name="cal_find_subtitle">Free in your calendars, within working hours.</string>
+    <string name="cal_find_no_buffer">No buffer</string>
+    <plurals name="cal_find_buffer">
+        <item quantity="one">%d min buffer</item>
+        <item quantity="other">%d min buffer</item>
+    </plurals>
+    <string name="cal_find_guests_not_shared">Guests: availability not shared</string>
+    <string name="cal_find_none">No free time in that range. Try a shorter duration or another week.</string>
+    <string name="cal_find_use_this_time">Use this time</string>
+    <string name="cal_find_use">Use</string>
+    <!-- The legend beside small colour boxes; the spaces are part of the layout -->
+    <string name="cal_find_legend_busy">" Busy  "</string>
+    <string name="cal_find_legend_free">" Free slot · 8:00–18:00"</string>
+    <!-- TalkBack for a day strip: %1$s the day, %2$d busy times, %3$d free slots -->
+    <plurals name="cal_find_day_cd">
+        <item quantity="one">%1$s: %2$d busy, %3$d free slot</item>
+        <item quantity="other">%1$s: %2$d busy, %3$d free slots</item>
+    </plurals>
+    <string name="cal_time_zone">Time zone</string>
+    <string name="cal_zone_search">Search a city</string>
+    <string name="cal_more">More</string>
+    <string name="cal_refresh">Refresh</string>
+    <!-- The calendar screen (ui/calendar/CalendarScreen.kt) -->
+    <string name="cal_menu_cd">Calendars and mini-month</string>
+    <string name="cal_pick_month_cd">Pick a month</string>
+    <!-- %s: "Synced 6 min ago" -->
+    <string name="cal_synced_refresh">%s ⟳</string>
+    <string name="cal_view_cd">View: %s</string>
+    <string name="cal_fab_long_label">Choose event or task</string>
+    <string name="cal_fab_event">Event</string>
+    <string name="cal_fab_task">Task</string>
+    <string name="cal_not_set_up">Calendar not set up yet</string>
+    <string name="cal_not_set_up_body">Finish setup on the web (Settings → Calendar &amp; tasks).</string>
+    <string name="cal_check_again">Check again</string>
+    <string name="cal_scope_change_task">Change repeating task</string>
+    <string name="cal_move_to">Move to</string>
+    <string name="cal_event_colour">Event colour</string>
+    <string name="cal_scope_delete_event">Delete recurring event</string>
+    <string name="cal_scope_change_event">Change recurring event</string>
+    <string name="cal_no_guests_to_email">No guests to email</string>
+    <string name="cal_discard_title">Discard changes?</string>
+    <string name="cal_discard_body">Your changes will be lost.</string>
+    <string name="cal_discard">Discard</string>
+    <string name="cal_keep_editing">Keep editing</string>
+    <!-- Calendar view model messages (ui/calendar/CalendarViewModels.kt) -->
+    <string name="cal_view_schedule">Schedule</string>
+    <string name="cal_view_day">Day</string>
+    <string name="cal_view_3_days">3 days</string>
+    <string name="cal_view_work_week">Work week</string>
+    <string name="cal_view_week">Week</string>
+    <string name="cal_view_month">Month</string>
+    <!-- An account without a name: "Account 3" -->
+    <string name="cal_account_n">Account %s</string>
+    <string name="cal_calendars">Calendars</string>
+    <string name="cal_offline_showing_full">Offline. Showing what\'s on this phone.</string>
+    <!-- "Overlaps Team sync 3:00–4:00 PM": %1$s the event, %2$s start, %3$s end -->
+    <string name="cal_overlaps">Overlaps %1$s %2$s–%3$s</string>
+    <string name="cal_saved_offline_invites">Saved on this phone. Invitations are queued until you\'re back online.</string>
+    <string name="cal_saved_offline">Saved on this phone. Queued until you\'re back online.</string>
+    <string name="cal_event_added_invites">Event added · invitations sent</string>
+    <string name="cal_event_added">Event added</string>
+    <string name="cal_event_updated">Event updated</string>
+    <string name="cal_event_deleted">Event deleted</string>
+    <string name="cal_deleted">Deleted</string>
+    <!-- %s: Going, Not going or Maybe -->
+    <string name="cal_rsvp_queued">%s · organiser told when you\'re back online</string>
+    <string name="cal_rsvp_sent">%s · organiser will be told</string>
+    <string name="cal_moved_to">Moved to %s</string>
+    <string name="cal_moved_to_queued">Moved to %s · queued until you\'re back online</string>
+    <string name="cal_deleted_elsewhere">Event deleted elsewhere</string>
+    <string name="cal_restored_as_new">Restored as a new event</string>
+    <string name="cal_ends_at">Ends %s</string>
+    <string name="cal_all_day_on">All day %s</string>
+    <string name="cal_rescheduled_to">Rescheduled to %s</string>
+    <string name="cal_rescheduled_to_queued">Rescheduled to %s · queued until you\'re back online</string>
+    <string name="cal_event_deleted_cancellation">Event deleted · cancellation sent</string>
+    <string name="cal_syncs_when_online">queued until you\'re back online</string>
+    <string name="cal_duplicated">Duplicated</string>
+    <string name="cal_colour_named">Colour: %s</string>
+    <string name="cal_completed_task">Completed “%s”</string>
+    <string name="cal_could_not_change_calendar">Couldn\'t change the calendar</string>
+    <string name="cal_showing_only">Showing only %s</string>
+    <string name="cal_calendar_created">Calendar “%s” created</string>
+    <string name="cal_offline_new_calendar">Offline. Creating a calendar requires a connection.</string>
+    <string name="cal_could_not_create_calendar">Couldn\'t create the calendar</string>
+    <string name="cal_renamed_to">Renamed to %s</string>
+    <string name="cal_colour_from_server">Colour from the server</string>
+    <string name="cal_new_events_go_to">New events go to %s</string>
+    <string name="cal_offline_try_again">Offline. Try again when you\'re back online.</string>
+    <string name="cal_default_reminders_saved">Default reminders saved</string>
+    <string name="cal_cannot_delete_read_only">This calendar is read-only.</string>
+    <string name="cal_cannot_delete_default">Can\'t delete the default calendar. Choose another default first.</string>
+    <string name="cal_cannot_delete_last">Can\'t delete the last calendar.</string>
+    <string name="cal_deleted_named">Deleted “%s”</string>
+    <string name="cal_offline_delete_calendar">Offline. Deleting a calendar requires a connection.</string>
+    <string name="cal_could_not_delete_calendar">Couldn\'t delete the calendar</string>
+    <string name="cal_change_saved">Your change was saved</string>
+    <string name="cal_kept_both">Kept both</string>
+    <!-- The calendar drawer (ui/calendar/CalendarDrawer.kt) -->
+    <string name="cal_previous_month">Previous month</string>
+    <string name="cal_next_month">Next month</string>
+    <string name="cal_mini_has_events">%s, has events</string>
+    <string name="cal_go_to_day">Go to day</string>
+    <string name="cal_drawer_only_phone">Only on this phone</string>
+    <string name="cal_drawer_only_phone_on">Hiding a calendar applies to this phone only</string>
+    <string name="cal_drawer_only_phone_off">Hiding a calendar applies everywhere</string>
+    <string name="cal_new_calendar">New calendar</string>
+    <string name="cal_drawer_show_tasks">Show tasks on calendar</string>
+    <string name="cal_colour_for">Colour for %s</string>
+    <string name="cal_default_reminders_title">Default reminders · %s</string>
+    <string name="cal_calendar_word">Calendar</string>
+    <string name="cal_default_reminders_body">New events in this calendar get these reminders.</string>
+    <string name="cal_timed_events">Timed events</string>
+    <string name="cal_all_day_events">All-day events</string>
+    <string name="cal_state_shown_phone">Shown on this phone</string>
+    <string name="cal_state_hidden_phone">Hidden on this phone</string>
+    <string name="cal_state_shown">Shown</string>
+    <string name="cal_state_hidden">Hidden</string>
+    <string name="cal_change_colour_of">Change colour of %s</string>
+    <string name="cal_read_only">Read-only</string>
+    <string name="cal_tag_default">Default</string>
+    <string name="cal_tag_this_phone">This phone</string>
+    <string name="cal_tag_local_only">Local only</string>
+    <string name="cal_show_named">Show %s</string>
+    <string name="cal_more_for">More for %s</string>
+    <string name="cal_menu_show_only">Show only this</string>
+    <string name="cal_menu_follow_account">Follow the account setting</string>
+    <string name="cal_colour">Colour</string>
+    <string name="cal_default_reminders">Default reminders</string>
+    <string name="cal_rename">Rename</string>
+    <string name="cal_set_as_default">Set as default</string>
+    <string name="cal_drawer_home_zone">Show times in home zone</string>
+    <!-- %1$s home zone, %2$s the phone's zone -->
+    <string name="cal_drawer_home_zone_sub">Home: %1$s · phone: %2$s</string>
+    <string name="cal_name">Name</string>
+    <string name="cal_account">Account</string>
+    <string name="cal_create">Create</string>
+    <string name="cal_rename_calendar">Rename calendar</string>
+    <string name="cal_cannot_delete_title">Can\'t delete “%s”</string>
+    <string name="cal_delete_title">Delete “%s”?</string>
+    <!-- %s: what happens to the events -->
+    <string name="cal_delete_cannot_undo">%s This can\'t be undone.</string>
+    <string name="cal_delete_counting">Counting its events…</string>
+    <string name="cal_delete_no_events">No events on this phone.</string>
+    <plurals name="cal_delete_events">
+        <item quantity="one">Its %d event is deleted from the server too.</item>
+        <item quantity="other">Its %d events are deleted from the server too.</item>
+    </plurals>
+    <string name="cal_delete_type_name">Type the name to confirm</string>
+    <string name="cal_shared_by">Shared by %s</string>
+    <string name="cal_shared_someone">someone</string>
+    <!-- %s: the group's name -->
+    <string name="cal_shared_with_group">Shared with the %s group</string>
+    <string name="cal_shared_group_fallback">group</string>
+    <!-- Live editing (ui/calendar/LiveEditors.kt): the other device's value of an all-day "when" -->
+    <string name="cal_live_when_all_day">%1$s – %2$s, all day</string>
+    <string name="cal_edit">Edit</string>
+    <string name="cal_rsvp_yes">Yes</string>
+    <string name="cal_rsvp_no">No</string>
+    <string name="cal_going_question">Going?</string>
+    <!-- Event detail (ui/calendar/EventDetail.kt) -->
+    <!-- An event over several days: "Oct 5, 3:00 PM – Oct 6, 4:00 PM" -->
+    <string name="cal_when_span">%1$s, %2$s – %3$s, %4$s</string>
+    <string name="cal_status_cancelled">Cancelled</string>
+    <string name="cal_status_in_progress">In progress</string>
+    <string name="cal_status_moved">Moved</string>
+    <string name="cal_edit_event">Edit event</string>
+    <string name="cal_delete_event">Delete event</string>
+    <string name="cal_moved_from">Moved from %s</string>
+    <string name="cal_detail_read_only">" · Read-only calendar"</string>
+    <string name="cal_hide_guests">Hide guests</string>
+    <string name="cal_show_guests">Show guests</string>
+    <string name="cal_organizer">Organiser: %s</string>
+    <string name="cal_guest_optional_line">%s · optional</string>
+    <string name="cal_add_note">Add note</string>
+    <string name="cal_will_get_answer">%s gets your answer.</string>
+    <string name="cal_email_guests">Email guests</string>
+    <string name="cal_email_all_guests">All guests</string>
+    <string name="cal_email_guests_yes">Guests who said yes</string>
+    <string name="cal_email_guests_awaiting">Guests who haven\'t answered</string>
+    <string name="cal_move_to_calendar">Move to calendar</string>
+    <string name="cal_record">Record</string>
+    <string name="cal_copy_link">Copy link</string>
+    <string name="cal_answer_with_note">Answer with a note</string>
+    <string name="cal_note_to_organizer">Note to the organiser</string>
+    <string name="cal_answer_for">Answer for</string>
+    <string name="cal_restore_as_new">Restore as new</string>
+    <string name="cal_saving">Saving…</string>
+    <string name="cal_starts">Starts</string>
+    <!-- The event editor (ui/calendar/EventEditor.kt) -->
+    <string name="cal_error_add_title">Add a title</string>
+    <string name="cal_error_last_day_before">The last day is before the first</string>
+    <string name="cal_error_ends_before">The end is before the start</string>
+    <string name="cal_add_title">Add title</string>
+    <string name="cal_toggle_all_day">Toggle all day</string>
+    <string name="cal_from">From</string>
+    <string name="cal_to">To</string>
+    <string name="cal_ends">Ends</string>
+    <string name="cal_change_time_zone">Change time zone</string>
+    <string name="cal_time_zone_line">Time zone: %s</string>
+    <!-- %1$s the event's zone, %2$s the start in the zone shown -->
+    <string name="cal_time_zone_line_here">Time zone: %1$s · here %2$s</string>
+    <string name="cal_change_repeat">Change repeat</string>
+    <string name="cal_part_of_series">Part of a series</string>
+    <string name="cal_change_calendar">Change calendar</string>
+    <string name="cal_change_colour">Change colour</string>
+    <string name="cal_custom_colour">Custom colour</string>
+    <string name="cal_edit_guests">Edit guests</string>
+    <string name="cal_add_guests">Add guests</string>
+    <!-- %1$s the first three names, %2$d how many more -->
+    <plurals name="cal_guests_and_more">
+        <item quantity="one">%1$s and %2$d more</item>
+        <item quantity="other">%1$s and %2$d more</item>
+    </plurals>
+    <string name="cal_add_location">Add location</string>
+    <string name="cal_paste_meeting_link">Paste a meeting link</string>
+    <string name="cal_add_video_link">Add video link</string>
+    <string name="cal_show_as">Show as</string>
+    <string name="cal_busy">Busy</string>
+    <string name="cal_free">Free</string>
+    <string name="cal_toggle_private">Toggle private</string>
+    <string name="cal_private">Private</string>
+    <string name="cal_private_body">Others sharing this calendar see only “Busy”.</string>
+    <string name="cal_add_notes">Add notes</string>
+    <plurals name="cal_guests_yes">
+        <item quantity="one">%d yes</item>
+        <item quantity="other">%d yes</item>
+    </plurals>
+    <plurals name="cal_guests_maybe">
+        <item quantity="one">%d maybe</item>
+        <item quantity="other">%d maybe</item>
+    </plurals>
+    <plurals name="cal_guests_no">
+        <item quantity="one">%d no</item>
+        <item quantity="other">%d no</item>
+    </plurals>
+    <plurals name="cal_guests_awaiting">
+        <item quantity="one">%d awaiting</item>
+        <item quantity="other">%d awaiting</item>
+    </plurals>
+    <plurals name="cal_guests_count">
+        <item quantity="one">%d guest</item>
+        <item quantity="other">%d guests</item>
+    </plurals>
+    <!-- "4 guests · 2 yes, 1 maybe, 1 awaiting" -->
+    <string name="cal_guest_summary">%1$s · %2$s</string>
+    <!-- The quick-action sheet (ui/calendar/QuickActions.kt) -->
+    <string name="cal_qa_nothing_to_complete">Nothing to complete</string>
+    <string name="cal_qa_done">Done: %s</string>
+    <string name="cal_qa_no_reminder_to_snooze">No reminder to snooze</string>
+    <string name="cal_qa_snoozed_until">Snoozed until %s</string>
+    <string name="cal_qa_dismissed">Dismissed</string>
+    <string name="cal_qa_no_reminder">No reminder</string>
+    <string name="cal_qa_too_soon">The event starts too soon</string>
+    <string name="cal_qa_reminds_at">Reminds you at %s</string>
+    <string name="cal_qa_event_not_found">Event not found</string>
+    <string name="cal_qa_task_deleted">Task deleted</string>
+    <string name="cal_qa_snooze">Snooze</string>
+    <string name="cal_qa_reschedule">Reschedule</string>
+    <string name="cal_qa_email">Email</string>
+    <string name="cal_qa_move">Move</string>
+    <string name="cal_qa_snooze_until">Snooze until</string>
+    <string name="cal_qa_ask_about">Ask %1$s about this</string>
+    <string name="cal_qa_all_day">%s · all day</string>
+    <string name="cal_qa_started_now">Started now</string>
+    <string name="cal_qa_starts">Starts %s</string>
+    <string name="cal_qa_missed">Missed</string>
+    <string name="cal_qa_snoozed">Snoozed</string>
+    <string name="cal_qa_remind_before">Remind before</string>
+    <!-- Date, time and reminder presets (ui/calendar/QuickDates.kt) -->
+    <string name="cal_qd_in_1_hour">In 1 hour</string>
+    <!-- %s: an hour, "9 am" -->
+    <string name="cal_qd_tomorrow_at">Tomorrow %s</string>
+    <string name="cal_qd_next_mon_at">Next Mon %s</string>
+    <string name="cal_qd_morning">Morning</string>
+    <string name="cal_qd_afternoon">Afternoon</string>
+    <string name="cal_qd_evening">Evening</string>
+    <string name="cal_qd_1_week_before">1 week before</string>
+    <string name="cal_qd_on_the_day_at">On the day, %s</string>
+    <string name="cal_qd_day_before_at">Day before, %s</string>
+    <!-- %1$d days, %2$s the time; the English text has always read "1 days before" -->
+    <plurals name="cal_qd_days_before_at">
+        <item quantity="one">%1$d day before, %2$s</item>
+        <item quantity="other">%1$d days before, %2$s</item>
+    </plurals>
+    <string name="cal_qd_week_before_at">Week before, %s</string>
+    <string name="cal_qd_at_due_time">At due time</string>
+    <plurals name="cal_qd_min_after_start">
+        <item quantity="one">%d min after start</item>
+        <item quantity="other">%d min after start</item>
+    </plurals>
+    <plurals name="cal_qd_days_before">
+        <item quantity="one">%d day before</item>
+        <item quantity="other">%d days before</item>
+    </plurals>
+    <plurals name="cal_qd_hours_before">
+        <item quantity="one">%d hour before</item>
+        <item quantity="other">%d hours before</item>
+    </plurals>
+    <plurals name="cal_qd_hr">
+        <item quantity="one">%d hr</item>
+        <item quantity="other">%d hr</item>
+    </plurals>
+    <string name="cal_qd_1_5_hr">1.5 hr</string>
+    <string name="cal_qd_hr_min">%1$d hr %2$d min</string>
+    <!-- The task editor (ui/calendar/TaskEditor.kt) -->
+    <string name="cal_task_new_subtask">New subtask</string>
+    <string name="cal_task_new">New task</string>
+    <string name="cal_task_edit">Edit task</string>
+    <string name="cal_task_title_placeholder">What needs doing?</string>
+    <string name="cal_task_add_details">Add details</string>
+    <string name="cal_task_pick_date">Pick date…</string>
+    <string name="cal_task_no_date">No date</string>
+    <!-- "Morning · 9 am" -->
+    <string name="cal_task_time_preset">%1$s · %2$s</string>
+    <string name="cal_task_pick_time">Pick time…</string>
+    <string name="cal_task_reminder_needs_due">Set a due date for a reminder</string>
+    <string name="cal_task_reminded_on_day">Reminder at %s on the day.</string>
+    <string name="cal_task_reminded_when_due">Reminder when due.</string>
+    <string name="cal_task_remind_at_time">Remind at a time…</string>
+    <!-- %1$s the day, %2$s the time -->
+    <string name="cal_task_starts_time">Starts %1$s, %2$s</string>
+    <string name="cal_task_no_start_date">No start date</string>
+    <string name="cal_task_pick">Pick…</string>
+    <string name="cal_task_no_start">No start</string>
+    <string name="cal_task_custom_rule">Custom rule from another app</string>
+    <string name="cal_task_repeat_from">Repeat from</string>
+    <string name="cal_task_due_date">Due date</string>
+    <string name="cal_task_completion">Completion</string>
+    <string name="cal_task_skip_occurrence">Skip this occurrence</string>
+    <string name="cal_task_change_list">Change list</string>
+    <string name="cal_task_default_list">Default list</string>
+    <string name="cal_task_remove_tag">Remove tag %s</string>
+    <string name="cal_task_add_tags">Add tags</string>
+    <string name="cal_task_subtasks">Subtasks</string>
+    <string name="cal_task_open_named">Open %s</string>
+    <string name="cal_task_add_subtask">Add subtask</string>
+    <string name="cal_task_reply">Reply</string>
+    <string name="cal_task_reply_email">Reply to the email</string>
+    <string name="cal_task_delete">Delete task</string>
+    <string name="cal_task_created">Created %s</string>
+    <string name="cal_task_changed">changed %s</string>
+    <string name="cal_task_remind_me_at">Remind me at</string>
+    <!-- Task messages (ui/calendar/TasksViewModel.kt) -->
+    <!-- %1$s the list, %2$s why -->
+    <string name="cal_tasks_create_list_failed">Couldn\'t create the list %1$s: %2$s</string>
+    <string name="cal_tasks_fail_duplicate">Couldn\'t duplicate</string>
+    <string name="cal_tasks_duplicated">Duplicated “%s”</string>
+    <string name="cal_tasks_fail_complete">Couldn\'t complete</string>
+    <!-- %1$s the task, %2$d subtasks -->
+    <plurals name="cal_tasks_completed_with_subtasks">
+        <item quantity="one">Completed “%1$s” and %2$d subtask</item>
+        <item quantity="other">Completed “%1$s” and %2$d subtasks</item>
+    </plurals>
+    <!-- A repeating task advanced: %s is the next due -->
+    <string name="cal_tasks_next">Next: %s</string>
+    <string name="cal_tasks_completed_queued">Completed “%s” (waiting to sync)</string>
+    <string name="cal_tasks_fail_reopen">Couldn\'t reopen</string>
+    <string name="cal_tasks_fail_skip">Couldn\'t skip</string>
+    <string name="cal_tasks_skipped_next">Skipped · Next: %s</string>
+    <string name="cal_tasks_none">none</string>
+    <string name="cal_tasks_fail_reschedule">Couldn\'t reschedule</string>
+    <string name="cal_tasks_fail_start">Couldn\'t change the start</string>
+    <string name="cal_tasks_start_removed">Start removed</string>
+    <string name="cal_tasks_fail_reminder">Couldn\'t add the reminder</string>
+    <string name="cal_tasks_set_due_first">Set a due date first</string>
+    <string name="cal_tasks_reminder_added">Reminder added</string>
+    <string name="cal_tasks_fail_priority">Couldn\'t change the priority</string>
+    <string name="cal_tasks_fail_move">Couldn\'t move</string>
+    <string name="cal_tasks_list_fallback">list</string>
+    <string name="cal_tasks_moved_top">Moved to top level</string>
+    <string name="cal_tasks_made_subtask">Made a subtask</string>
+    <string name="cal_tasks_moved">Task moved</string>
+    <string name="cal_tasks_reopened">Reopened “%s”</string>
+    <plurals name="cal_tasks_deleted_with_subtasks">
+        <item quantity="one">Task and %d subtask deleted</item>
+        <item quantity="other">Task and %d subtasks deleted</item>
+    </plurals>
+    <!-- "11 of 12 done · 1 changed elsewhere" -->
+    <string name="cal_tasks_bulk_partial">%1$d of %2$d done · %3$d changed elsewhere</string>
+    <string name="cal_tasks_review">Review</string>
+    <plurals name="cal_tasks_bulk_completed">
+        <item quantity="one">Completed %d task</item>
+        <item quantity="other">Completed %d tasks</item>
+    </plurals>
+    <plurals name="cal_tasks_bulk_rescheduled">
+        <item quantity="one">Rescheduled %d task</item>
+        <item quantity="other">Rescheduled %d tasks</item>
+    </plurals>
+    <!-- %1$s the list, %2$d tasks -->
+    <plurals name="cal_tasks_bulk_moved">
+        <item quantity="one">Moved to %1$s: %2$d task</item>
+        <item quantity="other">Moved to %1$s: %2$d tasks</item>
+    </plurals>
+    <plurals name="cal_tasks_bulk_tagged">
+        <item quantity="one">Tagged %d task</item>
+        <item quantity="other">Tagged %d tasks</item>
+    </plurals>
+    <plurals name="cal_tasks_bulk_changed">
+        <item quantity="one">Changed %d task</item>
+        <item quantity="other">Changed %d tasks</item>
+    </plurals>
+    <string name="cal_tasks_fail_tags">Couldn\'t change tags</string>
+    <string name="cal_tasks_fail_delete">Couldn\'t delete</string>
+    <plurals name="cal_tasks_bulk_deleted">
+        <item quantity="one">Deleted %d task</item>
+        <item quantity="other">Deleted %d tasks</item>
+    </plurals>
+    <plurals name="cal_tasks_deleted_completed">
+        <item quantity="one">Deleted %d completed task</item>
+        <item quantity="other">Deleted %d completed tasks</item>
+    </plurals>
+    <string name="cal_tasks_fail_create_list">Couldn\'t create the list</string>
+    <string name="cal_tasks_list_created">List “%s” created</string>
+    <string name="cal_tasks_fail_change_list">Couldn\'t change the list</string>
+    <string name="cal_tasks_list_updated">List updated</string>
+    <string name="cal_tasks_fail_default_list">Couldn\'t change the default list</string>
+    <string name="cal_tasks_new_go_to">New tasks go to %s</string>
+    <string name="cal_tasks_fail_colour">Couldn\'t change the colour</string>
+    <!-- %s: a tag, without its @ -->
+    <string name="cal_tasks_colour_removed">Colour removed from @%s</string>
+    <string name="cal_tasks_fail_reorder">Couldn\'t reorder</string>
+    <string name="cal_tasks_lists_reordered">Lists reordered</string>
+    <string name="cal_tasks_list_deleted">List “%s” deleted</string>
+    <string name="cal_tasks_fail_rename_tag">Couldn\'t rename the tag</string>
+    <string name="cal_tasks_tag_renamed">Renamed to @%s</string>
+    <string name="cal_tasks_fail_delete_tag">Couldn\'t delete the tag</string>
+    <!-- %1$s the tag, %2$d tasks -->
+    <plurals name="cal_tasks_tag_removed">
+        <item quantity="one">Tag @%1$s removed from %2$d task</item>
+        <item quantity="other">Tag @%1$s removed from %2$d tasks</item>
+    </plurals>
+    <string name="cal_tasks_fail_follow_up">Couldn\'t change the follow-up</string>
+    <string name="cal_tasks_follow_up_cancelled">Follow-up cancelled</string>
+    <string name="cal_tasks_follow_up_moved">Follow-up moved</string>
+    <string name="cal_tasks_fail_make_task">Couldn\'t create a task</string>
+    <string name="cal_tasks_no_message">No message to link in this conversation</string>
+    <!-- The title of a task made from a follow-up: %s is the email's subject -->
+    <string name="cal_tasks_follow_up_title">Follow up: %s</string>
+    <string name="cal_tasks_task_added">Task added</string>
+    <string name="cal_tasks_fail_resolve">Couldn\'t resolve</string>
+    <string name="cal_tasks_change_kept">Your change was kept</string>
+    <string name="cal_tasks_copy_title">%s (copy)</string>
+    <!-- The tasks screen (ui/calendar/TasksScreen.kt) -->
+    <string name="cal_tasks_gone">Task not found. It was deleted, or this account has no access to it.</string>
+    <string name="cal_tasks_clear_selection">Clear selection</string>
+    <plurals name="cal_tasks_selected">
+        <item quantity="one">%d selected</item>
+        <item quantity="other">%d selected</item>
+    </plurals>
+    <string name="cal_tasks_select_all">Select all</string>
+    <string name="cal_tasks_close_search">Close search</string>
+    <!-- The operators (list:, tag:, is:done) are what the search understands: keep them in English -->
+    <string name="cal_tasks_search_placeholder">Search tasks — list: tag: is:done</string>
+    <string name="cal_tasks_lists_and_tags">Lists and tags</string>
+    <string name="cal_tasks_search">Search tasks</string>
+    <string name="cal_tasks_sort">Sort</string>
+    <string name="cal_tasks_sort_default">Default</string>
+    <string name="cal_tasks_sort_manual">Manual</string>
+    <string name="cal_tasks_sort_priority">Priority</string>
+    <string name="cal_tasks_sort_title">Title</string>
+    <string name="cal_tasks_sort_created">Created</string>
+    <string name="cal_tasks_hide_completed">Hide completed</string>
+    <string name="cal_tasks_show_completed">Show completed</string>
+    <string name="cal_tasks_hide_deferred">Hide deferred</string>
+    <string name="cal_tasks_show_deferred">Show deferred</string>
+    <string name="cal_tasks_delete_completed">Delete completed</string>
+    <string name="cal_tasks_edit_lists">Edit lists</string>
+    <string name="cal_tasks_swipe_actions">Swipe actions</string>
+    <string name="cal_tasks_list_read_only">This list is read-only.</string>
+    <string name="cal_tasks_none_selected">No task selected</string>
+    <string name="cal_tasks_none_selected_body">Pick a task to see its details.</string>
+    <string name="cal_tasks_could_not_do">Couldn\'t do that</string>
+    <string name="cal_tasks_defer">Defer</string>
+    <string name="cal_tasks_skip">Skip</string>
+    <plurals name="cal_tasks_changed_elsewhere">
+        <item quantity="one">A task changed elsewhere</item>
+        <item quantity="other">%d tasks changed elsewhere</item>
+    </plurals>
+    <string name="cal_tasks_not_set_up">Task lists not set up yet</string>
+    <string name="cal_tasks_not_set_up_body">Finish setup on the web (Settings → Calendar &amp; tasks).</string>
+    <string name="cal_tasks_nobody_to_wait">Nobody to wait for</string>
+    <string name="cal_tasks_nobody_to_wait_body">Emails you asked to be reminded about are listed here until their date.</string>
+    <string name="cal_tasks_no_match">No tasks match</string>
+    <!-- The operators are what the search understands: keep them in English -->
+    <string name="cal_tasks_no_match_body">Try fewer words or an operator: list:, tag:, is:done, is:overdue, has:email, pri:high.</string>
+    <string name="cal_tasks_nothing_today">Nothing due today</string>
+    <!-- The example is typed into quick add, which understands English words -->
+    <string name="cal_tasks_nothing_today_body">Type a task above, e.g. “call the bank tomorrow 3pm”.</string>
+    <plurals name="cal_tasks_tomorrow">
+        <item quantity="one">%d task tomorrow →</item>
+        <item quantity="other">%d tasks tomorrow →</item>
+    </plurals>
+    <string name="cal_tasks_nothing_completed">Nothing completed yet</string>
+    <string name="cal_tasks_no_tasks">No tasks</string>
+    <!-- The example is typed into quick add, which understands English words -->
+    <string name="cal_tasks_no_tasks_body">Type a task above, e.g. “report friday !! @work”.</string>
+    <string name="cal_tasks_follow_ups">Follow-ups</string>
+    <string name="cal_tasks_waiting_for_reply">Waiting for reply</string>
+    <string name="cal_tasks_move_to_list">Move to list</string>
+    <!-- The English text has always read "Move 1 tasks to" -->
+    <plurals name="cal_tasks_move_n_to">
+        <item quantity="one">Move %d task to</item>
+        <item quantity="other">Move %d tasks to</item>
+    </plurals>
+    <!-- The English text has always read "Delete 1 tasks?" -->
+    <plurals name="cal_tasks_delete_n">
+        <item quantity="one">Delete %d task?</item>
+        <item quantity="other">Delete %d tasks?</item>
+    </plurals>
+    <string name="cal_tasks_undo_seconds">You can undo for a few seconds.</string>
+    <plurals name="cal_tasks_complete_subtasks">
+        <item quantity="one">Complete %d subtask too?</item>
+        <item quantity="other">Complete %d subtasks too?</item>
+    </plurals>
+    <string name="cal_tasks_has_open_subtasks">“%s” has open subtasks.</string>
+    <string name="cal_tasks_complete_all">Complete all</string>
+    <string name="cal_tasks_only_this_one">Only this one</string>
+    <string name="cal_tasks_no_completed">No completed tasks</string>
+    <plurals name="cal_tasks_delete_n_completed">
+        <item quantity="one">Delete %d completed task?</item>
+        <item quantity="other">Delete %d completed tasks?</item>
+    </plurals>
+    <string name="cal_tasks_nothing_to_delete">Nothing to delete.</string>
+    <string name="cal_tasks_deleted_on_server">Deleted from the server. This can\'t be undone.</string>
+    <string name="cal_tasks_not_found">Task not found</string>
+    <string name="cal_tasks_not_found_body">It may have been completed or deleted elsewhere.</string>
+</resources>

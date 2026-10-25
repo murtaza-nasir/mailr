@@ -1,0 +1,78 @@
+name: Bug report
+description: Something in Mailr does not work as described.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Security vulnerabilities are not reported here. They go through the repository's
+        [private vulnerability reporting](https://github.com/murtaza-nasir/mailr/security/advisories/new)
+        (see SECURITY.md).
+
+        Real mail, real addresses, tokens and passwords must be left out of the report or replaced
+        with examples.
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Web app
+        - Android app
+        - Notes app (Android)
+        - Ambrose (the assistant)
+        - Mail accounts and sync
+        - Calendar, tasks or contacts
+        - Agents, API or MCP
+        - Installation or upgrade
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: The problem, and any error message shown.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What should have happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open …
+        2. Select …
+        3. …
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Mailr version
+      description: The server's version, shown at the bottom of the web app's help menu (the question mark in the top bar), such as 0.40.13. For a server built from source, the commit as well.
+    validations:
+      required: true
+  - type: input
+    id: android-version
+    attributes:
+      label: Android app version
+      description: For problems in the Android or Notes app. Mailr shows it at the foot of its Settings, beside the server's; the Notes app under Settings → About.
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser and operating system, phone model and Android version, the mail provider, and the account mode (mirror, store or import), as far as they apply.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: Relevant lines from `docker compose logs app worker`, or the browser console.
+      render: text

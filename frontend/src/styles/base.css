@@ -1,0 +1,241 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* lucide icons: never squeezed by flex rows; inline ones centre on the text. */
+svg.lucide {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+a {
+  color: var(--link);
+}
+
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  background-clip: padding-box;
+  border: 4px solid transparent;
+  border-radius: 8px;
+  min-height: 40px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+* {
+  scrollbar-color: var(--scrollbar) transparent;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.muted {
+  color: var(--text-3);
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+kbd {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  border: 1px solid var(--border);
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  background: var(--chip-bg);
+  padding: 1px 5px;
+  border-radius: var(--radius-xs);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    /* Endless animations (rx-pulse, md-caret) would otherwise restart every frame. */
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  body {
+    overflow: visible;
+    background: #fff;
+    color: #000;
+  }
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* "Skip to content": off screen until the keyboard focuses it, then at the top left. */
+.skip-link {
+  position: fixed;
+  top: 8px;
+  inset-inline-start: 8px;
+  z-index: 1000;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--primary);
+  color: var(--on-primary, #fff);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip-link:focus {
+  transform: none;
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+#main:focus {
+  outline: none;
+}
+
+/* Icons that mean back or forward mirror in a right-to-left page:
+   chevrons and arrows for previous and next, back, reply and forward, undo and redo, send,
+   sign in and out, side panels, subtasks. Icons that show a real direction stay as they are: play
+   and skip, clocks and refresh, text alignment, the external-link arrow, the importance marker.
+   `scale` is applied before any rotation in `transform`, so a disclosure chevron still turns down.
+   `.rtl-mirror` mirrors any other icon; `.rtl-keep` keeps one of the listed icons as drawn. */
+:root[dir='rtl'] :is(
+    .lucide-chevron-left, .lucide-chevron-right, .lucide-chevrons-left, .lucide-chevrons-right,
+    .lucide-arrow-left, .lucide-arrow-right, .lucide-move-left, .lucide-move-right,
+    .lucide-undo, .lucide-undo-2, .lucide-redo, .lucide-redo-2,
+    .lucide-reply, .lucide-reply-all, .lucide-forward, .lucide-send, .lucide-send-horizontal,
+    .lucide-log-in, .lucide-log-out, .lucide-panel-left, .lucide-panel-right,
+    .lucide-panel-left-open, .lucide-panel-left-close, .lucide-panel-right-open, .lucide-panel-right-close,
+    .lucide-corner-up-left, .lucide-corner-up-right, .lucide-corner-down-left, .lucide-corner-down-right,
+    .lucide-list, .lucide-list-indent-increase, .lucide-list-indent-decrease, .lucide-indent, .lucide-outdent,
+    .rtl-mirror
+  ):not(.rtl-keep) {
+  scale: -1 1;
+}
+
+/* Text people write follows its own direction, in any language of the app:
+   what is typed into a field takes the direction of its first letter, and a
+   block of written text (`.bidi`: rendered notes, Ambrose's answers, a plain-text body) takes it
+   paragraph by paragraph, so an Arabic line aligns right in an English page and the next English
+   line aligns left. Single-line names and titles carry dir="auto" in the markup instead, so they
+   are cut off at their own end. */
+:is(input:not([type]), input[type='text'], input[type='search'], textarea) {
+  unicode-bidi: plaintext;
+}
+/* A name or a title in a row (a flex item) lines up with the row, whichever its own direction: an
+   English snippet in an Arabic row sits next to the subject, not at the far end. */
+:is(span, b, strong, button, bdi)[dir='auto'],
+div[dir='auto']:not(.chat-msg),
+bdi {
+  text-align: var(--start);
+}
+.bidi,
+.bidi :is(p, li, h1, h2, h3, h4, h5, h6, blockquote, td, th, dt, dd, figcaption),
+.ProseMirror :is(p, li, h1, h2, h3, h4, h5, h6, blockquote) {
+  unicode-bidi: plaintext;
+  text-align: start;
+}
+/* The highlight layers behind the quick-add fields show the field's text: same direction rule. */
+.tk-quick-overlay,
+.cal-qa-mirror {
+  unicode-bidi: plaintext;
+  text-align: start;
+}

@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Shared pieces (NotesUi.kt) -->
+    <string name="notes_color_default">Default</string>
+    <string name="notes_color_tomato">Tomato</string>
+    <string name="notes_color_flamingo">Flamingo</string>
+    <string name="notes_color_tangerine">Tangerine</string>
+    <string name="notes_color_banana">Banana</string>
+    <string name="notes_color_sage">Sage</string>
+    <string name="notes_color_basil">Basil</string>
+    <string name="notes_color_peacock">Peacock</string>
+    <string name="notes_color_blueberry">Blueberry</string>
+    <string name="notes_color_lavender">Lavender</string>
+    <string name="notes_color_grape">Grape</string>
+    <string name="notes_color_graphite">Graphite</string>
+    <string name="notes_color_cocoa">Cocoa</string>
+    <string name="notes_edited_at">Edited %1$s</string>
+    <string name="notes_in_trash">In Trash</string>
+    <string name="notes_deleted_today">Deleted today</string>
+    <string name="notes_deleted_yesterday">Deleted yesterday</string>
+    <plurals name="notes_deleted_days_ago">
+        <item quantity="one">Deleted %d day ago</item>
+        <item quantity="other">Deleted %d days ago</item>
+    </plurals>
+    <string name="notes_trash_label">%1$s · %2$s</string>
+    <plurals name="notes_trash_days_left">
+        <item quantity="one">%d day left</item>
+        <item quantity="other">%d days left</item>
+    </plurals>
+    <string name="notes_close">Close</string>
+    <string name="notes_colour">Colour</string>
+    <string name="notes_done">Done</string>
+    <string name="notes_cancel">Cancel</string>
+    <string name="notes_labels">Labels</string>
+    <string name="notes_find_label">Find a label</string>
+    <string name="notes_new_label">New label</string>
+    <string name="notes_create">Create</string>
+
+    <!-- Change labels: snackbars, undo and the failed-change banner (NotesRepository.kt) -->
+    <string name="notes_op_undo">Undo</string>
+    <string name="notes_op_changed_elsewhere">Changed elsewhere</string>
+    <string name="notes_op_list_created">List created</string>
+    <string name="notes_op_note_created">Note created</string>
+    <string name="notes_op_note_deleted">Note deleted</string>
+    <string name="notes_op_colour_changed">Colour changed</string>
+    <string name="notes_op_note_saved">Note saved</string>
+    <string name="notes_op_edit_undone">Edit undone</string>
+    <string name="notes_op_saved">Saved</string>
+    <string name="notes_op_reminder_removed">Reminder removed</string>
+    <string name="notes_op_link_removed">Link removed</string>
+    <string name="notes_op_seen">Seen</string>
+    <string name="notes_op_made_into_a_list">Made into a list</string>
+    <string name="notes_op_made_into_text">Made into text</string>
+    <string name="notes_op_copy_made">Copy created</string>
+    <string name="notes_op_moved_to_trash">Moved to Trash</string>
+    <string name="notes_op_restored">Restored</string>
+    <string name="notes_op_deleted_forever">Deleted forever</string>
+    <string name="notes_op_trash_emptied">Trash emptied</string>
+    <string name="notes_op_local_models_only_on">Local models only: on</string>
+    <string name="notes_op_local_models_only_off">Local models only: off</string>
+    <string name="notes_op_repeat_off">Repeat off</string>
+    <string name="notes_op_section_added">Section added</string>
+    <string name="notes_op_checked">Checked</string>
+    <string name="notes_op_unchecked">Unchecked</string>
+    <string name="notes_op_item_edited">Item edited</string>
+    <string name="notes_op_item_moved">Item moved</string>
+    <string name="notes_op_item_deleted">Item deleted</string>
+    <string name="notes_op_checked_items_cleared">Checked items cleared</string>
+    <string name="notes_op_all_unchecked">All unchecked</string>
+    <string name="notes_op_task_made">Task created</string>
+    <string name="notes_op_suggestion_hidden">Suggestion hidden</string>
+    <string name="notes_op_section_saved">Section saved</string>
+    <string name="notes_op_section_deleted">Section deleted</string>
+    <string name="notes_op_label_created">Label created</string>
+    <string name="notes_op_label_renamed">Label renamed</string>
+    <string name="notes_op_label_saved">Label saved</string>
+    <string name="notes_op_label_deleted">Label deleted</string>
+    <string name="notes_op_table_created">Table created</string>
+    <string name="notes_op_table_deleted">Table deleted</string>
+    <string name="notes_op_table_renamed">Table renamed</string>
+    <string name="notes_op_row_added">Row added</string>
+    <string name="notes_op_row_saved">Row saved</string>
+    <string name="notes_op_row_copied">Row copied</string>
+    <string name="notes_op_row_deleted">Row deleted</string>
+    <string name="notes_notice_stopped_sharing">%1$s stopped sharing “%2$s”</string>
+    <string name="notes_notice_no_longer_shared">A note is no longer shared with you</string>
+    <string name="notes_op_reminder_set">Reminder set</string>
+    <plurals name="notes_op_reminders_set">
+        <item quantity="one">%d reminder set</item>
+        <item quantity="other">%d reminders set</item>
+    </plurals>
+    <string name="notes_op_item_added">Item added</string>
+    <plurals name="notes_op_items_added">
+        <item quantity="one">%d item added</item>
+        <item quantity="other">%d items added</item>
+    </plurals>
+    <plurals name="notes_op_items_added_undo">
+        <item quantity="one">Item added</item>
+        <item quantity="other">Items added</item>
+    </plurals>
+    <string name="notes_op_added_usual">Added %1$s</string>
+    <plurals name="notes_op_rows_deleted">
+        <item quantity="one">%d row deleted</item>
+        <item quantity="other">%d rows deleted</item>
+    </plurals>
+
+    <!-- Errors (NotesApi.kt) -->
+    <string name="notes_error_not_allowed">Not allowed.</string>
+    <string name="notes_error_not_found">No longer available.</string>
+    <string name="notes_error_too_many_requests">Too many requests. Try again shortly.</string>
+    <string name="notes_error_server">Server error. Try again.</string>
+    <string name="notes_error_offline">Offline, or the server can\'t be reached.</string>
+    <string name="notes_error_generic">Something went wrong.</string>
+
+    <!-- Repeating lists (RepeatRule.kt, HouseholdLists.kt) -->
+    <string name="notes_repeats_weekly_one">Repeats weekly on %1$s</string>
+    <plurals name="notes_repeats_weekly">
+        <item quantity="one">Repeats every week on %2$s</item>
+        <item quantity="other">Repeats every %1$d weeks on %2$s</item>
+    </plurals>
+    <string name="notes_repeats_daily_one">Repeats every day</string>
+    <plurals name="notes_repeats_daily">
+        <item quantity="one">Repeats every day</item>
+        <item quantity="other">Repeats every %d days</item>
+    </plurals>
+    <string name="notes_repeat_menu">Repeat: %1$s</string>
+    <string name="notes_repeat_menu_weekly_one">weekly on %1$s</string>
+    <plurals name="notes_repeat_menu_weekly">
+        <item quantity="one">every week on %2$s</item>
+        <item quantity="other">every %1$d weeks on %2$s</item>
+    </plurals>
+    <string name="notes_repeat_menu_daily_one">every day</string>
+    <plurals name="notes_repeat_menu_daily">
+        <item quantity="one">every day</item>
+        <item quantity="other">every %d days</item>
+    </plurals>
+    <string name="notes_repeat_line_next">%1$s · next %2$s</string>
+    <string name="notes_repeat">Repeat</string>
+    <string name="notes_repeat_explainer">Items are unchecked at 4 am on each repeat. History is kept.</string>
+    <string name="notes_repeat_weekly_on_one">Weekly on</string>
+    <plurals name="notes_repeat_weekly_on">
+        <item quantity="one">Every week on</item>
+        <item quantity="other">Every %d weeks on</item>
+    </plurals>
+    <string name="notes_repeat_every_few_days">Every few days</string>
+    <string name="notes_repeat_every">Every</string>
+    <plurals name="notes_repeat_days_unit">
+        <item quantity="one">day</item>
+        <item quantity="other">days</item>
+    </plurals>
+    <string name="notes_repeat_change">Change the repeat</string>
+    <string name="notes_on">On</string>
+    <string name="notes_off">Off</string>
+    <string name="notes_save">Save</string>
+
+    <!-- Local models only, presence, offline line (HouseholdLists.kt) -->
+    <string name="notes_local_only">Local models only</string>
+    <string name="notes_local_only_locked">Only the owner can turn this off</string>
+    <string name="notes_local_only_on">Never sent to hosted models</string>
+    <string name="notes_local_only_off_note">Keep away from hosted models</string>
+    <string name="notes_local_only_off_list">Keep away from hosted models</string>
+    <string name="notes_local_only_off_table">Keep away from hosted models</string>
+    <string name="notes_names_and">%1$s and %2$s</string>
+    <string name="notes_names_separator">", "</string>
+    <plurals name="notes_presence_note">
+        <item quantity="one">%1$s is in this note</item>
+        <item quantity="other">%1$s are in this note</item>
+    </plurals>
+    <plurals name="notes_presence_list">
+        <item quantity="one">%1$s is in this list</item>
+        <item quantity="other">%1$s are in this list</item>
+    </plurals>
+    <plurals name="notes_presence_table">
+        <item quantity="one">%1$s is in this table</item>
+        <item quantity="other">%1$s are in this table</item>
+    </plurals>
+    <plurals name="notes_offline_waiting">
+        <item quantity="one">Offline · %d change waiting</item>
+        <item quantity="other">Offline · %d changes waiting</item>
+    </plurals>
+    <string name="notes_offline_kept">Offline · changes kept on this phone</string>
+
+    <!-- Views, home shortcuts (NotesViewModel.kt, HomeShortcuts.kt) -->
+    <string name="notes_view_all">Notes</string>
+    <string name="notes_view_lists">Lists</string>
+    <string name="notes_view_tables">Tables</string>
+    <string name="notes_view_shared">Shared with me</string>
+    <string name="notes_view_archive">Archive</string>
+    <string name="notes_view_trash">Trash</string>
+    <string name="notes_offline_changes_wait">Offline. Changes are sent when you\'re back online.</string>
+    <string name="notes_untitled_table">Untitled table</string>
+    <string name="notes_untitled_list">Untitled list</string>
+    <string name="notes_untitled_note">Untitled note</string>
+    <string name="notes_shortcut_not_saved">Try again once the note is saved</string>
+    <string name="notes_shortcut_unsupported">Shortcuts aren\'t supported on this home screen</string>
+
+    <!-- Note editor (NoteEditor.kt) -->
+    <string name="notes_share">Share</string>
+    <string name="notes_remind_me">Remind me</string>
+    <string name="notes_more_options">More options</string>
+    <string name="notes_move_to_trash">Move to Trash?</string>
+    <string name="notes_notes_in_trash_are_deleted_after_30_days">Notes in Trash are deleted after 30 days.</string>
+    <string name="notes_back">Back</string>
+    <string name="notes_restore">Restore</string>
+    <string name="notes_keep_theirs">Keep theirs</string>
+    <string name="notes_use_mine">Use mine</string>
+    <string name="notes_try_again">Try again</string>
+    <string name="notes_discard">Discard</string>
+    <string name="notes_title">Title</string>
+    <string name="notes_note">Note</string>
+    <string name="notes_rename">Rename</string>
+    <string name="notes_order_manual">Order: Manual</string>
+    <string name="notes_reset_learned_order">Reset learned order</string>
+    <string name="notes_move_up">Move up</string>
+    <string name="notes_move_down">Move down</string>
+    <string name="notes_delete">Delete</string>
+    <string name="notes_its_items_can_stay_on_the_list_in_the_top_group">Its items stay on the list, in the top group.</string>
+    <string name="notes_keep_the_items">Keep the items</string>
+    <string name="notes_delete_them_too">Delete them too</string>
+    <string name="notes_check">Check</string>
+    <string name="notes_move_to_section">Move to section</string>
+    <string name="notes_edit_quantity">Edit quantity</string>
+    <string name="notes_edit">Edit</string>
+    <string name="notes_task_badge">☐ Task</string>
+    <string name="notes_move_to_section_ellipsis">Move to section…</string>
+    <string name="notes_make_it_a_task">Make it a task</string>
+    <string name="notes_keep_both">Keep both</string>
+    <string name="notes_add_item">Add item</string>
+    <string name="notes_usual">Usual:</string>
+    <string name="notes_hide_for_now">Hide for now</string>
+    <string name="notes_never_suggest">Never suggest</string>
+    <string name="notes_add_all">Add all</string>
+    <string name="notes_clear_checked">Clear checked</string>
+    <string name="notes_shopping_list">Shopping list</string>
+    <string name="notes_show_checked_at_the_bottom">Checked items at bottom</string>
+    <string name="notes_suggest_usual_items">Suggest usual items</string>
+    <string name="notes_add_a_section">Add section</string>
+    <string name="notes_uncheck_all">Uncheck all</string>
+    <string name="notes_make_a_copy">Make a copy</string>
+    <string name="notes_save_as_template">Save as template</string>
+    <string name="notes_export">Export</string>
+    <string name="notes_version_history">Version history</string>
+    <string name="notes_add_to_home_screen">Add to home screen</string>
+    <string name="notes_ask_assistant">Ask assistant</string>
+    <string name="notes_remove_from_my_notes">Remove from my notes</string>
+    <string name="notes_amount">Amount</string>
+    <string name="notes_unit_hint">Unit (g, kg, can, pack…)</string>
+    <string name="notes_remove">Remove</string>
+    <string name="notes_note_gone">Note no longer available.</string>
+    <string name="notes_loading">Loading…</string>
+    <string name="notes_is_editing">%1$s is editing</string>
+    <string name="notes_op_pinned">Pinned</string>
+    <string name="notes_op_unpinned">Unpinned</string>
+    <string name="notes_pin">Pin</string>
+    <string name="notes_unpin">Unpin</string>
+    <string name="notes_op_archived">Archived</string>
+    <string name="notes_op_unarchived">Unarchived</string>
+    <string name="notes_archive">Archive</string>
+    <string name="notes_unarchive">Unarchive</string>
+    <string name="notes_op_labels_saved">Labels saved</string>
+    <string name="notes_view_only_shared_by">View only · shared by %1$s</string>
+    <string name="notes_view_only">View only</string>
+    <string name="notes_note_conflict">This note changed elsewhere while you were editing.</string>
+    <string name="notes_op_failed">%1$s: %2$s</string>
+    <string name="notes_not_saved">not saved</string>
+    <string name="notes_remove_link">Remove link to %1$s</string>
+    <string name="notes_tick_on_fold">%1$s: %2$s</string>
+    <string name="notes_expand">Expand</string>
+    <string name="notes_collapse">Collapse</string>
+    <string name="notes_expanded">Expanded</string>
+    <string name="notes_collapsed">Collapsed</string>
+    <string name="notes_section_learned">learned</string>
+    <string name="notes_section_options">Section options for %1$s</string>
+    <plurals name="notes_order_learned_trips">
+        <item quantity="one">Order: Learned (from %d trip)</item>
+        <item quantity="other">Order: Learned (from %d trips)</item>
+    </plurals>
+    <string name="notes_order_learned">Order: Learned</string>
+    <string name="notes_rename_section">Rename section</string>
+    <string name="notes_delete_section_title">Delete section %1$s?</string>
+    <string name="notes_item_options">Options for %1$s</string>
+    <string name="notes_add_a_line">Add a line</string>
+    <string name="notes_edit_extra_line">Edit the extra line</string>
+    <string name="notes_extra_line">Extra line</string>
+    <string name="notes_top_of_list">Top of the list</string>
+    <string name="notes_changed_elsewhere_theirs">Changed elsewhere: “%1$s”</string>
+    <string name="notes_already_on_list">%1$s is already on the list</string>
+    <string name="notes_hide_usual">Hide %1$s</string>
+    <string name="notes_count_checked">%1$d checked</string>
+    <string name="notes_make_it_text">Make it text</string>
+    <string name="notes_make_it_a_list">Make it a list</string>
+    <string name="notes_repeat_ellipsis">Repeat…</string>
+    <string name="notes_saved_as_template">Saved as a template</string>
+    <string name="notes_removed_from_your_notes">Removed from your notes</string>
+    <string name="notes_new_section">New section</string>
+    <string name="notes_add">Add</string>
+    <string name="notes_quantity_of">Quantity of %1$s</string>
+    <string name="notes_one_less">One less</string>
+    <string name="notes_one_more">One more</string>
+
+    <!-- Notes home (NotesHome.kt) -->
+    <string name="notes_notes_menu">Notes menu</string>
+    <string name="notes_search_notes">Search notes</string>
+    <string name="notes_close_search">Close search</string>
+    <string name="notes_empty_trash">Empty Trash</string>
+    <string name="notes_new">New</string>
+    <string name="notes_new_note">New note</string>
+    <string name="notes_new_list">New list</string>
+    <string name="notes_new_table">New table</string>
+    <string name="notes_from_a_template">From a template</string>
+    <string name="notes_empty_trash_title">Empty Trash?</string>
+    <string name="notes_delete_forever">Delete forever</string>
+    <string name="notes_empty_trash_view">Trash is empty. Notes in Trash are deleted after 30 days.</string>
+    <string name="notes_no_notes_with_this_label">No notes with this label</string>
+    <string name="notes_no_archived_notes">No archived notes</string>
+    <string name="notes_nothing_is_shared_with_you_yet">Nothing shared with you</string>
+    <string name="notes_tables_you_add_appear_here">Tables you add show here</string>
+    <string name="notes_lists_you_add_appear_here">Lists you add show here</string>
+    <string name="notes_notes_you_add_appear_here">Notes you add show here</string>
+    <string name="notes_retry">Retry</string>
+    <string name="notes_drawer_title">Notes</string>
+    <string name="notes_open">Open</string>
+    <string name="notes_options">Options</string>
+    <string name="notes_pinned">Pinned</string>
+    <string name="notes_move_earlier">Move earlier</string>
+    <string name="notes_move_later">Move later</string>
+    <string name="notes_delete_forever_title">Delete forever?</string>
+    <string name="notes_shared">Shared</string>
+    <string name="notes_has_a_reminder">Has a reminder</string>
+    <string name="notes_has_links">Has links</string>
+    <string name="notes_local_only_badge">Local only</string>
+    <string name="notes_name">Name</string>
+    <string name="notes_columns">Columns</string>
+    <string name="notes_columns_on_web">Edit columns on the web.</string>
+    <string name="notes_open_in_notes_app">Open in Notes app</string>
+    <plurals name="notes_empty_trash_body">
+        <item quantity="one">%d item is deleted forever. This can\'t be undone.</item>
+        <item quantity="other">%d items are deleted forever. This can\'t be undone.</item>
+    </plurals>
+    <string name="notes_empty_search">No notes match “%1$s”</string>
+    <string name="notes_offline">Offline</string>
+    <string name="notes_group_pinned">Pinned</string>
+    <string name="notes_group_others">Others</string>
+    <string name="notes_kind_table">Table</string>
+    <string name="notes_kind_list">List</string>
+    <string name="notes_kind_note">Note</string>
+    <string name="notes_op_moved">Moved</string>
+    <string name="notes_purge_body">“%1$s” is deleted forever. This can\'t be undone.</string>
+    <string name="notes_check_item">Check %1$s</string>
+    <string name="notes_more_count">+ %1$d more</string>
+    <string name="notes_table_counts">%1$s · %2$s</string>
+    <plurals name="notes_rows_count">
+        <item quantity="one">%d row</item>
+        <item quantity="other">%d rows</item>
+    </plurals>
+    <plurals name="notes_columns_count">
+        <item quantity="one">%d column</item>
+        <item quantity="other">%d columns</item>
+    </plurals>
+    <string name="notes_changed_since_you_looked">Changed since you looked</string>
+    <string name="notes_new_table_one_column">One column: Name</string>
+    <string name="notes_new_table_log">Log: Date, Item, Amount</string>
+    <string name="notes_new_table_inventory">Inventory: Item, Qty, Location</string>
+
+    <!-- Tables (Tables.kt) -->
+    <string name="notes_find_in_this_table">Find in this table</string>
+    <string name="notes_delete_selected_rows">Delete selected rows</string>
+    <string name="notes_clear_selection">Clear selection</string>
+    <string name="notes_export_csv">Export CSV</string>
+    <string name="notes_new_row">New row</string>
+    <string name="notes_clear_this_filter">Clear filter</string>
+    <string name="notes_select">Select</string>
+    <string name="notes_row_conflict_hint">Changed elsewhere · open the row to choose</string>
+    <string name="notes_row_options">Row options</string>
+    <string name="notes_duplicate">Duplicate</string>
+    <string name="notes_fields">Fields</string>
+    <string name="notes_history">History</string>
+    <string name="notes_save_and_add_another">Save and add another</string>
+    <string name="notes_none">None</string>
+    <string name="notes_links_on_web">Edit links on the web.</string>
+    <string name="notes_row_conflict">This row changed elsewhere while you were editing.</string>
+    <string name="notes_restore_the_row_to_this_point">Restore row to this point</string>
+    <string name="notes_use_this_value">Use this value</string>
+    <string name="notes_link">Link</string>
+    <string name="notes_link_not_shared">Not shared with you</string>
+    <string name="notes_link_deleted">Deleted</string>
+    <string name="notes_count_selected">%1$d selected</string>
+    <string name="notes_table_copied">Table copied</string>
+    <string name="notes_no_rows_match">No rows match these filters</string>
+    <string name="notes_no_rows_yet">No rows yet</string>
+    <string name="notes_rename_table">Rename table</string>
+    <string name="notes_empty_value">(empty)</string>
+    <string name="notes_row_cell">%1$s: %2$s</string>
+    <string name="notes_row">Row</string>
+    <string name="notes_last_change_by">Last change by %1$s</string>
+    <string name="notes_kept_as_text">Kept as text: “%1$s”</string>
+    <string name="notes_someone">Someone</string>
+    <string name="notes_row_restored">Row restored</string>
+    <string name="notes_earlier_values_of">Earlier values of %1$s</string>
+    <string name="notes_value_restored">Value restored</string>
+
+    <!-- Sharing, history, labels, reminders, templates (NoteSheets.kt) -->
+    <string name="notes_share_policy_groups">On this server, you can only add people in your groups.</string>
+    <string name="notes_share_policy_nobody">Sharing is off on this server.</string>
+    <string name="notes_add_people_or_groups">Add people or groups</string>
+    <string name="notes_name_or_address">Name or address</string>
+    <string name="notes_level_label">Level:</string>
+    <string name="notes_outside_sharing_rule">Outside this server\'s sharing rule</string>
+    <string name="notes_restore_this_version">Restore this version</string>
+    <string name="notes_no_earlier_versions_yet">No earlier versions yet.</string>
+    <string name="notes_edit_labels">Edit labels</string>
+    <string name="notes_no_labels_yet">No labels yet</string>
+    <string name="notes_new_from_template">New from template</string>
+    <string name="notes_level_view">View</string>
+    <string name="notes_level_edit">Edit</string>
+    <string name="notes_level_share">Edit and share</string>
+    <string name="notes_level_owner">Owner</string>
+    <string name="notes_share_table">Share table</string>
+    <string name="notes_share_note">Share note</string>
+    <string name="notes_name_group">%1$s (group)</string>
+    <string name="notes_name_you">%1$s (you)</string>
+    <string name="notes_name_email">%1$s · %2$s</string>
+    <string name="notes_stop_sharing_with">Stop sharing with %1$s</string>
+    <string name="notes_version_restored">Version restored</string>
+    <string name="notes_source_restore">Restore</string>
+    <string name="notes_source_import">Import</string>
+    <string name="notes_source_convert">Convert</string>
+    <string name="notes_source_agent">Agent</string>
+    <string name="notes_source_you">You</string>
+    <string name="notes_version">Version</string>
+    <string name="notes_label_line">%1$s · %2$s</string>
+    <plurals name="notes_notes_count">
+        <item quantity="one">%d note</item>
+        <item quantity="other">%d notes</item>
+    </plurals>
+    <string name="notes_rename_label">Rename label</string>
+    <string name="notes_later_today">Later today</string>
+    <string name="notes_tomorrow">Tomorrow</string>
+    <string name="notes_next_week">Next week</string>
+    <string name="notes_remove_reminder_of">Remove reminder from %1$s</string>
+    <string name="notes_untitled">Untitled</string>
+    <string name="notes_template_starter">starter</string>
+    <string name="notes_template_deleted">Template deleted</string>
+    <string name="notes_delete_template">Delete template %1$s</string>
+    <string name="notes_footer_stat">%1$s %2$s: %3$s</string>
+    <string name="notes_change_line">%1$s · %2$s</string>
+    <string name="notes_undo">Undo</string>
+    <string name="notes_redo">Redo</string>
+    <string name="notes_text_removed">Text removed</string>
+    <string name="notes_text_changed_elsewhere">Can\'t undo this step. The text changed elsewhere since then.</string>
+</resources>

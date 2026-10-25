@@ -1,0 +1,31 @@
+# User settings: mail.
+# One line per key, `key: plain description`; `key: {internal: why}` for a key that is not a setting
+# a person chooses. A key may appear in only one file of this folder. The settings map test
+# (frontend/src/features/settings/groups.test.ts) checks that Settings has a place for each one.
+
+inbox_type: "Which inbox layout is active (Default, Important first, Unread first, Priority, or a custom layout)."
+inbox_count: "The number by Inbox in the navigation: unread mail in the layout's first tab (first_tab, the default) or in every tab (all)."
+priority_sections: "The sections of the Priority inbox, in order."
+conversation_view: "Group messages into conversations, or list each message on its own."
+undo_send_seconds: How long Undo is offered after you press Send.
+categories: "Which inbox categories (Primary, Promotions, Social, Updates, Forums) are shown as tabs."
+importance_markers: Show the importance marker next to important mail.
+images: "Remote images: always (through mailr's image proxy), ask first, or never."
+send_and_archive: Show a Send and archive button in replies.
+default_reply: Whether Reply or Reply all is the default.
+signature_placement: Put your signature below or above the quoted text in replies.
+page_size: How many conversations a page of the list shows.
+auto_advance: Where to go after you archive or delete an open conversation.
+vip: "VIP senders: their mail is always important and notifies at once."
+archive_removes_current_label: Archiving also removes the label of the list you archived from.
+archive_also_removes: Labels that every archive also removes.
+nav_favorites: "The favourites in the mail navigation, in order."
+label_recency: "Label learning: recent labels count more; how quickly older ones fade."
+multiple_inboxes: "Extra inbox panes, each a saved search."
+vacation: "The away message: dates, subject, text, contacts only, and how often to resend."
+inbox_layouts: {internal: "stored by the layout editor (PUT /layouts), documented with layouts"}
+account_folders: "Show each account separately: with two or more mail accounts, the navigation gets a group per account with its own Inbox, Sent, Drafts, Scheduled, Spam and Trash."
+account_folder_pins: "The folders pinned to each account's group, in order: they show above More folders."
+account_folders_more_open: "The accounts whose More folders is open in the navigation."
+account_folders_show_unread: "Show folders with unread mail above More folders until they are read (off by default)."
+account_folders_hint_dismissed: "The hint in the navigation that offers Show each account separately (two or more mail accounts) was dismissed; it does not come back."

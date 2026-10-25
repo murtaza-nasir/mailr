@@ -1,0 +1,935 @@
+.settings {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.settings-head {
+  padding: 16px 24px 0;
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 16px;
+}
+.settings-head h1 {
+  flex: 1;
+}
+/* Simple or advanced settings (SettingsPage.tsx). */
+.settings-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.settings-head h1 {
+  font-size: 22px;
+  line-height: 28px;
+  margin-bottom: 8px;
+}
+/* The strip scrolls sideways on narrow screens (components/ScrollTabs.tsx). */
+.settings-tabs-wrap {
+  flex: none;
+  border-bottom: 1px solid var(--divider);
+}
+.settings-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0 16px;
+  scroll-padding: 0 16px;
+}
+.settings-tab {
+  flex: none;
+  position: relative;
+  height: 44px;
+  padding: 0 16px;
+  font-size: 14px;
+  color: var(--text-2);
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+}
+.settings-tab:hover {
+  background: var(--hover);
+}
+.settings-tab.active {
+  color: var(--primary);
+}
+.settings-tab.active::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 8px;
+  inset-inline-end: 8px;
+  bottom: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--primary);
+}
+.settings-body {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+  padding: 8px 24px 64px;
+}
+.set-row {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 24px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--divider);
+}
+.set-row > .k {
+  font-weight: 500;
+  font-size: 14px;
+}
+.set-row > .k .sub {
+  display: block;
+  font-weight: 400;
+  font-size: 12.5px;
+  color: var(--text-3);
+  margin-top: 4px;
+}
+.set-row > .v {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+.set-row > .v .input,
+.set-row > .v .select {
+  max-width: 420px;
+}
+.set-actions {
+  position: sticky;
+  bottom: -64px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 0 -24px;
+  padding: 16px 24px;
+  /* opaque: the bar sticks over the scrolling rows */
+  background: var(--surface);
+  border-top: 1px solid var(--divider);
+  z-index: 1;
+}
+[data-theme='dark'] .set-actions {
+  background: var(--surface-dim);
+}
+.set-section {
+  margin: 24px 0 8px;
+  min-width: 0;
+}
+.set-section > .row {
+  flex-wrap: wrap;
+  gap: 8px;
+}
+/* Wide tables scroll inside their section instead of pushing the page sideways. */
+.table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.settings-body {
+  overflow-x: hidden;
+}
+.set-section h2 {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+.set-section p {
+  margin: 0 0 12px;
+  color: var(--text-3);
+  font-size: 13px;
+  max-width: 760px;
+}
+.card {
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  background: var(--surface);
+}
+[data-theme='dark'] .card {
+  background: var(--surface-container);
+}
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.card-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.card-row .grow {
+  flex: 1;
+  min-width: 0;
+}
+.card-row .title {
+  font-weight: 500;
+}
+.card-row .sub {
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+/* A card with several worded buttons (Mail accounts): on a phone the buttons go under the text. */
+@media (max-width: 600px) {
+  .card-row.wrap-narrow {
+    flex-wrap: wrap;
+    gap: 4px 8px;
+  }
+  .card-row.wrap-narrow .grow {
+    flex-basis: 100%;
+  }
+}
+
+.wizard-steps {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.wizard-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+.wizard-step .num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--chip-bg);
+}
+.wizard-step.on {
+  color: var(--text);
+}
+.wizard-step.on .num {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.wizard-step.done .num {
+  background: var(--success-container);
+  color: var(--success);
+}
+.mode-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+}
+.mode-card {
+  text-align: start;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: transparent;
+}
+.mode-card:hover {
+  background: var(--hover);
+}
+.mode-card:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.mode-card:disabled:hover {
+  background: transparent;
+}
+.mode-card[aria-pressed='true'] {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+  background: var(--info-container);
+}
+.mode-card .t {
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mode-card .d {
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.grid-3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+}
+.token-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-container);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  word-break: break-all;
+}
+.scope-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 4px 16px;
+}
+
+@media (max-width: 900px) {
+  .set-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .settings-body {
+    padding: 8px 16px 64px;
+  }
+  .grid-2,
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.stat-tile {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-areas: 'icon label' 'icon value';
+  column-gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md, 12px);
+}
+.stat-tile .icon { grid-area: icon; align-self: center; color: var(--text-3); }
+.stat-tile .label { grid-area: label; font-size: 12px; color: var(--text-3); }
+.stat-tile .value { grid-area: value; font-size: 16px; font-weight: 600; }
+.stat-tile.ok .value { color: var(--success, #188038); }
+.stat-tile.bad .value { color: var(--danger, #d93025); }
+.sub-h {
+  font-size: 14px;
+  margin: 16px 0 6px;
+}
+.status-pill {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: var(--radius-full, 999px);
+  font-size: 12px;
+  background: var(--hover);
+}
+.status-pill.error { background: var(--danger-container, #fce8e6); color: var(--on-danger-container, #a50e0e); }
+.status-pill.idle { background: var(--success-container, #e6f4ea); color: var(--on-success-container, #0d652d); }
+.failed-jobs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.failed-jobs li {
+  border-bottom: 1px solid var(--divider);
+  padding: 6px 0;
+}
+.failed-jobs pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 12px;
+  max-height: 200px;
+  overflow: auto;
+  margin: 6px 0 0;
+}
+
+.approvals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 12px;
+}
+.perm-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 12px;
+}
+.perm-group {
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md, 12px);
+  padding: 8px 12px 10px;
+  margin: 0;
+  min-width: 0;
+}
+.perm-group legend {
+  font-weight: 600;
+  font-size: 13px;
+  padding: 0 4px;
+}
+.perm-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas: 'name select' 'effect select';
+  align-items: center;
+  column-gap: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--divider);
+}
+.perm-row:last-child { border-bottom: 0; }
+.perm-name { grid-area: name; font-size: 13.5px; }
+.perm-row .perm-effect { grid-area: effect; }
+.perm-row select { grid-area: select; width: auto; min-width: 150px; }
+.perm-effect {
+  font-size: 12px;
+  font-weight: 600;
+}
+.perm-effect.allow { color: var(--success, #188038); }
+.perm-effect.ask { color: var(--warning, #b06000); }
+.perm-effect.deny { color: var(--danger, #d93025); }
+.perm-effect .muted { font-weight: 400; }
+.perm-rules {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.perm-rules li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--divider);
+  font-size: 13.5px;
+}
+.perm-rules .grow { flex: 1; min-width: 0; }
+@media (max-width: 700px) {
+  .perm-groups, .approvals-grid { grid-template-columns: 1fr; }
+}
+
+.avatar-btn {
+  border-radius: 50%;
+  padding: 0;
+  line-height: 0;
+}
+.avatar-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Your picture (PictureSection.tsx) */
+.picture-large .avatar {
+  width: 72px;
+  height: 72px;
+  font-size: 28px;
+}
+.picture-publish summary {
+  cursor: pointer;
+  padding: 4px 0;
+}
+.picture-h {
+  font-size: 14px;
+  margin: 16px 0 4px;
+}
+.picture-reqs {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: grid;
+  gap: 8px;
+}
+.picture-reqs .pill {
+  vertical-align: middle;
+}
+.picture-reqs .muted {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .set-section .row {
+    flex-wrap: wrap;
+  }
+}
+
+.settings-intro {
+  color: var(--text-2);
+  font-size: 13px;
+  line-height: 1.5;
+  max-width: 760px;
+  margin: 0 0 16px;
+}
+.field-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  margin: 6px 0;
+}
+.input.num {
+  width: 72px;
+}
+.hint {
+  color: var(--text-2);
+  font-size: 12px;
+  margin: 4px 0 0;
+  max-width: 640px;
+}
+.hint-list {
+  margin: 0;
+  padding-inline-start: 18px;
+  color: var(--text-2);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ---- inbox layouts ---- */
+.lay-row { display: flex; align-items: center; gap: 12px; padding: 8px 4px; border-bottom: 1px solid var(--divider); max-width: 720px; }
+.lay-row-icons { display: inline-flex; gap: 2px; color: var(--text-3); }
+.lay-row-icons svg { width: 16px; height: 16px; display: block; }
+.lay-row-text { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.lay-row-text .name { font-weight: 500; display: flex; align-items: center; gap: 8px; }
+.lay-row-text .desc { font-size: 12.5px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.chip-sm { font-size: 11px; font-weight: 500; padding: 1px 8px; border-radius: var(--radius-full); background: var(--surface-container); color: var(--text-2); }
+
+.lay-ed { display: flex; flex-direction: column; gap: 14px; min-width: min(760px, 100%); }
+.lay-ed-tabs { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+.lay-ed-tab {
+  display: inline-flex; align-items: center; gap: 8px; height: 36px; padding: 0 14px; border-radius: var(--radius-full);
+  border: 1px solid transparent; background: none; color: var(--text-2); font: inherit; cursor: pointer;
+}
+.lay-ed-tab svg { width: 18px; height: 18px; display: block; }
+.lay-ed-tab:hover { background: var(--surface-high); }
+.lay-ed-tab.on { background: var(--surface-container); color: var(--text); border-color: var(--border); font-weight: 500; }
+.lay-ed-hint { margin: -6px 0 0; font-size: 12.5px; color: var(--text-3); }
+.lay-ed-tabcard { display: flex; flex-direction: column; gap: 10px; }
+.lay-ed-inds { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; }
+.lay-ed-inds .field-label { margin-inline-end: 4px; }
+.lay-ed-row { display: flex; align-items: flex-end; gap: 12px; }
+.lay-ed-row .grow { flex: 1; min-width: 0; }
+.lay-ed-tools { display: inline-flex; align-items: center; gap: 2px; padding-bottom: 2px; }
+.lay-ed-sections { display: flex; flex-direction: column; gap: 10px; }
+.lay-ed-sections > .btn { align-self: flex-start; }
+.lay-ed-sec { border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; background: var(--surface); }
+.lay-ed-num {
+  width: 26px; height: 26px; border-radius: 50%; display: inline-grid; place-items: center; flex: none;
+  background: var(--surface-container); color: var(--text-2); font-size: 12.5px; font-weight: 500; margin-bottom: 7px;
+}
+.lay-ed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px 12px; }
+.lay-ed-grid .span2 { grid-column: 1 / -1; }
+.lay-ed-grid .input.mono { font-family: var(--font-mono); font-size: 13px; }
+.lay-ed-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.lay-ed-checks { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.lay-ed-count { font-size: 12.5px; color: var(--text-3); font-variant-numeric: tabular-nums; }
+.lay-ed-count.err { color: var(--danger, #d93025); }
+.lay-ed-error { color: var(--danger, #d93025); font-size: 13px; }
+@media (max-width: 600px) {
+  .lay-ed-row { flex-wrap: wrap; }
+  .lay-ed { min-width: 0; }
+}
+
+.archive-labels { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0 12px; max-width: 720px; }
+
+/* Settings → Mail → Labels → Learn from my choices (LabelLearningSection.tsx). */
+.ll-levels {
+  border: 0;
+  margin: 8px 0 12px;
+  padding-block: 0;
+  padding-inline: 28px 0;
+}
+.ll-levels legend {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  padding: 0;
+}
+
+/* Settings → Admin → Access policies (access/AccessTab.tsx). */
+.acc-policies {
+  display: grid;
+  gap: 12px;
+  max-width: 860px;
+}
+.acc-policy {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md);
+  font-size: 13.5px;
+}
+.acc-policy-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.acc-policy-head .pill .lucide {
+  margin-inline-end: 4px;
+}
+.acc-needs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--warning-fg);
+}
+.acc-summary {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+.acc-summary > div {
+  display: grid;
+  grid-template-columns: minmax(120px, 180px) 1fr;
+  gap: 8px;
+}
+.acc-summary dt {
+  color: var(--text-2);
+}
+.acc-summary dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.acc-hint {
+  font-size: 12.5px;
+  margin: 0;
+}
+.acc-task,
+.acc-features {
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md);
+  padding: 8px 14px 12px;
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+.acc-task legend,
+.acc-features legend {
+  font-weight: 600;
+  padding: 0 4px;
+}
+.acc-rows {
+  display: grid;
+  gap: 6px;
+  padding-inline-start: 28px;
+  justify-items: start;
+}
+.acc-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.acc-row .select {
+  width: auto;
+  min-width: 160px;
+  max-width: 100%;
+}
+.acc-default label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.acc-default .select {
+  width: auto;
+  max-width: 100%;
+}
+.acc-problem {
+  color: var(--danger);
+  font-size: 12.5px;
+  margin-inline-end: auto;
+}
+/* Admin → Users: groups and access (AdminTab.tsx). */
+.acc-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+@media (max-width: 600px) {
+  .acc-summary > div {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .acc-rows {
+    padding-inline-start: 0;
+  }
+}
+
+/* Settings → Admin → Calendars → Group calendars (GroupCalendars.tsx). */
+.gcal-who {
+  margin-block: 4px 0;
+  margin-inline: 26px 0;
+}
+.gcal {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--divider);
+}
+.gcal-head {
+  margin: 0 0 4px;
+  font-size: 15px;
+}
+.gcal-desc {
+  margin: 0 0 10px;
+  font-size: 13px;
+}
+.gcal-group {
+  margin: 10px 0;
+}
+.gcal-group-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+.gcal-group-name .btn {
+  margin-inline-start: auto;
+}
+.gcal-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-height: 36px;
+  padding-block: 2px;
+  padding-inline: 22px 0;
+  font-size: 14px;
+  border-bottom: 1px solid var(--divider);
+}
+.gcal-row .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.gcal-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  flex: none;
+}
+.gcal-name {
+  font-weight: 500;
+}
+.gcal-editors,
+.gcal-count {
+  font-size: 12px;
+}
+.gcal-count {
+  margin-inline-start: auto;
+}
+.gcal-new {
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.gcal-new select {
+  max-width: 260px;
+}
+.gcal-access,
+.gcal-editors-pick {
+  border: 0;
+  padding: 0;
+  margin: 12px 0 0;
+}
+.gcal-access legend,
+.gcal-editors-pick legend {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+/* Copy a connected calendar account into the mailr calendar (CalendarMigration.tsx). */
+.mig-progress {
+  display: grid;
+  gap: 8px;
+  padding: 8px 0;
+}
+.mig-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--divider);
+  overflow: hidden;
+}
+.mig-bar span {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.3s ease;
+}
+.mig-table td:nth-child(n + 4),
+.mig-table th:nth-child(n + 4) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+.mig-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-inline-end: 8px;
+  vertical-align: baseline;
+}
+.mig-kind {
+  font-size: 12px;
+}
+.mig-notes h3,
+.mig-cutover h3 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 4px 0 6px;
+}
+.mig-notes ul {
+  margin: 0;
+  padding-inline-start: 18px;
+  font-size: 13px;
+  display: grid;
+  gap: 6px;
+}
+.mig-notes p,
+.mig-cutover p {
+  margin: 0 0 6px;
+  font-size: 13px;
+}
+.mig-cutover {
+  border-top: 1px solid var(--divider);
+  padding-top: 12px;
+}
+.mig-applied {
+  color: var(--success, var(--text));
+}
+.mig .choice .desc {
+  display: block;
+}
+/* Settings → Calendar & tasks → Phones and other apps (PhoneApps.tsx), and the admin check. */
+.phone-fields { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.phone-field { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 13.5px; }
+.phone-field > .muted { flex: 0 0 76px; }
+.phone-field > code { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; user-select: all; }
+.phone-howto h3 { font-size: 14px; margin: 14px 0 4px; }
+.phone-howto p { margin: 0 0 8px; color: var(--text-2); font-size: 13.5px; }
+.phone-check { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.phone-check li { display: flex; gap: 8px; align-items: flex-start; font-size: 13.5px; }
+.phone-check li svg { flex: 0 0 auto; margin-top: 1px; }
+.phone-check li.ok svg { color: var(--success); }
+.phone-check li.bad svg { color: var(--danger); }
+.phone-cmds { margin: 6px 0 0; padding: 8px 10px; border-radius: 8px; background: var(--surface-container, var(--surface)); font-size: 12px; overflow-x: auto; white-space: pre; }
+
+/* Admin → Diagnostics (features/settings/DiagnosticsAdmin.tsx) */
+.diag .banner { margin-bottom: 4px; }
+.diag-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.diag-list li {
+  display: grid;
+  grid-template-columns: 20px minmax(140px, 220px) 1fr;
+  gap: 8px;
+  align-items: start;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--divider);
+  font-size: 13.5px;
+}
+.diag-list li svg { margin-top: 2px; }
+.diag-name { font-weight: 600; }
+.diag-detail { color: var(--text-2); overflow-wrap: anywhere; }
+.diag-ok { color: var(--success, #188038); }
+.diag-bad { color: var(--danger, #d93025); }
+.diag-info { color: var(--text-3); }
+.diag-line { font-size: 13.5px; margin: 0 0 8px; }
+.diag-warn { color: var(--danger, #d93025); }
+@media (max-width: 560px) {
+  .diag-list li { grid-template-columns: 20px 1fr; }
+  .diag-detail { grid-column: 2; }
+}
+.model-test {
+  font-size: 12px;
+  margin-top: 4px;
+}
+.model-test.ok { color: var(--success, #188038); }
+.model-test.err { color: var(--danger, #d93025); }
+.account-health-line.bad { color: var(--danger, #d93025); }
+
+/* A section of a settings page (groups.ts): the address's #anchor scrolls it below the page chips. */
+.set-anchor {
+  scroll-margin-top: 56px;
+}
+/* "Fine-tune the numbers" on Mail → Spam and Screener: the raw numbers, folded away. */
+.set-details {
+  margin-top: 8px;
+}
+.set-details > summary {
+  cursor: pointer;
+  padding: 12px 0;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text-2);
+}
+.set-details > summary:hover {
+  color: var(--text);
+}
+/* The pages of a settings group: chips that are links (SettingsPage.tsx). */
+.as-nav a.chip {
+  flex: none;
+  text-decoration: none;
+}
+
+/* Admin → Users → Invite someone (InviteMember.tsx): the QR code beside the link; stacked on a phone. */
+.invite-made {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.invite-made .input {
+  min-width: 0;
+  flex: 1;
+}
+.qr-code {
+  flex: none;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #fff;
+}
+.invite-prepare > summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+@media (max-width: 600px) {
+  .invite-made {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Admin → Users → mail accounts (ManagedAccounts.tsx) */
+.managed-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.managed-switch > div {
+  flex: 1;
+  min-width: 0;
+}
+.push-steps {
+  margin: 0;
+  padding-inline-start: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}

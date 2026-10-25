@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rec_notif_recording">Recording</string>
+    <string name="rec_notif_paused">Recording paused</string>
+    <string name="rec_notif_new">New recording</string>
+    <string name="rec_notif_pause">Pause</string>
+    <string name="rec_notif_resume">Resume</string>
+    <string name="rec_notif_stop">Stop</string>
+    <string name="rec_err_no_audio">The recording has no audio.</string>
+    <string name="rec_err_upload_interrupted">Upload interrupted. Retrying.</string>
+    <string name="rec_err_too_large">File too large for Speakr.</string>
+</resources>

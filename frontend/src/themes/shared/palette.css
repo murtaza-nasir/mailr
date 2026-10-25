@@ -1,0 +1,159 @@
+/* ---------- command palette (any theme that mounts it) ---------- */
+
+.palette-scrim {
+  place-items: start center;
+  padding-top: 14vh;
+  z-index: 90;
+}
+.palette {
+  width: min(640px, 100%);
+  max-height: min(560px, 76vh);
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+  animation: dialog-in 140ms var(--ease);
+}
+.palette-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 56px;
+  padding-block: 0;
+  padding-inline: 16px 14px;
+  border-bottom: 1px solid var(--divider);
+  flex: none;
+}
+.palette-input > .lucide {
+  width: 20px;
+  height: 20px;
+  color: var(--text-3);
+}
+.palette-input input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  font-size: 17px;
+}
+.palette-input input:focus-visible {
+  outline: none;
+}
+.palette-input input::placeholder {
+  color: var(--text-3);
+}
+.palette-list {
+  flex: 1;
+  overflow: auto;
+  padding: 4px 6px 8px;
+}
+.palette-section {
+  padding: 10px 10px 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.palette-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 14.5px;
+}
+.palette-item.active {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.palette-item .pi-icon {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  flex: none;
+  color: var(--text-2);
+}
+.palette-item.active .pi-icon {
+  color: inherit;
+}
+.palette-item .pi-icon .lucide {
+  width: 18px;
+  height: 18px;
+}
+.palette-item .pi-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.palette-item .pi-hint {
+  flex: none;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+.palette-item.active .pi-hint {
+  color: inherit;
+  opacity: 0.75;
+}
+.palette-item .pi-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+  white-space: normal;
+}
+.palette-item .pi-chip {
+  font-size: 11.5px;
+  line-height: 18px;
+  padding: 0 8px;
+  border-radius: var(--radius-full);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+}
+.palette-item.active .pi-chip {
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  color: inherit;
+}
+.palette-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-3);
+}
+.palette-foot {
+  display: flex;
+  gap: 16px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--divider);
+  font-size: 12px;
+  color: var(--text-3);
+  flex: none;
+}
+.palette kbd {
+  font-size: 11px;
+  padding: 0 5px;
+  line-height: 18px;
+}
+@media (max-width: 600px) {
+  .palette-scrim {
+    padding: 8px;
+  }
+  .palette {
+    max-height: calc(100dvh - 16px);
+  }
+  .palette-foot {
+    display: none;
+  }
+}

@@ -1,0 +1,1928 @@
+/* ---------- buttons ---------- */
+
+/* Toolbars that fold to fit (hooks/useToolbarFit.ts): a folded item shows its icons only, a gone
+   item has moved to the More menu. A cut label is worse than none. */
+[data-folded] > .lbl,
+[data-folded] > :not([data-fold]) > .lbl {
+  display: none;
+}
+[data-fold-gone] {
+  display: none !important;
+}
+
+/* Icon buttons: one square hit target per size step, the glyph centred on a grid so its
+   box never sits on a text baseline. The icon size comes from the button (a lucide
+   `size` prop is overridden), so neighbours in a toolbar always match in size and weight.
+   Sizes: default 40/20, .md 36/20, .sm 32/18, .xs 24/16. Contexts tune --icon-btn/--icon. */
+.icon-btn {
+  --icon-btn: calc(40px * var(--dz, 1));
+  --icon: calc(20px * var(--dzi, 1));
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: var(--icon-btn);
+  height: var(--icon-btn);
+  padding: 0;
+  flex: none;
+  line-height: 0;
+  vertical-align: middle;
+  border-radius: var(--radius-full);
+  color: var(--text-2);
+  transition: background var(--dur) var(--ease);
+}
+/* (the .lucide compound outranks contextual `.x .lucide` sizing rules) */
+.icon-btn > svg,
+.icon-btn > svg.lucide {
+  display: block;
+  width: var(--icon);
+  height: var(--icon);
+  flex: none;
+}
+.icon-btn.md {
+  --icon-btn: calc(36px * var(--dz, 1));
+}
+.icon-btn:hover {
+  background: var(--hover);
+}
+.icon-btn:active {
+  background: var(--pressed);
+}
+.icon-btn:disabled {
+  opacity: 0.38;
+  background: none;
+}
+.icon-btn.sm {
+  --icon-btn: calc(32px * var(--dz, 1));
+  --icon: calc(18px * var(--dzi, 1));
+}
+.icon-btn.xs {
+  --icon-btn: calc(24px * var(--dz, 1));
+  --icon: calc(16px * var(--dzi, 1));
+}
+.icon-btn.active {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+.btn {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+  transition: background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  user-select: none;
+}
+.btn:disabled {
+  opacity: 0.5;
+}
+.btn.filled {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.btn.filled:hover:not(:disabled) {
+  box-shadow: var(--shadow-1);
+  filter: brightness(1.05);
+}
+.btn.tonal {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.btn.tonal:hover:not(:disabled) {
+  box-shadow: var(--shadow-1);
+}
+.btn.outlined {
+  border: 1px solid var(--border);
+  color: var(--primary);
+  background: transparent;
+}
+.btn.outlined:hover:not(:disabled) {
+  background: var(--hover);
+}
+.btn.text {
+  color: var(--primary);
+  padding: 0 12px;
+}
+.btn.text:hover:not(:disabled) {
+  background: var(--hover);
+}
+.btn.danger {
+  background: var(--danger);
+  color: #fff;
+}
+[data-theme='dark'] .btn.danger {
+  color: #601410;
+}
+.btn.sm {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+.btn .lucide {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- inputs ---------- */
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.field > label,
+.field-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+.field .hint {
+  font-size: 12px;
+  color: var(--text-3);
+}
+.field .error {
+  font-size: 12px;
+  color: var(--danger);
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 20px;
+}
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+.input.underline {
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  padding: 6px 0;
+  min-height: 32px;
+}
+.input.underline:focus {
+  box-shadow: none;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 5px;
+}
+.select {
+  appearance: none;
+  padding-inline-end: 32px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-2) 50%),
+    linear-gradient(135deg, var(--text-2) 50%, transparent 50%);
+  background-position: calc(100% - 17px) 50%, calc(100% - 12px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+/* The caret sits on the end side, where the padding is. */
+:root[dir='rtl'] .select {
+  background-position: 12px 50%, 17px 50%;
+}
+
+.checkbox {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  flex: none;
+  margin: 0;
+  border: 2px solid var(--text-2);
+  border-radius: 2px;
+  display: inline-grid;
+  place-content: center;
+  cursor: pointer;
+  background: transparent;
+  transition: background var(--dur) var(--ease);
+}
+.checkbox:checked,
+.checkbox:indeterminate,
+.checkbox[data-checked] {
+  background: var(--text);
+  border-color: var(--text);
+}
+/* span.checkbox[data-checked]: the box drawn inside a role=checkbox button (RowCheck). */
+.checkbox:checked::after,
+.checkbox[data-checked]::after {
+  content: '';
+  width: 10px;
+  height: 5px;
+  border-left: 2px solid var(--bg); /* rtl: a tick mark, drawn the same both ways */
+  border-bottom: 2px solid var(--bg);
+  transform: rotate(-45deg) translate(1px, -1px);
+}
+.checkbox:indeterminate::after {
+  content: '';
+  width: 10px;
+  height: 2px;
+  background: var(--bg);
+}
+
+.radio {
+  accent-color: var(--primary);
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  flex: none;
+}
+
+/* Compact switch: 36×20 track, 14px knob, same size in both states. Geometry comes from two
+   variables so the knob is always centred with an equal inset on every side. */
+.switch {
+  --sw-w: 36px;
+  --sw-h: 20px;
+  --sw-knob: 14px;
+  --sw-inset: calc((var(--sw-h) - var(--sw-knob)) / 2);
+  position: relative;
+  display: inline-flex;
+  width: var(--sw-w);
+  height: var(--sw-h);
+  flex: none;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--surface-high);
+  box-shadow: inset 0 0 0 1px var(--text-3);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.switch::after {
+  content: '';
+  position: absolute;
+  top: var(--sw-inset);
+  inset-inline-start: var(--sw-inset);
+  width: var(--sw-knob);
+  height: var(--sw-knob);
+  border-radius: 50%;
+  background: var(--text-2);
+  transition: transform var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+.switch:hover::after {
+  background: var(--text);
+}
+.switch:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.switch[aria-checked='true'] {
+  background: var(--primary);
+  box-shadow: none;
+}
+.switch[aria-checked='true']::after {
+  background: var(--on-primary);
+  transform: translateX(calc((var(--sw-w) - var(--sw-knob) - 2 * var(--sw-inset)) * var(--dir)));
+}
+.switch:disabled {
+  opacity: 0.4;
+}
+
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+.choice input {
+  margin-top: 1px;
+}
+.choice .desc {
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+/* ---------- menus / popovers ---------- */
+
+.popover {
+  position: fixed;
+  z-index: 60;
+  min-width: 200px;
+  max-width: 360px;
+  max-height: min(520px, calc(100vh - 24px));
+  overflow: auto;
+  padding: 8px 0;
+  background: var(--surface-container);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-2);
+  animation: pop-in 120ms var(--ease);
+}
+[data-theme='light'] .popover {
+  background: var(--surface);
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--menu-h);
+  padding: calc(6px * var(--dz, 1)) 16px;
+  text-align: start;
+  font-size: 14px;
+  color: var(--text);
+  white-space: nowrap;
+}
+.menu-item:hover,
+.menu-item[data-active='true'] {
+  background: var(--hover);
+}
+.menu-item:disabled,
+.menu-item[aria-disabled='true'] {
+  opacity: 0.4;
+  background: none;
+}
+.menu-item .lucide {
+  width: 18px;
+  height: 18px;
+  color: var(--text-2);
+  flex: none;
+}
+.menu-item .shortcut {
+  margin-inline-start: auto;
+  padding-inline-start: 24px;
+  color: var(--text-3);
+  font-size: 12px;
+}
+.menu-sep {
+  height: 1px;
+  margin: 6px 0;
+  background: var(--divider);
+}
+.menu-header {
+  padding: 8px 16px 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+  letter-spacing: 0.3px;
+}
+/* A line under a menu's name that says what its choices do ("Removes from Inbox"). */
+.menu-hint {
+  padding: 2px 16px 6px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.menu-search {
+  padding: 4px 12px 8px;
+}
+.menu-search input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  padding: 6px 2px;
+}
+.menu-search input:focus {
+  border-bottom: 2px solid var(--primary);
+}
+
+/* A long list inside a menu (labels) scrolls on its own; the filter and actions stay put. */
+.menu-scroll {
+  max-height: 300px;
+  overflow: auto;
+}
+
+/* The row's right-click menu may use the window's height (its submenus keep it short). */
+.popover.row-menu {
+  max-height: calc(100vh - 16px);
+}
+
+/* Cascading submenus (components/Popover.tsx SubMenu). */
+.menu-item .submenu-chevron {
+  width: 16px;
+  height: 16px;
+  margin-inline-start: auto;
+  color: var(--text-3);
+}
+.menu-item .shortcut + .submenu-chevron,
+.menu-item .shortcut + .menu-check {
+  margin-inline-start: 8px;
+}
+.menu-item .shortcut:has(+ .submenu-chevron) {
+  padding-inline-start: 16px;
+}
+/* Key hints in menus (b, v, l, e, #, s) only where a keyboard is likely: none on touch or at
+   phone width. A typed trigger (a template's ";sig") stays, since it works on any keyboard. */
+@media (hover: none), (max-width: 600px) {
+  .menu-item .shortcut:not(.typed) {
+    display: none;
+  }
+  .menu-item .shortcut:not(.typed) + .submenu-chevron,
+  .menu-item .shortcut:not(.typed) + .menu-check {
+    margin-inline-start: auto;
+  }
+}
+.menu-item .menu-check {
+  width: 16px;
+  height: 16px;
+  margin-inline-start: auto;
+  padding-inline-start: 0;
+  color: var(--primary);
+}
+.menu-item .menu-check.off {
+  visibility: hidden;
+}
+.submenu-trigger[aria-expanded='true'] {
+  background: var(--hover);
+}
+.submenu-panel.popover {
+  max-height: none;
+  animation: submenu-in 110ms var(--ease);
+}
+.submenu-panel[data-side='left'] {
+  animation-name: submenu-in-left;
+}
+.submenu-panel:focus {
+  outline: none;
+}
+@keyframes submenu-in {
+  from {
+    opacity: 0;
+    transform: translateX(-4px); /* rtl: data-side is the side it opened on */
+  }
+}
+@keyframes submenu-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(4px); /* rtl: data-side is the side it opened on */
+  }
+}
+/* At phone width a submenu takes the menu's place, under a Back item. */
+.popover[data-inline-open] > :not(.menu-inline-slot) {
+  display: none;
+}
+.menu-inline-slot:empty,
+.menu-inline-slot > .submenu-inline:not(:last-child) {
+  display: none;
+}
+.submenu-inline {
+  animation: submenu-in 110ms var(--ease);
+}
+.submenu-back {
+  color: var(--text-2);
+}
+
+/* ---------- dialogs ---------- */
+
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: var(--scrim);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  animation: fade-in 120ms var(--ease);
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+.dialog {
+  width: min(560px, 100%);
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  color: var(--text);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-3);
+  animation: dialog-in 160ms var(--ease);
+}
+[data-theme='dark'] .dialog {
+  background: var(--surface-container);
+}
+.dialog.wide {
+  width: min(840px, 100%);
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+.dialog-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 24px 8px;
+}
+.dialog-head h2 {
+  font-size: 22px;
+  line-height: 28px;
+  flex: 1;
+}
+.dialog-body {
+  padding: 8px 24px 16px;
+  overflow: auto;
+}
+.dialog-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 24px 20px;
+}
+
+/* ---------- toasts ---------- */
+
+.toasts {
+  position: fixed;
+  inset-inline-start: 24px;
+  bottom: 24px;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 288px;
+  max-width: 560px;
+  min-height: 48px;
+  padding-block: 6px;
+  padding-inline: 16px 8px;
+  border-radius: var(--radius-xs);
+  background: var(--toast-bg);
+  color: var(--toast-fg);
+  box-shadow: var(--shadow-2);
+  font-size: 14px;
+  animation: toast-in 180ms var(--ease);
+}
+.toast.error {
+  border-inline-start: 4px solid #f28b82;
+}
+.toast .toast-msg {
+  flex: 1;
+  padding: 6px 0;
+}
+.toast .toast-act {
+  color: var(--toast-action);
+  font-weight: 500;
+  padding: 8px;
+  border-radius: var(--radius-xs);
+}
+.toast .toast-act:hover {
+  background: rgba(128, 128, 128, 0.16);
+}
+.toast .icon-btn {
+  --icon-btn: calc(32px * var(--dz, 1));
+  --icon: calc(18px * var(--dzi, 1));
+  color: var(--toast-fg);
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+/* ---------- chips, badges, avatars ---------- */
+
+.label-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-xs);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 400;
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  white-space: nowrap;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: none;
+}
+.label-chip.lg {
+  height: 22px;
+  padding-block: 0;
+  padding-inline: 8px 4px;
+  font-size: 13px;
+}
+.label-chip button {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  color: inherit;
+  opacity: 0.7;
+}
+.label-chip button:hover {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.12);
+}
+.label-chip button .lucide {
+  width: 12px;
+  height: 12px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  color: var(--text-2);
+  font-size: 14px;
+  white-space: nowrap;
+  background: transparent;
+}
+.chip:hover {
+  background: var(--hover);
+}
+.chip[aria-pressed='true'],
+a.chip[aria-current='page'] {
+  background: var(--accent-chip-bg);
+  color: var(--accent-chip-fg);
+  border-color: transparent;
+}
+.chip .lucide {
+  width: 16px;
+  height: 16px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-full);
+  background: var(--danger);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+[data-theme='dark'] .badge {
+  color: #601410;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  white-space: nowrap;
+}
+.pill.ok {
+  background: var(--success-container);
+  color: var(--success);
+}
+.pill.warn {
+  background: var(--warning-container);
+  color: var(--warning-fg);
+}
+.pill.err {
+  background: var(--danger-container);
+  color: var(--danger);
+}
+.pill.info {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+.avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  background: var(--surface, #fff);
+}
+.avatar {
+  position: relative;
+  overflow: hidden;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  user-select: none;
+}
+.avatar.sm {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+}
+.avatar.xs {
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+}
+
+/* ---------- misc ---------- */
+
+.skeleton {
+  display: block;
+  border-radius: var(--radius-xs);
+  background: linear-gradient(90deg, var(--skeleton) 25%, var(--skeleton-hi) 37%, var(--skeleton) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+@keyframes shimmer {
+  /* The shine moves toward the end: left to right, or right to left in a right-to-left page. */
+  0% {
+    background-position: calc(50% + 50% * var(--dir)) 50%;
+  }
+  100% {
+    background-position: calc(50% - 50% * var(--dir)) 50%;
+  }
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3px solid var(--primary-container);
+  border-top-color: var(--primary);
+  animation: spin 0.8s linear infinite;
+  flex: none;
+}
+.spinner.sm {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 64px 24px;
+  text-align: center;
+  color: var(--text-3);
+}
+.empty .lucide {
+  width: 48px;
+  height: 48px;
+  opacity: 0.6;
+}
+.empty h3 {
+  font-size: 18px;
+  color: var(--text-2);
+}
+.empty .error-details {
+  max-width: min(560px, 100%);
+  font-size: 12px;
+}
+.empty .error-details code {
+  display: block;
+  margin-top: 6px;
+  overflow-wrap: anywhere;
+}
+
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  background: var(--info-container);
+  color: var(--text);
+  font-size: 13.5px;
+}
+.banner.warn {
+  background: var(--warning-container);
+  color: var(--warning-fg);
+}
+.banner.error {
+  background: var(--danger-container);
+  color: var(--danger);
+}
+.banner .lucide {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.table th {
+  text-align: start;
+  font-weight: 500;
+  color: var(--text-2);
+  font-size: 12.5px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--divider);
+  white-space: nowrap;
+}
+.table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--divider);
+  vertical-align: middle;
+}
+.table tr:hover td {
+  background: var(--hover);
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 100;
+  pointer-events: none;
+  padding: 4px 8px;
+  border-radius: var(--radius-xs);
+  background: var(--tooltip-bg);
+  color: var(--text-inverse);
+  font-size: 12px;
+  line-height: 16px;
+  /* One line when it fits; a long tip wraps inside the window (TooltipLayer keeps it on screen). */
+  width: max-content;
+  max-width: min(360px, calc(100vw - 16px));
+  animation: fade-in 100ms var(--ease) 300ms both;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 24px);
+  gap: 6px;
+  padding: 8px 12px;
+}
+.color-swatch {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-xs);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.color-swatch[aria-pressed='true'] {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+
+/* Label colour picker (features/mail/LabelColourPicker.tsx). Chips carry their own
+   light-dark() colours, so the grid matches the theme with no rules here. */
+.lcp {
+  width: 344px;
+  max-width: calc(100vw - 24px);
+  padding: 10px 12px 4px;
+  display: grid;
+  gap: 8px;
+}
+.lcp-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 26px;
+}
+.lcp-preview .label-chip:not([style]) {
+  background: var(--pressed);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+.lcp-desc {
+  font-size: 12px;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lcp-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+.lcp-tabs [role='tab'] {
+  font-size: 12px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: var(--text-2);
+}
+.lcp-tabs [role='tab']:hover {
+  background: var(--hover, rgba(127, 127, 127, 0.12));
+}
+.lcp-tabs [role='tab'][aria-selected='true'] {
+  background: var(--primary-container, rgba(31, 108, 134, 0.14));
+  color: var(--text);
+  font-weight: 600;
+}
+.lcp-yours {
+  color: var(--primary);
+  font-size: 9px;
+  vertical-align: 1px;
+}
+.lcp-grid {
+  display: grid;
+  gap: 5px 4px;
+}
+.lcp-row,
+.lcp-grid [role='gridcell'] {
+  display: contents;
+}
+.lcp-cell.label-chip {
+  justify-content: center;
+  width: 100%;
+  height: 26px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+}
+.lcp-cell:hover {
+  transform: scale(1.08);
+}
+.lcp-cell:focus-visible,
+.lcp-cell[aria-pressed='true'] {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+.lcp-custom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lcp-custom input[type='color'] {
+  width: 32px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xs);
+  background: none;
+}
+.lcp-custom .input {
+  width: 88px;
+  font-family: var(--font-mono, monospace);
+}
+.lcp-contrast {
+  font-size: 11px;
+  flex: 1;
+}
+.lcp-foot {
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  padding-top: 4px;
+}
+.lcp-foot .lucide {
+  width: 16px;
+  height: 16px;
+}
+
+/* Inputs draw their own focus state. */
+.input:focus-visible,
+.select:focus-visible,
+.textarea:focus-visible {
+  outline: none;
+}
+
+/* Quick-action popover and editors for tasks and events (features/rail/QuickSheet.tsx). */
+.qs {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  width: min(360px, calc(100vw - 32px));
+}
+.qs-head {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+.qs-title {
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1.3;
+}
+.qs-when-line {
+  font-size: 13px;
+  color: var(--text-2);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.qs-overdue {
+  background: var(--danger-container);
+  color: var(--danger);
+}
+.qs-primary {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 8px;
+}
+.qs-primary .btn {
+  justify-content: center;
+  gap: 6px;
+}
+.qs-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  align-items: center;
+}
+.qs-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.qs-chip {
+  display: grid;
+  text-align: start;
+  gap: 1px;
+  padding: 6px 10px;
+  height: auto;
+}
+.qs-chip span {
+  font-size: 11px;
+  color: var(--text-2);
+}
+.qs-picker {
+  display: grid;
+  gap: 8px;
+}
+.qs-when {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.qs-when .input {
+  width: auto;
+}
+.qs-notime {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+}
+.qs-result {
+  font-size: 13px;
+  color: var(--primary);
+}
+.qs-form {
+  display: grid;
+  gap: 12px;
+}
+.qs-form label {
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.qs-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.qs-row > label {
+  flex: 1 1 140px;
+}
+.qs-reminders {
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md);
+  padding: 6px 10px 10px;
+}
+.qs-reminders legend {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0 4px;
+}
+.qs-notes {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.agenda-item.clickable {
+  cursor: pointer;
+}
+.agenda-item.clickable:hover {
+  background: var(--hover, rgba(127, 127, 127, 0.08));
+}
+
+/* mail.primary_action chip on list rows (features/mail/ActionChip.tsx) */
+.action-chip-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-inline-start: 8px;
+  /* On a tight line the chip's label gives way (ellipsis, down to the icon) before the
+     subject does; the snippet already takes only leftover space. */
+  flex: 0 4 auto;
+  vertical-align: middle;
+  max-width: 100%;
+  min-width: 40px;
+  overflow: hidden;
+}
+.action-chip {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 10px;
+  border: 1px solid var(--divider);
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--primary);
+  text-decoration: none;
+  white-space: nowrap;
+  background: var(--surface);
+}
+.action-chip > .lucide { flex: none; }
+.action-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.action-chip:hover {
+  background: var(--primary-container, rgba(127, 127, 255, 0.12));
+}
+.action-fact {
+  /* The fact beside the chip takes only the room the chip leaves, so it gives way first. */
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--text-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* An editor's Delete sits at the footer's left end, apart from Cancel and Save. */
+.qs-delete {
+  color: var(--danger);
+  margin-inline-end: auto;
+}
+
+/* mail.follow_up: "No reply" on a row that came back, a bell while a reminder waits. */
+.nudge-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--warning-fg, #8a5a00);
+  background: var(--warning-container, rgba(255, 170, 0, 0.15));
+  white-space: nowrap;
+}
+.nudge-chip.pending {
+  padding: 0 4px;
+  color: var(--text-3);
+  background: none;
+}
+
+/* The attachments view (features/mail/AttachmentsView.tsx). */
+.files-view {
+  padding: 16px 24px 32px;
+  overflow: auto;
+  height: 100%;
+  box-sizing: border-box;
+}
+.files-head h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.files-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+.files-filters .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.files-name {
+  width: 200px;
+  margin-inline-start: auto;
+}
+.files-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.files-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--divider);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+  min-width: 0;
+}
+.files-preview {
+  display: grid;
+  place-items: center;
+  height: 120px;
+  background: var(--hover);
+  color: var(--text-3);
+}
+.files-preview {
+  overflow: hidden;
+}
+.files-preview img {
+  display: block;
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+.files-icon .lucide {
+  width: 40px;
+  height: 40px;
+}
+.files-meta {
+  padding: 8px 12px 10px;
+  min-width: 0;
+}
+.files-name-link {
+  display: block;
+  font-weight: 500;
+  color: var(--text);
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.files-name-link:hover {
+  text-decoration: underline;
+}
+.files-sub {
+  font-size: 12px;
+  margin: 2px 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.files-open {
+  max-width: 100%;
+  padding: 0 6px;
+  margin-inline-start: -6px;
+  justify-content: flex-start;
+}
+.files-open span,
+.files-open {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.files-more,
+.files-empty {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+@media (max-width: 600px) {
+  .files-view {
+    padding: 12px 16px 24px;
+  }
+  .files-name {
+    width: 100%;
+    margin-inline-start: 0;
+  }
+  .files-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
+
+/* Mail → Subscriptions and Mail → Clean up (features/mail/SubscriptionsView.tsx, CleanupView.tsx). */
+.mg-view {
+  padding: 16px 24px 32px;
+  overflow: auto;
+  height: 100%;
+  box-sizing: border-box;
+}
+.mg-head h2 {
+  margin: 0 0 4px;
+  font-size: 20px;
+  font-weight: 500;
+}
+.mg-intro {
+  margin: 0 0 12px;
+  max-width: 72ch;
+}
+.mg-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.mg-controls .files-filters {
+  margin-bottom: 0;
+}
+.mg-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+}
+.mg-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.mg-field .select {
+  min-width: 0;
+}
+.mg-search {
+  width: 220px;
+  margin-inline-start: auto;
+}
+.mg-toggles {
+  font-size: 13px;
+  color: var(--text-2);
+}
+.mg-toggles label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.mg-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--divider);
+}
+.mg-suggest {
+  margin-inline-start: auto;
+}
+.mg-center {
+  display: grid;
+  place-items: center;
+  padding: 32px;
+}
+.mg-grid {
+  --mg-cols: minmax(0, 1fr) auto;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  overflow: hidden;
+}
+.mg-grid.subs {
+  --mg-cols: minmax(200px, 2.2fr) 64px 64px 56px 104px 108px minmax(280px, 2.6fr);
+}
+.mg-gridhead,
+.mg-rowitem {
+  display: grid;
+  grid-template-columns: var(--mg-cols);
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+}
+.mg-gridhead {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+  border-bottom: 1px solid var(--divider);
+  background: var(--surface-dim);
+}
+.mg-rowitem {
+  border-bottom: 1px solid var(--divider);
+  font-size: 14px;
+  outline: none;
+}
+.mg-rowitem:last-child {
+  border-bottom: 0;
+}
+.mg-rowitem:hover {
+  background: var(--hover);
+}
+.mg-rowitem:focus-visible {
+  box-shadow: inset 3px 0 0 var(--row-focused-bar);
+  background: var(--hover);
+}
+.mg-rowitem.done .mg-title {
+  color: var(--text-2);
+}
+.mg-grid .num {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+.mg-name {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+.mg-title {
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mg-addr {
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mg-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.mg-badges:empty {
+  display: none;
+}
+.mg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  line-height: 18px;
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  border: 0;
+  white-space: nowrap;
+}
+.mg-badge.ok,
+.mg-badge.method.one_click {
+  background: var(--success-container);
+  color: var(--on-success-container);
+}
+.mg-badge.method.unknown,
+.mg-badge.method.nolink,
+.mg-badge.method.none {
+  background: transparent;
+  color: var(--text-3);
+  padding-inline-start: 0;
+}
+.mg-badge.suggestion {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+}
+.mg-badge.suggestion:hover {
+  filter: brightness(0.96);
+}
+.mg-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 2px 4px;
+}
+.mg-actions-h {
+  text-align: end;
+}
+.mg-preview p {
+  margin: 0 0 8px;
+}
+.mg-lead {
+  color: var(--text);
+}
+.mg-includes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 8px 0 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-sm);
+}
+.mg-includes legend {
+  font-size: 12px;
+  color: var(--text-3);
+  padding: 0 4px;
+}
+.mg-includes label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.mg-sub {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+  margin: 12px 0 4px;
+}
+.mg-samples {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-sm);
+}
+.mg-samples li + li {
+  border-top: 1px solid var(--divider);
+}
+.mg-sample {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 6px 10px;
+  border: 0;
+  background: none;
+  color: var(--text);
+  text-align: start;
+  font: inherit;
+  cursor: pointer;
+  min-width: 0;
+}
+.mg-sample:hover {
+  background: var(--hover);
+}
+.mg-sample-subj,
+.mg-sample-meta {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mg-sample-subj.unread {
+  font-weight: 600;
+}
+.mg-sample-meta {
+  font-size: 12px;
+}
+@media (max-width: 700px) {
+  .mg-view {
+    padding: 12px 12px 24px;
+  }
+  .mg-search {
+    width: 100%;
+    margin-inline-start: 0;
+  }
+  .mg-suggest {
+    margin-inline-start: 0;
+  }
+  .mg-sep {
+    display: none;
+  }
+  .mg-gridhead {
+    display: none;
+  }
+  .mg-grid.subs .mg-rowitem,
+  .mg-rowitem {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px 8px;
+    padding: 10px 12px;
+  }
+  .mg-rowitem .mg-name,
+  .mg-rowitem .mg-actions {
+    grid-column: 1 / -1;
+  }
+  .mg-grid.subs [data-label] {
+    font-size: 12px;
+    text-align: start;
+  }
+  .mg-grid.subs [data-label]::before {
+    content: attr(data-label);
+    display: block;
+    color: var(--text-3);
+    font-size: 11px;
+  }
+  .mg-grid.subs [data-label='Unsubscribe'] {
+    grid-column: span 2;
+  }
+  .mg-actions {
+    justify-content: flex-start;
+  }
+}
+
+/* Settings → Mail → Inbox → VIP senders. */
+.vip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.vip-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding-inline-end: 2px;
+}
+button.action-chip {
+  cursor: pointer;
+  font-family: inherit;
+}
+.action-code {
+  font-family: var(--font-mono, ui-monospace, monospace);
+  letter-spacing: 0.5px;
+}
+
+/* Triage signals on list rows (features/mail/SignalChips.tsx): a small filled bubble right after
+   the subject, never stretched, never pushing the subject along. */
+.signal-chip {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  align-self: center;
+  width: max-content;
+  height: 18px;
+  margin-inline-start: 6px;
+  padding: 0 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--text-2);
+  background: var(--hover, rgba(127, 127, 127, 0.14));
+}
+.signal-chip.needs_reply {
+  color: var(--accent-badge-fg);
+  background: var(--accent-badge-bg);
+}
+.signal-chip.deadline {
+  color: var(--warning-fg);
+  background: var(--warning-container);
+}
+.signal-chip.deadline.urgent {
+  color: var(--danger);
+  background: var(--danger-container);
+}
+/* The Due chip's two texts: the full one by default, the date alone on a narrow row line. */
+.signal-chip .due-short { display: none; }
+@container rowline (max-width: 460px) {
+  .signal-chip .due-full { display: none; }
+  .signal-chip .due-short { display: inline; }
+}
+/* The Due chip opens its menu (DeadlineChip.tsx): a button that looks like the other chips. */
+button.signal-chip {
+  border: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+button.signal-chip:hover { filter: brightness(0.96); }
+.conv-signals { display: inline-flex; vertical-align: top; align-items: center; height: var(--subject-line, 32px); }
+.conv-signals .signal-chip { margin-inline-start: 0; height: 22px; padding: 0 9px; font-size: 12px; }
+.nudge-chip {
+  margin-inline-start: 6px;
+}
+
+/* The mailr mark (components/bits.tsx Logo): the stack-check drawn in the theme's primary hue
+   at fixed lightness steps, so it keeps its contrast in light and dark themes alike. The hex
+   values are the default blue for browsers without relative colours. */
+.logo-mark { display: block; flex: none; }
+.logo-mark .l-back { fill: #0842a0; }
+.logo-mark .l-light { fill: #a8c7fa; }
+.logo-mark .l-mid { fill: #4c8df6; }
+.logo-mark .l-body { fill: #1a73e8; }
+.logo-mark .l-pocket { fill: #0b57d0; }
+.logo-mark .l-flap { fill: #eaf1fe; }
+.logo-mark .l-check { fill: none; stroke: #062e6f; stroke-width: 3.4; stroke-linecap: round; stroke-linejoin: round; }
+@supports (color: oklch(from red l c h)) {
+  .logo-mark .l-back { fill: oklch(from var(--primary) 0.43 0.15 h); }
+  .logo-mark .l-light { fill: oklch(from var(--primary) 0.82 0.08 h); }
+  .logo-mark .l-mid { fill: oklch(from var(--primary) 0.66 0.16 h); }
+  .logo-mark .l-body { fill: oklch(from var(--primary) 0.58 0.18 h); }
+  .logo-mark .l-pocket { fill: oklch(from var(--primary) 0.5 0.18 h); }
+  .logo-mark .l-flap { fill: oklch(from var(--primary) 0.96 0.02 h); }
+  .logo-mark .l-check { stroke: oklch(from var(--primary) 0.3 0.12 h); }
+}
+
+/* Settings → Mail → Labels → Label colours (features/settings/LabelColours.tsx). */
+.lc-schemes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+  gap: 10px;
+  max-width: 900px;
+}
+.lc-scheme {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 4px 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md, 8px);
+  cursor: pointer;
+}
+.lc-scheme.on {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+.lc-scheme .lc-name {
+  font-weight: 600;
+}
+.lc-scheme .lc-desc,
+.lc-scheme .lc-previews {
+  grid-column: 1 / -1;
+}
+.lc-desc {
+  font-size: 12px;
+  color: var(--text-2);
+}
+.lc-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+/* Fixed light and dark surfaces, so both previews show whichever theme is on. */
+.lc-panel {
+  flex: 1 1 190px;
+  display: grid;
+  gap: 5px;
+  padding: 6px 8px 8px;
+  border-radius: var(--radius-sm, 6px);
+}
+.lc-panel.light {
+  background: #ffffff;
+  border: 1px solid #dadce0;
+  color: #5f6368;
+}
+.lc-panel.dark {
+  background: #1f1f1f;
+  border: 1px solid #3c3c3c;
+  color: #9aa0a6;
+}
+.lc-mode {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.lc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.lc-chips .label-chip {
+  font-size: 11px;
+  padding: 0 4px;
+}
+.lc-strip {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 2px;
+}
+.lc-strip span {
+  height: 8px;
+  border-radius: 2px;
+}
+.lc-offer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md, 8px);
+  background: var(--primary-container);
+  max-width: 680px;
+}
+.lc-offer span {
+  flex: 1;
+  min-width: 200px;
+}
+.lc-plan {
+  display: grid;
+  gap: 6px;
+  max-height: 50vh;
+  overflow: auto;
+}
+.lc-plan-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.lc-plan-row .lc-arrow {
+  width: 14px;
+  height: 14px;
+  color: var(--text-2);
+}
+.lc-to {
+  font-size: 12px;
+}
+
+/* A list that failed to load (components/bits LoadFailed). */
+.load-failed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--danger-container);
+  color: var(--on-danger-container);
+}
+/* The two live regions of the toast stack (Toasts.tsx) draw no box: their toasts are items of
+   .toasts, kept in time order with `order`. */
+.toast-region {
+  display: contents;
+}
+
+/* A checkbox with a 24 px hit area (WCAG 2.5.8) that looks and takes the room of the usual box:
+   the input is 24 px with a negative margin, and ::before draws the box. Lists and note cards use it. */
+.checkbox.hit24 {
+  width: 24px;
+  height: 24px;
+  margin: -3px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+}
+.checkbox.hit24::before {
+  content: '';
+  grid-area: 1 / 1;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--text-2);
+  border-radius: 2px;
+  transition: background var(--dur) var(--ease);
+}
+.checkbox.hit24:checked,
+.checkbox.hit24:indeterminate {
+  background: none;
+}
+.checkbox.hit24:checked::before,
+.checkbox.hit24:indeterminate::before {
+  background: var(--text);
+  border-color: var(--text);
+}
+.checkbox.hit24::after {
+  grid-area: 1 / 1;
+  justify-self: center;
+  align-self: center;
+}
+
+/* One record that failed to render (components/bits ItemBoundary): a small line in its place. */
+.item-error {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--danger-container);
+  color: var(--danger);
+  font-size: 13px;
+}
+.item-error.compact {
+  display: block;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

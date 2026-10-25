@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Launcher shortcuts (long-press the app icon): the "Send to self" sharing target (its shortcut is
+     published at sign-in by SelfShareShortcut). Ask and Dictate are dynamic shortcuts
+     (ui/ask/AssistantSurfaces.kt), so their labels carry the user's name for the assistant. -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <share-target android:targetClass="io.github.murtazanasir.mailr.ui.share.ShareToSelfActivity">
+        <data android:mimeType="*/*" />
+        <category android:name="io.github.murtazanasir.mailr.category.SEND_TO_SELF" />
+    </share-target>
+</shortcuts>

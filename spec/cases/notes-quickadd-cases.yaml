@@ -1,0 +1,190 @@
+# Golden vectors for the checklist item grammar.
+#
+# Run by frontend/src/lib/itemadd.test.ts (vitest, which also checks that the Android copy matches), by
+# android/app/src/test/java/io/github/murtazanasir/mailr/notes/ItemGrammarTest.kt (JUnit, reading the copy in
+# android/app/src/test/resources/interaction/; the grammar is ItemGrammar in the shared module
+# android/notes-core) and by backend/tests/test_itemadd.py (pytest).
+#
+# Format: the restricted shape of quickadd-cases.yaml. Every value is JSON on one line: a top-level
+# `key: <json>` line, or a case line `  - {...}` under `cases:`. Lines starting with `#` are comments.
+#
+# A case: id; mode (list | capture | edit | key); list (list mode and edit mode: the id of the list the
+# input belongs to); in (the typed or pasted text; "\n" is a new line); optional opts (keep: token texts
+# turned back into text; prefixCreates: an unknown `Name:` prefix makes a section, as in the new-list
+# composer); expect.
+#
+# expect, for list, capture and edit:
+#   list          capture mode only: {"id", "name", "create"} (the default list when no token names one)
+#   items         in input order. Each item has "text"; "qty" ({"amount", "unit"} or null), "section"
+#                 (a section name or null) and "checked" (true or false) are always checked, with the
+#                 defaults null, null and false when a case leaves them out
+#   new_sections  sections the input creates, in order (default [])
+#   tokens        "kind:text" in input order (default []); kinds: list, section, qty, check
+# expect, for key: {"key": "<the item key>"}.
+# expect, for quick ("New note…" from anywhere): {"kind": "note", "note": {"title", "body"}} for a
+#   text note, or {"kind": "items", "list", "items", "tokens"} as in capture mode (no default list) when the
+#   text starts with a `#List` token. A `#name` later in the text stays text.
+#
+# Amounts are decimal strings ("2", "0.5", "1.5"); thirds and other repeating fractions round to 3
+# decimals ("0.333"). Units are the canonical unit names (unit null for a count).
+
+lists: [{"id": "n-shop", "name": "Shopping", "sections": ["Costco", "Corner market", "Spice shop"]}, {"id": "n-pack", "name": "Packing list", "sections": ["Clothes", "Toiletries"]}, {"id": "n-hw", "name": "Hardware", "sections": []}]
+defaultList: "n-shop"
+
+# Typing: every prefix of each line, one code point at a time, in list and capture mode, must parse without
+# an error, with every token's text at its place.
+typing: ["2 cans of tomatoes", "milk x2, eggs ×12", "Costco: 1½ lb ground beef", "#Shopping Spice shop: cumin", "- [x] 500g flour", "rice (2 kg)", "\"7 Up\"", "## Bakery", "½", "x", "#", ":", "2 x 4 lumber"]
+
+cases:
+# ---- splitting
+  - {"id": "split-one", "mode": "list", "list": "n-shop", "in": "milk", "expect": {"items": [{"text": "milk"}]}}
+  - {"id": "split-commas", "mode": "list", "list": "n-shop", "in": "milk, eggs, bread", "expect": {"items": [{"text": "milk"}, {"text": "eggs"}, {"text": "bread"}]}}
+  - {"id": "split-semicolon", "mode": "list", "list": "n-shop", "in": "milk; eggs", "expect": {"items": [{"text": "milk"}, {"text": "eggs"}]}}
+  - {"id": "split-lines", "mode": "list", "list": "n-shop", "in": "milk\neggs\n\nbread", "expect": {"items": [{"text": "milk"}, {"text": "eggs"}, {"text": "bread"}]}}
+  - {"id": "split-trailing-comma", "mode": "list", "list": "n-shop", "in": "milk, ", "expect": {"items": [{"text": "milk"}]}}
+  - {"id": "split-and-stays", "mode": "list", "list": "n-shop", "in": "salt and pepper", "expect": {"items": [{"text": "salt and pepper"}]}}
+  - {"id": "split-quotes-protect", "mode": "list", "list": "n-shop", "in": "\"cheese, cheddar\", crackers", "expect": {"items": [{"text": "\"cheese, cheddar\""}, {"text": "crackers"}]}}
+  - {"id": "split-parens-protect", "mode": "list", "list": "n-shop", "in": "tortillas (corn, small), salsa", "expect": {"items": [{"text": "tortillas (corn, small)"}, {"text": "salsa"}]}}
+  - {"id": "split-trailing-dot", "mode": "list", "list": "n-shop", "in": "milk.", "expect": {"items": [{"text": "milk"}]}}
+  - {"id": "split-inner-spaces", "mode": "list", "list": "n-shop", "in": "  paper    towels  ", "expect": {"items": [{"text": "paper towels"}]}}
+  - {"id": "split-case-kept", "mode": "list", "list": "n-shop", "in": "Greek Yogurt", "expect": {"items": [{"text": "Greek Yogurt"}]}}
+
+# ---- bullets and checkboxes (paste from Markdown or another app)
+  - {"id": "bullets", "mode": "list", "list": "n-shop", "in": "- milk\n* eggs\n• bread\n1. butter\n2) jam\n– honey", "expect": {"items": [{"text": "milk"}, {"text": "eggs"}, {"text": "bread"}, {"text": "butter"}, {"text": "jam"}, {"text": "honey"}]}}
+  - {"id": "checkboxes", "mode": "list", "list": "n-shop", "in": "- [ ] milk\n- [x] eggs\n[X] bread\n✓ jam\n✔ honey\n[ ] salt", "expect": {"items": [{"text": "milk"}, {"text": "eggs", "checked": true}, {"text": "bread", "checked": true}, {"text": "jam", "checked": true}, {"text": "honey", "checked": true}, {"text": "salt"}], "tokens": ["check:- [x]", "check:[X]", "check:✓", "check:✔"]}}
+  - {"id": "checked-with-qty", "mode": "list", "list": "n-shop", "in": "✓ 2 milk", "expect": {"items": [{"text": "milk", "qty": {"amount": "2", "unit": null}, "checked": true}], "tokens": ["check:✓", "qty:2"]}}
+
+# ---- quantities: leading forms
+  - {"id": "qty-count", "mode": "list", "list": "n-shop", "in": "2 milk", "expect": {"items": [{"text": "milk", "qty": {"amount": "2", "unit": null}}], "tokens": ["qty:2"]}}
+  - {"id": "qty-twelve", "mode": "list", "list": "n-shop", "in": "12 eggs", "expect": {"items": [{"text": "eggs", "qty": {"amount": "12", "unit": null}}], "tokens": ["qty:12"]}}
+  - {"id": "qty-grams-space", "mode": "list", "list": "n-shop", "in": "500 g flour", "expect": {"items": [{"text": "flour", "qty": {"amount": "500", "unit": "g"}}], "tokens": ["qty:500 g"]}}
+  - {"id": "qty-grams-attached", "mode": "list", "list": "n-shop", "in": "500g flour", "expect": {"items": [{"text": "flour", "qty": {"amount": "500", "unit": "g"}}], "tokens": ["qty:500g"]}}
+  - {"id": "qty-decimal-kg", "mode": "list", "list": "n-shop", "in": "1.5 kg rice", "expect": {"items": [{"text": "rice", "qty": {"amount": "1.5", "unit": "kg"}}], "tokens": ["qty:1.5 kg"]}}
+  - {"id": "qty-cans-of", "mode": "list", "list": "n-shop", "in": "2 cans of tomatoes", "expect": {"items": [{"text": "tomatoes", "qty": {"amount": "2", "unit": "can"}}], "tokens": ["qty:2 cans of"]}}
+  - {"id": "qty-lbs", "mode": "list", "list": "n-shop", "in": "2 lbs chicken thighs", "expect": {"items": [{"text": "chicken thighs", "qty": {"amount": "2", "unit": "lb"}}], "tokens": ["qty:2 lbs"]}}
+  - {"id": "qty-bunches", "mode": "list", "list": "n-shop", "in": "3 bunches cilantro", "expect": {"items": [{"text": "cilantro", "qty": {"amount": "3", "unit": "bunch"}}], "tokens": ["qty:3 bunches"]}}
+  - {"id": "qty-loaves", "mode": "list", "list": "n-shop", "in": "2 loaves bread", "expect": {"items": [{"text": "bread", "qty": {"amount": "2", "unit": "loaf"}}], "tokens": ["qty:2 loaves"]}}
+  - {"id": "qty-dozen", "mode": "list", "list": "n-shop", "in": "2 dozen eggs", "expect": {"items": [{"text": "eggs", "qty": {"amount": "2", "unit": "dozen"}}], "tokens": ["qty:2 dozen"]}}
+  - {"id": "qty-tins", "mode": "list", "list": "n-shop", "in": "4 tins chickpeas", "expect": {"items": [{"text": "chickpeas", "qty": {"amount": "4", "unit": "can"}}], "tokens": ["qty:4 tins"]}}
+  - {"id": "qty-litres", "mode": "list", "list": "n-shop", "in": "2 litres orange juice", "expect": {"items": [{"text": "orange juice", "qty": {"amount": "2", "unit": "l"}}], "tokens": ["qty:2 litres"]}}
+  - {"id": "qty-hundred-with-unit", "mode": "list", "list": "n-shop", "in": "120 g butter", "expect": {"items": [{"text": "butter", "qty": {"amount": "120", "unit": "g"}}], "tokens": ["qty:120 g"]}}
+  - {"id": "qty-times-attached", "mode": "list", "list": "n-shop", "in": "2x milk", "expect": {"items": [{"text": "milk", "qty": {"amount": "2", "unit": null}}], "tokens": ["qty:2x"]}}
+  - {"id": "qty-times-spaced", "mode": "list", "list": "n-shop", "in": "2 x milk", "expect": {"items": [{"text": "milk", "qty": {"amount": "2", "unit": null}}], "tokens": ["qty:2 x"]}}
+  - {"id": "qty-times-sign", "mode": "list", "list": "n-shop", "in": "3× limes", "expect": {"items": [{"text": "limes", "qty": {"amount": "3", "unit": null}}], "tokens": ["qty:3×"]}}
+
+# ---- quantities: fractions
+  - {"id": "qty-half-unicode", "mode": "list", "list": "n-shop", "in": "½ watermelon", "expect": {"items": [{"text": "watermelon", "qty": {"amount": "0.5", "unit": null}}], "tokens": ["qty:½"]}}
+  - {"id": "qty-mixed-unicode", "mode": "list", "list": "n-shop", "in": "1½ lb ground beef", "expect": {"items": [{"text": "ground beef", "qty": {"amount": "1.5", "unit": "lb"}}], "tokens": ["qty:1½ lb"]}}
+  - {"id": "qty-mixed-slash", "mode": "list", "list": "n-shop", "in": "1 1/2 cups sugar", "expect": {"items": [{"text": "sugar", "qty": {"amount": "1.5", "unit": "cup"}}], "tokens": ["qty:1 1/2 cups"]}}
+  - {"id": "qty-slash-dozen", "mode": "list", "list": "n-shop", "in": "1/2 dozen eggs", "expect": {"items": [{"text": "eggs", "qty": {"amount": "0.5", "unit": "dozen"}}], "tokens": ["qty:1/2 dozen"]}}
+  - {"id": "qty-third", "mode": "list", "list": "n-shop", "in": "⅓ cup oil", "expect": {"items": [{"text": "oil", "qty": {"amount": "0.333", "unit": "cup"}}], "tokens": ["qty:⅓ cup"]}}
+
+# ---- quantities: trailing forms
+  - {"id": "qty-trailing-x", "mode": "list", "list": "n-shop", "in": "milk x2", "expect": {"items": [{"text": "milk", "qty": {"amount": "2", "unit": null}}], "tokens": ["qty:x2"]}}
+  - {"id": "qty-trailing-times", "mode": "list", "list": "n-shop", "in": "milk ×2", "expect": {"items": [{"text": "milk", "qty": {"amount": "2", "unit": null}}], "tokens": ["qty:×2"]}}
+  - {"id": "qty-trailing-x-spaced", "mode": "list", "list": "n-shop", "in": "milk x 2", "expect": {"items": [{"text": "milk", "qty": {"amount": "2", "unit": null}}], "tokens": ["qty:x 2"]}}
+  - {"id": "qty-trailing-capital-x", "mode": "list", "list": "n-shop", "in": "Eggs X12", "expect": {"items": [{"text": "Eggs", "qty": {"amount": "12", "unit": null}}], "tokens": ["qty:X12"]}}
+  - {"id": "qty-trailing-litre", "mode": "list", "list": "n-shop", "in": "Coke 2L", "expect": {"items": [{"text": "Coke", "qty": {"amount": "2", "unit": "l"}}], "tokens": ["qty:2L"]}}
+  - {"id": "qty-trailing-grams", "mode": "list", "list": "n-shop", "in": "flour 500 g", "expect": {"items": [{"text": "flour", "qty": {"amount": "500", "unit": "g"}}], "tokens": ["qty:500 g"]}}
+  - {"id": "qty-trailing-parens-unit", "mode": "list", "list": "n-shop", "in": "rice (2 kg)", "expect": {"items": [{"text": "rice", "qty": {"amount": "2", "unit": "kg"}}], "tokens": ["qty:(2 kg)"]}}
+  - {"id": "qty-trailing-parens-count", "mode": "list", "list": "n-shop", "in": "limes (6)", "expect": {"items": [{"text": "limes", "qty": {"amount": "6", "unit": null}}], "tokens": ["qty:(6)"]}}
+  - {"id": "qty-each-item", "mode": "list", "list": "n-shop", "in": "milk x2, eggs ×12, 500 g flour", "expect": {"items": [{"text": "milk", "qty": {"amount": "2", "unit": null}}, {"text": "eggs", "qty": {"amount": "12", "unit": null}}, {"text": "flour", "qty": {"amount": "500", "unit": "g"}}], "tokens": ["qty:x2", "qty:×12", "qty:500 g"]}}
+  - {"id": "qty-leading-wins", "mode": "list", "list": "n-shop", "in": "2 milk x3", "expect": {"items": [{"text": "milk x3", "qty": {"amount": "2", "unit": null}}], "tokens": ["qty:2"]}}
+
+# ---- quantities: not taken
+  - {"id": "qty-no-percent", "mode": "list", "list": "n-shop", "in": "2% milk", "expect": {"items": [{"text": "2% milk"}]}}
+  - {"id": "qty-no-year", "mode": "list", "list": "n-shop", "in": "2026 planner", "expect": {"items": [{"text": "2026 planner"}]}}
+  - {"id": "qty-no-hundred-bare", "mode": "list", "list": "n-shop", "in": "150 napkins", "expect": {"items": [{"text": "150 napkins"}]}}
+  - {"id": "qty-no-empty-item", "mode": "list", "list": "n-shop", "in": "500 g", "expect": {"items": [{"text": "500 g"}]}}
+  - {"id": "qty-no-bare-number", "mode": "list", "list": "n-shop", "in": "2", "expect": {"items": [{"text": "2"}]}}
+  - {"id": "qty-no-trailing-bare", "mode": "list", "list": "n-hw", "in": "AA batteries 4", "expect": {"items": [{"text": "AA batteries 4"}]}}
+  - {"id": "qty-no-middle", "mode": "list", "list": "n-hw", "in": "size 10 drill bit", "expect": {"items": [{"text": "size 10 drill bit"}]}}
+  - {"id": "qty-no-in-word", "mode": "list", "list": "n-shop", "in": "7up", "expect": {"items": [{"text": "7up"}]}}
+  - {"id": "qty-no-in-word-unitlike", "mode": "list", "list": "n-hw", "in": "3M tape", "expect": {"items": [{"text": "3M tape"}]}}
+  - {"id": "qty-no-x-next-to-number", "mode": "list", "list": "n-hw", "in": "2 x 4 lumber", "expect": {"items": [{"text": "2 x 4 lumber"}]}}
+  - {"id": "qty-no-2x4-word", "mode": "list", "list": "n-hw", "in": "2x4 lumber", "expect": {"items": [{"text": "2x4 lumber"}]}}
+  - {"id": "qty-no-trailing-plain-number", "mode": "list", "list": "n-shop", "in": "milk 2", "expect": {"items": [{"text": "milk 2"}]}}
+  - {"id": "qty-no-quoted", "mode": "list", "list": "n-shop", "in": "\"7 Up\"", "expect": {"items": [{"text": "\"7 Up\""}]}}
+  # A brand that starts with a number is read as a count; the chip's × or quotes keep it.
+  - {"id": "qty-brand-count", "mode": "list", "list": "n-shop", "in": "7 Up", "expect": {"items": [{"text": "Up", "qty": {"amount": "7", "unit": null}}], "tokens": ["qty:7"]}}
+  - {"id": "qty-keep-as-text", "mode": "list", "list": "n-shop", "in": "7 Up", "opts": {"keep": ["7"]}, "expect": {"items": [{"text": "7 Up"}]}}
+  - {"id": "qty-no-clock", "mode": "list", "list": "n-shop", "in": "10:30 pickup", "expect": {"items": [{"text": "10:30 pickup"}]}}
+
+# ---- sections (list mode)
+  - {"id": "sec-prefix-line", "mode": "list", "list": "n-shop", "in": "Costco: paper towels, avocados", "expect": {"items": [{"text": "paper towels", "section": "Costco"}, {"text": "avocados", "section": "Costco"}], "tokens": ["section:Costco:"]}}
+  - {"id": "sec-case", "mode": "list", "list": "n-shop", "in": "costco: milk", "expect": {"items": [{"text": "milk", "section": "Costco"}], "tokens": ["section:costco:"]}}
+  - {"id": "sec-multiword", "mode": "list", "list": "n-shop", "in": "Corner market: eggs", "expect": {"items": [{"text": "eggs", "section": "Corner market"}], "tokens": ["section:Corner market:"]}}
+  - {"id": "sec-spaces-ignored", "mode": "list", "list": "n-shop", "in": "cornermarket: eggs", "expect": {"items": [{"text": "eggs", "section": "Corner market"}], "tokens": ["section:cornermarket:"]}}
+  - {"id": "sec-unique-prefix", "mode": "list", "list": "n-shop", "in": "Cor: eggs", "expect": {"items": [{"text": "eggs", "section": "Corner market"}], "tokens": ["section:Cor:"]}}
+  - {"id": "sec-unique-prefix-spice", "mode": "list", "list": "n-shop", "in": "spi: cumin, turmeric", "expect": {"items": [{"text": "cumin", "section": "Spice shop"}, {"text": "turmeric", "section": "Spice shop"}], "tokens": ["section:spi:"]}}
+  - {"id": "sec-prefix-too-short", "mode": "list", "list": "n-shop", "in": "Co: eggs", "expect": {"items": [{"text": "Co: eggs"}]}}
+  - {"id": "sec-unknown-stays", "mode": "list", "list": "n-shop", "in": "Note: buy ripe ones", "expect": {"items": [{"text": "Note: buy ripe ones"}]}}
+  - {"id": "sec-too-many-words", "mode": "list", "list": "n-shop", "in": "Buy at the big store later: milk", "expect": {"items": [{"text": "Buy at the big store later: milk"}]}}
+  - {"id": "sec-no-space-after-colon", "mode": "list", "list": "n-shop", "in": "Costco:milk", "expect": {"items": [{"text": "Costco:milk"}]}}
+  - {"id": "sec-url-stays", "mode": "list", "list": "n-shop", "in": "https://example.org/item", "expect": {"items": [{"text": "https://example.org/item"}]}}
+  - {"id": "sec-with-qty", "mode": "list", "list": "n-shop", "in": "Costco: 2 milk, eggs x12", "expect": {"items": [{"text": "milk", "section": "Costco", "qty": {"amount": "2", "unit": null}}, {"text": "eggs", "section": "Costco", "qty": {"amount": "12", "unit": null}}], "tokens": ["section:Costco:", "qty:2", "qty:x12"]}}
+  - {"id": "sec-header-new", "mode": "list", "list": "n-shop", "in": "Farmers market:\napples\npears", "expect": {"items": [{"text": "apples", "section": "Farmers market"}, {"text": "pears", "section": "Farmers market"}], "new_sections": ["Farmers market"], "tokens": ["section:Farmers market:"]}}
+  - {"id": "sec-header-markdown", "mode": "list", "list": "n-shop", "in": "## Bakery\nbread", "expect": {"items": [{"text": "bread", "section": "Bakery"}], "new_sections": ["Bakery"], "tokens": ["section:## Bakery"]}}
+  - {"id": "sec-header-known", "mode": "list", "list": "n-shop", "in": "Costco:\nmilk\nSpice shop:\ncumin, turmeric", "expect": {"items": [{"text": "milk", "section": "Costco"}, {"text": "cumin", "section": "Spice shop"}, {"text": "turmeric", "section": "Spice shop"}], "tokens": ["section:Costco:", "section:Spice shop:"]}}
+  - {"id": "sec-line-overrides-header", "mode": "list", "list": "n-shop", "in": "Costco:\nSpice shop: cumin\nmilk", "expect": {"items": [{"text": "cumin", "section": "Spice shop"}, {"text": "milk", "section": "Costco"}], "tokens": ["section:Costco:", "section:Spice shop:"]}}
+  - {"id": "sec-header-checked", "mode": "list", "list": "n-shop", "in": "Costco:\n- [x] milk\n- [ ] eggs", "expect": {"items": [{"text": "milk", "section": "Costco", "checked": true}, {"text": "eggs", "section": "Costco"}], "tokens": ["section:Costco:", "check:- [x]"]}}
+  - {"id": "sec-none-in-list", "mode": "list", "list": "n-hw", "in": "Costco: nails", "expect": {"items": [{"text": "Costco: nails"}]}}
+  # The new-list composer (prefixCreates): an unknown prefix makes the section and keeps the quantity, as its
+  # hint promises. A known one is used; a second line with the same name joins it.
+  - {"id": "sec-new-list-prefix", "mode": "list", "list": "n-hw", "in": "Costco: 2 milk, eggs, towels", "opts": {"prefixCreates": true}, "expect": {"items": [{"text": "milk", "section": "Costco", "qty": {"amount": "2", "unit": null}}, {"text": "eggs", "section": "Costco"}, {"text": "towels", "section": "Costco"}], "new_sections": ["Costco"], "tokens": ["section:Costco:", "qty:2"]}}
+  - {"id": "sec-new-list-prefix-two-lines", "mode": "list", "list": "n-hw", "in": "Costco: milk\ncostco: eggs\nbread", "opts": {"prefixCreates": true}, "expect": {"items": [{"text": "milk", "section": "Costco"}, {"text": "eggs", "section": "Costco"}, {"text": "bread"}], "new_sections": ["Costco"], "tokens": ["section:Costco:", "section:costco:"]}}
+  - {"id": "sec-new-list-prefix-known", "mode": "list", "list": "n-shop", "in": "Cor: eggs", "opts": {"prefixCreates": true}, "expect": {"items": [{"text": "eggs", "section": "Corner market"}], "tokens": ["section:Cor:"]}}
+  - {"id": "sec-new-list-prefix-keep", "mode": "list", "list": "n-hw", "in": "Costco: milk", "opts": {"prefixCreates": true, "keep": ["Costco:"]}, "expect": {"items": [{"text": "Costco: milk"}]}}
+  - {"id": "sec-new-list-long-stays", "mode": "list", "list": "n-hw", "in": "Buy at the big store later: milk", "opts": {"prefixCreates": true}, "expect": {"items": [{"text": "Buy at the big store later: milk"}]}}
+  - {"id": "sec-hash-is-text-in-list", "mode": "list", "list": "n-shop", "in": "#Shopping milk", "expect": {"items": [{"text": "#Shopping milk"}]}}
+
+# ---- capture mode: the list token
+  - {"id": "cap-list-first", "mode": "capture", "in": "#Shopping milk, eggs", "expect": {"list": {"id": "n-shop", "name": "Shopping", "create": false}, "items": [{"text": "milk"}, {"text": "eggs"}], "tokens": ["list:#Shopping"]}}
+  - {"id": "cap-list-last", "mode": "capture", "in": "milk #shop", "expect": {"list": {"id": "n-shop", "name": "Shopping", "create": false}, "items": [{"text": "milk"}], "tokens": ["list:#shop"]}}
+  - {"id": "cap-list-prefix", "mode": "capture", "in": "#packing socks x3", "expect": {"list": {"id": "n-pack", "name": "Packing list", "create": false}, "items": [{"text": "socks", "qty": {"amount": "3", "unit": null}}], "tokens": ["list:#packing", "qty:x3"]}}
+  - {"id": "cap-list-nospace", "mode": "capture", "in": "#packinglist toothbrush", "expect": {"list": {"id": "n-pack", "name": "Packing list", "create": false}, "items": [{"text": "toothbrush"}], "tokens": ["list:#packinglist"]}}
+  - {"id": "cap-list-unknown", "mode": "capture", "in": "#Groceries bananas", "expect": {"list": {"id": null, "name": "Groceries", "create": true}, "items": [{"text": "bananas"}], "tokens": ["list:#Groceries"]}}
+  - {"id": "cap-list-default", "mode": "capture", "in": "milk, eggs", "expect": {"list": {"id": "n-shop", "name": "Shopping", "create": false}, "items": [{"text": "milk"}, {"text": "eggs"}]}}
+  - {"id": "cap-hash-number", "mode": "capture", "in": "#12 eggs", "expect": {"list": {"id": "n-shop", "name": "Shopping", "create": false}, "items": [{"text": "#12 eggs"}]}}
+  - {"id": "cap-first-list-only", "mode": "capture", "in": "#Hardware nails #Shopping", "expect": {"list": {"id": "n-hw", "name": "Hardware", "create": false}, "items": [{"text": "nails #Shopping"}], "tokens": ["list:#Hardware"]}}
+  - {"id": "cap-section-of-list", "mode": "capture", "in": "#Shopping Costco: paper towels", "expect": {"list": {"id": "n-shop", "name": "Shopping", "create": false}, "items": [{"text": "paper towels", "section": "Costco"}], "tokens": ["list:#Shopping", "section:Costco:"]}}
+  - {"id": "cap-section-default-list", "mode": "capture", "in": "Spice shop: cardamom", "expect": {"list": {"id": "n-shop", "name": "Shopping", "create": false}, "items": [{"text": "cardamom", "section": "Spice shop"}], "tokens": ["section:Spice shop:"]}}
+  - {"id": "cap-section-other-list", "mode": "capture", "in": "#Hardware Costco: nails", "expect": {"list": {"id": "n-hw", "name": "Hardware", "create": false}, "items": [{"text": "Costco: nails"}], "tokens": ["list:#Hardware"]}}
+  - {"id": "cap-packing-section", "mode": "capture", "in": "#pack Toiletries: toothpaste, floss", "expect": {"list": {"id": "n-pack", "name": "Packing list", "create": false}, "items": [{"text": "toothpaste", "section": "Toiletries"}, {"text": "floss", "section": "Toiletries"}], "tokens": ["list:#pack", "section:Toiletries:"]}}
+
+# ---- quick mode: "New note…" (a #List first adds items; anything else is a text note)
+  - {"id": "quick-note", "mode": "quick", "in": "Call the plumber", "expect": {"kind": "note", "note": {"title": "Call the plumber", "body": ""}}}
+  - {"id": "quick-note-lines", "mode": "quick", "in": "Gift ideas\n scarf\nbook ", "expect": {"kind": "note", "note": {"title": "Gift ideas", "body": "scarf\nbook"}}}
+  - {"id": "quick-note-hashtag-later", "mode": "quick", "in": "Ask about #Shopping budget", "expect": {"kind": "note", "note": {"title": "Ask about #Shopping budget", "body": ""}}}
+  - {"id": "quick-hash-number", "mode": "quick", "in": "#1 priority: taxes", "expect": {"kind": "note", "note": {"title": "#1 priority: taxes", "body": ""}}}
+  - {"id": "quick-list-section", "mode": "quick", "in": "#Shopping Costco: milk", "expect": {"kind": "items", "list": {"id": "n-shop", "name": "Shopping", "create": false}, "items": [{"text": "milk", "section": "Costco"}], "tokens": ["list:#Shopping", "section:Costco:"]}}
+  - {"id": "quick-list-qty", "mode": "quick", "in": "  #shop 2 milk, eggs", "expect": {"kind": "items", "list": {"id": "n-shop", "name": "Shopping", "create": false}, "items": [{"text": "milk", "qty": {"amount": "2", "unit": null}}, {"text": "eggs"}], "tokens": ["list:#shop", "qty:2"]}}
+  - {"id": "quick-list-unknown", "mode": "quick", "in": "#Groceries bananas", "expect": {"kind": "items", "list": {"id": null, "name": "Groceries", "create": true}, "items": [{"text": "bananas"}], "tokens": ["list:#Groceries"]}}
+  - {"id": "quick-list-only", "mode": "quick", "in": "#Packing", "expect": {"kind": "items", "list": {"id": "n-pack", "name": "Packing list", "create": false}, "items": [], "tokens": ["list:#Packing"]}}
+
+# ---- edit mode: one item edited in place, never split
+  - {"id": "edit-no-split", "mode": "edit", "list": "n-shop", "in": "milk, oat or soy x2", "expect": {"items": [{"text": "milk, oat or soy", "qty": {"amount": "2", "unit": null}}], "tokens": ["qty:x2"]}}
+  - {"id": "edit-no-section", "mode": "edit", "list": "n-shop", "in": "Costco: milk", "expect": {"items": [{"text": "Costco: milk"}]}}
+  - {"id": "edit-leading-qty", "mode": "edit", "list": "n-shop", "in": "3 avocados", "expect": {"items": [{"text": "avocados", "qty": {"amount": "3", "unit": null}}], "tokens": ["qty:3"]}}
+
+# ---- the item key (duplicates, learned order, usual items)
+  - {"id": "key-plural", "mode": "key", "in": "Eggs", "expect": {"key": "egg"}}
+  - {"id": "key-upper", "mode": "key", "in": "EGGS", "expect": {"key": "egg"}}
+  - {"id": "key-singular", "mode": "key", "in": "egg", "expect": {"key": "egg"}}
+  - {"id": "key-oes-long", "mode": "key", "in": "Tomatoes", "expect": {"key": "tomato"}}
+  - {"id": "key-o", "mode": "key", "in": "tomato", "expect": {"key": "tomato"}}
+  - {"id": "key-oes-short", "mode": "key", "in": "shoes", "expect": {"key": "shoe"}}
+  - {"id": "key-sses", "mode": "key", "in": "glasses", "expect": {"key": "glass"}}
+  - {"id": "key-ss", "mode": "key", "in": "glass", "expect": {"key": "glass"}}
+  - {"id": "key-ies", "mode": "key", "in": "berries", "expect": {"key": "berry"}}
+  - {"id": "key-ies-short", "mode": "key", "in": "pies", "expect": {"key": "pie"}}
+  - {"id": "key-xes", "mode": "key", "in": "boxes", "expect": {"key": "box"}}
+  - {"id": "key-ches", "mode": "key", "in": "peaches", "expect": {"key": "peach"}}
+  - {"id": "key-shes", "mode": "key", "in": "dishes", "expect": {"key": "dish"}}
+  - {"id": "key-us", "mode": "key", "in": "hummus", "expect": {"key": "hummus"}}
+  - {"id": "key-short-word", "mode": "key", "in": "gas", "expect": {"key": "gas"}}
+  - {"id": "key-last-word-only", "mode": "key", "in": "Paper   towels.", "expect": {"key": "paper towel"}}
+  - {"id": "key-accents", "mode": "key", "in": "Jalapeño Peppers", "expect": {"key": "jalapeno pepper"}}
+  - {"id": "key-accents-two", "mode": "key", "in": "Crème fraîche", "expect": {"key": "creme fraiche"}}
+  - {"id": "key-nfkc", "mode": "key", "in": "ＭＩＬＫ", "expect": {"key": "milk"}}
+  - {"id": "key-no-plural-last", "mode": "key", "in": "Swiss cheese", "expect": {"key": "swiss cheese"}}

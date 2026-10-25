@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda widget, week strip: the weather pill (light). -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#141F6C86" />
+
+    <corners android:radius="14dp" />
+</shape>

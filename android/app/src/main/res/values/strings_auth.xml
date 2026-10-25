@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_handover_not_notes">Only the Notes app can use this sign-in.</string>
+    <string name="auth_handover_invalid">Invalid sign-in request.</string>
+    <string name="auth_handover_signed_out">The Mailr app is not signed in.</string>
+    <string name="auth_handover_unreachable">Couldn\'t reach your server. %1$s</string>
+</resources>

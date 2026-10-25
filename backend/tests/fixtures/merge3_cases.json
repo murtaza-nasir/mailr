@@ -1,0 +1,465 @@
+{
+ "text": [
+  {
+   "name": "identical",
+   "mode": "lines",
+   "base": "a\nb\n",
+   "mine": "a\nb\n",
+   "theirs": "a\nb\n",
+   "ok": true,
+   "result": "a\nb\n",
+   "conflicts": []
+  },
+  {
+   "name": "only mine changed",
+   "mode": "lines",
+   "base": "a\nb\nc\n",
+   "mine": "a\nB\nc\n",
+   "theirs": "a\nb\nc\n",
+   "ok": true,
+   "result": "a\nB\nc\n",
+   "conflicts": []
+  },
+  {
+   "name": "only theirs changed",
+   "mode": "lines",
+   "base": "a\nb\nc\n",
+   "mine": "a\nb\nc\n",
+   "theirs": "a\nb\nC\n",
+   "ok": true,
+   "result": "a\nb\nC\n",
+   "conflicts": []
+  },
+  {
+   "name": "both changed different lines",
+   "mode": "lines",
+   "base": "a\nb\nc\nd\n",
+   "mine": "A\nb\nc\nd\n",
+   "theirs": "a\nb\nc\nD\n",
+   "ok": true,
+   "result": "A\nb\nc\nD\n",
+   "conflicts": []
+  },
+  {
+   "name": "both changed the same line differently",
+   "mode": "lines",
+   "base": "a\nb\nc\n",
+   "mine": "a\nmine\nc\n",
+   "theirs": "a\ntheirs\nc\n",
+   "ok": false,
+   "result": "a\nmine\nc\n",
+   "conflicts": [
+    {
+     "base": "b\n",
+     "mine": "mine\n",
+     "theirs": "theirs\n"
+    }
+   ]
+  },
+  {
+   "name": "both made the same change",
+   "mode": "lines",
+   "base": "a\nb\nc\n",
+   "mine": "a\nX\nc\n",
+   "theirs": "a\nX\nc\n",
+   "ok": true,
+   "result": "a\nX\nc\n",
+   "conflicts": []
+  },
+  {
+   "name": "insert at the top while the other edits the first line",
+   "mode": "lines",
+   "base": "one\ntwo\n",
+   "mine": "Hi,\none\ntwo\n",
+   "theirs": "ONE\ntwo\n",
+   "ok": true,
+   "result": "Hi,\nONE\ntwo\n",
+   "conflicts": []
+  },
+  {
+   "name": "both insert at the same place",
+   "mode": "lines",
+   "base": "a\nb\n",
+   "mine": "a\nmine\nb\n",
+   "theirs": "a\ntheirs\nb\n",
+   "ok": false,
+   "result": "a\nmine\nb\n",
+   "conflicts": [
+    {
+     "base": "",
+     "mine": "mine\n",
+     "theirs": "theirs\n"
+    }
+   ]
+  },
+  {
+   "name": "append at the end while the other edits the start",
+   "mode": "lines",
+   "base": "a\nb",
+   "mine": "A\nb",
+   "theirs": "a\nb\nc",
+   "ok": true,
+   "result": "A\nb\nc",
+   "conflicts": []
+  },
+  {
+   "name": "delete a line while the other edits another",
+   "mode": "lines",
+   "base": "a\nb\nc\nd\n",
+   "mine": "a\nc\nd\n",
+   "theirs": "a\nb\nc\nD\n",
+   "ok": true,
+   "result": "a\nc\nD\n",
+   "conflicts": []
+  },
+  {
+   "name": "delete a line the other edited",
+   "mode": "lines",
+   "base": "a\nb\nc\n",
+   "mine": "a\nc\n",
+   "theirs": "a\nB\nc\n",
+   "ok": false,
+   "result": "a\nc\n",
+   "conflicts": [
+    {
+     "base": "b\n",
+     "mine": "",
+     "theirs": "B\n"
+    }
+   ]
+  },
+  {
+   "name": "empty base, both add",
+   "mode": "lines",
+   "base": "",
+   "mine": "mine\n",
+   "theirs": "theirs\n",
+   "ok": false,
+   "result": "mine\n",
+   "conflicts": [
+    {
+     "base": "",
+     "mine": "mine\n",
+     "theirs": "theirs\n"
+    }
+   ]
+  },
+  {
+   "name": "html: different paragraphs",
+   "mode": "html",
+   "base": "<p>Hi Dana,</p><p>Thanks for the notes.</p><p>Best,</p>",
+   "mine": "<p>Hi Dana,</p><p>Thanks for the detailed notes.</p><p>Best,</p>",
+   "theirs": "<p>Hi Dana,</p><p>Thanks for the notes.</p><p>Best regards,</p>",
+   "ok": true,
+   "result": "<p>Hi Dana,</p><p>Thanks for the detailed notes.</p><p>Best regards,</p>",
+   "conflicts": []
+  },
+  {
+   "name": "html: same paragraph",
+   "mode": "html",
+   "base": "<p>Hi Dana,</p><p>See you Thursday.</p><p>Best,</p>",
+   "mine": "<p>Hi Dana,</p><p>See you Thursday at 3.</p><p>Best,</p>",
+   "theirs": "<p>Hi Dana,</p><p>See you on Friday.</p><p>Best,</p>",
+   "ok": false,
+   "result": "<p>Hi Dana,</p><p>See you Thursday at 3.</p><p>Best,</p>",
+   "conflicts": [
+    {
+     "base": "<p>See you Thursday.</p>",
+     "mine": "<p>See you Thursday at 3.</p>",
+     "theirs": "<p>See you on Friday.</p>"
+    }
+   ]
+  },
+  {
+   "name": "html: div and p are the same paragraph",
+   "mode": "html",
+   "base": "<div>Hi Dana,</div><div>See you Thursday.</div>",
+   "mine": "<p>Hi Dana,</p><p>See you Thursday.</p><p>Alex</p>",
+   "theirs": "<div>Hello Dana,</div><div>See you Thursday.</div>",
+   "ok": true,
+   "result": "<div>Hello Dana,</div><p>See you Thursday.</p><p>Alex</p>",
+   "conflicts": []
+  },
+  {
+   "name": "html: attributes and br spelling do not count",
+   "mode": "html",
+   "base": "<p class=\"x\">One<br/>Two</p><p>Three</p>",
+   "mine": "<p>One<br>Two</p><p>Three!</p>",
+   "theirs": "<p class=\"x\">One<br/>2</p><p>Three</p>",
+   "ok": true,
+   "result": "<p>One<br>2</p><p>Three!</p>",
+   "conflicts": []
+  },
+  {
+   "name": "html: quote kept below",
+   "mode": "html",
+   "base": "<p>Short note.</p><div class=\"mailr_quote\"><p>Old mail</p></div>",
+   "mine": "<p>Short note, typed more.</p><div class=\"mailr_quote\"><p>Old mail</p></div>",
+   "theirs": "<p>Short note.</p><p>Added by the assistant.</p><div class=\"mailr_quote\"><p>Old mail</p></div>",
+   "ok": true,
+   "result": "<p>Short note, typed more.</p><p>Added by the assistant.</p><div class=\"mailr_quote\"><p>Old mail</p></div>",
+   "conflicts": []
+  }
+ ],
+ "fields": [
+  {
+   "name": "fields: different fields",
+   "base": {
+    "subject": "Plan",
+    "to": [
+     {
+      "email": "a@x.org"
+     }
+    ],
+    "html": "<p>Hi</p>"
+   },
+   "mine": {
+    "subject": "Plan v2",
+    "to": [
+     {
+      "email": "a@x.org"
+     }
+    ],
+    "html": "<p>Hi</p>"
+   },
+   "theirs": {
+    "subject": "Plan",
+    "to": [
+     {
+      "email": "a@x.org"
+     },
+     {
+      "email": "b@x.org"
+     }
+    ],
+    "html": "<p>Hi</p>"
+   },
+   "text_fields": {
+    "html": "html"
+   },
+   "ok": true,
+   "merged": {
+    "subject": "Plan v2",
+    "to": [
+     {
+      "email": "a@x.org"
+     },
+     {
+      "email": "b@x.org"
+     }
+    ],
+    "html": "<p>Hi</p>"
+   },
+   "conflicts": []
+  },
+  {
+   "name": "fields: same field differently",
+   "base": {
+    "subject": "Plan"
+   },
+   "mine": {
+    "subject": "Plan A"
+   },
+   "theirs": {
+    "subject": "Plan B"
+   },
+   "text_fields": {},
+   "ok": false,
+   "merged": {
+    "subject": "Plan A"
+   },
+   "conflicts": [
+    "subject"
+   ]
+  },
+  {
+   "name": "fields: text field merges",
+   "base": {
+    "subject": "S",
+    "html": "<p>One</p><p>Two</p>"
+   },
+   "mine": {
+    "subject": "S",
+    "html": "<p>One!</p><p>Two</p>"
+   },
+   "theirs": {
+    "subject": "S2",
+    "html": "<p>One</p><p>Two!</p>"
+   },
+   "text_fields": {
+    "html": "html"
+   },
+   "ok": true,
+   "merged": {
+    "subject": "S2",
+    "html": "<p>One!</p><p>Two!</p>"
+   },
+   "conflicts": []
+  },
+  {
+   "name": "fields: text field conflicts",
+   "base": {
+    "notes": "a\nb\n"
+   },
+   "mine": {
+    "notes": "a\nB1\n"
+   },
+   "theirs": {
+    "notes": "a\nB2\n"
+   },
+   "text_fields": {
+    "notes": "lines"
+   },
+   "ok": false,
+   "merged": {
+    "notes": "a\nB1\n"
+   },
+   "conflicts": [
+    "notes"
+   ]
+  },
+  {
+   "name": "fields: empty and missing are the same",
+   "base": {
+    "cc": []
+   },
+   "mine": {
+    "cc": [],
+    "subject": "x"
+   },
+   "theirs": {
+    "subject": ""
+   },
+   "text_fields": {},
+   "ok": true,
+   "merged": {
+    "cc": [],
+    "subject": "x"
+   },
+   "conflicts": []
+  },
+  {
+   "name": "row: different cells combine (live editing)",
+   "base": {
+    "c1": "80",
+    "c2": "o_squat"
+   },
+   "mine": {
+    "c1": "82",
+    "c2": "o_squat"
+   },
+   "theirs": {
+    "c1": "80",
+    "c2": "o_bench",
+    "c3": true
+   },
+   "text_fields": {},
+   "ok": true,
+   "merged": {
+    "c1": "82",
+    "c2": "o_bench",
+    "c3": true
+   },
+   "conflicts": []
+  },
+  {
+   "name": "row: the same cell changed two ways conflicts on that cell",
+   "base": {
+    "c1": "80",
+    "c2": "o_squat"
+   },
+   "mine": {
+    "c1": "82",
+    "c2": "o_squat"
+   },
+   "theirs": {
+    "c1": "85",
+    "c2": "o_squat"
+   },
+   "text_fields": {},
+   "ok": false,
+   "merged": {
+    "c1": "82",
+    "c2": "o_squat"
+   },
+   "conflicts": [
+    "c1"
+   ]
+  },
+  {
+   "name": "row: a long text cell merges by lines",
+   "base": {
+    "c4": "warm up\nfive sets\ncool down",
+    "c1": "80"
+   },
+   "mine": {
+    "c4": "warm up well\nfive sets\ncool down",
+    "c1": "80"
+   },
+   "theirs": {
+    "c4": "warm up\nfive sets\ncool down and stretch",
+    "c1": "81"
+   },
+   "text_fields": {
+    "c4": "lines"
+   },
+   "ok": true,
+   "merged": {
+    "c4": "warm up well\nfive sets\ncool down and stretch",
+    "c1": "81"
+   },
+   "conflicts": []
+  },
+  {
+   "name": "row: a cell emptied on one side, another cell changed on the other",
+   "base": {
+    "c1": "80",
+    "c2": "o_squat"
+   },
+   "mine": {
+    "c2": "o_squat"
+   },
+   "theirs": {
+    "c1": "80",
+    "c2": "o_bench"
+   },
+   "text_fields": {},
+   "ok": true,
+   "merged": {
+    "c1": null,
+    "c2": "o_bench"
+   },
+   "conflicts": []
+  }
+ ],
+ "long": [
+  {
+   "name": "long text, edits far apart",
+   "lines": 3000,
+   "line": "Line {n} of the long text.\n",
+   "mine": [
+    10,
+    "Line 10, edited by the user.\n"
+   ],
+   "theirs": [
+    2900,
+    "Line 2900, edited by the assistant.\n"
+   ],
+   "ok": true
+  },
+  {
+   "name": "long text, same line",
+   "lines": 3000,
+   "line": "Line {n} of the long text.\n",
+   "mine": [
+    1500,
+    "Line 1500, by the user.\n"
+   ],
+   "theirs": [
+    1500,
+    "Line 1500, by the assistant.\n"
+   ],
+   "ok": false
+  }
+ ]
+}

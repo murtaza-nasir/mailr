@@ -1,0 +1,9 @@
+# User settings: simple settings and learning (access policies, site/docs/admin/access.md).
+# One line per key, `key: plain description`; `key: {internal: why}` for a key that is not a setting
+# a person chooses. A key may appear in only one file of this folder. The settings map test
+# (frontend/src/features/settings/groups.test.ts) checks that Settings has a place for each one.
+
+advanced_settings: "Show the advanced parts of Settings (Agents & API, detailed filters, learning detail, the decisions lab). Admins always see them."
+auto_label: "Learn from my choices: the labels you give teach mailr to suggest labels and, when it is sure enough, apply them."
+auto_label_precision: "How sure a label model must be before it applies a label by itself (the three levels of Learn from my choices)."
+auto_label_min_examples: "How many of your own examples a label needs before mailr applies it by itself."

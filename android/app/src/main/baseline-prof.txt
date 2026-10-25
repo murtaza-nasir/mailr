@@ -1,0 +1,25 @@
+# Startup and inbox code compiled ahead of time on install (ProfileInstaller writes it; ART compiles
+# it at the next background dexopt). Hand-written wildcard rules: a Macrobenchmark-generated profile
+# needs an emulator or a phone, which android/build.sh's container does not have.
+# AGP expands the wildcards and maps the names through R8 for the release build.
+HSPLio/github/murtazanasir/mailr/MailrApp**;->**(**)**
+HSPLio/github/murtazanasir/mailr/AppGraph**;->**(**)**
+HSPLio/github/murtazanasir/mailr/ui/MainActivity**;->**(**)**
+HSPLio/github/murtazanasir/mailr/ui/App**;->**(**)**
+HSPLio/github/murtazanasir/mailr/ui/MainShell**;->**(**)**
+HSPLio/github/murtazanasir/mailr/ui/MailRoutes**;->**(**)**
+HSPLio/github/murtazanasir/mailr/ui/HomeRoutes**;->**(**)**
+HSPLio/github/murtazanasir/mailr/ui/ViewModels**;->**(**)**
+HSPLio/github/murtazanasir/mailr/ui/mail/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/ui/conversation/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/ui/components/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/ui/theme/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/look/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/i18n/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/time/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/data/api/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/data/auth/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/data/db/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/data/repo/MailRepository**;->**(**)**
+HSPLio/github/murtazanasir/mailr/data/settings/**;->**(**)**
+HSPLio/github/murtazanasir/mailr/data/sync/**;->**(**)**

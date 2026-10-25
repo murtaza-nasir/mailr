@@ -1,0 +1,6 @@
+{
+  "@type": "RocksDb",
+  "path": "/var/lib/stalwart/data",
+  "cacheSize": 67108864,
+  "bufferSize": 67108864
+}

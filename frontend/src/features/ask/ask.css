@@ -1,0 +1,277 @@
+/* The ask capture (web.ask) and the microphone in the chat composer. */
+
+.ask-card {
+  position: fixed;
+  z-index: 95;
+  width: min(440px, calc(100vw - 16px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px 12px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-3);
+}
+[data-theme='dark'] .ask-card {
+  background: var(--surface-container);
+}
+.ask-card.sheet {
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  bottom: 0;
+  width: 100%;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: 12px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+  border-bottom: 0;
+}
+.ask-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 94;
+  background: var(--scrim);
+}
+
+.ask-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 24px;
+}
+.ask-title {
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.ask-about {
+  display: flex;
+  min-width: 0;
+}
+.ask-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+  padding-block: 3px;
+  padding-inline: 10px 4px;
+  border-radius: var(--radius-full);
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  font-size: 13px;
+  line-height: 18px;
+}
+.ask-chip .ellipsis {
+  min-width: 0;
+}
+.ask-chip-x {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.ask-chip-x:hover {
+  background: var(--hover);
+}
+.ask-chip-x:focus-visible {
+  outline: 2px solid var(--focus-ring);
+}
+.ask-none {
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+
+.ask-field {
+  width: 100%;
+  min-height: 52px;
+  max-height: 180px;
+  resize: none;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--input-bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  line-height: 20px;
+}
+.ask-field:focus {
+  outline: none;
+  background: var(--input-bg-focus);
+  border-color: var(--focus-ring);
+}
+.ask-field:disabled {
+  opacity: 0.7;
+}
+
+.ask-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 20px;
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+.ask-status.error {
+  color: var(--danger);
+}
+.ask-rec-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--danger);
+  animation: ask-pulse 1.2s ease-in-out infinite;
+}
+@keyframes ask-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ask-rec-dot {
+    animation: none;
+  }
+}
+.ask-meter {
+  flex: 1;
+  min-width: 40px;
+  max-width: 120px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--surface-high);
+  overflow: hidden;
+}
+.ask-meter span {
+  display: block;
+  height: 100%;
+  background: var(--primary);
+  transform-origin: var(--start) center;
+  transition: transform 80ms linear;
+}
+.ask-time {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-3);
+}
+
+.ask-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ask-mic,
+.chat-mic {
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--surface-high);
+  color: var(--text);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease);
+}
+.ask-mic:hover:not(:disabled),
+.chat-mic:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+[data-theme='dark'] .ask-mic:hover:not(:disabled),
+[data-theme='dark'] .chat-mic:hover:not(:disabled) {
+  filter: brightness(1.15);
+}
+.ask-mic.on,
+.chat-mic.on {
+  background: var(--danger);
+  color: #fff;
+}
+.ask-mic:disabled,
+.chat-mic:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.ask-mic:focus-visible,
+.chat-mic:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+.chat-mic {
+  margin-bottom: 2px;
+  background: transparent;
+  color: var(--text-2);
+}
+.chat-mic.busy {
+  color: var(--primary);
+}
+.ask-auto {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--text-2);
+  cursor: pointer;
+  user-select: none;
+}
+.ask-auto .checkbox {
+  margin: 0;
+}
+
+/* The small Ask button beside a reminder row in the tray. */
+.rm-row-wrap {
+  display: flex;
+  align-items: center;
+}
+.rm-row-wrap .rm-row {
+  flex: 1;
+  min-width: 0;
+}
+.rm-row-wrap .rm-row-ask {
+  flex: none;
+  margin-inline-end: 8px;
+  opacity: 0;
+}
+.rm-row-wrap:hover .rm-row-ask,
+.rm-row-wrap:focus-within .rm-row-ask {
+  opacity: 1;
+}
+@media (hover: none) {
+  .rm-row-wrap .rm-row-ask {
+    opacity: 1;
+  }
+}
+.rm-row-wrap {
+  border-radius: var(--radius-sm);
+}
+[data-ui-theme='cards'] .rm-row-wrap {
+  border-radius: var(--radius-md);
+}
+.rm-row-wrap:hover {
+  background: var(--hover);
+}
+.rm-row-wrap .rm-row:hover {
+  background: none;
+}
+/* The sheet header's Ask sits at the end of the header, beside the counter. */
+.qs-head .rm-ask {
+  flex: none;
+  margin-inline-start: auto;
+  align-self: flex-start;
+}
+/* On a phone: the microphone and its switch on one row, Open chat and Send on the next. */
+.ask-card.sheet .ask-actions .spacer {
+  flex-basis: 100%;
+  height: 0;
+}
+.ask-card.sheet .ask-actions .btn.text {
+  margin-inline-start: auto;
+}

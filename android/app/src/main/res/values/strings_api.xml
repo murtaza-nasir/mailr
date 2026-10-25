@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="api_calendar_owner_note_user">Only %1$s can rename or delete it. You can hide it.</string>
+    <string name="api_calendar_its_owner">its owner</string>
+    <string name="api_calendar_owner_note_group">Only an administrator can rename or delete a group calendar. You can hide it.</string>
+    <string name="api_assistant_no_access">Your administrator hasn\'t given you access to %1$s yet.</string>
+    <string name="api_prep_last_recording">Last recording</string>
+    <plurals name="api_prep_threads">
+        <item quantity="one">%d thread</item>
+        <item quantity="other">%d threads</item>
+    </plurals>
+    <plurals name="api_prep_open_questions">
+        <item quantity="one">%d open question</item>
+        <item quantity="other">%d open questions</item>
+    </plurals>
+    <plurals name="api_prep_waiting_on">
+        <item quantity="one">%d waiting on them</item>
+        <item quantity="other">%d waiting on them</item>
+    </plurals>
+    <plurals name="api_prep_tasks">
+        <item quantity="one">%d task</item>
+        <item quantity="other">%d tasks</item>
+    </plurals>
+    <plurals name="api_prep_notes">
+        <item quantity="one">%d note</item>
+        <item quantity="other">%d notes</item>
+    </plurals>
+    <plurals name="api_prep_files">
+        <item quantity="one">%d file</item>
+        <item quantity="other">%d files</item>
+    </plurals>
+    <string name="api_upload_too_big">%1$s is over 35 MB and can\'t be attached.</string>
+    <string name="api_upload_cant_read">Couldn\'t read %1$s</string>
+    <string name="api_approval_agent">Agent</string>
+    <string name="api_approval_send_subject">Send “%1$s”</string>
+    <string name="api_approval_to">To %1$s</string>
+    <string name="api_screener_scope_domain">Everyone at %1$s</string>
+    <string name="api_screener_scope_address">This address only</string>
+    <string name="api_screener_auth_verified">Verified</string>
+    <string name="api_screener_auth_failed">Failed authentication</string>
+    <string name="api_screener_auth_none">Not verified</string>
+    <plurals name="api_screener_held">
+        <item quantity="one">%d message</item>
+        <item quantity="other">%d messages</item>
+    </plurals>
+    <plurals name="api_health_syncing">
+        <item quantity="one">Your account is syncing.</item>
+        <item quantity="other">All %d accounts are syncing.</item>
+    </plurals>
+    <string name="api_health_last_synced">" Last synced %1$s."</string>
+    <plurals name="api_health_more">
+        <item quantity="one">" %d more to check."</item>
+        <item quantity="other">" %d more to check."</item>
+    </plurals>
+    <string name="api_recording_untitled">Recording</string>
+    <string name="api_speakr_no_recording">No recording returned</string>
+    <string name="api_activity_you">You</string>
+    <string name="api_activity_an_agent">An agent</string>
+    <string name="api_activity_admin">Your administrator</string>
+    <string name="api_activity_admin_named">Your administrator (%1$s)</string>
+</resources>

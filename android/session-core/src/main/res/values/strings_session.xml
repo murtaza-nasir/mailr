@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Error messages (ApiClient.kt, userMessage) -->
+    <string name="session_error_upload_too_large">%1$s is over 35 MB and can\'t be attached.</string>
+    <string name="session_error_signed_out">Session ended. Sign in again.</string>
+    <string name="session_error_not_allowed">Not allowed.</string>
+    <string name="session_error_not_found">No longer available.</string>
+    <string name="session_error_upgrade_required">This app version is too old for the server. Update to keep syncing.</string>
+    <string name="session_error_too_many_requests">Too many requests. Try again shortly.</string>
+    <string name="session_error_server">Server error. Try again.</string>
+    <string name="session_error_offline">Offline, or the server can\'t be reached.</string>
+    <string name="session_error_generic">Something went wrong.</string>
+
+    <!-- Sign-in (Onboarding.kt, OnboardingViewModel.kt, AuthManager.kt) -->
+    <string name="session_continue_as">Continue as %1$s</string>
+    <string name="session_continue_as_detail">Signed in to Mailr on this phone · %1$s</string>
+    <string name="session_or">or</string>
+    <string name="session_server_title">Connect to your server</string>
+    <string name="session_server_hint">The address you use for Mailr in the browser.</string>
+    <string name="session_server_address">Server address</string>
+    <string name="session_continue">Continue</string>
+    <string name="session_sign_in_title">Sign in</string>
+    <string name="session_plain_http_warning">This address doesn\'t use HTTPS. Your sign-in and mail are sent unencrypted. Use it only on a trusted network.</string>
+    <string name="session_sign_in_with">Sign in with %1$s</string>
+    <string name="session_sign_in_sso">Sign in with single sign-on</string>
+    <string name="session_email">Email</string>
+    <string name="session_password">Password</string>
+    <string name="session_hide_password">Hide password</string>
+    <string name="session_show_password">Show password</string>
+    <string name="session_sign_in">Sign in</string>
+    <string name="session_sign_in_with_password">Sign in with password</string>
+    <string name="session_use_different_server">Use a different server</string>
+    <string name="session_handover_cancelled">Sign-in cancelled.</string>
+    <string name="session_server_unreachable">Couldn\'t reach Mailr at that address. %1$s</string>
+    <string name="session_sign_in_cancelled">Sign-in was cancelled.</string>
+    <string name="session_sign_in_failed">Sign-in failed.</string>
+    <string name="session_sign_in_refused">The sign-in service refused the sign-in.</string>
+    <string name="session_sign_in_server_changed">The server changed during sign-in. Sign in again.</string>
+    <string name="session_setup_link_title">Use this server?</string>
+    <string name="session_setup_link_body">You opened a setup link for %1$s. The server in the link is:</string>
+    <string name="session_setup_link_warning">Continue only if this is your own server. If you did not expect this link, cancel.</string>
+    <string name="session_setup_link_use">Use this server</string>
+    <string name="session_setup_link_cancel">Cancel</string>
+    <string name="session_sign_in_unfinished">Sign-in didn\'t finish. Try again. If it keeps failing, ask whoever runs your Mailr server.</string>
+    <string name="session_server_too_old">Server too old for app sign-in.</string>
+    <string name="session_sign_in_service_unreachable">Couldn\'t reach the sign-in service (%1$s).</string>
+    <string name="session_unknown_error">unknown error</string>
+
+    <!-- App updates (UpdateUi.kt) -->
+    <string name="session_update_required_title">Update %1$s to keep syncing</string>
+    <string name="session_update_required_detail">Your changes are kept on this phone until then.</string>
+    <string name="session_update">Update</string>
+    <string name="session_update_available">Update available</string>
+    <string name="session_update_ready_unnamed">A new version of %1$s is ready to download</string>
+    <string name="session_update_ready">%1$s %2$s is ready to download</string>
+    <string name="session_overlay_warning">Mailr is covered by another app. Close that app and tap again.</string>
+</resources>

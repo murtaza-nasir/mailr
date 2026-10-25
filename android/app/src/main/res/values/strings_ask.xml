@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="askui_note_chip_list">This list</string>
+    <string name="askui_note_chip_note">This note</string>
+    <string name="askui_close">Close</string>
+    <string name="askui_title">Ask %1$s</string>
+    <string name="askui_voice_on_device">Voice processed on this phone</string>
+    <string name="askui_voice_server">Voice sent to your speech server</string>
+    <string name="askui_voice_none">No dictation available. Type instead.</string>
+    <string name="askui_remove_about">Remove %1$s from the question</string>
+    <string name="askui_hint_approval">Ask a question, e.g. why does this need approval?</string>
+    <string name="askui_hint_none">Say what to do, e.g. what\'s on tomorrow?</string>
+    <string name="askui_hint_item">Say what to do, e.g. move this to Friday and email Dana.</string>
+    <string name="askui_recording">Recording. Tap stop when done.</string>
+    <string name="askui_listening">Listening…</string>
+    <string name="askui_transcribing">Transcribing…</string>
+    <string name="askui_get_model">Download</string>
+    <string name="askui_hands_free">Send when I stop talking</string>
+    <string name="askui_stop_listening">Stop listening</string>
+    <string name="askui_dictate">Dictate</string>
+    <string name="askui_open_chat">Open chat</string>
+    <string name="askui_send">Send</string>
+    <string name="askui_about_event">This event</string>
+    <string name="askui_about_task">This task</string>
+    <string name="askui_about_recording">This recording</string>
+    <string name="askui_about_conversation">This conversation</string>
+    <string name="askui_about_approval">This approval</string>
+    <string name="askui_about_table">This table</string>
+    <string name="askui_about_note">This note</string>
+</resources>

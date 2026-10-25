@@ -1,0 +1,622 @@
+# mailr production stack. Copy .env.example to .env, fill it in, then:
+#   docker compose up -d
+# Everything deployment-specific comes from .env.
+name: mailr
+
+# Docker keeps each container's standard output in a JSON file, here rotated at 10 MB with five
+# files kept, so a busy log cannot fill the disk. The app and the worker also write their logs to
+# /data/logs (core/logsetup.py), which survive a redeploy; Docker's files go with the container.
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+
+x-image: &image
+  # Two ways to get the app image, chosen in .env:
+  #   from source (default): the first `docker compose up -d` builds this repository as mailr:local;
+  #                          `docker compose up -d --build` builds it again (a new version).
+  #   published image:       MAILR_IMAGE=ghcr.io/murtaza-nasir/mailr:latest and MAILR_PULL_POLICY=missing,
+  #                          then `docker compose pull && docker compose up -d` (no build).
+  # "never" builds only when the image is missing or with --build. ("build" rebuilt it on every
+  # `up` and `run`; with Docker's containerd image store each rebuild has a new id, so Compose
+  # recreated the containers each time.)
+  # Only the app (and cli, which `up` does not start) carry the build: services that share one
+  # image tag and each have a build are built in parallel, and the second export then fails with
+  # 'image "mailr:local": already exists'. The worker and browser-gate run the image built for the app.
+  image: ${MAILR_IMAGE:-mailr:local}
+  pull_policy: ${MAILR_PULL_POLICY:-never}
+
+x-build: &build
+  context: ..
+  dockerfile: Dockerfile
+
+x-app: &app
+  <<: *image
+  restart: unless-stopped
+  logging: *logging
+  # A clean stop hands running jobs back to the queue and closes connections (up to about 13 s).
+  stop_grace_period: 30s
+  # Least privilege: the app needs no Linux capabilities and never gains new privileges, and
+  # its root filesystem is read-only (it writes only to /data, /backup and a small /tmp).
+  cap_drop: [ALL]
+  security_opt: ["no-new-privileges:true"]
+  read_only: true
+  tmpfs:
+    - /tmp:size=64m,mode=1777
+  # Memory and process limits (threads count as processes; the app and the worker hold one
+  # thread for each open IMAP connection). The cli service has the app's.
+  mem_limit: ${MAILR_APP_MEMORY:-2g}
+  pids_limit: ${MAILR_APP_PIDS:-4096}
+  env_file: .env
+  environment: &app-env
+    MAILR_DATABASE_URL: postgresql+asyncpg://mailr:${POSTGRES_PASSWORD}@postgres:5432/mailr
+    MAILR_STALWART_URL: http://stalwart:8080
+    MAILR_STALWART_ADMIN_USER: mailr-svc@${MAILR_STALWART_DOMAIN:-mailr.internal}
+    MAILR_STALWART_ADMIN_PASSWORD: ${MAILR_SVC_PASSWORD}
+    MAILR_STALWART_RESOLVER_IP: ${MAILR_RESOLVER_IP:-10.253.53.2}
+    # Its gateway is where a reverse proxy on this host reaches the app from: trusted for
+    # X-Forwarded-For while MAILR_TRUSTED_PROXIES is empty.
+    MAILR_NET_SUBNET: ${MAILR_NET_SUBNET:-10.253.54.0/24}
+    # The server's page-reading browser goes out only through the browser gate (below). Set it
+    # empty in .env when MAILR_BROWSER_URL points at a browserless outside this stack.
+    MAILR_BROWSER_GATE: ${MAILR_BROWSER_GATE-browser-gate}
+    # .env also holds the other containers' secrets. The app and worker do not get them: they
+    # use the database and the mail store only through the values above.
+    POSTGRES_PASSWORD: ""
+    STALWART_ADMIN_PASSWORD: ""
+    MAILR_SVC_PASSWORD: ""
+    MAILR_VPN_WIREGUARD_KEY: ""
+    MAILR_EGRESS_PASSWORD: ""
+    GLITCHTIP_SECRET_KEY: ""
+    GLITCHTIP_POSTGRES_PASSWORD: ""
+  volumes:
+    - mailr-data:/data
+    # Second copy of the Maildir export (e.g. an NFS share mounted on the host). Set
+    # MAILR_BACKUP_DIR to the host path and MAILR_BACKUP_TARGET=/backup in .env.
+    - ${MAILR_BACKUP_DIR:-./backup}:/backup
+  depends_on:
+    postgres: {condition: service_healthy}
+    stalwart: {condition: service_healthy}
+
+# Connections to Postgres (max_connections 150 below). Each process has a pool (MAILR_DB_POOL_SIZE
+# kept open, MAILR_DB_MAX_OVERFLOW more in a burst) and a small calendar-sync pool (2 + up to 8),
+# plus a few listener connections and one for the model-call slots (intel/slots.py); the worker
+# also holds one connection with the locks of all its running mail accounts, however many there
+# are, and one per write to a mail server running (MAILR_UPSTREAM_CONCURRENCY, 4):
+#   app           10 + 20 + 10 + 3 listeners + 1 slots                     = 44
+#   worker        10 + 10 + 10 + 2 listeners + 1 slots + 1 lock + 4 writes = 38
+#   worker-extra   5 +  5 +  7 + 2 listeners + 1 slots + 1 lock + 4 writes = 25 each
+#   cli            5 +  5 +  7                                             = 17  (one-off commands)
+#   total 99 at the very worst without extra workers, against 147 for clients (3 stay reserved
+#   for the superuser), with room for a second app during a deploy. Raise MAILR_PG_MAX_CONNECTIONS
+#   by 25 for each extra worker.
+
+services:
+  app:
+    <<: *app
+    build: *build
+    command: ["mailr", "serve", "--port", "8025"]
+    environment:
+      <<: *app-env
+      MAILR_DB_POOL_SIZE: "10"
+      MAILR_DB_MAX_OVERFLOW: "20"
+    ports:
+      # Published on loopback by default. With the reverse proxy on another machine, set
+      # MAILR_HTTP_BIND to this host's address on the network the proxy uses.
+      - "${MAILR_HTTP_BIND:-127.0.0.1}:${MAILR_HTTP_PORT:-8025}:8025"
+    networks:
+      default:
+        ipv4_address: ${MAILR_APP_IP:-10.253.54.250}
+      egress:
+      errors:
+
+  worker: &worker
+    <<: *app
+    command: ["mailr", "worker"]
+    # Imports, exports and attachment text run here. Extra workers have the same limits.
+    mem_limit: ${MAILR_WORKER_MEMORY:-3g}
+    pids_limit: ${MAILR_WORKER_PIDS:-4096}
+    # The scheduler touches /tmp/mailr-worker-heartbeat after every tick that reached the database
+    # (every 30 s); `mailr worker-alive` fails when it is older than 3 minutes or the mail store
+    # does not answer.
+    healthcheck:
+      test: ["CMD", "mailr", "worker-alive"]
+      interval: 60s
+      timeout: 15s
+      start_period: 300s
+      retries: 3
+    environment:
+      <<: *app-env
+      # The worker never signs anyone in.
+      MAILR_OIDC_CLIENT_SECRET: ""
+      MAILR_BOOTSTRAP_ADMIN_PASSWORD: ""
+      MAILR_DB_POOL_SIZE: "10"
+      MAILR_DB_MAX_OVERFLOW: "10"
+    networks:
+      default:
+        ipv4_address: ${MAILR_WORKER_IP:-10.253.54.251}
+      egress:
+      errors:
+
+  # More workers for a larger server (admin guide, "Scaling"): none unless asked for, e.g.
+  # `docker compose up -d --scale worker-extra=2`. They take jobs from the same queue as `worker`
+  # and run nothing twice. Docker gives them their addresses (a fixed one cannot be scaled), so
+  # they are outside MAILR_TRUSTED_NET; they sign in to the mail store with the service account
+  # only. Smaller pools than `worker`: each holds at most 25 connections (see above).
+  worker-extra:
+    <<: *worker
+    deploy:
+      replicas: 0
+    environment:
+      <<: *app-env
+      MAILR_OIDC_CLIENT_SECRET: ""
+      MAILR_BOOTSTRAP_ADMIN_PASSWORD: ""
+      MAILR_DB_POOL_SIZE: "5"
+      MAILR_DB_MAX_OVERFLOW: "5"
+    networks:
+      default:
+      egress:
+      errors:
+
+  postgres:
+    # Pinned: Postgres 17.11 + pgvector 0.8.6 (a major version change needs a dump/restore).
+    image: pgvector/pgvector:pg17@sha256:cf134a767f474095eeba57e0117be8e568e011a63f33fbf252f14c9b760f8e6f
+    restart: unless-stopped
+    logging: *logging
+    stop_grace_period: 60s
+    # The image's entrypoint starts as root, sets the owner of the data and socket folders and
+    # then runs Postgres as the postgres user: these five capabilities and no others. The root
+    # filesystem is read-only; Postgres writes to its volume, its socket folder and /tmp.
+    cap_drop: [ALL]
+    cap_add: [CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+      - /var/run/postgresql:size=1m
+    # Shared buffers, the work memory of the running queries and /dev/shm (below) count against
+    # the memory limit; raise it with MAILR_PG_SHARED_BUFFERS. One process per connection.
+    mem_limit: ${MAILR_PG_MEMORY:-4g}
+    pids_limit: ${MAILR_PG_PIDS:-1024}
+    # Sized for a host of about 8 GB shared with other services (the
+    # defaults were 128 MB of buffers and a cache hit ratio of 82 %). Changing these needs a
+    # restart of this container; write a dump first (admin guide, Upgrades).
+    #   shared_buffers 1GB: the hot part of the index (the two vector indexes alone are about
+    #     450 MB) stays in Postgres's own cache; a quarter of the RAM Postgres may use.
+    #   effective_cache_size 3GB: what the planner may assume the OS caches on top (a planning
+    #     figure, nothing is allocated).
+    #   work_mem 16MB: per sort or hash step; 4 MB spilled 225 temporary files (500 MB). 16 MB
+    #     times the few large sorts that run at once stays far below the free memory.
+    #   maintenance_work_mem 256MB: vacuum and index builds (the vector indexes) in fewer passes.
+    #   random_page_cost 1.1: the data is on SSD. jit off: compiling cost about 30 ms a query and
+    #     never paid off (core/sidebar.py already turned it off per transaction).
+    #   pg_stat_statements, log_min_duration_statement 500 ms, log_lock_waits, track_io_timing:
+    #     which statements are slow, and who waited on whom in a deadlock. Logged statements never
+    #     carry their parameters (log_parameter_max_length 0), so no search text reaches the log.
+    #   max_connections 150: the connection budget above, with room for a second app during a deploy.
+    command:
+      - postgres
+      - -c
+      - shared_buffers=${MAILR_PG_SHARED_BUFFERS:-1GB}
+      - -c
+      - effective_cache_size=${MAILR_PG_EFFECTIVE_CACHE_SIZE:-3GB}
+      - -c
+      - work_mem=${MAILR_PG_WORK_MEM:-16MB}
+      - -c
+      - maintenance_work_mem=${MAILR_PG_MAINTENANCE_WORK_MEM:-256MB}
+      - -c
+      - max_connections=${MAILR_PG_MAX_CONNECTIONS:-150}
+      - -c
+      - random_page_cost=1.1
+      - -c
+      - jit=off
+      - -c
+      - shared_preload_libraries=pg_stat_statements
+      - -c
+      - pg_stat_statements.track=top
+      - -c
+      - track_io_timing=on
+      - -c
+      - log_min_duration_statement=500
+      - -c
+      - log_parameter_max_length=0
+      - -c
+      - log_parameter_max_length_on_error=0
+      - -c
+      - log_lock_waits=on
+      - -c
+      - log_autovacuum_min_duration=10s
+    # Parallel queries use shared memory under /dev/shm; Docker's default of 64 MB is too small
+    # for 16 MB work_mem steps.
+    shm_size: 256mb
+    environment:
+      POSTGRES_USER: mailr
+      POSTGRES_DB: mailr
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mailr"]
+      interval: 5s
+      retries: 20
+
+  stalwart:
+    # Built locally only when missing or with --build (see x-image above), so `up -d` and
+    # `run --rm cli …` leave the running mail store alone.
+    build: ./stalwart
+    image: mailr-stalwart:local
+    pull_policy: never
+    restart: unless-stopped
+    logging: *logging
+    stop_grace_period: 30s
+    # It runs as its own user. The image gives its binary the capability to bind ports below 1024
+    # (143, 993), and the binary does not start without it: that one capability and no other.
+    # It writes to its volume, to the image's /etc/stalwart volume and to /tmp. Its thread pools
+    # count against the process limit.
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    mem_limit: ${MAILR_STALWART_MEMORY:-2g}
+    pids_limit: ${MAILR_STALWART_PIDS:-1024}
+    # Its own liveness probe (the app checks the same path, core/health.py). The first start
+    # provisions the server and restarts it once, hence the long start period.
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:8080/healthz/live"]
+      interval: 30s
+      timeout: 5s
+      start_period: 180s
+      retries: 3
+    environment:
+      STALWART_HOSTNAME: ${MAILR_IMAP_HOSTNAME:-mail.mailr.internal}
+      STALWART_PUBLIC_URL: http://stalwart:8080
+      STALWART_RECOVERY_ADMIN: admin:${STALWART_ADMIN_PASSWORD}
+      MAILR_DOMAIN: ${MAILR_STALWART_DOMAIN:-mailr.internal}
+      MAILR_SVC_USER: mailr-svc
+      MAILR_SVC_PASSWORD: ${MAILR_SVC_PASSWORD}
+      # Only the app and worker are exempt from Stalwart's auto-ban (their fixed addresses
+      # below); clients that reach IMAP through Docker's port forwarding are not.
+      MAILR_TRUSTED_NET: ${MAILR_TRUSTED_NET:-10.253.54.250/31}
+      MAILR_RESOLVER_IP: ${MAILR_RESOLVER_IP:-10.253.53.2}
+    volumes:
+      - stalwart-data:/var/lib/stalwart
+    networks:
+      default:
+      dns:
+        # Fixed, so Stalwart can never take the resolver's address (.2) when it starts first.
+        # Change it together with MAILR_DNS_SUBNET.
+        ipv4_address: 10.253.53.3
+    ports:
+      # IMAP for phone and desktop clients. 8080 (JMAP + admin) stays internal. Port 143
+      # (STARTTLS) is published on loopback only unless MAILR_IMAP_BIND says otherwise; 993 is
+      # what clients normally use.
+      - "${MAILR_IMAPS_BIND:-0.0.0.0}:${MAILR_IMAPS_PORT:-993}:993"
+      - "${MAILR_IMAP_BIND:-127.0.0.1}:${MAILR_IMAP_PORT:-143}:143"
+
+  # Recursive DNS resolver for Stalwart's spam checks. DNS blocklists (Spamhaus and others)
+  # refuse queries relayed through public or ISP resolvers, so Stalwart asks this one, which
+  # resolves from the root servers itself. Fixed address so Stalwart's setting stays valid.
+  resolver:
+    image: klutchell/unbound:1.26.1@sha256:9a3939ca33d6d3b42b81a70391bb8e43f0a08d2bd7a3fdffb43d427493345c36
+    restart: unless-stopped
+    logging: *logging
+    # Unbound starts as root and switches to its own user. It keeps the root zone's trust anchor
+    # (root.key, updated now and then) in /var/unbound, a volume of its own; the rest of the root
+    # filesystem is read-only.
+    cap_drop: [ALL]
+    cap_add: [SETGID, SETUID]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    tmpfs:
+      - /tmp:size=1m
+    volumes:
+      - resolver-data:/var/unbound
+    mem_limit: ${MAILR_RESOLVER_MEMORY:-512m}
+    pids_limit: ${MAILR_RESOLVER_PIDS:-64}
+    # Answers from the resolver itself (localhost is a local zone), so the check does not depend
+    # on the internet.
+    healthcheck:
+      test: ["CMD", "drill-hc", "@127.0.0.1", "localhost"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    networks:
+      dns:
+        ipv4_address: ${MAILR_RESOLVER_IP:-10.253.53.2}
+
+  # Optional VPN exit for the image proxy's fetches (core/imageproxy.py). Off unless the
+  # "vpn" profile is enabled (COMPOSE_PROFILES=vpn in .env). It sits on its own network with
+  # only the app and worker, so a mail URL whose name resolves to a stack address cannot reach
+  # Postgres, Stalwart or the resolver through it; nothing is published. gluetun's own DNS
+  # drops private addresses from its answers by default (DNS rebinding protection); keep that
+  # default. The proxy asks for a password
+  # (MAILR_EGRESS_PASSWORD); then set
+  # MAILR_IMAGE_PROXY_EGRESS=http://mailr:<that password>@egress:8888 for the app and worker.
+  egress:
+    profiles: [vpn]
+    image: qmcgaw/gluetun:v3@sha256:fa19cc76b2af13d57a8d3dc3066f2ada061b1c761b8aecf989b3877c0486e027
+    restart: unless-stopped
+    logging: *logging
+    # NET_ADMIN for the tunnel, its routes and its firewall; CHOWN and DAC_OVERRIDE for the state
+    # files it hands to its own unprivileged user (/tmp/gluetun). Its root filesystem stays
+    # writable: gluetun adds that user to /etc/passwd at every start.
+    cap_drop: [ALL]
+    cap_add: [NET_ADMIN, CHOWN, DAC_OVERRIDE]
+    security_opt: ["no-new-privileges:true"]
+    devices: ["/dev/net/tun:/dev/net/tun"]
+    mem_limit: ${MAILR_EGRESS_MEMORY:-256m}
+    pids_limit: ${MAILR_EGRESS_PIDS:-256}
+    # The image's own healthcheck (gluetun-entrypoint healthcheck) reports the tunnel's state.
+    environment:
+      VPN_SERVICE_PROVIDER: ${MAILR_VPN_PROVIDER:-protonvpn}
+      VPN_TYPE: wireguard
+      WIREGUARD_PRIVATE_KEY: ${MAILR_VPN_WIREGUARD_KEY:-}
+      SERVER_COUNTRIES: ${MAILR_VPN_COUNTRIES:-}
+      HTTPPROXY: "on"
+      HTTPPROXY_LISTENING_ADDRESS: ":8888"
+      HTTPPROXY_USER: mailr
+      HTTPPROXY_PASSWORD: ${MAILR_EGRESS_PASSWORD:-}
+      # The app and worker reach the proxy over the egress network.
+      FIREWALL_INPUT_PORTS: "8888"
+    networks:
+      - egress
+
+  # Optional browser for the page readers (websearch/readers.py; admin docs, "Web search"). Off
+  # unless the "browser" profile is enabled (COMPOSE_PROFILES=vpn,browser). Headless Chrome
+  # (browserless) for pages that need JavaScript. Its only network is browser-net, which is
+  # internal (no route out) and holds nothing but the browser and the browser gate: it cannot reach
+  # the LAN, the Docker host, the app, Postgres, Stalwart or the VPN container by itself. Every
+  # connection it makes goes through the gate, which applies mailr's address rules to each one.
+  # Nothing is published. Set MAILR_BROWSER_TOKEN (a long
+  # random value; `mailr gen-secret`) and MAILR_BROWSER_URL=http://browser:3000 in .env: mailr
+  # then lists the reader "Browser (server)" by itself, with the token from the environment. The
+  # container refuses to start without a token.
+  browser:
+    profiles: [browser]
+    image: ghcr.io/browserless/chromium:v2.57.3@sha256:40dff7c23e0e378ba451c23ef66394ffb81bd11e6b9fe8ef3066d59eb402cc5d
+    restart: unless-stopped
+    logging: *logging
+    entrypoint: ["/bin/bash", "-c", "[ -n \"$$TOKEN\" ] || { echo 'set MAILR_BROWSER_TOKEN' >&2; exit 1; }; exec ./scripts/start.sh"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    tmpfs:
+      - /tmp:size=512m,mode=1777
+      - /home/blessuser:size=64m,uid=999,gid=999
+    shm_size: 1gb
+    # Chrome's shared memory and the /tmp above count against the memory limit; each page is a
+    # few processes with many threads.
+    mem_limit: ${MAILR_BROWSER_MEMORY:-3g}
+    pids_limit: ${MAILR_BROWSER_PIDS:-1024}
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('net').connect(3000, '127.0.0.1').on('connect', () => process.exit(0)).on('error', () => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+    environment:
+      TOKEN: ${MAILR_BROWSER_TOKEN:-}
+      # Two pages at once, ten waiting; no session longer than a minute.
+      CONCURRENT: "2"
+      QUEUED: "10"
+      TIMEOUT: "60000"
+    networks:
+      browser-net:
+        # The name the gate relays mailr's control connection to.
+        aliases: [chrome]
+
+  # The browser gate (websearch/gate.py, `mailr browser-gate`): the browser's only way out, and
+  # mailr's way in to it. Chrome uses it as its proxy: port 3128 for the route "Directly from this
+  # network" (each name resolved once, public addresses only, connected to the checked address),
+  # 3129 for "Through the egress proxy" (passed on to egress:8888 with the proxy's password, which
+  # the browser never holds). Only https (CONNECT to port 443) passes. Port 3000 relays the app's
+  # requests to browserless; the gate is `browser` on the egress network, so MAILR_BROWSER_URL stays
+  # http://browser:3000. No database, no .env: only the egress proxy address.
+  browser-gate:
+    <<: *image
+    profiles: [browser]
+    restart: unless-stopped
+    logging: *logging
+    command: ["mailr", "browser-gate"]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    mem_limit: ${MAILR_BROWSER_GATE_MEMORY:-256m}
+    pids_limit: ${MAILR_BROWSER_GATE_PIDS:-256}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.create_connection(('127.0.0.1', 3128), 3).close()"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+    environment:
+      MAILR_BROWSER_GATE_UPSTREAM: ${MAILR_BROWSER_GATE_UPSTREAM:-${MAILR_IMAGE_PROXY_EGRESS:-}}
+      MAILR_BROWSER_GATE_TARGET: chrome:3000
+    networks:
+      browser-net:
+      egress:
+        aliases: [browser]
+      browser-out:
+
+  # One-off maintenance commands: `docker compose run --rm cli mailr <command>` (in a container
+  # manager, run the stack service "cli" with the command). The app's image, settings and networks without its fixed
+  # address or ports, so it runs while the app and worker are up (`docker compose run app …` fails
+  # with "Address already in use"). Its "tools" profile keeps it out of `up`.
+  cli:
+    <<: *app
+    build: *build
+    profiles: [tools]
+    restart: "no"
+    command: ["mailr", "--help"]
+    healthcheck: {disable: true}
+    environment:
+      <<: *app-env
+      MAILR_OIDC_CLIENT_SECRET: ""
+      MAILR_BOOTSTRAP_ADMIN_PASSWORD: ""
+      MAILR_DB_POOL_SIZE: "5"
+      MAILR_DB_MAX_OVERFLOW: "5"
+    networks:
+      default:
+      egress:
+
+  # Optional gateway for phones and desktop calendar apps (calendar/phones.py; admin docs, "Phones
+  # and desktop apps"). Off unless the "phones" profile is enabled (COMPOSE_PROFILES=phones). It
+  # publishes only Stalwart's calendar and contacts paths (/dav/, /.well-known/caldav|carddav),
+  # refuses the ACL method, the schedule outbox and every other Stalwart path, and passes the
+  # phone's address to Stalwart. Point a host name of your reverse proxy at its port. It is not
+  # in MAILR_TRUSTED_NET, so Stalwart's auto-ban applies to what comes through it.
+  dav-gateway:
+    profiles: [phones]
+    image: nginxinc/nginx-unprivileged:1.29-alpine@sha256:0c79d56aee561a1d81c63f00eee5fb5fe29279560cdc55e91425133104c7fbe6
+    restart: unless-stopped
+    logging: *logging
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,uid=101,gid=101
+      - /etc/nginx/conf.d:size=1m,uid=101,gid=101
+    # nginx starts one worker process per CPU.
+    mem_limit: ${MAILR_DAV_MEMORY:-128m}
+    pids_limit: ${MAILR_DAV_PIDS:-256}
+    # nginx answers on its port; every path it serves belongs to Stalwart and needs a sign-in.
+    healthcheck:
+      test: ["CMD", "nc", "-z", "127.0.0.1", "8080"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+    environment:
+      MAILR_DAV_UPSTREAM: stalwart:8080
+      MAILR_DAV_TRUSTED_PROXY: ${MAILR_DAV_TRUSTED_PROXY:-10.253.54.1}
+    volumes:
+      - ./dav-gateway/default.conf.template:/etc/nginx/templates/default.conf.template:ro
+    ports:
+      - "${MAILR_DAV_BIND:-127.0.0.1}:${MAILR_DAV_PORT:-8026}:8080"
+    depends_on:
+      stalwart: {condition: service_started}
+
+  # Optional error tracker (admin guide, "Error reports"). Off unless the "errors" profile is
+  # enabled (COMPOSE_PROFILES=errors). GlitchTip speaks the Sentry protocol. One container runs its
+  # web server and its background worker (SERVER_ROLE all_in_one) and keeps its queue and cache in
+  # its own Postgres (VALKEY_URL empty): two containers, about 300 MB together. It sits on its own
+  # network with the app and the worker, so it cannot reach mailr's database or the mail store;
+  # its database is on an internal network with nothing else. Publish its port to the reverse
+  # proxy for the web interface (GLITCHTIP_BIND, GLITCHTIP_PORT). The app and worker reach it as
+  # http://glitchtip:8000.
+  glitchtip:
+    profiles: [errors]
+    image: glitchtip/glitchtip:6.2.6@sha256:a3d8eb1b36c1e1603d55ab32711ea3dd8115874742a781a57391a62a16e0dff6
+    restart: unless-stopped
+    logging: *logging
+    # It runs as its own user (app) and needs no capability. It writes to its uploads volume and
+    # /tmp.
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    mem_limit: ${GLITCHTIP_MEMORY:-1g}
+    pids_limit: ${GLITCHTIP_PIDS:-256}
+    depends_on:
+      glitchtip-postgres: {condition: service_healthy}
+    environment:
+      SERVER_ROLE: all_in_one
+      DATABASE_URL: postgres://glitchtip:${GLITCHTIP_POSTGRES_PASSWORD:-}@glitchtip-postgres:5432/glitchtip
+      VALKEY_URL: ""
+      SECRET_KEY: ${GLITCHTIP_SECRET_KEY:-}
+      GLITCHTIP_DOMAIN: ${GLITCHTIP_DOMAIN:-http://localhost:8027}
+      CSRF_TRUSTED_ORIGINS: ${GLITCHTIP_DOMAIN:-http://localhost:8027}
+      DEFAULT_FROM_EMAIL: ${GLITCHTIP_FROM_EMAIL:-glitchtip@localhost}
+      # Alert mail; the default prints mail to the container's log instead of sending it.
+      EMAIL_URL: ${GLITCHTIP_EMAIL_URL:-consolemail://}
+      # Only the first account (made with `createsuperuser`, admin guide) and the people it invites.
+      ENABLE_USER_REGISTRATION: "false"
+      ENABLE_ORGANIZATION_CREATION: "false"
+      # Error reports only: no uptime checks (they would send requests from this host), no logs.
+      GLITCHTIP_ENABLE_UPTIME: "false"
+      GLITCHTIP_ENABLE_LOGS: "false"
+      GLITCHTIP_RETENTION_DAYS: ${GLITCHTIP_RETENTION_DAYS:-90}
+      GRANIAN_WORKERS: "1"
+      VTASKS_CONCURRENCY: "4"
+      DATABASE_POOL_MAX_SIZE: "5"
+      LOG_LEVEL: WARNING
+    volumes:
+      - glitchtip-uploads:/code/uploads
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/_health/', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      start_period: 120s
+      retries: 3
+    ports:
+      - "${GLITCHTIP_BIND:-127.0.0.1}:${GLITCHTIP_PORT:-8027}:8000"
+    networks:
+      errors:
+      errors-db:
+
+  glitchtip-postgres:
+    profiles: [errors]
+    image: postgres:17.11-alpine@sha256:b0f9560a2de083e2cc7382e75f808c7381a32852a7ec49117deedb300e552b24
+    restart: unless-stopped
+    logging: *logging
+    # The same capabilities as mailr's Postgres (above), for the same entrypoint.
+    cap_drop: [ALL]
+    cap_add: [CHOWN, DAC_OVERRIDE, FOWNER, SETGID, SETUID]
+    security_opt: ["no-new-privileges:true"]
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+      - /var/run/postgresql:size=1m
+    mem_limit: ${GLITCHTIP_POSTGRES_MEMORY:-512m}
+    pids_limit: ${GLITCHTIP_POSTGRES_PIDS:-128}
+    command: ["postgres", "-c", "shared_buffers=128MB", "-c", "max_connections=30"]
+    environment:
+      POSTGRES_USER: glitchtip
+      POSTGRES_DB: glitchtip
+      POSTGRES_PASSWORD: ${GLITCHTIP_POSTGRES_PASSWORD:-}
+    volumes:
+      - glitchtip-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U glitchtip"]
+      interval: 5s
+      retries: 20
+    networks:
+      - errors-db
+
+networks:
+  # Fixed subnet so the app and worker keep the addresses Stalwart's allow-list names.
+  default:
+    ipam:
+      config:
+        - subnet: ${MAILR_NET_SUBNET:-10.253.54.0/24}
+  dns:
+    ipam:
+      config:
+        - subnet: ${MAILR_DNS_SUBNET:-10.253.53.0/29}
+  # The VPN egress, the app and worker, and the browser gate; nothing else.
+  egress:
+  # The browser and the browser gate, nothing else, and no route out (the gate is the way out).
+  browser-net:
+    internal: true
+  # The browser gate's own way out, for pages read directly from this network.
+  browser-out:
+  # The error tracker, the app and the worker (GlitchTip sends its alert mail out through it).
+  errors:
+  # GlitchTip and its database, nothing else, no route out.
+  errors-db:
+    internal: true
+
+volumes:
+  mailr-data:
+  postgres-data:
+  stalwart-data:
+  # The resolver's trust anchor (root.key), first copied from its image.
+  resolver-data:
+  glitchtip-uploads:
+  glitchtip-postgres-data:

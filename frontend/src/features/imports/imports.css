@@ -1,0 +1,26 @@
+/* The import dialog (ImportDialog.tsx). */
+.import-dialog .import-pick {
+  align-self: flex-start;
+}
+.import-files {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+/* Room for the preview from the start, so the dialog does not grow when it arrives. */
+.import-preview {
+  min-height: 132px;
+}
+.import-preview ul {
+  margin: 4px 0 10px;
+  padding-inline-start: 20px;
+}
+.import-wait {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.import-sample,
+.import-undo-hint {
+  font-size: 13px;
+  margin-top: 4px;
+}

@@ -1,0 +1,284 @@
+/* The when sheet (WhenSheet.tsx): tiles in titled groups, a compact custom
+   row, a footer. Theme tokens only, so every theme and dark mode follow. */
+
+.ws {
+  display: grid;
+  gap: 12px;
+  container-type: inline-size;
+}
+.ws-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-3);
+}
+.ws-groups {
+  display: grid;
+  gap: 12px;
+}
+.ws-group {
+  display: grid;
+  gap: 6px;
+}
+.ws-label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.ws-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+@container (min-width: 440px) {
+  .ws-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.ws-tile {
+  position: relative;
+  display: grid;
+  align-content: center;
+  gap: 2px;
+  min-height: 52px;
+  padding: 8px 12px;
+  text-align: start;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--surface-high);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease);
+}
+.ws-tile:hover {
+  background: color-mix(in srgb, var(--surface-high), var(--text) 8%);
+}
+.ws-tile:active {
+  background: color-mix(in srgb, var(--surface-high), var(--text) 12%);
+}
+.ws-tile:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+.ws-tile-label {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.ws-tile-at {
+  font-size: 12px;
+  color: var(--text-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ws-tile kbd {
+  position: absolute;
+  top: 6px;
+  inset-inline-end: 8px;
+  font: 500 10px var(--font-mono);
+  color: var(--text-3);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+.ws:focus-within .ws-tile kbd,
+.ws-tile:hover kbd {
+  opacity: 1;
+}
+
+.ws-custom {
+  display: grid;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--divider);
+}
+.ws-seg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+.ws-seg button {
+  min-height: 36px;
+  border: 0;
+  background: transparent;
+  color: var(--text-2);
+  font: 500 13px var(--font);
+  cursor: pointer;
+}
+.ws-seg button + button {
+  border-inline-start: 1px solid var(--border);
+}
+.ws-seg button.on {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.ws-seg button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+.ws-spin {
+  display: grid;
+  grid-template-columns: 1fr auto 1.4fr;
+  align-items: stretch;
+  border-radius: var(--radius-md);
+  background: var(--surface-high);
+  overflow: hidden;
+}
+.ws-spin select {
+  appearance: none;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: 600 15px var(--font);
+  text-align: center;
+  text-align-last: center;
+  cursor: pointer;
+}
+.ws-spin select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+  border-radius: var(--radius-md);
+}
+.ws-spin select option {
+  background: var(--surface);
+  color: var(--text);
+}
+.ws-spin-rule {
+  width: 1px;
+  margin: 10px 0;
+  background: var(--divider);
+}
+.ws-result {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--primary);
+}
+.ws-result.past {
+  color: var(--danger);
+}
+.ws-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ws-foot-gap {
+  flex: 1;
+}
+.ws-foot .btn.text {
+  gap: 6px;
+}
+.ws-full .tk-when,
+.ws-full .qs-picker {
+  width: 100%;
+}
+
+/* The inline status badge on the when line (the quick-action sheet's header). */
+.ws-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ws-badge.overdue,
+.ws-badge.missed {
+  background: var(--danger-container);
+  color: var(--on-danger-container);
+}
+.ws-badge.live {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.ws-badge.snoozed {
+  background: var(--surface-high);
+  color: var(--text-2);
+}
+
+.ws-pick {
+  display: grid;
+  gap: 10px;
+}
+.ws-pick-fields {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 8px;
+}
+.ws-pick-fields label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-2);
+}
+.ws-pick-fields .input {
+  width: 100%;
+}
+
+/* The first level of the quick-action sheet: the primary actions as equal tiles, then one tidy secondary row. */
+.ws-acts {
+  display: grid;
+  grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr));
+  gap: 8px;
+}
+.ws-act {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 4px;
+  min-height: 64px;
+  padding: 8px 4px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--surface-high);
+  color: var(--text);
+  font: 600 13px var(--font);
+  cursor: pointer;
+  transition: background var(--dur) var(--ease);
+}
+.ws-act svg {
+  color: var(--primary);
+}
+.ws-act:hover {
+  background: color-mix(in srgb, var(--surface-high), var(--text) 8%);
+}
+.ws-act.ws-main {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.ws-act.ws-main svg {
+  color: inherit;
+}
+.ws-act.ws-main:hover {
+  background: color-mix(in srgb, var(--primary-container), var(--text) 8%);
+}
+.ws-act:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+.ws-sec {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--divider);
+}
+.ws-sec .muted {
+  font-size: 13px;
+  padding: 0 4px;
+}
+.ws-sec-gap {
+  flex: 1;
+}
+.ws-sec .ws-danger {
+  color: var(--danger);
+}

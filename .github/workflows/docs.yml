@@ -1,0 +1,61 @@
+name: Deploy Documentation
+
+# Builds the documentation in site/ with the pinned versions of site/requirements-docs.lock and
+# publishes it to GitHub Pages (https://murtaza-nasir.github.io/mailr/). In a fork, site_url is
+# changed to the fork's own Pages address before the build.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+
+      - name: Install MkDocs and dependencies (pinned, with hashes)
+        run: pip install --require-hashes --no-deps -r site/requirements-docs.lock
+
+      - name: Build documentation
+        working-directory: site
+        run: |
+          if [ "${{ github.repository }}" != "murtaza-nasir/mailr" ]; then
+            sed -i "s|^site_url:.*|site_url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/|" mkdocs.yml
+          fi
+          mkdocs build --strict
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ./site/site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

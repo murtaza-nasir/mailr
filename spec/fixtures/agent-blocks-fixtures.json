@@ -1,0 +1,2542 @@
+{
+ "version": 1,
+ "approvals": [
+  {
+   "name": "filter-create",
+   "action": "rules.write",
+   "display": {
+    "v": 1,
+    "icon": "filter",
+    "title": "Create a filter",
+    "summary": "Mail from 6 senders gets the label Finance.",
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "Name",
+      "label_msg": {
+       "key": "approvals.field.name",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Finance"
+      }
+     },
+     {
+      "label": "Matches",
+      "label_msg": {
+       "key": "approvals.field.matches",
+       "params": {}
+      },
+      "value": {
+       "t": "query",
+       "text": "From any of: paypal.com, amex.com, chase.com, … (6)",
+       "raw": "from:paypal.com OR from:amex.com OR from:chase.com OR from:venmo.com OR from:wellsfargo.com OR from:discover.com",
+       "conditions": [
+        {
+         "field": "from",
+         "neg": false,
+         "values": [
+          "paypal.com",
+          "amex.com",
+          "chase.com",
+          "venmo.com",
+          "wellsfargo.com",
+          "discover.com"
+         ],
+         "text": "From any of: paypal.com, amex.com, chase.com, … (6)"
+        }
+       ]
+      }
+     },
+     {
+      "label": "Add label",
+      "label_msg": {
+       "key": "approvals.field.add_label",
+       "params": {}
+      },
+      "value": {
+       "t": "labels",
+       "text": "Finance",
+       "items": [
+        {
+         "name": "Finance",
+         "color": null
+        }
+       ]
+      }
+     },
+     {
+      "label": "Also",
+      "label_msg": {
+       "key": "approvals.field.also",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Skip the Inbox",
+       "msg": {
+        "key": "approvals.flag.archive",
+        "params": {}
+       }
+      }
+     }
+    ],
+    "text": "Create a filter\nMail from 6 senders gets the label Finance.\nName: Finance\nMatches: From any of: paypal.com, amex.com, chase.com, … (6)\nAdd label: Finance\nAlso: Skip the Inbox",
+    "title_msg": {
+     "key": "approvals.filter.title.create",
+     "params": {}
+    },
+    "summary_msg": {
+     "key": "approvals.filter.summary.labels",
+     "params": {
+      "who": {
+       "key": "approvals.filter.who.senders",
+       "params": {
+        "count": 6
+       }
+      },
+      "names": "Finance",
+      "count": 1
+     }
+    }
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · created the filter",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.filter_create",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Create a filter",
+    "Mail from 6 senders gets the label Finance.",
+    "Name",
+    "Finance",
+    "Matches",
+    "From any of: paypal.com, amex.com, chase.com, … (6)",
+    "Add label",
+    "Also",
+    "Skip the Inbox"
+   ]
+  },
+  {
+   "name": "filter-query-mix",
+   "action": "rules.write",
+   "display": {
+    "v": 1,
+    "icon": "filter",
+    "title": "Change a filter",
+    "summary": "Matching mail gets the labels Shopping, Receipts.",
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "Matches",
+      "label_msg": {
+       "key": "approvals.field.matches",
+       "params": {}
+      },
+      "value": {
+       "t": "query",
+       "text": "Subject contains “order shipped”; Does not have the label Receipts; Has an attachment; Newer than 7 days",
+       "raw": "subject:\"order shipped\" -label:Receipts has:attachment newer_than:7d",
+       "conditions": [
+        {
+         "field": "subject",
+         "neg": false,
+         "values": [
+          "order shipped"
+         ],
+         "text": "Subject contains “order shipped”"
+        },
+        {
+         "field": "label",
+         "neg": true,
+         "values": [
+          "Receipts"
+         ],
+         "labels": [
+          {
+           "name": "Receipts",
+           "color": "@vivid/orange/2"
+          }
+         ],
+         "text": "Does not have the label Receipts"
+        },
+        {
+         "field": "has",
+         "neg": false,
+         "values": [
+          "attachment"
+         ],
+         "text": "Has an attachment"
+        },
+        {
+         "field": "newer_than",
+         "neg": false,
+         "values": [
+          "7d"
+         ],
+         "text": "Newer than 7 days"
+        }
+       ]
+      }
+     },
+     {
+      "label": "Add labels",
+      "label_msg": {
+       "key": "approvals.field.add_labels",
+       "params": {}
+      },
+      "value": {
+       "t": "labels",
+       "text": "Shopping, Receipts",
+       "items": [
+        {
+         "name": "Shopping",
+         "color": "@default/teal/3"
+        },
+        {
+         "name": "Receipts",
+         "color": "@vivid/orange/2"
+        }
+       ]
+      }
+     },
+     {
+      "label": "Also",
+      "label_msg": {
+       "key": "approvals.field.also",
+       "params": {}
+      },
+      "value": {
+       "t": "list",
+       "text": "Mark as read; Never mark as important",
+       "items": [
+        "Mark as read",
+        "Never mark as important"
+       ],
+       "more": 0,
+       "msgs": [
+        {
+         "key": "approvals.flag.mark_read",
+         "params": {}
+        },
+        {
+         "key": "approvals.flag.important_never",
+         "params": {}
+        }
+       ]
+      }
+     }
+    ],
+    "text": "Change a filter\nMatching mail gets the labels Shopping, Receipts.\nMatches: Subject contains “order shipped”; Does not have the label Receipts; Has an attachment; Newer than 7 days\nAdd labels: Shopping, Receipts\nAlso: Mark as read; Never mark as important",
+    "title_msg": {
+     "key": "approvals.filter.title.update",
+     "params": {}
+    },
+    "summary_msg": {
+     "key": "approvals.filter.summary.labels",
+     "params": {
+      "who": {
+       "key": "approvals.filter.who.matching",
+       "params": {}
+      },
+      "names": "Shopping, Receipts",
+      "count": 2
+     }
+    }
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · changed the filter",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.filter_update",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Change a filter",
+    "Matching mail gets the labels Shopping, Receipts.",
+    "Matches",
+    "Subject contains “order shipped”",
+    "Does not have the label Receipts",
+    "Has an attachment",
+    "Newer than 7 days",
+    "Add labels",
+    "Shopping",
+    "Receipts",
+    "Also",
+    "Mark as read",
+    "Never mark as important"
+   ]
+  },
+  {
+   "name": "order-choices",
+   "action": "orders.write",
+   "display": {
+    "v": 1,
+    "icon": "order",
+    "title": "Create a standing order: Auto-categorize by content",
+    "summary": "Sorts each new email into one of 2 options.",
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "When",
+      "label_msg": {
+       "key": "approvals.field.when",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Each new email",
+       "msg": {
+        "key": "approvals.order.when.message",
+        "params": {}
+       }
+      }
+     },
+     {
+      "label": "Pick one",
+      "label_msg": {
+       "key": "approvals.field.pick_single",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Based on the content of this email, which category does it best fit?"
+      }
+     },
+     {
+      "label": "Options",
+      "label_msg": {
+       "key": "approvals.field.options",
+       "params": {}
+      },
+      "value": {
+       "t": "choices",
+       "text": "Shopping: Add label Shopping; Travel: Add label Travel; Also Star",
+       "items": [
+        {
+         "name": "Shopping",
+         "description": "Orders and receipts",
+         "then": [
+          {
+           "label": "Add label",
+           "label_msg": {
+            "key": "approvals.field.add_label",
+            "params": {}
+           },
+           "value": {
+            "t": "labels",
+            "text": "Shopping",
+            "items": [
+             {
+              "name": "Shopping",
+              "color": "@default/teal/3"
+             }
+            ]
+           }
+          }
+         ],
+         "text": "Shopping: Add label Shopping"
+        },
+        {
+         "name": "Travel",
+         "description": "Flights and hotels",
+         "then": [
+          {
+           "label": "Add label",
+           "label_msg": {
+            "key": "approvals.field.add_label",
+            "params": {}
+           },
+           "value": {
+            "t": "labels",
+            "text": "Travel",
+            "items": [
+             {
+              "name": "Travel",
+              "color": "#d0e8ff,#0b3d91"
+             }
+            ]
+           }
+          },
+          {
+           "label": "Also",
+           "label_msg": {
+            "key": "approvals.field.also",
+            "params": {}
+           },
+           "value": {
+            "t": "text",
+            "text": "Star",
+            "msg": {
+             "key": "approvals.flag.star",
+             "params": {}
+            }
+           }
+          }
+         ],
+         "text": "Travel: Add label Travel; Also Star"
+        }
+       ]
+      }
+     }
+    ],
+    "text": "Create a standing order: Auto-categorize by content\nSorts each new email into one of 2 options.\nWhen: Each new email\nPick one: Based on the content of this email, which category does it best fit?\nOptions: Shopping: Add label Shopping; Travel: Add label Travel; Also Star",
+    "title_msg": {
+     "key": "approvals.order.title_named.create",
+     "params": {
+      "name": "Auto-categorize by content"
+     }
+    },
+    "summary_msg": {
+     "key": "approvals.order.summary",
+     "params": {
+      "when": {
+       "key": "approvals.order.when_inline.message",
+       "params": {}
+      },
+      "count": 2
+     }
+    }
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · created the standing order",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.order_create",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Create a standing order: Auto-categorize by content",
+    "Sorts each new email into one of 2 options.",
+    "When",
+    "Each new email",
+    "Pick one",
+    "Based on the content of this email, which category does it best fit?",
+    "Options",
+    "Shopping",
+    "Travel"
+   ]
+  },
+  {
+   "name": "order-errand",
+   "action": "orders.write",
+   "display": {
+    "v": 1,
+    "icon": "order",
+    "title": "Create a standing order: Remote jobs",
+    "summary": null,
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "When",
+      "label_msg": {
+       "key": "approvals.field.when",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Each new email",
+       "msg": {
+        "key": "approvals.order.when.message",
+        "params": {}
+       }
+      }
+     },
+     {
+      "label": "Mail",
+      "label_msg": {
+       "key": "approvals.field.mail",
+       "params": {}
+      },
+      "value": {
+       "t": "query",
+       "text": "From jobs.example",
+       "raw": "from:jobs.example",
+       "conditions": [
+        {
+         "field": "from",
+         "neg": false,
+         "values": [
+          "jobs.example"
+         ],
+         "text": "From jobs.example"
+        }
+       ]
+      }
+     },
+     {
+      "label": "Only if",
+      "label_msg": {
+       "key": "approvals.field.only_if",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Is this a job-alert email listing job openings?"
+      }
+     },
+     {
+      "label": "Then",
+      "label_msg": {
+       "key": "approvals.field.then",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Notify me",
+       "msg": {
+        "key": "approvals.flag.notify",
+        "params": {}
+       }
+      }
+     },
+     {
+      "label": "Errand",
+      "label_msg": {
+       "key": "approvals.field.errand",
+       "params": {}
+      },
+      "value": {
+       "t": "quote",
+       "text": "Use the /jobs skill: list the analyst jobs that allow remote work."
+      }
+     },
+     {
+      "label": "Result goes to",
+      "label_msg": {
+       "key": "approvals.field.result_goes_to",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "a card on the email, a notification",
+       "msgs": [
+        {
+         "key": "approvals.order.deliver.brief",
+         "params": {}
+        },
+        {
+         "key": "approvals.order.deliver.notify",
+         "params": {}
+        }
+       ]
+      }
+     }
+    ],
+    "text": "Create a standing order: Remote jobs\nWhen: Each new email\nMail: From jobs.example\nOnly if: Is this a job-alert email listing job openings?\nThen: Notify me\nErrand: Use the /jobs skill: list the analyst jobs that allow remote work.\nResult goes to: a card on the email, a notification",
+    "title_msg": {
+     "key": "approvals.order.title_named.create",
+     "params": {
+      "name": "Remote jobs"
+     }
+    }
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · created the standing order",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.order_create",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Create a standing order: Remote jobs",
+    "When",
+    "Each new email",
+    "Mail",
+    "From jobs.example",
+    "Only if",
+    "Is this a job-alert email listing job openings?",
+    "Then",
+    "Notify me",
+    "Errand",
+    "Use the /jobs skill: list the analyst jo",
+    "Result goes to",
+    "a card on the email, a notification"
+   ]
+  },
+  {
+   "name": "mail-trash",
+   "action": "mail.trash",
+   "display": {
+    "v": 1,
+    "icon": "trash",
+    "title": "Move 6 messages to Trash",
+    "summary": null,
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "Messages",
+      "label_msg": {
+       "key": "approvals.field.messages",
+       "params": {}
+      },
+      "value": {
+       "t": "list",
+       "text": "Reddit — u/cwningen95 replied to your comment; Reddit — u/koniboni replied to your comment; Reddit — u/lasolady replied to your comment; Reddit — u/Avawavaa replied to your comment; Reddit — u/zeta replied to your comment; and 1 more",
+       "items": [
+        "Reddit — u/cwningen95 replied to your comment",
+        "Reddit — u/koniboni replied to your comment",
+        "Reddit — u/lasolady replied to your comment",
+        "Reddit — u/Avawavaa replied to your comment",
+        "Reddit — u/zeta replied to your comment"
+       ],
+       "more": 1
+      }
+     }
+    ],
+    "text": "Move 6 messages to Trash\nMessages: Reddit — u/cwningen95 replied to your comment; Reddit — u/koniboni replied to your comment; Reddit — u/lasolady replied to your comment; Reddit — u/Avawavaa replied to your comment; Reddit — u/zeta replied to your comment; and 1 more",
+    "title_msg": {
+     "key": "approvals.mail.trash.ask",
+     "params": {
+      "what": {
+       "key": "approvals.what.messages",
+       "params": {
+        "count": 6
+       }
+      }
+     }
+    }
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · moved 6 messages to Trash",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.mail.trash.done",
+        "params": {
+         "what": {
+          "key": "approvals.what.messages",
+          "params": {
+           "count": 6
+          }
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Move 6 messages to Trash",
+    "Messages",
+    "Reddit — u/cwningen95 replied to your comment",
+    "Reddit — u/koniboni replied to your comment",
+    "Reddit — u/lasolady replied to your comment",
+    "Reddit — u/Avawavaa replied to your comment",
+    "Reddit — u/zeta replied to your comment"
+   ]
+  },
+  {
+   "name": "mail-labels",
+   "action": "mail.label",
+   "display": {
+    "v": 1,
+    "icon": "label",
+    "title": "Add labels to 2 messages",
+    "summary": null,
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "Labels",
+      "label_msg": {
+       "key": "approvals.field.labels",
+       "params": {}
+      },
+      "value": {
+       "t": "labels",
+       "text": "Shopping, Travel",
+       "items": [
+        {
+         "name": "Shopping",
+         "color": "@default/teal/3"
+        },
+        {
+         "name": "Travel",
+         "color": "#d0e8ff,#0b3d91"
+        }
+       ]
+      }
+     },
+     {
+      "label": "Messages",
+      "label_msg": {
+       "key": "approvals.field.messages",
+       "params": {}
+      },
+      "value": {
+       "t": "list",
+       "text": "Levi's — Your order shipped; Delta — Your trip to Austin",
+       "items": [
+        "Levi's — Your order shipped",
+        "Delta — Your trip to Austin"
+       ],
+       "more": 0
+      }
+     }
+    ],
+    "text": "Add labels to 2 messages\nLabels: Shopping, Travel\nMessages: Levi's — Your order shipped; Delta — Your trip to Austin",
+    "title_msg": {
+     "key": "approvals.mail.add_labels.ask",
+     "params": {
+      "what": {
+       "key": "approvals.what.messages",
+       "params": {
+        "count": 2
+       }
+      }
+     }
+    }
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · labelled 2 messages",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.mail.add_labels.done",
+        "params": {
+         "what": {
+          "key": "approvals.what.messages",
+          "params": {
+           "count": 2
+          }
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Add labels to 2 messages",
+    "Labels",
+    "Shopping",
+    "Travel",
+    "Messages",
+    "Levi's — Your order shipped",
+    "Delta — Your trip to Austin"
+   ]
+  },
+  {
+   "name": "send",
+   "action": "mail.send",
+   "display": {
+    "v": 1,
+    "icon": "send",
+    "title": "Send to Alice Chen and bob@example.com",
+    "summary": null,
+    "danger": false,
+    "reason": "First message to a new address",
+    "fields": [
+     {
+      "label": "From",
+      "label_msg": {
+       "key": "approvals.field.from",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "me@example.com"
+      }
+     },
+     {
+      "label": "To",
+      "label_msg": {
+       "key": "approvals.field.to",
+       "params": {}
+      },
+      "value": {
+       "t": "people",
+       "text": "Alice Chen <alice@example.com>",
+       "items": [
+        {
+         "name": "Alice Chen",
+         "email": "alice@example.com"
+        }
+       ],
+       "more": 0
+      }
+     },
+     {
+      "label": "Cc",
+      "label_msg": {
+       "key": "approvals.field.cc",
+       "params": {}
+      },
+      "value": {
+       "t": "people",
+       "text": "bob@example.com",
+       "items": [
+        {
+         "name": null,
+         "email": "bob@example.com"
+        }
+       ],
+       "more": 0
+      }
+     },
+     {
+      "label": "Subject",
+      "label_msg": {
+       "key": "approvals.field.subject",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Re: Quarterly plan"
+      }
+     },
+     {
+      "label": "",
+      "value": {
+       "t": "quote",
+       "text": "Friday at 10 works for me. See you then!\n\nOn Tue, Alice wrote:\n> old"
+      }
+     }
+    ],
+    "text": "Send to Alice Chen and bob@example.com\nFrom: me@example.com\nTo: Alice Chen <alice@example.com>\nCc: bob@example.com\nSubject: Re: Quarterly plan\nFriday at 10 works for me. See you then!\n\nOn Tue, Alice wrote:\n> old",
+    "title_msg": {
+     "key": "approvals.send.title",
+     "params": {
+      "who": {
+       "key": "approvals.who.two",
+       "params": {
+        "first": "Alice Chen",
+        "second": "bob@example.com"
+       }
+      }
+     }
+    }
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · sent the email",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.sent",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Send to Alice Chen and bob@example.com",
+    "First message to a new address",
+    "From",
+    "me@example.com",
+    "To",
+    "Alice Chen",
+    "Cc",
+    "bob@example.com",
+    "Subject",
+    "Re: Quarterly plan",
+    "Friday at 10 works for me. See you then!"
+   ]
+  },
+  {
+   "name": "draft-outsider",
+   "action": "mail.draft",
+   "display": {
+    "v": 1,
+    "icon": "draft",
+    "title": "Save a draft to Marco Silva",
+    "summary": "Nothing is sent. The draft stays in Drafts.",
+    "danger": false,
+    "reason": "Ambrose wrote this after reading mail. Marco Silva was not in that conversation.",
+    "fields": [
+     {
+      "label": "To",
+      "label_msg": {
+       "key": "approvals.field.to",
+       "params": {}
+      },
+      "value": {
+       "t": "people",
+       "text": "Marco Silva <marco@example.org>",
+       "items": [
+        {
+         "name": "Marco Silva",
+         "email": "marco@example.org"
+        }
+       ],
+       "more": 0
+      }
+     },
+     {
+      "label": "Subject",
+      "label_msg": {
+       "key": "approvals.field.subject",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Re: Quote for the Bluefin landing page"
+      }
+     },
+     {
+      "label": "",
+      "value": {
+       "t": "quote",
+       "text": "Hi Marco, a reminder about the quote."
+      }
+     }
+    ],
+    "text": "Save a draft to Marco Silva\nNothing is sent. The draft stays in Drafts.\nTo: Marco Silva <marco@example.org>\nSubject: Re: Quote for the Bluefin landing page\nHi Marco, a reminder about the quote.",
+    "title_msg": {
+     "key": "approvals.draft.title_save",
+     "params": {
+      "who": "Marco Silva"
+     }
+    },
+    "summary_msg": {
+     "key": "approvals.draft.summary",
+     "params": {}
+    },
+    "reason_msg": {
+     "key": "approvals.reason.read_mail.outsider",
+     "params": {
+      "who": "Ambrose",
+      "names": "Marco Silva"
+     }
+    }
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · done",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.done",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Save a draft to Marco Silva",
+    "Nothing is sent. The draft stays in Drafts.",
+    "Ambrose wrote this after reading mail. Marco Silva was not in that conversation.",
+    "To",
+    "Marco Silva",
+    "Subject",
+    "Re: Quote for the Bluefin landing page",
+    "Hi Marco, a reminder about the quote."
+   ]
+  },
+  {
+   "name": "event-create",
+   "action": "calendar.create",
+   "display": {
+    "v": 1,
+    "icon": "event",
+    "title": "Create event “Review with Alice”",
+    "summary": null,
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "When",
+      "label_msg": {
+       "key": "approvals.field.when",
+       "params": {}
+      },
+      "value": {
+       "t": "when",
+       "text": "Wed 30 Sep, 14:00–15:00",
+       "start": "2026-09-30T19:00:00+00:00",
+       "end": "2026-09-30T20:00:00+00:00",
+       "all_day": false
+      }
+     },
+     {
+      "label": "Where",
+      "label_msg": {
+       "key": "approvals.field.where",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Room 204"
+      }
+     },
+     {
+      "label": "Calendar",
+      "label_msg": {
+       "key": "approvals.field.calendar",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Work"
+      }
+     },
+     {
+      "label": "Guests",
+      "label_msg": {
+       "key": "approvals.field.guests",
+       "params": {}
+      },
+      "value": {
+       "t": "people",
+       "text": "Alice <alice@example.com>",
+       "items": [
+        {
+         "name": "Alice",
+         "email": "alice@example.com"
+        }
+       ],
+       "more": 0
+      }
+     }
+    ],
+    "text": "Create event “Review with Alice”\nWhen: Wed 30 Sep, 14:00–15:00\nWhere: Room 204\nCalendar: Work\nGuests: Alice <alice@example.com>"
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · added the event",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.event_added",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Create event “Review with Alice”",
+    "When",
+    "Wed 30 Sep, 14:00–15:00",
+    "Where",
+    "Room 204",
+    "Calendar",
+    "Work",
+    "Guests",
+    "Alice"
+   ]
+  },
+  {
+   "name": "task-create",
+   "action": "tasks.create",
+   "display": {
+    "v": 1,
+    "icon": "task",
+    "title": "Add task “Send the syllabus”",
+    "summary": null,
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "Due",
+      "label_msg": {
+       "key": "approvals.field.due",
+       "params": {}
+      },
+      "value": {
+       "t": "when",
+       "text": "Sat 3 Oct (all day)",
+       "start": "2026-10-03",
+       "end": null,
+       "all_day": true
+      }
+     },
+     {
+      "label": "List",
+      "label_msg": {
+       "key": "approvals.field.list",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Teaching"
+      }
+     }
+    ],
+    "text": "Add task “Send the syllabus”\nDue: Sat 3 Oct (all day)\nList: Teaching"
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · added the task",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.task_added",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Add task “Send the syllabus”",
+    "Due",
+    "Sat 3 Oct (all day)",
+    "List",
+    "Teaching"
+   ]
+  },
+  {
+   "name": "memory-update",
+   "action": "memory.write",
+   "display": {
+    "v": 1,
+    "icon": "memory",
+    "title": "Update a memory",
+    "summary": null,
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "Note",
+      "label_msg": {
+       "key": "approvals.field.note",
+       "params": {}
+      },
+      "value": {
+       "t": "diff",
+       "text": "Alice leads the analytics team → Alice leads the data science team",
+       "before": "Alice leads the analytics team",
+       "after": "Alice leads the data science team"
+      }
+     },
+     {
+      "label": "",
+      "value": {
+       "t": "text",
+       "text": "about Alice Chen"
+      }
+     }
+    ],
+    "text": "Update a memory\nNote: Alice leads the analytics team → Alice leads the data science team\nabout Alice Chen"
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · saved the memory",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.memory_saved",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Update a memory",
+    "Note",
+    "Alice leads the analytics team",
+    "Alice leads the data science team",
+    "about Alice Chen"
+   ]
+  },
+  {
+   "name": "skill-create",
+   "action": "skills.write",
+   "display": {
+    "v": 1,
+    "icon": "skill",
+    "title": "Create skill /jobs",
+    "summary": null,
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "About",
+      "label_msg": {
+       "key": "approvals.field.about",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Remote analyst jobs"
+      }
+     },
+     {
+      "label": "Instructions",
+      "label_msg": {
+       "key": "approvals.field.instructions",
+       "params": {}
+      },
+      "value": {
+       "t": "quote",
+       "text": "Scan the job-alert email for analyst roles."
+      }
+     },
+     {
+      "label": "Used for",
+      "label_msg": {
+       "key": "approvals.field.used_for",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "chat, summarize"
+      }
+     }
+    ],
+    "text": "Create skill /jobs\nAbout: Remote analyst jobs\nInstructions: Scan the job-alert email for analyst roles.\nUsed for: chat, summarize"
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · saved the skill",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.skill_saved",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Create skill /jobs",
+    "About",
+    "Remote analyst jobs",
+    "Instructions",
+    "Scan the job-alert email for analyst rol",
+    "Used for",
+    "chat, summarize"
+   ]
+  },
+  {
+   "name": "settings",
+   "action": "prefs.write",
+   "display": {
+    "v": 1,
+    "icon": "settings",
+    "title": "Change settings",
+    "summary": null,
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "Density",
+      "value": {
+       "t": "text",
+       "text": "compact"
+      }
+     },
+     {
+      "label": "Undo send seconds",
+      "value": {
+       "t": "text",
+       "text": "10"
+      }
+     }
+    ],
+    "text": "Change settings\nDensity: compact\nUndo send seconds: 10"
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · changed the settings",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.settings_changed",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Change settings",
+    "Density",
+    "compact",
+    "Undo send seconds",
+    "10"
+   ]
+  },
+  {
+   "name": "generic-lines",
+   "action": "speakr.share",
+   "display": {
+    "v": 1,
+    "icon": "recording",
+    "title": "Create a public link to “Weekly sync”",
+    "summary": null,
+    "danger": true,
+    "reason": null,
+    "fields": [
+     {
+      "label": "",
+      "value": {
+       "t": "text",
+       "text": "Anyone with the link can open the recording and its summary"
+      }
+     },
+     {
+      "label": "Expires",
+      "value": {
+       "t": "text",
+       "text": "never"
+      }
+     }
+    ],
+    "text": "Create a public link to “Weekly sync”\nAnyone with the link can open the recording and its summary\nExpires: never"
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · done",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.done",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Create a public link to “Weekly sync”",
+    "Anyone with the link can open the recording and its summary",
+    "Expires",
+    "never"
+   ]
+  },
+  {
+   "name": "event-update-occurrence",
+   "action": "calendar.update",
+   "display": {
+    "v": 1,
+    "icon": "event",
+    "title": "Change one occurrence of “Weekly sync”",
+    "summary": null,
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "Applies to",
+      "label_msg": {
+       "key": "approvals.field.applies_to",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Tue 6 Oct, 10:00–11:00 (this occurrence only)",
+       "msg": {
+        "key": "approvals.event.applies_this",
+        "params": {
+         "span": "Tue 6 Oct, 10:00–11:00"
+        }
+       }
+      }
+     },
+     {
+      "label": "Time",
+      "label_msg": {
+       "key": "approvals.field.time",
+       "params": {}
+      },
+      "value": {
+       "t": "diff",
+       "text": "Tue 6 Oct, 10:00–11:00 → 14:00–15:00",
+       "before": "Tue 6 Oct, 10:00–11:00",
+       "after": "14:00–15:00"
+      }
+     },
+     {
+      "label": "Where",
+      "label_msg": {
+       "key": "approvals.field.where",
+       "params": {}
+      },
+      "value": {
+       "t": "diff",
+       "text": "Room 4 → Room 5",
+       "before": "Room 4",
+       "after": "Room 5"
+      }
+     }
+    ],
+    "text": "Change one occurrence of “Weekly sync”\nApplies to: Tue 6 Oct, 10:00–11:00 (this occurrence only)\nTime: Tue 6 Oct, 10:00–11:00 → 14:00–15:00\nWhere: Room 4 → Room 5"
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · changed the event",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.event_changed",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Change one occurrence of “Weekly sync”",
+    "Applies to",
+    "Tue 6 Oct, 10:00–11:00 (this occurrence only)",
+    "Time",
+    "Tue 6 Oct, 10:00–11:00",
+    "14:00–15:00",
+    "Where",
+    "Room 4",
+    "Room 5"
+   ]
+  },
+  {
+   "name": "event-update-series",
+   "action": "calendar.update",
+   "display": {
+    "v": 1,
+    "icon": "event",
+    "title": "Change “Weekly sync”",
+    "summary": null,
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "Applies to",
+      "label_msg": {
+       "key": "approvals.field.applies_to",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "The whole series (weekly on Tuesday)",
+       "msg": {
+        "key": "approvals.event.applies_series_rule",
+        "params": {
+         "rule": "weekly on Tuesday"
+        }
+       }
+      }
+     },
+     {
+      "label": "Title",
+      "label_msg": {
+       "key": "approvals.field.title",
+       "params": {}
+      },
+      "value": {
+       "t": "diff",
+       "text": "Weekly sync → Team sync",
+       "before": "Weekly sync",
+       "after": "Team sync"
+      }
+     },
+     {
+      "label": "Repeats",
+      "label_msg": {
+       "key": "approvals.field.repeats",
+       "params": {}
+      },
+      "value": {
+       "t": "diff",
+       "text": "Weekly on Tuesday → Weekly on Mon and Thu",
+       "before": "Weekly on Tuesday",
+       "after": "Weekly on Mon and Thu"
+      }
+     }
+    ],
+    "text": "Change “Weekly sync”\nApplies to: The whole series (weekly on Tuesday)\nTitle: Weekly sync → Team sync\nRepeats: Weekly on Tuesday → Weekly on Mon and Thu"
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · changed the event",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.event_changed",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Change “Weekly sync”",
+    "Applies to",
+    "The whole series (weekly on Tuesday)",
+    "Title",
+    "Weekly sync",
+    "Team sync",
+    "Repeats",
+    "Weekly on Tuesday",
+    "Weekly on Mon and Thu"
+   ]
+  },
+  {
+   "name": "event-delete-following",
+   "action": "calendar.delete",
+   "display": {
+    "v": 1,
+    "icon": "event",
+    "title": "Delete “Weekly sync”",
+    "summary": null,
+    "danger": true,
+    "reason": null,
+    "fields": [
+     {
+      "label": "Applies to",
+      "label_msg": {
+       "key": "approvals.field.applies_to",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "This and following occurrences, from Tue 6 Oct",
+       "msg": {
+        "key": "approvals.event.applies_following",
+        "params": {
+         "day": "Tue 6 Oct"
+        }
+       }
+      }
+     },
+     {
+      "label": "Calendar",
+      "label_msg": {
+       "key": "approvals.field.calendar",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Work"
+      }
+     }
+    ],
+    "text": "Delete “Weekly sync”\nApplies to: This and following occurrences, from Tue 6 Oct\nCalendar: Work"
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · removed the event",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.event_removed",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Delete “Weekly sync”",
+    "Applies to",
+    "This and following occurrences, from Tue 6 Oct",
+    "Calendar",
+    "Work"
+   ]
+  },
+  {
+   "name": "event-move-calendar",
+   "action": "calendar.update",
+   "display": {
+    "v": 1,
+    "icon": "event",
+    "title": "Change “Dentist”",
+    "summary": null,
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "When",
+      "label_msg": {
+       "key": "approvals.field.when",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Thu 8 Oct, 11:00–12:00 CDT (09:00–10:00 PDT)"
+      }
+     },
+     {
+      "label": "Calendar",
+      "label_msg": {
+       "key": "approvals.field.calendar",
+       "params": {}
+      },
+      "value": {
+       "t": "diff",
+       "text": "Work → Family (the Family group)",
+       "before": "Work",
+       "after": "Family (the Family group)"
+      }
+     }
+    ],
+    "text": "Change “Dentist”\nWhen: Thu 8 Oct, 11:00–12:00 CDT (09:00–10:00 PDT)\nCalendar: Work → Family (the Family group)"
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · changed the event",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.event_changed",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Change “Dentist”",
+    "When",
+    "Thu 8 Oct, 11:00–12:00 CDT (09:00–10:00 PDT)",
+    "Calendar",
+    "Work",
+    "Family (the Family group)"
+   ]
+  },
+  {
+   "name": "event-create-repeating",
+   "action": "calendar.create",
+   "display": {
+    "v": 1,
+    "icon": "event",
+    "title": "Create event “Standup”",
+    "summary": null,
+    "danger": false,
+    "reason": null,
+    "fields": [
+     {
+      "label": "When",
+      "label_msg": {
+       "key": "approvals.field.when",
+       "params": {}
+      },
+      "value": {
+       "t": "when",
+       "text": "Mon 5 Oct, 09:15–09:30",
+       "start": "2026-10-05T14:15:00+00:00",
+       "end": "2026-10-05T14:30:00+00:00",
+       "all_day": false
+      }
+     },
+     {
+      "label": "Repeats",
+      "label_msg": {
+       "key": "approvals.field.repeats",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Every weekday (Mon–Fri)"
+      }
+     },
+     {
+      "label": "Calendar",
+      "label_msg": {
+       "key": "approvals.field.calendar",
+       "params": {}
+      },
+      "value": {
+       "t": "text",
+       "text": "Work"
+      }
+     }
+    ],
+    "text": "Create event “Standup”\nWhen: Mon 5 Oct, 09:15–09:30\nRepeats: Every weekday (Mon–Fri)\nCalendar: Work"
+   },
+   "outcomes": [
+    {
+     "state": "pending",
+     "text": "Waiting for approval",
+     "msg": {
+      "key": "approvals.outcome.pending",
+      "params": {}
+     }
+    },
+    {
+     "state": "executed",
+     "text": "Approved · added the event",
+     "msg": {
+      "key": "approvals.outcome.executed",
+      "params": {
+       "done": {
+        "key": "approvals.done.event_added",
+        "params": {}
+       }
+      }
+     }
+    },
+    {
+     "state": "denied",
+     "text": "Denied",
+     "msg": {
+      "key": "approvals.outcome.denied",
+      "params": {}
+     }
+    },
+    {
+     "state": "expired",
+     "text": "Expired",
+     "msg": {
+      "key": "approvals.outcome.expired",
+      "params": {}
+     }
+    },
+    {
+     "state": "failed",
+     "text": "Approved · failed: the server said no",
+     "msg": {
+      "key": "approvals.outcome.failed_error",
+      "params": {
+       "error": "the server said no"
+      }
+     }
+    }
+   ],
+   "expect": [
+    "Create event “Standup”",
+    "When",
+    "Mon 5 Oct, 09:15–09:30",
+    "Repeats",
+    "Every weekday (Mon–Fri)",
+    "Calendar",
+    "Work"
+   ]
+  }
+ ],
+ "steps": [
+  {
+   "name": "search_conversations",
+   "args": {
+    "q": "from:paypal.com newer_than:30d"
+   },
+   "label": "Searching your mail for “from:paypal.com newer_than:30d”",
+   "label_msg": {
+    "key": "approvals.step.search_mail",
+    "params": {
+     "q": "from:paypal.com newer_than:30d"
+    }
+   },
+   "icon": "search"
+  },
+  {
+   "name": "search_conversations",
+   "args": {
+    "view": "inbox"
+   },
+   "label": "Looking through your inbox",
+   "label_msg": {
+    "key": "approvals.step.view.inbox",
+    "params": {}
+   },
+   "icon": "search"
+  },
+  {
+   "name": "search_semantic",
+   "args": {
+    "q": "conference travel reimbursement"
+   },
+   "label": "Searching by meaning for “conference travel reimbursement”",
+   "label_msg": {
+    "key": "approvals.step.search_meaning",
+    "params": {
+     "q": "conference travel reimbursement"
+    }
+   },
+   "icon": "search"
+  },
+  {
+   "name": "use_skill",
+   "args": {
+    "name": "/jobs"
+   },
+   "label": "Using the /jobs skill",
+   "label_msg": {
+    "key": "approvals.step.use_skill",
+    "params": {
+     "name": "jobs"
+    }
+   },
+   "icon": "memory"
+  },
+  {
+   "name": "manage_filter",
+   "args": {
+    "action": "create",
+    "name": "Finance"
+   },
+   "label": "Creating filter “Finance”",
+   "label_msg": {
+    "key": "approvals.step.filter_named.create",
+    "params": {
+     "name": "Finance"
+    }
+   },
+   "icon": "label"
+  },
+  {
+   "name": "manage_order",
+   "args": {
+    "action": "create",
+    "name": "Remote jobs"
+   },
+   "label": "Creating standing order “Remote jobs”",
+   "label_msg": {
+    "key": "approvals.step.order_named.create",
+    "params": {
+     "name": "Remote jobs"
+    }
+   },
+   "icon": "label"
+  },
+  {
+   "name": "modify_conversations",
+   "args": {
+    "action": "trash",
+    "conversation_ids": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6
+    ]
+   },
+   "label": "Moving 6 conversations to Trash",
+   "label_msg": {
+    "key": "approvals.mail.trash.ing",
+    "params": {
+     "what": {
+      "key": "approvals.what.conversations",
+      "params": {
+       "count": 6
+      }
+     }
+    }
+   },
+   "icon": "label"
+  },
+  {
+   "name": "list_labels",
+   "args": {},
+   "label": "Checking your labels",
+   "label_msg": {
+    "key": "approvals.step.fixed.list_labels",
+    "params": {}
+   },
+   "icon": "label"
+  },
+  {
+   "name": "get_brief",
+   "args": {},
+   "label": "Reading the brief",
+   "label_msg": {
+    "key": "approvals.step.fixed.get_brief",
+    "params": {}
+   },
+   "icon": "read"
+  },
+  {
+   "name": "create_event",
+   "args": {},
+   "label": "Adding a calendar event",
+   "label_msg": {
+    "key": "approvals.step.fixed.create_event",
+    "params": {}
+   },
+   "icon": "calendar"
+  },
+  {
+   "name": "get_transcript",
+   "args": {},
+   "label": "Reading a transcript",
+   "label_msg": {
+    "key": "approvals.step.fixed.get_transcript",
+    "params": {}
+   },
+   "icon": "recording"
+  },
+  {
+   "name": "some_new_tool",
+   "args": {},
+   "label": "Some new tool",
+   "icon": "other"
+  }
+ ]
+}

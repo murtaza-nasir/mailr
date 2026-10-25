@@ -1,0 +1,9 @@
+# User settings: spam.
+# One line per key, `key: plain description`; `key: {internal: why}` for a key that is not a setting
+# a person chooses. A key may appear in only one file of this folder. The settings map test
+# (frontend/src/features/settings/groups.test.ts) checks that Settings has a place for each one.
+
+spam_classifier: "How mailr's own spam filter acts: off, score only, or move to Spam."
+spam_junk_score: The spam score at which mail goes to Spam.
+spam_upstream_unknown_threshold: The provider spam score that sends mail from new senders to Spam (0 turns it off).
+spam_suspect_score: The spam score from which no model reads mail from new senders (0 turns it off).

@@ -1,0 +1,303 @@
+/* People, contact groups and their chips in recipient fields. */
+
+.group-chip-wrap {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  max-width: 100%;
+}
+.group-chip {
+  border-color: var(--primary);
+  max-width: 320px;
+}
+.group-chip .group-chip-icon {
+  flex: none;
+  margin-inline-start: 4px;
+  color: var(--primary);
+}
+.recip-chip.group-chip button.group-chip-name,
+.cal-guest-chip.group-chip button.group-chip-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-full);
+  padding: 0 4px;
+  color: inherit;
+  font-weight: 500;
+  min-width: 0;
+}
+.group-chip .group-chip-name .lucide {
+  width: 14px;
+  height: 14px;
+  flex: none;
+}
+.group-chip-members {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 2px 6px;
+  border-inline-start: 2px solid var(--primary-container);
+}
+.cal-guest-group .group-chip-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+.cal-guest-group .group-chip {
+  border: 0;
+  max-width: none;
+}
+.cal-guest-group .group-chip-members {
+  display: flex;
+  flex-direction: column;
+  margin-inline-start: 14px;
+}
+.group-option-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.cal-people .group-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  text-align: start;
+}
+.cal-people .group-option .who {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.cal-people .group-option .who span:last-child {
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+/* Settings → Mail → People and groups */
+.ppl-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(300px, 1.2fr);
+  gap: 16px;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .ppl-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.ppl-search {
+  width: 100%;
+  margin-bottom: 8px;
+}
+.ppl-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.ppl-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  text-align: start;
+  border-bottom: 1px solid var(--divider);
+}
+.ppl-list li:last-child .ppl-row {
+  border-bottom: 0;
+}
+.ppl-row:hover,
+.ppl-row[aria-current='true'] {
+  background: var(--hover);
+}
+.ppl-row .who {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.ppl-row .who span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ppl-row .who span:last-child,
+.ppl-muted {
+  font-size: 12px;
+  color: var(--text-3);
+}
+.ppl-card {
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  position: sticky;
+  top: 8px;
+}
+.ppl-card h3 {
+  margin: 0;
+  font-size: 18px;
+  font-family: var(--font-display);
+}
+.ppl-card dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 12px;
+  margin: 12px 0;
+}
+.ppl-card dt {
+  color: var(--text-3);
+  font-size: 13px;
+}
+.ppl-card dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.ppl-source {
+  margin-inline-start: 6px;
+  font-size: 11px;
+  color: var(--text-3);
+}
+.ppl-sugg {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.ppl-sugg li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-dim);
+}
+.ppl-sugg .v {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.grp-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--chip-bg);
+  border: 1px solid var(--border);
+}
+.grp-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.grp-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--divider);
+}
+.grp-row .nm {
+  flex: 1;
+  min-width: 0;
+  font-weight: 500;
+}
+.grp-members {
+  list-style: none;
+  margin: 8px 0;
+  padding: 0;
+  max-height: 260px;
+  overflow: auto;
+}
+.grp-members li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+.grp-members li .who {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.grp-sugg {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.grp-sugg .row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.grp-sugg .input {
+  flex: 1;
+  min-width: 160px;
+}
+.grp-swatches {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.grp-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+}
+.grp-swatch[aria-checked='true'] {
+  border-color: var(--text);
+}
+/* "Add member" text Save cannot take as an address (it stops Save). */
+.ppl-error { margin: 4px 0 0; font-size: 12.5px; color: var(--danger); }
+
+/* What Ambrose knows (the person card) */
+.ppl-knows {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--divider);
+}
+.ppl-knows .as-mems {
+  margin: 0;
+}
+
+/* The card's address: a link that opens a draft to them. */
+.ppl-address {
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.ppl-address:hover,
+.ppl-address:focus-visible {
+  color: var(--primary);
+  text-decoration: underline;
+}

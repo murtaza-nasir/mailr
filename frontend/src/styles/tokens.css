@@ -1,0 +1,227 @@
+/* Design tokens. The base (Classic) palette: light, roomy surfaces in mailr's ocean blue, from the
+   suite icon, with tonal containers in light and dark. */
+
+/* Right to left. <html dir> follows the language. Positions,
+   margins and paddings use logical properties, which mirror by themselves; what has no logical
+   form reads these: a sideways move multiplies by --dir (translateX(calc(12px * var(--dir)))), and
+   a side named in a value (a gradient, transform-origin) uses --start / --end. */
+:root {
+  --dir: 1;
+  --start: left;
+  --end: right;
+  --to-end: to right;
+}
+:root[dir='rtl'] {
+  --dir: -1;
+  --start: right;
+  --end: left;
+  --to-end: to left;
+}
+
+:root {
+  --font: 'Inter', 'Noto Sans', Roboto, system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Inter', 'Noto Sans', Roboto, system-ui, -apple-system, sans-serif;
+  --font-mono: 'Roboto Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 999px;
+
+  --topbar-h: 64px;
+  --sidebar-w: 256px;
+  --sidebar-w-collapsed: 72px;
+  --rail-w: 56px;
+  --panel-w: 360px;
+
+  --row-h: 40px;
+  --row-h-chips: 64px;
+  /* A narrow list's row with its third line (snippet, chips or action): list.css .narrow .conv-row. */
+  --row-h-narrow: 94px;
+
+  --shadow-1: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  --shadow-2: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --shadow-3: 0 4px 4px 0 rgba(60, 64, 67, 0.3), 0 8px 12px 6px rgba(60, 64, 67, 0.15);
+  --row-hover-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur: 150ms;
+}
+
+/* The light colours. [data-theme='light'] too, so a light sample inside a dark page (the colour
+   picker's preview) gets them back. */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  --bg: #f4f8f9;
+  --surface: #ffffff;
+  --surface-dim: #eff5f7;
+  --surface-container: #e4eff2;
+  --surface-high: #e2ebee;
+  --text: #1f1f1f;
+  --text-2: #42494b;
+  --text-3: #5b6569;
+  --text-inverse: #f2f2f2;
+  --border: #d5dee1;
+  --divider: #dde5e8;
+  --primary: #1f6c86;
+  --on-primary: #ffffff;
+  --primary-container: #cfe8f0;
+  --on-primary-container: #06303d;
+  --compose-bg: #c4e4ee;
+  --compose-fg: #062b37;
+  --nav-active: #cfe8f0;
+  --nav-active-fg: #062b37;
+  --hover: rgba(42, 66, 74, 0.08);
+  --pressed: rgba(42, 66, 74, 0.12);
+  --row-selected: #c6e2ec;
+  --row-focused-bar: #1f6c86;
+  --row-read-bg: #eff5f7;
+  --row-unread-bg: #ffffff;
+  --chip-bg: #e2ebee;
+  --chip-fg: #42494b;
+  --star: #e3a21a;
+  --important: #e98a5b;
+  --important-border: #c96a3c;
+  --danger: #b3261e;
+  --danger-container: #f9dedc;
+  --warning-container: #fef7e0;
+  --warning-fg: #7a5c00;
+  --warning: #b06000;
+  --on-danger-container: #8c1d18;
+  --on-success-container: #0d652d;
+  --success: #146c2e;
+  --success-container: #c4eed0;
+  --info-container: #e1f1f5;
+  --scrim: rgba(32, 33, 36, 0.4);
+  --toast-bg: #303030;
+  --toast-fg: #f2f2f2;
+  --toast-action: #8fd0e3;
+  --input-bg: #e4eff2;
+  --input-bg-focus: #ffffff;
+  --focus-ring: #1f6c86;
+  --tooltip-bg: #34404a;
+  --skeleton: #e5ecee;
+  --skeleton-hi: #f0f5f6;
+  --scrollbar: rgba(0, 0, 0, 0.2);
+}
+
+/* Accent spots that follow the primary unless the colour engine sets them (lib/colour/themes.ts).
+   On every element that picks a scheme, so a sample in the colour picker resolves its own. */
+:root,
+[data-theme] {
+  --link: var(--primary);
+  --accent-chip-bg: var(--primary-container);
+  --accent-chip-fg: var(--on-primary-container);
+  --accent-badge-bg: var(--primary-container);
+  --accent-badge-fg: var(--on-primary-container);
+  --secondary: var(--primary);
+  --secondary-container: var(--primary-container);
+  --on-secondary-container: var(--on-primary-container);
+  --tertiary: var(--primary);
+  --tertiary-container: var(--primary-container);
+  --on-tertiary-container: var(--on-primary-container);
+  --accent-selection: var(--row-selected);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #1b1b1b;
+  --surface: #282828;
+  --surface-dim: #1f1f1f;
+  --surface-container: #2d2e30;
+  --surface-high: #35363a;
+  --text: #e3e3e3;
+  --text-2: #c4c7c5;
+  --text-3: #9aa0a6;
+  --text-inverse: #1f1f1f;
+  --border: #444746;
+  --divider: #3a3b3d;
+  --primary: #8fd0e3;
+  --on-primary: #003543;
+  --primary-container: #0f4d60;
+  --on-primary-container: #c4ebf6;
+  --compose-bg: #bfe5f0;
+  --compose-fg: #00303c;
+  --nav-active: #0f4d60;
+  --nav-active-fg: #c4ebf6;
+  --hover: rgba(227, 227, 227, 0.08);
+  --pressed: rgba(227, 227, 227, 0.12);
+  --row-selected: #2f4a52;
+  --row-focused-bar: #8fd0e3;
+  --row-read-bg: #232323;
+  --row-unread-bg: #2c2c2c;
+  --row-hover-shadow: inset 1px 0 0 #5f6368, inset -1px 0 0 #5f6368, 0 1px 2px 0 rgba(0, 0, 0, 0.6), 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+  --chip-bg: #3c4043;
+  --chip-fg: #e3e3e3;
+  --star: #f2c45a;
+  --important: #f4a27a;
+  --important-border: #e98a5b;
+  --danger: #f2b8b5;
+  --danger-container: #601410;
+  --warning-container: #4d3b00;
+  --warning-fg: #ffe08a;
+  --warning: #fdd663;
+  --on-danger-container: #f9dedc;
+  --on-success-container: #c4eed0;
+  --success: #6dd58c;
+  --success-container: #0f5223;
+  --info-container: #0d3440;
+  --scrim: rgba(0, 0, 0, 0.6);
+  --toast-bg: #e3e3e3;
+  --toast-fg: #1f1f1f;
+  --toast-action: #1f6c86;
+  --input-bg: #35363a;
+  --input-bg-focus: #3c4043;
+  --focus-ring: #8fd0e3;
+  --tooltip-bg: #e3e3e3;
+  --skeleton: #35363a;
+  --skeleton-hi: #3c4043;
+  --scrollbar: rgba(255, 255, 255, 0.25);
+  --shadow-1: 0 1px 2px 0 rgba(0, 0, 0, 0.6), 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+  --shadow-2: 0 1px 3px 0 rgba(0, 0, 0, 0.6), 0 4px 8px 3px rgba(0, 0, 0, 0.3);
+  --shadow-3: 0 4px 4px 0 rgba(0, 0, 0, 0.6), 0 8px 12px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Density (Settings → Look → Text and spacing). Scales the scanning surfaces — list rows, sidebar, toolbars and
+   icon buttons, menus, side-panel rows, message headers — never the text you read or type.
+   --dz scales button boxes, --dzi icons; --nav-h / --menu-h are sidebar and menu rows. */
+:root {
+  --dz: 1;
+  --dzi: 1;
+  --nav-h: 32px;
+  --menu-h: 36px;
+  --panel-row-h: 36px;
+  --msg-head-pad: 16px;
+}
+[data-density='compact'] {
+  --row-h: 32px;
+  --row-h-chips: 32px;
+  --dz: 0.88;
+  --dzi: 0.92;
+  --nav-h: 28px;
+  --menu-h: 32px;
+  --panel-row-h: 30px;
+  --msg-head-pad: 10px;
+}
+[data-density='comfortable'] {
+  --row-h: 44px;
+  --row-h-chips: 72px;
+  --dz: 1.1;
+  --dzi: 1.08;
+  --nav-h: 36px;
+  --menu-h: 40px;
+  --panel-row-h: 42px;
+  --msg-head-pad: 20px;
+}
+/* Touch screens: compact never shrinks tap targets. */
+@media (pointer: coarse) {
+  [data-density='compact'] {
+    --dz: 1;
+    --nav-h: 32px;
+    --menu-h: 36px;
+    --panel-row-h: 36px;
+  }
+}

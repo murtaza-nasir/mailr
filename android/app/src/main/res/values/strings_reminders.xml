@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Snooze, reschedule and remind-before choices (data/reminders/QuickChoices.kt) -->
+    <string name="rem_unit_minutes">minutes</string>
+    <string name="rem_unit_hours">hours</string>
+    <string name="rem_unit_days">days</string>
+    <string name="rem_unit_weeks">weeks</string>
+    <plurals name="rem_minutes_short">
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
+    <plurals name="rem_hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <string name="rem_this_evening">This evening</string>
+    <string name="rem_tomorrow_morning">Tomorrow morning</string>
+    <string name="rem_next_week">Next week</string>
+    <string name="rem_when_it_starts">At start time</string>
+    <string name="rem_later_today">Later today</string>
+    <string name="rem_tonight">Tonight</string>
+    <string name="rem_tomorrow">Tomorrow</string>
+    <string name="rem_this_weekend">This weekend</string>
+    <string name="rem_next_monday">Next Monday</string>
+    <string name="rem_in_a_week">In a week</string>
+    <string name="rem_plus_15_min">+15 min</string>
+    <string name="rem_plus_1_hour">+1 hour</string>
+    <string name="rem_tomorrow_same_time">Tomorrow, same time</string>
+    <string name="rem_next_week_same_time">Next week, same time</string>
+    <string name="rem_offset_at_start">At start</string>
+    <plurals name="rem_offset_minutes_before">
+        <item quantity="one">%d min before</item>
+        <item quantity="other">%d min before</item>
+    </plurals>
+    <plurals name="rem_offset_hours_before">
+        <item quantity="one">%d hour before</item>
+        <item quantity="other">%d hours before</item>
+    </plurals>
+    <plurals name="rem_offset_days_before">
+        <item quantity="one">%d day before</item>
+        <item quantity="other">%d days before</item>
+    </plurals>
+    <!-- The when sheet (data/reminders/WhenSheet.kt) -->
+    <plurals name="rem_in_minutes">
+        <item quantity="one">In %d min</item>
+        <item quantity="other">In %d min</item>
+    </plurals>
+    <plurals name="rem_in_hours">
+        <item quantity="one">In %d hour</item>
+        <item quantity="other">In %d hours</item>
+    </plurals>
+    <string name="rem_group_before">Before it starts</string>
+    <string name="rem_group_later">Later</string>
+    <string name="rem_group_same_time">Same time</string>
+    <string name="rem_group_next">Next</string>
+    <string name="rem_15_min_later">15 min later</string>
+    <string name="rem_1_hour_later">1 hour later</string>
+    <string name="rem_next_month">Next month</string>
+    <string name="rem_next_weekend">Next weekend</string>
+    <string name="rem_base_from_due">From due time</string>
+    <string name="rem_base_from_start">From start</string>
+    <string name="rem_rel_today">today</string>
+    <plurals name="rem_rel_in_days">
+        <item quantity="one">in %d day</item>
+        <item quantity="other">in %d days</item>
+    </plurals>
+    <plurals name="rem_rel_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+    <plurals name="rem_span_minutes">
+        <item quantity="one">%d min</item>
+        <item quantity="other">%d min</item>
+    </plurals>
+    <plurals name="rem_span_hours">
+        <item quantity="one">%d h</item>
+        <item quantity="other">%d h</item>
+    </plurals>
+    <string name="rem_span_hours_minutes">%1$d h %2$d min</string>
+    <!-- "in 3 h 20 min": %s is a span -->
+    <string name="rem_rel_in">in %s</string>
+    <string name="rem_rel_ago">%s ago</string>
+    <string name="rem_day_today">Today</string>
+    <string name="rem_day_tomorrow">Tomorrow</string>
+    <!-- "Fri 9 Oct, 12:00 PM": %1$s day, %2$s time -->
+    <string name="rem_day_time">%1$s, %2$s</string>
+    <!-- "→ Fri 9 Oct, 12:00 PM · in 8 days" -->
+    <string name="rem_result_line">→ %1$s · %2$s</string>
+    <plurals name="rem_overdue_days">
+        <item quantity="one">Overdue %d d</item>
+        <item quantity="other">Overdue %d d</item>
+    </plurals>
+    <plurals name="rem_overdue_minutes">
+        <item quantity="one">Overdue %d min</item>
+        <item quantity="other">Overdue %d min</item>
+    </plurals>
+    <plurals name="rem_overdue_hours">
+        <item quantity="one">Overdue %d h</item>
+        <item quantity="other">Overdue %d h</item>
+    </plurals>
+    <string name="rem_due_day_today">today</string>
+    <string name="rem_due_day_tomorrow">tomorrow</string>
+    <string name="rem_due_date">Due %s</string>
+    <!-- "today 12:00 PM": %1$s the day, %2$s the time -->
+    <string name="rem_due_day_time">%1$s %2$s</string>
+    <string name="rem_hint_remind">Adds a reminder. The event doesn\'t move.</string>
+    <string name="rem_hint_snooze_event">Only the reminder moves.</string>
+    <string name="rem_hint_snooze_task_due">Only the reminder moves. The task stays due %s.</string>
+    <string name="rem_hint_snooze_task">Only the reminder moves.</string>
+    <string name="rem_hint_reschedule_task">Moves the due date and its reminders.</string>
+    <string name="rem_hint_reschedule_event">Moves the event. Its length stays.</string>
+    <!-- Planned reminders and their notification summaries (data/reminders/ReminderPlan.kt) -->
+    <string name="rem_no_title">(no title)</string>
+    <string name="rem_untitled_task">(untitled task)</string>
+    <string name="rem_untitled_list">Untitled list</string>
+    <string name="rem_untitled_note">Untitled note</string>
+    <string name="rem_note_kind_list">List</string>
+    <string name="rem_note_kind_note">Note</string>
+    <string name="rem_all_day">All day</string>
+    <string name="rem_no_due_date">No due date</string>
+    <string name="rem_due">Due</string>
+    <!-- "Due tomorrow, 9:00 AM" -->
+    <string name="rem_due_day_comma_time">Due %1$s, %2$s</string>
+    <string name="rem_due_day_yesterday">yesterday</string>
+    <plurals name="rem_summary_events">
+        <item quantity="one">%d event reminder</item>
+        <item quantity="other">%d event reminders</item>
+    </plurals>
+    <plurals name="rem_summary_tasks">
+        <item quantity="one">%d task reminder</item>
+        <item quantity="other">%d task reminders</item>
+    </plurals>
+    <!-- One line of the summary: %1$s title, %2$s when -->
+    <string name="rem_summary_line">%1$s · %2$s</string>
+    <string name="rem_summary_line_missed">Missed: %1$s · %2$s</string>
+    <plurals name="rem_minutes_long">
+        <item quantity="one">%d minute</item>
+        <item quantity="other">%d minutes</item>
+    </plurals>
+    <string name="rem_this_morning">This morning</string>
+    <!-- Reminder notifications (data/reminders/ReminderNotifier.kt) -->
+    <!-- A missed reminder's text: %s is its when line -->
+    <string name="rem_missed_detail">Missed · %s</string>
+    <string name="rem_event_reminder">Event reminder</string>
+    <string name="rem_task_reminder">Task reminder</string>
+    <string name="rem_note_reminder">Note reminder</string>
+    <string name="rem_action_snooze_5_min">Snooze 5 min</string>
+    <string name="rem_action_snooze_1_h">Snooze 1 h</string>
+    <string name="rem_action_remind_before">Remind before…</string>
+    <string name="rem_action_snooze_more">Snooze…</string>
+    <string name="rem_action_join">Join</string>
+    <string name="rem_action_prep">Prep</string>
+    <string name="rem_action_dismiss">Dismiss</string>
+    <string name="rem_action_ask">Ask %1$s</string>
+    <string name="rem_action_done">Done</string>
+    <plurals name="rem_starts_in_minutes">
+        <item quantity="one">in %d min</item>
+        <item quantity="other">in %d min</item>
+    </plurals>
+    <string name="rem_starts_now">now</string>
+    <plurals name="rem_more">
+        <item quantity="one">+%d more</item>
+        <item quantity="other">+%d more</item>
+    </plurals>
+    <string name="rem_agenda_public_title">Today\'s agenda</string>
+    <!-- The lock-screen agenda: the English text has always read "1 events" -->
+    <plurals name="rem_agenda_events">
+        <item quantity="one">%d event</item>
+        <item quantity="other">%d events</item>
+    </plurals>
+    <plurals name="rem_agenda_tasks">
+        <item quantity="one">%d task</item>
+        <item quantity="other">%d tasks</item>
+    </plurals>
+    <!-- The morning agenda (data/reminders/ReminderAlerts.kt) -->
+    <!-- One agenda line, two spaces after the time: %1$s time or "All day", %2$s title -->
+    <string name="rem_agenda_line">"%1$s  %2$s"</string>
+    <string name="rem_agenda_line_where">"%1$s  %2$s · %3$s"</string>
+    <string name="rem_agenda_overdue">Overdue</string>
+    <plurals name="rem_agenda_count_events">
+        <item quantity="one">%d event</item>
+        <item quantity="other">%d events</item>
+    </plurals>
+    <plurals name="rem_agenda_count_tasks">
+        <item quantity="one">%d task</item>
+        <item quantity="other">%d tasks</item>
+    </plurals>
+    <!-- %s: "2 events, 1 task" -->
+    <string name="rem_agenda_title">Today: %s</string>
+    <!-- Remind before's result: %1$s "tomorrow, 9:00 AM", %2$s "in 18 h" -->
+    <string name="rem_remind_line">Reminds you %1$s · %2$s</string>
+</resources>

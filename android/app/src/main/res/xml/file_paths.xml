@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <cache-path name="attachments" path="attachments/" />
+    <!-- AttachmentCache: whole downloads only (since 0.38). -->
+    <cache-path name="attachment-files" path="attachment-files/" />
+    <!-- Camera shots for inline photos in compose (ACT mail.insert_image). -->
+    <cache-path name="photos" path="photos/" />
+</paths>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Today widget's evening picture: the sun going down and the first star. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp" android:height="48dp" android:viewportWidth="48" android:viewportHeight="48">
+    <group>
+        <clip-path android:pathData="M24,0a24,24 0,1 1,0 48a24,24 0,1 1,0 -48z" />
+        <path android:fillColor="#FFF8BBD0" android:pathData="M0,0h48v48h-48z" />
+        <path android:fillColor="#FFFFAB91" android:pathData="M0,22h48v12h-48z" />
+        <path android:fillColor="#FFFF7043" android:pathData="M14,33a10,10 0,0 1,20 0z" />
+        <path android:fillColor="#FF7E57C2" android:pathData="M0,33L48,33L48,48L0,48z" />
+        <path android:fillColor="#FF5E35B1" android:pathData="M0,39C14,36 30,40 48,38L48,48L0,48z" />
+        <path android:fillColor="#FFFFFFFF" android:pathData="M35,8l1.2,2.8l2.8,1.2l-2.8,1.2l-1.2,2.8l-1.2,-2.8l-2.8,-1.2l2.8,-1.2z" />
+    </group>
+</vector>

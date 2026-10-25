@@ -1,0 +1,787 @@
+/* Phones and the installed app (features/pwa): safe areas, the bottom tab bar, bottom sheets,
+   swipe and pull-to-refresh, 44 px touch targets. Theme-neutral: colours come from the tokens,
+   so every theme's palette carries over; Cards and Classic are tuned below. */
+
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --tabbar-h: 64px;
+}
+
+/* ---------- the page in the installed app ---------- */
+
+html[data-standalone] body {
+  /* The page itself never rubber-bands or reloads on a pull; lists scroll on their own. */
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+html[data-standalone] .app,
+html[data-standalone] .app-skeleton {
+  /* The status bar is drawn over the app (black-translucent): content starts below it. */
+  padding-top: var(--sat);
+}
+.app {
+  /* Landscape iPhones: keep content clear of the notch and the rounded corners. */
+  padding-inline-start: var(--sal);
+  padding-inline-end: var(--sar);
+}
+html[data-platform='ios'] .app button,
+html[data-platform='ios'] .phone-tabs,
+html[data-platform='ios'] .bottom-sheet .more-item {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.list-scroll {
+  /* A pull at the top refreshes the list (useTouchList), never the browser's own page reload. */
+  overscroll-behavior-y: contain;
+}
+
+/* ---------- the tab bar ---------- */
+
+html[data-phone-chrome] .app {
+  height: calc(100dvh - var(--tabbar-h) - var(--sab));
+}
+.phone-tabs {
+  position: fixed;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  bottom: 0;
+  z-index: 45;
+  display: flex;
+  align-items: stretch;
+  height: calc(var(--tabbar-h) + var(--sab));
+  padding-block: 0 var(--sab);
+  padding-inline: var(--sal) var(--sar);
+  background: var(--surface-container);
+  border-top: 1px solid var(--divider);
+}
+.phone-tabs .tab {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 2px 4px;
+  border: 0;
+  background: none;
+  color: var(--text-2);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+.phone-tabs .tab-ind {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  transition: background var(--dur) var(--ease);
+}
+.phone-tabs .tab-ind svg {
+  width: 24px;
+  height: 24px;
+}
+.phone-tabs .tab.active {
+  color: var(--text);
+}
+.phone-tabs .tab.active .tab-ind {
+  background: var(--nav-active);
+  color: var(--nav-active-fg);
+}
+.phone-tabs .tab:focus-visible {
+  outline: none;
+}
+.phone-tabs .tab:focus-visible .tab-ind {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.phone-tabs .tab-label {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tab-badge {
+  position: absolute;
+  top: -2px;
+  inset-inline-start: 32px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--danger);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 16px;
+  text-align: center;
+}
+[data-theme='dark'] .tab-badge {
+  color: #370b0b;
+}
+
+/* What the tab bar covers moves up. */
+.compose-fab {
+  margin-bottom: var(--sab);
+}
+html[data-phone-chrome] .compose-fab {
+  bottom: calc(var(--tabbar-h) + var(--sab) + 16px) !important;
+  margin-bottom: 0;
+}
+/* The list keeps room below its last row for the Compose button. The button is its round icon
+   over a list with rows, and has its label only over an empty list (ComposeFab), so no row sits
+   under its label at rest. */
+html[data-phone] .list-scroll {
+  scroll-padding-bottom: 88px;
+}
+html[data-phone] .list-scroll > :last-child {
+  margin-bottom: 88px;
+}
+html[data-phone] .compose-fab {
+  transition: width 160ms var(--ease), padding 160ms var(--ease);
+}
+html[data-phone] .compose-fab:not(.roomy) {
+  width: 56px;
+  padding: 0;
+  gap: 0;
+  justify-content: center;
+}
+html[data-phone] .compose-fab:not(.roomy) .fab-label {
+  display: none;
+}
+html[data-phone-chrome] .toasts {
+  bottom: calc(var(--tabbar-h) + var(--sab) + 12px);
+}
+@media (max-width: 900px) {
+  .toasts {
+    inset-inline-start: 12px;
+    inset-inline-end: 12px;
+    bottom: calc(12px + var(--sab));
+  }
+  .toast {
+    min-width: 0;
+    max-width: none;
+  }
+  html[data-phone-chrome] .side-panel {
+    bottom: calc(var(--tabbar-h) + var(--sab)) !important;
+  }
+  html[data-standalone] .side-panel,
+  html[data-standalone] .sidebar,
+  html[data-standalone] .c-drawer {
+    padding-top: var(--sat);
+  }
+  /* Compose fills the screen above the home indicator. */
+  .compose-win:not(.minimized) {
+    padding-bottom: var(--sab);
+  }
+}
+
+/* ---------- touch targets (44 px, Apple's and Material's minimum) ---------- */
+
+@media (pointer: coarse) {
+  .icon-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .icon-btn.sm {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .account-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .btn {
+    min-height: 44px;
+  }
+  /* Small marks keep their look and get a 44 px target from an invisible overlay. */
+  .checkbox {
+    position: relative;
+  }
+  .checkbox::before {
+    content: '';
+    position: absolute;
+    inset: -13px;
+  }
+  .importance {
+    position: relative;
+  }
+  .importance::after {
+    content: '';
+    position: absolute;
+    inset: -11px;
+  }
+  .toolbar .sel-caret {
+    width: 44px;
+    height: 44px;
+  }
+  .action-chip {
+    position: relative;
+  }
+  .action-chip::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+  }
+  .btn.sm {
+    min-height: 44px;
+  }
+  .menu-item {
+    min-height: 48px;
+  }
+  .nav-item {
+    min-height: 44px;
+  }
+  select.select,
+  input.input {
+    min-height: 44px;
+    font-size: 16px; /* iOS zooms into smaller fields */
+  }
+  .list-scroll [data-id] {
+    /* Vertical scrolling stays the browser's; sideways is the swipe. */
+    touch-action: pan-y;
+    -webkit-touch-callout: none;
+  }
+}
+
+/* ---------- swipe and pull to refresh ---------- */
+
+.swipe-under {
+  position: absolute;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  pointer-events: none;
+  background: var(--primary);
+}
+.swipe-under.dir-left {
+  justify-content: flex-end;
+}
+/* dir-left and dir-right are the ways the finger moved on the screen; the label sits on the side the
+   row uncovers, which in a right-to-left row is the other flex end. */
+:root[dir='rtl'] .swipe-under.dir-left {
+  justify-content: flex-start;
+}
+:root[dir='rtl'] .swipe-under.dir-right {
+  justify-content: flex-end;
+}
+.swipe-under.tone-archive {
+  background: var(--success);
+}
+.swipe-under.tone-danger {
+  background: var(--danger);
+}
+.swipe-under.tone-snooze {
+  background: var(--warning);
+}
+[data-theme='dark'] .swipe-under {
+  color: #111;
+}
+.swipe-under span {
+  transition: transform 120ms var(--ease);
+}
+.swipe-under.armed span {
+  transform: scale(1.12);
+}
+.list-scroll [data-id].pressed {
+  background: var(--pressed) !important;
+}
+.ptr {
+  position: absolute;
+  top: 4px;
+  left: 50%; /* rtl: centred with translate(-50%) */
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  margin-top: -44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+  opacity: 0;
+  transform: translate(-50%, 0);
+  pointer-events: none;
+  transition: transform 160ms var(--ease), opacity 160ms var(--ease);
+}
+.ptr-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid var(--primary);
+  border-inline-end-color: transparent;
+  border-radius: 50%;
+}
+.ptr.spinning .ptr-spinner {
+  animation: ptr-spin 700ms linear infinite;
+}
+@keyframes ptr-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- bottom sheets ---------- */
+
+.sheet-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background: var(--scrim);
+  animation: fade-in 160ms var(--ease);
+}
+.bottom-sheet,
+.popover.as-sheet {
+  position: fixed;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  bottom: 0;
+  top: auto;
+  z-index: 96;
+  max-width: none;
+  max-height: calc(88dvh - var(--sat));
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding-block: 0 calc(16px + var(--sab));
+  padding-inline: calc(8px + var(--sal)) calc(8px + var(--sar));
+  background: var(--surface-container);
+  color: var(--text);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  box-shadow: var(--shadow-3);
+  animation: sheet-up 220ms var(--ease);
+  outline: none;
+}
+@media (min-width: 640px) {
+  .bottom-sheet,
+  .popover.as-sheet {
+    left: 50%; /* rtl: centred with translateX(-50%) */
+    right: auto; /* rtl: centred with left: 50% */
+    width: min(560px, 100vw);
+    transform: translateX(-50%); /* rtl: centred with left: 50% */
+    animation-name: sheet-up-centred;
+  }
+}
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+@keyframes sheet-up-centred {
+  from {
+    transform: translate(-50%, 100%);
+  }
+}
+.sheet-grab {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: inherit;
+  touch-action: none;
+}
+.sheet-handle {
+  display: block;
+  width: 32px;
+  height: 4px;
+  margin: 10px auto 6px;
+  border-radius: 2px;
+  background: var(--text-3);
+  opacity: 0.4;
+}
+.sheet-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-block: 0 8px;
+  padding-inline: 16px 4px;
+}
+.sheet-head h2 {
+  flex: 1;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+.sheet-body {
+  padding: 0 8px 8px;
+}
+.popover.as-sheet .menu-item {
+  min-height: 48px;
+  padding-inline-start: 20px;
+  padding-inline-end: 20px;
+  border-radius: var(--radius-md);
+}
+@media (prefers-reduced-motion: reduce) {
+  .bottom-sheet,
+  .popover.as-sheet,
+  .sheet-scrim {
+    animation: none;
+  }
+  .phone-tabs .tab-ind,
+  .ptr,
+  .swipe-under span {
+    transition: none;
+  }
+}
+
+/* ---------- More ---------- */
+
+.more-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.more-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-height: 72px;
+  padding: 10px 4px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.more-item svg {
+  width: 24px;
+  height: 24px;
+  color: var(--text-2);
+}
+.more-item.active {
+  background: var(--nav-active);
+  color: var(--nav-active-fg);
+}
+.more-item:active,
+.more-row:active {
+  background: var(--pressed);
+}
+.more-count {
+  margin-inline-start: auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.more-item .more-count {
+  position: absolute;
+  top: 6px;
+  inset-inline-end: 10px;
+}
+.more-list {
+  border-top: 1px solid var(--divider);
+  padding-top: 8px;
+}
+.more-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 15px;
+  text-align: start;
+  cursor: pointer;
+}
+.more-row svg {
+  width: 22px;
+  height: 22px;
+  color: var(--text-2);
+}
+
+/* ---------- install guide ---------- */
+
+.install-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.install-lead {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 0;
+  line-height: 1.5;
+}
+.install-note {
+  margin: 0;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+.install-steps {
+  margin: 0;
+  padding-inline-start: 22px;
+  line-height: 1.6;
+}
+.install-steps li + li {
+  margin-top: 6px;
+}
+.install-glyph {
+  width: 18px;
+  height: 18px;
+  vertical-align: -3px;
+  color: var(--primary);
+}
+.install-art {
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  align-self: center;
+}
+.install-art .ia-phone {
+  fill: var(--surface);
+  stroke: var(--border);
+}
+.install-art .ia-bar,
+.install-art .ia-row {
+  fill: var(--surface-container);
+}
+.install-art .ia-line {
+  fill: var(--divider);
+}
+.install-art .ia-toolbar {
+  fill: var(--surface-dim);
+}
+.install-art .ia-ring {
+  fill: var(--primary-container);
+  stroke: var(--primary);
+  stroke-width: 2;
+}
+.install-art .ia-hit {
+  fill: var(--primary-container);
+  stroke: var(--primary);
+  stroke-width: 1.5;
+}
+.install-art .ia-icon {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.install-art .ia-arrow {
+  stroke: var(--text-3);
+  stroke-width: 2;
+  fill: none;
+}
+.install-art .ia-arrowhead {
+  fill: var(--text-3);
+}
+.install-art .ia-text {
+  font: 600 8.6px var(--font);
+  fill: var(--on-primary-container);
+}
+.install-banner {
+  margin: 8px 12px 0;
+  border-radius: var(--radius-md);
+}
+
+/* ---------- pending changes ---------- */
+
+.pending-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  min-height: 36px;
+  margin: 8px 12px 0;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: var(--surface);
+  color: var(--text-2);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.pending-chip svg {
+  width: 18px;
+  height: 18px;
+}
+.pending-chip.failed {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+.pending-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding-block: 4px;
+  padding-inline: 8px 0;
+  border-bottom: 1px solid var(--divider);
+}
+.pending-row > svg {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  color: var(--text-3);
+}
+.pending-row.failed > svg {
+  color: var(--danger);
+}
+.pending-text {
+  flex: 1;
+  min-width: 0;
+}
+.pending-list .small {
+  font-size: 12px;
+}
+
+/* ---------- start-up skeleton ---------- */
+
+.app-skeleton {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  background: var(--bg);
+}
+.app-skeleton-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--topbar-h);
+  padding: 0 16px;
+}
+.app-skeleton-body {
+  flex: 1;
+  overflow: hidden;
+  margin: 0 8px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--surface);
+}
+.app-skeleton-tabs {
+  display: none;
+  justify-content: space-around;
+  align-items: center;
+  height: calc(var(--tabbar-h) + var(--sab));
+  padding-bottom: var(--sab);
+  background: var(--surface-container);
+}
+@media (max-width: 900px) {
+  .app-skeleton-tabs {
+    display: flex;
+  }
+  .app-skeleton-body {
+    margin: 0;
+    border-radius: 0;
+  }
+}
+
+/* ---------- Classic on a phone ---------- */
+
+@media (max-width: 900px) {
+  /* The tab bar and More hold the brand's and the gear's jobs: the search box gets the room. */
+  html[data-phone] .topbar .brand,
+  html[data-phone] header .icon-btn[aria-label='Settings'] {
+    display: none;
+  }
+  html[data-phone] .topbar {
+    gap: 0;
+    padding-inline-end: 8px;
+  }
+  html[data-phone] .topbar-right {
+    padding-inline-start: 4px;
+  }
+  /* A conversation on a phone: Reply and Forward are under the message; no Compose over it. */
+  html[data-phone-reading] .compose-fab {
+    display: none !important;
+  }
+}
+@media (max-width: 600px) {
+  /* Rows: select and star stay at the start; importance is a swipe or the row's menu away. */
+  .conv-row .lead .importance {
+    display: none;
+  }
+}
+@media (pointer: coarse) {
+  .conv-row .lead .icon-btn {
+    min-width: 40px;
+  }
+}
+
+/* ---------- touch screens: what a mouse finds by hovering ---------- */
+
+@media (hover: none) {
+  /* A tap leaves a sticky :hover on touch screens; the row's hover buttons would cover its date
+     until the next tap elsewhere. A swipe or a long press (the row's menu) does their work. */
+  .conv-row:hover:not(:focus-within) .hover-actions {
+    display: none;
+  }
+  .conv-row:hover:not(:focus-within) .tail {
+    visibility: visible;
+  }
+  .conv-row:hover {
+    box-shadow: none;
+  }
+}
+
+/* ---------- Ambrose stepped aside (features/rail/assistant/ambroseNav.ts) ---------- */
+
+/* The chat stays mounted while an item opened from it has the screen. */
+.side-panel-parked {
+  display: none !important;
+}
+
+/* "Back to Ambrose" (PhoneChrome's AmbroseReturn): a pill at the bottom start, beside the Compose
+   button, above the tab bar when it shows; under sheets and dialogs (they cover the page too). */
+.ambrose-return {
+  position: fixed;
+  inset-inline-start: 16px;
+  bottom: calc(var(--sab) + 22px);
+  z-index: 44;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: calc(100vw - 120px);
+  min-height: 44px;
+  padding-block: 0;
+  padding-inline: 12px 16px;
+  border: 0;
+  border-radius: 22px;
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+  box-shadow: var(--shadow-2);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+.ambrose-return span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ambrose-return:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+html[data-phone-chrome] .ambrose-return {
+  bottom: calc(var(--tabbar-h) + var(--sab) + 22px);
+}
+/* A sheet or a dialog over the page (the task opened from the chat, the note editor, an inline reply)
+   has the bottom of the screen, so the pill is hidden there. The Ambrose tab and the back gesture
+   still return to the chat. */
+body:has(.tk-overlay) .ambrose-return,
+body:has([aria-modal='true']) .ambrose-return,
+body:has([data-inline-reply]) .ambrose-return {
+  display: none;
+}

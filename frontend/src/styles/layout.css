@@ -1,0 +1,950 @@
+.app {
+  display: grid;
+  grid-template-rows: var(--topbar-h) 1fr;
+  grid-template-columns: auto 1fr auto auto;
+  grid-template-areas:
+    'top top top top'
+    'side main panel rail';
+  height: 100vh;
+  height: 100dvh;
+  background: var(--bg);
+}
+
+/* ---------- top bar ---------- */
+
+.topbar {
+  grid-area: top;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding-block: 8px;
+  padding-inline: 12px 8px;
+  min-width: 0;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 232px;
+  padding-inline-start: 4px;
+  flex: none;
+  text-decoration: none;
+  color: var(--text-2);
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: -0.2px;
+}
+.brand svg,
+.brand img,
+.brand .logo-mark {
+  width: 36px;
+  height: 36px;
+}
+.brand b {
+  font-weight: 500;
+  color: var(--text);
+}
+/* Top bar glyphs are a step larger (Gmail: 24px), in the same 40px targets. */
+.topbar .icon-btn {
+  --icon: 24px;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-inline-start: auto;
+  padding-inline-start: 12px;
+}
+.account-btn {
+  margin-inline-start: 8px;
+  padding: 4px;
+  border-radius: 50%;
+}
+.account-btn:hover {
+  background: var(--hover);
+}
+.account-btn {
+  position: relative;
+}
+/* Phones: changes made offline wait to be sent (Pending changes, in this menu). */
+.account-dot {
+  position: absolute;
+  top: 2px;
+  inset-inline-end: 2px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+  background: var(--warning);
+}
+
+/* ---------- search ---------- */
+
+.search {
+  position: relative;
+  flex: 1;
+  max-width: 720px;
+  min-width: 0;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 4px;
+  border-radius: var(--radius-xl);
+  background: var(--input-bg);
+  transition: background var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.search-box.focused,
+.search-box.open {
+  background: var(--input-bg-focus);
+  box-shadow: var(--shadow-1);
+}
+.search-box.open {
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+.search-box input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  font-size: 16px;
+  padding: 0 4px;
+}
+.search-box input::placeholder {
+  color: var(--text-2);
+}
+/* The scope chip (features/search/scope.ts): All · Mail · Calendar · Tasks · Notes. */
+.search-scope {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 28px;
+  padding-block: 0;
+  padding-inline: 10px 6px;
+  margin: 0 2px;
+  border: 1px solid var(--divider);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--text-2);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.search-scope:hover,
+.search-scope[aria-expanded='true'] {
+  background: var(--hover);
+  color: var(--text);
+}
+.search-scope:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+/* A phone's box is short: the chip shows while you search, so the words keep their room. */
+@media (max-width: 600px) {
+  .search-box:not(.focused):not(.open) .search-scope {
+    display: none;
+  }
+}
+.search-panel {
+  position: absolute;
+  top: 48px;
+  inset-inline-start: 0;
+  inset-inline-end: 0;
+  z-index: 50;
+  background: var(--input-bg-focus);
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  box-shadow: var(--shadow-2);
+  padding: 8px 0;
+  max-height: 70vh;
+  overflow: auto;
+}
+.adv-search {
+  padding: 16px 24px 20px;
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 6px 16px;
+  align-items: center;
+}
+.adv-search label {
+  font-size: 14px;
+  color: var(--text-2);
+}
+.adv-search .inline {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.adv-search .actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+/* ---------- sidebar ---------- */
+
+.sidebar {
+  grid-area: side;
+  width: var(--sidebar-w);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding-inline-end: 16px;
+  transition: width 200ms var(--ease);
+}
+.sidebar.collapsed {
+  width: var(--sidebar-w-collapsed);
+  padding-inline-end: 0;
+}
+.compose-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  min-width: 56px;
+  margin-block: 8px 16px;
+  margin-inline: 8px 0;
+  padding-block: 0;
+  padding-inline: 16px 24px;
+  border-radius: var(--radius-lg);
+  background: var(--compose-bg);
+  color: var(--compose-fg);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.25px;
+  align-self: flex-start;
+  transition: box-shadow var(--dur) var(--ease);
+}
+.compose-btn:hover {
+  box-shadow: var(--shadow-2);
+}
+.compose-btn .lucide {
+  width: 24px;
+  height: 24px;
+}
+/* Collapsed, the button keeps its height and its icon's place, so the rows below do not move when
+   the sidebar opens or closes. */
+.sidebar.collapsed:not(.peek) .compose-btn {
+  width: 56px;
+  min-width: 56px;
+  padding: 0;
+  justify-content: center;
+  border-radius: var(--radius-md);
+}
+.sidebar.collapsed:not(.peek) .compose-btn .lucide {
+  width: 22px;
+  height: 22px;
+}
+.nav {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 16px;
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  height: var(--nav-h);
+  /* nested labels indent by --depth (set on the row); never when collapsed */
+  padding-block: 0;
+  padding-inline: calc(26px + var(--depth, 0) * 12px) 12px;
+  border-start-start-radius: 0;
+  border-start-end-radius: var(--radius-lg);
+  border-end-end-radius: var(--radius-lg);
+  border-end-start-radius: 0;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  cursor: pointer;
+  width: 100%;
+  text-align: start;
+  position: relative;
+}
+.nav-item:hover {
+  background: var(--hover);
+}
+.nav-item.active {
+  background: var(--nav-active);
+  color: var(--nav-active-fg);
+  font-weight: 700;
+}
+.nav-item.unread {
+  font-weight: 700;
+}
+.nav-item .lucide {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+/* Classic: 18 px icons sit better beside 14 px names , open or collapsed. */
+[data-ui-theme='classic'] .sidebar .nav-item .lucide,
+[data-ui-theme='classic'] .sidebar .nav-item .label-dot {
+  width: 18px;
+  height: 18px;
+}
+.nav-item .count {
+  margin-inline-start: auto;
+  font-size: 12px;
+  font-weight: inherit;
+  letter-spacing: 0.3px;
+}
+.nav-item .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+.nav-item .label-dot {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.nav-item .label-dot span {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  transform: rotate(45deg);
+  background: var(--text-2);
+}
+/* an uncoloured label is an outline at the nav icons' stroke weight, not a solid blot */
+.nav-item .label-dot span:not([style]) {
+  background: transparent;
+  box-shadow: inset 0 0 0 1.75px currentColor;
+}
+.nav-item .caret {
+  position: absolute;
+  inset-inline-start: calc(6px + var(--depth, 0) * 12px);
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  color: var(--text-2);
+}
+/* The label's ⋮ sits over the row's end and takes no room until it shows, so the name uses
+   the free width (it used to lose about 50 px to the hidden button and its gap). */
+.nav-item .more-btn {
+  position: absolute;
+  inset-inline-end: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+.nav-item:hover .more-btn,
+.nav-item:focus-within .more-btn {
+  opacity: 1;
+}
+.nav-item:hover .name,
+.nav-item:focus-within .name {
+  margin-inline-end: 24px;
+}
+.nav-item:hover .count.hide-on-hover {
+  display: none;
+}
+/* Collapsed rail: every entry (mailboxes and labels alike) is one centred icon on the same
+   axis; label nesting only shows when the sidebar is open. */
+/* Same row height as the open sidebar and no extra margins: each icon stays on its row when the
+   sidebar collapses (it used to take 8 px more per row, so the icons drifted down). */
+.sidebar.collapsed:not(.peek) .nav-item {
+  width: calc(44px * var(--dz, 1));
+  height: var(--nav-h);
+  padding: 0;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  margin-inline: 14px 0;
+}
+.sidebar.collapsed:not(.peek) .nav-item .lucide,
+.sidebar.collapsed:not(.peek) .nav-item .label-dot {
+  width: 18px;
+  height: 18px;
+}
+.sidebar.collapsed:not(.peek) .nav-item .label-dot span {
+  width: 10px;
+  height: 10px;
+}
+.sidebar.collapsed:not(.peek) .nav-item .count,
+.sidebar.collapsed:not(.peek) .nav-item .caret,
+.sidebar.collapsed:not(.peek) .nav-item .more-btn {
+  display: none;
+}
+/* The collapsed rail hides an entry's name from sight only: it stays the link's name for a screen
+   reader (axe link-name on the icon-only links). */
+.sidebar.collapsed:not(.peek) .nav-item .name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+/* A section heading keeps its height when collapsed (its text gives way to a short rule), so the
+   rows under it stay where they were in the open sidebar. */
+.sidebar.collapsed:not(.peek) .nav-section-head {
+  position: relative;
+}
+.sidebar.collapsed:not(.peek) .nav-section-head > * {
+  visibility: hidden;
+}
+.sidebar.collapsed:not(.peek) .nav-section-head::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 22px;
+  width: 28px;
+  top: 50%;
+  border-top: 1px solid var(--border);
+}
+/* Hover-open: full width drawn over the list; the negative margin keeps the grid column at the
+   collapsed width, so nothing else moves. */
+.sidebar.collapsed.peek {
+  width: var(--sidebar-w);
+  margin-inline-end: calc(var(--sidebar-w-collapsed) - var(--sidebar-w));
+  padding-inline-end: 16px;
+  position: relative;
+  z-index: 60;
+  background: var(--bg);
+  box-shadow: var(--shadow-3);
+  border-start-start-radius: 0;
+  border-start-end-radius: var(--radius-lg);
+  border-end-end-radius: var(--radius-lg);
+  border-end-start-radius: 0;
+}
+.nav-section-head {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding-block: 0;
+  padding-inline: 26px 8px;
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--text);
+}
+.nav-section-head .spacer {
+  flex: 1;
+}
+
+/* ---------- main ---------- */
+
+.main {
+  grid-area: main;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  margin-bottom: 16px;
+  overflow: hidden;
+  position: relative;
+}
+[data-theme='dark'] .main {
+  background: var(--surface-dim);
+}
+
+.side-panel {
+  grid-area: panel;
+  width: var(--panel-w);
+  min-height: 0;
+  margin-block: 0 16px;
+  margin-inline: 16px 0;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+[data-theme='dark'] .side-panel {
+  background: var(--surface-dim);
+}
+.side-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 56px;
+  padding-block: 0;
+  padding-inline: 20px 8px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--text-2);
+  flex: none;
+}
+.side-panel-head h2 {
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;
+}
+/* A panel's own title beside its name (the open Ambrose chat): the name keeps its width, the title
+   takes the rest and is cut with an ellipsis. */
+.side-panel-title:empty {
+  display: none;
+}
+.side-panel-head h2:has(+ .side-panel-title:not(:empty)) {
+  flex: none;
+}
+.side-panel-title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  text-transform: none;
+  letter-spacing: normal;
+}
+.chat-head-title {
+  max-width: 100%;
+  min-width: 0;
+  padding: 4px 8px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-3);
+  font: inherit;
+  font-family: var(--font);
+  font-size: 13px;
+  text-align: start;
+  cursor: default;
+}
+.chat-head-title:hover {
+  background: var(--hover);
+}
+.chat-head-title:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+.chat-head-title-input {
+  width: 100%;
+  min-width: 0;
+  height: 30px;
+  padding: 0 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 13px;
+}
+.chat-head-title-input:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: -1px;
+}
+.side-panel-body {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+}
+
+.rail {
+  grid-area: rail;
+  width: var(--rail-w);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 8px;
+}
+.rail .icon-btn.active {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+.rail-sep {
+  width: 20px;
+  height: 1px;
+  background: var(--divider);
+  margin: 4px 0;
+}
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 1280px) {
+  .side-panel {
+    position: fixed;
+    inset-inline-end: var(--rail-w);
+    top: var(--topbar-h);
+    bottom: 16px;
+    z-index: 40;
+    box-shadow: var(--shadow-3);
+    margin: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'top'
+      'main';
+  }
+  .brand {
+    width: auto;
+  }
+  .brand span {
+    display: none;
+  }
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    inset-inline-start: 0;
+    z-index: 70;
+    background: var(--bg);
+    box-shadow: var(--shadow-3);
+    transform: translateX(calc(-100% * var(--dir)));
+    transition: transform 200ms var(--ease);
+    padding-top: 8px;
+    width: min(300px, 85vw);
+  }
+  .sidebar.mobile-open {
+    transform: none;
+  }
+  .sidebar.collapsed {
+    width: min(300px, 85vw);
+  }
+  /* The phone drawer is always full width, whatever the desktop collapse setting says. */
+  .sidebar.collapsed:not(.peek) .nav-item {
+    width: 100%;
+    height: 32px;
+    padding-block: 0;
+    padding-inline: calc(26px + var(--depth, 0) * 12px) 12px;
+    justify-content: flex-start;
+    border-start-start-radius: 0;
+    border-start-end-radius: var(--radius-lg);
+    border-end-end-radius: var(--radius-lg);
+    border-end-start-radius: 0;
+    margin: 0;
+  }
+  .sidebar.collapsed:not(.peek) .nav-item .name,
+  .sidebar.collapsed:not(.peek) .nav-item .count,
+  .sidebar.collapsed:not(.peek) .nav-section-head {
+    display: flex;
+  }
+  .sidebar.collapsed:not(.peek) .nav-item .name {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+  }
+  .sidebar.collapsed:not(.peek) .nav-item .caret {
+    display: grid;
+  }
+  .main {
+    margin: 0;
+    border-radius: 0;
+  }
+  .rail {
+    display: none;
+  }
+  .side-panel {
+    inset-inline-end: 0;
+    inset-inline-start: 0;
+    top: var(--topbar-h);
+    bottom: 0;
+    width: auto;
+    border-radius: 0;
+  }
+  .topbar {
+    padding: 4px;
+  }
+  .topbar-right .hide-mobile {
+    display: none;
+  }
+  .search-box {
+    height: 44px;
+  }
+  .compose-fab {
+    display: inline-flex !important;
+  }
+}
+
+.mobile-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  background: var(--scrim);
+}
+
+.compose-fab {
+  display: none;
+  position: fixed;
+  inset-inline-end: 16px;
+  bottom: 16px;
+  z-index: 30;
+  height: 56px;
+  padding-block: 0;
+  padding-inline: 16px 20px;
+  gap: 12px;
+  align-items: center;
+  border-radius: var(--radius-lg);
+  background: var(--compose-bg);
+  color: var(--compose-fg);
+  box-shadow: var(--shadow-2);
+  font-weight: 500;
+}
+
+/* Approval cards in the "Waiting for you" bell (features/waiting) */
+.approvals-body {
+  overflow: auto;
+  padding: 8px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.approvals-meta {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-block: 0 4px;
+  margin-inline: 2px 0;
+}
+.approvals-item.focused {
+  /* The approval an approval link opened (/approvals/:id). */
+  outline: 2px solid var(--primary);
+  outline-offset: 4px;
+  border-radius: 12px;
+}
+.approvals-notice {
+  margin: 8px 12px 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--danger-container);
+  color: var(--on-danger-container, inherit);
+  font-size: 13px;
+}
+
+/* The overlay assistant panel (≤1280 px) gets a scrim so it no longer intercepts clicks meant for the page. */
+.panel-scrim {
+  display: none;
+}
+@media (max-width: 1280px) {
+  .panel-scrim {
+    display: block;
+    position: fixed;
+    inset-block: var(--topbar-h) 0;
+    inset-inline: 0 var(--rail-w);
+    z-index: 39;
+    background: var(--scrim);
+  }
+}
+/* No Compose button over an open inline reply. */
+body:has([data-inline-reply]) .compose-fab {
+  display: none !important;
+}
+
+/* ---------- Favorites and conversation drops on the nav ---------- */
+
+/* Classic's Favorites group at the top of the sidebar. */
+.nav-favorites {
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--divider);
+}
+.nav-item.nav-group-toggle {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--text-2);
+  height: 28px;
+}
+.sidebar.collapsed:not(.peek) .nav-group-toggle {
+  display: none;
+}
+.o-fav-empty {
+  padding-block: 4px 8px;
+  padding-inline: 28px 12px;
+  font-size: 12px;
+  color: var(--text-2);
+}
+
+/* A target under a conversation drag: tinted, with an inset ring in the accent. */
+.drop-over,
+.nav-item.drop-over,
+.desk-app .d-folder.drop-over {
+  background: var(--primary-container) !important;
+  color: var(--on-primary-container) !important;
+  box-shadow: inset 0 0 0 2px var(--primary);
+}
+.drop-over .lucide,
+.drop-over .count,
+.drop-over .n {
+  color: inherit !important;
+}
+
+/* The verb beside the highlighted target. */
+.drop-hint {
+  position: fixed;
+  z-index: 1200;
+  pointer-events: none;
+  max-width: 240px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--tooltip-bg);
+  color: var(--text-inverse);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: var(--shadow-2);
+  animation: drop-hint-in 120ms var(--ease);
+}
+@keyframes drop-hint-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The drag image: drawn off-screen for the browser to snapshot. */
+.mail-drag-image {
+  position: fixed;
+  top: -200px;
+  inset-inline-start: -400px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 280px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text);
+  font: 500 13px var(--font);
+  box-shadow: 0 0 0 1px var(--border), var(--shadow-2);
+}
+.mail-drag-image .mail-drag-count {
+  margin-inline-start: -4px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 12px;
+  line-height: 20px;
+  text-align: center;
+}
+.mail-drag-image .mail-drag-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Reordering a favorite: a line where it will land. */
+.fav-drop-before {
+  box-shadow: inset 0 2px 0 var(--primary);
+}
+.fav-drop-after {
+  box-shadow: inset 0 -2px 0 var(--primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drop-hint {
+    animation: none;
+  }
+}
+
+/* During a conversation drag: the dragged rows dim; toasts and tooltips never block a target. */
+body[data-mail-drag] [data-mail-list] [data-dragging] {
+  opacity: 0.5;
+}
+body[data-mail-drag] .toast,
+body[data-mail-drag] .toasts,
+body[data-mail-drag] .tooltip {
+  pointer-events: none;
+}
+
+/* ---------- Ambrose's button (features/layout/AmbroseButton.tsx) ---------- */
+
+/* One place in every theme: the first item of the top bar's right-hand group. Themes only tune
+   colours (Workspace's dark title bar inherits its text colour). */
+.ambrose-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  height: calc(36px * var(--dz, 1));
+  margin-inline-end: 4px;
+  padding-block: 0;
+  padding-inline: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: none;
+  color: var(--text);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease);
+}
+.ambrose-btn svg {
+  width: calc(20px * var(--dzi, 1));
+  height: calc(20px * var(--dzi, 1));
+  color: var(--primary);
+}
+.ambrose-btn:hover {
+  background: var(--hover);
+}
+.ambrose-btn.active {
+  background: var(--nav-active);
+  border-color: transparent;
+  color: var(--nav-active-fg);
+}
+.ambrose-btn.active svg {
+  color: inherit;
+}
+.ambrose-btn:focus-visible {
+  outline: 2px solid var(--focus-ring, var(--primary));
+  outline-offset: 2px;
+}
+/* Narrow desktops keep the icon; phones have Ambrose in the bottom bar. */
+@media (max-width: 1180px) {
+  .ambrose-btn {
+    width: calc(36px * var(--dz, 1));
+    padding: 0;
+    justify-content: center;
+  }
+  .ambrose-btn .ambrose-name {
+    display: none;
+  }
+}
+html[data-phone] .ambrose-btn {
+  display: none;
+}
+
+/* ---------- short screens (features/layout/chromeAway.ts) ---------- */
+/* Scrolling down on a short screen moves the top bar and the phone tab bar away. */
+html[data-chrome-away] .app {
+  --topbar-h: 0px;
+}
+html[data-chrome-away] .app > header,
+html[data-chrome-away] .app > .d-toolbar {
+  display: none;
+}
+@media (max-width: 900px) {
+  html[data-chrome-away][data-ui-theme='desk'] .desk-app {
+    grid-template-rows: 0 1fr;
+  }
+}
+html[data-chrome-away][data-phone-chrome] .app {
+  height: 100dvh;
+}
+html[data-chrome-away] .phone-tabs {
+  transform: translateY(100%);
+}
+/* The add-to-home-screen invitation waits for a taller screen. */
+@media (max-height: 600px) {
+  .install-banner {
+    display: none;
+  }
+}

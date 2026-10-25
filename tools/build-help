@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Build the user guide that mailr serves at /help/ (backend/mailr/core/helpdocs.py) into
+# backend/mailr/help, for development and the browser tests. The image builds its own copy
+# (Dockerfile, docs stage). Uses the docs environment site/.venv of this checkout or, failing
+# that, of the main checkout (MAILR_DOCS_VENV overrides).
+set -euo pipefail
+ROOT=$(cd "$(dirname "$0")/.." && pwd)
+VENV=${MAILR_DOCS_VENV:-}
+if [ -z "$VENV" ]; then
+  for v in "$ROOT/site/.venv" "$(git -C "$ROOT" worktree list --porcelain | awk 'NR==1{print $2}')/site/.venv"; do
+    [ -x "$v/bin/mkdocs" ] && { VENV=$v; break; }
+  done
+fi
+[ -n "$VENV" ] && [ -x "$VENV/bin/mkdocs" ] || { echo "no docs environment: python -m venv site/.venv && site/.venv/bin/pip install -r site/requirements-docs.lock" >&2; exit 2; }
+exec "$VENV/bin/python" "$ROOT/site/build_help.py" --mkdocs "$VENV/bin/mkdocs" --out "$ROOT/backend/mailr/help" "$@"

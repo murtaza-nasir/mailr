@@ -1,0 +1,1229 @@
+/* Cards: expressive and colourful. A tonal palette derived from one accent (color-mix), rounded
+   containers, big avatars, a navigation rail and bottom sheets. Scoped by [data-ui-theme='cards']. */
+
+[data-ui-theme='cards'] {
+  --font: 'Inter', 'Noto Sans', Roboto, system-ui, -apple-system, sans-serif;
+  --font-display: 'Inter', 'Noto Sans', Roboto, system-ui, -apple-system, sans-serif;
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --topbar-h: 72px;
+  --rail-w: 0px;
+  --panel-w: 360px;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --c-spring: cubic-bezier(0.34, 1.36, 0.64, 1);
+  --dur: 200ms;
+  --c-accent: #6750a4;
+  --c-accent-d: #d0bcff;
+}
+/* Other accents: the colour engine sets --c-accent and --c-accent-d (lib/colour/themes.ts). */
+[data-ui-theme='cards'][data-theme='light'] {
+  --bg: color-mix(in oklab, var(--c-accent) 8%, #fdfbff);
+  --surface: color-mix(in oklab, var(--c-accent) 2%, #ffffff);
+  --surface-dim: color-mix(in oklab, var(--c-accent) 4%, #fcfaff);
+  --surface-container: color-mix(in oklab, var(--c-accent) 9%, #fdfbff);
+  --surface-high: color-mix(in oklab, var(--c-accent) 13%, #fbf9fd);
+  --text: #1c1b1f;
+  --text-2: #46444c;
+  --text-3: #5d5a64;
+  --border: color-mix(in oklab, var(--c-accent) 16%, #cac4d0);
+  --divider: color-mix(in oklab, var(--c-accent) 10%, #e7e0ec);
+  --primary: var(--c-accent);
+  --on-primary: #ffffff;
+  --primary-container: color-mix(in oklab, var(--c-accent) 22%, #ffffff);
+  --on-primary-container: color-mix(in oklab, var(--c-accent) 55%, #000000);
+  --c-secondary: color-mix(in oklab, var(--c-accent) 15%, #f4eff7);
+  --compose-bg: var(--primary-container);
+  --compose-fg: var(--on-primary-container);
+  --nav-active: var(--c-secondary);
+  --nav-active-fg: var(--on-primary-container);
+  --hover: color-mix(in oklab, var(--c-accent) 8%, transparent);
+  --pressed: color-mix(in oklab, var(--c-accent) 14%, transparent);
+  --row-selected: var(--primary-container);
+  --row-focused-bar: var(--c-accent);
+  --row-read-bg: var(--surface);
+  --row-unread-bg: var(--surface);
+  --chip-bg: var(--surface-high);
+  --chip-fg: var(--text-2);
+  --star: #b98300;
+  --input-bg: var(--surface-high);
+  --input-bg-focus: var(--surface);
+  --focus-ring: var(--c-accent);
+  --tooltip-bg: #313033;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.07), 0 1px 3px 1px rgba(0, 0, 0, 0.05);
+  --shadow-2: 0 1px 2px rgba(0, 0, 0, 0.08), 0 2px 6px 2px rgba(0, 0, 0, 0.06);
+  --shadow-3: 0 4px 8px 3px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+[data-ui-theme='cards'][data-theme='dark'] {
+  --bg: color-mix(in oklab, var(--c-accent-d) 4%, #131316);
+  --surface: color-mix(in oklab, var(--c-accent-d) 7%, #1b1b1f);
+  --surface-dim: color-mix(in oklab, var(--c-accent-d) 5%, #18181b);
+  --surface-container: color-mix(in oklab, var(--c-accent-d) 9%, #1f1f23);
+  --surface-high: color-mix(in oklab, var(--c-accent-d) 13%, #26262b);
+  --text: #e6e1e6;
+  --text-2: #cbc5d0;
+  --text-3: #aea8b5;
+  --border: color-mix(in oklab, var(--c-accent-d) 18%, #49454f);
+  --divider: color-mix(in oklab, var(--c-accent-d) 8%, #2c2a31);
+  --primary: var(--c-accent-d);
+  --on-primary: color-mix(in oklab, var(--c-accent) 65%, #000000);
+  --primary-container: color-mix(in oklab, var(--c-accent) 60%, #1b1b1f);
+  --on-primary-container: color-mix(in oklab, var(--c-accent-d) 35%, #ffffff);
+  --c-secondary: color-mix(in oklab, var(--c-accent-d) 18%, #232327);
+  --compose-bg: var(--primary-container);
+  --compose-fg: var(--on-primary-container);
+  --nav-active: var(--c-secondary);
+  --nav-active-fg: var(--on-primary-container);
+  --hover: color-mix(in oklab, var(--c-accent-d) 8%, transparent);
+  --pressed: color-mix(in oklab, var(--c-accent-d) 14%, transparent);
+  --row-selected: var(--primary-container);
+  --row-focused-bar: var(--c-accent-d);
+  --row-read-bg: var(--surface);
+  --row-unread-bg: var(--surface);
+  --chip-bg: var(--surface-high);
+  --chip-fg: var(--text-2);
+  --star: #f2c14e;
+  --input-bg: var(--surface-high);
+  --input-bg-focus: var(--surface-high);
+  --focus-ring: var(--c-accent-d);
+  --tooltip-bg: #e6e1e6;
+}
+
+/* ---------- controls ---------- */
+
+[data-ui-theme='cards'] .label-chip {
+  border-radius: 8px;
+}
+[data-ui-theme='cards'] .popover {
+  border-radius: var(--radius-md);
+}
+[data-ui-theme='cards'] .dialog {
+  border-radius: var(--radius-xl);
+}
+
+/* ---------- frame ---------- */
+
+[data-ui-theme='cards'] .cards-app {
+  grid-template-rows: var(--topbar-h) 1fr;
+  grid-template-columns: 88px 1fr auto;
+  grid-template-areas:
+    'rail top panel'
+    'rail main panel';
+}
+.cards-app .c-rail {
+  grid-area: rail;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 0 16px;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.cards-app .c-menu {
+  margin-bottom: 4px;
+}
+.cards-app .c-fab {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  flex: none;
+  margin: 0 0 16px;
+  border-radius: 16px;
+  background: var(--compose-bg);
+  color: var(--compose-fg);
+  box-shadow: var(--shadow-2);
+  transition: box-shadow var(--dur) var(--ease), transform 300ms var(--c-spring), border-radius 300ms var(--c-spring);
+}
+.cards-app .c-fab .lucide {
+  width: 24px;
+  height: 24px;
+}
+.cards-app .c-fab:hover {
+  box-shadow: var(--shadow-3);
+  border-radius: 20px;
+}
+.cards-app .c-fab:active {
+  transform: scale(0.94);
+}
+.cards-app .c-dest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 80px;
+  flex: none;
+  padding: 2px 0 6px;
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+}
+.cards-app .c-ind {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 32px;
+  border-radius: 16px;
+  transition: background var(--dur) var(--ease), width 300ms var(--c-spring);
+}
+.cards-app .c-ind .lucide {
+  width: 22px;
+  height: 22px;
+}
+.cards-app .c-dest:hover .c-ind {
+  background: var(--hover);
+}
+.cards-app .c-dest.active {
+  color: var(--text);
+  font-weight: 700;
+}
+.cards-app .c-dest.active .c-ind {
+  background: var(--c-secondary);
+  color: var(--on-primary-container);
+}
+.cards-app .c-dest-badge {
+  position: absolute;
+  top: -3px;
+  inset-inline-start: 32px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--danger);
+  color: var(--surface);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 18px;
+  text-align: center;
+}
+.cards-app .c-rail-sep {
+  width: 40px;
+  height: 1px;
+  margin: 8px 0;
+  background: var(--divider);
+  flex: none;
+}
+.cards-app .c-top {
+  grid-area: top;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-block: 0;
+  padding-inline: 0 16px;
+  min-width: 0;
+}
+.cards-app .c-top-menu {
+  display: none;
+}
+.cards-app .c-top .search {
+  max-width: 720px;
+}
+.cards-app .c-top .search-box {
+  height: 56px;
+  padding: 0 8px;
+  border-radius: 28px;
+  background: var(--surface-high);
+}
+.cards-app .c-top .search-box.focused,
+.cards-app .c-top .search-box.open {
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+}
+.cards-app .c-top .search-box.open {
+  border-radius: 28px 28px 0 0;
+}
+.cards-app .c-top .search-panel {
+  top: 56px;
+  background: var(--surface);
+  border-radius: 0 0 28px 28px;
+  padding-bottom: 12px;
+}
+.cards-app .c-top-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-inline-start: auto;
+}
+.cards-app .c-top-right .icon-btn {
+  --icon: calc(22px * var(--dzi, 1));
+}
+.cards-app .main.c-main {
+  grid-area: main;
+  margin-block: 0 16px;
+  margin-inline: 0 16px;
+  border-radius: 0;
+  background: transparent;
+  overflow: hidden;
+}
+.cards-app .c-main > .settings,
+.cards-app .c-main > .conv-view,
+.cards-app .c-main > .empty {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+}
+
+/* ---------- list of cards ---------- */
+
+.cards-app .split {
+  gap: 12px;
+}
+.cards-app .split.right > .list-pane {
+  width: var(--list-w, clamp(360px, 38%, 500px));
+  border-inline-end: 0;
+}
+.cards-app .c-main > .list-pane {
+  width: 100%;
+  max-width: 880px;
+  margin: 0 auto;
+}
+.cards-app .reader-pane {
+  background: var(--surface);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+.cards-app .reader-empty .lucide {
+  color: var(--primary);
+  opacity: 0.5;
+}
+.cards-app .cat-tabs-wrap {
+  border-bottom: 0;
+}
+.cards-app .cat-tabs {
+  gap: 8px;
+  padding: 4px 2px 10px;
+  scroll-padding: 0 2px;
+}
+.cards-app .cat-tabs-wrap .scroll-tabs-btn {
+  margin-top: -3px; /* centred on the tabs, above the strip's bottom padding */
+}
+.cards-app .cat-tab {
+  height: 32px;
+  min-width: 0;
+  max-width: none;
+  flex: none;
+  gap: 6px;
+  padding-block: 0;
+  padding-inline: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-2);
+  transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.cards-app .cat-tab .lucide {
+  width: 18px;
+  height: 18px;
+}
+.cards-app .cat-tab:hover {
+  background: var(--hover);
+}
+.cards-app .cat-tab[aria-selected='true'] {
+  background: var(--c-secondary);
+  border-color: transparent;
+  color: var(--on-primary-container);
+}
+.cards-app .cat-tab[aria-selected='true']::after {
+  display: none;
+}
+.cards-app .cat-tab .new,
+.cards-app .cat-tab .count {
+  margin-inline-start: 2px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 11px;
+}
+.cards-app .cat-tab .count {
+  background: var(--chip-bg);
+  color: var(--text-2);
+}
+.cards-app .cat-tab .due {
+  margin-inline-start: 2px;
+  font-size: 11px;
+  color: var(--warning-fg);
+  background: var(--warning-container);
+}
+.cards-app .cat-tab .due.urgent {
+  color: var(--danger);
+  background: var(--danger-container);
+}
+.cards-app .toolbar {
+  height: 44px;
+  padding: 0 2px;
+}
+.cards-app .toolbar.scrolled {
+  border-bottom-color: transparent;
+}
+.cards-app .toolbar .icon-btn {
+  --icon-btn: calc(36px * var(--dz, 1));
+  --icon: calc(20px * var(--dzi, 1));
+}
+.cards-app .list-scroll {
+  padding: 0 2px 24px;
+}
+.cards-app .row-skeleton {
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  margin-bottom: 8px;
+  height: 88px;
+}
+.cards-app .c-slot {
+  padding-bottom: 8px;
+}
+/* A card with a one-line preview and no chips: sender, subject and preview (22, 22 and 19 px with
+   2 px gaps) inside the paddings. An empty section is as tall; longer previews and chips grow a card. */
+[data-ui-theme='cards'] {
+  --c-card-h: 95px;
+}
+[data-ui-theme='cards'][data-density='compact'] {
+  --c-card-h: 82px;
+}
+[data-ui-theme='cards'][data-density='comfortable'] {
+  --c-card-h: 103px;
+}
+/* A card without a preview stays shorter (no empty line). */
+.cards-app .c-card:has(.c-snippet) {
+  min-height: var(--c-card-h);
+}
+.cards-app .c-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-block: 14px;
+  padding-inline: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  animation: c-in 280ms var(--ease) both;
+  transition: box-shadow var(--dur) var(--ease), transform 250ms var(--c-spring), background var(--dur) var(--ease);
+}
+.cards-app .c-card:hover {
+  box-shadow: var(--shadow-2);
+  transform: translateY(-1px);
+}
+.cards-app .c-card:active {
+  transform: scale(0.992);
+}
+.cards-app .c-card.focused {
+  background: var(--c-secondary);
+}
+.cards-app .c-card.selected {
+  background: var(--primary-container);
+}
+.cards-app .c-card:focus-visible {
+  box-shadow: 0 0 0 2px var(--focus-ring);
+}
+@keyframes c-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.cards-app .c-avatar {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  transition: transform 300ms var(--c-spring);
+}
+.cards-app .c-avatar:hover {
+  transform: scale(1.06);
+}
+.cards-app .c-avatar .avatar {
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
+}
+.cards-app .c-check {
+  display: grid;
+  place-items: center;
+  /* fills the avatar's slot, whatever size density gives it */
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--on-primary);
+  animation: c-pop 300ms var(--c-spring);
+}
+.cards-app .c-check .lucide {
+  width: 50%;
+  height: 50%;
+  stroke-width: 3;
+}
+@keyframes c-pop {
+  from {
+    transform: scale(0.6) rotate(-20deg);
+  }
+}
+.cards-app .c-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.cards-app .c-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.cards-app .c-sender {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+.cards-app .c-card.unread .c-sender,
+.cards-app .c-card.unread .c-subject {
+  color: var(--text);
+  font-weight: 700;
+}
+.cards-app .c-n {
+  margin-inline-start: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-3);
+}
+.cards-app .c-draft {
+  margin-inline-start: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--danger);
+}
+.cards-app .c-date {
+  flex: none;
+  font-size: 12.5px;
+  color: var(--text-3);
+}
+.cards-app .c-card.unread .c-date {
+  color: var(--primary);
+  font-weight: 700;
+}
+.cards-app .c-subject {
+  font-size: 14.5px;
+  color: var(--text-2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cards-app .c-star {
+  width: 14px;
+  height: 14px;
+  margin-block: -2px 0;
+  margin-inline: 6px 0;
+  vertical-align: middle;
+  color: var(--star);
+  fill: var(--star);
+}
+.cards-app .c-snippet {
+  font-size: 13.5px;
+  line-height: 19px;
+  color: var(--text-3);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.cards-app .c-chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+.cards-app .c-chips .label-chip {
+  height: 22px;
+  line-height: 22px;
+  padding: 0 8px;
+  flex: none;
+}
+.cards-app .c-att {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  max-width: 180px;
+  padding-block: 0;
+  padding-inline: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 12.5px;
+  color: var(--text-2);
+  flex: none;
+}
+.cards-app .c-att span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cards-app .c-att .lucide {
+  width: 15px;
+  height: 15px;
+  color: var(--primary);
+  flex: none;
+}
+.cards-app .c-clip {
+  width: 15px;
+  height: 15px;
+  color: var(--text-3);
+}
+.cards-app .c-actions {
+  position: absolute;
+  top: 8px;
+  inset-inline-end: 8px;
+  display: none;
+  gap: 0;
+  padding: 2px;
+  border-radius: 20px;
+  background: var(--surface-high);
+  box-shadow: var(--shadow-1);
+}
+.cards-app .c-actions .icon-btn.on {
+  color: var(--star);
+}
+.cards-app .c-card:hover .c-actions,
+.cards-app .c-card:focus-within .c-actions {
+  display: flex;
+}
+.cards-app .c-card:hover .c-date,
+.cards-app .c-card:focus-within .c-date {
+  visibility: hidden;
+}
+
+/* inbox sections: no panel behind the cards; headings sit on the page like bundle titles */
+.cards-app .section,
+[data-theme='dark'] .cards-app .section {
+  background: transparent;
+}
+.cards-app .section + .section {
+  margin-top: 8px;
+}
+/* A label above the cards, in the accent colour, on the page itself (opaque for sticking). */
+.cards-app .section + .section {
+  padding-top: 0;
+  margin-top: 16px;
+}
+.cards-app .section-head,
+.cards-app .section + .section > .section-head {
+  border: 0;
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  padding: 0 4px;
+  margin-bottom: 4px;
+  color: var(--primary);
+}
+.cards-app .section-more,
+.cards-app .section-empty {
+  border-bottom: 0;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  margin-bottom: 8px;
+}
+/* An empty section is one card tall, with the 8px below it inside its box like a card's slot
+   (.c-slot), so no margin collapses into the gap before the next section. */
+.cards-app .list-pane,
+.cards-app .list-pane.narrow {
+  --section-empty-h: var(--c-card-h);
+}
+.cards-app .section-empty {
+  position: relative;
+  z-index: 0;
+  height: calc(var(--section-empty-h) + 8px);
+  margin-bottom: 0;
+  padding-block: 0 8px;
+  padding-inline: 16px;
+  border-radius: 0;
+  background: none;
+}
+.cards-app .section-empty::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 8px;
+  z-index: -1;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+/* bundles */
+.cards-app .c-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px 2px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  color: var(--text-2);
+}
+.cards-app .c-group-n {
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 10px;
+  background: var(--surface-high);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.cards-app .c-fold {
+  margin-inline-start: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding-block: 0;
+  padding-inline: 8px 12px;
+  border-radius: 15px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--primary);
+}
+.cards-app .c-fold:hover {
+  background: var(--hover);
+}
+.cards-app .c-fold .lucide {
+  width: 18px;
+  height: 18px;
+}
+.cards-app .c-bundle {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding-block: 12px;
+  padding-inline: 14px 16px;
+  border-radius: var(--radius-lg);
+  background: var(--c-secondary);
+  color: var(--on-primary-container);
+  text-align: start;
+  animation: c-in 280ms var(--ease) both;
+  transition: box-shadow var(--dur) var(--ease), transform 250ms var(--c-spring);
+}
+.cards-app .c-bundle:hover {
+  box-shadow: var(--shadow-2);
+  transform: translateY(-1px);
+}
+.cards-app .c-bundle:active {
+  transform: scale(0.99);
+}
+.cards-app .c-stack {
+  display: flex;
+  flex: none;
+  width: 60px;
+}
+.cards-app .c-stack .avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 13px;
+  box-shadow: 0 0 0 2px var(--c-secondary);
+}
+.cards-app .c-stack .avatar + .avatar {
+  margin-inline-start: -18px;
+}
+.cards-app .c-bundle-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.cards-app .c-bundle-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.cards-app .c-badge {
+  height: 20px;
+  padding: 0 8px;
+  border-radius: 10px;
+  background: var(--primary);
+  color: var(--on-primary);
+  font-size: 11.5px;
+  font-weight: 600;
+  line-height: 20px;
+}
+.cards-app .c-bundle-sub {
+  font-size: 13px;
+  opacity: 0.8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cards-app .c-bundle-n {
+  font-size: 13px;
+  font-weight: 600;
+}
+.cards-app .c-bundle-chev {
+  width: 20px;
+  height: 20px;
+}
+
+/* ---------- reading card ---------- */
+
+.cards-app .conv-view-head {
+  height: 60px;
+  padding: 0 12px;
+}
+.cards-app .conv-inner {
+  max-width: none;
+  padding-block: 0 40px;
+  padding-inline: 0 16px;
+}
+.cards-app .conv-subject {
+  --subject-line: 34px;
+  padding-block: 4px 16px;
+  padding-inline: 28px 8px;
+}
+.cards-app .conv-subject .title {
+  font-size: 26px;
+  font-weight: 400;
+}
+.cards-app .summary-card {
+  margin-block: 0 12px;
+  margin-inline: 16px 0;
+  border-radius: var(--radius-lg);
+  background: var(--c-secondary);
+}
+.cards-app .msg {
+  margin-block: 0 8px;
+  margin-inline: 16px 0;
+  padding-block: 16px 0;
+  padding-inline: 12px 0;
+  border-radius: var(--radius-lg);
+  border-bottom: 0;
+  background: var(--surface-dim);
+}
+.cards-app .msg.collapsed {
+  padding-block: 10px;
+  padding-inline: 12px 0;
+  background: var(--surface-container);
+}
+.cards-app .msg.collapsed:hover {
+  background: var(--surface-high);
+}
+.cards-app .older-pill {
+  margin-block: 0 8px;
+  margin-inline: 16px 0;
+  border-color: transparent;
+}
+.cards-app .older-pill span {
+  background: var(--surface-high);
+  border-color: transparent;
+}
+.cards-app .reply-bar {
+  padding-block: 8px;
+  padding-inline: 84px 0;
+}
+.cards-app .inline-compose .box {
+  border-radius: var(--radius-lg);
+}
+.cards-app .deleted-note {
+  margin-inline-start: 16px;
+  border-radius: var(--radius-md);
+}
+
+/* settings, panel, compose */
+.cards-app .settings-head h1 {
+  font-size: 28px;
+  line-height: 36px;
+}
+.cards-app .settings-tab.active {
+  color: var(--primary);
+}
+.cards-app .side-panel {
+  /* spans the top bar too: start level with the search box (56px centred in 72px) */
+  margin-block: 8px 16px;
+  margin-inline: 0 16px;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+}
+.cards-app .side-panel-head {
+  height: 64px;
+  padding-inline-start: 24px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.cards-app .side-panel-head h2 {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text);
+}
+@media (max-width: 1280px) {
+  .cards-app .side-panel {
+    inset-inline-end: 16px;
+    top: var(--topbar-h);
+    bottom: 16px;
+    margin: 0;
+  }
+  .cards-app .panel-scrim {
+    inset: 0;
+  }
+}
+.cards-app .compose-win {
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+.cards-app .compose-win.maximized {
+  border-radius: var(--radius-xl);
+}
+.cards-app .compose-head {
+  height: 52px;
+  padding-block: 0;
+  padding-inline: 24px 12px;
+  background: var(--surface-high);
+  font-size: 15px;
+}
+[data-theme='light'] .cards-app .compose-head {
+  background: var(--surface-high);
+}
+.cards-app .compose-head .icon-btn {
+  --icon-btn: calc(36px * var(--dz, 1));
+  --icon: calc(18px * var(--dzi, 1));
+}
+
+/* the drawer: every mailbox and label */
+.cards-app .c-drawer-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  background: var(--scrim);
+  animation: fade-in 200ms var(--ease);
+}
+.cards-app .c-drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: 0;
+  z-index: 70;
+  width: min(340px, 86vw);
+  padding: 12px 12px 24px;
+  overflow-y: auto;
+  border-start-start-radius: 0;
+  border-start-end-radius: var(--radius-xl);
+  border-end-end-radius: var(--radius-xl);
+  border-end-start-radius: 0;
+  background: var(--surface-container);
+  box-shadow: var(--shadow-3);
+  transform: translateX(calc(-104% * var(--dir)));
+  transition: transform 320ms var(--ease);
+}
+.cards-app .c-drawer.open {
+  transform: none;
+}
+.cards-app .c-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 4px 8px;
+  padding-inline: 16px 0;
+}
+.cards-app .c-drawer-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 500;
+}
+.cards-app .c-drawer-compose {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding-block: 0;
+  padding-inline: 16px 20px;
+  margin: 4px 0 12px;
+  border-radius: 16px;
+  background: var(--compose-bg);
+  color: var(--compose-fg);
+  font-weight: 500;
+  box-shadow: var(--shadow-1);
+}
+.cards-app .c-drawer-compose .lucide {
+  width: 22px;
+  height: 22px;
+}
+.cards-app .c-drawer .nav-item {
+  height: calc(48px * var(--dz, 1));
+  gap: 12px;
+  padding-block: 0;
+  /* nested labels (and the folders under an account's More folders) indent by --depth */
+  padding-inline: calc(16px + var(--depth, 0) * 16px) 20px;
+  border-radius: 24px;
+  font-weight: 500;
+}
+.cards-app .c-drawer .nav-item.active {
+  background: var(--c-secondary);
+  color: var(--on-primary-container);
+  font-weight: 700;
+}
+.cards-app .c-drawer .nav-item .lucide {
+  width: 22px;
+  height: 22px;
+}
+.cards-app .c-drawer .nav-item .caret {
+  inset-inline-start: calc(var(--depth, 0) * 16px);
+}
+.cards-app .c-drawer-sec {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: 16px 6px;
+  padding-inline: 16px 4px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+
+/* ---------- phones: extended FAB, sheets (the shared phone bar is the navigation) ---------- */
+
+@media (max-width: 900px) {
+  [data-ui-theme='cards'] {
+    --topbar-h: 68px;
+  }
+  [data-ui-theme='cards'] .cards-app {
+    grid-template-rows: var(--topbar-h) 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'top'
+      'main';
+  }
+  .cards-app .c-rail {
+    display: none;
+  }
+  .cards-app .c-top {
+    padding: 0 12px;
+    gap: 4px;
+    position: relative;
+  }
+  .cards-app .c-top .search-box {
+    height: 52px;
+    padding-inline-start: 48px;
+  }
+  .cards-app .c-top .search-panel {
+    top: 52px;
+  }
+  .cards-app .c-top-menu {
+    display: inline-grid;
+    position: absolute;
+    inset-inline-start: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+  .cards-app .c-top-right .icon-btn:not(.account-btn):not(.wb-bell) {
+    display: none;
+  }
+  .cards-app .main.c-main {
+    margin: 0 8px;
+  }
+  .cards-app .c-main > .conv-view,
+  .cards-app .c-main > .settings {
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  }
+  .cards-app .compose-fab {
+    inset-inline-end: 16px;
+    bottom: 104px;
+    border-radius: 16px;
+    background: var(--compose-bg);
+    color: var(--compose-fg);
+    box-shadow: var(--shadow-3);
+  }
+  .cards-app .c-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  .cards-app .c-actions {
+    display: none !important;
+  }
+  .cards-app .c-card:hover .c-date {
+    visibility: visible;
+  }
+  .cards-app .c-avatar .avatar,
+  .cards-app .c-avatar {
+    width: 40px;
+    height: 40px;
+  }
+  .cards-app .conv-subject {
+    padding-inline-start: 16px;
+  }
+  .cards-app .conv-subject .title {
+    font-size: 22px;
+  }
+  .cards-app .msg,
+  .cards-app .summary-card,
+  .cards-app .older-pill {
+    margin-inline-start: 8px;
+  }
+  .cards-app .conv-inner {
+    padding-inline-end: 8px;
+  }
+  .cards-app .side-panel {
+    inset: var(--topbar-h) 0 0 0;
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    z-index: 60;
+  }
+  /* compose as a bottom sheet */
+  .cards-app .c-sheet-scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 54;
+    background: var(--scrim);
+    animation: fade-in 200ms var(--ease);
+  }
+  .cards-app .compose-win,
+  .cards-app .compose-win.minimized {
+    top: auto;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    bottom: 0;
+    height: min(92dvh, 820px);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    animation: c-sheet 340ms var(--ease);
+  }
+  .cards-app .compose-win.minimized {
+    inset-inline-start: 12px;
+    inset-inline-end: 12px;
+    bottom: 104px;
+    height: 52px;
+    border-radius: 16px;
+    box-shadow: var(--shadow-3);
+  }
+  .cards-app .compose-win.maximized {
+    top: 0;
+    height: auto;
+    border-radius: 0;
+  }
+  .cards-app .compose-head {
+    position: relative;
+    height: 56px;
+    padding-top: 8px;
+    background: var(--surface-high);
+  }
+  .cards-app .compose-head::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    inset-inline-start: 50%;
+    width: 32px;
+    height: 4px;
+    margin-inline-start: -16px;
+    border-radius: 2px;
+    background: var(--text-3);
+    opacity: 0.4;
+  }
+  .cards-app .compose-win.minimized .compose-head {
+    height: 52px;
+    padding-top: 0;
+  }
+  .cards-app .compose-win.minimized .compose-head::before {
+    display: none;
+  }
+  @keyframes c-sheet {
+    from {
+      transform: translateY(40%);
+      opacity: 0.4;
+    }
+  }
+}
+.cards-app .c-draft.solo {
+  margin-inline-start: 0;
+}
+
+.cards-app .toast {
+  border-radius: var(--radius-md);
+}
+@media (max-width: 900px) {
+  /* above the bottom bar */
+  .cards-app .toasts {
+    bottom: 100px;
+  }
+}
+[data-ui-theme='cards'][data-theme='light'] {
+  --toast-action: var(--c-accent-d);
+}
+[data-ui-theme='cards'][data-theme='dark'] {
+  --toast-action: var(--c-accent);
+}
+
+/* Density (Settings → Look → Text and spacing). Default is the look above. */
+[data-ui-theme='cards'][data-density='compact'] .cards-app .c-card {
+  gap: 10px;
+  padding-block: 8px;
+  padding-inline: 10px 12px;
+  border-radius: var(--radius-md);
+}
+[data-ui-theme='cards'][data-density='compact'] .cards-app .c-avatar,
+[data-ui-theme='cards'][data-density='compact'] .cards-app .c-avatar .avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 14px;
+}
+[data-ui-theme='cards'][data-density='compact'] .cards-app .c-snippet {
+  -webkit-line-clamp: 1;
+  font-size: 13px;
+  line-height: 18px;
+}
+[data-ui-theme='cards'][data-density='compact'] .cards-app .c-chips {
+  margin-top: 4px;
+}
+[data-ui-theme='cards'][data-density='comfortable'] .cards-app .c-card {
+  gap: 16px;
+  padding-block: 18px;
+  padding-inline: 18px 20px;
+}
+[data-ui-theme='cards'][data-density='comfortable'] .cards-app .c-avatar,
+[data-ui-theme='cards'][data-density='comfortable'] .cards-app .c-avatar .avatar {
+  width: 48px;
+  height: 48px;
+  font-size: 19px;
+}
+[data-ui-theme='cards'][data-density='comfortable'] .cards-app .c-snippet {
+  -webkit-line-clamp: 3;
+}
+
+/* the divider sits in the gap between list and reader (two gaps around it, net one) */
+.cards-app .split.right > .split-handle {
+  margin-block: 0;
+  margin-inline: -11px -10px;
+}
+
+/* Subject line: the text ellipsizes, signal chips sit right after it. */
+.cards-app .c-subject {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.cards-app .c-subject-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The action chip on its own line under the snippet starts flush, like the file chips. */
+.cards-app .c-body > .action-chip-wrap {
+  margin-inline-start: 0;
+  margin-top: 6px;
+}
+
+/* Menus opened from the drawer (a label's options, Favorites) sit above it. */
+body:has(.c-drawer.open) .popover {
+  z-index: 75;
+}

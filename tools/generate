@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# The checked-in files that are generated from other files in the repository:
+#
+#   tools/generate           rebuild them
+#   tools/generate --check   change nothing; exit 1 when one is out of date (CI runs this)
+#
+#   tools/i18n_server_texts.py      backend/mailr/i18n/en.json -> the web's en.json, Android strings_server.xml
+#   tools/android_tokens.py         frontend/src/styles -> Android look/WebTokens.kt
+#   tools/android_windows_zones.py  the server's Windows zone table -> Android data/cal/WindowsZones.kt
+#
+# They run with the backend's Python (backend/.venv, from `uv sync --all-extras`): the Windows zone
+# table comes from the icalendar package. The typed API files have their own command, tools/api-types.
+set -uo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+PY="$ROOT/backend/.venv/bin/python"
+[ -x "$PY" ] || { echo "generate: backend/.venv is missing (cd backend && uv sync --all-extras)" >&2; exit 2; }
+cd "$ROOT" || exit 2
+
+args=()
+[ "${1:-}" = "--check" ] && args=(--check)
+status=0
+for script in i18n_server_texts android_tokens android_windows_zones; do
+  echo "== tools/$script.py ${args[*]:-}"
+  "$PY" "tools/$script.py" "${args[@]}" || status=1
+done
+exit $status

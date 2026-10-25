@@ -1,0 +1,44 @@
+/* The frame the Calendar and Tasks apps sit in (router.tsx, features/calendar, features/tasks).
+   The apps style their own insides; this only makes the frame fill the main region. */
+
+.app-frame {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+}
+.app-frame-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+}
+.app-frame-head h1 {
+  font-size: 20px;
+  font-weight: 500;
+  margin: 0;
+}
+.app-frame-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+/* Classic: the app switcher (Mail, Calendar, Tasks, Notes) above the labels. */
+.sidebar .nav-apps {
+  margin-top: 8px;
+}
+.sidebar .nav-apps .nav-item.app-current {
+  font-weight: 600;
+}
+.sidebar .nav-apps .nav-item.app-current svg {
+  color: var(--primary);
+}
+/* Phones: the bottom bar is the app switcher, so the drawer leaves it out. */
+html[data-phone] .sidebar .nav-apps {
+  display: none;
+}
+.side-panel-head .side-panel-open {
+  white-space: nowrap;
+}

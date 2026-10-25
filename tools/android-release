@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+# Build the release APKs of both Android apps (mailr and Notes) and, with --publish, hand them to a
+# running mailr server, which serves them to phones (site/docs/admin/phone-apps.md).
+#
+#   tools/android-release                         # build both release APKs (android/build.sh assembleRelease)
+#   tools/android-release --publish <ssh-host>    # build, then publish both to the app container on that host
+#   tools/android-release --publish local         # ... to the app container on this machine
+#   tools/android-release --no-build --publish <ssh-host>   # publish the APKs already built
+#   options: --app mailr|notes (only one app), --project <compose project> (default mailr),
+#            --allow-older (pass on to app-publish)
+#
+# The container is the one with the Compose labels project=<project> and service=app. Each APK goes
+# in on standard input: docker exec -i <container> mailr app-publish --app <app>. The server checks
+# the package and reads the version from the APK. This script prints file names, versions and
+# checksums only: the signing settings stay in android/keystore.properties, read by Gradle.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+host="" build=1 project="mailr" only="" older=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --publish) host="${2:?--publish needs an ssh host, or local}"; shift 2 ;;
+    --no-build) build=0; shift ;;
+    --app) only="${2:?--app needs mailr or notes}"; shift 2 ;;
+    --project) project="${2:?--project needs a name}"; shift 2 ;;
+    --allow-older) older=(--allow-older); shift ;;
+    -h|--help) sed -n '2,15p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    *) echo "android-release: unknown option $1 (see --help)" >&2; exit 2 ;;
+  esac
+done
+case "$only" in ""|mailr|notes) ;; *) echo "android-release: --app is mailr or notes" >&2; exit 2 ;; esac
+
+declare -A APK=([mailr]=android/app/build/outputs/apk/release/app-release.apk
+                [notes]=android/notes/build/outputs/apk/release/notes-release.apk)
+declare -A TASK=([mailr]=:app:assembleRelease [notes]=:notes:assembleRelease)
+apps=(mailr notes)
+[ -n "$only" ] && apps=("$only")
+
+if [ "$build" = 1 ]; then
+  if [ ! -f android/keystore.properties ]; then
+    echo "android-release: android/keystore.properties is missing, so the APKs would be unsigned and" >&2
+    echo "  the server would refuse them. Build from the checkout that holds the release key." >&2
+    exit 1
+  fi
+  tasks=()
+  for a in "${apps[@]}"; do tasks+=("${TASK[$a]}"); done
+  echo "android-release: building ${apps[*]} (android/build.sh ${tasks[*]})"
+  android/build.sh "${tasks[@]}"
+fi
+
+# Every Glance widget class must survive R8 as its own class: Glance matches receivers to widgets by
+# class name, and merged widget classes draw one widget's content in another (proguard-rules.pro).
+declare -A MAPPING=([mailr]=android/app/build/outputs/mapping/release/mapping.txt
+                    [notes]=android/notes/build/outputs/mapping/release/mapping.txt)
+declare -A SRC=([mailr]=android/app/src/main [notes]=android/notes/src/main)
+for a in "${apps[@]}"; do
+  m="${MAPPING[$a]}"
+  [ -f "$m" ] || continue
+  while IFS= read -r cls; do
+    if ! grep -q "^$cls -> " "$m"; then
+      echo "android-release: $cls has no class of its own in the R8 mapping (merged into another widget)." >&2
+      echo "  Widgets would show each other's content. Check the GlanceAppWidget keep rule in proguard-rules.pro." >&2
+      exit 1
+    fi
+  done < <(grep -rhoE "^(package [a-z.]+|class [A-Za-z]+ : GlanceAppWidget\(\))" "${SRC[$a]}" --include='*.kt' \
+           | awk '/^package/{p=$2; next} {print p"."$2}')
+done
+
+for a in "${apps[@]}"; do
+  f="${APK[$a]}"
+  if [ ! -s "$f" ]; then
+    echo "android-release: $f is missing; build it first (drop --no-build)" >&2
+    exit 1
+  fi
+  meta="$(dirname "$f")/output-metadata.json"
+  ver=$(python3 -c 'import json,sys; e=json.load(open(sys.argv[1]))["elements"][0]; print("%s (%s)" % (e["versionName"], e["versionCode"]))' "$meta" 2>/dev/null || echo "?")
+  echo "android-release: $a $ver  $f  sha256 $(sha256sum "$f" | cut -d' ' -f1)"
+done
+
+[ -z "$host" ] && exit 0
+
+# Runs on the target host under sh, whatever the login shell is (no single quotes or backslashes in
+# it, so the quoting below reads the same in sh, bash, zsh and fish): find the app container by its
+# Compose labels, then publish standard input.
+script="set -e; c=\$(docker ps -q --filter label=com.docker.compose.project=$project --filter label=com.docker.compose.service=app | head -n1); if [ -z \"\$c\" ]; then echo \"no running app container of compose project $project\" >&2; exit 3; fi; exec docker exec -i \"\$c\" mailr app-publish \"\$@\""
+
+for a in "${apps[@]}"; do
+  echo "android-release: publishing $a to $host"
+  if [ "$host" = local ]; then
+    sh -c "$script" sh --app "$a" ${older[@]+"${older[@]}"} < "${APK[$a]}"
+  else
+    ssh -o BatchMode=yes "$host" "sh -c '$script' sh --app $a ${older[*]:-}" < "${APK[$a]}"
+  fi
+done

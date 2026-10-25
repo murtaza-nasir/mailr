@@ -1,0 +1,41 @@
+{
+  "_about": "Coded server errors for the Android ServerMessages test. The texts are copies of backend/mailr/i18n/en.json (errors.*), checked against it in backend/tests/test_i18n_route_errors.py.",
+  "messages": {
+    "templates.shortcut_taken": "another template already uses ;{{shortcut}}",
+    "dictation.not_set_up": "Dictation through the server is not set up.",
+    "calendar.no_invitation": "this message has no invitation",
+    "contacts.group_max_members": "a group holds at most {{max}} people",
+    "notes.version_not_found": "version not found",
+    "push.target_not_found": "push target not found"
+  },
+  "cases": [
+    {
+      "code": "templates.shortcut_taken",
+      "params": {
+        "shortcut": "sig"
+      }
+    },
+    {
+      "code": "dictation.not_set_up",
+      "params": {}
+    },
+    {
+      "code": "calendar.no_invitation",
+      "params": {}
+    },
+    {
+      "code": "contacts.group_max_members",
+      "params": {
+        "max": "500"
+      }
+    },
+    {
+      "code": "notes.version_not_found",
+      "params": {}
+    },
+    {
+      "code": "push.target_not_found",
+      "params": {}
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+# The memory relevance eval (tests/memory_eval.py, tests/test_memory_eval.py).
+# Synthetic: example people, example domains, nobody's real notes or mail.
+#
+# entities: the people and topics the user keeps notes about. `self: true` is the user ("About you").
+# notes: key → {text, about (an entity key or omitted), kind, pinned}.
+# requests: what the user asks, with the addresses of the email on screen (`emails`, as the
+#   assistant panel sends them). `use` lists the notes that should reach the prompt; `ok` lists notes
+#   that may (neither right nor wrong). Every other note in the prompt counts as a wrong one.
+#   Pinned notes are "always" notes the user chose and are counted apart.
+
+entities:
+  me: {kind: person, name: Alex Morgan, self: true}
+  joao: {kind: person, name: João Domingos, aliases: [João], emails: [joao@example.org]}
+  priya: {kind: person, name: Priya Raman, aliases: [Priya], emails: [priya@example.edu]}
+  sam: {kind: person, name: Sam Ortiz, aliases: [Sam], emails: [sam@example.net]}
+  cleo: {kind: person, name: Cleo Adams, aliases: [Cleo], emails: [cleo@example.com]}
+  lee: {kind: person, name: Kim Lee, aliases: [Dr. Lee], emails: [frontdesk@smiles.example]}
+  northwind: {kind: organization, name: Northwind Traders, aliases: [Northwind], domains: [northwind.example]}
+  hoa: {kind: organization, name: Maple Court HOA, aliases: [HOA]}
+  grant: {kind: project, name: Science foundation grant, aliases: [grant proposal]}
+
+notes:
+  teach: {about: me, kind: fact, text: "You teach Chemistry 101 and 210 at the university."}
+  teach_days: {about: me, kind: routine, text: "You teach on Tuesdays and Thursdays."}
+  late_meetings: {about: me, kind: preference, text: "You prefer meetings that start after 10 am."}
+  club: {about: me, kind: fact, text: "You are the faculty advisor of the student chess club."}
+  app: {about: me, kind: fact, text: "You maintain Lumen, an open-source photo-editing app."}
+  signoff: {about: me, kind: preference, pinned: true, text: "You sign emails with just your first name."}
+  board: {about: me, kind: fact, text: "You sit on the board of your homeowners' association."}
+  shop: {about: me, kind: routine, text: "You buy groceries at Northside Market on Saturdays."}
+  allergy: {about: me, kind: fact, text: "You are allergic to shellfish."}
+  joao_licence: {about: joao, kind: fact, text: "João Domingos is negotiating a software licence with you."}
+  joao_short: {about: joao, kind: preference, text: "João prefers short emails in English."}
+  priya_chair: {about: priya, kind: fact, text: "Priya Raman is your department chair."}
+  priya_schedule: {about: priya, kind: commitment, text: "Priya wants the course schedule by the 15th of each month."}
+  sam_accountant: {about: sam, kind: fact, text: "Sam Ortiz is your accountant."}
+  sam_receipts: {about: sam, kind: commitment, text: "Sam needs your receipts before the end of each quarter."}
+  cleo_thai: {about: cleo, kind: preference, text: "Cleo loves Thai food."}
+  cleo_birthday: {about: cleo, kind: fact, text: "Cleo's birthday is on 12 March."}
+  lee_phone: {about: lee, kind: fact, text: "Dr. Kim Lee is your dentist; appointments are booked by phone."}
+  nw_client: {about: northwind, kind: fact, text: "Northwind Traders is your main consulting client."}
+  nw_invoice: {about: northwind, kind: routine, text: "You send the Northwind invoice on the 1st of each month."}
+  hoa_meets: {about: hoa, kind: routine, text: "The Maple Court HOA meets on the first Monday of the month."}
+  grant_due: {about: grant, kind: commitment, text: "Your grant proposal to the science foundation is due on 30 November."}
+  car: {kind: fact, text: "Your car is due for a service in December."}
+  gym: {kind: routine, text: "You go to the gym on Monday and Wednesday mornings."}
+
+requests:
+  # Plain commands: nothing to add.
+  - {q: "Can you also add razors", use: []}
+  - {q: "Add milk and eggs to the shopping list", use: [], ok: [shop]}
+  - {q: "archive this", emails: [joao@example.org], use: [], ok: [joao_licence, joao_short]}
+  - {q: "snooze this until Monday", emails: [sam@example.net], use: [], ok: [sam_accountant, sam_receipts]}
+  - {q: "label this as Receipts", emails: [sam@example.net], use: [], ok: [sam_accountant, sam_receipts]}
+  - {q: "Delete the newsletter from yesterday", use: []}
+  - {q: "Create a task to call the plumber", use: []}
+  - {q: "Mark everything in the inbox as read", use: []}
+  - {q: "Move this to the Travel label", use: []}
+  - {q: "Remind me to water the plants tonight", use: []}
+  - {q: "Add 'grant budget' to my to-do list", use: [], ok: [grant_due]}
+  - {q: "Forward this to Cleo", use: [], ok: [cleo_thai, cleo_birthday]}
+  - {q: "How many unread emails do I have?", use: []}
+  - {q: "What's the weather tomorrow?", use: []}
+  - {q: "Translate this email into Spanish", emails: [joao@example.org], use: [], ok: [joao_licence, joao_short]}
+  # About you.
+  - {q: "What do I teach?", use: [teach], ok: [teach_days]}
+  - {q: "Which days do I teach?", use: [teach_days], ok: [teach]}
+  - {q: "Find a time for a meeting next week", use: [late_meetings], ok: [teach_days, gym]}
+  - {q: "Am I on any boards?", use: [board], ok: [hoa_meets]}
+  - {q: "Tell me about the chess club meeting on Thursday", use: [club], ok: [teach_days]}
+  - {q: "Any new issues from the people who use my photo-editing app?", use: [app]}
+  - {q: "What groceries do I usually buy, and where?", use: [shop]}
+  - {q: "Can I eat at the seafood place Cleo suggested?", use: [allergy], ok: [cleo_thai, cleo_birthday]}
+  - {q: "When is my car due for a service?", use: [car]}
+  # People.
+  - {q: "Draft a reply to João about the licence terms", emails: [joao@example.org], use: [joao_licence, joao_short]}
+  - {q: "Prepare me for my meeting with João tomorrow", use: [joao_licence, joao_short]}
+  - {q: "What did João say about the licence?", use: [joao_licence], ok: [joao_short]}
+  - {q: "Who is Priya?", use: [priya_chair], ok: [priya_schedule]}
+  - {q: "When does Priya need the course schedule?", use: [priya_schedule], ok: [priya_chair]}
+  - {q: "Reply to Priya that the schedule is attached", emails: [priya@example.edu], use: [priya_schedule], ok: [priya_chair]}
+  - {q: "Send Sam my receipts for this quarter", use: [sam_receipts], ok: [sam_accountant]}
+  - {q: "Thank Sam for the help with my taxes", emails: [sam@example.net], use: [sam_accountant], ok: [sam_receipts]}
+  - {q: "Who is my accountant?", use: [sam_accountant], ok: [sam_receipts]}
+  - {q: "What should I get Cleo for her birthday?", use: [cleo_birthday], ok: [cleo_thai]}
+  - {q: "Book dinner with Cleo on Friday", use: [cleo_thai], ok: [cleo_birthday, allergy]}
+  - {q: "Who is my dentist and how do I book?", use: [lee_phone]}
+  # Topics.
+  - {q: "When is the HOA meeting?", use: [hoa_meets], ok: [board]}
+  - {q: "Write to the HOA board about the broken gate", use: [hoa_meets], ok: [board]}
+  - {q: "When should I send the Northwind invoice?", use: [nw_invoice], ok: [nw_client]}
+  - {q: "Summarise the latest emails from Northwind", use: [nw_client], ok: [nw_invoice]}
+  - {q: "What's the deadline for my grant proposal?", use: [grant_due]}
+  - {q: "Where should we go for dinner tonight?", use: [], ok: [cleo_thai, allergy]}
+  # Held out: written after the thresholds were set (7 Oct 2026), to check they were not fitted to
+  # the requests above. MAILR_MEMORY_EVAL_SET=held_out runs only these.
+  - {held_out: true, q: "Put toothpaste on the list", use: []}
+  - {held_out: true, q: "Star this one", emails: [priya@example.edu], use: [], ok: [priya_chair, priya_schedule]}
+  - {held_out: true, q: "Unsubscribe me from this newsletter", use: []}
+  - {held_out: true, q: "Can you summarise this thread?", emails: [joao@example.org], use: [], ok: [joao_licence, joao_short]}
+  - {held_out: true, q: "What's Priya's role?", use: [priya_chair], ok: [priya_schedule]}
+  - {held_out: true, q: "Do I have any allergies?", use: [allergy]}
+  - {held_out: true, q: "When do I go to the gym?", use: [gym]}
+  - {held_out: true, q: "Who handles my taxes?", use: [sam_accountant], ok: [sam_receipts]}
+  - {held_out: true, q: "Is anything of mine due at the end of November?", use: [grant_due], ok: [car]}
+  - {held_out: true, q: "What kind of food does Cleo like?", use: [cleo_thai], ok: [cleo_birthday]}
+  - {held_out: true, q: "Who is my biggest client?", use: [nw_client], ok: [nw_invoice]}
+  - {held_out: true, q: "How do I make an appointment with Dr. Lee?", use: [lee_phone]}
+  - {held_out: true, q: "What's the name of the app I maintain?", use: [app]}
+  - {held_out: true, q: "Which store do I shop at?", use: [shop]}
+  - {held_out: true, q: "Write a short note to the HOA about the pool hours", use: [hoa_meets], ok: [board]}
+  - {held_out: true, q: "What time do my classes start?", use: [teach_days], ok: [teach]}

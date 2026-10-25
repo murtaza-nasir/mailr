@@ -1,0 +1,1331 @@
+.list-pane {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 48px;
+  padding-block: 0;
+  padding-inline: 12px 8px;
+  flex: none;
+  border-bottom: 1px solid transparent;
+  min-width: 0;
+}
+.toolbar.scrolled {
+  border-bottom-color: var(--divider);
+}
+.toolbar .sel-group {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-xs);
+  padding-block: 0;
+  padding-inline: 6px 2px;
+  height: 32px;
+}
+.toolbar .sel-group:hover {
+  background: var(--hover);
+}
+.toolbar .sel-caret {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  color: var(--text-2);
+}
+.toolbar .sep {
+  width: 1px;
+  height: 20px;
+  background: var(--divider);
+  margin: 0 6px;
+}
+.toolbar .range {
+  font-size: 12px;
+  color: var(--text-2);
+  padding: 0 8px;
+  white-space: nowrap;
+  border-radius: var(--radius-xs);
+}
+.toolbar .icon-btn,
+.conv-view-head .icon-btn {
+  --icon-btn: calc(36px * var(--dz, 1));
+}
+
+.list-scroll {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+  position: relative;
+}
+
+/* The tab strip scrolls sideways when the tabs do not fit (components/ScrollTabs.tsx). */
+.cat-tabs-wrap {
+  flex: none;
+  border-bottom: 1px solid var(--divider);
+}
+.cat-tabs {
+  display: flex;
+}
+.cat-tab {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  min-width: 150px;
+  max-width: 250px;
+  flex: 1 0 auto;
+  scroll-snap-align: start;
+  white-space: nowrap;
+  padding: 0 16px;
+  color: var(--text-2);
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  text-align: start;
+}
+.cat-tab:hover {
+  background: var(--hover);
+}
+.cat-tab[aria-selected='true'] {
+  color: var(--primary);
+}
+.cat-tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 8px;
+  inset-inline-end: 8px;
+  bottom: 0;
+  height: 3px;
+  border-radius: 3px 3px 0 0;
+  background: var(--primary);
+}
+.cat-tab .lucide {
+  width: 20px;
+  height: 20px;
+}
+.cat-tab-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* The count sits right after the name (a wide tab leaves its spare room after the count). */
+.cat-tab .new,
+.cat-tab .count,
+.cat-tab .due {
+  margin-inline-start: -4px;
+  font-variant-numeric: tabular-nums;
+  min-width: 20px;
+  text-align: center;
+  flex: none;
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  /* The primary's own text: white on every style's light primary, and whichever text the colour
+     engine picked for a custom colour (a light seed gets dark text). */
+  color: var(--on-primary);
+  background: var(--primary);
+}
+/* "All conversations": a neutral number, not the accent "new" pill. */
+.cat-tab .count {
+  color: var(--text-2);
+  background: var(--chip-bg);
+}
+/* A deadline, in the Due chip's colours: red within two days or overdue. */
+.cat-tab .due {
+  color: var(--warning-fg);
+  background: var(--warning-container);
+}
+.cat-tab .due.urgent {
+  color: var(--danger);
+  background: var(--danger-container);
+}
+/* Compact indicators (Desk, phones): a small number, or a coloured dot for a deadline. */
+.cat-tab .ti-num {
+  margin-inline-start: -4px;
+  font-variant-numeric: tabular-nums;
+  flex: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-3);
+}
+.cat-tab .ti-num.ti-unread {
+  color: var(--primary);
+}
+.cat-tab .ti-dot {
+  margin-inline-start: -4px;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--warning-fg);
+}
+.cat-tab .ti-dot.urgent {
+  background: var(--danger);
+}
+/* "Show more on tabs" (InboxTabs.tsx): a tab with all its indicators keeps its whole name and
+   takes only the width it needs (Classic's other tabs stop growing at 250 px, so it would take
+   all the spare room). A dot separates pills only in themes whose pills have no fill (Office,
+   Focus). */
+.cat-tab.ti-more {
+  max-width: none;
+  flex-grow: 0;
+}
+.cat-tab .ti-sep {
+  display: none;
+  flex: none;
+  margin: 0 -2px;
+  color: var(--text-3);
+  font-size: 12px;
+}
+/* The hidden copy of the tabs that InboxTabs measures: laid out at their natural widths, clipped
+   to nothing, never seen or reached. */
+.cat-tabs-measure {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+.cat-tabs-measure .cat-tab {
+  width: max-content;
+  flex: none;
+}
+
+/* A section's header is a label over its rows, not a row: a shorter tinted band with a small
+   secondary-coloured name, and a gap above every section after the first. */
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 8px 0 8px;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-2);
+  border-bottom: 1px solid var(--divider);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface-container);
+}
+.section {
+  background: var(--surface);
+}
+[data-theme='dark'] .section {
+  background: var(--surface-dim);
+}
+.section + .section {
+  padding-top: 16px;
+}
+.section + .section > .section-head {
+  border-top: 1px solid var(--divider);
+}
+.section-head > .icon-btn.xs {
+  color: var(--text-3);
+}
+/* The 24px fold button's target reaches 32px. */
+.section-head > button.icon-btn.xs::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+}
+.section-head .title {
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-xs);
+}
+.section-head .range {
+  font-size: 12px;
+  color: var(--text-2);
+  font-weight: 400;
+  padding: 0 8px;
+}
+/* The count as a small pill right after the name (it used to be "· 4"). */
+.section-head .section-scope {
+  margin-inline-start: 6px;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.section-head .count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 7px;
+  margin-inline-start: 4px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--text-2);
+  background: var(--surface);
+}
+[data-theme='dark'] .section-head .count {
+  background: var(--surface-high);
+}
+/* A one-section tab's header: same place and height, nothing to fold. */
+.section-head .section-chev-space {
+  visibility: hidden;
+  pointer-events: none;
+}
+.section-head.fixed .title {
+  cursor: default;
+}
+/* The section's name gives way before its count and actions on a narrow pane. */
+.section-head.with-actions {
+  container: sechead / inline-size;
+}
+.section-head .title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.section-head .count {
+  flex: none;
+}
+/* Select all in this section (web.section). */
+.section-head .section-check-hit {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  /* The box centred over the rows' checkboxes (measured per theme). */
+  margin-block: 0;
+  margin-inline: 0 -6px;
+}
+.section-head .section-check {
+  margin: 0;
+}
+[data-ui-theme='classic'][data-density='compact'] .section-head .section-check-hit {
+  margin-inline-start: -2px;
+}
+/* Actions on the whole section: on hover or keyboard focus on a desktop, always (compact) on
+   touch screens and phone widths. */
+.section-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-inline-start: auto;
+  padding-inline-start: 8px;
+  flex: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--dur) var(--ease);
+}
+.section-head:hover .section-actions,
+.section-head:focus-within .section-actions,
+.section-actions.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.section-act {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  height: 26px;
+  padding: 0 8px;
+  border-radius: var(--radius-full);
+  color: var(--text-2);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  white-space: nowrap;
+  transition: background var(--dur) var(--ease);
+}
+.section-act:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+.section-act:focus-visible,
+.section-actions .icon-btn:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+.section-act > svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.section-act .lbl {
+  display: none;
+}
+.section-actions .icon-btn.sm {
+  --icon-btn: 26px;
+  --icon: 16px;
+}
+/* Small pills in the band, 32px targets. */
+.section-act::after,
+.section-actions .icon-btn.sm::after {
+  content: '';
+  position: absolute;
+  inset: -3px 0;
+}
+@container sechead (min-width: 600px) {
+  .section-act .lbl {
+    display: inline;
+  }
+}
+/* Touch: each section action and the select-all box get a 44 px target, with room between them
+   (the pills stay their size). */
+@media (pointer: coarse) {
+  .section-actions {
+    gap: 18px;
+  }
+  .section-act::after,
+  .section-actions .icon-btn.sm::after {
+    inset: -9px -9px;
+  }
+  .section-actions .icon-btn.sm {
+    min-width: 26px;
+    min-height: 26px;
+  }
+  .section-head .section-check-hit {
+    position: relative;
+  }
+  .section-more {
+    min-height: 44px;
+  }
+  .section-head .section-check-hit::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+  }
+}
+@media (hover: none), (max-width: 600px) {
+  .section-actions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .section-act {
+    padding: 0 6px;
+  }
+}
+.section-more {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  padding: 8px 52px;
+  border: 0;
+  border-bottom: 1px solid var(--divider);
+  background: transparent;
+  color: var(--primary);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: start;
+}
+.section-more:hover {
+  background: var(--hover);
+}
+/* "Show N more", "Show all N" and "Show fewer" under a capped section, side by side. */
+.section-more-row {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--divider);
+}
+.section-more-row .section-more {
+  width: auto;
+  border-bottom: 0;
+}
+.section-more-row .section-more + .section-more {
+  padding-inline-start: 16px;
+}
+/* A section shown alone: "← Name" is one button back to all sections. The arrow sits as far from
+   the checkbox as from the name, and the target is the whole pair. */
+.section-head .section-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  height: 28px;
+  padding-block: 0;
+  padding-inline: 8px 10px;
+  /* The checkbox's 32px target already leaves room: 10px from the box to the arrow, as to the name. */
+  margin-inline-start: -3px;
+  border: 0;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--text-2);
+  font: inherit;
+  cursor: pointer;
+}
+.section-head .section-back:hover {
+  background: var(--hover);
+  color: var(--text);
+}
+.section-head .section-back:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+.section-head .section-back svg {
+  flex: none;
+  color: var(--text-3);
+}
+.section-head .section-back:hover svg {
+  color: inherit;
+}
+.section-back-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* The main section's pager and "Show only this section", always shown (not on hover). */
+.section-tools {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+  margin-inline-start: auto;
+  padding-inline-start: 8px;
+}
+.section-actions + .section-tools {
+  margin-inline-start: 4px;
+}
+.section-tools .section-range {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-2);
+  padding: 0 6px;
+  white-space: nowrap;
+}
+.section-tools .icon-btn.xs {
+  color: var(--text-3);
+}
+/* A narrow head (Office's or Cards' list pane) keeps the section's name readable: the page's
+   numbers go, the arrows stay. */
+@container sechead (max-width: 520px) {
+  .section-tools .section-range,
+  .section-tools .section-focus {
+    display: none;
+  }
+}
+.section-more:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+/* An empty section is exactly one row tall, so a section that loses its last row keeps its height
+   and nothing below it moves. Each theme sets --section-empty-h from the
+   variable its rows use (Classic: --row-h, and --row-h-narrow in a narrow list). The text is one
+   line, centred, cut with an ellipsis. lib/motion.ts measures it when a section's last row leaves. */
+.list-pane {
+  --section-empty-h: var(--row-h);
+}
+.list-pane.narrow {
+  --section-empty-h: var(--row-h-narrow);
+}
+.section-empty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: var(--section-empty-h);
+  padding-block: 0;
+  padding-inline: 52px 16px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: var(--text-3);
+  font-size: 13px;
+  border-bottom: 1px solid var(--divider);
+}
+.section-empty-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.section-empty > .btn {
+  flex: none;
+}
+
+/* ---------- rows ---------- */
+
+.conv-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--row-h);
+  padding-block: 0;
+  padding-inline: 8px 16px;
+  border-bottom: 1px solid var(--divider);
+  background: var(--row-read-bg);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  transition: box-shadow var(--dur) var(--ease);
+  font-size: 14px;
+  letter-spacing: 0.2px;
+}
+.conv-row.unread {
+  background: var(--row-unread-bg);
+}
+.conv-row.unread .sender,
+.conv-row.unread .subject,
+.conv-row.unread .date {
+  font-weight: 700;
+  color: var(--text);
+}
+.conv-row.selected {
+  background: var(--row-selected);
+}
+.conv-row:hover {
+  box-shadow: var(--row-hover-shadow);
+  z-index: 1;
+}
+.conv-row.focused::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--row-focused-bar);
+}
+.conv-row.with-chips {
+  height: var(--row-h-chips);
+  align-items: flex-start;
+  padding-top: 4px;
+}
+/* Two-line rows: every cell centres on the first (subject) line, a 32px band at the top. */
+.conv-row.with-chips .sender,
+.conv-row.with-chips .tail {
+  line-height: 32px;
+  min-height: 32px;
+}
+.conv-row.with-chips .content {
+  padding-top: 6px;
+}
+.conv-row .lead {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex: none;
+}
+.conv-row .lead .icon-btn {
+  --icon-btn: calc(32px * var(--dz, 1));
+  --icon: calc(20px * var(--dzi, 1));
+  color: var(--text-3);
+}
+.conv-row .star-on {
+  color: var(--star) !important;
+}
+.conv-row .star-on .lucide {
+  fill: var(--star);
+}
+.importance {
+  display: inline-grid;
+  place-items: center;
+  width: var(--importance-box, 32px);
+  height: var(--importance-box, 32px);
+  padding: 0;
+  line-height: 0;
+  flex: none;
+  color: var(--text-3);
+  border-radius: 50%;
+}
+.importance:hover {
+  background: var(--hover);
+}
+.importance svg {
+  display: block;
+  width: 18px;
+  height: 12px;
+}
+.importance.on svg path {
+  fill: var(--important);
+  stroke: var(--important-border);
+}
+.conv-row .sender {
+  flex: 0 0 200px;
+  width: 200px;
+  padding-block: 0;
+  padding-inline: 8px 24px;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.conv-row .sender .count {
+  color: var(--text-3);
+  font-weight: 400;
+  font-size: 12px;
+  margin-inline-start: 2px;
+}
+.conv-row .sender .draft {
+  color: var(--danger);
+  font-weight: 400;
+}
+.conv-row .content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.conv-row .line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  /* The Due chip shortens to its date on a narrow line (components.css). */
+  container: rowline / inline-size;
+}
+/* The subject takes the width it needs (no cap: it used to stop at 70% with an ellipsis while the
+   line still had room); the snippet after it only gets what is left
+   (flex 1 1 0), and the chips never shrink, so a long subject gives way before them instead of
+   pushing the Due chip under the line's clip ("Due O"). */
+.conv-row .subject {
+  color: var(--text);
+  flex: 0 1 auto;
+  min-width: min(8em, 30%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.conv-row .snippet {
+  color: var(--text-3);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 1 1 0;
+}
+.conv-row .att-chips {
+  display: flex;
+  gap: 8px;
+  overflow: hidden;
+}
+.att-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  max-width: 200px;
+  padding-block: 0;
+  padding-inline: 8px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-2);
+  background: var(--surface);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: none;
+}
+[data-theme='dark'] .att-chip {
+  background: transparent;
+}
+.att-chip .lucide {
+  width: 16px;
+  height: 16px;
+  color: var(--danger);
+  flex: none;
+}
+.conv-row .tail {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 80px;
+  padding-inline-start: 12px;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-2);
+}
+.conv-row .date {
+  white-space: nowrap;
+}
+.conv-row .tail .lucide.clip {
+  width: 16px;
+  height: 16px;
+  color: var(--text-3);
+}
+.conv-row .snoozed {
+  color: var(--warning-fg);
+  font-weight: 500;
+}
+.conv-row .hover-actions {
+  display: none;
+  align-items: center;
+  gap: 0;
+  position: absolute;
+  inset-inline-end: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: inherit;
+  padding-inline-start: 12px;
+}
+.conv-row.with-chips .hover-actions {
+  top: 2px;
+  transform: none;
+}
+.conv-row .hover-actions .icon-btn {
+  --icon-btn: calc(36px * var(--dz, 1));
+}
+.conv-row:hover .hover-actions,
+.conv-row:focus-within .hover-actions {
+  display: flex;
+}
+.conv-row:hover .tail,
+.conv-row:focus-within .tail {
+  visibility: hidden;
+}
+
+.row-skeleton {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: var(--row-h);
+  padding-block: 0;
+  padding-inline: 20px 16px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.list-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+/* Narrow list (reading pane right, or mobile): two-line rows */
+.narrow .conv-row {
+  height: auto;
+  min-height: 72px;
+  align-items: flex-start;
+  padding-block: 10px;
+  padding-inline: 4px 12px;
+}
+/* The usual narrow row has a third line; an empty section is as tall (--section-empty-h). */
+.narrow .conv-row:has(> .content > .line + .line) {
+  min-height: var(--row-h-narrow);
+}
+.narrow .conv-row .sender {
+  flex: 1;
+  width: auto;
+  padding: 0;
+}
+.narrow .conv-row .content {
+  width: 100%;
+  min-width: 0;
+}
+.narrow .conv-row > .avatar {
+  margin-block: 2px 0;
+  margin-inline: 2px 12px;
+}
+.narrow .conv-row .top {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.narrow .conv-row .subject {
+  max-width: none;
+  flex: 1;
+}
+.narrow .conv-row .snippet {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+.narrow .conv-row .hover-actions {
+  display: none !important;
+}
+.narrow .conv-row:hover .tail {
+  visibility: visible;
+}
+
+/* ---------- split panes ---------- */
+
+.split {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+}
+.split.right > .list-pane {
+  flex: 0 0 auto;
+  width: var(--list-w, clamp(320px, 38%, 560px));
+  border-inline-end: 1px solid var(--divider);
+}
+.split.below {
+  flex-direction: column;
+}
+.split.below > .list-pane {
+  flex: 0 0 var(--list-h, 45%);
+  border-bottom: 1px solid var(--divider);
+}
+/* The divider sits on the list's border; a wide invisible grab area, a line when active. */
+.split-handle {
+  position: relative;
+  z-index: 3;
+  flex: 0 0 auto;
+  width: 9px;
+  margin-block: 0;
+  margin-inline: -4px -5px;
+  cursor: col-resize;
+  touch-action: none;
+  outline: none;
+}
+.split.below > .split-handle {
+  width: auto;
+  height: 9px;
+  margin: -4px 0 -5px;
+  cursor: row-resize;
+}
+.split-handle::after {
+  content: '';
+  position: absolute;
+  inset: 0 3px;
+  border-radius: 2px;
+  background: var(--primary);
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease);
+}
+.split.below > .split-handle::after {
+  inset: 3px 0;
+}
+.split-handle:hover::after,
+.split-handle:focus-visible::after,
+.split-handle.dragging::after {
+  opacity: 0.6;
+}
+body.split-dragging {
+  user-select: none;
+}
+body.split-dragging iframe {
+  pointer-events: none;
+}
+.split .reader-pane {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.reader-empty {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  color: var(--text-3);
+  text-align: center;
+}
+
+.search-chips {
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px;
+  flex-wrap: wrap;
+  flex: none;
+}
+
+/* "All 25 conversations on this page are selected. Select all 432…" */
+.select-all-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 12px;
+  padding: 8px 16px;
+  font-size: 13px;
+  background: var(--hover);
+  border-bottom: 1px solid var(--divider);
+  text-align: center;
+}
+
+.scheduled-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.scheduled-row {
+  display: grid;
+  grid-template-columns: minmax(120px, 220px) 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding-block: 4px;
+  padding-inline: 16px 8px;
+  border-bottom: 1px solid var(--divider);
+  font-size: 14px;
+}
+.scheduled-row:hover {
+  background: var(--hover);
+}
+.scheduled-row .who,
+.scheduled-row .what {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.scheduled-row .subject {
+  font-weight: 500;
+}
+.scheduled-row .when {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  font-size: 13px;
+  white-space: nowrap;
+}
+.scheduled-row .actions {
+  display: flex;
+}
+@media (max-width: 700px) {
+  .scheduled-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 'who actions' 'what actions' 'when actions';
+    padding-block: 8px;
+    padding-inline: 16px 8px;
+  }
+  .scheduled-row .who { grid-area: who; }
+  .scheduled-row .what { grid-area: what; }
+  .scheduled-row .when { grid-area: when; }
+  .scheduled-row .actions { grid-area: actions; }
+}
+
+/* Virtualised rows slide into a gap left by a removed row (lib/motion.ts). */
+.list-scroll.rows-moving .v-row {
+  transition: transform 50ms cubic-bezier(0.2, 0, 0, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .list-scroll.rows-moving .v-row {
+    transition: none;
+  }
+}
+
+/* A one-line row with an action chip: on hover the line makes room for the hover buttons, so the
+   chip stays clickable (they sit on top of the line's end). */
+.conv-row.has-action:not(.with-chips):hover .content,
+.conv-row.has-action:not(.with-chips):focus-within .content {
+  padding-inline-end: calc(4 * 36px * var(--dz, 1) + 12px);
+}
+.conv-row .att-chips .action-chip-wrap {
+  margin-inline-start: 0;
+}
+/* With chips on the line the subject shrinks last and keeps a readable minimum. */
+.narrow .conv-row .line .subject {
+  flex: 0 1 auto;
+  min-width: min(6em, 40%);
+}
+
+/* The row kit (features/mail/RowParts.tsx): the parts every theme's row shares. Themes place
+   them; these rules keep them the same size and colour everywhere. */
+.row-muted {
+  flex: none;
+  color: var(--text-3);
+}
+.o-marker,
+.f-marker,
+.c-marker,
+.d-marker {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  --importance-box: 22px;
+}
+.d-marker {
+  margin-inline-end: 2px;
+}
+.att-chip .att-name,
+.c-att .att-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.att-chip .att-n,
+.c-att .att-n {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-3);
+}
+.label-chip.more {
+  background: var(--surface-container);
+  color: var(--text-2);
+}
+.d-from .row-muted {
+  margin-inline-start: 6px;
+  vertical-align: -1px;
+}
+.c-marker {
+  margin-inline-start: -5px;
+}
+/* Cards: the avatar's grid cell takes no box of its own. */
+.c-cell {
+  display: contents;
+}
+/* A group heading's row and cell wrappers in the list grid (MailList EntryView) draw no box. */
+.grid-contents {
+  display: contents;
+}
+/* The pager's section name in a tab with several sections. */
+.range .range-of {
+  display: inline-block;
+  max-width: 14em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  color: var(--text-3);
+}
+.range .range-sep {
+  margin: 0 6px;
+  color: var(--text-3);
+}
+
+/* The Outbox: the Scheduled rows, with "Not sent" in the danger colour. */
+.outbox-row .when.bad {
+  color: var(--danger);
+}
+.outbox-row .outbox-why {
+  color: var(--text-2);
+  font-weight: 400;
+}
+.outbox-row .send-status-details {
+  display: inline-block;
+  margin-inline-start: 6px;
+  white-space: normal;
+}
+/* The " - " between subject and snippet is its own item, so the snippet can take its own direction
+   (dir="auto") and still be cut at its end. The negative margin keeps the old spacing. */
+.conv-row .snippet-sep {
+  flex: none;
+  color: var(--text-3);
+  margin-inline-end: -6px;
+}
+
+/* Account colours (features/layout/accounts.tsx; backend core/mailaccounts.ACCOUNT_HUES): a dot of
+   the account on rows of the unified list and in the navigation, each hue in a light and a dark tone. */
+.acct-dot {
+  --acct-c: #1a73e8;
+  display: inline-block;
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--acct-c);
+  vertical-align: middle;
+}
+.acct-dot[data-hue='blue'] { --acct-c: #1a73e8; }
+.acct-dot[data-hue='orange'] { --acct-c: #e8710a; }
+.acct-dot[data-hue='green'] { --acct-c: #188038; }
+.acct-dot[data-hue='purple'] { --acct-c: #9334e6; }
+.acct-dot[data-hue='pink'] { --acct-c: #d01884; }
+.acct-dot[data-hue='teal'] { --acct-c: #129eaf; }
+.acct-dot[data-hue='red'] { --acct-c: #d93025; }
+.acct-dot[data-hue='yellow'] { --acct-c: #b08c00; }
+[data-theme='dark'] .acct-dot[data-hue='blue'] { --acct-c: #8ab4f8; }
+[data-theme='dark'] .acct-dot[data-hue='orange'] { --acct-c: #fcad70; }
+[data-theme='dark'] .acct-dot[data-hue='green'] { --acct-c: #81c995; }
+[data-theme='dark'] .acct-dot[data-hue='purple'] { --acct-c: #c58af9; }
+[data-theme='dark'] .acct-dot[data-hue='pink'] { --acct-c: #ff8bcb; }
+[data-theme='dark'] .acct-dot[data-hue='teal'] { --acct-c: #78d9ec; }
+[data-theme='dark'] .acct-dot[data-hue='red'] { --acct-c: #f28b82; }
+[data-theme='dark'] .acct-dot[data-hue='yellow'] { --acct-c: #fdd663; }
+.row-accounts {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 3px;
+  margin-inline-end: 4px;
+}
+/* The account groups in the sidebar-style navs. The heading's dot sits in the place of the other
+   rows' icons and the address starts right after it, as their names do (the address
+   must not sit far from its dot). Long addresses end in an ellipsis. */
+.acct-group-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+.acct-group-head > .acct-group-toggle {
+  flex: 1;
+  min-width: 0;
+}
+.acct-lead {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+}
+.nav-item.acct-group-toggle {
+  gap: 8px;
+}
+.acct-sec .acct-dot,
+.o-section-toggle .acct-dot {
+  margin-inline: 2px 4px;
+}
+.acct-group-toggle .name,
+.acct-sec-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: start;
+}
+.acct-sec {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+/* The one-line hint that offers "Show each account separately" (features/layout/accounts.tsx):
+   small text in the navigation, a link and a ✕, never wider than the column. */
+.acct-hint {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  margin-block: 2px;
+  margin-inline: 0 4px;
+  padding-inline-start: 26px;
+  font-size: 12.5px;
+  color: var(--text-2);
+}
+.acct-hint-link {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.acct-hint-link:hover {
+  color: var(--text);
+}
+.acct-hint-close {
+  flex: none;
+}
+/* Workspace's folder column is narrower: the hint starts at the folders' own edge. */
+.acct-hint.o-acct-hint {
+  padding-inline-start: 4px;
+  font-size: 12px;
+}
+/* The ⋮ (New folder) of an account's heading: over the row's end, shown on hover or focus, and
+   always on touch screens. */
+.acct-group-head .acct-more {
+  position: absolute;
+  inset-inline-end: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+.acct-group-head:hover .acct-more,
+.acct-group-head:focus-within .acct-more,
+.o-section-head:hover .acct-more,
+.o-section-head:focus-within .acct-more {
+  opacity: 1;
+}
+.o-section-head .acct-more {
+  opacity: 0;
+}
+@media (hover: none) {
+  .acct-group-head .acct-more,
+  .o-section-head .acct-more {
+    opacity: 1;
+  }
+}
+.acct-group-head:hover .acct-group-toggle .name,
+.acct-group-head:focus-within .acct-group-toggle .name {
+  margin-inline-end: 24px;
+}
+.acct-group-head:hover .acct-group-toggle .count {
+  visibility: hidden;
+}
+/* A label made in an account carries that account's dot in the unified Labels list, right after
+   its name. */
+.nav-item .name:has(+ .label-home) {
+  flex: 0 1 auto;
+}
+.nav-item .label-home {
+  margin-inline-start: -10px; /* the row's 18 px gap less 10: 8 px after the name */
+}
+.office-app .o-folders .nav-item .label-home {
+  margin-inline-start: -2px; /* 10 px gap */
+}
+.desk-app .d-labels-tree .nav-item .label-home {
+  margin-inline-start: 0; /* 6 px gap */
+}
+/* Collapsed to icons, the Classic sidebar hides the account groups' rows. */
+.sidebar.collapsed:not(.peek):not(.mobile-open) .nav-accounts .acct-group > :not(.acct-group-head),
+.sidebar.collapsed:not(.peek):not(.mobile-open) .acct-more {
+  display: none;
+}
+
+/* An account group's "More folders" row (features/layout/Sidebar.tsx AccountFolders) and the
+   "Pin here" line that shows while a folder is dragged. */
+.acct-more-folders .count {
+  margin-inline-end: 0;
+}
+.acct-more-folders .more-chevron {
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: var(--text-2);
+}
+.acct-more-folders .count + .more-chevron {
+  margin-inline-start: -8px;
+}
+.acct-more-folders:not(:has(.count)) .more-chevron {
+  margin-inline-start: auto;
+}
+.nav-item.acct-more-folders .more-chevron .lucide {
+  width: 16px;
+  height: 16px;
+}
+.desk-app .d-labels-tree .acct-more-folders > .lucide {
+  width: 15px;
+  height: 15px;
+}
+.desk-app .d-labels-tree .nav-item.acct-more-folders .more-chevron .lucide {
+  width: 14px;
+  height: 14px;
+}
+.desk-app .d-labels-tree .acct-more-folders .count + .more-chevron {
+  margin-inline-start: 2px;
+}
+.nav-item.pin-zone {
+  color: var(--primary);
+  cursor: default;
+  outline: 1.5px dashed color-mix(in srgb, var(--primary) 55%, transparent);
+  outline-offset: -3px;
+}
+.nav-item.pin-zone.drop-over {
+  background: color-mix(in srgb, var(--primary) 14%, transparent);
+}
+.sidebar.collapsed:not(.peek):not(.mobile-open) .acct-more-folders,
+.sidebar.collapsed:not(.peek):not(.mobile-open) .pin-zone {
+  display: none;
+}

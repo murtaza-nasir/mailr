@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block analytics %}
+  {{ super() }}
+  {% set a = config.extra.mailr_analytics %}
+  {% if a and a.src and a.id %}
+  <script defer src="{{ a.src }}" data-website-id="{{ a.id }}"{% if a.host %} data-host-url="{{ a.host }}"{% endif %}></script>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onb_tagline">Mail on your own server</string>
+    <string name="onb_notif_title">Notifications</string>
+    <string name="onb_notif_body">For important mail, reminders and approvals.</string>
+    <string name="onb_notif_action">Allow notifications</string>
+    <string name="onb_notif_done">Notifications are on.</string>
+    <string name="onb_battery_title">Battery</string>
+    <string name="onb_battery_body">Mail can be delayed by battery saving. On the next screen, choose Mailr, then “Allow” or “Don’t optimise”.</string>
+    <string name="onb_battery_action">Open battery settings</string>
+    <string name="onb_battery_done">Background use is allowed.</string>
+    <string name="onb_push_title">Instant mail</string>
+    <string name="onb_push_body_choose">Several notification apps are installed. Choose one.</string>
+    <string name="onb_push_body">With ntfy, a free notification app, new mail arrives instantly. Without it, mail is checked every 15 minutes.</string>
+    <string name="onb_push_action_choose">Choose an app</string>
+    <string name="onb_push_action_get">Get ntfy</string>
+    <string name="onb_push_done_live">Live connection on. New mail arrives instantly.</string>
+    <string name="onb_push_done">Instant mail is working, through %1$s.</string>
+    <string name="onb_push_helper_app">your notification app</string>
+    <string name="onb_title">Phone setup</string>
+    <string name="onb_intro">Three quick settings for this phone. You can change them later in Settings.</string>
+    <string name="onb_copy_open_ntfy">Copy and open ntfy</string>
+    <string name="onb_use_live">Use a live connection instead (no extra app; a permanent notification and more battery use)</string>
+    <string name="onb_done_for_now">Done for now</string>
+    <string name="onb_go_inbox">Go to my inbox</string>
+    <string name="onb_finish_web_body">No mail account connected yet. Connect one in the setup guide at %1$s.</string>
+    <string name="onb_finish_web_title">Finish setup on the web</string>
+    <string name="onb_finish_web_action">Open setup guide</string>
+</resources>

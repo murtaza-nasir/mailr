@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Settings → Ambrose → Sweep (ui/settings/SweepScreen.kt). -->
+<resources>
+    <string name="sweep_title">Sweep</string>
+    <string name="sweep_settings_sub">Your rules for reviews by %1$s, and the moves remembered from review cards.</string>
+    <string name="sweep_intro">How %1$s reviews a whole view or search: with /sweep, when you ask in the chat, and in routines. Every review ends in one card that you approve.</string>
+    <string name="sweep_rules">Your rules</string>
+    <string name="sweep_rules_hint">Write them in your own words. %1$s follows them in every review, and they come before the meaning of each move below. What you ask for in one review comes after them and wins where the two disagree.</string>
+    <string name="sweep_placeholder">Trash promotions and shipping notices once delivered. Archive only receipts, bank and tax mail, tickets and confirmations.</string>
+    <string name="sweep_length">%1$d / %2$d</string>
+    <string name="sweep_save">Save</string>
+    <string name="sweep_saved">Rules saved</string>
+    <string name="sweep_definitions">What each move means</string>
+    <string name="sweep_move_trash">Move to Trash</string>
+    <string name="sweep_move_archive">Archive</string>
+    <string name="sweep_move_read">Mark read</string>
+    <string name="sweep_move_keep">Keep</string>
+    <string name="sweep_move_unsure">Not sure</string>
+    <string name="sweep_move_label">Label “%1$s”</string>
+    <string name="sweep_def_trash">Worthless now: expired offers, notifications already acted on, mail that looks like spam.</string>
+    <string name="sweep_def_archive">No longer needs attention but could be useful to find later: receipts, confirmations, newsletters to keep. Only for mail in the Inbox.</string>
+    <string name="sweep_def_read">Marked read and left where it is. Only for unread mail.</string>
+    <string name="sweep_def_keep">Left as it is: still useful, or it needs you.</string>
+    <string name="sweep_def_unsure">The sender, subject and preview are not enough. The text of the email is read once; what is still unclear is left for you.</string>
+    <string name="sweep_always_kept">Always kept without asking: starred and important conversations, conversations you replied to, mail from people you write to, and invitations.</string>
+    <string name="sweep_past">Your past choices</string>
+    <string name="sweep_past_hint">When you change a move on a review card, that move is remembered for the sender. In later reviews the sender\'s mail gets the same move without the model, and you can still change it on the card.</string>
+    <string name="sweep_none">None yet.</string>
+    <string name="sweep_remove_for">Remove the choice for %1$s</string>
+    <string name="sweep_removed">The choice for %1$s is removed</string>
+    <string name="sweep_clear_all">Clear all</string>
+    <string name="sweep_clear_title">Clear all past choices?</string>
+    <string name="sweep_clear_body">In later reviews, the model judges these senders\' mail again.</string>
+    <string name="sweep_cleared">Past choices cleared</string>
+    <string name="sweep_cancel">Cancel</string>
+</resources>

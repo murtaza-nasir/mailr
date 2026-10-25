@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- HTTPS everywhere, except LAN-only names (*.lan), which homelab setups reach over plain HTTP.
+     The app itself sends plain HTTP only to the server the user entered (ApiClient); every
+     other fetch is https only. The emulator and localhost hosts are in the debug build only
+     (src/debug/res/xml). -->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">lan</domain>
+    </domain-config>
+</network-security-config>

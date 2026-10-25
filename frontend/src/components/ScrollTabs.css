@@ -1,0 +1,70 @@
+/* ScrollTabs: a row of tabs or chips that scrolls sideways when it does not fit. A side with
+   hidden items fades out and gets a ‹ or › button (start and end: they mirror in a right-to-left page). Strips with side padding set the same
+   scroll-padding, so snapping keeps the padding. */
+.scroll-tabs {
+  position: relative;
+  min-width: 0;
+  --scroll-tabs-fade: 48px;
+}
+.scroll-tabs-strip {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  --fade-start: 0px;
+  --fade-end: 0px;
+  mask-image: linear-gradient(var(--to-end), transparent 0, #000 var(--fade-start), #000 calc(100% - var(--fade-end)), transparent 100%);
+}
+.scroll-tabs-strip::-webkit-scrollbar {
+  display: none;
+}
+.scroll-tabs-strip > * {
+  flex-shrink: 0;
+  white-space: nowrap;
+  scroll-snap-align: start;
+}
+.scroll-tabs[data-start] > .scroll-tabs-strip {
+  --fade-start: var(--scroll-tabs-fade);
+}
+.scroll-tabs[data-end] > .scroll-tabs-strip {
+  --fade-end: var(--scroll-tabs-fade);
+}
+.scroll-tabs-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  color: var(--text-2);
+  background: var(--surface);
+  box-shadow: var(--shadow-1);
+  cursor: pointer;
+}
+.scroll-tabs-btn:hover {
+  color: var(--text);
+  background: var(--surface-high);
+}
+.scroll-tabs-btn.start {
+  inset-inline-start: 4px;
+}
+.scroll-tabs-btn.end {
+  inset-inline-end: 4px;
+}
+.scroll-tabs-btn .lucide {
+  width: 18px;
+  height: 18px;
+}
+/* Touch screens swipe; the buttons would only cover items there. */
+@media (hover: none) {
+  .scroll-tabs-btn {
+    display: none;
+  }
+}

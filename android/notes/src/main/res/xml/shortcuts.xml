@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The launcher's long-press menu (ACT note.create @android.noteslauncher):
+     New note and New list open the editor at once. The last three notes, lists or tables opened are
+     added as dynamic shortcuts (Shortcuts.kt). -->
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut android:shortcutId="new_note" android:enabled="true" android:icon="@drawable/ic_shortcut_note"
+        android:shortcutShortLabel="@string/shortcut_new_note">
+        <intent android:action="android.intent.action.VIEW" android:data="mailr-notes://new?kind=text"
+            android:targetPackage="@string/shortcut_package" android:targetClass="io.github.murtazanasir.mailr.notesapp.MainActivity" />
+    </shortcut>
+    <shortcut android:shortcutId="new_list" android:enabled="true" android:icon="@drawable/ic_shortcut_list"
+        android:shortcutShortLabel="@string/shortcut_new_list">
+        <intent android:action="android.intent.action.VIEW" android:data="mailr-notes://new?kind=checklist"
+            android:targetPackage="@string/shortcut_package" android:targetClass="io.github.murtazanasir.mailr.notesapp.MainActivity" />
+    </shortcut>
+</shortcuts>

@@ -1,0 +1,49 @@
+{
+  "id": "/mail/inbox",
+  "name": "Mailr",
+  "short_name": "Mailr",
+  "description": "Your self-hosted mailbox: mail, calendar, tasks and an assistant.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "/mail/inbox",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#f4f8f9",
+  "theme_color": "#f4f8f9",
+  "categories": ["productivity", "business"],
+  "prefer_related_applications": false,
+  "protocol_handlers": [
+    { "protocol": "mailto", "url": "/compose?mailto=%s" }
+  ],
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Compose",
+      "short_name": "Compose",
+      "description": "Write a new message",
+      "url": "/mail/inbox?compose=1",
+      "icons": [{ "src": "/shortcut-compose.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Calendar",
+      "short_name": "Calendar",
+      "description": "Open your calendar",
+      "url": "/calendar",
+      "icons": [{ "src": "/shortcut-calendar.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Tasks",
+      "short_name": "Tasks",
+      "description": "Open your tasks",
+      "url": "/tasks",
+      "icons": [{ "src": "/shortcut-tasks.png", "sizes": "96x96", "type": "image/png" }]
+    }
+  ]
+}

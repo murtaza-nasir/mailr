@@ -1,0 +1,169 @@
+{
+ "version": 1,
+ "samples": [
+  {
+   "name": "categories-table",
+   "md": "# Categories & matching rules\n\nI set up these categories:\n| Category | Match rule | Label |\n|---|---|---|\n| Shopping | `from:levi.com OR from:gap.com OR from:nike.com` | Shopping |\n| Travel | `from:delta.com OR from:united.com OR from:marriott.com` | Travel |\n| Finance | `from:paypal.com OR from:amex.com OR from:chase.com` | Finance |\n\nWant me to create the filters?",
+   "expect": {
+    "headings": [
+     3
+    ],
+    "tables": [
+     {
+      "cols": 3,
+      "rows": 3,
+      "layout": {
+       "360": "cards",
+       "800": "table"
+      }
+     }
+    ],
+    "text": [
+     "Categories & matching rules",
+     "Shopping",
+     "from:levi.com OR from:gap.com OR from:nike.com",
+     "Want me to create the filters?"
+    ]
+   },
+   "normalized": "### Categories & matching rules\n\nI set up these categories:\n\n| Category | Match rule | Label |\n|---|---|---|\n| Shopping | `from:levi.com OR from:gap.com OR from:nike.com` | Shopping |\n| Travel | `from:delta.com OR from:united.com OR from:marriott.com` | Travel |\n| Finance | `from:paypal.com OR from:amex.com OR from:chase.com` | Finance |\n\nWant me to create the filters?"
+  },
+  {
+   "name": "sections",
+   "md": "## Summary\nTwo invoices are due this week.\n\n### Details\n- **Amex**: $1,204 due Friday\n- **Chase**: $88 due Monday\n\n#### Fine print\nLate fees apply.\n",
+   "expect": {
+    "headings": [
+     3,
+     4
+    ],
+    "tables": [],
+    "text": [
+     "Summary",
+     "Details",
+     "Amex",
+     "Fine print"
+    ]
+   },
+   "normalized": "### Summary\nTwo invoices are due this week.\n\n#### Details\n- **Amex**: $1,204 due Friday\n- **Chase**: $88 due Monday\n\n**Fine print**\nLate fees apply."
+  },
+  {
+   "name": "short-table",
+   "md": "Times that work:\n\n| Day | Time |\n|:---|---:|\n| Tue | 10:00 |\n| Thu | 14:30 |",
+   "expect": {
+    "headings": [],
+    "tables": [
+     {
+      "cols": 2,
+      "rows": 2,
+      "layout": {
+       "360": "table",
+       "800": "table"
+      }
+     }
+    ],
+    "text": [
+     "Times that work:",
+     "Tue",
+     "14:30"
+    ]
+   },
+   "normalized": "Times that work:\n\n| Day | Time |\n|:---|---:|\n| Tue | 10:00 |\n| Thu | 14:30 |"
+  },
+  {
+   "name": "wide-table",
+   "md": "| Sender | Subject | Date | Amount | Status |\n|---|---|---|---|---|\n| American Express | Your statement is ready to view online | 28 Sep 2026 | $1,204.18 | Due Friday |\n| Chase | Payment reminder for the account ending 4411 | 29 Sep 2026 | $88.00 | Paid |",
+   "expect": {
+    "headings": [],
+    "tables": [
+     {
+      "cols": 5,
+      "rows": 2,
+      "layout": {
+       "360": "cards",
+       "800": "table"
+      }
+     }
+    ],
+    "text": [
+     "American Express",
+     "Payment reminder for the account ending 4411",
+     "Due Friday"
+    ]
+   },
+   "normalized": "| Sender | Subject | Date | Amount | Status |\n|---|---|---|---|---|\n| American Express | Your statement is ready to view online | 28 Sep 2026 | $1,204.18 | Due Friday |\n| Chase | Payment reminder for the account ending 4411 | 29 Sep 2026 | $88.00 | Paid |"
+  },
+  {
+   "name": "two-col-long",
+   "md": "| Rule | What it does |\n|---|---|\n| Finance | Labels mail from PayPal, American Express, Chase, Venmo and Discover as Finance and skips the inbox |",
+   "expect": {
+    "headings": [],
+    "tables": [
+     {
+      "cols": 2,
+      "rows": 1,
+      "layout": {
+       "360": "scroll",
+       "800": "table"
+      }
+     }
+    ],
+    "text": [
+     "Finance",
+     "skips the inbox"
+    ]
+   },
+   "normalized": "| Rule | What it does |\n|---|---|\n| Finance | Labels mail from PayPal, American Express, Chase, Venmo and Discover as Finance and skips the inbox |"
+  },
+  {
+   "name": "citations-list",
+   "md": "Three things need a reply:\n\n1. The PADS review request [1](mailr-cite:1)\n2. Alice's question about Friday [2](mailr-cite:2)\n3. The parking permit renewal",
+   "expect": {
+    "headings": [],
+    "tables": [],
+    "text": [
+     "Three things need a reply:",
+     "PADS review request",
+     "parking permit renewal"
+    ]
+   },
+   "normalized": "Three things need a reply:\n\n1. The PADS review request [1](mailr-cite:1)\n2. Alice's question about Friday [2](mailr-cite:2)\n3. The parking permit renewal"
+  },
+  {
+   "name": "code-and-setext",
+   "md": "Filters\n=======\n\nThe query I used:\n\n```\n# not a heading\nfrom:paypal.com OR from:amex.com\n```\n\n---\n",
+   "expect": {
+    "headings": [
+     3
+    ],
+    "tables": [],
+    "text": [
+     "Filters",
+     "# not a heading",
+     "from:paypal.com OR from:amex.com"
+    ]
+   },
+   "normalized": "### Filters\n\nThe query I used:\n\n```\n# not a heading\nfrom:paypal.com OR from:amex.com\n```"
+  },
+  {
+   "name": "br-in-cells",
+   "md": "Here:\n| Label | Senders |\n|---|---|\n| Shopping | levi.com<br>gap.com |",
+   "expect": {
+    "headings": [],
+    "tables": [
+     {
+      "cols": 2,
+      "rows": 1,
+      "layout": {
+       "360": "table",
+       "800": "table"
+      }
+     }
+    ],
+    "text": [
+     "Here:",
+     "levi.com; gap.com"
+    ]
+   },
+   "normalized": "Here:\n\n| Label | Senders |\n|---|---|\n| Shopping | levi.com; gap.com |"
+  }
+ ]
+}

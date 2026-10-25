@@ -1,0 +1,59 @@
+# Development services: the backend and frontend run on the host.
+#   docker compose -f deploy/dev/docker-compose.yml up -d
+# Run that from one checkout. From a second checkout of the repository add --no-recreate: the bind
+# mounts below resolve to that checkout, so a plain `up -d` recreates the shared containers.
+name: mailr-dev
+services:
+  stalwart:
+    image: stalwartlabs/stalwart:v0.16.23
+    entrypoint: ["/bin/sh", "/opt/mailr/entrypoint.sh"]
+    environment:
+      STALWART_HOSTNAME: mail.mailr.internal
+      STALWART_PUBLIC_URL: http://localhost:18080
+      STALWART_RECOVERY_ADMIN: admin:dev-admin-pass
+      MAILR_DOMAIN: mailr.internal
+      MAILR_SVC_USER: mailr-svc
+      MAILR_SVC_PASSWORD: dev-svc-pass
+      MAILR_TRUSTED_NET: 172.16.0.0/12
+    volumes:
+      - ../stalwart/config.json:/etc/stalwart/config.json:ro
+      - ../stalwart/provision.json:/opt/mailr/provision.json:ro
+      - ../stalwart/provision-groupware.json:/opt/mailr/provision-groupware.json:ro
+      - ../stalwart/entrypoint.sh:/opt/mailr/entrypoint.sh:ro
+      - stalwart-data:/var/lib/stalwart
+    ports:
+      - "18080:8080"
+      - "11143:143"
+      - "11993:993"
+  # A second Stalwart that plays the upstream provider (a hosted IMAP provider) in tests.
+  upstream:
+    image: stalwartlabs/stalwart:v0.16.23
+    entrypoint: ["/bin/sh", "/opt/mailr/entrypoint.sh"]
+    environment:
+      STALWART_HOSTNAME: mail.upstream.test
+      STALWART_PUBLIC_URL: http://localhost:18091
+      STALWART_RECOVERY_ADMIN: admin:up-admin-pass
+      MAILR_DOMAIN: upstream.test
+      MAILR_SVC_USER: up-svc
+      MAILR_SVC_PASSWORD: up-svc-pass
+      MAILR_TRUSTED_NET: 172.16.0.0/12
+      # Tests sign in to this test provider over plain IMAP (port 143).
+      MAILR_IMAP_PLAIN_TEXT_AUTH: "true"
+    volumes:
+      - ../stalwart/config.json:/etc/stalwart/config.json:ro
+      - ../stalwart/provision.json:/opt/mailr/provision.json:ro
+      - ../stalwart/provision-groupware.json:/opt/mailr/provision-groupware.json:ro
+      - ../stalwart/entrypoint.sh:/opt/mailr/entrypoint.sh:ro
+      - upstream-data:/var/lib/stalwart
+    ports:
+      - "18091:8080"
+      - "12143:143"
+      - "12993:993"
+  # CalDAV server for calendar/task tests.
+  radicale:
+    image: tomsquest/docker-radicale
+    ports:
+      - "15232:5232"
+volumes:
+  stalwart-data:
+  upstream-data:

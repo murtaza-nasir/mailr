@@ -1,0 +1,9 @@
+# User settings: notifications (core/notifyprefs.py).
+# One line per key, `key: plain description`; `key: {internal: why}` for a key that is not a setting
+# a person chooses. A key may appear in only one file of this folder. The settings map test
+# (frontend/src/features/settings/groups.test.ts) checks that Settings has a place for each one.
+
+mail_notifications: "Which new mail notifies, on every device: off, VIP senders only, important, important and Primary, or all."
+notify_approvals: "Notify about approvals and failed sends, on every device."
+notify_assistant: "Notify about messages from the assistant and standing orders, on every device."
+notify_accounts: "Notify once when a mail account needs its password again."

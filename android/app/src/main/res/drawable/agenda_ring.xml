@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Agenda widget: a task's circle (a thin ring, as in the mockups). Tinted. A vector, so the ring
+     keeps its hole when tinted (a stroke-only shape filled in on some renderers). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp" android:height="16dp" android:viewportWidth="16" android:viewportHeight="16">
+    <path android:strokeColor="#FFFFFFFF" android:strokeWidth="1.6" android:fillColor="#00000000"
+        android:pathData="M8,1.2a6.8,6.8 0 1,0 0,13.6a6.8,6.8 0 1,0 0,-13.6z" />
+</vector>

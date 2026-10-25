@@ -1,0 +1,18 @@
+# Golden vectors for the Sources list of an assistant answer (one row per cited record).
+#
+# Run by frontend/src/features/rail/assistant/citations.test.ts (sourceRows, vitest) and Android's
+# SourceRowsTest (JUnit, which reads the copy in android/app/src/test/resources/interaction/; that copy
+# is checked against this file in vitest). Same restricted shape as citation-cases.yaml.
+#
+# `cites` are citations as the server sends them (only the fields the key reads). `rows` lists each
+# row's numbers, in order. The rules: every citation of one email thread is one row (the conversation
+# and its messages, with or without a quote); one event occurrence, task, note item, table row,
+# recording or web page is one row; rows come in the order of their first number. The numbers in the
+# answer's text are never changed.
+cases:
+  - {"id": "thread-and-quotes-of-its-message", "cites": [{"n": 1, "kind": "conversation", "conversation_id": 7, "message_id": null}, {"n": 2, "kind": "message", "conversation_id": 7, "message_id": 70}, {"n": 3, "kind": "message", "conversation_id": 7, "message_id": 70}, {"n": 4, "kind": "message", "conversation_id": 7, "message_id": 70}], "rows": [[1, 2, 3, 4]]}
+  - {"id": "two-messages-of-one-thread", "cites": [{"n": 1, "kind": "message", "conversation_id": 7, "message_id": 70}, {"n": 2, "kind": "message", "conversation_id": 7, "message_id": 71}], "rows": [[1, 2]]}
+  - {"id": "two-threads", "cites": [{"n": 1, "kind": "message", "conversation_id": 7, "message_id": 70}, {"n": 2, "kind": "message", "conversation_id": 8, "message_id": 80}, {"n": 3, "kind": "conversation", "conversation_id": 7, "message_id": null}], "rows": [[1, 3], [2]]}
+  - {"id": "events-by-occurrence", "cites": [{"n": 1, "kind": "event", "uid": "e1", "occurrence": "2026-10-02T15:00:00Z"}, {"n": 2, "kind": "event", "uid": "e1", "occurrence": "2026-10-09T15:00:00Z"}, {"n": 3, "kind": "event", "uid": "e1", "occurrence": "2026-10-02T15:00:00Z"}], "rows": [[1, 3], [2]]}
+  - {"id": "task-note-table-web-recording", "cites": [{"n": 1, "kind": "task", "uid": "t1"}, {"n": 2, "kind": "note", "note_id": "n1", "item_id": "i1"}, {"n": 3, "kind": "note", "note_id": "n1", "item_id": null}, {"n": 4, "kind": "table", "table": "t9", "row": "r1"}, {"n": 5, "kind": "web", "url": "https://example.com/a"}, {"n": 6, "kind": "recording", "connector_id": 2, "recording_id": 5}, {"n": 7, "kind": "recording", "connector_id": 2, "recording_id": 5}, {"n": 8, "kind": "task", "uid": "t1"}], "rows": [[1, 8], [2], [3], [4], [5], [6, 7]]}
+  - {"id": "order-follows-numbers", "cites": [{"n": 3, "kind": "message", "conversation_id": 9, "message_id": 90}, {"n": 1, "kind": "task", "uid": "t1"}, {"n": 2, "kind": "conversation", "conversation_id": 9, "message_id": null}], "rows": [[1], [2, 3]]}

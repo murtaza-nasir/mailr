@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The Agenda widget's paper fold, part 1: the turned-over corner of the header band (the dog-ear),
+     as in the folds of the mailr mark. Tinted with the primary colour; widget_fold_cut sits under it. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="16dp" android:height="16dp" android:viewportWidth="16" android:viewportHeight="16"
+    android:autoMirrored="true">
+    <path android:fillColor="#FFFFFFFF" android:pathData="M1,0H15Q16,0 16,1V15Q16,16.4 14.8,15.2L0.8,1.2Q-0.4,0 1,0Z" />
+</vector>

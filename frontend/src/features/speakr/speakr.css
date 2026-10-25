@@ -1,0 +1,531 @@
+/* The recording sheet (web.recording), the event detail's Recording section, the compose picker
+   and the Speakr settings card. Colours come from the theme tokens. */
+
+.rec-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--scrim);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.rec-sheet {
+  width: min(560px, 100vw);
+  height: 100%;
+  background: var(--bg);
+  color: inherit;
+  box-shadow: var(--shadow-3);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.rec-page {
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.rec-view {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.rec-view.page {
+  max-width: 820px;
+  height: auto;
+}
+
+.rec-head {
+  padding: 16px 20px 8px;
+  border-bottom: 1px solid var(--divider);
+}
+
+.rec-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rec-title-row h2 {
+  flex: 1;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.rec-mark {
+  color: var(--primary);
+  flex: none;
+}
+
+.rec-meta {
+  margin-top: 6px;
+  font-size: 13px;
+  opacity: 0.8;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.rec-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.rec-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.rec-followup {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.rec-tabs-wrap {
+  border-bottom: 1px solid var(--divider);
+}
+.rec-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 0 12px;
+  scroll-padding: 0 12px;
+}
+
+.rec-tab {
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 13.5px;
+  padding: 10px 12px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  opacity: 0.75;
+}
+
+.rec-tab.on {
+  border-bottom-color: var(--primary);
+  opacity: 1;
+  font-weight: 600;
+}
+
+.rec-body {
+  flex: 1;
+  overflow: auto;
+  padding: 14px 20px 24px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.rec-md h1,
+.rec-md h2,
+.rec-md h3 {
+  font-size: 15px;
+  margin: 14px 0 6px;
+}
+
+.rec-wait {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.rec-find {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.rec-find .input {
+  flex: 1;
+}
+
+.rec-turns {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rec-turns li {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 8px;
+  padding: 5px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.rec-turns li.at {
+  background: var(--primary-container);
+  color: var(--on-primary-container);
+}
+
+.rec-time {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding-top: 2px;
+  text-decoration: none;
+}
+
+.rec-links ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rec-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.rec-link-title {
+  flex: 1;
+  text-align: start;
+  justify-content: flex-start;
+}
+
+.rec-link.suggested .rec-link-title {
+  font-style: italic;
+}
+
+.rec-ask {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.rec-sub {
+  font-size: 13px;
+  margin: 16px 0 4px;
+}
+
+.rec-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rec-items li {
+  padding: 4px 0;
+}
+
+/* The owner, due date and time sit under the task, not run into its last word ("…by ThursdayMe"). */
+.rec-items .desc {
+  display: block;
+  margin-block-start: 2px;
+}
+
+.rec-items li.done {
+  opacity: 0.6;
+}
+
+/* The Recording section of the event detail. */
+.cal-rec {
+  margin: 10px 0;
+  padding: 10px 12px;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md);
+}
+
+.cal-rec-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 13.5px;
+}
+
+.cal-rec-excerpt {
+  margin: 6px 0;
+  font-size: 13px;
+  opacity: 0.85;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: pre-line;
+}
+
+.cal-rec-ask {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 13px;
+  margin: 6px 0;
+}
+
+.cal-rec-actions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+/* Insert → From a recording… in compose. */
+.ir-pop {
+  width: 360px;
+  max-height: 440px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 8px;
+}
+
+.ir-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  max-height: 300px;
+}
+
+.ir-list button {
+  width: 100%;
+  text-align: start;
+  display: block;
+  padding: 6px 8px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.ir-list button:hover,
+.ir-list button:focus-visible {
+  background: var(--hover);
+}
+
+.ir-turns {
+  overflow: auto;
+  max-height: 280px;
+  font-size: 13px;
+}
+
+.ir-turns label {
+  display: flex;
+  gap: 6px;
+  padding: 2px 0;
+}
+
+/* Recordings in mail (MailCard.tsx): the reader card, the list chip and the search section. */
+.rec-mail {
+  margin: 8px 0 12px;
+}
+
+.rec-mail-ev {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.rec-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-inline-start: 6px;
+  padding: 1px 5px;
+  border-radius: 8px;
+  font-size: 11px;
+  background: var(--surface-high);
+  color: var(--primary);
+  vertical-align: middle;
+}
+
+.rec-glance-row {
+  width: 100%;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+
+/* "Last time" (LastTime.tsx) on the event detail and the event reminder. */
+.rec-last {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+  font-size: 13px;
+}
+
+.rec-last b {
+  font-weight: 600;
+}
+
+.rec-last .rec-last-line {
+  flex-basis: 100%;
+  opacity: 0.85;
+}
+
+/* The sheet's Events and People tabs and the edit and share actions. */
+.rec-events li,
+.rec-people li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--divider);
+}
+
+.rec-events ul,
+.rec-people ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.rec-events .grow,
+.rec-people .grow {
+  flex: 1;
+  min-width: 160px;
+}
+
+.rec-edit {
+  display: grid;
+  gap: 10px;
+}
+
+/* The person card's Recordings list (PersonRecordings.tsx). */
+.rec-person h4 {
+  margin: 10px 0 4px;
+}
+.rec-person ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.rec-person-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  padding: 4px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.rec-person-row:hover,
+.rec-person-row:focus-visible {
+  background: var(--hover);
+}
+.rec-person-row .when {
+  flex: none;
+  color: var(--text-3);
+  font-variant-numeric: tabular-nums;
+}
+.rec-person-row .ttl {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* "Find recording…" and "Record this meeting" in the event detail (FindRecording.tsx). */
+.cal-rec-find {
+  border-style: dashed;
+  padding: 6px 8px;
+}
+.cal-rec-finder {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+.cal-rec-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-3);
+}
+.cal-rec-search .input {
+  flex: 1;
+  min-width: 0;
+}
+.cal-rec-options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.cal-rec-options li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 2px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--divider);
+}
+.cal-rec-options li:last-child {
+  border-bottom: 0;
+}
+.cal-rec-options .grow {
+  flex: 1;
+  min-width: 0;
+}
+.cal-rec-wait,
+.cal-rec-none {
+  padding: 6px 2px;
+  font-size: 13px;
+}
+.cal-rec-finder > .btn.text {
+  align-self: flex-start;
+}
+
+/* The calendar panel's next meeting, with "Last time" under it. */
+.cp-next {
+  margin: 8px 0 4px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  background: var(--surface-high);
+  font-size: 13px;
+}
+.cp-next-head {
+  display: flex;
+  gap: 6px;
+  align-items: baseline;
+}
+.cp-next-head b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cp-next .rec-last {
+  margin: 4px 0 0;
+}
+
+.rec-links .rec-make-note {
+  margin-top: 12px;
+  align-self: flex-start;
+}

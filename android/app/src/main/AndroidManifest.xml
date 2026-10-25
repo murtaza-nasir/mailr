@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- New recording (Recordings (Speakr), off by default): asked only when recording starts. -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <!-- The live connection (data/push/LiveConnection.kt), only when the person turns it on. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-feature android:name="android.hardware.microphone" android:required="false" />
+    <!-- Exact reminder alarms. USE_EXACT_ALARM (Android 13+) is granted to calendar apps at
+         install; SCHEDULE_EXACT_ALARM covers Android 12/12L. Without either the app falls back
+         to inexact alarms and asks for the permission in the UI. -->
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" android:maxSdkVersion="32" />
+    <!-- Full-screen reminder alerts (opt-in). Android 14+ asks the user to allow it
+         for the app; without it the reminder is a heads-up notification. -->
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <!-- Approvals hide other apps' overlay windows while they are on screen (tapjacking). -->
+    <uses-permission android:name="android.permission.HIDE_OVERLAY_WINDOWS" />
+    <!-- The Agenda widget's weather (optional): approximate location only, asked in the widget's
+         settings; a city can be picked instead. Rounded to about 10 km and sent only to Open-Meteo. -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- "Continue as <name>" in the Notes app (session-core Handover): only an app signed with this
+         app's certificate may start HandoverActivity or read HandoverAccountProvider. The Notes app
+         declares the same permission, so either may be installed first. -->
+    <permission
+        android:name="${applicationId}.permission.SIGN_IN_HANDOVER"
+        android:label="Sign in the Notes app with Mailr"
+        android:protectionLevel="signature" />
+
+    <application
+        android:name=".MailrApp"
+        android:allowBackup="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:localeConfig="@xml/locales_config"
+        android:enableOnBackInvokedCallback="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Mailr.Splash"
+        tools:targetApi="35">
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- mailto: links from other apps open the composer. -->
+            <intent-filter>
+                <action android:name="android.intent.action.SENDTO" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="mailto" />
+            </intent-filter>
+            <!-- https app links (citation/share links, Calendar and Tasks) come from deploy.properties
+                 (appLinkHosts): app/build.gradle.kts generates them into a manifest overlay. Without
+                 hosts there are none. mailr://calendar/…, mailr://tasks/…, mailr://event/…,
+                 mailr://task/… always work. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="mailr" android:host="calendar" />
+                <data android:scheme="mailr" android:host="tasks" />
+                <data android:scheme="mailr" android:host="event" />
+                <data android:scheme="mailr" android:host="task" />
+                <!-- A note or table (the Notes app's "Open in mailr"): mailr://notes/n/<id>, mailr://tables/t/<id>. -->
+                <data android:scheme="mailr" android:host="notes" />
+                <data android:scheme="mailr" android:host="tables" />
+            </intent-filter>
+            <!-- mailr://setup?server=…: the web setup guide's Get the app page fills in the server. -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="mailr" android:host="setup" />
+            </intent-filter>
+            <!-- The "Send to self" sharing shortcut's share target. -->
+            <meta-data android:name="android.app.shortcuts" android:resource="@xml/shortcuts" />
+        </activity>
+
+        <!-- Share → "New email": the composer, in the sharing app's task. -->
+        <activity
+            android:name=".ui.share.ShareComposeActivity"
+            android:exported="true"
+            android:label="@string/share_compose_label"
+            android:theme="@style/Theme.Mailr"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity>
+
+        <!-- Share → "Send to self": no composer, a small confirmation card with Undo. -->
+        <activity
+            android:name=".ui.share.ShareToSelfActivity"
+            android:exported="true"
+            android:label="@string/share_self_label"
+            android:icon="@mipmap/ic_send_to_self"
+            android:roundIcon="@mipmap/ic_send_to_self"
+            android:theme="@style/Theme.Mailr.Overlay"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity>
+
+        <!-- Share → "New task": the task editor with the shared text as the title (a link goes to the notes). -->
+        <activity
+            android:name=".ui.tasks.ShareTaskActivity"
+            android:exported="true"
+            android:label="New task"
+            android:theme="@style/Theme.Mailr"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <!-- A recording in progress (data/recorder/RecorderService.kt). -->
+        <service android:name=".data.recorder.RecorderService" android:exported="false"
+            android:foregroundServiceType="microphone" />
+        <receiver android:name=".data.share.SelfSendReceiver" android:exported="false" />
+        <!-- Push messages, endpoints and errors from the UnifiedPush distributor (data/push). The
+             connector's own exported receiver takes the distributor's broadcasts and binds this. -->
+        <service android:name=".data.push.MailrPushService" android:exported="false">
+            <intent-filter>
+                <action android:name="org.unifiedpush.android.connector.PUSH_EVENT" />
+            </intent-filter>
+        </service>
+        <!-- The live connection: the server's event stream for a phone without a push app, only
+             when the person turns it on (data/push/LiveConnection.kt). -->
+        <service android:name=".data.push.LiveConnectionService" android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Instant mail from the user's own self-hosted mail server when no UnifiedPush distributor is installed; turned on by the user" />
+        </service>
+        <!-- Approve / Deny on an approval notification (data/sync/Workers.kt). -->
+        <receiver android:name=".data.sync.ApprovalActionReceiver" android:exported="false" />
+        <!-- Archive, Mark read and Reply on a new-mail notification. -->
+        <receiver android:name=".data.sync.MailActionReceiver" android:exported="false" />
+
+        <!-- Reminders: the armed alarm, notification actions, and re-planning after system changes. -->
+        <receiver android:name=".data.reminders.ReminderAlarmReceiver" android:exported="false" />
+        <receiver android:name=".data.reminders.ReminderActionReceiver" android:exported="false" />
+        <receiver android:name=".data.reminders.ReminderSystemReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- "Snooze…" from a reminder: a small picker that also works over the lock screen. -->
+        <activity
+            android:name=".ui.calendar.ReminderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mailr.Overlay"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:showWhenLocked="true"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode" />
+
+        <!-- The full-screen reminder alert: over the lock screen, screen on. -->
+        <activity
+            android:name=".ui.calendar.ReminderAlertActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mailr"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode" />
+
+        <!-- The ask capture: say or type an instruction for the assistant. Never over
+             the lock screen. Opened by the widget, the launcher shortcuts, the tile and Ask buttons. -->
+        <activity
+            android:name=".ui.ask.AskActivity"
+            android:exported="false"
+            android:label="@string/ask_widget_label"
+            android:theme="@style/Theme.Mailr.Overlay"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode">
+            <intent-filter>
+                <action android:name="io.github.murtazanasir.mailr.action.ASK" />
+                <action android:name="io.github.murtazanasir.mailr.action.DICTATE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <!-- "Talk to Ambrose" home-screen widget (Glance; the receiver of the old "Ask mailr" bar). -->
+        <receiver android:name=".ui.ask.AskWidgetReceiver" android:exported="true" android:label="@string/talk_widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/ask_widget" />
+        </receiver>
+
+        <!-- The Today home-screen widget (Glance). -->
+        <receiver android:name=".ui.today.TodayWidgetReceiver" android:exported="true" android:label="@string/today_widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/today_widget" />
+        </receiver>
+
+        <!-- The Agenda home-screen widget (Glance): the next days, tasks and weather. -->
+        <receiver android:name=".ui.agenda.AgendaWidgetReceiver" android:exported="true" android:label="@string/agenda_widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/agenda_widget" />
+        </receiver>
+
+        <!-- The Agenda widget's ticks: redraws that keep the glass timeline's now-line and the numeral's countdown true. -->
+        <receiver android:name=".ui.agenda.AgendaTickReceiver" android:exported="false" />
+
+        <!-- The Agenda widget's settings: when it is placed, and from its long-press menu (Android 12+). -->
+        <activity
+            android:name=".ui.agenda.AgendaSettingsActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Mailr"
+            android:taskAffinity=""
+            android:excludeFromRecents="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <!-- The Agenda widget's weather tap: opens the chosen weather app and closes. -->
+        <activity
+            android:name=".ui.agenda.WeatherOpenActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Mailr.Handover"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:noHistory="true" />
+
+        <!-- "Talk to Ambrose" Quick Settings tile. -->
+        <service
+            android:name=".ui.ask.AskTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_ask_mic"
+            android:label="@string/talk_tile_label"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE" android:value="false" />
+        </service>
+
+        <!-- "New task" Quick Settings tile: the task editor. -->
+        <service
+            android:name=".ui.ask.NewTaskTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_new_task"
+            android:label="@string/new_task_tile_label"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data android:name="android.service.quicksettings.ACTIVE_TILE" android:value="false" />
+        </service>
+
+        <!-- AppAuth's receiver is replaced: it would answer in a task of its own (MainActivity has no
+             task affinity) and the sign-in would read as cancelled. auth/AuthRedirectActivity.kt. -->
+        <activity
+            android:name="net.openid.appauth.RedirectUriReceiverActivity"
+            android:exported="false"
+            tools:node="replace" />
+        <!-- AppAuth declares it singleTask, which keeps it out of MainActivity's task (no affinity);
+             singleTop keeps it there, where AuthRedirectActivity hands it the answer. -->
+        <activity
+            android:name="net.openid.appauth.AuthorizationManagementActivity"
+            android:launchMode="singleTop"
+            tools:replace="android:launchMode" />
+        <activity
+            android:name=".auth.AuthRedirectActivity"
+            android:exported="true"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- AppAuth's redirect has no host (<scheme>:/oauth2redirect). -->
+                <data android:scheme="${appAuthRedirectScheme}" android:path="/oauth2redirect" tools:ignore="AppLinkUrlError" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".auth.HandoverActivity"
+            android:exported="true"
+            android:permission="${applicationId}.permission.SIGN_IN_HANDOVER"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:theme="@style/Theme.Mailr.Handover" />
+
+        <provider
+            android:name=".auth.HandoverAccountProvider"
+            android:authorities="${applicationId}.handover"
+            android:exported="true"
+            android:permission="${applicationId}.permission.SIGN_IN_HANDOVER" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.files"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <!-- WorkManager is initialised on demand from MailrApp. -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
+    </application>
+
+    <queries>
+        <!-- The Agenda widget's weather app choice: apps with a launcher icon, and weather apps. -->
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.APP_WEATHER" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.WEB_SEARCH" />
+        </intent>
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
+        </intent>
+        <!-- The on-device speech recognizer (dictation). -->
+        <intent>
+            <action android:name="android.speech.RecognitionService" />
+        </intent>
+        <!-- The Notes app: "Open in Notes app" shows when it answers mailr-notes://, and note
+             reminders fire from it, not from here, once it is installed (NotesApp.installed). -->
+        <package android:name="${notesApplicationId}" />
+        <package android:name="${notesApplicationId}.debug" />
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="mailr-notes" />
+        </intent>
+    </queries>
+</manifest>

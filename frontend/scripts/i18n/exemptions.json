@@ -1,0 +1,90 @@
+{
+  "_about": "Strings check-strings.mjs accepts in a file: IDs that read like words. Each entry says why.",
+  "src/lib/shortcuts.ts": {
+    "why": "Shortcut groups are IDs (type ShortcutGroup); the help shows them through shortcutGroupLabel().",
+    "texts": [
+      "Compose & chat",
+      "Formatting",
+      "Actions",
+      "Hot keys",
+      "Navigation",
+      "Threadlist selection",
+      "Application",
+      "Views",
+      "Events",
+      "Tasks",
+      "Selection",
+      "Notes"
+    ]
+  },
+  "src/features/shortcuts/HelpOverlay.tsx": {
+    "why": "A shortcut group ID (see src/lib/shortcuts.ts).",
+    "texts": [
+      "In an open note"
+    ]
+  },
+  "src/themes/shared/CommandPalette.tsx": {
+    "why": "Palette sections are IDs; the palette shows them through sectionLabel().",
+    "texts": [
+      "Favorites",
+      "Go to",
+      "Accounts",
+      "Labels",
+      "Mail",
+      "App",
+      "Layout",
+      "Search",
+      "Settings"
+    ]
+  },
+  "src/features/rail/paletteItems.tsx": {
+    "why": "Palette section IDs (see CommandPalette.tsx).",
+    "texts": [
+      "Create",
+      "Calendar",
+      "Tasks"
+    ]
+  },
+  "src/features/notes/palette.tsx": {
+    "why": "Palette section ID (see CommandPalette.tsx).",
+    "texts": [
+      "Notes"
+    ]
+  },
+  "src/features/speakr/palette.tsx": {
+    "why": "Palette section ID (see CommandPalette.tsx).",
+    "texts": [
+      "Recordings"
+    ]
+  },
+  "src/features/tables/Grid.tsx": {
+    "why": "The Tab key's name, passed to moveFocus().",
+    "texts": [
+      "Tab"
+    ]
+  },
+  "src/features/auth/JoinPage.tsx": {
+    "why": "The wordmark <b>Mail</b>r: the product name Mailr, split for its bold first half; never translated.",
+    "texts": [
+      "Mail"
+    ]
+  },
+  "src/features/auth/LoginPage.tsx": {
+    "why": "The wordmark <b>Mail</b>r: the product name Mailr, split for its bold first half; never translated.",
+    "texts": [
+      "Mail"
+    ]
+  },
+  "src/features/layout/TopBar.tsx": {
+    "why": "The wordmark <b>Mail</b>r: the product name Mailr, split for its bold first half; never translated.",
+    "texts": [
+      "Mail"
+    ]
+  },
+  "src/features/onboarding/SetupGuide.tsx": {
+    "why": "The wordmark <b>Mail</b>r: the product name Mailr, split for its bold first half; never translated.",
+    "texts": [
+      "Mail"
+    ]
+  }
+}
