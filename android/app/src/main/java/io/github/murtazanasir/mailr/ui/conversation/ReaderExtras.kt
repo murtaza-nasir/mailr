@@ -140,12 +140,17 @@ object InviteText {
     fun answerable(i: Invite): Boolean = !i.cancelled && i.method in setOf("REQUEST", "", "PUBLISH") && i.myStatus != null
 
     /** The toast after an answer. */
-    fun answered(response: String, calendarFailed: Boolean): String =
+    /** [reason]: the server's words for why the calendar copy failed (`calendar_reason`), when it gave them. */
+    fun answered(response: String, calendarFailed: Boolean, reason: String? = null): String =
         AppText.get(when (response) {
             "accepted" -> R.string.conv_invite_answered_yes
             "declined" -> R.string.conv_invite_answered_no
             else -> R.string.conv_invite_answered_maybe
-        }) + if (calendarFailed) AppText.get(R.string.conv_invite_calendar_failed_suffix) else ""
+        }) + when {
+            !calendarFailed -> ""
+            !reason.isNullOrBlank() -> AppText.get(R.string.conv_invite_calendar_failed_because_suffix, reason)
+            else -> AppText.get(R.string.conv_invite_calendar_failed_suffix)
+        }
 }
 
 /** An attachment that makes a message an invitation (the web's hasInvite). */
@@ -343,7 +348,8 @@ class ReaderExtras(
     fun answer(messageId: Long, response: String, comment: String = "", send: Boolean = true) = run(messageId) {
         val r = g.api.inviteReply(messageId, response, comment, send)
         val failed = ((r["calendar"] as? JsonPrimitive)?.takeIf { it.isString }?.content ?: "").startsWith("error")
-        say(UiMessage(if (send) InviteText.answered(response, failed) else AppText.get(R.string.conv_invite_added_maybe_silent)))
+        val reason = (r["calendar_reason"] as? JsonPrimitive)?.takeIf { it.isString }?.content
+        say(UiMessage(if (send) InviteText.answered(response, failed, reason) else AppText.get(R.string.conv_invite_added_maybe_silent)))
     }
 
     // ACT invite.apply_unverified @android.reader

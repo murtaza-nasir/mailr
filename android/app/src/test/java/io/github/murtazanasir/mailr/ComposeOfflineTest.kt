@@ -57,6 +57,9 @@ class ComposeOfflineTest {
     private val sendKeys = CopyOnWriteArrayList<String>()
     /** The next sends reach the server, which drops the connection before it answers. */
     @Volatile private var loseSendAnswers = 0
+    /** Every send reaches the server, which drops the connection before it answers, until cleared:
+     *  OkHttp may retry a dropped request by itself (same key), and that retry must not get through. */
+    @Volatile private var dropSendAnswers = false
     private var nextDraft = 900L
 
     private val me = """{"user":{"id":1,"email":"me@example.com","name":"Me"},
@@ -80,6 +83,7 @@ class ComposeOfflineTest {
                         loseSendAnswers--
                         return MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST)
                     }
+                    if (dropSendAnswers) return MockResponse().setSocketPolicy(SocketPolicy.DISCONNECT_AFTER_REQUEST)
                 }
                 return when {
                     path == "/api/v1/me" -> MockResponse().setBody(me)
@@ -233,17 +237,20 @@ class ComposeOfflineTest {
         vm.addRecipient(Field.TO, "alice@example.com")
         vm.setSubject("Report")
         vm.setBody("Attached below.")
-        loseSendAnswers = 1
+        dropSendAnswers = true
         vm.send()
         vm.send()  // a double tap while the first is on its way does nothing
         eventually("send failed") { !vm.state.value.sending && vm.state.value.error != null }
-        assertEquals(1, sendKeys.size)
+        // One attempt: OkHttp may have retried it on its own, always with the same key.
+        val first = sendKeys.toList()
+        assertEquals(1, first.toSet().size)
         // Send again: the server gets the same key, so it answers with the first request's result.
+        dropSendAnswers = false
         vm.clearError()
         val r = result(vm) { vm.send() }
         assertTrue(r is ComposeResult.Sent)
-        assertEquals(2, sendKeys.size)
-        assertEquals(sendKeys[0], sendKeys[1])
+        assertTrue(sendKeys.size > first.size)
+        assertEquals(1, sendKeys.toSet().size)
         assertTrue(sendKeys[0].isNotBlank())
     }
 

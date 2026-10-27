@@ -545,3 +545,49 @@ async def test_an_errand_interrupted_after_a_change_is_not_run_again(client, use
     assert first.status == "failed" and "not run again" in first.error and calls == []
     second = await errands.run_errand(read)
     assert second.status == "done" and calls == [read]
+
+
+async def test_brief_shows_the_runs_approvals_as_they_stand_now(client, user, raw, monkeypatch):
+    """A run's brief is written when the run ends; an approval decided after that (a draft saved a minute
+    later) shows its state on the brief, and the run is told it never sends mail and promises nothing later."""
+    from mailr.assistant import errands, orders
+    from mailr.models import PendingAction
+
+    prompts = []
+
+    async def fake_chat(db, p, text, *, context=None, errand=None, **kw):
+        prompts.append(text)
+        yield {"type": "session", "session_id": "errand-approval-session"}
+        yield {"type": "final", "content": "Forward prepared, waiting for your approval.", "citations": []}
+
+    import mailr.agent.loop as loop
+
+    monkeypatch.setattr(loop, "run_chat", fake_chat)
+    oid = (await client.post("/api/v1/assistant/orders", json={
+        "name": "Building mail", "query": "from:residents@building.example", "errand": "forward this to Sam",
+        "deliver": ["brief"]})).json()["id"]
+    mid, cid = await _ingest(user, raw("Room booking", frm="Residents <residents@building.example>"))
+    await orders.on_message({"message_id": mid}, None)
+    async with sessionmaker()() as db:
+        rid = (await db.execute(select(AssistantRun).where(AssistantRun.order_id == oid))).scalar_one().id
+    await errands.run_errand(rid)
+    assert prompts and errands.BACKGROUND_RULES in prompts[0]
+
+    async with sessionmaker()() as db:
+        pa = PendingAction(user_id=user.id, chat_session_id="errand-approval-session", subject="session:errand-approval-session",
+                           actor="assistant", action="mail.draft", status="pending",
+                           preview={"title": "Save a draft to sam@example.org", "kind": "draft"},
+                           expires_at=datetime.now(UTC) + timedelta(days=1))
+        db.add(pa)
+        await db.commit()
+        pid = pa.id
+    brief = (await client.get(f"/api/v1/conversations/{cid}/brief")).json()["brief"]
+    assert [(a["title"], a["status"]) for a in brief["approvals"]] == [("Save a draft to sam@example.org", "pending")]
+    assert "/approvals/" in brief["approvals"][0]["url"]
+
+    async with sessionmaker()() as db:
+        row = await db.get(PendingAction, pid)
+        row.status, row.result = "executed", {"title": "Draft saved", "draft_id": 1}
+        await db.commit()
+    brief = (await client.get(f"/api/v1/conversations/{cid}/brief")).json()["brief"]
+    assert brief["approvals"][0]["status"] == "executed" and brief["approvals"][0]["result"] == "Draft saved"

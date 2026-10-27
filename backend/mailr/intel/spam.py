@@ -9,7 +9,9 @@ User setting `spam_classifier`:
   "score"            score recent inbound mail and show the score; never move anything.
   "junk" (default)   also move mail to Spam when the score is at least `spam_junk_score`
                      (default 15), the provider did not already decide, and the sender is not
-                     someone the user corresponds with.
+                     someone the user corresponds with. Never for mail Gmail delivered outside Spam,
+                     nor for mail whose sender passes DMARC for the From domain (`keep_reason`):
+                     the score is recorded and shown, and the mail stays where it is.
   "off"              no scoring.
 Scoring does live DNS lookups (0.2–2 s per message), so history imports are not scored. Live mail
 is scored at the start of triage (intel/tasks.py), before any model reads it.
@@ -197,6 +199,25 @@ async def classify(db: AsyncSession, m: Message, raw: bytes) -> dict[str, Any] |
     return created
 
 
+async def keep_reason(db: AsyncSession, m: Message) -> str | None:
+    """Why a high score must not move this message to Spam (the score is still recorded and shown):
+    - Gmail delivered it outside Spam. Gmail's own filter decided it is not spam, and a second check
+      on headers alone overrode it (a DigitalOcean sign-in code, 27 Oct 2026: Reply-To the
+      recipient's own address, which some services set, scored 19.6).
+    - The sender is authenticated: DMARC passes for a domain that matches the From address."""
+    from mailr.models import Connector
+
+    conn = await db.get(Connector, m.connector_id) if m.connector_id else None
+    if conn is not None and conn.kind == "gmail":
+        return "not moved: Gmail delivered it outside Spam"
+    ar = m.auth_results or {}
+    frm = (m.from_email or "").rpartition("@")[2].lower()
+    dfrom = str(ar.get("dmarc_from") or "").lower()
+    if ar.get("dmarc") == "pass" and frm and dfrom and (frm == dfrom or frm.endswith("." + dfrom)):
+        return f"not moved: DMARC passes for {dfrom}"
+    return None
+
+
 async def score_and_act(db: AsyncSession, m: Message, raw: bytes) -> None:
     from mailr.core import threading
 
@@ -217,8 +238,11 @@ async def score_and_act(db: AsyncSession, m: Message, raw: bytes) -> None:
     from mailr.core.spamrules import known_sender
 
     known = await known_sender(db, m.user_id, m.from_email)
+    keep = await keep_reason(db, m) if score >= junk_score and not already_junk else None
+    if keep:
+        reason += f"; {keep}"
     act = mode == "junk" and score >= junk_score and not already_junk and not known \
-        and not (m.upstream or {}).get("upstream_verdict")
+        and not (m.upstream or {}).get("upstream_verdict") and not keep
     db.add(LabelDecision(user_id=m.user_id, message_id=m.id, kind="spam", target="spam", value=score >= junk_score,
                          source="classifier", source_ref="stalwart", confidence=min(1.0, max(0.0, score / 20)),
                          reason=reason, status="applied" if act else "suggested"))

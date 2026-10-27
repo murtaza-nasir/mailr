@@ -1770,5 +1770,11 @@
       "due": "Vence {{when}}",
       "due_at": "Vence {{when}}, {{time}}"
     }
+  },
+  "calendar_write": {
+    "server": "tu servidor de calendario respondió con un error (HTTP {{status}})",
+    "forbidden": "tu servidor de calendario no permitió el cambio",
+    "signin": "no se pudo iniciar sesión en tu servidor de calendario",
+    "other": "se produjo un error inesperado"
   }
 }

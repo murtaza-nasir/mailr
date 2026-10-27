@@ -1700,5 +1700,11 @@
       "due": "截止：{{when}}",
       "due_at": "截止：{{when}} {{time}}"
     }
+  },
+  "calendar_write": {
+    "server": "您的日历服务器返回了错误（HTTP {{status}}）",
+    "forbidden": "您的日历服务器不允许此更改",
+    "signin": "登录日历服务器失败",
+    "other": "发生未知错误"
   }
 }

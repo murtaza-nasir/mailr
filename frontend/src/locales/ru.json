@@ -52,7 +52,7 @@
     },
     "hooks": {
       "actionUndone": "Действие отменено.",
-      "archivedStaysInSection": "{{what}} It is still listed in {{section}}, a section that shows all mail with its label.",
+      "archivedStaysInSection": "{{what}} Он по-прежнему отображается в разделе «{{section}}», где показаны все письма с этим ярлыком.",
       "conversationArchived": "Цепочка архивирована.",
       "conversationDeletedForever": "Цепочка удалена навсегда.",
       "conversationMarkedAsNotSpam": "Цепочка помечена как не спам.",
@@ -170,7 +170,7 @@
       "nothingToArchiveNoneOf_many": "Нечего архивировать: ни одна из этих цепочек не находится во Входящих.",
       "nothingToArchiveNoneOf_other": "Нечего архивировать: ни одна из этих цепочек не находится во Входящих.",
       "settingsNotSaved": "Настройки не сохранены",
-      "staysInItsAccount": "{{what}}. The mail stays in its own account; nothing is copied to {{address}}.",
+      "staysInItsAccount": "{{what}}. Письмо остается в своем аккаунте; на {{address}} ничего не копируется.",
       "stoppedAfterOf": "Остановлено после {{done}} из {{total}}: {{error}}",
       "workingOnConversations_one": "Обработка {{count}} цепочки…",
       "workingOnConversations_few": "Обработка {{count}} цепочек…",
@@ -1593,6 +1593,13 @@
       "previousAttachment": "Предыдущее вложение"
     },
     "briefCard": {
+      "approvalApproved": "Подтверждено",
+      "approvalDenied": "Отклонено",
+      "approvalDone": "Подтверждено и выполнено",
+      "approvalDoneWith": "Подтверждено: {{result}}",
+      "approvalExpired": "Истекло без решения",
+      "approvalFailed": "Подтверждено, но с ошибкой",
+      "approvalWaiting": "Ожидает вашего подтверждения",
       "howGotThis": "Источники {{name}}",
       "showAboveTheMessages": "Показывать над сообщениями",
       "showBesideTheMessages": "Показывать рядом с сообщениями"
@@ -1656,6 +1663,7 @@
       "whatChanged": "Изменения",
       "yourCalendar": "ваш календарь",
       "yourCalendarCouldNotBe": " Не удалось обновить календарь.",
+      "yourCalendarCouldNotBeBecause": " Не удалось обновить календарь: {{reason}}.",
       "yourCalendarWasUpdated": "Календарь обновлен.",
       "yourDayAroundThisTime": "Ваш день в это время",
       "linkedToTheInvitation": "Связано с приглашением. Обновления организатора теперь применяются к вашему мероприятию.",
@@ -8743,7 +8751,7 @@
       "readerSaved": "Модуль сохранен.",
       "editReader": "Изменить модуль чтения страниц",
       "addPageReader": "Добавить модуль чтения страниц",
-      "browserlessToken": "browserless: the TOKEN set on the browserless container.",
+      "browserlessToken": "browserless: токен, заданный в контейнере browserless.",
       "localDesc": "Локальный сервис, такой как browserless или Firecrawl, в вашей сети. Доступен напрямую; его адрес должен быть частным.",
       "onTheInternetThirdParty": "В интернете (сторонний)",
       "internetDesc": "Хостинговый сервис, такой как Jina Reader или облачный Firecrawl. Он получает адрес каждой читаемой страницы и загружает страницу со своего адреса.",

@@ -320,4 +320,22 @@ async def conversation_brief(cid: int, p: Principal = Depends(scope("read")), db
     if run is None:
         return {"brief": None}
     o = await db.get(AssistantOrder, run.order_id) if run.order_id else None
-    return {"brief": {**ord_.run_out(run, o.name if o else None, o.builtin if o else None)}}
+    return {"brief": {**ord_.run_out(run, o.name if o else None, o.builtin if o else None),
+                      "approvals": await run_approvals(db, p.user_id, run)}}
+
+
+async def run_approvals(db: AsyncSession, user_id: int, run) -> list[dict]:
+    """The approvals a run asked for, with their state now. The brief's text was written when the run
+    ended, so an approval decided later (a draft saved a minute after) shows here, not in the text."""
+    from mailr.core.permissions import approval_url
+    from mailr.models import PendingAction
+
+    if not run.session_id:
+        return []
+    rows = (await db.execute(select(PendingAction).where(
+        PendingAction.user_id == user_id, PendingAction.chat_session_id == run.session_id)
+        .order_by(PendingAction.id))).scalars().all()
+    # The card's title is in its preview (core/permissions.py); `subject` names who asked.
+    return [{"title": str((pa.preview or {}).get("title") or pa.action), "status": pa.status, "url": approval_url(pa.id),
+             "result": ((pa.result or {}).get("title") if isinstance(pa.result, dict) else None)}
+            for pa in rows]

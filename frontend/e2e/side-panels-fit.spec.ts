@@ -111,7 +111,9 @@ for (const { theme, dark, rtl } of looks({ dark: true, rtl: true })) {
     const d = new Date()
     const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
     await post(page.request, '/api/v1/tasks', { summary: 'E2E Renew the passport, book the photo appointment and collect the old one from the drawer', due: today })
-    const start = new Date(Date.now() + 3_600_000)
+    // Today's meeting: an hour from now, or two hours ago when an hour from now is already tomorrow (late evening).
+    let start = new Date(Date.now() + 3_600_000)
+    if (start.getDate() !== d.getDate()) start = new Date(Date.now() - 2 * 3_600_000)
     await post(page.request, '/api/v1/calendar/events', {
       summary: 'E2E Quarterly planning with finance and the operations team about next year', location: 'Conference room on the fourth floor, east wing',
       start: start.toISOString(), end: new Date(start.getTime() + 3_600_000).toISOString(),

@@ -11,6 +11,30 @@
   font-size: 16px;
   flex: 1;
 }
+/* The calendar panel's day: weekday and date on one line, the weekday shortened before anything wraps. */
+.cp-day-title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.cp-day-title h3 {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cp-day-date {
+  flex: none;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.cp-day-title .cp-today {
+  flex: none;
+  align-self: center;
+}
 .agenda-item {
   display: flex;
   gap: 12px;

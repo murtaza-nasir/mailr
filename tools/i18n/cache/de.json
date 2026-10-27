@@ -6560,6 +6560,41 @@
    "state": "model",
    "text": "Zurück"
   },
+  "android:app:conv_brief_approval_approved": {
+   "sha": "1a9f56594878f9c1",
+   "state": "model",
+   "text": "Freigegeben"
+  },
+  "android:app:conv_brief_approval_denied": {
+   "sha": "4b4a83794e5a7bba",
+   "state": "model",
+   "text": "Abgelehnt"
+  },
+  "android:app:conv_brief_approval_done": {
+   "sha": "9fb6e741e4dab0a5",
+   "state": "model",
+   "text": "Freigegeben und erledigt"
+  },
+  "android:app:conv_brief_approval_done_with": {
+   "sha": "113e3be2ffe65299",
+   "state": "model",
+   "text": "Freigegeben: %1$s"
+  },
+  "android:app:conv_brief_approval_expired": {
+   "sha": "6a890dd25ec6d17a",
+   "state": "model",
+   "text": "Abgelaufen ohne Entscheidung"
+  },
+  "android:app:conv_brief_approval_failed": {
+   "sha": "f871f1073e65d0f8",
+   "state": "model",
+   "text": "Freigegeben, aber fehlgeschlagen"
+  },
+  "android:app:conv_brief_approval_waiting": {
+   "sha": "df225f08f5746358",
+   "state": "model",
+   "text": "Warten auf deine Freigabe"
+  },
   "android:app:conv_cancel": {
    "sha": "c0774c185060fc13",
    "state": "model",
@@ -6988,6 +7023,11 @@
    "sha": "0423d85feaeb063d",
    "state": "model",
    "text": "Zusage an den Organisator gesendet."
+  },
+  "android:app:conv_invite_calendar_failed_because_suffix": {
+   "sha": "541410d65b248b7c",
+   "state": "model",
+   "text": " Konnte deinen Kalender nicht aktualisieren: %1$s."
   },
   "android:app:conv_invite_calendar_failed_suffix": {
    "sha": "f8f4ca571326bb97",
@@ -21725,6 +21765,26 @@
    "state": "model",
    "text": "Zeit"
   },
+  "server:calendar_write.forbidden": {
+   "sha": "44116d3d35b9567c",
+   "state": "model",
+   "text": "Dein Kalender-Server hat die Änderung nicht zugelassen"
+  },
+  "server:calendar_write.other": {
+   "sha": "e6b6e770c816b4d5",
+   "state": "model",
+   "text": "Ein unerwarteter Fehler ist aufgetreten"
+  },
+  "server:calendar_write.server": {
+   "sha": "8c31a01f9727ce2a",
+   "state": "model",
+   "text": "Dein Kalender-Server hat mit einem Fehler geantwortet (HTTP {{status}})"
+  },
+  "server:calendar_write.signin": {
+   "sha": "4f00ee78d3f3e136",
+   "state": "model",
+   "text": "Anmeldung am Kalender-Server fehlgeschlagen"
+  },
   "server:common.no_subject": {
    "sha": "de4d5b384884f0df",
    "state": "model",
@@ -31570,6 +31630,41 @@
    "state": "model",
    "text": "Vorheriger Anhang"
   },
+  "web:conversation.briefCard.approvalApproved": {
+   "sha": "1a9f56594878f9c1",
+   "state": "model",
+   "text": "Freigegeben"
+  },
+  "web:conversation.briefCard.approvalDenied": {
+   "sha": "4b4a83794e5a7bba",
+   "state": "model",
+   "text": "Abgelehnt"
+  },
+  "web:conversation.briefCard.approvalDone": {
+   "sha": "9fb6e741e4dab0a5",
+   "state": "model",
+   "text": "Freigegeben und erledigt"
+  },
+  "web:conversation.briefCard.approvalDoneWith": {
+   "sha": "1f1ac1fde8209e57",
+   "state": "model",
+   "text": "Freigegeben: {{result}}"
+  },
+  "web:conversation.briefCard.approvalExpired": {
+   "sha": "6a890dd25ec6d17a",
+   "state": "model",
+   "text": "Abgelaufen ohne Entscheidung"
+  },
+  "web:conversation.briefCard.approvalFailed": {
+   "sha": "f871f1073e65d0f8",
+   "state": "model",
+   "text": "Freigegeben, aber fehlgeschlagen"
+  },
+  "web:conversation.briefCard.approvalWaiting": {
+   "sha": "df225f08f5746358",
+   "state": "model",
+   "text": "Warten auf deine Freigabe"
+  },
   "web:conversation.briefCard.howGotThis": {
    "sha": "cc1ebc7176834661",
    "state": "model",
@@ -31918,6 +32013,11 @@
    "sha": "f8f4ca571326bb97",
    "state": "model",
    "text": " Dein Kalender konnte nicht aktualisiert werden."
+  },
+  "web:conversation.calendarBits.yourCalendarCouldNotBeBecause": {
+   "sha": "33806186325e44cd",
+   "state": "model",
+   "text": " Kalender konnte nicht aktualisiert werden: {{reason}}."
   },
   "web:conversation.calendarBits.yourCalendarWasUpdated": {
    "sha": "928c499b419bcfdc",

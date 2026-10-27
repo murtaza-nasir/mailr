@@ -1416,6 +1416,13 @@
       "previousAttachment": "上一个附件"
     },
     "briefCard": {
+      "approvalApproved": "已批准",
+      "approvalDenied": "已拒绝",
+      "approvalDone": "已批准并完成",
+      "approvalDoneWith": "已批准：{{result}}",
+      "approvalExpired": "已过期，未作决定",
+      "approvalFailed": "已批准，但执行失败",
+      "approvalWaiting": "等待您的批准",
       "howGotThis": "{{name}}的来源",
       "showAboveTheMessages": "显示在消息上方",
       "showBesideTheMessages": "显示在消息旁边"
@@ -1470,6 +1477,7 @@
       "whatChanged": "变更",
       "yourCalendar": "您的日历",
       "yourCalendarCouldNotBe": " 无法更新您的日历。",
+      "yourCalendarCouldNotBeBecause": " 无法更新你的日历：{{reason}}。",
       "yourCalendarWasUpdated": "日历已更新。",
       "yourDayAroundThisTime": "该时间段前后的日程",
       "linkedToTheInvitation": "已关联到邀请。组织者的更新现在将应用于您的活动。",
@@ -7810,7 +7818,7 @@
       "readerSaved": "阅读器已保存。",
       "editReader": "编辑网页阅读器",
       "addPageReader": "添加网页阅读器",
-      "browserlessToken": "browserless: the TOKEN set on the browserless container.",
+      "browserlessToken": "browserless：在 browserless 容器中设置的 TOKEN。",
       "localDesc": "您网络中的自托管服务，例如 browserless 或 Firecrawl。直接访问；其地址必须为私有地址。",
       "onTheInternetThirdParty": "在互联网上（第三方）",
       "internetDesc": "托管服务，例如 Jina Reader 或 Firecrawl 云服务。它会接收其读取的每个页面的地址，并从其自身地址获取页面。",

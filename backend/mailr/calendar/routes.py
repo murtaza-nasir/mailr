@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import re
 from datetime import UTC, date, datetime, timedelta, tzinfo
 from typing import Any
@@ -27,6 +28,7 @@ from mailr.db import get_db
 from mailr.i18n import ApiError
 from mailr.models import Connector, Conversation, EventLink, Identity, Message
 
+log = logging.getLogger("mailr.calendar")
 router = APIRouter(tags=["calendar"])
 
 
@@ -1442,8 +1444,26 @@ async def _rsvp(db: AsyncSession, p, message_id: int, response: str, comment: st
         result["calendar"] = await cal.set_partstat(db, p.user_id, info["uid"], me, itip.PARTSTAT[response], ics,
                                                     p=cal_p or p)
     except Exception as e:  # noqa: BLE001
+        # The reply is out; only the calendar copy failed. Logged (it was silent before: a calendar
+        # server's 500 left nothing to read) and given a reason the apps can show.
+        log.warning("invitation in message %s: the calendar update failed: %s", m.id, e)
         result["calendar"] = f"error: {e}"[:200]
+        result["calendar_reason"] = calendar_failure_reason(e, i18n.user_language(p.user))
     return result
+
+
+def calendar_failure_reason(e: Exception, lang: str) -> str:
+    """Why a calendar write failed, in words for the person: the calendar server's answer when
+    there is one, else the refusal's own text."""
+    if isinstance(e, dav.Unauthorized):
+        return i18n.t("calendar_write.signin", lang)
+    if isinstance(e, dav.DavError) and e.status == 403:
+        return i18n.t("calendar_write.forbidden", lang)
+    if isinstance(e, dav.DavError) and e.status:
+        return i18n.t("calendar_write.server", lang, status=e.status)
+    if isinstance(e, writer.InviteRefused):
+        return str(e)
+    return i18n.t("calendar_write.other", lang)
 
 
 async def _x_calendar_rsvp(db, user, payload):
@@ -1469,7 +1489,8 @@ async def add_invite(db: AsyncSession, p, message_id: int, *, cal_p=None) -> dic
     _, _, info = await _invite(db, cal_p or p, message_id)
     res = await _rsvp(db, p, message_id, "accepted", "", send=False, cal_p=cal_p)
     if isinstance(res.get("calendar"), str) and res["calendar"].startswith("error"):
-        raise HTTPException(409, res["calendar"][7:].strip() or "the invitation could not be added")
+        raise HTTPException(409, res.get("calendar_reason") or res["calendar"][7:].strip()
+                            or "the invitation could not be added")
     return {"uid": info["uid"], "summary": info["summary"], "calendar": res.get("calendar"),
             "start": info.get("start")}
 

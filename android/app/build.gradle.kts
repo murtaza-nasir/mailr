@@ -46,8 +46,8 @@ android {
         applicationId = MailrIds.MAILR
         minSdk = 29
         targetSdk = 36
-        versionCode = 106
-        versionName = "0.40.21"
+        versionCode = 111
+        versionName = "0.40.26"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // AppAuth receives the OIDC redirect on this scheme (io.github.murtazanasir.mailr:/oauth2redirect).
         manifestPlaceholders["appAuthRedirectScheme"] = MailrIds.MAILR

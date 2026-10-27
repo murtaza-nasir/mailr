@@ -3,7 +3,7 @@
 // ACT brief.read @web.reader, ACT brief.dock @web.reader (the button on the card)
 
 import { useQuery } from '@tanstack/react-query'
-import { Bot, ChevronDown, ChevronUp, History, PanelRight, PanelTop } from 'lucide-react'
+import { Bot, ChevronDown, ChevronUp, History, PanelRight, PanelTop, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router'
 import { api } from '../../api/client'
@@ -11,7 +11,7 @@ import { useSettings, useUpdateSettings } from '../../api/hooks'
 import { Markdown } from '../rail/assistant/LazyMarkdown'
 import type { Citation } from '../rail/assistant/citations'
 import { useAssistantName } from '../rail/assistant/useAssistantName'
-import { orderName, type AssistantRun } from '../settings/assistant/types'
+import { orderName, type AssistantRun, type RunApproval } from '../settings/assistant/types'
 import { formatRelative } from '../../lib/format'
 import { t } from '../../i18n'
 import { startsOpen, type AiCardsInput } from './aiCards'
@@ -24,11 +24,15 @@ export function teaser(md: string): string {
 
 export const briefKey = (id: number) => ['brief', id] as const
 
+const OPEN = new Set(['pending', 'approved', 'executing'])
+
 export function useBrief(id: number) {
   return useQuery<{ brief: AssistantRun | null }>({
     queryKey: briefKey(id),
     queryFn: () => api.get<{ brief: AssistantRun | null }>(`/conversations/${id}/brief`),
     staleTime: 60_000,
+    // An approval the run asked for may be decided anywhere (drawer, chat, phone): look again until none is open.
+    refetchInterval: (q) => (q.state.data?.brief?.approvals ?? []).some((a) => OPEN.has(a.status)) ? 10_000 : false,
   })
 }
 
@@ -86,11 +90,42 @@ export function BriefCard({ id, input, onOpenCitation }: { id: number; input: Ai
       {open && (
         <div className="body">
           <Markdown text={b.output} citations={b.citations} onOpenCitation={onOpenCitation} />
+          {b.approvals && b.approvals.length > 0 && (
+            <ul className="brief-approvals">
+              {b.approvals.map((a, i) => <ApprovalLine key={i} a={a} />)}
+            </ul>
+          )}
           <Link className="brief-how muted" to={`/settings/ambrose/orders?run=${b.id}`}>
             <History size={14} />{' '}{t('conversation.briefCard.howGotThis', { name })}
           </Link>
         </div>
       )}
     </div>
+  )
+}
+
+/** One approval of the run, as it stands now: the brief's text was written when the run ended. */
+function ApprovalLine({ a }: { a: RunApproval }) {
+  const path = (() => {
+    try {
+      return new URL(a.url).pathname
+    } catch {
+      return a.url
+    }
+  })()
+  const state = a.status === 'executed'
+    ? (a.result ? t('conversation.briefCard.approvalDoneWith', { result: a.result }) : t('conversation.briefCard.approvalDone'))
+    : a.status === 'pending' ? t('conversation.briefCard.approvalWaiting')
+      : a.status === 'approved' || a.status === 'executing' ? t('conversation.briefCard.approvalApproved')
+        : a.status === 'denied' ? t('conversation.briefCard.approvalDenied')
+          : a.status === 'expired' ? t('conversation.briefCard.approvalExpired')
+            : t('conversation.briefCard.approvalFailed')
+  return (
+    <li className={`brief-approval ${a.status}`}>
+      <ShieldCheck size={14} />{' '}
+      <span dir="auto">{a.title}</span>
+      <span className="muted"> · </span>
+      {a.status === 'pending' ? <Link to={path}>{state}</Link> : <span className="muted">{state}</span>}
+    </li>
   )
 }

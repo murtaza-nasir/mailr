@@ -1770,5 +1770,11 @@
       "due": "Due {{when}}",
       "due_at": "Due {{when}}, {{time}}"
     }
+  },
+  "calendar_write": {
+    "server": "your calendar server answered with an error (HTTP {{status}})",
+    "forbidden": "your calendar server did not allow the change",
+    "signin": "signing in to your calendar server failed",
+    "other": "an unexpected error occurred"
   }
 }

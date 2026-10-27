@@ -102,15 +102,19 @@ function PanelBody({ day, setDay }: { day: ISODate; setDay: (d: ISODate) => void
   return (
     <div className="agenda cp-panel" data-testid="calendar-panel">
       <div className="agenda-day">
-        <h3>{isToday ? tr('common.today') : formatDate(day, 'weekdayLong')}</h3>
-        <span className="muted" style={{ fontSize: 13 }}>{formatDate(day, 'short')}</span>
+        <div className="cp-day-title">
+          <h3>{isToday ? tr('common.today') : formatDate(day, 'weekdayLong')}</h3>
+          <span className="muted cp-day-date">{formatDate(day, 'short')}</span>
+          {/* Beside the date: when it appears, the title side gives up the room, and the arrows
+              (at the row's end) stay where they are, so repeated clicks keep landing on them. */}
+          {!isToday && <button type="button" className="btn text sm cp-today" onClick={() => setDay(cal.today)}>{tr('common.today')}</button>}
+        </div>
         <button type="button" className="icon-btn sm" aria-label={tr('rail.calendarPanel.previousDay')} data-tip={tr('rail.calendarPanel.previousDay')} onClick={() => setDay(addDaysISO(day, -1))}>
           <ChevronLeft size={18} />
         </button>
         <button type="button" className="icon-btn sm" aria-label={tr('rail.calendarPanel.nextDay')} data-tip={tr('rail.calendarPanel.nextDay')} onClick={() => setDay(addDaysISO(day, 1))}>
           <ChevronRight size={18} />
         </button>
-        {!isToday && <button type="button" className="btn text sm" onClick={() => setDay(cal.today)}>{tr('common.today')}</button>}
         <CalendarsMenu />
       </div>
       {cols.isError || noCalendar ? (

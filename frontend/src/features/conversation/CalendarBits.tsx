@@ -111,10 +111,13 @@ function InviteBody({ m, i }: { m: Message; i: Invite }) {
 
   const reply = useMutation({
     // ACT event.rsvp @web.reader
-    mutationFn: (response: Rsvp) => api.post<{ calendar: unknown; outbox: unknown }>('/calendar/invite-reply', { message_id: m.id, response, comment: note?.trim() ?? '' }),
+    mutationFn: (response: Rsvp) => api.post<{ calendar: unknown; outbox: unknown; calendar_reason?: string }>('/calendar/invite-reply', { message_id: m.id, response, comment: note?.trim() ?? '' }),
     onSuccess: (r, response) => {
       const calFailed = typeof r?.calendar === 'string' && r.calendar.startsWith('error')
-      toast({ message: t('conversation.calendarBits.sentToTheOrganiser', { value: response === 'accepted' ? t('common.yes') : response === 'declined' ? t('common.no') : t('common.maybe'), value2: calFailed ? t('conversation.calendarBits.yourCalendarCouldNotBe') : '' }) })
+      const why = calFailed
+        ? (r.calendar_reason ? t('conversation.calendarBits.yourCalendarCouldNotBeBecause', { reason: r.calendar_reason }) : t('conversation.calendarBits.yourCalendarCouldNotBe'))
+        : ''
+      toast({ message: t('conversation.calendarBits.sentToTheOrganiser', { value: response === 'accepted' ? t('common.yes') : response === 'declined' ? t('common.no') : t('common.maybe'), value2: why }) })
       setNote(null)
       refresh()
     },

@@ -157,6 +157,11 @@ The numbers behind each level are under **Fine-tune the numbers**:
 The classifier and the provider score apply to new senders only: mail from people you write to is
 never moved by a score.
 
+Two kinds of mail are not moved by the classifier score: mail that Gmail delivered outside its Spam
+folder (Gmail's own filter already judged it), and mail whose sender passes DMARC for the domain in
+the From address. The score is still recorded and shown in the **Why this is here** panel, and a
+high score still keeps the message away from language models.
+
 Mail in Spam and mail from blocked senders is never sent to a model either. The **Why this is here**
 panel then shows "Not checked by a model: likely spam". After **Not spam**, the message is
 classified again by the user's models.

@@ -6454,6 +6454,41 @@
    "state": "model",
    "text": "返回"
   },
+  "android:app:conv_brief_approval_approved": {
+   "sha": "1a9f56594878f9c1",
+   "state": "model",
+   "text": "已批准"
+  },
+  "android:app:conv_brief_approval_denied": {
+   "sha": "4b4a83794e5a7bba",
+   "state": "model",
+   "text": "已拒绝"
+  },
+  "android:app:conv_brief_approval_done": {
+   "sha": "9fb6e741e4dab0a5",
+   "state": "model",
+   "text": "已批准并完成"
+  },
+  "android:app:conv_brief_approval_done_with": {
+   "sha": "113e3be2ffe65299",
+   "state": "model",
+   "text": "已批准：%1$s"
+  },
+  "android:app:conv_brief_approval_expired": {
+   "sha": "6a890dd25ec6d17a",
+   "state": "model",
+   "text": "已过期，未作决定"
+  },
+  "android:app:conv_brief_approval_failed": {
+   "sha": "f871f1073e65d0f8",
+   "state": "model",
+   "text": "已批准，但执行失败"
+  },
+  "android:app:conv_brief_approval_waiting": {
+   "sha": "df225f08f5746358",
+   "state": "model",
+   "text": "等待您的批准"
+  },
   "android:app:conv_cancel": {
    "sha": "c0774c185060fc13",
    "state": "model",
@@ -6879,6 +6914,11 @@
    "sha": "0423d85feaeb063d",
    "state": "model",
    "text": "已向组织者发送“接受”。"
+  },
+  "android:app:conv_invite_calendar_failed_because_suffix": {
+   "sha": "541410d65b248b7c",
+   "state": "manual",
+   "text": " 无法更新你的日历：%1$s。"
   },
   "android:app:conv_invite_calendar_failed_suffix": {
    "sha": "f8f4ca571326bb97",
@@ -21444,6 +21484,26 @@
    "state": "model",
    "text": "时间"
   },
+  "server:calendar_write.forbidden": {
+   "sha": "44116d3d35b9567c",
+   "state": "model",
+   "text": "您的日历服务器不允许此更改"
+  },
+  "server:calendar_write.other": {
+   "sha": "e6b6e770c816b4d5",
+   "state": "model",
+   "text": "发生未知错误"
+  },
+  "server:calendar_write.server": {
+   "sha": "8c31a01f9727ce2a",
+   "state": "model",
+   "text": "您的日历服务器返回了错误（HTTP {{status}}）"
+  },
+  "server:calendar_write.signin": {
+   "sha": "4f00ee78d3f3e136",
+   "state": "model",
+   "text": "登录日历服务器失败"
+  },
   "server:common.no_subject": {
    "sha": "de4d5b384884f0df",
    "state": "model",
@@ -31178,6 +31238,41 @@
    "state": "model",
    "text": "上一个附件"
   },
+  "web:conversation.briefCard.approvalApproved": {
+   "sha": "1a9f56594878f9c1",
+   "state": "model",
+   "text": "已批准"
+  },
+  "web:conversation.briefCard.approvalDenied": {
+   "sha": "4b4a83794e5a7bba",
+   "state": "model",
+   "text": "已拒绝"
+  },
+  "web:conversation.briefCard.approvalDone": {
+   "sha": "9fb6e741e4dab0a5",
+   "state": "model",
+   "text": "已批准并完成"
+  },
+  "web:conversation.briefCard.approvalDoneWith": {
+   "sha": "1f1ac1fde8209e57",
+   "state": "model",
+   "text": "已批准：{{result}}"
+  },
+  "web:conversation.briefCard.approvalExpired": {
+   "sha": "6a890dd25ec6d17a",
+   "state": "model",
+   "text": "已过期，未作决定"
+  },
+  "web:conversation.briefCard.approvalFailed": {
+   "sha": "f871f1073e65d0f8",
+   "state": "model",
+   "text": "已批准，但执行失败"
+  },
+  "web:conversation.briefCard.approvalWaiting": {
+   "sha": "df225f08f5746358",
+   "state": "model",
+   "text": "等待您的批准"
+  },
   "web:conversation.briefCard.howGotThis": {
    "sha": "cc1ebc7176834661",
    "state": "model",
@@ -31523,6 +31618,11 @@
    "sha": "f8f4ca571326bb97",
    "state": "model",
    "text": " 无法更新您的日历。"
+  },
+  "web:conversation.calendarBits.yourCalendarCouldNotBeBecause": {
+   "sha": "33806186325e44cd",
+   "state": "manual",
+   "text": " 无法更新你的日历：{{reason}}。"
   },
   "web:conversation.calendarBits.yourCalendarWasUpdated": {
    "sha": "928c499b419bcfdc",
@@ -47683,7 +47783,7 @@
    "sha": "466c6e196d77d620",
    "state": "english",
    "text": "claude mcp add mailr --transport http {{origin}}/mcp \\\n  --header \"Authorization: Bearer {{raw}}…\"",
-   "why": "not translated into Chinese; English words left: claude, header, http, transport; left in English"
+   "why": "not translated into Chinese; English words left: claude, header, http, mailr, transport; left in English"
   },
   "web:settings.agentsTab.copyThisTokenNowIt": {
    "sha": "824bd0a2f7223b26",
@@ -54990,9 +55090,8 @@
   },
   "web:settings.pageReadersAdmin.browserlessToken": {
    "sha": "4034cfa1b3faeeef",
-   "state": "english",
-   "text": "browserless: the TOKEN set on the browserless container.",
-   "why": "English words left: browserless"
+   "state": "model",
+   "text": "browserless：在 browserless 容器中设置的 TOKEN。"
   },
   "web:settings.pageReadersAdmin.builtIn": {
    "sha": "caaeda9d02d381cc",

@@ -141,6 +141,7 @@
     <string name="conv_invite_answered_no">Ответ «Нет» отправлен организатору.</string>
     <string name="conv_invite_answered_maybe">Ответ «Возможно» отправлен организатору.</string>
     <string name="conv_invite_calendar_failed_suffix"> Не удалось обновить календарь.</string>
+    <string name="conv_invite_calendar_failed_because_suffix"> Не удалось обновить календарь: %1$s.</string>
     <string name="conv_move_inbox">Входящие</string>
     <string name="conv_move_trash">Корзина</string>
     <string name="conv_move_archive">Архив</string>
@@ -178,6 +179,13 @@
     <string name="conv_the_note">заметка</string>
     <string name="conv_collapse_brief">Свернуть краткое описание</string>
     <string name="conv_expand_brief">Развернуть</string>
+    <string name="conv_brief_approval_waiting">Требуется ваше подтверждение</string>
+    <string name="conv_brief_approval_approved">Подтверждено</string>
+    <string name="conv_brief_approval_done">Подтверждено и выполнено</string>
+    <string name="conv_brief_approval_done_with">Подтверждено: %1$s</string>
+    <string name="conv_brief_approval_denied">Отклонено</string>
+    <string name="conv_brief_approval_expired">Срок истёк без решения</string>
+    <string name="conv_brief_approval_failed">Подтверждено, но не удалось выполнить</string>
     <string name="conv_reading_email">Чтение письма…</string>
     <plurals name="conv_invite_conflict_more">
         <item quantity="one">У вас занято %1$s и ещё %2$d мероприятие в это время</item>

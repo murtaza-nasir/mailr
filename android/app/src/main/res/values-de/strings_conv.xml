@@ -133,6 +133,7 @@
     <string name="conv_invite_answered_no">Absage an den Organisator gesendet.</string>
     <string name="conv_invite_answered_maybe">Vielleicht-Zusage an den Organisator gesendet.</string>
     <string name="conv_invite_calendar_failed_suffix"> Dein Kalender konnte nicht aktualisiert werden.</string>
+    <string name="conv_invite_calendar_failed_because_suffix"> Konnte deinen Kalender nicht aktualisieren: %1$s.</string>
     <string name="conv_move_inbox">Posteingang</string>
     <string name="conv_move_trash">Papierkorb</string>
     <string name="conv_move_archive">Archivieren</string>
@@ -170,6 +171,13 @@
     <string name="conv_the_note">die Notiz</string>
     <string name="conv_collapse_brief">Übersicht einklappen</string>
     <string name="conv_expand_brief">Übersicht ausklappen</string>
+    <string name="conv_brief_approval_waiting">Warten auf deine Freigabe</string>
+    <string name="conv_brief_approval_approved">Freigegeben</string>
+    <string name="conv_brief_approval_done">Freigegeben und erledigt</string>
+    <string name="conv_brief_approval_done_with">Freigegeben: %1$s</string>
+    <string name="conv_brief_approval_denied">Abgelehnt</string>
+    <string name="conv_brief_approval_expired">Abgelaufen ohne Entscheidung</string>
+    <string name="conv_brief_approval_failed">Freigegeben, aber fehlgeschlagen</string>
     <string name="conv_reading_email">E-Mail wird gelesen…</string>
     <plurals name="conv_invite_conflict_more">
         <item quantity="one">Du hast %1$s und %2$d weitere zu dieser Zeit</item>

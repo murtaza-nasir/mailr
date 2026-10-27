@@ -129,6 +129,7 @@
     <string name="conv_invite_answered_no">已向组织者发送“拒绝”。</string>
     <string name="conv_invite_answered_maybe">已向组织者发送“待定”。</string>
     <string name="conv_invite_calendar_failed_suffix"> 无法更新您的日历。</string>
+    <string name="conv_invite_calendar_failed_because_suffix"> 无法更新你的日历：%1$s。</string>
     <string name="conv_move_inbox">收件箱</string>
     <string name="conv_move_trash">回收站</string>
     <string name="conv_move_archive">归档</string>
@@ -166,6 +167,13 @@
     <string name="conv_the_note">该笔记</string>
     <string name="conv_collapse_brief">收起摘要</string>
     <string name="conv_expand_brief">展开摘要</string>
+    <string name="conv_brief_approval_waiting">等待您的批准</string>
+    <string name="conv_brief_approval_approved">已批准</string>
+    <string name="conv_brief_approval_done">已批准并完成</string>
+    <string name="conv_brief_approval_done_with">已批准：%1$s</string>
+    <string name="conv_brief_approval_denied">已拒绝</string>
+    <string name="conv_brief_approval_expired">已过期，未作决定</string>
+    <string name="conv_brief_approval_failed">已批准，但执行失败</string>
     <string name="conv_reading_email">正在读取邮件…</string>
     <plurals name="conv_invite_conflict_more">
         <item quantity="other">您在该时间段还有 %1$s 和另外 %2$d 个活动</item>

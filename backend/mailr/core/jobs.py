@@ -410,6 +410,9 @@ _INFLIGHT: set[int] = set()
 # Set at shutdown before running jobs are handed back: lanes claim nothing more, so a job handed
 # back is not claimed again by the stopping worker.
 _STOPPING = False
+# Claims under way: the shutdown waits for them before it hands jobs back, so a claim that began
+# just before the stop cannot take a handed-back job after the hand-back.
+_CLAIMING = 0
 _TASKS: set[asyncio.Task] = set()  # strong refs: asyncio only keeps weak ones
 
 
@@ -426,10 +429,23 @@ async def _heartbeat() -> None:
                 log.warning("job heartbeat failed: %s", e)
 
 
+async def _counted_claim(kinds, exclude, turns):
+    global _CLAIMING
+    _CLAIMING += 1
+    try:
+        return await _claim(kinds, exclude, lane=turns)
+    finally:
+        _CLAIMING -= 1
+
+
 async def requeue_inflight() -> None:
     """On shutdown: hand running jobs back to the queue (their handlers are idempotent)."""
     global _STOPPING
     _STOPPING = True
+    for _ in range(40):  # at most 2 s
+        if not _CLAIMING:
+            break
+        await asyncio.sleep(0.05)
     if not _INFLIGHT:
         return
     async with session_scope() as db:
@@ -553,7 +569,7 @@ async def _lane(sem: asyncio.Semaphore, wake: asyncio.Event, turns: Lane, backgr
             if background and datetime.now(UTC) - last_reap > timedelta(minutes=5):
                 await reap_stale()
                 last_reap = datetime.now(UTC)
-            job = await _claim(kinds, exclude, lane=turns)
+            job = await _counted_claim(kinds, exclude, turns)
         except asyncio.CancelledError:
             sem.release()
             raise

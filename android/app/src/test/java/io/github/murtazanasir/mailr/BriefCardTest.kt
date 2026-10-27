@@ -12,6 +12,7 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.assertCountEquals
 import io.github.murtazanasir.mailr.data.api.AssistantRun
 import io.github.murtazanasir.mailr.data.api.Citation
+import io.github.murtazanasir.mailr.data.api.RunApproval
 import io.github.murtazanasir.mailr.ui.conversation.ConversationActions
 import io.github.murtazanasir.mailr.ui.conversation.ConversationScreen
 import io.github.murtazanasir.mailr.ui.conversation.briefLinks
@@ -71,5 +72,26 @@ class BriefCardTest {
     @Test fun noBriefNoCard() {
         reader(null)
         compose.onAllNodesWithText("Ambrose").assertCountEquals(0)
+    }
+
+    @Test fun showsTheRunsApprovalsAsTheyStandNow() {
+        // The brief says the draft waits; the approval was decided after the run ended.
+        val b = brief.copy(output = "Forward prepared, waiting for your approval.", approvals = listOf(
+            RunApproval(title = "Save a draft to sam@example.org", status = "executed",
+                url = "https://mail.example.com/approvals/aR30r5XQgO", result = "Draft saved"),
+            RunApproval(title = "Send to sam@example.org", status = "pending", url = "https://mail.example.com/approvals/aB12")))
+        reader(b)
+        compose.onNodeWithText("Save a draft to sam@example.org · Approved: Draft saved").assertIsDisplayed()
+        compose.onNodeWithText("Send to sam@example.org · Waiting for your approval").assertIsDisplayed()
+        assertEquals("aB12", b.approvals[1].key)
+        assertEquals(listOf(false, true), b.approvals.map { it.open })
+    }
+
+    @Test fun readsApprovalsFromTheServer() {
+        val run = io.github.murtazanasir.mailr.data.api.MailrJson.decodeFromString(AssistantRun.serializer(),
+            """{"id": 1, "output": "x", "approvals": [{"title": "Save a draft", "status": "pending",
+               "url": "https://mail.example.com/approvals/aR30", "result": null}]}""")
+        assertEquals("aR30", run.approvals.single().key)
+        assertEquals(true, run.approvals.single().open)
     }
 }

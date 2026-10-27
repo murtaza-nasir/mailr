@@ -133,6 +133,7 @@
     <string name="conv_invite_answered_no">No enviado al organizador.</string>
     <string name="conv_invite_answered_maybe">Tal vez enviado al organizador.</string>
     <string name="conv_invite_calendar_failed_suffix"> No se pudo actualizar tu calendario.</string>
+    <string name="conv_invite_calendar_failed_because_suffix"> No se pudo actualizar tu calendario: %1$s.</string>
     <string name="conv_move_inbox">Recibidos</string>
     <string name="conv_move_trash">Papelera</string>
     <string name="conv_move_archive">Archivo</string>
@@ -170,6 +171,13 @@
     <string name="conv_the_note">la nota</string>
     <string name="conv_collapse_brief">Contraer resumen</string>
     <string name="conv_expand_brief">Ampliar resumen</string>
+    <string name="conv_brief_approval_waiting">Esperando tu aprobación</string>
+    <string name="conv_brief_approval_approved">Aprobada</string>
+    <string name="conv_brief_approval_done">Aprobada y realizada</string>
+    <string name="conv_brief_approval_done_with">Aprobada: %1$s</string>
+    <string name="conv_brief_approval_denied">Rechazada</string>
+    <string name="conv_brief_approval_expired">Caducada sin decisión</string>
+    <string name="conv_brief_approval_failed">Aprobada, pero falló</string>
     <string name="conv_reading_email">Leyendo el correo…</string>
     <plurals name="conv_invite_conflict_more">
         <item quantity="one">Tienes %1$s y %2$d más a esa hora</item>

@@ -7,6 +7,8 @@ search:
 
 A **standing order** is an instruction to Ambrose for when certain mail arrives: "When a bill reminder arrives, label it Bills and tell me the due date." A **routine** is run on a schedule: "Every weekday at 8:00, list what needs a reply." Both are run in the background, with the same permissions and approvals as a chat.
 
+Mail is never sent from a standing order or a routine. A draft that Ambrose prepares waits on an approval card, and once it is approved and saved, you send it yourself. To forward matching mail automatically, use a [filter](organize.md#filters) with **Forward it to:** instead.
+
 Open **Settings → Ambrose → Standing orders & routines**.
 
 ![Settings, Standing orders & routines, with message orders, a recording order and routines](../assets/shots/assistant-orders-list.png)
@@ -108,6 +110,8 @@ When one order fails, for example because the model could not be reached, its ru
 ## Briefs
 
 When the result of an order is **a brief on the email**, Ambrose's report appears as a card on that conversation, with the order's name. Briefs have citations like chat answers.
+
+The text of a brief is written when the order finishes. When the order asked for approvals, each one is listed under the text with its current state, for example **Waiting for your approval** (a link to the card) or **Approved: Draft saved**, so a decision made after the order finished is shown on the card.
 
 ![A conversation with Ambrose's brief above the messages](../assets/shots/assistant-brief-top.png)
 
