@@ -6560,6 +6560,41 @@
    "state": "model",
    "text": "Voltar"
   },
+  "android:app:conv_brief_approval_approved": {
+   "sha": "1a9f56594878f9c1",
+   "state": "model",
+   "text": "Aprovado"
+  },
+  "android:app:conv_brief_approval_denied": {
+   "sha": "4b4a83794e5a7bba",
+   "state": "model",
+   "text": "Recusado"
+  },
+  "android:app:conv_brief_approval_done": {
+   "sha": "9fb6e741e4dab0a5",
+   "state": "model",
+   "text": "Aprovado e concluído"
+  },
+  "android:app:conv_brief_approval_done_with": {
+   "sha": "113e3be2ffe65299",
+   "state": "model",
+   "text": "Aprovado: %1$s"
+  },
+  "android:app:conv_brief_approval_expired": {
+   "sha": "6a890dd25ec6d17a",
+   "state": "model",
+   "text": "Expirado sem uma decisão"
+  },
+  "android:app:conv_brief_approval_failed": {
+   "sha": "f871f1073e65d0f8",
+   "state": "model",
+   "text": "Aprovado, mas falhou"
+  },
+  "android:app:conv_brief_approval_waiting": {
+   "sha": "df225f08f5746358",
+   "state": "model",
+   "text": "Aguardando sua aprovação"
+  },
   "android:app:conv_cancel": {
    "sha": "c0774c185060fc13",
    "state": "model",
@@ -6988,6 +7023,11 @@
    "sha": "0423d85feaeb063d",
    "state": "model",
    "text": "Sim enviado ao organizador."
+  },
+  "android:app:conv_invite_calendar_failed_because_suffix": {
+   "sha": "541410d65b248b7c",
+   "state": "model",
+   "text": " Não foi possível atualizar sua agenda: %1$s."
   },
   "android:app:conv_invite_calendar_failed_suffix": {
    "sha": "f8f4ca571326bb97",
@@ -21725,6 +21765,26 @@
    "state": "model",
    "text": "horário"
   },
+  "server:calendar_write.forbidden": {
+   "sha": "44116d3d35b9567c",
+   "state": "model",
+   "text": "seu servidor de agenda não permitiu a alteração"
+  },
+  "server:calendar_write.other": {
+   "sha": "e6b6e770c816b4d5",
+   "state": "model",
+   "text": "ocorreu um erro inesperado"
+  },
+  "server:calendar_write.server": {
+   "sha": "8c31a01f9727ce2a",
+   "state": "model",
+   "text": "seu servidor de agenda respondeu com um erro (HTTP {{status}})"
+  },
+  "server:calendar_write.signin": {
+   "sha": "4f00ee78d3f3e136",
+   "state": "model",
+   "text": "falha ao entrar no seu servidor de agenda"
+  },
   "server:common.no_subject": {
    "sha": "de4d5b384884f0df",
    "state": "model",
@@ -31571,6 +31631,41 @@
    "state": "model",
    "text": "Anexo anterior"
   },
+  "web:conversation.briefCard.approvalApproved": {
+   "sha": "1a9f56594878f9c1",
+   "state": "model",
+   "text": "Aprovado"
+  },
+  "web:conversation.briefCard.approvalDenied": {
+   "sha": "4b4a83794e5a7bba",
+   "state": "model",
+   "text": "Recusado"
+  },
+  "web:conversation.briefCard.approvalDone": {
+   "sha": "9fb6e741e4dab0a5",
+   "state": "model",
+   "text": "Aprovado e concluído"
+  },
+  "web:conversation.briefCard.approvalDoneWith": {
+   "sha": "1f1ac1fde8209e57",
+   "state": "model",
+   "text": "Aprovado: {{result}}"
+  },
+  "web:conversation.briefCard.approvalExpired": {
+   "sha": "6a890dd25ec6d17a",
+   "state": "model",
+   "text": "Expirado sem uma decisão"
+  },
+  "web:conversation.briefCard.approvalFailed": {
+   "sha": "f871f1073e65d0f8",
+   "state": "model",
+   "text": "Aprovado, mas falhou"
+  },
+  "web:conversation.briefCard.approvalWaiting": {
+   "sha": "df225f08f5746358",
+   "state": "model",
+   "text": "Aguardando sua aprovação"
+  },
   "web:conversation.briefCard.howGotThis": {
    "sha": "cc1ebc7176834661",
    "state": "model",
@@ -31919,6 +32014,11 @@
    "sha": "f8f4ca571326bb97",
    "state": "model",
    "text": " Não foi possível atualizar sua agenda."
+  },
+  "web:conversation.calendarBits.yourCalendarCouldNotBeBecause": {
+   "sha": "33806186325e44cd",
+   "state": "model",
+   "text": " Não foi possível atualizar sua agenda: {{reason}}."
   },
   "web:conversation.calendarBits.yourCalendarWasUpdated": {
    "sha": "928c499b419bcfdc",

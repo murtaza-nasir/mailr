@@ -1770,5 +1770,11 @@
       "due": "Fällig {{when}}",
       "due_at": "Fällig {{when}}, {{time}}"
     }
+  },
+  "calendar_write": {
+    "server": "Dein Kalender-Server hat mit einem Fehler geantwortet (HTTP {{status}})",
+    "forbidden": "Dein Kalender-Server hat die Änderung nicht zugelassen",
+    "signin": "Anmeldung am Kalender-Server fehlgeschlagen",
+    "other": "Ein unerwarteter Fehler ist aufgetreten"
   }
 }

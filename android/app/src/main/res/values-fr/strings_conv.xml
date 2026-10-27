@@ -133,6 +133,7 @@
     <string name="conv_invite_answered_no">Réponse « Non » envoyée à l\'organisateur.</string>
     <string name="conv_invite_answered_maybe">Réponse « Peut-être » envoyée à l\'organisateur.</string>
     <string name="conv_invite_calendar_failed_suffix"> Impossible de mettre à jour votre agenda.</string>
+    <string name="conv_invite_calendar_failed_because_suffix"> Impossible de mettre à jour votre agenda : %1$s.</string>
     <string name="conv_move_inbox">Boîte de réception</string>
     <string name="conv_move_trash">Corbeille</string>
     <string name="conv_move_archive">Archives</string>
@@ -170,6 +171,13 @@
     <string name="conv_the_note">la note</string>
     <string name="conv_collapse_brief">Réduire le résumé</string>
     <string name="conv_expand_brief">Développer le résumé</string>
+    <string name="conv_brief_approval_waiting">En attente de votre approbation</string>
+    <string name="conv_brief_approval_approved">Approuvé</string>
+    <string name="conv_brief_approval_done">Approuvé et terminé</string>
+    <string name="conv_brief_approval_done_with">Approuvé : %1$s</string>
+    <string name="conv_brief_approval_denied">Refusé</string>
+    <string name="conv_brief_approval_expired">Expiré sans décision</string>
+    <string name="conv_brief_approval_failed">Approuvé, mais a échoué</string>
     <string name="conv_reading_email">Lecture de l\'e-mail…</string>
     <plurals name="conv_invite_conflict_more">
         <item quantity="one">Vous avez %1$s et %2$d autre événement à cette heure</item>

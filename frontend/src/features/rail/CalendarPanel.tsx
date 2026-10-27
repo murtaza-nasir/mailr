@@ -102,15 +102,20 @@ function PanelBody({ day, setDay }: { day: ISODate; setDay: (d: ISODate) => void
   return (
     <div className="agenda cp-panel" data-testid="calendar-panel">
       <div className="agenda-day">
-        <h3>{isToday ? tr('common.today') : formatDate(day, 'weekdayLong')}</h3>
-        <span className="muted" style={{ fontSize: 13 }}>{formatDate(day, 'short')}</span>
+        <div className="cp-day-title">
+          <h3>{isToday ? tr('common.today') : formatDate(day, 'weekdayLong')}</h3>
+          <span className="muted cp-day-date">{formatDate(day, 'short')}</span>
+        </div>
         <button type="button" className="icon-btn sm" aria-label={tr('rail.calendarPanel.previousDay')} data-tip={tr('rail.calendarPanel.previousDay')} onClick={() => setDay(addDaysISO(day, -1))}>
           <ChevronLeft size={18} />
         </button>
         <button type="button" className="icon-btn sm" aria-label={tr('rail.calendarPanel.nextDay')} data-tip={tr('rail.calendarPanel.nextDay')} onClick={() => setDay(addDaysISO(day, 1))}>
           <ChevronRight size={18} />
         </button>
-        {!isToday && <button type="button" className="btn text sm" onClick={() => setDay(cal.today)}>{tr('common.today')}</button>}
+        {/* Always in the row, hidden on today itself: the arrows stay where they are, so repeated
+            clicks keep landing on them. */}
+        <button type="button" className={`btn text sm cp-today${isToday ? ' is-hidden' : ''}`} onClick={() => setDay(cal.today)}
+          disabled={isToday} aria-hidden={isToday || undefined} tabIndex={isToday ? -1 : undefined}>{tr('common.today')}</button>
         <CalendarsMenu />
       </div>
       {cols.isError || noCalendar ? (

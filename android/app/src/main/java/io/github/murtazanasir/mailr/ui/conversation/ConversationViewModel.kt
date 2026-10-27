@@ -94,11 +94,19 @@ class ConversationViewModel(
             }
         }
         viewModelScope.launch { load() }
-        viewModelScope.launch { loadBrief() }
+        viewModelScope.launch {
+            loadBrief()
+            // An approval the brief's run asked for may be decided anywhere (notification, approvals
+            // screen, web): look again while one is open, so the card shows the decision.
+            while (true) {
+                kotlinx.coroutines.delay(10_000)
+                if (_brief.value?.approvals?.any { it.open } == true) loadBrief()
+            }
+        }
         viewModelScope.launch {
             g.mail.invalidations.collect {
                 if ("conversation" in it || "message" in it) catching { g.mail.refreshConversation(conversationId) }
-                if ("assistant" in it || "conversation" in it) loadBrief()
+                if ("assistant" in it || "conversation" in it || "approval" in it) loadBrief()
             }
         }
     }

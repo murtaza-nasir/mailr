@@ -268,6 +268,16 @@ export interface AssistantRun {
   error: string
   created_at: string | null
   finished_at: string | null
+  /** On a conversation's brief: the approvals the run asked for, with their state now. */
+  approvals?: RunApproval[]
+}
+
+/** An approval a run asked for (GET /conversations/{id}/brief). `result` is the outcome's title once it ran. */
+export interface RunApproval {
+  title: string
+  status: 'pending' | 'approved' | 'executing' | 'executed' | 'denied' | 'expired' | 'failed'
+  url: string
+  result: string | null
 }
 
 /** An order's name: a built-in order's own translated name, else the name the user gave it. */

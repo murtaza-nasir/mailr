@@ -231,6 +231,20 @@ The API, for the signed-in user (not for API tokens):
   report in `result` once it has finished.
 - `POST /connectors/{cid}/migration/cutover` with `make_default` and `hide_copied`.
 
+## Invitations on connected calendar servers
+
+Invitations, updates, cancellations and replies from Mailr are sent through the user's own mail
+account. Some CalDAV servers (Davis, Nextcloud and other SabreDAV servers) are set up to send
+scheduling mail of their own, which would duplicate that mail. On such a server, each copy written
+from Mailr is marked with `SCHEDULE-AGENT=CLIENT` (RFC 6638): on the organiser of an event that
+someone else organises, and on each guest of an event that the user organises. No scheduling mail
+is then sent from the server for these events. Without the mark, a write to a server that has no
+mail settings fails as a whole (HTTP 500 from Davis), and the event is not saved.
+
+Events written by phone and desktop apps are not affected by the marks. For invitations made in
+those apps to be sent, the calendar server needs its own mail settings (for Davis, `MAILER_DSN`
+and `INVITE_FROM_ADDRESS`). With `INVITE_FROM_ADDRESS` empty, no invitation mail is sent from Davis.
+
 ## Phones and desktop apps
 
 Users can connect the calendar and contacts apps of their iPhone, iPad, Mac, Android phone (with

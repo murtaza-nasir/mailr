@@ -1475,6 +1475,13 @@
       "previousAttachment": "Vorheriger Anhang"
     },
     "briefCard": {
+      "approvalApproved": "Freigegeben",
+      "approvalDenied": "Abgelehnt",
+      "approvalDone": "Freigegeben und erledigt",
+      "approvalDoneWith": "Freigegeben: {{result}}",
+      "approvalExpired": "Abgelaufen ohne Entscheidung",
+      "approvalFailed": "Freigegeben, aber fehlgeschlagen",
+      "approvalWaiting": "Warten auf deine Freigabe",
       "howGotThis": "Quellen von {{name}}",
       "showAboveTheMessages": "Über den Nachrichten anzeigen",
       "showBesideTheMessages": "Neben den Nachrichten anzeigen"
@@ -1532,6 +1539,7 @@
       "whatChanged": "Änderungen",
       "yourCalendar": "dein Kalender",
       "yourCalendarCouldNotBe": " Dein Kalender konnte nicht aktualisiert werden.",
+      "yourCalendarCouldNotBeBecause": " Kalender konnte nicht aktualisiert werden: {{reason}}.",
       "yourCalendarWasUpdated": "Kalender aktualisiert.",
       "yourDayAroundThisTime": "Dein Tag um diese Zeit",
       "linkedToTheInvitation": "Mit der Einladung verknüpft. Die Aktualisierungen des Organisators gelten jetzt für deinen Termin.",

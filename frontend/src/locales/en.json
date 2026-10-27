@@ -1475,6 +1475,13 @@
       "previousAttachment": "Previous attachment"
     },
     "briefCard": {
+      "approvalApproved": "Approved",
+      "approvalDenied": "Denied",
+      "approvalDone": "Approved and done",
+      "approvalDoneWith": "Approved: {{result}}",
+      "approvalExpired": "Expired without a decision",
+      "approvalFailed": "Approved, but it failed",
+      "approvalWaiting": "Waiting for your approval",
       "howGotThis": "{{name}}'s sources",
       "showAboveTheMessages": "Show above the messages",
       "showBesideTheMessages": "Show beside the messages"
@@ -1532,6 +1539,7 @@
       "whatChanged": "Changes",
       "yourCalendar": "your calendar",
       "yourCalendarCouldNotBe": " Couldn't update your calendar.",
+      "yourCalendarCouldNotBeBecause": " Couldn't update your calendar: {{reason}}.",
       "yourCalendarWasUpdated": "Calendar updated.",
       "yourDayAroundThisTime": "Your day around this time",
       "linkedToTheInvitation": "Linked to the invitation. The organiser's updates now apply to your event.",

@@ -1475,6 +1475,13 @@
       "previousAttachment": "Pièce jointe précédente"
     },
     "briefCard": {
+      "approvalApproved": "Approuvé",
+      "approvalDenied": "Refusé",
+      "approvalDone": "Approuvé et terminé",
+      "approvalDoneWith": "Approuvé : {{result}}",
+      "approvalExpired": "Expiré sans décision",
+      "approvalFailed": "Approuvé, mais a échoué",
+      "approvalWaiting": "En attente de votre approbation",
       "howGotThis": "Sources de {{name}}",
       "showAboveTheMessages": "Afficher au-dessus des messages",
       "showBesideTheMessages": "Afficher à côté des messages"
@@ -1532,6 +1539,7 @@
       "whatChanged": "Modifications",
       "yourCalendar": "votre agenda",
       "yourCalendarCouldNotBe": " Impossible de mettre à jour votre agenda.",
+      "yourCalendarCouldNotBeBecause": " Impossible de mettre à jour votre agenda : {{reason}}.",
       "yourCalendarWasUpdated": "Agenda mis à jour.",
       "yourDayAroundThisTime": "Votre journée autour de cet horaire",
       "linkedToTheInvitation": "Lié à l'invitation. Les mises à jour de l'organisateur s'appliquent désormais à votre événement.",

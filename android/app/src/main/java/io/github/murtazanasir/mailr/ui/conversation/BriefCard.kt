@@ -33,6 +33,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.murtazanasir.mailr.data.api.AssistantRun
 import io.github.murtazanasir.mailr.data.api.Citation
+import io.github.murtazanasir.mailr.data.api.RunApproval
+import io.github.murtazanasir.mailr.ui.MainActivity
+import io.github.murtazanasir.mailr.ui.util.InternalLinks
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.material.icons.outlined.VerifiedUser
 import io.github.murtazanasir.mailr.ui.util.Format
 import androidx.compose.ui.res.stringResource
 import io.github.murtazanasir.mailr.R
@@ -77,7 +84,38 @@ fun BriefCard(brief: AssistantRun, assistantName: String, openCitation: (Citatio
                     // The same Markdown renderer as the chat: modest headings, tables for the width (ui/present).
                     io.github.murtazanasir.mailr.ui.present.AgentMarkdown(brief.output)
                 }
+                if (brief.approvals.isNotEmpty()) {
+                    Spacer(Modifier.size(8.dp))
+                    brief.approvals.forEach { BriefApprovalLine(it) }
+                }
             }
         }
+    }
+}
+
+/** One approval of the brief's run as it stands now (the text was written when the run ended).
+ *  A waiting one opens the app's approval screen. */
+@Composable
+private fun BriefApprovalLine(a: RunApproval) {
+    val ctx = LocalContext.current
+    val state = when (a.status) {
+        "executed" -> a.result?.let { stringResource(R.string.conv_brief_approval_done_with, it) }
+            ?: stringResource(R.string.conv_brief_approval_done)
+        "pending" -> stringResource(R.string.conv_brief_approval_waiting)
+        "approved", "executing" -> stringResource(R.string.conv_brief_approval_approved)
+        "denied" -> stringResource(R.string.conv_brief_approval_denied)
+        "expired" -> stringResource(R.string.conv_brief_approval_expired)
+        else -> stringResource(R.string.conv_brief_approval_failed)
+    }
+    val open = a.status == "pending" && a.key.isNotBlank()
+    Row(verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth().padding(vertical = 2.dp).then(if (open) Modifier.clickable {
+            ctx.startActivity(InternalLinks.mark(ctx, Intent(Intent.ACTION_VIEW, Uri.parse("mailr://approvals/${a.key}"),
+                ctx, MainActivity::class.java)))
+        } else Modifier)) {
+        Icon(Icons.Outlined.VerifiedUser, null, Modifier.size(16.dp), tint = MaterialTheme.colorScheme.onSurfaceVariant)
+        Spacer(Modifier.width(6.dp))
+        Text("${a.title} · $state", style = MaterialTheme.typography.bodySmall,
+            color = if (open) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }

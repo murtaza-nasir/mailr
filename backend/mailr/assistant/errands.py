@@ -65,6 +65,14 @@ def _forward_prompt(run: AssistantRun, subject: str) -> str:
             "cannot do, say so in one line.")
 
 
+# A background run ends with its answer and never sends mail itself (core/permissions.py). Without
+# this, a run whose draft waits for approval promised to "send it once it's saved", and nothing did.
+BACKGROUND_RULES = ("This is a background run: it ends with your answer, and mail is never sent from it. When an "
+                    "action waits for the user's approval (a draft, a send, a change), say what is waiting and that "
+                    "the user approves it on the approval card; a draft saved after approval is sent by the user. "
+                    "Do not promise to do anything later.")
+
+
 async def _prompt(db, user: User, order: AssistantOrder | None, run: AssistantRun,
                   conversation_ids: list[int]) -> str:
     parts = []
@@ -74,6 +82,7 @@ async def _prompt(db, user: User, order: AssistantOrder | None, run: AssistantRu
         parts.append("Your answer is shown as a brief above the conversation, and its FIRST LINE becomes a phone "
                      "notification: make it one complete sentence that says what you did. Then the details, "
                      "citing each item with [[m:ID \"quote\"]].")
+        parts.append(BACKGROUND_RULES)
         return "\n\n".join(parts)
     name = order.name if order else "manual run"
     parts.append(f"Standing order: “{name}”.")
@@ -125,6 +134,7 @@ async def _prompt(db, user: User, order: AssistantOrder | None, run: AssistantRu
         how.append("Your answer's FIRST LINE becomes a phone notification: make it one complete sentence that "
                    "stands alone. Then the details, citing each item.")
     parts.append(" ".join(how))
+    parts.append(BACKGROUND_RULES)
     return "\n\n".join(parts)
 
 

@@ -807,7 +807,23 @@ data class AssistantRun(
     val delivered: List<String> = emptyList(),
     val citations: List<Citation> = emptyList(),
     @SerialName("finished_at") val finishedAt: String? = null,
+    /** On a conversation's brief: the approvals the run asked for, with their state now. */
+    val approvals: List<RunApproval> = emptyList(),
 )
+
+/** An approval a run asked for. [status]: pending, approved, executing, executed, denied, expired or failed;
+ *  [result] is the outcome's title once it ran ("Draft saved"). */
+@Serializable
+data class RunApproval(
+    val title: String = "",
+    val status: String = "",
+    val url: String = "",
+    val result: String? = null,
+) {
+    val open: Boolean get() = status in setOf("pending", "approved", "executing")
+    /** The approval's key, the last part of its link (mailr://approvals/<key> in the app). */
+    val key: String get() = url.trimEnd('/').substringAfterLast('/')
+}
 
 /** GET /conversations/{id}/brief: the latest brief a standing order or routine left on it. */
 @Serializable

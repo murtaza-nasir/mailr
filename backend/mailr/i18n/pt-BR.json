@@ -1770,5 +1770,11 @@
       "due": "Vence {{when}}",
       "due_at": "Vence {{when}}, {{time}}"
     }
+  },
+  "calendar_write": {
+    "server": "seu servidor de agenda respondeu com um erro (HTTP {{status}})",
+    "forbidden": "seu servidor de agenda não permitiu a alteração",
+    "signin": "falha ao entrar no seu servidor de agenda",
+    "other": "ocorreu um erro inesperado"
   }
 }

@@ -1770,5 +1770,11 @@
       "due": "Échéance : {{when}}",
       "due_at": "Échéance : {{when}}, {{time}}"
     }
+  },
+  "calendar_write": {
+    "server": "votre serveur d'agenda a répondu avec une erreur (HTTP {{status}})",
+    "forbidden": "votre serveur d'agenda n'a pas autorisé la modification",
+    "signin": "la connexion à votre serveur d'agenda a échoué",
+    "other": "une erreur inattendue s'est produite"
   }
 }

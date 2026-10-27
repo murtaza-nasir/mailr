@@ -6772,6 +6772,41 @@
    "state": "model",
    "text": "Назад"
   },
+  "android:app:conv_brief_approval_approved": {
+   "sha": "1a9f56594878f9c1",
+   "state": "model",
+   "text": "Подтверждено"
+  },
+  "android:app:conv_brief_approval_denied": {
+   "sha": "4b4a83794e5a7bba",
+   "state": "model",
+   "text": "Отклонено"
+  },
+  "android:app:conv_brief_approval_done": {
+   "sha": "9fb6e741e4dab0a5",
+   "state": "model",
+   "text": "Подтверждено и выполнено"
+  },
+  "android:app:conv_brief_approval_done_with": {
+   "sha": "113e3be2ffe65299",
+   "state": "model",
+   "text": "Подтверждено: %1$s"
+  },
+  "android:app:conv_brief_approval_expired": {
+   "sha": "6a890dd25ec6d17a",
+   "state": "model",
+   "text": "Срок истёк без решения"
+  },
+  "android:app:conv_brief_approval_failed": {
+   "sha": "f871f1073e65d0f8",
+   "state": "model",
+   "text": "Подтверждено, но не удалось выполнить"
+  },
+  "android:app:conv_brief_approval_waiting": {
+   "sha": "df225f08f5746358",
+   "state": "model",
+   "text": "Требуется ваше подтверждение"
+  },
   "android:app:conv_cancel": {
    "sha": "c0774c185060fc13",
    "state": "model",
@@ -7206,6 +7241,11 @@
    "sha": "0423d85feaeb063d",
    "state": "model",
    "text": "Ответ «Да» отправлен организатору."
+  },
+  "android:app:conv_invite_calendar_failed_because_suffix": {
+   "sha": "541410d65b248b7c",
+   "state": "model",
+   "text": " Не удалось обновить календарь: %1$s."
   },
   "android:app:conv_invite_calendar_failed_suffix": {
    "sha": "f8f4ca571326bb97",
@@ -13650,9 +13690,8 @@
   },
   "android:app:sync_summary_more": {
    "sha": "7734c31ddbbbb712",
-   "state": "english",
-   "text": "+%1$d more",
-   "why": "empty or not a string"
+   "state": "model",
+   "text": "+%1$d ещё"
   },
   "android:app:sync_waiting_ok": {
    "sha": "cc2478b177b68628",
@@ -22289,6 +22328,26 @@
    "state": "model",
    "text": "время"
   },
+  "server:calendar_write.forbidden": {
+   "sha": "44116d3d35b9567c",
+   "state": "model",
+   "text": "Сервер календаря не разрешил изменение"
+  },
+  "server:calendar_write.other": {
+   "sha": "e6b6e770c816b4d5",
+   "state": "model",
+   "text": "Произошла непредвиденная ошибка"
+  },
+  "server:calendar_write.server": {
+   "sha": "8c31a01f9727ce2a",
+   "state": "model",
+   "text": "Сервер календаря вернул ошибку (HTTP {{status}})"
+  },
+  "server:calendar_write.signin": {
+   "sha": "4f00ee78d3f3e136",
+   "state": "model",
+   "text": "Не удалось войти на сервер календаря"
+  },
   "server:common.no_subject": {
    "sha": "de4d5b384884f0df",
    "state": "model",
@@ -25456,9 +25515,8 @@
   },
   "server:push.account.body": {
    "sha": "1e8bf8c487fba1df",
-   "state": "english",
-   "text": "Enter it again in Settings → Mail → Mail accounts. No new mail arrives until then.",
-   "why": "empty or not a string"
+   "state": "model",
+   "text": "Введите его снова в «Настройки» → «Почта» → «Почтовые аккаунты». До этого новые письма приходить не будут."
   },
   "server:push.account.title": {
    "sha": "fd1b51e7620e0e6c",
@@ -25902,9 +25960,8 @@
   },
   "web:api.hooks.archivedStaysInSection": {
    "sha": "eff15df416b8068f",
-   "state": "english",
-   "text": "{{what}} It is still listed in {{section}}, a section that shows all mail with its label.",
-   "why": "empty or not a string"
+   "state": "model",
+   "text": "{{what}} Он по-прежнему отображается в разделе «{{section}}», где показаны все письма с этим ярлыком."
   },
   "web:api.hooks.conversationArchived": {
    "sha": "18dce5f20e6b3b7b",
@@ -26278,9 +26335,8 @@
   },
   "web:api.hooks.staysInItsAccount": {
    "sha": "c5f8a10c34dc8c3e",
-   "state": "english",
-   "text": "{{what}}. The mail stays in its own account; nothing is copied to {{address}}.",
-   "why": "empty or not a string"
+   "state": "model",
+   "text": "{{what}}. Письмо остается в своем аккаунте; на {{address}} ничего не копируется."
   },
   "web:api.hooks.stoppedAfterOf": {
    "sha": "fdab2560ddc84677",
@@ -32322,6 +32378,41 @@
    "state": "model",
    "text": "Предыдущее вложение"
   },
+  "web:conversation.briefCard.approvalApproved": {
+   "sha": "1a9f56594878f9c1",
+   "state": "model",
+   "text": "Подтверждено"
+  },
+  "web:conversation.briefCard.approvalDenied": {
+   "sha": "4b4a83794e5a7bba",
+   "state": "model",
+   "text": "Отклонено"
+  },
+  "web:conversation.briefCard.approvalDone": {
+   "sha": "9fb6e741e4dab0a5",
+   "state": "model",
+   "text": "Подтверждено и выполнено"
+  },
+  "web:conversation.briefCard.approvalDoneWith": {
+   "sha": "1f1ac1fde8209e57",
+   "state": "model",
+   "text": "Подтверждено: {{result}}"
+  },
+  "web:conversation.briefCard.approvalExpired": {
+   "sha": "6a890dd25ec6d17a",
+   "state": "model",
+   "text": "Истекло без решения"
+  },
+  "web:conversation.briefCard.approvalFailed": {
+   "sha": "f871f1073e65d0f8",
+   "state": "model",
+   "text": "Подтверждено, но с ошибкой"
+  },
+  "web:conversation.briefCard.approvalWaiting": {
+   "sha": "df225f08f5746358",
+   "state": "model",
+   "text": "Ожидает вашего подтверждения"
+  },
   "web:conversation.briefCard.howGotThis": {
    "sha": "cc1ebc7176834661",
    "state": "model",
@@ -32676,6 +32767,11 @@
    "sha": "f8f4ca571326bb97",
    "state": "model",
    "text": " Не удалось обновить календарь."
+  },
+  "web:conversation.calendarBits.yourCalendarCouldNotBeBecause": {
+   "sha": "33806186325e44cd",
+   "state": "model",
+   "text": " Не удалось обновить календарь: {{reason}}."
   },
   "web:conversation.calendarBits.yourCalendarWasUpdated": {
    "sha": "928c499b419bcfdc",
@@ -49361,7 +49457,7 @@
    "sha": "466c6e196d77d620",
    "state": "english",
    "text": "claude mcp add mailr --transport http {{origin}}/mcp \\\n  --header \"Authorization: Bearer {{raw}}…\"",
-   "why": "not translated into Russian; English words left: claude, header, http, transport; left in English"
+   "why": "not translated into Russian; English words left: claude, header, http, mailr, transport; left in English"
   },
   "web:settings.agentsTab.copyThisTokenNowIt": {
    "sha": "824bd0a2f7223b26",
@@ -56797,9 +56893,8 @@
   },
   "web:settings.pageReadersAdmin.browserlessToken": {
    "sha": "4034cfa1b3faeeef",
-   "state": "english",
-   "text": "browserless: the TOKEN set on the browserless container.",
-   "why": "English words left: browserless"
+   "state": "model",
+   "text": "browserless: токен, заданный в контейнере browserless."
   },
   "web:settings.pageReadersAdmin.builtIn": {
    "sha": "caaeda9d02d381cc",

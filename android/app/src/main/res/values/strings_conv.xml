@@ -132,6 +132,7 @@
     <string name="conv_invite_answered_no">No sent to organiser.</string>
     <string name="conv_invite_answered_maybe">Maybe sent to organiser.</string>
     <string name="conv_invite_calendar_failed_suffix">" Couldn\'t update your calendar."</string>
+    <string name="conv_invite_calendar_failed_because_suffix">" Couldn\'t update your calendar: %1$s."</string>
     <string name="conv_move_inbox">Inbox</string>
     <string name="conv_move_trash">Trash</string>
     <string name="conv_move_archive">Archive</string>
@@ -170,6 +171,13 @@
     <string name="conv_the_note">the note</string>
     <string name="conv_collapse_brief">Collapse brief</string>
     <string name="conv_expand_brief">Expand brief</string>
+    <string name="conv_brief_approval_waiting">Waiting for your approval</string>
+    <string name="conv_brief_approval_approved">Approved</string>
+    <string name="conv_brief_approval_done">Approved and done</string>
+    <string name="conv_brief_approval_done_with">Approved: %1$s</string>
+    <string name="conv_brief_approval_denied">Denied</string>
+    <string name="conv_brief_approval_expired">Expired without a decision</string>
+    <string name="conv_brief_approval_failed">Approved, but it failed</string>
     <string name="conv_reading_email">Reading email…</string>
     <plurals name="conv_invite_conflict_more">
         <item quantity="one">You have %1$s and %2$d more at that time</item>

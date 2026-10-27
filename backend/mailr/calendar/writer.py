@@ -70,6 +70,17 @@ def _before_write(uid: str, old_ics: str | None, cal: Calendar | None, connector
         hook.before_write(uid, old_ics, cal, connector_id)
 
 
+async def _client_scheduling(db: AsyncSession, user_id: int, connector_id: int, cal: Calendar) -> None:
+    """On a server that schedules by itself (RFC 6638 calendar-auto-schedule), mark the copy so it
+    sends no invitation or reply mail of its own: Mailr sends that mail (ical.mark_client_scheduling).
+    The organizer write path marks its guests the same way (organizer.stamp)."""
+    from mailr.calendar.organizer import auto_schedule
+
+    conn = await db.get(Connector, connector_id)
+    if conn is not None and await auto_schedule(db, conn):
+        ical.mark_client_scheduling(cal, await mirror.my_addresses(db, user_id))
+
+
 def _write_failed(uid: str) -> None:
     """The server refused the write that `_before_write` announced (412); a retry follows."""
     hook = WRITE_HOOK.get()
@@ -182,6 +193,7 @@ async def rmw(db: AsyncSession, user_id: int, p: Any, obj: CalObject, mutate: Ca
             cal = Calendar.from_ical(obj.ics)
             result = mutate(cal)
             _before_write(obj.uid, obj.ics, cal, obj.connector_id)
+            await _client_scheduling(db, user_id, obj.connector_id, cal)
             ics = ical.serialize(cal)
             try:
                 etag = await client.put(obj.href, ics, if_match=obj.etag)
@@ -217,6 +229,7 @@ async def create(db: AsyncSession, user_id: int, coll: CalCollection, cal: Calen
         raise Conflict(kind, await _out(db, existing), error="exists")
     href = dav.norm_href(coll.href.rstrip("/") + "/" + safe_name(uid) + ".ics")
     _before_write(uid, None, cal, coll.connector_id)
+    await _client_scheduling(db, user_id, coll.connector_id, cal)
     ics = ical.serialize(cal)
     client = await _dav(db, coll.connector_id)
     async with client:
@@ -246,6 +259,7 @@ async def move(db: AsyncSession, user_id: int, obj: CalObject, target: CalCollec
     cal = Calendar.from_ical(obj.ics)
     result = mutate(cal) if mutate else None
     _before_write(obj.uid, obj.ics, cal, obj.connector_id)
+    await _client_scheduling(db, user_id, obj.connector_id, cal)
     ics = ical.serialize(cal)
     new_href = dav.norm_href(target.href.rstrip("/") + "/" + safe_name(obj.uid) + ".ics")
     client = await _dav(db, obj.connector_id)

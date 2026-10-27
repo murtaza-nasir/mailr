@@ -154,16 +154,19 @@ test('a month chip dragged to another day keeps its time', async ({ page, seeded
   const chip = page.locator(`[data-mday="${dayOf(2)}"] .cal-mchip`).filter({ hasText: 'Writing block' })
   await expect(chip).toBeVisible()
   const from = (await chip.boundingBox())!
-  const to = (await page.locator(`[data-mday="${dayOf(9)}"]`).boundingBox())!
+  // The same weekday a week later, or a week earlier when the later one is outside this month's
+  // grid (late in a month): one of the two is always shown.
+  const target = (await page.locator(`[data-mday="${dayOf(9)}"]`).count()) > 0 ? dayOf(9) : dayOf(-5)
+  const to = (await page.locator(`[data-mday="${target}"]`).boundingBox())!
   // ACT event.reschedule
   await page.mouse.move(from.x + 20, from.y + from.height / 2)
   await page.mouse.down()
   await page.mouse.move(to.x + to.width / 2, to.y + to.height / 2, { steps: 10 })
   await page.mouse.up()
   await expect.poll(async () => {
-    const e = (await agenda(page.request, dayOf(0), dayOf(21))).find((x) => x.summary === 'Writing block')!
+    const e = (await agenda(page.request, dayOf(-7), dayOf(21))).find((x) => x.summary === 'Writing block')!
     return `${isoDay(new Date(e.start))} ${hhmm(e.start)}-${hhmm(e.end)}`
-  }).toBe(`${dayOf(9)} 13:00-16:00`)
+  }).toBe(`${target} 13:00-16:00`)
 })
 
 test('the calendar menu: rename, colour, default reminders; a new calendar and its delete', async ({ page, seeded }) => {

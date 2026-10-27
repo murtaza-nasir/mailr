@@ -757,6 +757,30 @@ def set_attendee(comp: Any, email: str, partstat: str) -> None:
         comp.add("attendee", a, encode=0)
 
 
+def mark_client_scheduling(cal: Any, mine: set[str]) -> None:
+    """Mailr sends the invitation and reply mail itself (core/compose.py, calendar/organizer.py), so
+    a copy written to a server that schedules by itself tells it not to (RFC 6638 7.1, SCHEDULE-AGENT=CLIENT):
+    on the ORGANIZER of an event someone else organises (no reply mail from the server) and on each
+    guest of an event the user organises (no invitation mail). A server that sends that mail itself
+    sends a duplicate, and one without a mail server fails the whole write (Davis: HTTP 500)."""
+    mine = {m.lower() for m in mine}
+    for comp in list(cal.walk("VEVENT")) + list(cal.walk("VTODO")):
+        org = comp.get("organizer")
+        if org is None or not addr(org):
+            continue
+        if addr(org).lower() in mine:
+            atts = as_list(comp.get("attendee"))
+            for a in atts:
+                if addr(a).lower() not in mine and hasattr(a, "params"):
+                    a.params["SCHEDULE-AGENT"] = "CLIENT"
+            if atts:
+                comp.pop("attendee", None)
+                for a in atts:
+                    comp.add("attendee", a, encode=0)
+        elif hasattr(org, "params"):
+            org.params["SCHEDULE-AGENT"] = "CLIENT"
+
+
 # ---------------- tasks ----------------
 
 

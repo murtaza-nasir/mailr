@@ -4,6 +4,27 @@ The changes in each Mailr release are listed here, newest first. A release is ta
 on GitHub, and its image is published as `ghcr.io/murtaza-nasir/mailr:<version>`. The Android app
 of a release has the same version number; the separate Notes app has its own.
 
+## 0.40.25
+
+- A brief from a standing order or routine lists the approvals its run asked for, with their current
+  state ("Waiting for your approval", "Approved: Draft saved", "Denied", "Expired"), on the web and in
+  the Android app. A decision made after the run finished is shown on the card, and the card checks
+  again while an approval is open.
+- Background runs never send mail and end with their answer; Ambrose now says so when a draft waits for
+  approval instead of promising to send it later. The user guide points to filters with
+  **Forward it to:** for automatic forwarding.
+- Top-level web files without a precompressed copy (the app icons) answer a cache check with 304
+  instead of an error.
+- A table column changed to a choice list gets its options in the table's row order.
+- A stopping worker no longer claims again a job it has just handed back to the queue.
+- An invitation answer whose calendar copy fails says why (for example, the calendar server's HTTP
+  status) on the web and in the Android app, and the failure is logged.
+- Calendar panel: the day arrows stay in place while clicking through days, and the weekday and
+  date stay on one line.
+- On a calendar server that schedules by itself (Davis, Nextcloud and other SabreDAV servers), each
+  copy written from Mailr is marked `SCHEDULE-AGENT=CLIENT`, so the server sends no duplicate
+  invitation or reply mail, and a server without mail settings no longer fails the write (HTTP 500).
+
 ## 0.40.21
 
 The first public release. Mailr is a self-hosted mail store with a web client and an Android app.
