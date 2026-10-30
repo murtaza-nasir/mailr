@@ -64,6 +64,10 @@ class Event(Out):
     connector_id: int | None = None
     href: str | None = None
     local_only: bool | None = None
+    phone_busy: bool | None = absent(description="A block from a phone calendar: read-only; times only unless "
+                                              "phone_details.")
+    phone_details: bool | None = absent(description="A phone calendar's block that carries the phone's title "
+                                                 "and place (the calendar is set to send details).")
     my_status: str | None = absent(description="My answer as a guest (ACCEPTED, NEEDS-ACTION…), else null.")
     is_organizer: bool | None = None
     conversation_id: int | None = absent(description="The email the event came from, when it has one.")
@@ -82,6 +86,16 @@ class Agenda(Out):
 class CollectionSharing(Out):
     people: int
     others: int
+
+
+class PhoneCalendar(Out):
+    """The `phone` field of a phone calendar: busy times sent from the phone."""
+
+    key: str
+    device: str
+    synced_at: IsoTime | None = None
+    stale: bool
+    details: bool | None = absent(description="The phone sends titles and places too, not busy times only.")
 
 
 class Collection(Out):
@@ -110,6 +124,7 @@ class Collection(Out):
     sharing: CollectionSharing | None = None
     shareable: bool | None = None
     subscription: Untyped | None = None
+    phone: PhoneCalendar | None = None
     sync: SyncState | None = None
     error: str | None = None
 

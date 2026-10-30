@@ -832,6 +832,18 @@
       "sharedWithPeople_other": "Shared with {{count}} people{{value}}",
       "sharedWithTheGroup": "Shared with the {{group}} group",
       "viewOnly": " · view only"
+    },
+    "phone": {
+      "busy": "Busy",
+      "updatedFrom": "Updated from {{device}} {{when}}",
+      "updated": "Updated {{when}}",
+      "neverUpdated": "Not updated yet",
+      "stale": "over a day old",
+      "changeOnThePhone": "A busy time from a calendar on your phone. It changes only on the phone.",
+      "eventChangeOnThePhone": "An event from a calendar on your phone. It changes only on the phone.",
+      "menuNote": "Busy times from a calendar on your phone. They change only on the phone.",
+      "menuNoteDetails": "Events from a calendar on your phone, with titles and places. They change only on the phone.",
+      "phoneCalendarSettings": "Phone calendar settings"
     }
   },
   "colour": {
@@ -4179,6 +4191,7 @@
         "question": "{{title}}?",
         "remoteImages": "Remote images",
         "reportSpam": "report spam",
+        "sendBusyTimesFromPhoneCalendars": "send busy times from phone calendars",
         "sendEmail": "send email",
         "sendInvitationsAndUpdatesTo": "send invitations and updates to guests",
         "thisCantBeUndoneFrom": "This can't be undone from Mailr.",
@@ -7639,7 +7652,8 @@
       "whatAgentsMayDoWithout": "Actions agents may take without asking. With “Ask me”, the action goes to the approval queue, where you decide once, for a while or always. Your own actions are never gated. The first message to a new address always requires approval. An agent's read access is set by its token, not by these rules.",
       "writeDraftsAndRewriteBriefs": "Write drafts and rewrite briefs",
       "yourRule": "your rule",
-      "actOnNotesYouForward": "Act on notes you forward from your trusted addresses"
+      "actOnNotesYouForward": "Act on notes you forward from your trusted addresses",
+      "sendPhoneBusyTimes": "Send busy times from phone calendars"
     },
     "phoneAccessAdmin": {
       "aHostNameOfIts": "Use a dedicated host name, such as dav.example.com. Calendar paths must be at the root of the host. Saved when you leave the field or press Enter.",
@@ -8192,6 +8206,20 @@
       "trusted": "These addresses need a new code before they speak for you again: {{addresses}}.",
       "forwards": "Mail is not forwarded to these addresses until you confirm them again: {{addresses}}.",
       "notYou": "If you set these up yourself, turn them back on. If not, remove them."
+    },
+    "phoneCalendars": {
+      "title": "Phone calendars",
+      "desc": "Calendars on your phone whose busy times are sent to Mailr. By default only the start and end of each busy time are sent. For a calendar set to Show and send details, the title and place of each event are sent as well. Guests, descriptions and notes are never sent. Each calendar is set in the Android app, under Settings → Calendar & tasks → Phone calendars.",
+      "none": "No phone calendars send busy times.",
+      "busyTimes_one": "{{count}} busy time",
+      "busyTimes_other": "{{count}} busy times",
+      "busyOnly": "Busy times only",
+      "withDetails": "Busy times with titles and places",
+      "removeName": "Remove {{name}}",
+      "removeTitle": "Remove “{{name}}”?",
+      "removeBody": "Its busy times are removed from Mailr. If the phone still sends them, they return at its next update. To stop that, set the calendar to Off or Show on this phone in the Android app.",
+      "removed": "“{{name}}” removed",
+      "notRemoved": "Could not remove the phone calendar"
     }
   },
   "shortcuts": {

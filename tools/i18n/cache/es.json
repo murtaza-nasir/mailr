@@ -937,6 +937,11 @@
    "state": "model",
    "text": "enviar invitaciones y actualizaciones a los invitados"
   },
+  "android:app:appr_verb_calendar_phone_sync": {
+   "sha": "afee006e664996a5",
+   "state": "model",
+   "text": "enviar horarios ocupados desde los calendarios del teléfono"
+  },
   "android:app:appr_verb_calendar_rsvp": {
    "sha": "c07712555fe1e69e",
    "state": "model",
@@ -2215,6 +2220,16 @@
    "sha": "19ebd8e3e64d49f3",
    "state": "model",
    "text": "Empieza ahora"
+  },
+  "android:app:cal_alert_unlock": {
+   "sha": "6c500cc253ab3fd4",
+   "state": "model",
+   "text": "Desbloquear"
+  },
+  "android:app:cal_alert_unlock_to_see": {
+   "sha": "cee27fad70ef21d9",
+   "state": "model",
+   "text": "Desbloquea tu teléfono para ver este recordatorio"
   },
   "android:app:cal_all_caught_up": {
    "sha": "35c0061dde99162c",
@@ -10065,6 +10080,111 @@
    "sha": "94abf3c279af6f31",
    "state": "same",
    "text": "VIP"
+  },
+  "android:app:phonecal_allow": {
+   "sha": "c8859d61b0c02167",
+   "state": "model",
+   "text": "Permitir acceso al calendario"
+  },
+  "android:app:phonecal_choose_cd": {
+   "sha": "c700573807f9c547",
+   "state": "model",
+   "text": "Elige cómo se usa %1$s"
+  },
+  "android:app:phonecal_denied": {
+   "sha": "718d4628b5f3bedd",
+   "state": "model",
+   "text": "No se permite el acceso al calendario. Puedes permitirlo en los ajustes del sistema de la aplicación."
+  },
+  "android:app:phonecal_denied_once": {
+   "sha": "bfb06c32be5cc761",
+   "state": "model",
+   "text": "No se permitió el acceso al calendario, por lo que los calendarios del teléfono permanecen desactivados."
+  },
+  "android:app:phonecal_detail_note": {
+   "sha": "d0748e9567aa82cd",
+   "state": "model",
+   "text": "Este evento está en un calendario de este teléfono. Puedes modificarlo en la aplicación de calendario del teléfono."
+  },
+  "android:app:phonecal_header": {
+   "sha": "bbc6ea4013864724",
+   "state": "model",
+   "text": "Calendarios de este teléfono"
+  },
+  "android:app:phonecal_mode_details": {
+   "sha": "5aa75d29d3cdd014",
+   "state": "model",
+   "text": "Mostrar y enviar detalles"
+  },
+  "android:app:phonecal_mode_details_hint": {
+   "sha": "1be9dd69a3ec9dae",
+   "state": "model",
+   "text": "Los títulos y lugares se envían a tu servidor de Mailr; los invitados y las descripciones no."
+  },
+  "android:app:phonecal_mode_off": {
+   "sha": "50accd740fa2e736",
+   "state": "model",
+   "text": "Desactivado"
+  },
+  "android:app:phonecal_mode_send": {
+   "sha": "3e2c589d57bf252d",
+   "state": "model",
+   "text": "Mostrar y enviar horas ocupadas"
+  },
+  "android:app:phonecal_mode_show": {
+   "sha": "23b0c9cf36ab5e3c",
+   "state": "model",
+   "text": "Mostrar en este teléfono"
+  },
+  "android:app:phonecal_no_calendar_app": {
+   "sha": "ff27d49a00592bd8",
+   "state": "model",
+   "text": "No se puede abrir este evento: el teléfono no tiene una aplicación de calendario."
+  },
+  "android:app:phonecal_none": {
+   "sha": "6b3059a6694d8581",
+   "state": "model",
+   "text": "Este teléfono no tiene calendarios."
+  },
+  "android:app:phonecal_on_phone": {
+   "sha": "580b4b9299717d08",
+   "state": "model",
+   "text": "En este teléfono"
+  },
+  "android:app:phonecal_open_in_calendar": {
+   "sha": "ebacf128399ea052",
+   "state": "model",
+   "text": "Abrir en Calendario"
+  },
+  "android:app:phonecal_open_settings": {
+   "sha": "02789805322fbdfb",
+   "state": "model",
+   "text": "Abrir ajustes de la aplicación"
+  },
+  "android:app:phonecal_privacy": {
+   "sha": "39966c0599bb40a7",
+   "state": "manual",
+   "text": "No se envía nada al servidor para los calendarios configurados como «Desactivado» o «Mostrar en este teléfono». Para «Mostrar y enviar horas ocupadas», se envían el inicio y el fin de cada evento ocupado o provisional. Para «Mostrar y enviar detalles», también se envían el título y el lugar de cada evento. Los invitados, las descripciones y las notas nunca se envían."
+  },
+  "android:app:phonecal_settings_sub": {
+   "sha": "aa4e738b80dd8db4",
+   "state": "model",
+   "text": "Calendarios de este teléfono en el calendario de Mailr"
+  },
+  "android:app:phonecal_switch": {
+   "sha": "f60b3d230fe87c07",
+   "state": "model",
+   "text": "Mostrar calendarios del teléfono"
+  },
+  "android:app:phonecal_switch_sub": {
+   "sha": "c46e04dd69771026",
+   "state": "model",
+   "text": "Los eventos de los calendarios de este teléfono se muestran en el calendario de Mailr, solo de lectura. Concede acceso al calendario al activar esta opción."
+  },
+  "android:app:phonecal_title": {
+   "sha": "87538b0705e7b07c",
+   "state": "model",
+   "text": "Calendarios del teléfono"
   },
   "android:app:present_and_more": {
    "sha": "b6aa4cc88b76c316",
@@ -21765,6 +21885,11 @@
    "state": "model",
    "text": "hora"
   },
+  "server:calendar_phone.busy": {
+   "sha": "cba4637ab0d1c0f9",
+   "state": "model",
+   "text": "Ocupado"
+  },
   "server:calendar_write.forbidden": {
    "sha": "44116d3d35b9567c",
    "state": "model",
@@ -22557,6 +22682,21 @@
    "sha": "22b8f9cfd93842f3",
    "state": "model",
    "text": "solo el organizador puede cancelar este evento"
+  },
+  "server:errors.calendar.phone_limit": {
+   "sha": "01716fe0be427a87",
+   "state": "model",
+   "text": "como máximo {{max}} calendarios del teléfono"
+  },
+  "server:errors.calendar.phone_needs_allow": {
+   "sha": "b2b2133547f85f95",
+   "state": "model",
+   "text": "una regla hace que las actualizaciones de calendarios del teléfono requieran aprobación; permítelas para este token en Ajustes → Permisos"
+  },
+  "server:errors.calendar.phone_read_only": {
+   "sha": "11758b47c47bb66e",
+   "state": "model",
+   "text": "«{{name}}» muestra los horarios ocupados de tu teléfono y no se puede modificar aquí. Cambia el evento en el teléfono."
   },
   "server:errors.calendar.proposal_no_time": {
    "sha": "92bc5dd9a492cde7",
@@ -27822,6 +27962,56 @@
    "sha": "0369daaed745fe94",
    "state": "model",
    "text": "Semana {{isoWeek}}"
+  },
+  "web:calendar.phone.busy": {
+   "sha": "cba4637ab0d1c0f9",
+   "state": "model",
+   "text": "Ocupado"
+  },
+  "web:calendar.phone.changeOnThePhone": {
+   "sha": "e90409e73b9099e0",
+   "state": "model",
+   "text": "Tiempo ocupado de un calendario en tu teléfono. Solo cambia en el teléfono."
+  },
+  "web:calendar.phone.eventChangeOnThePhone": {
+   "sha": "20b6a33f179aa905",
+   "state": "model",
+   "text": "Un evento de un calendario de tu teléfono. Solo se modifica en el teléfono."
+  },
+  "web:calendar.phone.menuNote": {
+   "sha": "67784481233b64af",
+   "state": "model",
+   "text": "Tiempos ocupados de un calendario en tu teléfono. Solo cambian en el teléfono."
+  },
+  "web:calendar.phone.menuNoteDetails": {
+   "sha": "8bf4988680f677fd",
+   "state": "model",
+   "text": "Eventos de un calendario de tu teléfono, con títulos y lugares. Solo se modifican en el teléfono."
+  },
+  "web:calendar.phone.neverUpdated": {
+   "sha": "f6815fdd0f399304",
+   "state": "model",
+   "text": "Aún no actualizado"
+  },
+  "web:calendar.phone.phoneCalendarSettings": {
+   "sha": "b22f2faf64dfc46d",
+   "state": "model",
+   "text": "Ajustes del calendario del teléfono"
+  },
+  "web:calendar.phone.stale": {
+   "sha": "c3f00a1ed2428fec",
+   "state": "model",
+   "text": "más de un día"
+  },
+  "web:calendar.phone.updated": {
+   "sha": "f52b2c47944acc25",
+   "state": "model",
+   "text": "Actualizado {{when}}"
+  },
+  "web:calendar.phone.updatedFrom": {
+   "sha": "fe6de9a63c2d5ed6",
+   "state": "model",
+   "text": "Actualizado desde {{device}} {{when}}"
   },
   "web:calendar.prep.lastRecording": {
    "sha": "0dc5b8158611cf91",
@@ -43396,6 +43586,11 @@
    "state": "model",
    "text": "marcar como spam"
   },
+  "web:rail.assistant.approvalCard.sendBusyTimesFromPhoneCalendars": {
+   "sha": "afee006e664996a5",
+   "state": "model",
+   "text": "enviar horarios ocupados desde los calendarios del teléfono"
+  },
   "web:rail.assistant.approvalCard.sendEmail": {
    "sha": "a45b85c3e2a1bfb5",
    "state": "model",
@@ -56356,6 +56551,11 @@
    "state": "model",
    "text": "Enviar correo"
   },
+  "web:settings.permissionsSection.sendPhoneBusyTimes": {
+   "sha": "2776d6c7d5e96ef9",
+   "state": "model",
+   "text": "Enviar horarios de ocupación desde calendarios del teléfono"
+  },
   "web:settings.permissionsSection.taskListS": {
    "sha": "00e7c26243ab9a52",
    "state": "model",
@@ -56856,6 +57056,64 @@
    "sha": "bcd3481bff420cb4",
    "state": "model",
    "text": " (tu servidor)"
+  },
+  "web:settings.phoneCalendars.busyOnly": {
+   "sha": "1483369a44966e0c",
+   "state": "model",
+   "text": "Solo horarios ocupados"
+  },
+  "web:settings.phoneCalendars.busyTimes": {
+   "sha": "a4f0820ccfb2ca19",
+   "state": "model",
+   "text": {
+    "one": "{{count}} horario de ocupación",
+    "other": "{{count}} horarios de ocupación"
+   }
+  },
+  "web:settings.phoneCalendars.desc": {
+   "sha": "2cedce09d6f79bd8",
+   "state": "model",
+   "text": "Calendarios de tu teléfono cuyos tiempos ocupados se envían a Mailr. De forma predeterminada, solo se envían el inicio y el fin de cada tiempo ocupado. Para un calendario configurado en Mostrar y enviar detalles, también se envían el título y el lugar de cada evento. Nunca se envían los invitados, las descripciones ni las notas. Cada calendario se configura en la aplicación de Android, en Ajustes → Calendario y tareas → Calendarios del teléfono."
+  },
+  "web:settings.phoneCalendars.none": {
+   "sha": "b0d9c9950dcf738c",
+   "state": "model",
+   "text": "Ningún calendario del teléfono envía horarios de ocupación."
+  },
+  "web:settings.phoneCalendars.notRemoved": {
+   "sha": "07a54f77eb24f51d",
+   "state": "model",
+   "text": "No se pudo quitar el calendario del teléfono"
+  },
+  "web:settings.phoneCalendars.removeBody": {
+   "sha": "d706d70988e3cfc1",
+   "state": "model",
+   "text": "Sus horarios de ocupación se eliminan de Mailr. Si el teléfono sigue enviándolos, volverán en su próxima actualización. Para evitarlo, configura el calendario como Desactivado o Mostrar en este teléfono en la aplicación de Android."
+  },
+  "web:settings.phoneCalendars.removeName": {
+   "sha": "f87ea03cf025802a",
+   "state": "model",
+   "text": "Quitar {{name}}"
+  },
+  "web:settings.phoneCalendars.removeTitle": {
+   "sha": "cd44c92b9e3b510d",
+   "state": "model",
+   "text": "¿Quitar “{{name}}”?"
+  },
+  "web:settings.phoneCalendars.removed": {
+   "sha": "eaf266ff0d59c67d",
+   "state": "model",
+   "text": "“{{name}}” eliminado"
+  },
+  "web:settings.phoneCalendars.title": {
+   "sha": "87538b0705e7b07c",
+   "state": "model",
+   "text": "Calendarios del teléfono"
+  },
+  "web:settings.phoneCalendars.withDetails": {
+   "sha": "9fe7c2437007680c",
+   "state": "model",
+   "text": "Horarios ocupados con títulos y lugares"
   },
   "web:settings.pictureSection.asksGravatarAndLibravatarAbout": {
    "sha": "a0a6da865189aaa8",

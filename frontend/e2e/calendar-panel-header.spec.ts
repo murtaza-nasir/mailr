@@ -20,13 +20,13 @@ test('the calendar panel day arrows stay in place and the date stays on one line
 
   for (let i = 0; i < 3; i++) {
     await next.click()
-    expect(await at()).toEqual(before)
+    await expect.poll(at).toEqual(before)
   }
   await expect(panel.getByRole('button', { name: 'Today', exact: true })).toBeVisible()
   // Today sits beside the date, left of the arrows.
   expect((await panel.getByRole('button', { name: 'Today', exact: true }).boundingBox())!.x).toBeLessThan((await at())[0])
   await prev.click()
-  expect(await at()).toEqual(before)
+  await expect.poll(at).toEqual(before)
 
   // The short date ("28 Oct") is one line: its height is one line of its own text.
   const date = panel.locator('.cp-day-date')
@@ -34,5 +34,7 @@ test('the calendar panel day arrows stay in place and the date stays on one line
   expect(h).toBeLessThan(line * 1.5)
 
   await panel.getByRole('button', { name: 'Today', exact: true }).click()
-  expect(await at()).toEqual(before)
+  // Measured after the header has redrawn for today (no Today button), not in between.
+  await expect(panel.getByRole('button', { name: 'Today', exact: true })).toHaveCount(0)
+  await expect.poll(at).toEqual(before)
 })

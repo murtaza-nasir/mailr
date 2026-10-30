@@ -26,6 +26,7 @@ object GrantText {
         "calendar.rsvp" to R.string.appr_verb_calendar_rsvp,
         "calendar.invite" to R.string.appr_verb_calendar_invite,
         "calendar.cancel" to R.string.appr_verb_calendar_cancel,
+        "calendar.phone_sync" to R.string.appr_verb_calendar_phone_sync,
         "tasks.create" to R.string.appr_verb_tasks_create,
         "tasks.update" to R.string.appr_verb_tasks_update,
         "tasks.complete" to R.string.appr_verb_tasks_complete,

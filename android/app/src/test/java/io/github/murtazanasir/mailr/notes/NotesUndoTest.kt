@@ -115,6 +115,36 @@ class NotesUndoTest {
         serverSees("the undone text") { fake.notes[n.id]!!.body == "" }
     }
 
+    /**
+     * An edit made while an autosave is still finishing is saved too. The undo runs in the moment after
+     * the save's write and before the save returns. Before, the save then marked the editor clean, and
+     * the undone text never reached the server.
+     */
+    @Test fun anEditWhileTheAutosaveFinishesIsSavedToo() {
+        val n = fake.note("text", "Plan")
+        runBlocking { g.notes.repo.pull() }
+        show()
+        compose.runOnIdle { vm.open(NotesPage.OpenNote(n.id)) }
+        compose.waitForNode(hasTestTag("note-body"))
+        val before = vm.repo.onQueued
+        var undone = false
+        vm.repo.onQueued = {
+            before?.invoke()
+            if (!undone) {
+                undone = true
+                vm.undoEdit(n.id)
+            }
+        }
+        compose.onNodeWithTag("note-body").performTextInput("buy paint")
+        compose.mainClock.advanceTimeBy(2_000)
+        serverSees("the typed text") { fake.notes[n.id]!!.body == "buy paint" }
+        compose.waitForIdle()  // the save's return, which runs the hook
+        assertTrue(undone)
+        bodyIs("")
+        compose.mainClock.advanceTimeBy(2_000)
+        serverSees("the undone text") { fake.notes[n.id]!!.body == "" }
+    }
+
     private fun selectionIs(tag: String, at: Int) = compose.eventually("the cursor of $tag at $at") {
         compose.onAllNodes(hasTestTag(tag) and SemanticsMatcher.expectValue(SemanticsProperties.TextSelectionRange, TextRange(at)))
             .fetchSemanticsNodes().isNotEmpty()

@@ -773,6 +773,18 @@
       "sharedWithPeople_other": "与 {{count}} 人共享{{value}}",
       "sharedWithTheGroup": "已共享给 {{group}} 群组",
       "viewOnly": " · 仅查看"
+    },
+    "phone": {
+      "busy": "忙碌",
+      "updatedFrom": "已于 {{when}} 从 {{device}} 更新",
+      "updated": "已于 {{when}} 更新",
+      "neverUpdated": "尚未更新",
+      "stale": "已超过一天",
+      "changeOnThePhone": "来自您手机日历的忙碌时间。仅在手机上更改。",
+      "eventChangeOnThePhone": "您手机日历中的活动。仅在手机上更改。",
+      "menuNote": "来自您手机日历的忙碌时间。仅在手机上更改。",
+      "menuNoteDetails": "您手机日历中的活动，包含标题和地点。仅在手机上更改。",
+      "phoneCalendarSettings": "手机日历设置"
     }
   },
   "colour": {
@@ -3990,6 +4002,7 @@
         "question": "{{title}}?",
         "remoteImages": "远程图片",
         "reportSpam": "举报垃圾邮件",
+        "sendBusyTimesFromPhoneCalendars": "从手机日历发送忙碌时间",
         "sendEmail": "发送邮件",
         "sendInvitationsAndUpdatesTo": "向宾客发送邀请和更新",
         "thisCantBeUndoneFrom": "此操作无法在 Mailr 中撤消。",
@@ -7332,7 +7345,8 @@
       "whatAgentsMayDoWithout": "代理无需询问即可执行的操作。选择“询问我”时，操作会进入审批队列，由您决定一次、暂时或始终允许。您自己的操作永远不会受限。向新地址发送的第一条消息始终需要审批。代理的读取权限由其令牌设置，而非这些规则。",
       "writeDraftsAndRewriteBriefs": "撰写草稿和重写简报",
       "yourRule": "您的规则",
-      "actOnNotesYouForward": "处理您从受信任地址转发的备注"
+      "actOnNotesYouForward": "处理您从受信任地址转发的备注",
+      "sendPhoneBusyTimes": "从手机日历发送忙碌时间"
     },
     "phoneAccessAdmin": {
       "aHostNameOfIts": "使用专用主机名，例如 dav.example.com。日历路径必须位于主机根目录。离开字段或按 Enter 时保存。",
@@ -7880,6 +7894,19 @@
       "trusted": "这些地址需要新的验证码，才能再次代表你：{{addresses}}。",
       "forwards": "在你再次确认之前，不会把邮件转发到这些地址：{{addresses}}。",
       "notYou": "如果是你自己设置的，请重新打开；如果不是，请删除。"
+    },
+    "phoneCalendars": {
+      "title": "手机日历",
+      "desc": "您手机上将忙碌时间发送至 Mailr 的日历。默认情况下，仅发送每个忙碌时间的开始和结束时间。对于设置为“显示并发送详细信息”的日历，还会发送每个活动的标题和地点。来宾、描述和备注永远不会发送。请在 Android 应用中，前往“设置”→“日历与任务”→“手机日历”来设置每个日历。",
+      "none": "没有手机日历发送忙碌时间。",
+      "busyTimes_other": "{{count}} 个忙碌时间",
+      "busyOnly": "仅忙碌时间",
+      "withDetails": "包含标题和地点的忙碌时间",
+      "removeName": "移除 {{name}}",
+      "removeTitle": "移除“{{name}}”？",
+      "removeBody": "其忙碌时间将从 Mailr 中移除。如果手机仍发送这些时间，它们将在下次更新时重新出现。若要停止此情况，请在 Android 应用中将此日历设置为“关闭”或在此手机上设置为“显示”。",
+      "removed": "已移除“{{name}}”",
+      "notRemoved": "无法移除手机日历"
     }
   },
   "shortcuts": {

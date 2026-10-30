@@ -703,6 +703,7 @@ private fun GridBlock(
         else -> MaterialTheme.colorScheme.onSurface
     }
     val outline = MaterialTheme.colorScheme.onSurface
+    val onPhone = io.github.murtazanasir.mailr.data.phonecal.PhoneEvents.isPhone(d.e)
     // TalkBack: "Standup, 9:00 AM to 9:15 AM, tentative, not synced yet".
     val label = listOfNotNull(
         d.e.summary.ifBlank { stringResource(R.string.cal_no_title) },
@@ -711,6 +712,7 @@ private fun GridBlock(
         if (b.style == BlockStyle.HATCHED) stringResource(R.string.cal_grid_tentative_lower) else null,
         if (b.style == BlockStyle.OUTLINE) (if (declined) stringResource(R.string.cal_grid_declined_lower) else stringResource(R.string.cal_grid_needs_reply_lower)) else null,
         if (pending) stringResource(R.string.cal_grid_not_synced_lower) else null,
+        if (onPhone) stringResource(R.string.phonecal_on_phone) else null,
     ).joinToString(", ")
     val moveEarlier = stringResource(R.string.cal_grid_move_earlier)
     val moveLater = stringResource(R.string.cal_grid_move_later)
@@ -783,6 +785,8 @@ private fun GridBlock(
                 val sub = listOfNotNull(d.start.toLocalTime().format(tf), d.e.location?.takeIf { it.isNotBlank() }).joinToString(" · ")
                 Text(sub, style = MaterialTheme.typography.labelSmall, color = fg.copy(alpha = 0.85f), maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
+            // "On this phone": the phone mark, where the block has room for a line of its own.
+            if (onPhone && !b.compact && height > 30.dp && width >= 28.dp) OnPhoneMark(fg.copy(alpha = 0.85f), size = 12, described = false)
         }
     }
 }
@@ -899,7 +903,10 @@ private fun AllDayStrip(days: List<LocalDate>, strip: List<DayEvent>, tasks: Lis
                     if (item is DayEvent) {
                         val dashed = item.e.key in pending
                         val outline = MaterialTheme.colorScheme.onSurface
-                        Text(item.e.summary.ifBlank { stringResource(R.string.cal_no_title) }, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                        val title = item.e.summary.ifBlank { stringResource(R.string.cal_no_title) }
+                        // A phone calendar's event: "On this phone" after the title (TalkBack reads it too).
+                        val shown = if (io.github.murtazanasir.mailr.data.phonecal.PhoneEvents.isPhone(item.e)) "$title · ${stringResource(R.string.phonecal_on_phone)}" else title
+                        Text(shown, maxLines = 1, overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.labelMedium, color = CalendarColors.onColor(item.color),
                             modifier = dragMod.fillMaxWidth().heightIn(min = 22.dp).clip(RoundedCornerShape(4.dp)).background(item.color)
                                 .drawBehind {

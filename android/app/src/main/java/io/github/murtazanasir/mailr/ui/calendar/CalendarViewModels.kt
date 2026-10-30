@@ -155,8 +155,25 @@ class CalendarViewModel(private val g: AppGraph, val prefs: CalendarPrefs = Cale
         .stateIn(viewModelScope, SharingStarted.Eagerly, rangeOf(CalView.AGENDA, AppClock.today()))
 
     val events: StateFlow<List<CalendarEvent>?> = range.flatMapLatest { (f, t) ->
-        g.calendar.events(ms(f.minusDays(1)), ms(t.plusDays(1)))
+        val from = ms(f.minusDays(1))
+        val to = ms(t.plusDays(1))
+        // Shown phone calendars (Settings → Calendar → Phone calendars) beside mailr's: read-only.
+        // The busy times this phone sent come back from the server as phone calendars: those are hidden
+        // here; busy times from another phone stay.
+        combine(g.calendar.events(from, to), g.phoneCalendars.events(from, to) { displayZone.value }, g.calendar.collections) { mine, phone, cols ->
+            val own = g.phoneCalendars.ownKeys()
+            val echo = if (own.isEmpty()) emptySet() else cols.filter { it.phone?.key in own }.mapTo(HashSet()) { it.url }
+            val kept = if (echo.isEmpty()) mine else mine.filterNot { it.calendar in echo }
+            if (phone.isEmpty()) kept else kept + phone
+        }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), null)
+
+    /** The name of a phone calendar ("phone:<id>"), for an event's detail. */
+    suspend fun phoneCalendarName(calendar: String?): String? = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+        val id = calendar?.removePrefix(io.github.murtazanasir.mailr.data.phonecal.PhoneEvents.CALENDAR_PREFIX)?.toLongOrNull()
+            ?: return@withContext null
+        g.phoneCalendars.source.calendars().firstOrNull { it.id == id }?.name
+    }
 
     /** Rows changed on this phone and not yet confirmed by the server: drawn with a dashed border. */
     val pendingKeys: StateFlow<Set<String>> = range.flatMapLatest { (f, t) ->
@@ -653,7 +670,9 @@ class CalendarViewModel(private val g: AppGraph, val prefs: CalendarPrefs = Cale
         }
     }
 
-    fun readOnly(e: CalendarEvent): Boolean = e.calendar?.let(::readOnlyUrl) == true
+    /** Read-only: a read-only calendar, or an event from a phone calendar (changed only in the phone's calendar app). */
+    fun readOnly(e: CalendarEvent): Boolean =
+        io.github.murtazanasir.mailr.data.phonecal.PhoneEvents.isPhone(e) || e.calendar?.let(::readOnlyUrl) == true
     private fun readOnlyUrl(url: String) = collections.value.firstOrNull { it.url == url }?.readOnly == true
 
     /** ACT task.complete @android.calendar: the checkbox of a task chip on the calendar. */

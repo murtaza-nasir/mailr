@@ -22,6 +22,26 @@ Tap a day to see its events under the month: the start and end times, the calend
 
 An upcoming event with guests has a **Meeting prep** card in its details. Tap it to see the last recording of the meeting and its open action items, open questions and threads waiting on the guests, recent threads, related tasks, memories Ambrose keeps and recent files. Tap **Summarise** to ask the assistant model for a short paragraph. See [Meeting prep](../user-guide/calendar.md#meeting-prep).
 
+### Phone calendars
+
+The calendars that Android keeps on the phone, such as an Exchange account added through the Gmail app, can be shown in Mailr's calendar. Open **Settings → Calendar & tasks → Phone calendars** and turn on **Show phone calendars**. You are then asked to allow calendar access. If you do not allow it, the switch stays off. After **Don't ask again**, **Open app settings** is shown on the page; calendar access can be allowed there later.
+
+Each calendar on the phone is listed under **Calendars on this phone** with its account and colour, and is set to one of four choices. All are **Off** at first.
+
+| Choice | Effect |
+|---|---|
+| **Off** | The calendar is not shown in Mailr. |
+| **Show on this phone** | Its events are shown in the schedule, day, week and month views on this phone, in the calendar's colour, marked **On this phone**. Nothing is sent to the server. |
+| **Show and send busy times** | As **Show on this phone**, and the calendar's busy times are sent to the server, where they are shown on the web and given to Ambrose. |
+| **Show and send details** | As **Show and send busy times**, and each event's title and place are sent with its times, so they are shown on the web and given to Ambrose. Guests and descriptions are not sent. |
+
+Events from a phone calendar are read-only in Mailr. They cannot be dragged, edited, deleted or answered, and no Mailr reminders are set for them; the reminders of the phone's calendar app still apply. Tap one to see its time, place and calendar, and tap **Open in Calendar** to open it in the phone's calendar app, where it can be changed.
+
+Nothing is sent from the phone for calendars set to **Off** or **Show on this phone**. For calendars set to **Show and send busy times**, the start, the end and whether it lasts all day are sent for each event marked busy or tentative, and not declined or cancelled, for the 30 days before today and the 180 days after. For calendars set to **Show and send details**, the same events are sent with their titles and places as well, each cut to 300 characters. Guests, descriptions, notes and the organizer are never sent. The busy times are sent again when the phone's calendar changes and every 30 minutes, when they differ from the last copy sent. Setting a calendar from **Show and send details** back to **Show and send busy times** sends its busy times again at once without titles, and the titles and places are removed from the server. Setting a calendar back to **Show on this phone** or **Off**, or turning **Show phone calendars** off, removes its busy times from the server. See [Phone calendars](../user-guide/calendar.md#phone-calendars) for how they are shown on the web.
+
+A phone event that is also in Mailr's calendar, at the same time and with the same title, is shown and counted once, from Mailr's calendar. A meeting declined or cancelled in Mailr is therefore not shown or sent from the phone, even when it is still marked busy in the phone's calendar. An event whose title starts with **Canceled:** is not shown or sent either.
+<!-- covers: calendar.phone_sync -->
+
 ## Tasks
 
 On the Tasks tab, tasks are grouped by due date, from Overdue to Completed, with subtasks under their parent. Smart lists (Today, Upcoming, All) and custom lists are in the drawer.
@@ -122,7 +142,7 @@ Event and task reminders are shown on the phone at the right minute, even withou
 
 For an event with guests, **Prep** is shown in place of **Dismiss** (a swipe still dismisses), unless the event is about to start and has a video link; then **Join** is shown. Tap **Prep** to open the event with its meeting prep. The reminder sheet has a **Prep** button too.
 
-The buttons work from the lock screen. Tap **Snooze…** to open a small sheet of choices that fit the reminder: for an event that has not started, in 5 or 10 minutes or when it starts; for a task, later today, the same time tomorrow or next week, tomorrow morning or next Monday; or a date and time you pick. Tap a reminder to open its event or task.
+On the lock screen, a reminder shows no details, and the phone must be unlocked before its sheet opens. Tap **Snooze…** to open a small sheet of choices that fit the reminder: for an event that has not started, in 5 or 10 minutes or when it starts; for a task, later today, the same time tomorrow or next week, tomorrow morning or next Monday; or a date and time you pick. Tap a reminder to open its event or task.
 
 ![A reminder's quick-action sheet with snooze choices](../assets/shots/android-reminder-sheet.png)
 
@@ -132,7 +152,7 @@ Reminders that came due while the phone was off are shown as **Missed** after it
 
 ### Full-screen alerts
 
-With **Full-screen alerts** on, an event about to start or a task due now is shown full screen, also on the lock screen. You can mark it done, snooze it, join the call, dismiss it or ask Ambrose about it. Full-screen alerts are never shown while Do Not Disturb is on, and never for missed reminders or all-day items. You are asked for the **Full-screen permission** the first time.
+With **Full-screen alerts** on, an event about to start or a task due now is shown full screen, and the screen is switched on. While the phone is locked, the alert shows only the time and "Task reminder" or "Event reminder", with **Unlock**: the title, the details and the buttons appear after the phone is unlocked. You can then mark it done, snooze it, join the call, dismiss it or ask Ambrose about it. Full-screen alerts are never shown while Do Not Disturb is on, and never for missed reminders or all-day items. You are asked for the **Full-screen permission** the first time.
 
 <!-- covers: reminder.full_screen android:fullscreen -->
 

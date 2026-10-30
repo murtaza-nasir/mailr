@@ -381,6 +381,51 @@ The Mailr calendar on your server, sharing calendars with people, connecting ano
 account, importing `.ics` files, calendar links and moving your calendars into Mailr are in
 [Calendar sharing and import](calendar-sharing.md).
 
+## Phone calendars
+
+The busy times of a calendar that exists only on your phone, such as a work calendar synced to the
+phone from an Exchange or Microsoft 365 account, can be sent to Mailr. Each phone calendar is set up in
+the Mailr app for Android, under **Settings → Calendar & tasks → Phone calendars** (see
+[Calendar, tasks and reminders](../android/calendar-and-reminders.md#phone-calendars)).
+
+What leaves the phone depends on the calendar's setting:
+
+- **Show and send busy times** (the choice that sends the least): only busy times are sent, that is
+  the start and end of each event marked busy or tentative.
+- **Show and send details**: the busy times, and also the title and place of each of those events.
+
+Guests, descriptions, notes, the organizer and the phone's event ids are never sent, for either
+choice, and Mailr refuses them if they arrive. Free events, events you declined and cancelled
+events are not sent. When a calendar goes from **Show and send details** back to **Show and send
+busy times**, its next update removes every title and place of that calendar from Mailr, older
+events included.
+
+In Mailr, these blocks appear as follows:
+
+- A block from a calendar that sends busy times only is titled **Busy**. A block from a calendar
+  that sends details shows the event's title and place; a block without a title there is titled
+  **Busy**. Both are shown in the calendar's colour, under the calendar's name in the calendar list
+  and in the calendar side panel.
+- The blocks are read-only. They cannot be moved, resized, edited, deleted or answered in Mailr;
+  they change only on the phone.
+- The calendar list and the event details show **Updated from** the phone's name and how long ago
+  the blocks were sent. After a day without an update, the line is marked **over a day old**;
+  the blocks are still shown.
+- The blocks count as busy in **Find a time**, in free/busy and for Ambrose. For a calendar that
+  sends busy times only, Ambrose sees "Busy" with the calendar's name and the time. For a calendar
+  that sends details, Ambrose sees the title, the place and the time, as for your other calendar
+  events, and that the event comes from a phone calendar and cannot be changed in Mailr.
+- They have no reminders (the phone's calendar app reminds you), no guests and no video links.
+- They are not shared with your groups' free/busy, cannot be shared with other people, are not
+  copied to other calendar apps through the Mailr calendar, and are not part of the calendar backup.
+
+**Settings → Calendar & tasks → Phone calendars** lists each phone calendar with what it sends
+(**Busy times only**, or **Busy times with titles and places**), its phone, when it was last
+updated and how many busy times Mailr holds. **Remove** deletes the calendar and its blocks from
+Mailr. If the phone still sends them, they return at its next update; to stop that, set the
+calendar to **Off** or **Show on this phone** in the Android app.
+<!-- covers: calendar.phone_list, calendar.phone_remove -->
+
 ## Calendar settings
 
 **Settings → You → Region** holds the time zone, the clock and the first day of the week, for the

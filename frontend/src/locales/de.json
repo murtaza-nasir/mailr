@@ -832,6 +832,18 @@
       "sharedWithPeople_other": "Mit {{count}} Personen geteilt{{value}}",
       "sharedWithTheGroup": "Mit der Gruppe {{group}} geteilt",
       "viewOnly": " · Nur anzeigen"
+    },
+    "phone": {
+      "busy": "Beschäftigt",
+      "updatedFrom": "Aktualisiert von {{device}} {{when}}",
+      "updated": "Aktualisiert {{when}}",
+      "neverUpdated": "Noch nicht aktualisiert",
+      "stale": "Älter als einen Tag",
+      "changeOnThePhone": "Eine belegte Zeit aus einem Kalender auf deinem Telefon. Sie ändert sich nur auf dem Telefon.",
+      "eventChangeOnThePhone": "Ein Termin aus einem Kalender auf deinem Telefon. Er wird nur auf dem Telefon geändert.",
+      "menuNote": "Belegte Zeiten aus einem Kalender auf deinem Telefon. Sie ändern sich nur auf dem Telefon.",
+      "menuNoteDetails": "Termine aus einem Kalender auf deinem Telefon, mit Titeln und Orten. Sie werden nur auf dem Telefon geändert.",
+      "phoneCalendarSettings": "Einstellungen für Telefonkalender"
     }
   },
   "colour": {
@@ -4179,6 +4191,7 @@
         "question": "{{title}}?",
         "remoteImages": "Externe Bilder",
         "reportSpam": "Als Spam melden",
+        "sendBusyTimesFromPhoneCalendars": "belegte Zeiten aus Telefonkalendern senden",
         "sendEmail": "E-Mail senden",
         "sendInvitationsAndUpdatesTo": "Einladungen und Aktualisierungen an Gäste senden",
         "thisCantBeUndoneFrom": "Dies kann in Mailr nicht rückgängig gemacht werden.",
@@ -7639,7 +7652,8 @@
       "whatAgentsMayDoWithout": "Aktionen, die Agenten ohne Rückfrage ausführen dürfen. Bei „Mich fragen“ geht die Aktion in die Freigabe-Warteschlange, wo du einmalig, für eine Weile oder dauerhaft entscheidest. Deine eigenen Aktionen werden nie eingeschränkt. Die erste Nachricht an eine neue Adresse erfordert immer eine Freigabe. Der Lesezugriff eines Agenten wird durch sein Token festgelegt, nicht durch diese Regeln.",
       "writeDraftsAndRewriteBriefs": "Entwürfe schreiben und Zusammenfassungen umformulieren",
       "yourRule": "deine Regel",
-      "actOnNotesYouForward": "Auf Notizen reagieren, die du von deinen vertrauenswürdigen Adressen weiterleitest"
+      "actOnNotesYouForward": "Auf Notizen reagieren, die du von deinen vertrauenswürdigen Adressen weiterleitest",
+      "sendPhoneBusyTimes": "Belegungszeiten aus Telefonkalendern senden"
     },
     "phoneAccessAdmin": {
       "aHostNameOfIts": "Verwende einen dedizierten Hostnamen, z. B. dav.example.com. Kalenderpfade müssen sich im Stammverzeichnis des Hosts befinden. Gespeichert, wenn du das Feld verlässt oder Enter drückst.",
@@ -8192,6 +8206,20 @@
       "trusted": "Diese Adressen brauchen einen neuen Code, bevor sie wieder für Sie sprechen: {{addresses}}.",
       "forwards": "An diese Adressen wird keine Mail weitergeleitet, bis Sie sie erneut bestätigen: {{addresses}}.",
       "notYou": "Wenn Sie das selbst eingerichtet haben, schalten Sie es wieder ein. Wenn nicht, entfernen Sie es."
+    },
+    "phoneCalendars": {
+      "title": "Telefonkalender",
+      "desc": "Kalender auf deinem Telefon, deren Belegungszeiten an Mailr gesendet werden. Standardmäßig werden nur der Beginn und das Ende jeder Belegungszeit gesendet. Für einen Kalender, der auf „Details anzeigen und senden“ eingestellt ist, werden zusätzlich der Titel und der Ort jedes Termins gesendet. Gäste, Beschreibungen und Notizen werden niemals gesendet. Jeder Kalender wird in der Android-App unter Einstellungen → Kalender & Aufgaben → Telefonkalender eingestellt.",
+      "none": "Keine Telefonkalender senden Belegungszeiten.",
+      "busyTimes_one": "{{count}} Belegungszeit",
+      "busyTimes_other": "{{count}} Belegungszeiten",
+      "busyOnly": "Nur Belegungszeiten",
+      "withDetails": "Belegungszeiten mit Titeln und Orten",
+      "removeName": "{{name}} entfernen",
+      "removeTitle": "„{{name}}“ entfernen?",
+      "removeBody": "Die Belegungszeiten werden aus Mailr entfernt. Wenn das Telefon sie weiterhin sendet, kehren sie beim nächsten Update zurück. Um das zu verhindern, stelle den Kalender in der Android-App auf Aus oder Anzeigen auf diesem Telefon.",
+      "removed": "„{{name}}“ entfernt",
+      "notRemoved": "Der Telefonkalender konnte nicht entfernt werden"
     }
   },
   "shortcuts": {

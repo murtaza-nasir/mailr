@@ -103,6 +103,8 @@ internal object Routes {
     const val APPROVALS = "approvals"
     const val SCREENER = "screener"
     const val ACTIVITY = "activity"
+    /** Settings → Calendar → Phone calendars. */
+    const val PHONE_CALENDARS = "phone-calendars"
     /** What Ambrose remembers: from Ambrose's ⋮ menu and from Settings → Ambrose. */
     const val MEMORY = "memory"
     const val TRUSTED = "trusted"

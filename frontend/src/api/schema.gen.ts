@@ -106,6 +106,7 @@ export interface Collection {
   sharing?: CollectionSharing | null
   shareable?: boolean | null
   subscription?: Record<string, unknown> | null
+  phone?: PhoneCalendar | null
   sync?: SyncState | null
   error?: string | null
 }
@@ -212,6 +213,10 @@ export interface Event {
   connector_id?: number | null
   href?: string | null
   local_only?: boolean | null
+  /** A block from a phone calendar: read-only; times only unless phone_details. */
+  phone_busy?: boolean | null
+  /** A phone calendar's block that carries the phone's title and place (the calendar is set to send details). */
+  phone_details?: boolean | null
   /** My answer as a guest (ACCEPTED, NEEDS-ACTION…), else null. */
   my_status?: string | null
   is_organizer?: boolean | null
@@ -567,6 +572,16 @@ export interface Participant {
   email: string
   name?: string | null
   me?: boolean
+}
+
+/** The `phone` field of a phone calendar: busy times sent from the phone. */
+export interface PhoneCalendar {
+  key: string
+  device: string
+  synced_at?: string | null
+  stale: boolean
+  /** The phone sends titles and places too, not busy times only. */
+  details?: boolean | null
 }
 
 export interface PreviewItem {

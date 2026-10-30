@@ -73,7 +73,7 @@ FEED = "Feed"
 # are by address, as at shared mail providers.
 _INSTITUTION = re.compile(r"(^|\.)(edu|gov|mil)(\.[a-z]{2})?$|(^|\.)ac\.[a-z]{2}$")
 # Connector kinds that carry no mail.
-_NOT_MAIL = {"caldav", "speakr", "file", "webcal"}
+_NOT_MAIL = {"caldav", "speakr", "file", "webcal", "phone"}
 # People who write from an account's own domain before it counts as a work account.
 COLLEAGUES = 3
 

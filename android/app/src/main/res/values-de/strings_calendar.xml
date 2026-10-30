@@ -134,6 +134,8 @@
     <string name="cal_quick_no_one_called">Niemand namens „%s“ gefunden</string>
     <string name="cal_quick_keep_as_text">Als Text beibehalten</string>
     <string name="cal_alert_close_cd">Schließen; die Erinnerung bleibt</string>
+    <string name="cal_alert_unlock">Entsperren</string>
+    <string name="cal_alert_unlock_to_see">Entsperre dein Telefon, um diese Erinnerung anzuzeigen</string>
     <string name="cal_alert_snooze_10_min">10 Min. zurückstellen</string>
     <string name="cal_alert_more_choices">Weitere Optionen</string>
     <plurals name="cal_alert_starts_in">

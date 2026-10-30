@@ -571,6 +571,14 @@ private fun DetailFor(vm: CalendarViewModel, key: String, loaded: List<CalendarE
                       onDelete: (CalendarEvent) -> Unit, onColor: (CalendarEvent) -> Unit, openEmail: (Long) -> Unit = {},
                       dismiss: () -> Unit = {}, compose: ((String, String, String) -> Unit)? = null,
                       askAssistant: ((CalendarEvent) -> Unit)? = null) {
+    if (io.github.murtazanasir.mailr.data.phonecal.PhoneEvents.isPhoneKey(key)) {
+        // A phone calendar's event: read-only, with "Open in Calendar". Gone from the phone (or its
+        // calendar no longer shown): the "deleted elsewhere" note without Restore.
+        val pe = loaded.firstOrNull { it.key == key } ?: return DeletedElsewhere(null, onRestore = null, onClose = onClose)
+        val name by produceState<String?>(null, pe.calendar) { value = vm.phoneCalendarName(pe.calendar) }
+        PhoneEventDetail(pe, name, zone, onClose, now)
+        return
+    }
     val ctx = LocalContext.current
     val recordings = io.github.murtazanasir.mailr.ui.recordings.LocalRecordings.current
     val e by produceState(loaded.firstOrNull { it.key == key }, key, loaded) {

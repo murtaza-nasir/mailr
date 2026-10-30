@@ -134,6 +134,8 @@
     <string name="cal_quick_no_one_called">Ninguém chamado “%s”</string>
     <string name="cal_quick_keep_as_text">Manter como texto</string>
     <string name="cal_alert_close_cd">Fechar; o lembrete continua</string>
+    <string name="cal_alert_unlock">Desbloquear</string>
+    <string name="cal_alert_unlock_to_see">Desbloqueie o celular para ver este lembrete</string>
     <string name="cal_alert_snooze_10_min">Adiar 10 min</string>
     <string name="cal_alert_more_choices">Mais opções</string>
     <plurals name="cal_alert_starts_in">

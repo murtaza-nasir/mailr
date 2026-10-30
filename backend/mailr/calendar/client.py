@@ -134,7 +134,10 @@ async def defaults(db: AsyncSession, user_id: int, p=None) -> dict[str, Any]:
         conf_lst = [r.config.get("default_tasklist") for r in rows if (r.config or {}).get("default_tasklist")]
         cal = cal or next((u for u in conf_cal if u in by_url and by_url[u]["events"]), None)
         lst = lst or next((u for u in conf_lst if u in by_url and by_url[u]["tasks"]), None)
-    cal = cal or next((c["url"] for c in cols if c["events"] and not c.get("hidden")), None) \
+    # A read-only calendar (a calendar link, a phone calendar's busy times) is the default only
+    # when nothing else takes events.
+    cal = cal or next((c["url"] for c in cols if c["events"] and not c.get("hidden") and not c.get("read_only")), None) \
+        or next((c["url"] for c in cols if c["events"] and not c.get("hidden")), None) \
         or next((c["url"] for c in cols if c["events"]), None)
     lst = lst or next((c["url"] for c in cols if c["tasks"] and not c.get("hidden")), None) \
         or next((c["url"] for c in cols if c["tasks"]), None)

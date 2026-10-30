@@ -26,6 +26,9 @@
     <!-- The Agenda widget's weather (optional): approximate location only, asked in the widget's
          settings; a city can be picked instead. Rounded to about 10 km and sent only to Open-Meteo. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- Phone calendars (off by default): asked when Settings → Calendar → Phone calendars is turned
+         on. Events are only read; busy times leave the phone only for calendars set to send them. -->
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
 
     <!-- "Continue as <name>" in the Notes app (session-core Handover): only an app signed with this
          app's certificate may start HandoverActivity or read HandoverAccountProvider. The Notes app
@@ -189,7 +192,6 @@
             android:theme="@style/Theme.Mailr.Overlay"
             android:taskAffinity=""
             android:excludeFromRecents="true"
-            android:showWhenLocked="true"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density|uiMode" />
 
         <!-- The full-screen reminder alert: over the lock screen, screen on. -->

@@ -59,6 +59,7 @@ export const ACTION_LABELS: Record<string, string> = {
   'calendar.update': tr('settings.permissionsSection.changeEvents'),
   'calendar.delete': tr('settings.permissionsSection.deleteEvents'),
   'calendar.rsvp': tr('settings.permissionsSection.answerInvitations'),
+  'calendar.phone_sync': tr('settings.permissionsSection.sendPhoneBusyTimes'),
   'tasks.read': tr('settings.permissionsSection.readTasks'),
   'tasks.create': tr('settings.permissionsSection.createTasks'),
   'tasks.update': tr('settings.permissionsSection.changeTasks'),

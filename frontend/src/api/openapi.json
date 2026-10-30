@@ -1931,6 +1931,16 @@
             ],
             "title": "Subscription"
           },
+          "phone": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PhoneCalendar"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "sync": {
             "anyOf": [
               {
@@ -2645,6 +2655,30 @@
               }
             ],
             "title": "Local Only"
+          },
+          "phone_busy": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone Busy",
+            "description": "A block from a phone calendar: read-only; times only unless phone_details."
+          },
+          "phone_details": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone Details",
+            "description": "A phone calendar's block that carries the phone's title and place (the calendar is set to send details)."
           },
           "my_status": {
             "anyOf": [
@@ -4653,6 +4687,54 @@
           "email"
         ],
         "title": "Participant"
+      },
+      "PhoneCalendar": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "title": "Key"
+          },
+          "device": {
+            "type": "string",
+            "title": "Device"
+          },
+          "synced_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "description": "An ISO 8601 time, as the server wrote it."
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Synced At"
+          },
+          "stale": {
+            "type": "boolean",
+            "title": "Stale"
+          },
+          "details": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Details",
+            "description": "The phone sends titles and places too, not busy times only."
+          }
+        },
+        "type": "object",
+        "required": [
+          "key",
+          "device",
+          "stale"
+        ],
+        "title": "PhoneCalendar",
+        "description": "The `phone` field of a phone calendar: busy times sent from the phone."
       },
       "PreviewItem": {
         "properties": {

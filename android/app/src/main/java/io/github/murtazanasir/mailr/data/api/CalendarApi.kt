@@ -184,6 +184,15 @@ data class SharedInfo(
     val editor: Boolean = false,
 )
 
+/** Busy times sent from a calendar on a phone (server `phone`): the key, the device and when it last sent them. */
+@Serializable
+data class PhoneInfo(
+    val key: String = "",
+    val device: String = "",
+    @SerialName("synced_at") val syncedAt: String? = null,
+    val stale: Boolean = false,
+)
+
 @Serializable
 data class CalendarCollection(
     val url: String = "",
@@ -210,6 +219,8 @@ data class CalendarCollection(
     @SerialName("default_reminders") val defaultReminders: JsonElement? = null,
     /** A group calendar, or a calendar another person shares with this user (null: the user's own). */
     val shared: SharedInfo? = null,
+    /** Busy times from a phone calendar (null: not one). */
+    val phone: PhoneInfo? = null,
     @kotlinx.serialization.Transient val deviceHidden: Boolean? = null,
 ) {
     /** Only the owner (or an admin, for a group calendar) renames or deletes a shared calendar. */

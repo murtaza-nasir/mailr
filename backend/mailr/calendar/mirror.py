@@ -18,7 +18,7 @@ from sqlalchemy import and_, delete, func, insert, or_, select, text, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import defer
 
-from mailr.calendar import expand, ical
+from mailr.calendar import expand, ical, phonecal
 from mailr.calendar import tz as tzmod
 from mailr.calendar.describe import calendar_name
 from mailr.config import get_settings
@@ -56,8 +56,9 @@ def _restricted(p: Any) -> bool:
 async def visible_connectors(db: AsyncSession, user_id: int, p: Any = None, *, subscriptions: bool = False
                              ) -> list[Connector]:
     """The calendar accounts p may see. `subscriptions`: also the read-only calendar links
-    (calendar/webcal.py, kind "webcal"), for reading; writes and DAV syncs leave it off."""
-    kinds = ("caldav", "webcal") if subscriptions else ("caldav",)
+    (calendar/webcal.py, kind "webcal") and the phone calendars' busy times (calendar/phonecal.py,
+    kind "phone"), for reading; writes and DAV syncs leave it off."""
+    kinds = ("caldav", "webcal", "phone") if subscriptions else ("caldav",)
     rows = (await db.execute(select(Connector).where(
         Connector.user_id == user_id, Connector.kind.in_(kinds), Connector.enabled.is_(True))
         .order_by(Connector.id))).scalars().all()
@@ -482,6 +483,9 @@ def collection_out(coll: CalCollection, connector: Connector | None, overrides: 
             "subscription": ({"url": (connector.config or {}).get("url"),
                               "refresh_hours": (connector.config or {}).get("refresh_hours")}
                              if connector is not None and connector.kind == "webcal" else None),
+            # ACT calendar.phone_list @api: busy times sent from a calendar on the user's phone
+            # (calendar/phonecal.py): read-only, with the device and when it last sent them.
+            "phone": phonecal.info(coll, connector) if phonecal.is_phone(coll) else None,
             "sync": {"state": coll.sync_status if coll.last_full_sync_at else "initial",
                      "last_sync_at": coll.last_sync_at.isoformat() if coll.last_sync_at else None,
                      "error": coll.sync_error or None}}
@@ -511,6 +515,10 @@ def event_out(obj: CalObject, coll: CalCollection | None, user_tz: tzinfo, *, lo
         "calendar": coll.href if coll else None,
         "calendar_id": obj.collection_id, "connector_id": obj.connector_id, "href": obj.href,
         "local_only": local_only,
+        # A block from a phone calendar (calendar/phonecal.py): read-only; times only unless
+        # phone_details (the calendar sends titles and places, and this block has one).
+        "phone_busy": phonecal.is_phone(coll),
+        "phone_details": phonecal.is_phone(coll) and phonecal.has_details(obj.uid),
     }
 
 

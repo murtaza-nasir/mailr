@@ -295,9 +295,10 @@ async def list_connectors(p: Principal = Depends(scope("read")), db: AsyncSessio
     on = await builtin.shown_for(db, p.user_id)
     unsynced = await accounthealth.unsynced_changes(db, [c.id for c in rows if c.mode == "mirror"])
     unsaved = await sentcopy.unsaved(db, [c.id for c in rows if sentcopy.active(c)])
-    # Calendar links (calendar/webcal.py) are listed under GET /calendar/subscriptions, not as accounts.
+    # Calendar links (calendar/webcal.py) are listed under GET /calendar/subscriptions, and phone
+    # calendars (calendar/phonecal.py) under GET /calendar/phone-calendars, not as accounts.
     return [connector_out(c, i18n.user_language(p.user), unsynced.get(c.id, 0), unsaved.get(c.id, 0)) for c in rows
-            if p.can_see_connector(c) and (on or not c.builtin) and c.kind != "webcal"]
+            if p.can_see_connector(c) and (on or not c.builtin) and c.kind not in ("webcal", "phone")]
 
 
 @router.get("/{cid}")

@@ -24,6 +24,8 @@ export const calendarKeys = {
   /** One occurrence (occ = canonical occurrence string), or the master when occ is absent. */
   event: (uid: string, occ?: string | null) => ['calendar', 'event', uid, occ ?? null] as const,
   calendars: ['calendar', 'calendars'] as const,
+  /** The phone calendars that send busy times (Settings → Calendar). */
+  phoneCalendars: ['calendar', 'phone-calendars'] as const,
   collections: ['calendar', 'collections'] as const,
   defaults: ['calendar', 'defaults'] as const,
   search: (q: string) => ['calendar', 'search', q] as const,

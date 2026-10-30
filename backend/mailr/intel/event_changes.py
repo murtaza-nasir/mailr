@@ -98,7 +98,8 @@ async def candidates(db: AsyncSession, user: User, m: Message, text: str) -> lis
     body = _norm(f"{m.subject} {text}")
     out = []
     for e in events:
-        if e.get("recurring") or e.get("all_day") or (e.get("status") or "").upper() == "CANCELLED":
+        # A phone calendar's busy time (calendar/phonecal.py) changes only on the phone.
+        if e.get("recurring") or e.get("all_day") or e.get("phone_busy") or (e.get("status") or "").upper() == "CANCELLED":
             continue
         people = {str(a.get("email") or "").lower() for a in e.get("attendee_list") or []} | {str(e.get("organizer") or "").lower()}
         if sender in people or (from_user and (e["uid"] in linked or any(w in body for w in _words(e.get("summary") or "")))):

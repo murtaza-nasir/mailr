@@ -67,6 +67,9 @@ CLASSES: dict[str, tuple[str, str]] = {
     "tasks.lists": ("allow", "calendar"),
     "tasks.bulk": ("allow", "calendar"),
     "calendar.manage": ("ask", "calendar"),
+    # Busy times from a calendar on the user's phone (calendar/phonecal.py): times, plus titles and
+    # places for a calendar set to send details, sent by the app every 30 minutes, so allowed by default.
+    "calendar.phone_sync": ("allow", "calendar"),
     "contacts.read": ("allow", "read"),
     # Contact groups: create, rename, change members, delete.
     "contacts.write": ("ask", "label"),

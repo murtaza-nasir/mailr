@@ -13,6 +13,7 @@ import { Section } from './common'
 import { CollectionsSection } from './CalendarCollections'
 import { MigrateDialog } from './CalendarMigration'
 import { PhoneAppsSection } from './PhoneApps'
+import { PhoneCalendarsSection } from './PhoneCalendars'
 import { t } from '../../i18n'
 
 /** Settings → Calendar & tasks → the calendar and task accounts, their calendars, and phone access. */
@@ -85,6 +86,7 @@ export function CalendarAccountsSection() {
         )}
       </Section>
       {caldav.length > 0 && <CollectionsSection />}
+      <PhoneCalendarsSection />
       {caldav.some((c) => c.builtin) && <PhoneAppsSection />}
       {adding && <CaldavDialog onClose={() => setAdding(false)} />}
       {copying && <MigrateDialog conn={copying} onClose={() => setCopying(null)} />}

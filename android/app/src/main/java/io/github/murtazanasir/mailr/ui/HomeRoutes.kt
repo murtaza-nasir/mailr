@@ -143,6 +143,7 @@ internal fun SettingsRoute(g: AppGraph, nav: NavHostController, scope: Coroutine
                 useSignIn = { pictureRun(R.string.ui_shell_picture_signin, R.string.ui_shell_picture_signin_failed) { pictures.useSignIn() } },
             ),
             openActivity = { nav.navigate(Routes.ACTIVITY) },
+            openPhoneCalendars = { nav.navigate(Routes.PHONE_CALENDARS) { launchSingleTop = true } },
             assistantName = assistantName,
             openMemory = { nav.navigate(Routes.MEMORY) { launchSingleTop = true } },
             openTrusted = { nav.navigate(Routes.TRUSTED) { launchSingleTop = true } },

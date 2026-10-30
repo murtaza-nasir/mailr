@@ -14,6 +14,7 @@
     <string name="appr_verb_calendar_rsvp">responder a convites</string>
     <string name="appr_verb_calendar_invite">enviar convites e atualizações para convidados</string>
     <string name="appr_verb_calendar_cancel">cancelar eventos com convidados</string>
+    <string name="appr_verb_calendar_phone_sync">enviar horários ocupados das agendas do celular</string>
     <string name="appr_verb_tasks_create">criar tarefas</string>
     <string name="appr_verb_tasks_update">alterar tarefas</string>
     <string name="appr_verb_tasks_complete">concluir tarefas</string>

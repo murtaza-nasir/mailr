@@ -248,3 +248,51 @@ for (const [scheme, theme] of [['dark', 'classic'], ['light', 'cards']] as const
     await page.locator('.side-panel').screenshot({ path: `${SHOTS}/chats-${scheme}-${theme}.png` })
   })
 }
+
+// A list request that started before a rename and is answered after it (a search cleared right after
+// Enter) carries the old title; it must not put that title back (seen on a slow runner, 27 Oct 2026).
+test('a list answer from before a rename does not undo the rename', async ({ page }) => {
+  let title = CHATS[0].title
+  let hold = false
+  let gotList: () => void = () => {}
+  const listArrived = new Promise<void>((r) => { gotList = r })
+  let patched: () => void = () => {}
+  const patchDone = new Promise<void>((r) => { patched = r })
+  await page.route(/\/api\/v1\/agent\/sessions(\?.*)?$/, async (route) => {
+    const snapshot = CHATS.map((c, i) => (i === 0 ? { ...c, title } : c))
+    // Only the full list (the search cleared) is held; a search answer goes at once.
+    if (hold && !route.request().url().includes('q=')) {
+      gotList()
+      await patchDone
+      await new Promise((r) => setTimeout(r, 300))
+    }
+    try { await route.fulfill({ json: snapshot }) } catch { /* the app cancelled it */ }
+  })
+  await page.route(/\/api\/v1\/agent\/sessions\/e2e-c1$/, async (route) => {
+    if (route.request().method() !== 'PATCH') return route.fulfill({ json: { id: 'e2e-c1', turns: [] } })
+    // Answered only after a list request has started: that request carries the old title.
+    await Promise.race([listArrived, new Promise((r) => setTimeout(r, 3000))])
+    const previous = { title, renamed: false }
+    title = (route.request().postDataJSON() as { title: string }).title
+    await route.fulfill({ json: { id: 'e2e-c1', title, renamed: true, previous } })
+    hold = false
+    patched()
+  })
+  await openAmbrose(page)
+  await chatsButton(page).click()
+  await expect(rows(page)).toHaveCount(3)
+  // As in the phone test: rename from the search results, then clear the search at once.
+  const box = page.getByRole('searchbox', { name: 'Search chats' })
+  await box.fill('Lumen')
+  const first = page.getByTestId('chats').locator('.chats-item').first()
+  await first.hover()
+  await first.getByTestId('chat-more').click()
+  await page.getByRole('menuitem', { name: 'Rename' }).click()
+  await page.getByRole('textbox', { name: 'Chat title' }).fill('Lumen kickoff notes')
+  hold = true
+  await page.getByRole('textbox', { name: 'Chat title' }).press('Enter')
+  await box.fill('')
+  await expect(page.locator('.toast', { hasText: 'Chat renamed.' })).toBeVisible()
+  await page.waitForTimeout(800)
+  await expect(rows(page).first()).toContainText('Lumen kickoff notes')
+})

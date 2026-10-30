@@ -134,6 +134,8 @@
     <string name="cal_quick_no_one_called">Personne nommée « %s »</string>
     <string name="cal_quick_keep_as_text">Conserver comme texte</string>
     <string name="cal_alert_close_cd">Fermer ; le rappel reste actif</string>
+    <string name="cal_alert_unlock">Déverrouiller</string>
+    <string name="cal_alert_unlock_to_see">Déverrouillez votre téléphone pour voir ce rappel</string>
     <string name="cal_alert_snooze_10_min">Reporter de 10 min</string>
     <string name="cal_alert_more_choices">Plus d\'options</string>
     <plurals name="cal_alert_starts_in">

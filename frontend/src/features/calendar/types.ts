@@ -58,6 +58,10 @@ export interface ApiEvent {
   href?: string
   conversation_id?: number | string | null
   local_only?: boolean
+  /** A block from a phone calendar (backend calendar/phonecal.py): read-only; times only unless phone_details. */
+  phone_busy?: boolean
+  /** A phone calendar's block with the phone's title and place (the calendar sends details). */
+  phone_details?: boolean
 }
 
 /** An event as the views use it: times parsed, colour and identity resolved. */
@@ -96,6 +100,8 @@ export interface Collection {
   read_only?: boolean
   /** A calendar link the user subscribed to (calendar.subscribe, backend calendar/webcal.py): read-only. */
   subscription?: { url: string; refresh_hours: number } | null
+  /** A phone calendar's busy times (backend calendar/phonecal.py): read-only, sent by the Android app. */
+  phone?: PhoneInfo | null
   tz?: string | null
   hidden?: boolean
   busy?: boolean
@@ -115,6 +121,16 @@ export interface Collection {
   sharing?: { people: number; others: number } | null
   /** "Share…" is offered: an own calendar of the mailr calendar account, or one shared with the share level. */
   shareable?: boolean
+}
+
+/** Where a phone calendar's busy times come from and when they were last sent. */
+export interface PhoneInfo {
+  key: string
+  device: string
+  synced_at: string | null
+  stale: boolean
+  /** The phone sends titles and places too, not busy times only. */
+  details?: boolean
 }
 
 export type SharedInfo = GroupShared | UserShared

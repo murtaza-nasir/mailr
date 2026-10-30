@@ -108,7 +108,10 @@
       "subscription_not_found": "subscription not found",
       "unknown_calendar": "unknown calendar",
       "unverified_user_only": "only the signed-in user can apply a change from an unverified sender",
-      "window_two_years": "the window must be positive and at most two years"
+      "window_two_years": "the window must be positive and at most two years",
+      "phone_read_only": "“{{name}}” shows busy times from your phone and can't be changed here. Change the event on the phone.",
+      "phone_limit": "at most {{max}} phone calendars",
+      "phone_needs_allow": "a rule makes phone calendar updates ask first; allow them for this token in Settings → Permissions"
     },
     "admin": {
       "user_not_found": "user not found",
@@ -1776,5 +1779,8 @@
     "forbidden": "your calendar server did not allow the change",
     "signin": "signing in to your calendar server failed",
     "other": "an unexpected error occurred"
+  },
+  "calendar_phone": {
+    "busy": "Busy"
   }
 }

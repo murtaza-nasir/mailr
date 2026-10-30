@@ -71,9 +71,12 @@ async def _cal():
     return cal
 
 
-async def _require_calendar(ctx: ToolCtx) -> Any:
+async def _require_calendar(ctx: ToolCtx, *, read: bool = False) -> Any:
+    """`read`: a calendar link or a phone calendar's busy times are enough (calendar/client.py
+    has_any_calendar); writes need a calendar account."""
     cal = await _cal()
-    if not await cal.has_calendar(ctx.db, ctx.p.user_id, p=ctx.p):
+    has = cal.has_any_calendar if read else cal.has_calendar
+    if not await has(ctx.db, ctx.p.user_id, p=ctx.p):
         raise ToolError("no calendar account is connected (Settings → Calendar)")
     return cal
 
@@ -246,8 +249,45 @@ def _named(out: dict[str, Any], key: str, names: dict[str, str] | None) -> None:
             out.pop(key, None)
 
 
+# What Ambrose reads of a block from a phone calendar (calendar/phonecal.py): its time, and for a
+# calendar that sends details its title and place.
+_BUSY_KEYS = ("uid", "occurrence", "start", "end", "all_day", "tz")
+
+
+def busy_block(e: dict[str, Any], names: dict[str, str] | None = None) -> dict[str, Any]:
+    """A phone calendar's block as the model reads it, marked as unchangeable here.
+
+    A busy-only block reads "Busy (<calendar>)" with its times: no title, place or guests reach
+    mailr for it, so the local-only rules have nothing to hide in it. A block with details
+    (`phone_details`: the calendar is set to send titles and places) reads like an ordinary
+    read-only event: its title, place, calendar name and times. Its connector is "normal" like the
+    owner's other calendar events (see calendar/phonecal.py on the outbound data policy). Guests,
+    descriptions and links never reach mailr from a phone, so neither kind has them."""
+    from mailr.calendar import phonecal
+
+    out = {k: e[k] for k in _BUSY_KEYS if k in e and e[k] not in (None, "", [])}
+    calendar = (names or {}).get(e.get("calendar") or "")
+    if e.get("phone_details"):
+        out["summary"] = e.get("summary") or phonecal.model_title(None)
+        if e.get("location"):
+            out["location"] = e["location"]
+        if calendar:
+            out["calendar"] = calendar
+        out["read_only"] = "event from a phone calendar; it changes only on the phone"
+        return out
+    out["summary"] = phonecal.model_title(calendar)
+    out["read_only"] = "busy time from a phone calendar; it changes only on the phone"
+    return out
+
+
 def _ev_brief(e: dict[str, Any], keys: tuple[str, ...] = _EV_KEYS, zone: Any = None,
               names: dict[str, str] | None = None, clock: str = "24h") -> dict[str, Any]:
+    if e.get("phone_busy"):
+        out = busy_block(e, names)
+        if zone is not None:
+            _localize(out, zone, "start", "end", bool(e.get("all_day")), "when", clock)
+        out["cite"] = cite_event(e["uid"], e.get("occurrence") or e.get("recurrence_id"))
+        return out
     out = {k: e[k] for k in keys if k in e and e[k] not in (None, "", [])}
     _named(out, "calendar", names)
     if out.get("rrule"):
@@ -541,6 +581,18 @@ async def _event_ref(ctx: ToolCtx, args: dict[str, Any]) -> tuple[str, str | Non
         raise ToolError("'uid' is required (no event is focused on screen)")
     _when(occ, "occurrence")
     return uid, occ or None
+
+
+async def _refuse_phone(ctx: ToolCtx, uid: str) -> None:
+    """A busy block from a phone calendar is never changed, deleted, cancelled or answered here."""
+    from fastapi import HTTPException
+
+    from mailr.calendar import phonecal
+
+    try:
+        await phonecal.refuse_uid(ctx.db, ctx.p.user_id, uid)
+    except HTTPException as e:
+        raise ToolError(f"{e.detail} It is a busy time from a phone calendar; it changes only on the phone.") from None
 
 
 def _task_uid(ctx: ToolCtx, args: dict[str, Any]) -> str:

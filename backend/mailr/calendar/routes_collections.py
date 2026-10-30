@@ -159,8 +159,11 @@ async def update_collection(db: AsyncSession, user: User, p: Any, calendar_id: i
     shared = await _group_calendar(db, user.id, coll)
     if shared and name is not None and name != coll.displayname:
         raise PermissionError(_not_yours(coll, shared, "rename"))
-    if shared and color is not None:
+    from mailr.calendar import phonecal
+
+    if (shared or phonecal.is_phone(coll)) and color is not None:
         # A group or shared calendar's colour is its owner's for everyone; this user's choice stays in mailr.
+        # A phone calendar's colour comes from the phone; a choice made here stays in mailr too.
         await _set_prefs(db, user.id, coll.href, color_local=color[:7] if color else None)
         name = color = None
     if name is not None or color is not None:
@@ -189,6 +192,8 @@ async def update_collection(db: AsyncSession, user: User, p: Any, calendar_id: i
                 else:
                     await _set_prefs(db, user.id, coll.href, color_local=None)
     for k in ("hidden", "busy", "notify", "sort_order"):
+        if k == "notify" and phonecal.is_phone(coll):
+            continue  # busy times from a phone never remind: the phone's own calendar app does
         if payload.get(k) is not None:
             setattr(coll, k, payload[k])
     if "default_reminders" in payload:
@@ -397,6 +402,9 @@ async def move_event(uid: str, body: EventMoveIn, p: Principal = Depends(scope("
     """Move a whole series into another calendar of the same account (UID kept): written to the
     target, then deleted from the source; if the delete fails, the new copy is removed."""
     await _collection_visible(db, p, body.calendar)
+    from mailr.calendar import phonecal
+
+    await phonecal.refuse_uid(db, p.user_id, uid)
     payload: dict[str, Any] = {"uid": uid, "changes": {"calendar": body.calendar}, "scope": "all"}
     if etag := _etag(if_match, body.etag):
         payload["etag"] = etag

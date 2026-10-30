@@ -912,6 +912,11 @@
    "state": "model",
    "text": "向嘉宾发送邀请和更新"
   },
+  "android:app:appr_verb_calendar_phone_sync": {
+   "sha": "afee006e664996a5",
+   "state": "model",
+   "text": "从手机日历发送忙碌时间"
+  },
   "android:app:appr_verb_calendar_rsvp": {
    "sha": "c07712555fe1e69e",
    "state": "model",
@@ -2162,6 +2167,16 @@
    "sha": "19ebd8e3e64d49f3",
    "state": "model",
    "text": "现在开始"
+  },
+  "android:app:cal_alert_unlock": {
+   "sha": "6c500cc253ab3fd4",
+   "state": "model",
+   "text": "解锁"
+  },
+  "android:app:cal_alert_unlock_to_see": {
+   "sha": "cee27fad70ef21d9",
+   "state": "model",
+   "text": "解锁手机以查看此提醒"
   },
   "android:app:cal_all_caught_up": {
    "sha": "35c0061dde99162c",
@@ -9922,6 +9937,111 @@
    "sha": "94abf3c279af6f31",
    "state": "same",
    "text": "VIP"
+  },
+  "android:app:phonecal_allow": {
+   "sha": "c8859d61b0c02167",
+   "state": "model",
+   "text": "允许访问日历"
+  },
+  "android:app:phonecal_choose_cd": {
+   "sha": "c700573807f9c547",
+   "state": "model",
+   "text": "选择如何使用 %1$s"
+  },
+  "android:app:phonecal_denied": {
+   "sha": "718d4628b5f3bedd",
+   "state": "model",
+   "text": "未允许访问日历。您可以在应用的系统设置中允许访问。"
+  },
+  "android:app:phonecal_denied_once": {
+   "sha": "bfb06c32be5cc761",
+   "state": "model",
+   "text": "未允许访问日历，因此手机日历保持关闭。"
+  },
+  "android:app:phonecal_detail_note": {
+   "sha": "d0748e9567aa82cd",
+   "state": "model",
+   "text": "此活动位于此手机上的日历中。您可以在手机的日历应用中更改它。"
+  },
+  "android:app:phonecal_header": {
+   "sha": "bbc6ea4013864724",
+   "state": "model",
+   "text": "此手机上的日历"
+  },
+  "android:app:phonecal_mode_details": {
+   "sha": "5aa75d29d3cdd014",
+   "state": "model",
+   "text": "显示并发送详情"
+  },
+  "android:app:phonecal_mode_details_hint": {
+   "sha": "1be9dd69a3ec9dae",
+   "state": "model",
+   "text": "标题和地点会发送到您的 Mailr 服务器；宾客和描述不会发送。"
+  },
+  "android:app:phonecal_mode_off": {
+   "sha": "50accd740fa2e736",
+   "state": "model",
+   "text": "关闭"
+  },
+  "android:app:phonecal_mode_send": {
+   "sha": "3e2c589d57bf252d",
+   "state": "model",
+   "text": "显示并发送忙碌时间"
+  },
+  "android:app:phonecal_mode_show": {
+   "sha": "23b0c9cf36ab5e3c",
+   "state": "model",
+   "text": "在此手机上显示"
+  },
+  "android:app:phonecal_no_calendar_app": {
+   "sha": "ff27d49a00592bd8",
+   "state": "model",
+   "text": "无法打开此活动：此手机没有日历应用。"
+  },
+  "android:app:phonecal_none": {
+   "sha": "6b3059a6694d8581",
+   "state": "model",
+   "text": "此手机没有日历。"
+  },
+  "android:app:phonecal_on_phone": {
+   "sha": "580b4b9299717d08",
+   "state": "model",
+   "text": "在此手机上"
+  },
+  "android:app:phonecal_open_in_calendar": {
+   "sha": "ebacf128399ea052",
+   "state": "model",
+   "text": "在日历中打开"
+  },
+  "android:app:phonecal_open_settings": {
+   "sha": "02789805322fbdfb",
+   "state": "model",
+   "text": "打开应用设置"
+  },
+  "android:app:phonecal_privacy": {
+   "sha": "39966c0599bb40a7",
+   "state": "manual",
+   "text": "设置为“关闭”或“在此手机上显示”的日历不会向服务器发送任何内容。对于“显示并发送忙碌时间”，会发送每个忙碌或暂定活动的开始和结束时间。对于“显示并发送详情”，还会发送每个活动的标题和地点。宾客、描述和备注绝不会发送。"
+  },
+  "android:app:phonecal_settings_sub": {
+   "sha": "aa4e738b80dd8db4",
+   "state": "model",
+   "text": "此手机上的日历（在 Mailr 日历中）"
+  },
+  "android:app:phonecal_switch": {
+   "sha": "f60b3d230fe87c07",
+   "state": "model",
+   "text": "显示手机日历"
+  },
+  "android:app:phonecal_switch_sub": {
+   "sha": "c46e04dd69771026",
+   "state": "model",
+   "text": "此手机日历中的活动将以只读方式显示在 Mailr 日历中。开启此功能时，您将允许访问日历。"
+  },
+  "android:app:phonecal_title": {
+   "sha": "87538b0705e7b07c",
+   "state": "model",
+   "text": "手机日历"
   },
   "android:app:present_and_more": {
    "sha": "b6aa4cc88b76c316",
@@ -21484,6 +21604,11 @@
    "state": "model",
    "text": "时间"
   },
+  "server:calendar_phone.busy": {
+   "sha": "cba4637ab0d1c0f9",
+   "state": "model",
+   "text": "忙碌"
+  },
   "server:calendar_write.forbidden": {
    "sha": "44116d3d35b9567c",
    "state": "model",
@@ -22275,6 +22400,21 @@
    "sha": "22b8f9cfd93842f3",
    "state": "model",
    "text": "仅组织者可以取消此活动"
+  },
+  "server:errors.calendar.phone_limit": {
+   "sha": "01716fe0be427a87",
+   "state": "model",
+   "text": "最多 {{max}} 个手机日历"
+  },
+  "server:errors.calendar.phone_needs_allow": {
+   "sha": "b2b2133547f85f95",
+   "state": "model",
+   "text": "有一条规则要求手机日历更新需先获得批准；请在“设置”→“权限”中为此令牌允许这些更新。"
+  },
+  "server:errors.calendar.phone_read_only": {
+   "sha": "11758b47c47bb66e",
+   "state": "model",
+   "text": "“{{name}}”显示您手机上的忙碌时间，无法在此处更改。请在手机上更改该活动。"
   },
   "server:errors.calendar.proposal_no_time": {
    "sha": "92bc5dd9a492cde7",
@@ -27467,6 +27607,56 @@
    "sha": "0369daaed745fe94",
    "state": "model",
    "text": "第 {{isoWeek}} 周"
+  },
+  "web:calendar.phone.busy": {
+   "sha": "cba4637ab0d1c0f9",
+   "state": "model",
+   "text": "忙碌"
+  },
+  "web:calendar.phone.changeOnThePhone": {
+   "sha": "e90409e73b9099e0",
+   "state": "model",
+   "text": "来自您手机日历的忙碌时间。仅在手机上更改。"
+  },
+  "web:calendar.phone.eventChangeOnThePhone": {
+   "sha": "20b6a33f179aa905",
+   "state": "model",
+   "text": "您手机日历中的活动。仅在手机上更改。"
+  },
+  "web:calendar.phone.menuNote": {
+   "sha": "67784481233b64af",
+   "state": "model",
+   "text": "来自您手机日历的忙碌时间。仅在手机上更改。"
+  },
+  "web:calendar.phone.menuNoteDetails": {
+   "sha": "8bf4988680f677fd",
+   "state": "model",
+   "text": "您手机日历中的活动，包含标题和地点。仅在手机上更改。"
+  },
+  "web:calendar.phone.neverUpdated": {
+   "sha": "f6815fdd0f399304",
+   "state": "model",
+   "text": "尚未更新"
+  },
+  "web:calendar.phone.phoneCalendarSettings": {
+   "sha": "b22f2faf64dfc46d",
+   "state": "model",
+   "text": "手机日历设置"
+  },
+  "web:calendar.phone.stale": {
+   "sha": "c3f00a1ed2428fec",
+   "state": "model",
+   "text": "已超过一天"
+  },
+  "web:calendar.phone.updated": {
+   "sha": "f52b2c47944acc25",
+   "state": "model",
+   "text": "已于 {{when}} 更新"
+  },
+  "web:calendar.phone.updatedFrom": {
+   "sha": "fe6de9a63c2d5ed6",
+   "state": "model",
+   "text": "已于 {{when}} 从 {{device}} 更新"
   },
   "web:calendar.prep.lastRecording": {
    "sha": "0dc5b8158611cf91",
@@ -42841,6 +43031,11 @@
    "state": "model",
    "text": "举报垃圾邮件"
   },
+  "web:rail.assistant.approvalCard.sendBusyTimesFromPhoneCalendars": {
+   "sha": "afee006e664996a5",
+   "state": "model",
+   "text": "从手机日历发送忙碌时间"
+  },
   "web:rail.assistant.approvalCard.sendEmail": {
    "sha": "a45b85c3e2a1bfb5",
    "state": "model",
@@ -55715,6 +55910,11 @@
    "state": "model",
    "text": "发送邮件"
   },
+  "web:settings.permissionsSection.sendPhoneBusyTimes": {
+   "sha": "2776d6c7d5e96ef9",
+   "state": "model",
+   "text": "从手机日历发送忙碌时间"
+  },
   "web:settings.permissionsSection.taskListS": {
    "sha": "00e7c26243ab9a52",
    "state": "model",
@@ -56213,6 +56413,63 @@
    "sha": "bcd3481bff420cb4",
    "state": "model",
    "text": " （您的服务器）"
+  },
+  "web:settings.phoneCalendars.busyOnly": {
+   "sha": "1483369a44966e0c",
+   "state": "model",
+   "text": "仅忙碌时间"
+  },
+  "web:settings.phoneCalendars.busyTimes": {
+   "sha": "a4f0820ccfb2ca19",
+   "state": "model",
+   "text": {
+    "other": "{{count}} 个忙碌时间"
+   }
+  },
+  "web:settings.phoneCalendars.desc": {
+   "sha": "2cedce09d6f79bd8",
+   "state": "model",
+   "text": "您手机上将忙碌时间发送至 Mailr 的日历。默认情况下，仅发送每个忙碌时间的开始和结束时间。对于设置为“显示并发送详细信息”的日历，还会发送每个活动的标题和地点。来宾、描述和备注永远不会发送。请在 Android 应用中，前往“设置”→“日历与任务”→“手机日历”来设置每个日历。"
+  },
+  "web:settings.phoneCalendars.none": {
+   "sha": "b0d9c9950dcf738c",
+   "state": "model",
+   "text": "没有手机日历发送忙碌时间。"
+  },
+  "web:settings.phoneCalendars.notRemoved": {
+   "sha": "07a54f77eb24f51d",
+   "state": "model",
+   "text": "无法移除手机日历"
+  },
+  "web:settings.phoneCalendars.removeBody": {
+   "sha": "d706d70988e3cfc1",
+   "state": "model",
+   "text": "其忙碌时间将从 Mailr 中移除。如果手机仍发送这些时间，它们将在下次更新时重新出现。若要停止此情况，请在 Android 应用中将此日历设置为“关闭”或在此手机上设置为“显示”。"
+  },
+  "web:settings.phoneCalendars.removeName": {
+   "sha": "f87ea03cf025802a",
+   "state": "model",
+   "text": "移除 {{name}}"
+  },
+  "web:settings.phoneCalendars.removeTitle": {
+   "sha": "cd44c92b9e3b510d",
+   "state": "model",
+   "text": "移除“{{name}}”？"
+  },
+  "web:settings.phoneCalendars.removed": {
+   "sha": "eaf266ff0d59c67d",
+   "state": "model",
+   "text": "已移除“{{name}}”"
+  },
+  "web:settings.phoneCalendars.title": {
+   "sha": "87538b0705e7b07c",
+   "state": "model",
+   "text": "手机日历"
+  },
+  "web:settings.phoneCalendars.withDetails": {
+   "sha": "9fe7c2437007680c",
+   "state": "model",
+   "text": "包含标题和地点的忙碌时间"
   },
   "web:settings.pictureSection.asksGravatarAndLibravatarAbout": {
    "sha": "a0a6da865189aaa8",

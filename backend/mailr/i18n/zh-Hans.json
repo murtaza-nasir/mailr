@@ -108,7 +108,10 @@
       "subscription_not_found": "未找到订阅",
       "unknown_calendar": "未知日历",
       "unverified_user_only": "只有已登录的用户可以应用来自未验证发件人的更改",
-      "window_two_years": "时间窗口必须为正数且不超过两年"
+      "window_two_years": "时间窗口必须为正数且不超过两年",
+      "phone_read_only": "“{{name}}”显示您手机上的忙碌时间，无法在此处更改。请在手机上更改该活动。",
+      "phone_limit": "最多 {{max}} 个手机日历",
+      "phone_needs_allow": "有一条规则要求手机日历更新需先获得批准；请在“设置”→“权限”中为此令牌允许这些更新。"
     },
     "admin": {
       "user_not_found": "未找到用户",
@@ -1706,5 +1709,8 @@
     "forbidden": "您的日历服务器不允许此更改",
     "signin": "登录日历服务器失败",
     "other": "发生未知错误"
+  },
+  "calendar_phone": {
+    "busy": "忙碌"
   }
 }

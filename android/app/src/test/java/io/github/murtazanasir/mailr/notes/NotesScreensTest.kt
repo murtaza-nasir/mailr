@@ -150,9 +150,14 @@ class NotesScreensTest {
         serverSees("eggs checked from beside its box") { checked("eggs") }
         assertEquals(listOf<NotesPage>(NotesPage.Grid), vm.stack.value)
         assertTrue(!checked("milk") && !checked("bread"))
-        // A checked item leaves the card: bread, the last box now, sits where eggs was.
-        val bread = compose.onNodeWithContentDescription("Check bread").fetchSemanticsNode().boundsInRoot
-        assertEquals(0f, (bread.center.y - box.center.y) / dp, 1f)
+        // A checked item leaves the card: bread, the last box now, sits where eggs was. The card shows
+        // the phone's copy, whose change reaches the screen through Room on another thread; the server
+        // can have the write first, so the card is waited for.
+        fun breadOffset() = (compose.onNodeWithContentDescription("Check bread").fetchSemanticsNode().boundsInRoot.center.y -
+            box.center.y) / dp
+        compose.eventually("bread sits where eggs was", detail = { "offset ${breadOffset()} dp" }) {
+            kotlin.math.abs(breadOffset()) <= 1f
+        }
         // 22 dp below it: outside the box, inside its 48 dp target.
         tapAt(-22f, 22f)
         serverSees("bread checked from below its box") { checked("bread") }

@@ -108,6 +108,12 @@ class GmailConnector(ImapConnector):
                                "in Gmail settings → Labels")
         return plan
 
+    def _push_folder(self, plan: dict) -> str | None:
+        """Gmail is synced from All Mail, and its plan has no inbox folder, so IDLE never ran and new
+        mail waited for the next full pass (3 to 6 minutes, 28 Oct 2026). New mail lands in All
+        Mail too: IDLE watches that."""
+        return next((f for f, t in plan.items() if t == ALL_MAIL), None)
+
     RECONCILE_VERSION = 1
 
     async def sync_once(self, ctx) -> dict[str, int]:

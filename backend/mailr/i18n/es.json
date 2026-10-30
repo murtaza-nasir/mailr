@@ -108,7 +108,10 @@
       "subscription_not_found": "Suscripción no encontrada",
       "unknown_calendar": "Calendario desconocido",
       "unverified_user_only": "Solo el usuario conectado puede aplicar un cambio de un remitente no verificado",
-      "window_two_years": "El intervalo debe ser positivo y de un máximo de dos años"
+      "window_two_years": "El intervalo debe ser positivo y de un máximo de dos años",
+      "phone_read_only": "«{{name}}» muestra los horarios ocupados de tu teléfono y no se puede modificar aquí. Cambia el evento en el teléfono.",
+      "phone_limit": "como máximo {{max}} calendarios del teléfono",
+      "phone_needs_allow": "una regla hace que las actualizaciones de calendarios del teléfono requieran aprobación; permítelas para este token en Ajustes → Permisos"
     },
     "admin": {
       "user_not_found": "Usuario no encontrado",
@@ -1776,5 +1779,8 @@
     "forbidden": "tu servidor de calendario no permitió el cambio",
     "signin": "no se pudo iniciar sesión en tu servidor de calendario",
     "other": "se produjo un error inesperado"
+  },
+  "calendar_phone": {
+    "busy": "Ocupado"
   }
 }

@@ -7,7 +7,7 @@
 
 import { assistantNameNow } from '../rail/assistant/useAssistantName'
 import {
-  AlarmClock, Ban, Check, ChevronDown, CircleHelp, Copy, CopyPlus, ExternalLink, Lock, Mail, MapPin, Palette, Pencil, Repeat, Sparkles, Trash2,
+  AlarmClock, Ban, Check, ChevronDown, CircleHelp, Copy, CopyPlus, ExternalLink, Lock, Mail, MapPin, Palette, Pencil, Repeat, Smartphone, Sparkles, Trash2,
   Users, Video, X, FolderInput,
 } from 'lucide-react'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
@@ -43,6 +43,7 @@ import { appLinkLabel, appPath } from '../../lib/appLinks'
 import { appNavigate } from '../../lib/appNav'
 import { ItemBoundary } from '../../components/bits'
 import { mayRestoreFocus } from '../../hooks/useModalFocus'
+import { phoneFreshness } from './phone'
 
 export type DetailMode = 'popover' | 'pane' | 'card' | 'sheet'
 
@@ -91,6 +92,7 @@ function EventDetailBody({ e, mode, anchor, onClose, deleted, onRestore }: Event
   const join = joinTarget(e)
   const ro = e.readOnly || cal.readOnly
   const col = e.calendar ? cal.collectionByUrl.get(e.calendar) : undefined
+  const fresh = e.phone_busy ? phoneFreshness(col, cal.now) : null
   const evZone = e.tz && e.tz !== 'UTC' ? e.tz : null
   const otherZone = !e.allDay && evZone && zoneAbbr(e.startAt, evZone) !== zoneAbbr(e.startAt, prefs.zone) ? evZone : null
   const when = formatRange(e.allDay ? e.firstDay : e.startAt, e.allDay ? nextDayOf(e.lastDay) : e.endAt, e.allDay, prefs)
@@ -200,6 +202,15 @@ function EventDetailBody({ e, mode, anchor, onClose, deleted, onRestore }: Event
       <Line icon={<span className="cal-dot" style={{ background: colour }} />}>
         {col?.name ?? tr('common.calendar')}{e.readOnly && <span className="cal-ro"><Lock size={12} aria-hidden />{' '}{tr('common.readOnlyCalendar')}</span>}
       </Line>
+      {fresh && (
+        // ACT calendar.phone_list @web.calendar: a phone calendar's busy time says where it comes from and how fresh it is.
+        <Line icon={<Smartphone />}>
+          <span className={`cal-phone-fresh${fresh.stale ? ' stale' : ''}`} data-testid="phone-freshness">
+            {fresh.text}{fresh.stale && <span className="cal-phone-stale">{' · '}{tr('calendar.phone.stale')}</span>}
+          </span>
+          <span className="cal-note cal-phone-note">{tr(e.phone_details ? 'calendar.phone.eventChangeOnThePhone' : 'calendar.phone.changeOnThePhone')}</span>
+        </Line>
+      )}
       {(e.attendee_list?.length ?? 0) > 0 && (
         <div className="cal-detail-guests">
           <button type="button" className="cal-line cal-line-btn" aria-expanded={guestsOpen} onClick={() => setGuestsOpen(!guestsOpen)}>
@@ -243,13 +254,16 @@ function EventDetailBody({ e, mode, anchor, onClose, deleted, onRestore }: Event
           )}
         </div>
       )}
-      <div className="cal-line">
-        <span className="cal-line-icon" aria-hidden><AlarmClock /></span>
-        <span className="cal-line-body cal-reminders">
-          {(e.reminders ?? []).length ? (e.reminders ?? []).map((m) => <span key={m} className="cal-mini-chip">{offsetLabel(m)}</span>) : <span className="muted">{tr('calendar.eventDetail.noReminders')}</span>}
-          {!ro && <button type="button" className="btn text sm" onClick={() => setSub(sub === 'reminders' ? null : 'reminders')}>{sub === 'reminders' ? tr('common.done') : tr('common.edit2')}</button>}
-        </span>
-      </div>
+      {/* A phone calendar's busy time has no reminders: the phone's own calendar app reminds. */}
+      {!e.phone_busy && (
+        <div className="cal-line">
+          <span className="cal-line-icon" aria-hidden><AlarmClock /></span>
+          <span className="cal-line-body cal-reminders">
+            {(e.reminders ?? []).length ? (e.reminders ?? []).map((m) => <span key={m} className="cal-mini-chip">{offsetLabel(m)}</span>) : <span className="muted">{tr('calendar.eventDetail.noReminders')}</span>}
+            {!ro && <button type="button" className="btn text sm" onClick={() => setSub(sub === 'reminders' ? null : 'reminders')}>{sub === 'reminders' ? tr('common.done') : tr('common.edit2')}</button>}
+          </span>
+        </div>
+      )}
       {active && (
         // Snooze and Remind before, only while a reminder of this occurrence is up.
         <div className="cal-detail-sub cal-detail-active" role="group" aria-label={tr('calendar.eventDetail.activeReminder')} data-testid="cal-detail-reminder">

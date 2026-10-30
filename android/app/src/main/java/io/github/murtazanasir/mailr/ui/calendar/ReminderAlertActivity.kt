@@ -40,6 +40,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Event
+import androidx.compose.material.icons.outlined.LockOpen
 import androidx.compose.material.icons.outlined.Mic
 import androidx.compose.material.icons.outlined.MoreHoriz
 import androidx.compose.material.icons.outlined.NotificationsOff
@@ -91,9 +92,12 @@ import java.util.Locale
 
 /**
  * The full-screen alert (android.fullscreen): an imminent event or a task due now,
- * when the user turned full-screen alerts on. It shows over the lock screen and turns the screen
- * on. It only shows: the reminder stays in the shade until one of its actions is taken,
- * and Close or Back leave it exactly as it was. Ask and Join need the phone unlocked.
+ * when the user turned full-screen alerts on. It turns the screen on and shows over the lock
+ * screen, but while the phone is locked it shows only the time and "Task reminder" (or "Event
+ * reminder") with Unlock: the title, the details and every action wait until the phone is
+ * unlocked, so nobody holding a locked phone can read or act on the reminder. It only shows:
+ * the reminder stays in the shade until one of its actions is taken, and Close or Back leave it
+ * exactly as it was.
  *
  * ACT reminder.full_screen @android.fullscreen, ACT task.complete @android.fullscreen, ACT task.snooze @android.fullscreen, ACT event.snooze @android.fullscreen, ACT event.join @android.fullscreen,
  * ACT reminder.dismiss @android.fullscreen, ACT agent.ask_about @android.fullscreen
@@ -120,6 +124,7 @@ class ReminderAlertActivity : ComponentActivity() {
             var row by remember { mutableStateOf<ReminderEntity?>(null) }
             var join by remember { mutableStateOf<String?>(null) }
             var now by remember { mutableLongStateOf(AppClock.millis()) }
+            var locked by remember { mutableStateOf(isLocked()) }
             LaunchedEffect(key) {
                 while (true) {
                     val r = g.reminders.reminder(key)
@@ -130,10 +135,17 @@ class ReminderAlertActivity : ComponentActivity() {
                         ?.let { JoinLink.find(it.url, it.location, it.description) }
                     row = r
                     now = AppClock.millis()
+                    locked = isLocked()
                     delay(5_000)
                 }
             }
             MailrTheme(prefs.theme, prefs.dynamicColor, prefs.webColours(), prefs.webLook) {
+                if (locked) {
+                    val r = row
+                    if (r != null) LockedAlert(r.kind == Kind.EVENT, now,
+                        unlock = { unlock { locked = isLocked() } }, close = ::finish)
+                    return@MailrTheme
+                }
                 row?.let { r ->
                     fun act(block: suspend () -> Unit) {
                         lifecycleScope.launch { catching { block() }; finish() }
@@ -156,6 +168,18 @@ class ReminderAlertActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun isLocked(): Boolean =
+        getSystemService(android.app.KeyguardManager::class.java)?.isKeyguardLocked == true
+
+    /** Asks for the PIN, pattern or fingerprint; [then] runs once the phone is unlocked. */
+    private fun unlock(then: () -> Unit) {
+        val km = getSystemService(android.app.KeyguardManager::class.java)
+        if (km == null || !km.isKeyguardLocked) return then()
+        km.requestDismissKeyguard(this, object : android.app.KeyguardManager.KeyguardDismissCallback() {
+            override fun onDismissSucceeded() { then() }
+        })
     }
 
     companion object {
@@ -227,6 +251,40 @@ fun ReminderAlertScreen(r: ReminderEntity, join: String?, now: Long, cb: AlertCa
                     }
                     if (!event || join != null) TextButton(onClick = cb.dismiss, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.rem_action_dismiss)) }
                 }
+            }
+        }
+    }
+}
+
+/** The alert while the phone is locked: the time and the kind of reminder, nothing about it. */
+@Composable
+fun LockedAlert(event: Boolean, now: Long, unlock: () -> Unit, close: () -> Unit, zone: ZoneId = ZoneId.systemDefault()) {
+    BackHandler(onBack = close)
+    val cs = MaterialTheme.colorScheme
+    val time = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(Locale.getDefault())
+    Surface(Modifier.fillMaxSize(), color = cs.surface) {
+        Column(Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.safeDrawing).padding(horizontal = 24.dp, vertical = 16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Spacer(Modifier.weight(1f))
+                IconButton(onClick = close) { Icon(Icons.Outlined.Close, stringResource(R.string.cal_alert_close_cd)) }
+            }
+            Spacer(Modifier.weight(0.6f))
+            Text(Instant.ofEpochMilli(now).atZone(zone).format(time), style = MaterialTheme.typography.displayMedium,
+                color = cs.onSurfaceVariant, fontWeight = FontWeight.Light)
+            Spacer(Modifier.height(24.dp))
+            Box(Modifier.size(72.dp).background(cs.primaryContainer, CircleShape), contentAlignment = Alignment.Center) {
+                Icon(if (event) Icons.Outlined.Event else Icons.Outlined.TaskAlt, null, Modifier.size(36.dp), tint = cs.onPrimaryContainer)
+            }
+            Spacer(Modifier.height(20.dp))
+            Text(if (event) stringResource(R.string.rem_event_reminder) else stringResource(R.string.rem_task_reminder),
+                style = MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
+            Spacer(Modifier.height(8.dp))
+            Text(stringResource(R.string.cal_alert_unlock_to_see), style = MaterialTheme.typography.bodyLarge,
+                color = cs.onSurfaceVariant, textAlign = TextAlign.Center)
+            Spacer(Modifier.weight(1f))
+            Column(Modifier.widthIn(max = 480.dp).fillMaxWidth()) {
+                Big(stringResource(R.string.cal_alert_unlock), Icons.Outlined.LockOpen, unlock)
             }
         }
     }

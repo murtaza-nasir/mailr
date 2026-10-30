@@ -21,6 +21,9 @@ import io.github.murtazanasir.mailr.data.reminders.ReminderNotifier
 import io.github.murtazanasir.mailr.ui.ask.AskActivity
 import io.github.murtazanasir.mailr.ui.ask.AskIntents
 import io.github.murtazanasir.mailr.ui.calendar.AlertCallbacks
+import io.github.murtazanasir.mailr.ui.calendar.LockedAlert
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.onAllNodesWithText
 import io.github.murtazanasir.mailr.ui.calendar.QuickActionCard
 import io.github.murtazanasir.mailr.ui.calendar.QuickActions
 import io.github.murtazanasir.mailr.ui.calendar.ReminderAlertActivity
@@ -180,5 +183,22 @@ class ReminderAlertUiTest {
         compose.onNodeWithText("Join").performClick()
         compose.onNodeWithText("Snooze 5 min").performClick()
         assertEquals(listOf("join:https://meet.example.com/abc", "snooze:5m"), calls)
+    }
+
+    /** On a locked phone the alert names only the kind of reminder: no title, no actions; Unlock asks for the phone's lock. */
+    @Test fun aLockedPhoneShowsNoDetailsAndNoActions() {
+        var unlocks = 0
+        var closed = false
+        compose.setContent {
+            MaterialTheme { LockedAlert(event = false, now = 0L, unlock = { unlocks++ }, close = { closed = true }) }
+        }
+        compose.onNodeWithText("Task reminder").assertExists()
+        compose.onNodeWithText("Unlock your phone to see this reminder").assertExists()
+        for (action in listOf("Done", "Dismiss", "More choices")) compose.onAllNodesWithText(action).assertCountEquals(0)
+        compose.onAllNodesWithText("Snooze", substring = true).assertCountEquals(0)
+        compose.onNodeWithText("Unlock").performClick()
+        assertEquals(1, unlocks)
+        compose.onNodeWithContentDescription("Close; the reminder stays").performClick()
+        assertTrue(closed)
     }
 }

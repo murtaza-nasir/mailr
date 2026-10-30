@@ -116,6 +116,8 @@ data class SettingsCallbacks(
     val openSweep: (() -> Unit)? = null,
     /** The server's version (GET /me `version`), beside the app's at the foot; null shows the app's only. */
     val serverVersion: String? = null,
+    /** Settings → Calendar → Phone calendars. Null hides the row. */
+    val openPhoneCalendars: (() -> Unit)? = null,
 )
 
 @Composable
@@ -224,6 +226,14 @@ fun SettingsScreen(prefs: Prefs, name: String, email: String, server: String, se
                         ListItem(headlineContent = { Text(stringResource(R.string.settings_task_swipes)) },
                             supportingContent = cb.taskSwipeSummary?.let { t -> { Text(t) } },
                             modifier = Modifier.clickable { cb.taskSwipes?.invoke() })
+                    }
+                }
+                cb.openPhoneCalendars?.let { open ->
+                    item {
+                        ListItem(headlineContent = { Text(stringResource(R.string.phonecal_title)) },
+                            supportingContent = { Text(stringResource(R.string.phonecal_settings_sub)) },
+                            leadingContent = { Icon(Icons.Outlined.PhoneAndroid, null) },
+                            modifier = Modifier.testTag("settings-phone-calendars").clickable { open() })
                     }
                 }
                 item { Toggle(stringResource(R.string.settings_event_reminders), stringResource(R.string.settings_event_reminders_sub), prefs.eventReminders) { v -> cb.update { it.copy(eventReminders = v) } } }

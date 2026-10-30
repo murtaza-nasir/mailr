@@ -4,6 +4,57 @@ The changes in each Mailr release are listed here, newest first. A release is ta
 on GitHub, and its image is published as `ghcr.io/murtaza-nasir/mailr:<version>`. The Android app
 of a release has the same version number; the separate Notes app has its own.
 
+## 0.40.31
+
+- Android: a phone calendar event that is also in Mailr's calendar (same time and title) is shown
+  and counted once, from Mailr's calendar. Meetings declined or cancelled in Mailr no longer appear
+  from the phone or count as busy; phone events titled "Canceled:" are skipped too.
+- Phone calendars have a fourth choice, Show and send details, which also sends each event's title
+  and place to your Mailr server; guests, descriptions and notes are never sent, and busy times
+  only stays the default. On the web, such events show their title and place, read-only, with the
+  "Updated from …" line, and Ambrose reads them like other read-only events. Switching a calendar
+  back to busy times removes its titles and places from the server at once. Settings → Calendar
+  → Phone calendars on the web says what each calendar sends.
+- API: `PUT /calendar/phone-calendars/{key}` accepts `details` and per-entry `title` and
+  `location` (at most 300 characters); a title or place without `details: true` is refused with
+  422. The phone calendar list and the calendar list gain `details`; event reads gain
+  `phone_details`.
+- Web: the day arrows in the calendar panel no longer move when the list of calendars finishes
+  loading.
+
+## 0.40.30
+
+- Phone calendars. On Android, Settings → Calendar & tasks → Phone calendars shows the phone's
+  own calendars (for example an Exchange account added through the Gmail app) in Mailr's
+  calendar, read-only and marked "On this phone", with "Open in Calendar". Each calendar is Off,
+  Show on this phone, or Show and send busy times; all start Off.
+- For calendars set to "Show and send busy times", only the start, end and all-day flag of busy
+  or tentative events are sent to the server; titles, places, guests and descriptions stay on the
+  phone. On the web they are shown as read-only "Busy" blocks with the device and the time of
+  the last update, they count as busy in free/busy and Find a time, and Ambrose sees them as
+  "Busy (calendar name)". They are not shared with household members, not written to the
+  calendar server and not exported. Settings → Calendar → Phone calendars on the web lists them
+  with Remove.
+- API: `PUT`/`GET`/`DELETE /api/v1/calendar/phone-calendars[/{key}]`; calendars carry `phone`
+  and events carry `phone_busy`. New permission class `calendar.phone_sync`, allowed by default
+  with the `calendar` scope.
+- A new event's default calendar is now always one that can be edited.
+- Android: on a locked phone, a full-screen reminder shows only "Task reminder" or "Event
+  reminder" with Unlock; the title, details and buttons appear after the phone is unlocked, and
+  the reminder sheet asks for the unlock first.
+- Notes (both apps): an edit made while an autosave was finishing is kept and saved; before, it
+  could stay unsaved and the older text was written back. Undoing back to the original text is
+  saved too. The Notes app is 2.1.4.
+- Android: when chat titles are changed quickly in a row (a rename, then `/retitle`), the newest
+  change wins; a late answer to the first no longer puts the old title back.
+- Sent mail is stored with the time it went out, so a storing step retried after a database error
+  no longer leaves a second copy of the sent message.
+- Web: renaming a chat while its list is reloading (a search cleared right after Enter) no
+  longer puts the old title back.
+- Gmail accounts: new mail is picked up within seconds. IDLE watched only an inbox folder, which a
+  Gmail account (synced from All Mail) does not have, so Gmail mail waited for the next full pass
+  (typically 3 to 6 minutes); IDLE now watches All Mail.
+
 ## 0.40.26
 
 - Calendar panel: Today sits beside the date, and the day arrows stay at the row's end.

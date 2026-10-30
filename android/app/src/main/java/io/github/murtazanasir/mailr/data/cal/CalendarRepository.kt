@@ -251,6 +251,16 @@ class CalendarRepository(
     suspend fun eventCount(url: String): Int = dao.eventsInCollection(url).map { it.uid }.distinct().size
 
     suspend fun eventsNow(fromMs: Long, toMs: Long): List<CalendarEvent> = dao.eventsNow(fromMs, toMs).mapNotNull(::decodeEvent)
+
+    /**
+     * Every stored event, hidden calendars too, for matching phone events against Mailr's calendar
+     * (data/phonecal/PhoneMatch). Read from Room only, never from the network.
+     */
+    val forPhoneMatch: io.github.murtazanasir.mailr.data.phonecal.MailrEvents = object : io.github.murtazanasir.mailr.data.phonecal.MailrEvents {
+        override fun events(fromMs: Long, toMs: Long): Flow<List<CalendarEvent>> =
+            dao.events(fromMs, toMs).map { rows -> rows.mapNotNull(::decodeEvent) }
+        override suspend fun eventsNow(fromMs: Long, toMs: Long): List<CalendarEvent> = this@CalendarRepository.eventsNow(fromMs, toMs)
+    }
     suspend fun tasksNow(): List<TaskItem> = dao.tasksNow().mapNotNull(::decodeTask)
     suspend fun task(uid: String): TaskItem? = dao.task(uid)?.let(::decodeTask)
     suspend fun eventInstance(key: String): CalendarEvent? = dao.event(key)?.let(::decodeEvent)

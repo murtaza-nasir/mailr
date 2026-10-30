@@ -832,6 +832,18 @@
       "sharedWithPeople_other": "Compartido con {{count}} personas{{value}}",
       "sharedWithTheGroup": "Compartido con el grupo {{group}}",
       "viewOnly": " · solo lectura"
+    },
+    "phone": {
+      "busy": "Ocupado",
+      "updatedFrom": "Actualizado desde {{device}} {{when}}",
+      "updated": "Actualizado {{when}}",
+      "neverUpdated": "Aún no actualizado",
+      "stale": "más de un día",
+      "changeOnThePhone": "Tiempo ocupado de un calendario en tu teléfono. Solo cambia en el teléfono.",
+      "eventChangeOnThePhone": "Un evento de un calendario de tu teléfono. Solo se modifica en el teléfono.",
+      "menuNote": "Tiempos ocupados de un calendario en tu teléfono. Solo cambian en el teléfono.",
+      "menuNoteDetails": "Eventos de un calendario de tu teléfono, con títulos y lugares. Solo se modifican en el teléfono.",
+      "phoneCalendarSettings": "Ajustes del calendario del teléfono"
     }
   },
   "colour": {
@@ -4179,6 +4191,7 @@
         "question": "{{title}}?",
         "remoteImages": "Imágenes remotas",
         "reportSpam": "marcar como spam",
+        "sendBusyTimesFromPhoneCalendars": "enviar horarios ocupados desde los calendarios del teléfono",
         "sendEmail": "enviar correo",
         "sendInvitationsAndUpdatesTo": "enviar invitaciones y actualizaciones a los invitados",
         "thisCantBeUndoneFrom": "Esto no se puede deshacer desde Mailr.",
@@ -7639,7 +7652,8 @@
       "whatAgentsMayDoWithout": "Acciones que los agentes pueden realizar sin preguntar. Con «Preguntarme», la acción pasa a la cola de aprobaciones, donde decides una vez, durante un tiempo o siempre. Tus propias acciones nunca están restringidas. El primer mensaje a una nueva dirección siempre requiere aprobación. El acceso de lectura de un agente se establece mediante su token, no por estas reglas.",
       "writeDraftsAndRewriteBriefs": "Redactar borradores y reescribir resúmenes",
       "yourRule": "tu regla",
-      "actOnNotesYouForward": "Actuar sobre las notas que reenvías desde tus direcciones de confianza"
+      "actOnNotesYouForward": "Actuar sobre las notas que reenvías desde tus direcciones de confianza",
+      "sendPhoneBusyTimes": "Enviar horarios de ocupación desde calendarios del teléfono"
     },
     "phoneAccessAdmin": {
       "aHostNameOfIts": "Usa un nombre de host dedicado, como dav.example.com. Las rutas de calendario deben estar en la raíz del host. Se guarda al salir del campo o pulsar Enter.",
@@ -8192,6 +8206,20 @@
       "trusted": "Estas direcciones necesitan un código nuevo antes de volver a hablar por ti: {{addresses}}.",
       "forwards": "No se reenvía correo a estas direcciones hasta que las confirmes de nuevo: {{addresses}}.",
       "notYou": "Si lo configuraste tú, vuelve a activarlo. Si no, elimínalo."
+    },
+    "phoneCalendars": {
+      "title": "Calendarios del teléfono",
+      "desc": "Calendarios de tu teléfono cuyos tiempos ocupados se envían a Mailr. De forma predeterminada, solo se envían el inicio y el fin de cada tiempo ocupado. Para un calendario configurado en Mostrar y enviar detalles, también se envían el título y el lugar de cada evento. Nunca se envían los invitados, las descripciones ni las notas. Cada calendario se configura en la aplicación de Android, en Ajustes → Calendario y tareas → Calendarios del teléfono.",
+      "none": "Ningún calendario del teléfono envía horarios de ocupación.",
+      "busyTimes_one": "{{count}} horario de ocupación",
+      "busyTimes_other": "{{count}} horarios de ocupación",
+      "busyOnly": "Solo horarios ocupados",
+      "withDetails": "Horarios ocupados con títulos y lugares",
+      "removeName": "Quitar {{name}}",
+      "removeTitle": "¿Quitar “{{name}}”?",
+      "removeBody": "Sus horarios de ocupación se eliminan de Mailr. Si el teléfono sigue enviándolos, volverán en su próxima actualización. Para evitarlo, configura el calendario como Desactivado o Mostrar en este teléfono en la aplicación de Android.",
+      "removed": "“{{name}}” eliminado",
+      "notRemoved": "No se pudo quitar el calendario del teléfono"
     }
   },
   "shortcuts": {

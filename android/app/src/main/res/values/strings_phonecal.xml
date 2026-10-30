@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Settings → Calendar → Phone calendars (data/phonecal, ui/settings/PhoneCalendarsScreen.kt) -->
+    <string name="phonecal_title">Phone calendars</string>
+    <string name="phonecal_settings_sub">Calendars on this phone in Mailr\'s calendar</string>
+    <string name="phonecal_switch">Show phone calendars</string>
+    <string name="phonecal_switch_sub">The events of this phone\'s calendars are shown in Mailr\'s calendar, read-only. You allow calendar access when you turn this on.</string>
+    <string name="phonecal_denied">Calendar access is not allowed. You can allow it in the app\'s system settings.</string>
+    <string name="phonecal_denied_once">Calendar access was not allowed, so phone calendars stay off.</string>
+    <string name="phonecal_open_settings">Open app settings</string>
+    <string name="phonecal_allow">Allow calendar access</string>
+    <string name="phonecal_header">Calendars on this phone</string>
+    <string name="phonecal_none">This phone has no calendars.</string>
+    <string name="phonecal_mode_off">Off</string>
+    <string name="phonecal_mode_show">Show on this phone</string>
+    <string name="phonecal_mode_send">Show and send busy times</string>
+    <string name="phonecal_choose_cd">Choose how %1$s is used</string>
+    <string name="phonecal_mode_details">Show and send details</string>
+    <string name="phonecal_mode_details_hint">Titles and places are sent to your Mailr server; guests and descriptions are not.</string>
+    <string name="phonecal_privacy">Nothing is sent to the server for calendars set to Off or “Show on this phone”. For “Show and send busy times”, the start and end of each busy or tentative event are sent. For “Show and send details”, each event\'s title and place are sent as well. Guests, descriptions and notes are never sent.</string>
+    <!-- The calendar views and the event detail -->
+    <string name="phonecal_on_phone">On this phone</string>
+    <string name="phonecal_open_in_calendar">Open in Calendar</string>
+    <string name="phonecal_no_calendar_app">This event cannot be opened: the phone has no calendar app.</string>
+    <string name="phonecal_detail_note">This event is in a calendar on this phone. You can change it in the phone\'s calendar app.</string>
+</resources>

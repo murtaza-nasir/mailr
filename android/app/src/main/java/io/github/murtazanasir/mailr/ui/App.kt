@@ -259,6 +259,8 @@ private fun Home(g: AppGraph, deepLinks: StateFlow<Destination?>, consume: () ->
             io.github.murtazanasir.mailr.ui.settings.SweepRoute(g, assistant.state.collectAsStateWithLifecycle().value.name) { nav.popBackStack() }
         }
         // Settings → Activity: read-only.
+        // Settings → Calendar → Phone calendars.
+        composable(Routes.PHONE_CALENDARS) { io.github.murtazanasir.mailr.ui.settings.PhoneCalendarsRoute(g) { nav.popBackStack() } }
         composable(Routes.ACTIVITY) { io.github.murtazanasir.mailr.ui.settings.ActivityRoute(g) { nav.popBackStack() } }
         // ACT recording.record @android.recording: New recording (Recordings (Speakr) on; a recording in progress opens it too).
         composable(Routes.RECORD) { entry ->

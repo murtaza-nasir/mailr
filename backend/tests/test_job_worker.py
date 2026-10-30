@@ -140,7 +140,9 @@ async def test_retry_reschedules_without_using_an_attempt(app):
 
     jid = await _enqueue(kind, max_attempts=1)
     async with _worker([kind]):
-        j = await _until(jid, lambda j: j.status == "queued" and calls, "was rescheduled")
+        # "queued" is also the state before the claim: wait for the new run_at, which only the retry sets.
+        j = await _until(jid, lambda j: j.status == "queued" and calls
+                         and (j.run_at - datetime.now(UTC)).total_seconds() > 60, "was rescheduled")
     assert j.attempts == 0 and j.error == "" and calls == [1]
     assert 500 < (j.run_at - datetime.now(UTC)).total_seconds() <= 600
 

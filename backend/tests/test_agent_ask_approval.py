@@ -230,6 +230,7 @@ APPROVAL_SITES = {
     "calendar/routes.py:_gated_event": "events: calendar text, the connector in ctx",
     "calendar/routes.py:invite_reply": "refs",
     "calendar/routes_tasks.py:gated": "tasks: calendar text, the connector in ctx",
+    "calendar/phonecal.py:_gate": "a phone calendar's name and busy times only: no mail",
     "contacts/routes.py:_run": "a contact group the caller changes",
     "core/sendgate.py:submit": "refs",
     "integrations/speakr/routes.py:_gate_link": "refs",

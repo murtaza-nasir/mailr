@@ -131,6 +131,8 @@
     <string name="cal_quick_no_one_called">没有名为“%s”的人</string>
     <string name="cal_quick_keep_as_text">保留为文本</string>
     <string name="cal_alert_close_cd">关闭；提醒仍保留</string>
+    <string name="cal_alert_unlock">解锁</string>
+    <string name="cal_alert_unlock_to_see">解锁手机以查看此提醒</string>
     <string name="cal_alert_snooze_10_min">延后 10 分钟</string>
     <string name="cal_alert_more_choices">更多选项</string>
     <plurals name="cal_alert_starts_in">

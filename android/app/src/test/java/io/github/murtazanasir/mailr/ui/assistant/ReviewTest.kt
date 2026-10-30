@@ -84,7 +84,8 @@ class ReviewTest {
 
     private val app: Application = ApplicationProvider.getApplicationContext()
     private var server: MockWebServer? = null
-    private val requests: MutableList<String> = Collections.synchronizedList(mutableListOf())
+    // Copy-on-write: the server thread adds while a wait iterates it (ChatCommandsTest).
+    private val requests: MutableList<String> = java.util.concurrent.CopyOnWriteArrayList()
     /** The answers GET /agent/reviews/5 gives, one per read (the last repeats). */
     private val progress: MutableList<String> = Collections.synchronizedList(mutableListOf())
 

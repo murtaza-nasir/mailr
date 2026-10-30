@@ -832,6 +832,18 @@
       "sharedWithPeople_other": "Compartilhado com {{count}} pessoas{{value}}",
       "sharedWithTheGroup": "Compartilhado com o grupo {{group}}",
       "viewOnly": " · somente visualização"
+    },
+    "phone": {
+      "busy": "Ocupado",
+      "updatedFrom": "Atualizado de {{device}} {{when}}",
+      "updated": "Atualizado {{when}}",
+      "neverUpdated": "Não atualizado ainda",
+      "stale": "mais de um dia",
+      "changeOnThePhone": "Um horário ocupado de uma agenda no seu celular. Ele muda apenas no celular.",
+      "eventChangeOnThePhone": "Um evento de uma agenda no seu celular. Ele muda apenas no celular.",
+      "menuNote": "Horários ocupados de uma agenda no seu celular. Eles mudam apenas no celular.",
+      "menuNoteDetails": "Eventos de uma agenda no seu celular, com títulos e locais. Eles mudam apenas no celular.",
+      "phoneCalendarSettings": "Configurações da agenda do celular"
     }
   },
   "colour": {
@@ -4179,6 +4191,7 @@
         "question": "{{title}}?",
         "remoteImages": "Imagens remotas",
         "reportSpam": "marcar como spam",
+        "sendBusyTimesFromPhoneCalendars": "enviar horários ocupados das agendas do telefone",
         "sendEmail": "enviar e-mail",
         "sendInvitationsAndUpdatesTo": "enviar convites e atualizações para os convidados",
         "thisCantBeUndoneFrom": "Isso não pode ser desfeito no Mailr.",
@@ -7639,7 +7652,8 @@
       "whatAgentsMayDoWithout": "Ações que os agentes podem tomar sem perguntar. Com “Perguntar a mim”, a ação vai para a fila de aprovações, onde você decide uma vez, por um tempo ou sempre. Suas próprias ações nunca são bloqueadas. A primeira mensagem para um novo endereço sempre requer aprovação. O acesso de leitura de um agente é definido pelo seu token, não por estas regras.",
       "writeDraftsAndRewriteBriefs": "Escrever rascunhos e reescrever resumos",
       "yourRule": "sua regra",
-      "actOnNotesYouForward": "Agir em notas que você encaminha dos seus endereços confiáveis"
+      "actOnNotesYouForward": "Agir em notas que você encaminha dos seus endereços confiáveis",
+      "sendPhoneBusyTimes": "Enviar horários ocupados de agendas do celular"
     },
     "phoneAccessAdmin": {
       "aHostNameOfIts": "Use um nome de host dedicado, como dav.example.com. Os caminhos da agenda devem estar na raiz do host. Salvo quando você sair do campo ou pressionar Enter.",
@@ -8192,6 +8206,20 @@
       "trusted": "Estes endereços precisam de um novo código antes de falar por você de novo: {{addresses}}.",
       "forwards": "Nenhum e-mail é encaminhado para estes endereços até você confirmá-los de novo: {{addresses}}.",
       "notYou": "Se foi você que configurou, ative de novo. Se não, remova."
+    },
+    "phoneCalendars": {
+      "title": "Agendas do celular",
+      "desc": "Agendas do seu celular cujos horários ocupados são enviados ao Mailr. Por padrão, apenas o início e o fim de cada horário ocupado são enviados. Para uma agenda definida como Mostrar e enviar detalhes, o título e o local de cada evento também são enviados. Convidados, descrições e notas nunca são enviados. Cada agenda é definida no aplicativo Android, em Configurações → Agenda e tarefas → Agendas do celular.",
+      "none": "Nenhuma agenda do celular envia horários ocupados.",
+      "busyTimes_one": "{{count}} horário ocupado",
+      "busyTimes_other": "{{count}} horários ocupados",
+      "busyOnly": "Somente horários ocupados",
+      "withDetails": "Horários ocupados com títulos e locais",
+      "removeName": "Remover {{name}}",
+      "removeTitle": "Remover “{{name}}”?",
+      "removeBody": "Os horários ocupados dela são removidos do Mailr. Se o celular continuar enviando, eles retornarão na próxima atualização. Para evitar isso, defina a agenda como Desativada ou Mostrar neste celular no aplicativo Android.",
+      "removed": "“{{name}}” removida",
+      "notRemoved": "Não foi possível remover a agenda do celular"
     }
   },
   "shortcuts": {

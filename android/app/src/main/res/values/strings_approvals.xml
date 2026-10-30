@@ -13,6 +13,7 @@
     <string name="appr_verb_calendar_rsvp">answer invitations</string>
     <string name="appr_verb_calendar_invite">send invitations and updates to guests</string>
     <string name="appr_verb_calendar_cancel">cancel events with guests</string>
+    <string name="appr_verb_calendar_phone_sync">send busy times from phone calendars</string>
     <string name="appr_verb_tasks_create">create tasks</string>
     <string name="appr_verb_tasks_update">change tasks</string>
     <string name="appr_verb_tasks_complete">complete tasks</string>

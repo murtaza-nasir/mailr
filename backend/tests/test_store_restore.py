@@ -6,7 +6,7 @@ whole mailbox again."""
 from __future__ import annotations
 
 import time
-from datetime import timedelta
+from datetime import UTC, datetime, timedelta
 
 import pytest
 from helpers.core_flow import _ingest
@@ -292,11 +292,15 @@ async def test_an_import_whose_transaction_failed_is_not_indexed_twice(user, raw
     from mailr.core.ingest import IngestOptions, ingest_raw
 
     data = raw("Invoice 7781", frm="Billing <billing@supplier.example>")
+    # A connector passes the provider's arrival time (INTERNALDATE), so the retry carries the same one.
+    # Without it each try took "now" (the store keeps whole seconds), and on a slow runner the copies
+    # differed by more than the second the store sync allows: the orphan was indexed as its own message.
+    opts = IngestOptions(received_at=datetime(2026, 10, 1, 8, 0, tzinfo=UTC))
     async with sessionmaker()() as db:
-        orphan = (await ingest_raw(db, await _store(db, user.id), data, IngestOptions())).message.jmap_id
+        orphan = (await ingest_raw(db, await _store(db, user.id), data, opts)).message.jmap_id
         await db.rollback()
     async with session_scope() as db:
-        kept = (await ingest_raw(db, await _store(db, user.id), data, IngestOptions())).message.jmap_id
+        kept = (await ingest_raw(db, await _store(db, user.id), data, opts)).message.jmap_id
     assert kept != orphan
     pending = {orphan: 0.0}
     async with session_scope() as db:
@@ -308,6 +312,68 @@ async def test_an_import_whose_transaction_failed_is_not_indexed_twice(user, raw
         n = (await db.execute(text("SELECT count(*) FROM messages WHERE user_id = :u AND subject = 'Invoice 7781'"),
                               {"u": user.id})).scalar_one()
     assert n == 1
+
+
+async def test_a_sent_copy_stored_again_after_a_rollback_is_not_indexed_twice(client, user, monkeypatch):
+    """The sent copy's store job rolled back after the store took the copy, and its retry ran later.
+    Both copies arrive at the time the message went out, so the store sync merges the first one into
+    the indexed copy. Before, each try took "now": a retry a second or more later left a copy that
+    the store sync indexed as a second sent message."""
+    from helpers.agent import _setup_identity
+
+    from mailr.core import ingest, sendgate
+    from mailr.models import Identity, Outbox
+
+    await _setup_identity(user)
+
+    class Smtp:
+        async def send(self, raw, mail_from, rcpts):
+            return "250 queued"
+
+    async def fake_connector_for(db, row):
+        return Smtp()
+
+    monkeypatch.setattr("mailr.connectors.loader.connector_for", fake_connector_for)
+    async with sessionmaker()() as db:
+        ident = (await db.execute(select(Identity).where(Identity.user_id == user.id))).scalars().first()
+    r = await client.post("/api/v1/send", json={"payload": {
+        "identity_id": ident.id, "to": [{"email": "marco@harbour.example"}], "subject": "Mooring fees",
+        "text": "The fees are paid."}})
+    assert r.status_code in (200, 202), r.text
+    oid = r.json()["outbox"]["id"]
+    async with session_scope() as db:
+        (await db.get(Outbox, oid)).send_at = datetime.now(UTC) - timedelta(seconds=1)
+    await sendgate.send_job({"outbox_id": oid}, None)
+
+    stored: list[str] = []
+    real_ingest = ingest.ingest_raw
+
+    async def recording_ingest(*a, **kw):
+        res = await real_ingest(*a, **kw)
+        stored.append(res.message.jmap_id)
+        if len(stored) == 1:
+            raise RuntimeError("database blip")  # after the store import: the transaction rolls back
+        return res
+
+    monkeypatch.setattr(ingest, "ingest_raw", recording_ingest)
+    with pytest.raises(RuntimeError):
+        await sendgate.store_sent_job({"outbox_id": oid}, None)
+
+    class Later(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return datetime.now(tz) + timedelta(minutes=5)  # the job's retry, minutes later
+
+    monkeypatch.setattr(ingest, "datetime", Later)
+    await sendgate.store_sent_job({"outbox_id": oid}, None)
+    orphan, kept = stored
+    assert orphan != kept and await _rows(user.id, orphan) == []
+    pending = {orphan: 0.0}
+    async with session_scope() as db:
+        await _UserSync(user.id)._index(db, await _store(db, user.id), [orphan], pending, time.time())
+    assert pending == {} and await _rows(user.id, orphan) == [] and len(await _rows(user.id, kept)) == 1
+    async with sessionmaker()() as db:
+        assert await (await _store(db, user.id)).get_emails([orphan]) == []
 
 
 async def test_a_copy_with_another_arrival_time_is_its_own_message(user, raw):

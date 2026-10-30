@@ -2,7 +2,7 @@
 // mail, with the Calendar app's rows and detail, the quick-add line for a new event, and "Open
 // Calendar" in the panel header. Edit opens the app's editor over the page. The eye button shows
 // or hides calendars here and in the app alike.
-// ACT event.create @web.panel, ACT event.edit @web.panel, ACT event.rsvp @web.panel, ACT event.open_email @web.panel, ACT calendar.toggle_visibility @web.panel
+// ACT event.create @web.panel, ACT calendar.phone_list @web.panel, ACT event.edit @web.panel, ACT event.rsvp @web.panel, ACT event.open_email @web.panel, ACT calendar.toggle_visibility @web.panel
 
 import { CalendarPlus, ChevronLeft, ChevronRight, Eye } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
@@ -16,6 +16,7 @@ import { displayColour } from '../calendar/colour'
 import { useCollections } from '../calendar/data'
 import { useVisibility } from '../calendar/LeftColumn'
 import { EventDetail } from '../calendar/EventDetail'
+import { phoneFreshness } from '../calendar/phone'
 import { useCalPrefs } from '../calendar/prefs'
 import { EventRow } from '../calendar/ScheduleView'
 import { useCalUI } from '../calendar/store'
@@ -148,7 +149,8 @@ function CalendarsMenu() {
   const vis = useVisibility()
   const [anchor, setAnchor] = useState<HTMLElement | null>(null)
   const cals = cal.collections.filter((c) => c.events !== false && !c.error)
-  if (cals.length < 1) return null
+  // Its place is kept while the calendars load, so the day arrows beside it do not move when it appears.
+  if (cals.length < 1) return <span className="icon-btn sm cp-cals" aria-hidden="true" style={{ visibility: 'hidden' }} />
   const hidden = cals.filter((c) => cal.hidden.has(c.url ?? c.id)).length
   return (
     <>
@@ -163,7 +165,13 @@ function CalendarsMenu() {
               <label key={url} className="cp-cal">
                 <input type="checkbox" className="cal-swatch-box" style={{ '--sw': displayColour(cal.colourOf(c), cal.dark) } as React.CSSProperties}
                   checked={!cal.hidden.has(url)} aria-label={tr('rail.calendarPanel.show', { itemName: c.name })} onChange={() => void vis.toggle(c)} />
-                <span>{c.name}</span>
+                <span>
+                  {c.name}
+                  {(() => {
+                    const f = phoneFreshness(c, cal.now)
+                    return f && <span className={`cp-cal-sub cal-phone-fresh${f.stale ? ' stale' : ''}`} data-testid="phone-freshness">{f.text}{f.stale && <>{' · '}{tr('calendar.phone.stale')}</>}</span>
+                  })()}
+                </span>
               </label>
             )
           })}

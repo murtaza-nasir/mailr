@@ -71,7 +71,8 @@ class ChatsTest {
 
     private val app: Application = ApplicationProvider.getApplicationContext()
     private var server: MockWebServer? = null
-    private val requests: MutableList<String> = Collections.synchronizedList(mutableListOf())
+    // Copy-on-write: the server thread adds while a wait iterates it (ChatCommandsTest).
+    private val requests: MutableList<String> = java.util.concurrent.CopyOnWriteArrayList()
     private val bodies: MutableList<String> = Collections.synchronizedList(mutableListOf())
 
     @Before fun fast() {

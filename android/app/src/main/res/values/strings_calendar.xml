@@ -153,6 +153,8 @@
     <string name="cal_quick_keep_as_text">Keep as text</string>
     <!-- The full-screen reminder alert (ui/calendar/ReminderAlertActivity.kt) -->
     <string name="cal_alert_close_cd">Close; the reminder stays</string>
+    <string name="cal_alert_unlock">Unlock</string>
+    <string name="cal_alert_unlock_to_see">Unlock your phone to see this reminder</string>
     <string name="cal_alert_snooze_10_min">Snooze 10 min</string>
     <string name="cal_alert_more_choices">More choices</string>
     <plurals name="cal_alert_starts_in">

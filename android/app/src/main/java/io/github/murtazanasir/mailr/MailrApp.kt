@@ -168,6 +168,22 @@ class AppGraph(
         }
     }
     val calendar by calendarLazy
+    /**
+     * Phone calendars (data/phonecal): the phone's own calendars in the app's calendar, and the busy
+     * times of the ones set to send them. Off until Settings → Calendar → Phone calendars is turned on.
+     */
+    internal val phoneCalendarsLazy = lazy {
+        io.github.murtazanasir.mailr.data.phonecal.PhoneCalendars(this.context,
+            io.github.murtazanasir.mailr.data.phonecal.ProviderCalendarSource(this.context),
+            io.github.murtazanasir.mailr.data.phonecal.PhoneCalendarPrefs(this.context), client, client.clientId,
+            signedIn = { sessions.session.value != null },
+            // Built on first read, so a wake that only follows the settings does not build the calendar repository.
+            mailr = object : io.github.murtazanasir.mailr.data.phonecal.MailrEvents {
+                override fun events(fromMs: Long, toMs: Long) = calendar.forPhoneMatch.events(fromMs, toMs)
+                override suspend fun eventsNow(fromMs: Long, toMs: Long) = calendar.forPhoneMatch.eventsNow(fromMs, toMs)
+            }).also { wiring?.phoneCalendars(it) }
+    }
+    val phoneCalendars by phoneCalendarsLazy
     val alarms by lazy { AlarmScheduler(this.context) }
     internal val remindersLazy = lazy {
         ReminderEngine(db.reminders(), calendar, { calendar.reminderConfig(settings.prefs.first().reminderConfig()) },
@@ -355,6 +371,7 @@ interface AppWiring {
     fun selfSend(s: SelfSendRepository)
     fun calendar(c: CalendarRepository)
     fun live(l: LiveEvents)
+    fun phoneCalendars(p: io.github.murtazanasir.mailr.data.phonecal.PhoneCalendars)
 }
 
 /** Tables kept when a session expires: what the user did and has not reached the server yet. */
@@ -457,6 +474,7 @@ class MailrApp : Application(), Configuration.Provider, io.github.murtazanasir.m
                     // the periodic jobs, at the current push health. The rest waits for the app to open.
                     Work.schedulePeriodicSync(this@MailrApp, g.push.pollMinutes().toLong())
                     g.startCalendarWork()
+                    catching { g.phoneCalendars.follow() }
                 } else if (s != null) {
                     // What waited for this sign-in (an expired session's queue and drafts) goes out now.
                     catching { g.adoptKeptQueue(s.email) }
@@ -468,6 +486,7 @@ class MailrApp : Application(), Configuration.Provider, io.github.murtazanasir.m
                     SelfShareShortcut.publish(this@MailrApp, s.email)
                     g.scope.launch { g.refreshAssistantName() }
                     g.startCalendarWork()
+                    catching { g.phoneCalendars.follow() }
                     g.notes.syncNow()
                     if (g.foreground.value) g.live.start()
                 } else {
@@ -477,6 +496,7 @@ class MailrApp : Application(), Configuration.Provider, io.github.murtazanasir.m
                     SelfShareShortcut.remove(this@MailrApp)
                     catching { g.reminders.clear() }
                     catching { g.calendar.clear() }
+                    catching { g.phoneCalendars.follow() }
                 }
             }
         }
@@ -544,6 +564,11 @@ class MailrApp : Application(), Configuration.Provider, io.github.murtazanasir.m
             }
             c.scheduleDelayed = { op, delay -> CalendarWork.delayed(this@MailrApp, op, delay) }
             c.cancelDelayed = { name -> CalendarWork.cancel(this@MailrApp, name) }
+        }
+
+        override fun phoneCalendars(p: io.github.murtazanasir.mailr.data.phonecal.PhoneCalendars) {
+            p.scheduleSoon = { delay -> io.github.murtazanasir.mailr.data.phonecal.PhoneCalendarWork.soon(this@MailrApp, delay) }
+            p.schedulePeriodic = { on -> io.github.murtazanasir.mailr.data.phonecal.PhoneCalendarWork.periodic(this@MailrApp, on) }
         }
 
         override fun live(l: LiveEvents) {

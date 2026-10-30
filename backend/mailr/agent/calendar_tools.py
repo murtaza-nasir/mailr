@@ -21,6 +21,7 @@ from mailr.agent.calendar_common import (
     _localize,
     _names,
     _record_result,
+    _refuse_phone,
     _require_calendar,
     _run_event,
     _run_gated,
@@ -32,6 +33,7 @@ from mailr.agent.calendar_common import (
     _when,
     _where,
     _zone,
+    busy_block,
     calendar_local_copy_reason,
     cite_event,
     stable_uids,
@@ -62,7 +64,7 @@ from mailr.agent.tools import (
       _obj({}))
 async def get_calendar_defaults(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     cal = await _cal()
-    if not await cal.has_calendar(ctx.db, ctx.p.user_id, p=ctx.p):
+    if not await cal.has_any_calendar(ctx.db, ctx.p.user_id, p=ctx.p):
         return ToolResult({"connected": False})
     try:
         cals = [c for c in await cal.calendars(ctx.db, ctx.p.user_id, p=ctx.p) if "error" not in c]
@@ -138,7 +140,7 @@ async def search_events(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     from mailr.calendar.routes import _my_addresses, _with_my_status
 
     cal = await _cal()
-    if not await cal.has_calendar(ctx.db, ctx.p.user_id, p=ctx.p):
+    if not await cal.has_any_calendar(ctx.db, ctx.p.user_id, p=ctx.p):
         return ToolResult({"connected": False, "items": []})
     start, end = await _tool_range(ctx, args)
     await _check_query(ctx, args.get("text"))
@@ -190,7 +192,7 @@ async def list_calendar(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
 async def get_event(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     from mailr.calendar.routes import _my_addresses, _with_my_status
 
-    cal = await _require_calendar(ctx)
+    cal = await _require_calendar(ctx, read=True)
     uid, _ = await _event_ref(ctx, args)
     try:
         got = await cal.get_event(ctx.db, ctx.p.user_id, uid, p=ctx.p)
@@ -203,6 +205,8 @@ async def get_event(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     if hidden:
         raise ToolError("this event is in a calendar that is hidden from this model (a local-only account)")
     ev = dict(kept[0])
+    if ev.get("phone_busy"):  # a phone calendar's block: "Busy (<calendar>)", or its title and place
+        ev = busy_block(ev, await _names(ctx))
     _localize(ev, await _zone(ctx), "start", "end", bool(ev.get("all_day")), "when", _clock(ctx))
     ev["cite"] = cite_event(uid, ev.get("occurrence"))
     return ToolResult(ev, sensitive=sens)
@@ -221,7 +225,7 @@ async def search_calendar(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     from mailr.calendar.routes_collections import calendar_search
 
     cal = await _cal()
-    if not await cal.has_calendar(ctx.db, ctx.p.user_id, p=ctx.p):
+    if not await cal.has_any_calendar(ctx.db, ctx.p.user_id, p=ctx.p):
         return ToolResult({"connected": False, "items": []})
     kind = args.get("kind") or "all"
     if kind not in ("event", "task", "all"):
@@ -262,7 +266,7 @@ async def find_time(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     from mailr.calendar.routes_collections import FindTimeIn
     from mailr.calendar.routes_collections import find_time as find_time_route
 
-    await _require_calendar(ctx)
+    await _require_calendar(ctx, read=True)
     body = {"duration": args.get("duration") or 30, "from": args.get("from"), "to": args.get("to"),
             "tz": args.get("timezone"), "working_hours": args.get("working_hours"),
             "buffer_minutes": args.get("buffer_minutes") or 0, "limit": args.get("limit") or 5,
@@ -282,7 +286,7 @@ async def get_free_busy(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     from mailr.agent import when
     from mailr.calendar.routes_collections import calendar_freebusy
 
-    await _require_calendar(ctx)
+    await _require_calendar(ctx, read=True)
     start, end = await _tool_range(ctx, args, default_days=7)
     res = await calendar_freebusy(frm=start.isoformat(), to=end.isoformat(),
                                   calendar=args.get("calendars") or None, p=ctx.p, db=ctx.db)
@@ -442,8 +446,9 @@ async def update_event(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
 
     from mailr.calendar.routes import EventPatch, _check_rrule, _check_tz, _check_when, where_ctx
 
-    await _require_calendar(ctx)
     uid, occ = await _event_ref(ctx, args)
+    await _refuse_phone(ctx, uid)
+    await _require_calendar(ctx)
     for k in ("start", "end"):
         _when(args.get(k), k)
     fields = await _event_fields(ctx, args)
@@ -486,8 +491,9 @@ async def update_event(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
 async def delete_event(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     from mailr.calendar.routes import where_ctx
 
-    await _require_calendar(ctx)
     uid, occ = await _event_ref(ctx, args)
+    await _refuse_phone(ctx, uid)
+    await _require_calendar(ctx)
     payload: dict[str, Any] = {"uid": uid, "scope": args.get("scope") or "all", "occurrence": occ}
     await _occurrence_needed(ctx, uid, occ, payload["scope"])
     if args.get("send_updates") is not None:
@@ -511,8 +517,9 @@ async def cancel_event(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     from mailr.calendar import mirror
     from mailr.calendar.routes import where_ctx
 
-    await _require_calendar(ctx)
     uid, occ = await _event_ref(ctx, args)
+    await _refuse_phone(ctx, uid)
+    await _require_calendar(ctx)
     src = await _where(ctx, uid)
     obj = await mirror.find_by_uid(ctx.db, ctx.p.user_id, uid, "event", ctx.p)
     if obj is None:

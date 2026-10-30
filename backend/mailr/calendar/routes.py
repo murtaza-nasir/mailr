@@ -17,7 +17,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from mailr import i18n
 from mailr.api import contract as C
 from mailr.calendar import client as cal
-from mailr.calendar import dav, ical, itip, mirror, writer
+from mailr.calendar import dav, ical, itip, mirror, phonecal, writer
 from mailr.calendar.describe import calendar_name
 from mailr.core import permissions
 from mailr.core.audit import audit
@@ -584,6 +584,7 @@ async def get_event(uid: str, p: Principal = Depends(scope("read")), db: AsyncSe
 async def update_event(uid: str, body: EventPatch, p: Principal = Depends(scope("calendar")),
                        db: AsyncSession = Depends(get_db), if_match: str | None = Header(None)):
     _check_when(body.start, body.end, body.occurrence)
+    await phonecal.refuse_uid(db, p.user_id, uid)
     _check_tz(body.tz)
     await _collection_visible(db, p, body.calendar)
     changes = {k: v for k, v in body.model_dump(exclude={"scope", "occurrence", "etag", "send_updates", "identity_id", "message",
@@ -616,6 +617,7 @@ async def delete_event(uid: str, scope_: str = Query("all", alias="scope", patte
                        p: Principal = Depends(scope("calendar")),
                        db: AsyncSession = Depends(get_db), if_match: str | None = Header(None)):
     _check_when(occurrence)
+    await phonecal.refuse_uid(db, p.user_id, uid)
     payload = {"uid": uid, "scope": scope_, "occurrence": occurrence}
     if v := _etag(if_match, etag):
         payload["etag"] = v
@@ -643,6 +645,7 @@ async def cancel_event(uid: str, body: CancelIn | None = None, p: Principal = De
     guests. The event stays in the calendar, marked cancelled."""
     body = body or CancelIn()
     _check_when(body.occurrence)
+    await phonecal.refuse_uid(db, p.user_id, uid)
     obj = await mirror.find_by_uid(db, p.user_id, uid, "event", p)
     if obj is None:
         await where_is(db, p, uid)
@@ -1534,6 +1537,7 @@ async def rsvp_event(uid: str, body: EventRsvpIn, p: Principal = Depends(current
 
 async def _event_invite(db: AsyncSession, p, uid: str, cal_p=None) -> tuple[dict[str, Any], bytes, str]:
     """(event, stored iCalendar, my attendee address) for an invitation in the calendar."""
+    await phonecal.refuse_uid(db, p.user_id, uid)
     try:
         got = await cal.get_event(db, p.user_id, uid, p=cal_p)
     except Exception as e:  # noqa: BLE001

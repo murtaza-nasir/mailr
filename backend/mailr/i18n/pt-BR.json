@@ -108,7 +108,10 @@
       "subscription_not_found": "assinatura não encontrada",
       "unknown_calendar": "agenda desconhecida",
       "unverified_user_only": "apenas o usuário conectado pode aplicar uma alteração de um remetente não verificado",
-      "window_two_years": "o período deve ser positivo e de no máximo dois anos"
+      "window_two_years": "o período deve ser positivo e de no máximo dois anos",
+      "phone_read_only": "“{{name}}” mostra horários ocupados do seu celular e não pode ser alterada aqui. Altere o evento no celular.",
+      "phone_limit": "no máximo {{max}} agendas do celular",
+      "phone_needs_allow": "uma regra exige aprovação para atualizações de agendas do celular; permita-as para este token em Configurações → Permissões"
     },
     "admin": {
       "user_not_found": "usuário não encontrado",
@@ -1776,5 +1779,8 @@
     "forbidden": "seu servidor de agenda não permitiu a alteração",
     "signin": "falha ao entrar no seu servidor de agenda",
     "other": "ocorreu um erro inesperado"
+  },
+  "calendar_phone": {
+    "busy": "Ocupado"
   }
 }

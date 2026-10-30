@@ -4,6 +4,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { CalendarPlus, Check, ChevronLeft, ChevronRight, ListTodo, Lock, MoreVertical, Plus, Users, X } from 'lucide-react'
 import { useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { api } from '../../api/client'
 import { useModalFocus } from '../../hooks/useModalFocus'
 import { Dialog, ConfirmDialog } from '../../components/Dialog'
@@ -17,6 +18,7 @@ import { displayColour, SWATCHES } from './colour'
 import { useCal } from './context'
 import { calApi, defaultReminders, SHARE_NOTICES_KEY, useAccounts, useDefaults, useNormalized, useRange, useShareNotices } from './data'
 import { exportIcs } from './ics'
+import { phoneFreshness } from './phone'
 import { isoWeek } from './geometry'
 import { useSavedView } from './prefs'
 import { saveVisibility } from './visibility'
@@ -238,6 +240,7 @@ function CalendarList() {
                       {c.name}
                       {c.shared && <span className="cal-cal-sub">{sharedLabel(c)}</span>}
                       {!c.shared && c.sharing && <span className="cal-cal-sub">{sharingLabel(c)}</span>}
+                      {c.phone && <PhoneSub c={c} now={cal.now} />}
                     </span>
                   </label>
                   {c.read_only && <Lock className="cal-lock" aria-label="Read-only" size={14} />}
@@ -263,10 +266,22 @@ function CalendarList() {
   )
 }
 
+/** Under a phone calendar's name: "Updated from <device> <time ago>", marked when over a day old. */
+function PhoneSub({ c, now }: { c: Collection; now: Date }) {
+  const f = phoneFreshness(c, now)
+  if (!f) return null
+  return (
+    <span className={`cal-cal-sub cal-phone-fresh${f.stale ? ' stale' : ''}`} data-testid="phone-freshness">
+      {f.text}{f.stale && <>{' · '}{t('calendar.phone.stale')}</>}
+    </span>
+  )
+}
+
 function CalendarMenu({ c, anchor, onClose, isDefault, only }: { c: Collection; anchor: HTMLElement; onClose: () => void; isDefault: boolean; only: boolean }) {
   const cal = useCal()
   const qc = useQueryClient()
   const vis = useVisibility()
+  const nav = useNavigate()
   const [mode, setMode] = useState<'menu' | 'rename' | 'reminders' | 'delete' | 'share' | 'unsubscribe'>('menu')
   const done = () => void qc.invalidateQueries({ queryKey: ['calendar'] })
   const unsupported = () => toast({ message: t('calendar.leftColumn.thisServerCannotChangeCalendars'), error: true })
@@ -309,14 +324,19 @@ function CalendarMenu({ c, anchor, onClose, isDefault, only }: { c: Collection; 
         ))}
       </div>
       <div className="menu-sep" />
-      {c.subscription ? (
+      {c.phone ? (
+        <>
+          <div className="cal-menu-note">{t(c.phone.details ? 'calendar.phone.menuNoteDetails' : 'calendar.phone.menuNote')}</div>
+          <MenuItem onSelect={() => { onClose(); nav('/settings/calendar') }}>{t('calendar.phone.phoneCalendarSettings')}</MenuItem>
+        </>
+      ) : c.subscription ? (
         <SubscriptionMenuItems c={c} onClose={onClose} onRemove={() => setMode('unsubscribe')} />
       ) : c.shared ? (
         <div className="cal-menu-note">{sharedLabel(c)}. {ownerNote(c)}</div>
       ) : (
         <MenuItem onSelect={() => setMode('rename')} disabled={c.read_only}>{t('calendar.leftColumn.rename')}</MenuItem>
       )}
-      {!c.subscription && <>
+      {!c.subscription && !c.phone && <>
       {/* ACT calendar.share @web.calendar: own calendars of the mailr calendar, or shared with "Edit and share" */}
       {c.shareable && <MenuItem onSelect={() => setMode('share')}>{t('common.share2')}</MenuItem>}
       <MenuItem onSelect={() => setMode('reminders')}>{t('calendar.leftColumn.defaultReminders2')}</MenuItem>

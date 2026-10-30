@@ -832,6 +832,18 @@
       "sharedWithPeople_other": "Partagé avec {{count}} personnes{{value}}",
       "sharedWithTheGroup": "Partagé avec le groupe {{group}}",
       "viewOnly": " · lecture seule"
+    },
+    "phone": {
+      "busy": "Occupé",
+      "updatedFrom": "Mis à jour depuis {{device}} {{when}}",
+      "updated": "Mis à jour {{when}}",
+      "neverUpdated": "Pas encore mis à jour",
+      "stale": "plus d'un jour",
+      "changeOnThePhone": "Un créneau occupé issu d'un agenda sur votre téléphone. Il ne change que sur le téléphone.",
+      "eventChangeOnThePhone": "Un événement d'un agenda sur votre téléphone. Il ne change que sur le téléphone.",
+      "menuNote": "Créneaux occupés issus d'un agenda sur votre téléphone. Ils ne changent que sur le téléphone.",
+      "menuNoteDetails": "Événements d'un agenda sur votre téléphone, avec titres et lieux. Ils ne changent que sur le téléphone.",
+      "phoneCalendarSettings": "Paramètres de l'agenda du téléphone"
     }
   },
   "colour": {
@@ -4179,6 +4191,7 @@
         "question": "{{title}}?",
         "remoteImages": "Images distantes",
         "reportSpam": "signaler comme spam",
+        "sendBusyTimesFromPhoneCalendars": "envoyer les créneaux occupés des agendas du téléphone",
         "sendEmail": "envoyer un e-mail",
         "sendInvitationsAndUpdatesTo": "envoyer les invitations et les mises à jour aux invités",
         "thisCantBeUndoneFrom": "Cette action est irréversible dans Mailr.",
@@ -7639,7 +7652,8 @@
       "whatAgentsMayDoWithout": "Actions que les agents peuvent effectuer sans demander. Avec « Me demander », l'action est envoyée dans la file d'approbation, où vous décidez une fois, pour un moment ou toujours. Vos propres actions ne sont jamais bloquées. Le premier message à une nouvelle adresse nécessite toujours une approbation. L'accès en lecture d'un agent est défini par son jeton, pas par ces règles.",
       "writeDraftsAndRewriteBriefs": "Rédiger des brouillons et réécrire des résumés",
       "yourRule": "votre règle",
-      "actOnNotesYouForward": "Traiter les notes que vous transférez depuis vos adresses de confiance"
+      "actOnNotesYouForward": "Traiter les notes que vous transférez depuis vos adresses de confiance",
+      "sendPhoneBusyTimes": "Envoyer les créneaux occupés depuis les agendas du téléphone"
     },
     "phoneAccessAdmin": {
       "aHostNameOfIts": "Utilisez un nom d'hôte dédié, tel que dav.example.com. Les chemins de l'agenda doivent être à la racine de l'hôte. Enregistré lorsque vous quittez le champ ou appuyez sur Entrée.",
@@ -8192,6 +8206,20 @@
       "trusted": "Ces adresses ont besoin d’un nouveau code avant de parler de nouveau en votre nom : {{addresses}}.",
       "forwards": "Aucun e-mail n’est transféré à ces adresses tant que vous ne les confirmez pas de nouveau : {{addresses}}.",
       "notYou": "Si vous les avez configurés vous-même, réactivez-les. Sinon, supprimez-les."
+    },
+    "phoneCalendars": {
+      "title": "Agendas du téléphone",
+      "desc": "Agendas de votre téléphone dont les créneaux occupés sont envoyés à Mailr. Par défaut, seuls le début et la fin de chaque créneau occupé sont envoyés. Pour un agenda configuré sur Afficher et envoyer les détails, le titre et le lieu de chaque événement sont également envoyés. Les invités, les descriptions et les notes ne sont jamais envoyés. Chaque agenda se configure dans l'application Android, sous Paramètres → Agenda et tâches → Agendas du téléphone.",
+      "none": "Aucun agenda du téléphone n'envoie de créneaux occupés.",
+      "busyTimes_one": "{{count}} créneau occupé",
+      "busyTimes_other": "{{count}} créneaux occupés",
+      "busyOnly": "Créneaux occupés uniquement",
+      "withDetails": "Créneaux occupés avec titres et lieux",
+      "removeName": "Supprimer {{name}}",
+      "removeTitle": "Supprimer « {{name}} » ?",
+      "removeBody": "Ses créneaux occupés sont supprimés de Mailr. Si le téléphone continue de les envoyer, ils réapparaîtront lors de la prochaine mise à jour. Pour l'éviter, définissez l'agenda sur Désactivé ou Affiché sur ce téléphone dans l'application Android.",
+      "removed": "« {{name}} » supprimé",
+      "notRemoved": "Impossible de supprimer l'agenda du téléphone"
     }
   },
   "shortcuts": {

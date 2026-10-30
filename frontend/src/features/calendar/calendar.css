@@ -427,6 +427,19 @@ label.cal-cal {
   color: var(--text-3);
   white-space: normal;
 }
+/* A phone calendar's "Updated from Pixel 9 3 minutes ago" (phone.ts); over a day old it is marked. */
+.cal-phone-fresh.stale {
+  color: var(--warning-fg);
+}
+.cal-phone-note {
+  display: block;
+}
+.cp-cal-sub {
+  display: block;
+  font-size: 11.5px;
+  line-height: 1.3;
+  color: var(--text-3);
+}
 /* "Rosa shared “Work” with you." above the calendar list (calendar/sharing.py notices). */
 .cal-share-notes {
   display: flex;

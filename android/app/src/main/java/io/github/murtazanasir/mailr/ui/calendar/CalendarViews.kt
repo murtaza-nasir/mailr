@@ -230,6 +230,7 @@ private fun NowLine() {
 @Composable
 private fun EventCard(d: DayEvent, day: LocalDate, selected: Boolean, past: Boolean, pending: Boolean = false, onClick: () -> Unit) {
     val on = CalendarColors.onColor(d.color)
+    val onPhone = io.github.murtazanasir.mailr.data.phonecal.PhoneEvents.isPhone(d.e)
     val declined = d.e.myStatus == "DECLINED"
     val invite = d.e.isInvite && (d.e.myStatus == "NEEDS-ACTION" || d.e.myStatus == "TENTATIVE")
     Surface(
@@ -258,9 +259,14 @@ private fun EventCard(d: DayEvent, day: LocalDate, selected: Boolean, past: Bool
                     Spacer(Modifier.width(4.dp))
                     Icon(Icons.Outlined.MailOutline, stringResource(R.string.cal_from_an_email), Modifier.size(14.dp), tint = fg.copy(alpha = 0.8f))
                 }
+                if (onPhone) {
+                    Spacer(Modifier.width(4.dp))
+                    OnPhoneMark(fg.copy(alpha = 0.8f), described = false)
+                }
             }
             val sub = listOfNotNull(timeRange(d, day), d.e.location?.takeIf { it.isNotBlank() },
-                if (invite) stringResource(R.string.cal_invitation) else null, if (pending) stringResource(R.string.cal_not_synced_yet) else null).joinToString(" · ")
+                if (invite) stringResource(R.string.cal_invitation) else null, if (pending) stringResource(R.string.cal_not_synced_yet) else null,
+                if (onPhone) stringResource(R.string.phonecal_on_phone) else null).joinToString(" · ")
             Text(sub, style = MaterialTheme.typography.bodySmall, color = fg.copy(alpha = 0.85f), maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
@@ -433,6 +439,9 @@ private fun MonthChip(e: DayEvent, inMonth: Boolean) {
     Row(Modifier.fillMaxWidth().height(MonthChips.HEIGHT).alpha(if (inMonth) 1f else 0.55f).clip(shape)
         .background(if (filled) e.color else e.color.copy(alpha = 0.18f)), verticalAlignment = Alignment.CenterVertically) {
         if (!filled) Box(Modifier.width(2.dp).fillMaxHeight().background(e.color))
+        if (io.github.murtazanasir.mailr.data.phonecal.PhoneEvents.isPhone(e.e)) Box(Modifier.padding(start = 2.dp)) {
+            OnPhoneMark(if (filled) CalendarColors.onColor(e.color) else MaterialTheme.colorScheme.onSurface, size = 9)
+        }
         Text(title, maxLines = 1, overflow = TextOverflow.Clip, softWrap = false, style = MonthChips.textStyle(),
             color = if (filled) CalendarColors.onColor(e.color) else MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(horizontal = 3.dp))
@@ -493,7 +502,8 @@ private fun AgendaRow(d: DayEvent, day: LocalDate, selected: Boolean, past: Bool
                 Text(d.e.summary.ifBlank { stringResource(R.string.cal_no_title) }, style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium, maxLines = 1, overflow = TextOverflow.Ellipsis,
                     textDecoration = if (declined || d.e.cancelled) androidx.compose.ui.text.style.TextDecoration.LineThrough else null)
-                val sub = listOfNotNull(d.e.location?.takeIf { it.isNotBlank() }, if (invite) stringResource(R.string.cal_invitation) else null)
+                val sub = listOfNotNull(d.e.location?.takeIf { it.isNotBlank() }, if (invite) stringResource(R.string.cal_invitation) else null,
+                    if (io.github.murtazanasir.mailr.data.phonecal.PhoneEvents.isPhone(d.e)) stringResource(R.string.phonecal_on_phone) else null)
                     .joinToString(" · ")
                 if (sub.isNotEmpty()) Text(sub, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1, overflow = TextOverflow.Ellipsis)

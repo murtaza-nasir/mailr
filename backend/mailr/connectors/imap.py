@@ -882,10 +882,14 @@ class ImapConnector(MailConnector):
                 if inbox:
                     await self._sync_folder(ctx, inbox, plan[inbox])
 
+    def _push_folder(self, plan: dict[str, Any]) -> str | None:
+        """The folder IDLE watches for new mail: the inbox."""
+        return next((f for f, t in plan.items() if t == ("role", "inbox")), None)
+
     async def _idle_loop(self, ctx, poll: int) -> None:
         s = await self._open()
         plan = dict(await self.folder_plan())
-        inbox = next((f for f, t in plan.items() if t == ("role", "inbox")), None)
+        inbox = self._push_folder(plan)
         last_full = time.monotonic()
         synced_next = None  # the inbox's UIDNEXT when it was last synced here
         while not ctx.stopping.is_set():

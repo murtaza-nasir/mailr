@@ -322,6 +322,10 @@ NOT_OWNER_OBJECTS = {"/api/v1/smart/{name}",
                      "/api/v1/tasks/tags/{name}",
                      # A domain on the caller's own spam sender list (users.settings): nothing of anyone else's.
                      "/api/v1/spam/domains/{key}",
+                     # A phone calendar's key (calendar/phonecal.py) names one of the caller's own phone
+                     # calendars: the same key from someone else is their own calendar
+                     # (test_phone_calendars.py, test_other_users_cannot_read_or_write).
+                     "/api/v1/calendar/phone-calendars/{key}",
                      # A Speakr webhook address: no session by design; a delivery needs the connector's
                      # HMAC secret (test_speakr_webhook.py), and the owner's connector has none here.
                      "/api/v1/integrations/speakr/{hook}/webhook"}

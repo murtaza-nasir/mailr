@@ -78,11 +78,12 @@ a new password can be entered or the account fixed.
 | Setting | Effect |
 |---|---|
 | **Task swipe actions** | The actions for swiping a task left and right: Complete, Reschedule, Delete or Move to list. |
+| **Phone calendars** | The calendars on this phone, shown in Mailr's calendar, read-only. For each calendar: Off, Show on this phone, Show and send busy times, or Show and send details (titles and places too). See [Phone calendars](calendar-and-reminders.md#phone-calendars). |
 | **Event reminders** | Notifications before calendar events start. |
 | **Events without a reminder** | The reminder a timed event gets when it has none: None, At start, or 5, 10, 15, 30 or 60 minutes before. |
 | **Task reminders** | Notifications when tasks are due. |
 | **Morning reminders at** | The hour for reminders of date-only tasks and "tomorrow morning" snoozes, from 6 to 11 am. |
-| **Full-screen alerts** | An event about to start, or a task due now, is shown full screen, also on the lock screen. Not while Do Not Disturb is on. |
+| **Full-screen alerts** | An event about to start, or a task due now, is shown full screen. On a locked phone, only the kind of reminder is shown until the phone is unlocked. Not while Do Not Disturb is on. |
 | **Full-screen permission** | Whether full-screen alerts are allowed in Android. Tap it to allow them. Without the permission, reminders are shown at the top. |
 | **Remind again** | A reminder is repeated every 5, 10, 15 or 30 minutes until it is acted on. Off by default. Also applies on the web. |
 | **Ask button on reminders** | Reminders carry an **Ask** button, to tell Ambrose what to do with them. **Snooze…** and **Remind before…** stay in the reminder's sheet. |

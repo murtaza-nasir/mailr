@@ -152,6 +152,18 @@ async def _out(db: AsyncSession, obj: CalObject | None) -> dict[str, Any] | None
     return await mirror.object_out(db, obj) if obj is not None else None
 
 
+def refuse_read_only(coll: CalCollection | None) -> None:
+    """Nothing is written to a read-only calendar. A phone calendar's busy times (calendar/phonecal.py)
+    get their own error: they change only on the phone."""
+    if coll is None or not coll.read_only:
+        return
+    from mailr.calendar import phonecal
+
+    if phonecal.is_phone(coll):
+        raise phonecal.read_only_error(coll)
+    raise ValueError(read_only_message(coll))
+
+
 def read_only_message(coll: CalCollection) -> str:
     """Why nothing was written: the calendar is read-only for this user (a read-only share, or a
     group calendar only its editors change)."""
@@ -178,8 +190,7 @@ async def rmw(db: AsyncSession, user_id: int, p: Any, obj: CalObject, mutate: Ca
     if obj.deleted_at is not None:
         raise Gone(obj.uid)
     coll = await db.get(CalCollection, obj.collection_id)
-    if coll is not None and coll.read_only:
-        raise ValueError(read_only_message(coll))
+    refuse_read_only(coll)
     client = await _dav(db, obj.connector_id)
     async with client:
         if client_etag and obj.etag and client_etag != obj.etag:
@@ -220,8 +231,7 @@ async def rmw(db: AsyncSession, user_id: int, p: Any, obj: CalObject, mutate: Ca
 
 async def create(db: AsyncSession, user_id: int, coll: CalCollection, cal: Calendar, uid: str) -> CalObject:
     """PUT a new resource with If-None-Match: *. A UID already there is a Conflict("exists")."""
-    if coll.read_only:
-        raise ValueError(read_only_message(coll))
+    refuse_read_only(coll)
     await uid_lock(db, user_id, uid)
     existing = await mirror.find_by_uid(db, user_id, uid)
     kind = "task" if list(cal.walk("VTODO")) else "event"
@@ -252,8 +262,8 @@ async def move(db: AsyncSession, user_id: int, obj: CalObject, target: CalCollec
     await db.refresh(obj)
     if client_etag and obj.etag and client_etag != obj.etag:
         raise Conflict(obj.kind, await _out(db, obj))
-    if target.read_only:
-        raise ValueError(read_only_message(target))
+    refuse_read_only(await db.get(CalCollection, obj.collection_id))
+    refuse_read_only(target)
     if target.connector_id != obj.connector_id:
         raise ValueError("an item can only move between calendars of the same account")
     cal = Calendar.from_ical(obj.ics)
@@ -291,8 +301,7 @@ async def delete(db: AsyncSession, user_id: int, obj: CalObject, *, client_etag:
     if obj.deleted_at is not None:
         return
     coll = await db.get(CalCollection, obj.collection_id)
-    if coll is not None and coll.read_only:
-        raise ValueError(read_only_message(coll))
+    refuse_read_only(coll)
     client = await _dav(db, obj.connector_id)
     async with client:
         if client_etag and obj.etag and client_etag != obj.etag:

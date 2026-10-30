@@ -10,6 +10,7 @@ import { api, ApiError, buildUrl } from '../../api/client'
 import { qk } from '../../api/hooks'
 import { canonicalOccurrence, addDaysISO, isISODate, parseISO, toISODate, utcIsoformat } from '../../lib/dates'
 import { fallbackColour, normalizeColour } from './colour'
+import { busyTitle } from './phone'
 import type {
   Account, AgendaResponse, ApiEvent, ApiTask, CalEvent, Collection, ConflictBody, EventWrite, Scope, ShareLevel,
   ShareNotice, ShareState, SyncStatus,
@@ -127,7 +128,10 @@ export function normalizeEvent(e: ApiEvent, ctx: Ctx): CalEvent | null {
   const colour = normalizeColour(e.color) ?? normalizeColour(e.calendar_color) ?? collectionColour(col)
   return {
     ...e, key: `${e.uid}|${occurrence}`, occurrence, startAt, endAt, allDay, firstDay, lastDay, colour,
-    readOnly: !!col?.read_only,
+    // A phone calendar's busy time reads "Busy" in the app's language and is never edited here; a
+    // block with details keeps the title the phone sent.
+    ...(e.phone_busy && !e.phone_details ? { summary: busyTitle() } : {}),
+    readOnly: !!col?.read_only || !!e.phone_busy,
   }
 }
 

@@ -707,7 +707,10 @@ async def store_sent_job(payload: dict[str, Any], ctx) -> None:
         res = await ingest_raw(db, store, path.read_bytes(), IngestOptions(
             # Filters run only if the message is addressed to the user too (ingest decides).
             connector=conn_row, roles=["sent"], keywords={"seen": True}, source="send",
-            run_rules=True, notify=False, label_ids=labels))
+            run_rules=True, notify=False, label_ids=labels,
+            # The time it went out, not now: a retry after a rolled-back try must give its store copy
+            # the same arrival time, or the store sync takes the first copy for another message.
+            received_at=ob.sent_at))
         ob.conversation_id = res.message.conversation_id
         # A mirror account's provider gets a copy in its Sent folder too (connectors/sentcopy.py).
         from mailr.connectors.sentcopy import queue_after_send

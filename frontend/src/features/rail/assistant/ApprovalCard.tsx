@@ -55,6 +55,7 @@ const ACTION_TEXT: Record<string, string> = {
   'labels.delete': tr('rail.assistant.approvalCard.deleteLabels'),
   'calendar.invite': tr('rail.assistant.approvalCard.sendInvitationsAndUpdatesTo'),
   'calendar.cancel': tr('rail.assistant.approvalCard.cancelEventsWithGuests'),
+  'calendar.phone_sync': tr('rail.assistant.approvalCard.sendBusyTimesFromPhoneCalendars'),
   'contacts.write': tr('rail.assistant.approvalCard.changeContactGroups'),
   'memory.write': tr('rail.assistant.approvalCard.keepAndChangeMemories'),
   'prefs.write': tr('rail.assistant.approvalCard.changeSettingsLayoutsAndSignatures'),

@@ -24,6 +24,7 @@ import androidx.test.core.app.ApplicationProvider
 import io.github.murtazanasir.mailr.TestGraph
 import io.github.murtazanasir.mailr.data.api.Citation
 import io.github.murtazanasir.mailr.data.auth.SessionStore
+import io.github.murtazanasir.mailr.testing.WAIT_CEILING_MS
 import io.github.murtazanasir.mailr.testing.createComposeRule
 import io.github.murtazanasir.mailr.testing.eventually
 import kotlinx.coroutines.launch
@@ -62,13 +63,19 @@ class ChatCommandsTest {
 
     private val app: Application = ApplicationProvider.getApplicationContext()
     private var server: MockWebServer? = null
-    /** "METHOD path body" of every request the fake server got. */
-    private val requests: MutableList<String> = Collections.synchronizedList(mutableListOf())
+    /**
+     * "METHOD path body" of every request the fake server got. The server's thread adds while the test
+     * reads (`any`, `filter`); a synchronized list's iterator is not locked and threw
+     * ConcurrentModificationException. Each read here iterates a snapshot.
+     */
+    private val requests: MutableList<String> = java.util.concurrent.CopyOnWriteArrayList()
     /** The next chat answer: a normal one, or the server's reply to a command. */
     @Volatile private var commandReply: String? = null
     /** POST /notes fails; POST /notes/{id}/links fails. */
     @Volatile private var noteFails = false
     @Volatile private var linkFails = false
+    /** Holds the answer to a rename until the test opens it. */
+    @Volatile private var renameGate: java.util.concurrent.CountDownLatch? = null
     /** The next answer makes a skill (a create_skill step). */
     @Volatile private var makesSkill = false
 
@@ -133,7 +140,7 @@ class ChatCommandsTest {
                         MockResponse().setBody("""{"id":"c9","title":"Dana the accountant","renamed":false,"previous":{"title":"Who is Dana?","renamed":false}}""")
                     request.method == "DELETE" && request.path == "/api/v1/agent/sessions/c9" -> MockResponse().setBody("{}")
                     request.method == "PATCH" && request.path == "/api/v1/agent/sessions/c9" ->
-                        MockResponse().setBody("""{"id":"c9","title":"Dana","renamed":true,"previous":{"title":"Who is Dana?","renamed":false}}""")
+                        MockResponse().also { renameGate?.await(WAIT_CEILING_MS, java.util.concurrent.TimeUnit.MILLISECONDS) }.setBody("""{"id":"c9","title":"Dana","renamed":true,"previous":{"title":"Who is Dana?","renamed":false}}""")
                     request.method == "POST" && request.path == "/api/v1/notes" ->
                         if (noteFails) MockResponse().setResponseCode(500).setBody("""{"detail":"boom"}""")
                         else MockResponse().setBody("""{"note":{"id":"n77","title":"Dana is your accountant.","kind":"text"},"undo":null}""")
@@ -324,6 +331,23 @@ class ChatCommandsTest {
         until("retitled") { vm.state.value.title == "Dana the accountant" }
         assertFalse(vm.state.value.titleRenamed)
         assertTrue(requests.any { it.startsWith("POST /api/v1/agent/sessions/c9/retitle") })
+    }
+
+    /** A rename answered after a later `/retitle` does not put its title back: the newest request decides. */
+    @Test fun aRenameAnsweredLateDoesNotUndoALaterRetitle() {
+        val vm = answered()
+        val seen = Collections.synchronizedList(mutableListOf<ChatsMessage>())
+        graphs.scope().launch { vm.renames.collect { seen += it } }
+        val gate = java.util.concurrent.CountDownLatch(1)
+        renameGate = gate
+        vm.send("/rename Dana")
+        until("the rename sent") { requests.any { it.startsWith("PATCH /api/v1/agent/sessions/c9") } }
+        vm.send("/retitle")
+        until("retitled") { vm.state.value.title == "Dana the accountant" }
+        gate.countDown()
+        until("the rename answered") { seen.isNotEmpty() }
+        assertEquals("Dana the accountant", vm.state.value.title)
+        assertFalse(vm.state.value.titleRenamed)
     }
 
     @Test fun retryWritesTheLastAnswerAgainFromItsQuestion() {

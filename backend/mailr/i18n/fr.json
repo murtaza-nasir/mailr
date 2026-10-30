@@ -108,7 +108,10 @@
       "subscription_not_found": "Abonnement introuvable",
       "unknown_calendar": "agenda inconnu",
       "unverified_user_only": "Seul l'utilisateur connecté peut appliquer une modification provenant d'un expéditeur non vérifié",
-      "window_two_years": "La période doit être positive et d'une durée maximale de deux ans"
+      "window_two_years": "La période doit être positive et d'une durée maximale de deux ans",
+      "phone_read_only": "« {{name}} » affiche les créneaux occupés de votre téléphone et ne peut pas être modifié ici. Modifiez l'événement sur le téléphone.",
+      "phone_limit": "au maximum {{max}} agendas du téléphone",
+      "phone_needs_allow": "une règle impose une validation préalable pour les mises à jour des agendas du téléphone ; autorisez-les pour ce jeton dans Paramètres → Autorisations"
     },
     "admin": {
       "user_not_found": "Utilisateur introuvable",
@@ -1776,5 +1779,8 @@
     "forbidden": "votre serveur d'agenda n'a pas autorisé la modification",
     "signin": "la connexion à votre serveur d'agenda a échoué",
     "other": "une erreur inattendue s'est produite"
+  },
+  "calendar_phone": {
+    "busy": "Occupé"
   }
 }

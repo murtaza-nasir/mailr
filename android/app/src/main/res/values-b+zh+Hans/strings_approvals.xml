@@ -14,6 +14,7 @@
     <string name="appr_verb_calendar_rsvp">回复邀请</string>
     <string name="appr_verb_calendar_invite">向嘉宾发送邀请和更新</string>
     <string name="appr_verb_calendar_cancel">取消有嘉宾的活动</string>
+    <string name="appr_verb_calendar_phone_sync">从手机日历发送忙碌时间</string>
     <string name="appr_verb_tasks_create">创建任务</string>
     <string name="appr_verb_tasks_update">更改任务</string>
     <string name="appr_verb_tasks_complete">完成任务</string>

@@ -1,6 +1,6 @@
 [project]
 name = "mailr"
-version = "0.40.26"
+version = "0.40.31"
 description = "Self-hosted mail store and Gmail-style client"
 requires-python = ">=3.12.5"
 dependencies = [

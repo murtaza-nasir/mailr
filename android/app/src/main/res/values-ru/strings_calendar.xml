@@ -140,6 +140,8 @@
     <string name="cal_quick_no_one_called">Никто не назван «%s»</string>
     <string name="cal_quick_keep_as_text">Оставить как текст</string>
     <string name="cal_alert_close_cd">Закрыть; напоминание останется</string>
+    <string name="cal_alert_unlock">Разблокировать</string>
+    <string name="cal_alert_unlock_to_see">Разблокируйте телефон, чтобы увидеть это напоминание</string>
     <string name="cal_alert_snooze_10_min">Отложить на 10 мин</string>
     <string name="cal_alert_more_choices">Другие варианты</string>
     <plurals name="cal_alert_starts_in">

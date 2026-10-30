@@ -41,6 +41,10 @@ def calendar_name(displayname: str | None, href: str | None, fallback: str = "Ca
     when that is a word ("work"), else "Calendar"."""
     from mailr.calendar.builtin import STOCK_NAME
 
+    if str(href or "").startswith("phone:"):
+        # A phone calendar (calendar/phonecal.py) keeps the name the phone gives it, address and all
+        # ("Calendar (name@university.edu)"): on the phone that is how the person tells them apart.
+        return " ".join(str(displayname or "").split()) or fallback
     if STOCK_NAME.match(str(displayname or "").strip()):
         return "Calendar"
     name = _ADDRESS_PART.sub(" ", str(displayname or "")).strip()

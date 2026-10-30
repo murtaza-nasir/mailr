@@ -937,6 +937,11 @@
    "state": "model",
    "text": "envoyer des invitations et des mises à jour aux invités"
   },
+  "android:app:appr_verb_calendar_phone_sync": {
+   "sha": "afee006e664996a5",
+   "state": "model",
+   "text": "envoyer les créneaux occupés depuis les agendas du téléphone"
+  },
   "android:app:appr_verb_calendar_rsvp": {
    "sha": "c07712555fe1e69e",
    "state": "model",
@@ -2215,6 +2220,16 @@
    "sha": "19ebd8e3e64d49f3",
    "state": "model",
    "text": "Débute maintenant"
+  },
+  "android:app:cal_alert_unlock": {
+   "sha": "6c500cc253ab3fd4",
+   "state": "model",
+   "text": "Déverrouiller"
+  },
+  "android:app:cal_alert_unlock_to_see": {
+   "sha": "cee27fad70ef21d9",
+   "state": "model",
+   "text": "Déverrouillez votre téléphone pour voir ce rappel"
   },
   "android:app:cal_all_caught_up": {
    "sha": "35c0061dde99162c",
@@ -10065,6 +10080,111 @@
    "sha": "94abf3c279af6f31",
    "state": "same",
    "text": "VIP"
+  },
+  "android:app:phonecal_allow": {
+   "sha": "c8859d61b0c02167",
+   "state": "model",
+   "text": "Autoriser l'accès aux agendas"
+  },
+  "android:app:phonecal_choose_cd": {
+   "sha": "c700573807f9c547",
+   "state": "model",
+   "text": "Choisir l'utilisation de %1$s"
+  },
+  "android:app:phonecal_denied": {
+   "sha": "718d4628b5f3bedd",
+   "state": "model",
+   "text": "L'accès aux agendas n'est pas autorisé. Vous pouvez l'autoriser dans les paramètres système de l'application."
+  },
+  "android:app:phonecal_denied_once": {
+   "sha": "bfb06c32be5cc761",
+   "state": "model",
+   "text": "L'accès aux agendas n'a pas été autorisé, les agendas du téléphone restent désactivés."
+  },
+  "android:app:phonecal_detail_note": {
+   "sha": "d0748e9567aa82cd",
+   "state": "model",
+   "text": "Cet événement se trouve dans un agenda de ce téléphone. Vous pouvez le modifier dans l'application d'agenda du téléphone."
+  },
+  "android:app:phonecal_header": {
+   "sha": "bbc6ea4013864724",
+   "state": "model",
+   "text": "Agendas de ce téléphone"
+  },
+  "android:app:phonecal_mode_details": {
+   "sha": "5aa75d29d3cdd014",
+   "state": "model",
+   "text": "Afficher et envoyer les détails"
+  },
+  "android:app:phonecal_mode_details_hint": {
+   "sha": "1be9dd69a3ec9dae",
+   "state": "model",
+   "text": "Les titres et les lieux sont envoyés à votre serveur Mailr ; les invités et les descriptions ne le sont pas."
+  },
+  "android:app:phonecal_mode_off": {
+   "sha": "50accd740fa2e736",
+   "state": "model",
+   "text": "Désactivé"
+  },
+  "android:app:phonecal_mode_send": {
+   "sha": "3e2c589d57bf252d",
+   "state": "model",
+   "text": "Afficher et envoyer les disponibilités"
+  },
+  "android:app:phonecal_mode_show": {
+   "sha": "23b0c9cf36ab5e3c",
+   "state": "model",
+   "text": "Afficher sur ce téléphone"
+  },
+  "android:app:phonecal_no_calendar_app": {
+   "sha": "ff27d49a00592bd8",
+   "state": "model",
+   "text": "Impossible d'ouvrir cet événement : le téléphone ne contient aucune application d'agenda."
+  },
+  "android:app:phonecal_none": {
+   "sha": "6b3059a6694d8581",
+   "state": "model",
+   "text": "Ce téléphone ne contient aucun agenda."
+  },
+  "android:app:phonecal_on_phone": {
+   "sha": "580b4b9299717d08",
+   "state": "model",
+   "text": "Sur ce téléphone"
+  },
+  "android:app:phonecal_open_in_calendar": {
+   "sha": "ebacf128399ea052",
+   "state": "model",
+   "text": "Ouvrir dans l'agenda"
+  },
+  "android:app:phonecal_open_settings": {
+   "sha": "02789805322fbdfb",
+   "state": "model",
+   "text": "Ouvrir les paramètres"
+  },
+  "android:app:phonecal_privacy": {
+   "sha": "39966c0599bb40a7",
+   "state": "model",
+   "text": "Rien n'est envoyé au serveur pour les agendas définis sur « Désactivé » ou « Afficher sur ce téléphone ». Pour « Afficher et envoyer les disponibilités », le début et la fin de chaque événement occupé ou provisoire sont envoyés. Pour « Afficher et envoyer les détails », le titre et le lieu de chaque événement sont également envoyés. Les invités, les descriptions et les notes ne sont jamais envoyés."
+  },
+  "android:app:phonecal_settings_sub": {
+   "sha": "aa4e738b80dd8db4",
+   "state": "model",
+   "text": "Agendas de ce téléphone dans l'agenda de Mailr"
+  },
+  "android:app:phonecal_switch": {
+   "sha": "f60b3d230fe87c07",
+   "state": "model",
+   "text": "Afficher les agendas du téléphone"
+  },
+  "android:app:phonecal_switch_sub": {
+   "sha": "c46e04dd69771026",
+   "state": "model",
+   "text": "Les événements des agendas de ce téléphone sont affichés en lecture seule dans l'agenda de Mailr. Vous autorisez l'accès aux agendas en activant cette option."
+  },
+  "android:app:phonecal_title": {
+   "sha": "87538b0705e7b07c",
+   "state": "model",
+   "text": "Agendas du téléphone"
   },
   "android:app:present_and_more": {
    "sha": "b6aa4cc88b76c316",
@@ -21765,6 +21885,11 @@
    "state": "model",
    "text": "heure"
   },
+  "server:calendar_phone.busy": {
+   "sha": "cba4637ab0d1c0f9",
+   "state": "model",
+   "text": "Occupé"
+  },
   "server:calendar_write.forbidden": {
    "sha": "44116d3d35b9567c",
    "state": "model",
@@ -22557,6 +22682,21 @@
    "sha": "22b8f9cfd93842f3",
    "state": "model",
    "text": "seul l'organisateur peut annuler cet événement"
+  },
+  "server:errors.calendar.phone_limit": {
+   "sha": "01716fe0be427a87",
+   "state": "model",
+   "text": "au maximum {{max}} agendas du téléphone"
+  },
+  "server:errors.calendar.phone_needs_allow": {
+   "sha": "b2b2133547f85f95",
+   "state": "model",
+   "text": "une règle impose une validation préalable pour les mises à jour des agendas du téléphone ; autorisez-les pour ce jeton dans Paramètres → Autorisations"
+  },
+  "server:errors.calendar.phone_read_only": {
+   "sha": "11758b47c47bb66e",
+   "state": "model",
+   "text": "« {{name}} » affiche les créneaux occupés de votre téléphone et ne peut pas être modifié ici. Modifiez l'événement sur le téléphone."
   },
   "server:errors.calendar.proposal_no_time": {
    "sha": "92bc5dd9a492cde7",
@@ -27823,6 +27963,56 @@
    "sha": "0369daaed745fe94",
    "state": "model",
    "text": "Semaine {{isoWeek}}"
+  },
+  "web:calendar.phone.busy": {
+   "sha": "cba4637ab0d1c0f9",
+   "state": "model",
+   "text": "Occupé"
+  },
+  "web:calendar.phone.changeOnThePhone": {
+   "sha": "e90409e73b9099e0",
+   "state": "model",
+   "text": "Un créneau occupé issu d'un agenda sur votre téléphone. Il ne change que sur le téléphone."
+  },
+  "web:calendar.phone.eventChangeOnThePhone": {
+   "sha": "20b6a33f179aa905",
+   "state": "model",
+   "text": "Un événement d'un agenda sur votre téléphone. Il ne change que sur le téléphone."
+  },
+  "web:calendar.phone.menuNote": {
+   "sha": "67784481233b64af",
+   "state": "model",
+   "text": "Créneaux occupés issus d'un agenda sur votre téléphone. Ils ne changent que sur le téléphone."
+  },
+  "web:calendar.phone.menuNoteDetails": {
+   "sha": "8bf4988680f677fd",
+   "state": "model",
+   "text": "Événements d'un agenda sur votre téléphone, avec titres et lieux. Ils ne changent que sur le téléphone."
+  },
+  "web:calendar.phone.neverUpdated": {
+   "sha": "f6815fdd0f399304",
+   "state": "model",
+   "text": "Pas encore mis à jour"
+  },
+  "web:calendar.phone.phoneCalendarSettings": {
+   "sha": "b22f2faf64dfc46d",
+   "state": "model",
+   "text": "Paramètres de l'agenda du téléphone"
+  },
+  "web:calendar.phone.stale": {
+   "sha": "c3f00a1ed2428fec",
+   "state": "model",
+   "text": "plus d'un jour"
+  },
+  "web:calendar.phone.updated": {
+   "sha": "f52b2c47944acc25",
+   "state": "model",
+   "text": "Mis à jour {{when}}"
+  },
+  "web:calendar.phone.updatedFrom": {
+   "sha": "fe6de9a63c2d5ed6",
+   "state": "model",
+   "text": "Mis à jour depuis {{device}} {{when}}"
   },
   "web:calendar.prep.lastRecording": {
    "sha": "0dc5b8158611cf91",
@@ -43397,6 +43587,11 @@
    "state": "model",
    "text": "signaler comme spam"
   },
+  "web:rail.assistant.approvalCard.sendBusyTimesFromPhoneCalendars": {
+   "sha": "afee006e664996a5",
+   "state": "model",
+   "text": "envoyer les créneaux occupés des agendas du téléphone"
+  },
   "web:rail.assistant.approvalCard.sendEmail": {
    "sha": "a45b85c3e2a1bfb5",
    "state": "model",
@@ -56356,6 +56551,11 @@
    "state": "model",
    "text": "Envoyer des e-mails"
   },
+  "web:settings.permissionsSection.sendPhoneBusyTimes": {
+   "sha": "2776d6c7d5e96ef9",
+   "state": "model",
+   "text": "Envoyer les créneaux occupés depuis les agendas du téléphone"
+  },
   "web:settings.permissionsSection.taskListS": {
    "sha": "00e7c26243ab9a52",
    "state": "model",
@@ -56856,6 +57056,64 @@
    "sha": "bcd3481bff420cb4",
    "state": "model",
    "text": " (votre serveur)"
+  },
+  "web:settings.phoneCalendars.busyOnly": {
+   "sha": "1483369a44966e0c",
+   "state": "model",
+   "text": "Créneaux occupés uniquement"
+  },
+  "web:settings.phoneCalendars.busyTimes": {
+   "sha": "a4f0820ccfb2ca19",
+   "state": "model",
+   "text": {
+    "one": "{{count}} créneau occupé",
+    "other": "{{count}} créneaux occupés"
+   }
+  },
+  "web:settings.phoneCalendars.desc": {
+   "sha": "2cedce09d6f79bd8",
+   "state": "model",
+   "text": "Agendas de votre téléphone dont les créneaux occupés sont envoyés à Mailr. Par défaut, seuls le début et la fin de chaque créneau occupé sont envoyés. Pour un agenda configuré sur Afficher et envoyer les détails, le titre et le lieu de chaque événement sont également envoyés. Les invités, les descriptions et les notes ne sont jamais envoyés. Chaque agenda se configure dans l'application Android, sous Paramètres → Agenda et tâches → Agendas du téléphone."
+  },
+  "web:settings.phoneCalendars.none": {
+   "sha": "b0d9c9950dcf738c",
+   "state": "model",
+   "text": "Aucun agenda du téléphone n'envoie de créneaux occupés."
+  },
+  "web:settings.phoneCalendars.notRemoved": {
+   "sha": "07a54f77eb24f51d",
+   "state": "model",
+   "text": "Impossible de supprimer l'agenda du téléphone"
+  },
+  "web:settings.phoneCalendars.removeBody": {
+   "sha": "d706d70988e3cfc1",
+   "state": "model",
+   "text": "Ses créneaux occupés sont supprimés de Mailr. Si le téléphone continue de les envoyer, ils réapparaîtront lors de la prochaine mise à jour. Pour l'éviter, définissez l'agenda sur Désactivé ou Affiché sur ce téléphone dans l'application Android."
+  },
+  "web:settings.phoneCalendars.removeName": {
+   "sha": "f87ea03cf025802a",
+   "state": "model",
+   "text": "Supprimer {{name}}"
+  },
+  "web:settings.phoneCalendars.removeTitle": {
+   "sha": "cd44c92b9e3b510d",
+   "state": "model",
+   "text": "Supprimer « {{name}} » ?"
+  },
+  "web:settings.phoneCalendars.removed": {
+   "sha": "eaf266ff0d59c67d",
+   "state": "model",
+   "text": "« {{name}} » supprimé"
+  },
+  "web:settings.phoneCalendars.title": {
+   "sha": "87538b0705e7b07c",
+   "state": "model",
+   "text": "Agendas du téléphone"
+  },
+  "web:settings.phoneCalendars.withDetails": {
+   "sha": "9fe7c2437007680c",
+   "state": "model",
+   "text": "Créneaux occupés avec titres et lieux"
   },
   "web:settings.pictureSection.asksGravatarAndLibravatarAbout": {
    "sha": "a0a6da865189aaa8",

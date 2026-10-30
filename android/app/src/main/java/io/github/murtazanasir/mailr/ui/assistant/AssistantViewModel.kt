@@ -220,6 +220,17 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
     /** "Chat renamed." with Undo, or why a rename failed, for the screen's snackbar. */
     val renames: kotlinx.coroutines.flow.Flow<ChatsMessage> = _renames.receiveAsFlow()
 
+    /**
+     * The newest title request (rename, its Undo, `/retitle`). Their answers can come back out of order
+     * (each on its own connection); only the newest one's answer sets the title, so an older answer that
+     * arrives late does not put back the title the later request replaced.
+     */
+    private var titleAsk = 0
+
+    private fun titleAnswer(ask: Int, id: String, title: String, renamed: Boolean) {
+        if (ask == titleAsk) titleChanged(id, title, renamed)
+    }
+
     /** A rename made elsewhere (Chats): the top bar follows when it is the open chat. */
     fun titleChanged(id: String, title: String, renamed: Boolean) {
         _state.update { if (it.sessionId == id) it.copy(title = title, titleRenamed = renamed) else it }
@@ -235,15 +246,16 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
         val c = ChatSummary(id, st.title.orEmpty(), renamed = st.titleRenamed)
         val body = renameTitleBody(typed, c) ?: return
         if (body.isNotEmpty()) titleChanged(id, body, true)
+        val ask = ++titleAsk
         viewModelScope.launch {
             try {
                 val r = g.agent.renameSession(id, body)
-                titleChanged(id, r.title, r.renamed)
+                titleAnswer(ask, id, r.title, r.renamed)
                 _renames.trySend(ChatsMessage(AppText.get(R.string.chats_renamed), undoRename = r))
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                titleChanged(id, c.title, c.renamed)
+                titleAnswer(ask, id, c.title, c.renamed)
                 _renames.trySend(ChatsMessage(AppText.get(R.string.chats_rename_failed)))
             }
         }
@@ -252,14 +264,15 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
     /** The snackbar's Undo of a rename: the title it had, or the first question when that was the automatic one. */
     fun undoRename(r: RenameResult) {
         titleChanged(r.id, r.previous.title, r.previous.renamed)
+        val ask = ++titleAsk
         viewModelScope.launch {
             try {
                 val u = g.agent.renameSession(r.id, if (r.previous.renamed) r.previous.title else "")
-                titleChanged(r.id, u.title, u.renamed)
+                titleAnswer(ask, r.id, u.title, u.renamed)
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {
-                titleChanged(r.id, r.title, r.renamed)
+                titleAnswer(ask, r.id, r.title, r.renamed)
                 _renames.trySend(ChatsMessage(AppText.get(R.string.chats_rename_failed)))
             }
         }
@@ -565,10 +578,11 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
 
     /** `/retitle`: a new short title from the first question; the top bar follows. */
     private fun retitle(id: String) {
+        val ask = ++titleAsk
         viewModelScope.launch {
             try {
                 val r = g.agent.retitle(id)
-                titleChanged(id, r.title, r.renamed)
+                titleAnswer(ask, id, r.title, r.renamed)
             } catch (e: kotlinx.coroutines.CancellationException) {
                 throw e
             } catch (e: Exception) {

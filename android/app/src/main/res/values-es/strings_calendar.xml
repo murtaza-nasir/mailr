@@ -134,6 +134,8 @@
     <string name="cal_quick_no_one_called">Nadie llamado “%s”</string>
     <string name="cal_quick_keep_as_text">Mantener como texto</string>
     <string name="cal_alert_close_cd">Cerrar; el recordatorio se mantiene</string>
+    <string name="cal_alert_unlock">Desbloquear</string>
+    <string name="cal_alert_unlock_to_see">Desbloquea tu teléfono para ver este recordatorio</string>
     <string name="cal_alert_snooze_10_min">Posponer 10 min</string>
     <string name="cal_alert_more_choices">Más opciones</string>
     <plurals name="cal_alert_starts_in">

@@ -20,11 +20,22 @@ export function useRenameChat(applied?: (id: string, title: string, renamed: boo
 
   const apply = useCallback(
     (id: string, title: string, renamed: boolean) => {
+      // A list request already under way (a search cleared just before) carries the title from before
+      // the rename; landing after this, it would put that title back. Cancel it first.
+      void qc.cancelQueries({ queryKey: CHATS_KEY })
       // The list and every search the cache holds.
       qc.setQueriesData<ChatSummary[]>({ queryKey: CHATS_KEY }, (list) => withTitle(list, id, title, renamed))
       appliedRef.current?.(id, title, renamed)
     },
     [qc],
+  )
+  /** The server has the title: the lists are loaded again, from after the change. */
+  const settled = useCallback(
+    (id: string, title: string, renamed: boolean) => {
+      apply(id, title, renamed)
+      void qc.invalidateQueries({ queryKey: CHATS_KEY })
+    },
+    [apply, qc],
   )
 
   const send = useCallback(
@@ -42,14 +53,14 @@ export function useRenameChat(applied?: (id: string, title: string, renamed: boo
       if (body.title) apply(chat.id, body.title, true)
       void send(chat.id, body).then(
         (r) => {
-          apply(chat.id, r.title, r.renamed)
+          settled(chat.id, r.title, r.renamed)
           toast({
             message: tr('rail.assistant.chatList.renamed'),
             actionLabel: tr('common.undo'),
             onAction: () => {
               apply(chat.id, r.previous.title, r.previous.renamed)
               void send(chat.id, undoBody(r.previous)).then(
-                (u) => apply(chat.id, u.title, u.renamed),
+                (u) => settled(chat.id, u.title, u.renamed),
                 () => {
                   apply(chat.id, r.title, r.renamed)
                   toast({ message: tr('rail.assistant.chatList.renameFailed'), error: true })
@@ -65,6 +76,6 @@ export function useRenameChat(applied?: (id: string, title: string, renamed: boo
       )
       return true
     },
-    [apply, send],
+    [apply, settled, send],
   )
 }

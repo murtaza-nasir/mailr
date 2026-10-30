@@ -414,7 +414,9 @@ private fun TextBody(vm: NotesViewModel, note: Note, readOnly: Boolean, fg: Colo
         if (!dirty) return@LaunchedEffect
         delay(1_500)
         save(vm, note, title, body)
-        dirty = false
+        // An edit made while the save ran (typing, an undo) is not in it: the editor stays dirty, and
+        // this effect runs again for that text. Clearing it here lost that edit.
+        if (titleV.text == title && bodyV.text == body) dirty = false
     }
     DisposableEffect(note.id) {
         onDispose { if (dirty) vm.run { vm.repo.editNote(note.id, title = title, body = body) } }
@@ -439,7 +441,10 @@ private fun recordEdit(vm: NotesViewModel, hist: NoteHistory, field: String, bef
 
 private suspend fun save(vm: NotesViewModel, note: Note, title: String, body: String) {
     catching {
-        vm.repo.editNote(note.id, title = title.takeIf { it != note.title }, body = body.takeIf { it != note.body })
+        // Compared with the phone's copy now. The composed note can be older (Room's update is still on its
+        // way after the last save), and text that matched the older copy was left out of the save.
+        val cur = vm.repo.noteNow(note.id) ?: note
+        vm.repo.editNote(note.id, title = title.takeIf { it != cur.title }, body = body.takeIf { it != cur.body })
     }
 }
 
@@ -563,7 +568,8 @@ private fun ChecklistBody(vm: NotesViewModel, s: NotesRepository.NoteState, read
         delay(1_500)
         // ACT note.edit @android.notes @android.notesapp (a list's title)
         catching { repo.editNote(note.id, title = title) }
-        titleDirty = false
+        // A title typed while the save ran stays dirty and is saved next (see TextBody).
+        if (titleV.text == title) titleDirty = false
     }
     LazyColumn(state = list, contentPadding = PaddingValues(bottom = 48.dp), modifier = Modifier.fillMaxSize().testTag("checklist")) {
         item(key = "title") {

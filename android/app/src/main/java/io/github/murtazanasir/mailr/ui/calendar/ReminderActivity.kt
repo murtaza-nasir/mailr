@@ -66,7 +66,8 @@ import kotlinx.coroutines.launch
  * - One notification: its quick-action sheet. Nothing changes until the user acts.
  * - The group summary: the triage queue over every reminder showing, one card each;
  *   acting removes the card and moves on; leaving keeps the rest exactly as they were.
- * - Opens over the lock screen; Edit and Email hand over to the app.
+ * - Needs the phone unlocked (a tap on the lock screen asks for it first), so a reminder's details
+ *   and actions are never available on a locked phone; Edit and Email hand over to the app.
  *
  * ACT notification.open @android.notification, ACT notification.open_stack @android.notification
  */

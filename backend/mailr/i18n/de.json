@@ -108,7 +108,10 @@
       "subscription_not_found": "Abonnement nicht gefunden",
       "unknown_calendar": "Unbekannter Kalender",
       "unverified_user_only": "Nur der angemeldete Benutzer kann eine Änderung von einem nicht verifizierten Absender anwenden",
-      "window_two_years": "Der Zeitraum muss positiv und maximal zwei Jahre betragen"
+      "window_two_years": "Der Zeitraum muss positiv und maximal zwei Jahre betragen",
+      "phone_read_only": "„{{name}}“ zeigt Belegungszeiten von deinem Telefon an und kann hier nicht geändert werden. Ändere den Termin auf dem Telefon.",
+      "phone_limit": "höchstens {{max}} Telefonkalender",
+      "phone_needs_allow": "Eine Regel verlangt eine Bestätigung vor Aktualisierungen von Telefonkalendern; erlaube dies für dieses Token unter Einstellungen → Berechtigungen"
     },
     "admin": {
       "user_not_found": "Benutzer nicht gefunden",
@@ -1776,5 +1779,8 @@
     "forbidden": "Dein Kalender-Server hat die Änderung nicht zugelassen",
     "signin": "Anmeldung am Kalender-Server fehlgeschlagen",
     "other": "Ein unerwarteter Fehler ist aufgetreten"
+  },
+  "calendar_phone": {
+    "busy": "Beschäftigt"
   }
 }

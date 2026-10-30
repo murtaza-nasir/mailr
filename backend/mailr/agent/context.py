@@ -299,7 +299,7 @@ async def _calendar(db: AsyncSession, p, texts: list[str], subject: str = "",
         from mailr.calendar import mirror
     except ImportError:
         return None
-    if not await cal.has_calendar(db, p.user_id, p=p):
+    if not await cal.has_any_calendar(db, p.user_id, p=p):  # calendar links and phone calendars count
         return None
     # Days are the user's own: an event at 23:00 on Sunday in Chicago (04:00Z Monday) is Sunday's.
     from mailr.agent import when
@@ -331,8 +331,21 @@ async def _calendar(db: AsyncSession, p, texts: list[str], subject: str = "",
         evs = keep(await mirror.agenda(db, p.user_id, start, end, p=p))
         want = {d.isoformat() for d in set(days) | {today, today + timedelta(days=1)}}
 
+        names: dict[str, str] | None = None
+        if any(e.get("phone_busy") for e in evs):
+            from mailr.calendar.describe import labels
+
+            names = await labels(db, p.user_id, p)
+
         def brief(e):
-            b = {k: e.get(k) for k in ("uid", "occurrence", "summary", "start", "end", "all_day", "location")}
+            # A phone calendar's block (calendar/phonecal.py): the time only, or with details its
+            # title and place, marked read-only.
+            if e.get("phone_busy"):
+                from mailr.agent.calendar_common import busy_block
+
+                b = {k: v for k, v in busy_block(e, names).items() if k != "tz"}
+            else:
+                b = {k: e.get(k) for k in ("uid", "occurrence", "summary", "start", "end", "all_day", "location")}
             b["start"], b["end"] = when.local_iso(b["start"], zone), when.local_iso(b["end"], zone)
             line = when.describe(e.get("start"), e.get("end"), bool(e.get("all_day")), zone, clock)
             if line:
@@ -345,7 +358,7 @@ async def _calendar(db: AsyncSession, p, texts: list[str], subject: str = "",
             day = when.local_day(e.get("start"), zone) or ""
             if day in want:
                 out["busy"].setdefault(day, []).append(brief(e))
-            if keys and keys & _keywords(e.get("summary") or ""):
+            if keys and (e.get("phone_details") or not e.get("phone_busy")) and keys & _keywords(e.get("summary") or ""):
                 out["related_events"].append(brief(e))
             elif day >= today.isoformat() and len(out["upcoming"]) < 8:
                 out["upcoming"].append(brief(e))

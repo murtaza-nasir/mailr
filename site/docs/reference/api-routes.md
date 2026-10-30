@@ -374,6 +374,9 @@ Scope: `read`, `calendar` to change.
 | `PATCH /api/v1/calendar/subscriptions/{cid}` | Rename a calendar link or change how often it is fetched. |
 | `POST /api/v1/calendar/subscriptions/{cid}/refresh` | Fetch a calendar link now. |
 | `DELETE /api/v1/calendar/subscriptions/{cid}` | Remove a calendar link and its events. |
+| `PUT /api/v1/calendar/phone-calendars/{key}` | Replace a phone calendar's busy times inside a window (`{name, color?, device?, details?, window_start, window_end, busy: [{id, start, end, all_day, title?, location?}]}`); `key` is 32 lowercase hex characters, each `id` 24. Times only by default. With `details: true` each entry may also carry `title` and `location` (each at most 300 characters); without it an entry with a title or place is refused (422). Any other field is refused (422). A snapshot with `details` false also removes the titles and places stored for that calendar outside the window. At most 5,000 entries and a 400-day window. Answers `{stored, synced_at}`. Session, or a token with the `calendar` scope. |
+| `GET /api/v1/calendar/phone-calendars` | Your phone calendars: `[{key, name, color, device, synced_at, count, stale, details}]`; `details` is true for a calendar that sends titles and places. |
+| `DELETE /api/v1/calendar/phone-calendars/{key}` | Remove a phone calendar and all its blocks. |
 | `POST /api/v1/calendar/invite-reply` | Answer an invitation in an email (Yes, Maybe, No). |
 | `GET /api/v1/calendar/search` | Search events and tasks with words and operators. |
 | `POST /api/v1/calendar/sync` | Sync your calendars now. |
