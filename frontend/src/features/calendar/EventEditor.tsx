@@ -12,7 +12,7 @@ import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router'
 import { ConfirmDialog } from '../../components/Dialog'
 import { MenuItem, Popover } from '../../components/Popover'
-import { addDaysISO, diffDaysISO, formatDate, formatRange, minutesOfDay, toISODate, type ISODate } from '../../lib/dates'
+import { addDaysISO, diffDaysISO, formatDate, formatRange, isLaterPass, minutesOfDay, toISODate, type ISODate } from '../../lib/dates'
 import { eventPath } from '../../lib/routes'
 import { mailPath } from '../../lib/views'
 import { useCompose, emptyPayload } from '../../stores/compose'
@@ -28,6 +28,7 @@ import { ColourPicker, DateField, GuestField, ReminderChips, RepeatPicker, TimeF
 import { PlaceOptions } from '../people/PlaceOptions'
 import { FindTimePanel } from './FindTime'
 import { formatDuration, gridInstant } from './geometry'
+import { nextHalfHour } from './halfHour'
 import { askSendUpdates, type SendKind } from './Prompts'
 import { videoLink } from './QuickCreate'
 import { useCalUI, type EditorInit } from './store'
@@ -49,6 +50,10 @@ interface Form {
   startMin: number
   endDay: ISODate
   endMin: number
+  /** The start or end is the second pass of a repeated wall time (the autumn change): 01:27 CST,
+   *  not 01:27 CDT. Without it the form would read the end of 01:42 CDT–01:27 CST before its start. */
+  startLater?: boolean
+  endLater?: boolean
   zone: string
   rrule: string | null
   guests: Guest[]
@@ -98,6 +103,7 @@ export function initialForm(init: EditorInit, zone: string, defaults: { calendar
       summary: init.mode === 'duplicate' ? e.summary : e.summary, allDay,
       startDay: allDay ? e.firstDay : toISODate(e.startAt, zone), startMin: allDay ? 9 * 60 : minutesOfDay(e.startAt, zone),
       endDay: allDay ? e.lastDay : toISODate(e.endAt, zone), endMin: allDay ? 10 * 60 : minutesOfDay(e.endAt, zone),
+      startLater: !allDay && isLaterPass(e.startAt, zone), endLater: !allDay && isLaterPass(e.endAt, zone),
       zone, rrule: e.rrule ?? null,
       guests: (e.attendee_list ?? []).map((a) => ({ email: a.email, name: a.name, partstat: init.mode === 'duplicate' ? undefined : a.partstat, optional: a.role === 'OPT-PARTICIPANT' })),
       location: e.location ?? '', url: e.url ?? '', calendar: e.calendar ?? defaults.calendar ?? '', color: e.color ?? null,
@@ -119,6 +125,7 @@ export function initialForm(init: EditorInit, zone: string, defaults: { calendar
     startMin: typeof start === 'string' ? 9 * 60 : minutesOfDay(start, zone),
     endDay: typeof end === 'string' ? (allDay ? addDaysISO(end, -1) : end) : toISODate(end, zone),
     endMin: typeof end === 'string' ? 10 * 60 : minutesOfDay(end, zone),
+    startLater: typeof start !== 'string' && isLaterPass(start, zone), endLater: typeof end !== 'string' && isLaterPass(end, zone),
     zone, rrule: s.rrule ?? null, guests: s.guests ?? [], location: s.location ?? '',
     url: s.video ? 'pending-video' : '', calendar: s.calendar ?? defaults.calendar ?? '', color: null, transparent: false, private: false,
     reminders: s.reminders ?? [], remindersAuto: s.reminders === undefined,
@@ -130,8 +137,8 @@ export function initialForm(init: EditorInit, zone: string, defaults: { calendar
 /** The instants (or dates) a form describes; a time in the spring-forward gap moves forward. */
 export function formTimes(f: Form): { start: Date | ISODate; end: Date | ISODate; gap: string | null } {
   if (f.allDay) return { start: f.startDay, end: addDaysISO(f.endDay < f.startDay ? f.startDay : f.endDay, 1), gap: null }
-  const start = gridInstant(f.startDay, f.startMin, f.zone)
-  const end = gridInstant(f.endDay, f.endMin, f.zone)
+  const start = gridInstant(f.startDay, f.startMin, f.zone, !!f.startLater)
+  const end = gridInstant(f.endDay, f.endMin, f.zone, !!f.endLater)
   const got = minutesOfDay(start, f.zone)
   const gap = got !== f.startMin ? tr('calendar.eventEditor.doesNotExistOnThe', { hm: hm(f.startMin), date: formatDate(f.startDay, 'short'), hm2: hm(got) }) : null
   return { start, end, gap }
@@ -146,7 +153,7 @@ export function EventEditor({ init, mode }: { init: EditorInit; mode: EditorMode
   const defaults = useDefaults().data
   const ev = init.event
   const draftKey = init.mode === 'edit' && ev ? ev.key : 'new'
-  const initialBase = useMemo(() => initialForm(init, prefs.zone, { calendar: defaults?.calendar, duration: prefs.defaultDuration, now: nextSlot(cal.now) }),
+  const initialBase = useMemo(() => initialForm(init, prefs.zone, { calendar: defaults?.calendar, duration: prefs.defaultDuration, now: nextHalfHour(cal.now) }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [init])
   // Live editing (lib/live): the form of the version this editor is based on. A change saved
@@ -183,7 +190,7 @@ export function EventEditor({ init, mode }: { init: EditorInit; mode: EditorMode
     const series = !!ev.recurring
     const merged = { ...ev, ...content, occurrence: ev.occurrence, ...(series ? { start: ev.start, end: ev.end, all_day: ev.all_day } : {}) } as ApiEvent
     const ce = normalizeEvent(merged, { zone: prefs.zone, collections: cal.collectionByUrl }) ?? ev
-    return initialForm({ mode: 'edit', event: ce }, prefs.zone, { calendar: defaults?.calendar, duration: prefs.defaultDuration, now: nextSlot(cal.now) })
+    return initialForm({ mode: 'edit', event: ce }, prefs.zone, { calendar: defaults?.calendar, duration: prefs.defaultDuration, now: nextHalfHour(cal.now) })
   }
   const onRemote = (theirs: { version: number | null; content: Record<string, unknown>; by?: string | null }, quiet = false) => {
     const form = formOf(theirs.content) as Form & Record<string, unknown>
@@ -279,7 +286,7 @@ export function EventEditor({ init, mode }: { init: EditorInit; mode: EditorMode
     const dur = Math.max(0, duration)
     const endAt = gridInstant(day, min, f.zone).getTime() + dur * 60_000
     const end = new Date(endAt)
-    set({ startDay: day, startMin: ((min % 1440) + 1440) % 1440, endDay: toISODate(end, f.zone), endMin: minutesOfDay(end, f.zone) })
+    set({ startDay: day, startMin: ((min % 1440) + 1440) % 1440, startLater: false, endDay: toISODate(end, f.zone), endMin: minutesOfDay(end, f.zone), endLater: isLaterPass(end, f.zone) })
   }
   const setEnd = (day: ISODate, min: number) => {
     let endDay = day
@@ -290,7 +297,7 @@ export function EventEditor({ init, mode }: { init: EditorInit; mode: EditorMode
       endDay = addDaysISO(f.startDay, 1)
       setNotice(tr('calendar.eventEditor.theEndMovedTo', { date: formatDate(endDay, 'day') }))
     }
-    set({ endDay, endMin })
+    set({ endDay, endMin, endLater: false })
   }
 
   const payload = (): EventWrite => payloadOf(f)
@@ -336,7 +343,7 @@ export function EventEditor({ init, mode }: { init: EditorInit; mode: EditorMode
         // merges it with what others saved since then).
         const was = base
         const changes: EventWrite = {}
-        const timesChanged = was.allDay !== f.allDay || was.startDay !== f.startDay || was.endDay !== f.endDay || (!f.allDay && (was.startMin !== f.startMin || was.endMin !== f.endMin)) || was.zone !== f.zone
+        const timesChanged = was.allDay !== f.allDay || was.startDay !== f.startDay || was.endDay !== f.endDay || (!f.allDay && (was.startMin !== f.startMin || was.endMin !== f.endMin || !!was.startLater !== !!f.startLater || !!was.endLater !== !!f.endLater)) || was.zone !== f.zone
         if (timesChanged) Object.assign(changes, timesFor(t.start, t.end, f.allDay))
         if (was.summary !== f.summary) changes.summary = body.summary
         if (was.location !== f.location) changes.location = f.location
@@ -514,7 +521,10 @@ export function EventEditor({ init, mode }: { init: EditorInit; mode: EditorMode
             guests={f.guests}
             exclude={ev?.key}
             onPick={(s) => {
-              set({ allDay: false, startDay: toISODate(s.start, f.zone), startMin: minutesOfDay(s.start, f.zone), endDay: toISODate(s.end, f.zone), endMin: minutesOfDay(s.end, f.zone) })
+              set({
+                allDay: false, startDay: toISODate(s.start, f.zone), startMin: minutesOfDay(s.start, f.zone), startLater: isLaterPass(s.start, f.zone),
+                endDay: toISODate(s.end, f.zone), endMin: minutesOfDay(s.end, f.zone), endLater: isLaterPass(s.end, f.zone),
+              })
               setTab('details')
               setNotice(tr('calendar.eventEditor.timeSet', { range: formatRange(s.start, s.end, false, prefs) }))
             }}
@@ -677,13 +687,6 @@ function Row({ icon, label, children }: { icon: ReactNode; label: string; childr
   )
 }
 
-/** The next round half-hour (a new event with no slot). */
-function nextSlot(now: Date): Date {
-  const t = new Date(now.getTime())
-  t.setSeconds(0, 0)
-  t.setMinutes(t.getMinutes() < 30 ? 30 : 60)
-  return t
-}
 
 /** The form's values as an event, for Duplicate from inside the editor. */
 function formAsEvent(f: Form, ev: CalEvent): Partial<CalEvent> {

@@ -34,7 +34,7 @@ import { EventDetail, type DetailMode } from './EventDetail'
 import { EventEditor, type EditorMode } from './EventEditor'
 import { parseDateText } from './fields'
 import { FindTimeDialog } from './FindTime'
-import { gridInstant, keyboardDrag, moveDays, periodTitle, shiftDate, viewDays, viewSpan, type ViewOptions } from './geometry'
+import { gridInstant, keyboardDrag, moveDays, periodTitle, shiftDate, spanInstants, viewDays, viewSpan, type ViewOptions } from './geometry'
 import { focusSearch } from '../search/SearchBar'
 import { Header } from './Header'
 import { LeftColumn } from './LeftColumn'
@@ -306,8 +306,7 @@ export function CalendarApp() {
         s.set({ kbdDrag: null })
         const target = events.find((x) => x.key === k.key)
         if (target) {
-          const start = gridInstant(days[k.span.day], k.span.start, prefs.zone)
-          const end = gridInstant(days[k.span.day], k.span.end, prefs.zone)
+          const { start, end } = spanInstants(days[k.span.day], k.span, prefs.zone, !k.resize)
           void actions.reschedule(target, start, end, false, k.resize ? tr('calendar.calendarApp.resize') : tr('common.move')) // ACT event.reschedule @web.calendar, ACT event.resize @web.calendar
         }
       } else if (e.key === 'Escape') {

@@ -12,6 +12,7 @@ from sqlalchemy import select, text
 from mailr.connectors.loader import connector_for
 from mailr.connectors.runner import RunnerContext
 from mailr.db import session_scope, sessionmaker
+from mailr.dev import store_accounts
 from mailr.models import Connector, Job
 
 UP_JMAP = "http://localhost:18091"
@@ -33,17 +34,20 @@ def _jmap(calls):
 
 
 def make_upstream_account() -> tuple[str, str]:
-    """A fresh account on the test upstream server. The server keeps every account from earlier runs,
-    so the name has 16 random hex digits (6 collided now and then: primaryKeyViolation), and a
-    collision is retried with a new name."""
+    """A fresh account on the test upstream server. Accounts of other runs can be there at the same
+    time (a crashed run's stay up to six hours), so the name has 16 random hex digits (6 collided now
+    and then: primaryKeyViolation), and a collision is retried with a new name."""
     dom = _jmap([["x:Domain/query", {"filter": {"name": "upstream.test"}}, "q"]])[0][1]["ids"][0]
     pw = "Upstream-pass-123"
     for _ in range(3):
         local = f"alice{uuid.uuid4().hex[:16]}"
         res = _jmap([["x:Account/set", {"create": {"a": {"@type": "User", "name": local, "domainId": dom,
-                                                          "credentials": {"0": {"@type": "Password", "secret": pw}}}}},
+                                                          "credentials": {"0": {"@type": "Password", "secret": pw}},
+                                                          **store_accounts.mark()}}},
                       "c"]])
         if "a" in res[0][1].get("created", {}):
+            # Destroyed at the end of the session (conftest, mailr/dev/store_accounts.py).
+            store_accounts.note_created(UP_JMAP, res[0][1]["created"]["a"]["id"], local)
             return f"{local}@upstream.test", pw
         if (res[0][1].get("notCreated") or {}).get("a", {}).get("type") != "primaryKeyViolation":
             break

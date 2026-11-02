@@ -403,6 +403,22 @@ async def test_stale_after_a_day(client):
     assert c["phone"]["stale"] is True
 
 
+async def test_a_quiet_phone_calendar_does_not_age_the_sync_line(client):
+    """The calendar's "Synced … ago" line covers the synced calendars only: a phone calendar that
+    sent its busy times 8 hours ago does not make it read "Synced 8 h ago"."""
+    key = _key()
+    await _put(client, key, _body([_block(1, _day(2, 15))]))
+    old = datetime.now(UTC) - timedelta(hours=8)
+    async with sessionmaker()() as db:
+        coll = (await db.execute(select(CalCollection).where(
+            CalCollection.href == f"phone:{key}"))).scalar_one()
+        coll.last_sync_at = old
+        await db.commit()
+    got = (await client.get("/api/v1/calendar/sync-status")).json()
+    last = got.get("last_sync_at")
+    assert last is None or datetime.fromisoformat(last) > old + timedelta(hours=1), got
+
+
 # ---------------- Ambrose ----------------
 
 

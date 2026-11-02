@@ -1,6 +1,6 @@
 # Stalwart for mailr
 
-These files were tested against `stalwartlabs/stalwart:v0.16.23` on 2026-09-27. The server booted from an empty volume, provisioned itself and served JMAP, IMAP 143 and IMAP 993.
+These files were tested against `stalwartlabs/stalwart:v0.16.23` on 2026-09-27 and against `v0.16.27` on 2026-11-01. The server booted from an empty volume, provisioned itself and served JMAP, IMAP 143 and IMAP 993. A 0.16.23 volume starts on 0.16.27 unchanged (docs/stalwart-notes.md, section 11).
 
 | File | Purpose |
 |---|---|
@@ -34,4 +34,4 @@ The backend talks to `http://stalwart:8080` as `mailr-svc@<domain>` using HTTP B
 
 - **IMAP TLS certificate.** 993 and STARTTLS on 143 currently use an auto-generated `rcgen self signed cert`. Add an `x:Certificate` object that reads PEM files from a mount, `{"@type":"File","filePath":"/certs/fullchain.pem"}`. Then either set `x:SystemSettings.defaultCertificateId` or run the `ReloadTlsCertificates` action. This step is not yet tested.
 - **Plaintext IMAP.** Port 143 allows plaintext auth (`x:Imap.allowPlainTextAuth=true`). Drop that setting if phones should be forced to 993 or STARTTLS.
-- **Image tag.** Pin the image tag. v0.16.24 fixes `Email/import` with a `#creationId` blobId.
+- **Image tag.** The Dockerfile pins `v0.16.27` by digest. `deploy/tools/check-image-updates.sh` reports newer images; read the release notes before moving.

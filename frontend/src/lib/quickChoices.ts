@@ -32,8 +32,9 @@ function nextDow(d: Date, dow: number): Date {
 
 /** Round up to the next 5 minutes (seconds dropped). */
 export function roundUp5(d: Date): Date {
-  const x = new Date(d)
-  x.setSeconds(0, 0)
+  // Seconds are dropped on the instant: setSeconds rebuilds the local time, and in the repeated
+  // autumn hour that picks the first pass, an hour too early.
+  const x = new Date(Math.floor(d.getTime() / MIN) * MIN)
   const extra = (5 - (x.getMinutes() % 5)) % 5
   return new Date(x.getTime() + extra * MIN)
 }

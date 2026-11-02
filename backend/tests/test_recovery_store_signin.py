@@ -24,11 +24,13 @@ MIGRATION = (Path(__file__).resolve().parents[1] / "migrations" / "versions"
 
 def _imap_login(user: str, secret: str) -> bool:
     import imaplib
+    import os
     import ssl
 
     from dev_services import DEV_STALWART_IMAPS
 
-    host, port = DEV_STALWART_IMAPS.rsplit(":", 1)
+    # The suite's store: the dev Stalwart's 993, or the one MAILR_TEST_STALWART_IMAPS names.
+    host, port = os.environ.get("MAILR_TEST_STALWART_IMAPS", DEV_STALWART_IMAPS).rsplit(":", 1)
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE

@@ -29,6 +29,7 @@ from dev_services import stalwart_dav_skip_reason
 from mailr.calendar import dav
 from mailr.core.jmap import CORE, JMAPClient
 from mailr.core.store_groupware import ensure_groupware_settings
+from mailr.dev import store_accounts
 
 URL = os.environ.get("MAILR_TEST_STALWART_URL", "").rstrip("/")
 ADMIN = os.environ.get("MAILR_TEST_STALWART_ADMIN", "")
@@ -82,8 +83,9 @@ class Stalwart:
         dom = (await self.mgmt("x:Domain/query", {"filter": {"name": self.domain}}))["ids"][0]
         r = await self.mgmt("x:Account/set", {"create": {"a": {
             "@type": "User", "name": name, "domainId": dom, "description": "mailr test_stalwart_dav",
-            "credentials": {"0": {"@type": "Password", "secret": pw}}}}})
+            "credentials": {"0": {"@type": "Password", "secret": pw}}, **store_accounts.mark()}}})
         self.ids.append(r["created"]["a"]["id"])
+        store_accounts.note_created(URL, r["created"]["a"]["id"], name)
         login = f"{name}@{self.domain}"
         self.accounts[short] = (login, pw)
         return login, pw

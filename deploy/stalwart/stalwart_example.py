@@ -1,4 +1,4 @@
-"""Minimal Stalwart v0.16 client for mailr (requests only). Verified against v0.16.23.
+"""Minimal Stalwart v0.16 client for mailr (requests only). Verified against v0.16.23 and v0.16.27.
 
 Auth model: one service account with the Admin role (created by provision.json).
 Admin can address ANY account's mail by passing that account's accountId in

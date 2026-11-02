@@ -71,6 +71,9 @@ os.environ.setdefault("MAILR_OUTBOUND_ALLOW", "localhost,127.0.0.1,::1,ntfy.inva
 os.environ.setdefault("MAILR_TRUSTED_AUTHSERV_IDS", "mx,mx.example,mx.example.com")
 # Test users hash their passwords with the cheapest Argon2 parameters (core/auth.py; needs MAILR_DEV).
 os.environ.setdefault("MAILR_TEST_CHEAP_PASSWORD_HASHES", "true")
+# Store accounts made in this run carry the test mark and are destroyed at the end of the session
+# (mailr/dev/store_accounts.py); the sweep (tools/dev-store-sweep) finds the ones a crash left.
+os.environ.setdefault("MAILR_TEST_STORE_RUN", f"pytest-{os.getpid()}")
 
 
 def _recreate_test_db() -> None:
@@ -84,6 +87,7 @@ def _is_xdist_controller(config) -> bool:
 
 
 _radicale_stop = None
+_store_ledger = ""
 
 
 def _internal_names() -> set[str]:
@@ -147,6 +151,16 @@ def pytest_sessionstart(session):
     from mailr.dev import radicale
 
     _radicale_stop = radicale.track()
+    # The store accounts this process makes are noted in memory; those its child processes make
+    # (a CLI command run in a test) go to this file. Both are destroyed at the end of the session.
+    global _store_ledger
+    import tempfile
+
+    from mailr.dev import store_accounts
+
+    fd, _store_ledger = tempfile.mkstemp(prefix="mailr-store-ledger-", suffix=".jsonl")
+    os.close(fd)
+    os.environ[store_accounts.LEDGER_ENV] = _store_ledger
     _recreate_test_db()
     # User ids restart with the fresh database, so stale exports/uploads must go too.
     shutil.rmtree(os.environ["MAILR_DATA_DIR"], ignore_errors=True)
@@ -162,6 +176,8 @@ def pytest_sessionfinish(session, exitstatus):
                 radicale.delete_users(made)
             except Exception as e:  # noqa: BLE001  never fail a run over cleanup
                 print(f"could not delete {len(made)} dev Radicale users: {e}")
+    if _store_ledger:
+        _release_store_accounts()
     # Worker databases are throwaway copies; the serial database stays for inspection.
     if _WORKER and os.environ.get("MAILR_TEST_KEEP_DB", "") not in ("1", "true"):
         import shutil
@@ -173,6 +189,23 @@ def pytest_sessionfinish(session, exitstatus):
         except Exception as e:  # noqa: BLE001  never fail a run over cleanup
             print(f"could not drop {TEST_DB}: {e}")
         shutil.rmtree(os.environ["MAILR_DATA_DIR"], ignore_errors=True)
+
+
+def _release_store_accounts() -> None:
+    """Destroy the dev store and fake upstream accounts this process (and its children) made. With
+    MAILR_TEST_KEEP_DB=1 they stay, like the databases; the sweep removes them after six hours."""
+    from mailr.dev import store_accounts
+
+    entries = store_accounts.noted() + store_accounts.read_ledger(_store_ledger)
+    if os.environ.get("MAILR_TEST_KEEP_DB", "") not in ("1", "true") and entries:
+        try:
+            store_accounts.release(entries)
+        except Exception as e:  # noqa: BLE001  never fail a run over cleanup; the sweep finds them later
+            print(f"could not destroy {len(entries)} test store accounts: {e}")
+    try:
+        os.unlink(_store_ledger)
+    except OSError:
+        pass
 
 
 SCALE_ENV = "MAILR_TEST_SCALE"

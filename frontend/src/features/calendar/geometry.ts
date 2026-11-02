@@ -3,8 +3,8 @@
 // time input and overlap checks. No React here, so vitest covers all of it (geometry.test.ts).
 
 import {
-  addDaysISO, addMonthsISO, daysFrom, diffDaysISO, formatDate, fromZoned, MONTH_SHORT, monthGrid, parseISODate,
-  startOfMonthISO, startOfWeekISO, weekdayOf, zoneParts, type ISODate, type Weekday,
+  addDaysISO, addMonthsISO, dayRange, daysFrom, diffDaysISO, formatDate, fromZoned, minutesOnDay, MONTH_SHORT, monthGrid,
+  parseISODate, startOfMonthISO, startOfWeekISO, weekdayOf, zoneParts, type ISODate, type Weekday,
 } from '../../lib/dates'
 import type { CalendarView } from '../../lib/routes'
 import { t as tr } from '../../i18n'
@@ -164,12 +164,55 @@ export function keyboardDrag(span: GridSpan, key: 'up' | 'down' | 'left' | 'righ
   return { ...span, start, end: start + dur }
 }
 
-/** The instant for a wall time on a grid day (minutes may pass midnight: 1500 = 01:00 next day). */
-export function gridInstant(day: ISODate, minutes: number, zone: string): Date {
+/** The instant for a wall time on a grid day (minutes may pass midnight: 1500 = 01:00 next day).
+ *  A wall time in the repeated autumn hour gives its first pass, or its second when `later` is set. */
+export function gridInstant(day: ISODate, minutes: number, zone: string, later = false): Date {
   const extra = Math.floor(minutes / 1440)
   const m = minutes - extra * 1440
   const { year, month, day: d } = parseISODate(addDaysISO(day, extra))
-  return fromZoned({ year, month, day: d, hour: Math.floor(m / 60), minute: m % 60 }, zone)
+  return fromZoned({ year, month, day: d, hour: Math.floor(m / 60), minute: m % 60 }, zone, later ? 'later' : 'compatible')
+}
+
+/**
+ * Where a drag or a keyboard move lands, as instants. The start is the clock time of the start line.
+ * A move keeps the span's length in elapsed minutes (end = start + length), so an event moved on a
+ * daylight-saving day keeps its real duration; a resize or a new range ends at the clock time of
+ * the end line. On a normal day both give the same end.
+ */
+export function spanInstants(day: ISODate, span: { start: number; end: number }, zone: string, move: boolean): { start: Date; end: Date } {
+  const start = gridInstant(day, span.start, zone)
+  const end = move ? new Date(start.getTime() + (span.end - span.start) * MIN) : gridInstant(day, span.end, zone)
+  return { start, end }
+}
+
+/** A timed event's part on one day column of the time grid (minutes as minutesOnDay gives them). */
+export interface DaySegment {
+  id: string
+  date: ISODate
+  start: number
+  end: number
+  /** It began on an earlier day (drawn with "↳"). */
+  continued: boolean
+  /** It goes on after this day. */
+  continues: boolean
+}
+
+/**
+ * Timed events cut into the days shown, from their instants. An event that ends exactly at midnight
+ * stays on its first day. The minutes come from minutesOnDay, so an event in the repeated hour of
+ * the autumn change keeps its real length.
+ */
+export function daySegments(events: Array<{ id: string; start: Date; end: Date }>, days: ISODate[], zone: string): DaySegment[] {
+  const out: DaySegment[] = []
+  for (const date of days) {
+    const range = dayRange(date, zone)
+    for (const ev of events) {
+      const m = minutesOnDay(ev.start, ev.end, date, zone, range)
+      if (!m) continue
+      out.push({ id: ev.id, date, start: m.start, end: m.end, continued: ev.start < range.start, continues: ev.end > range.end })
+    }
+  }
+  return out
 }
 
 /** A timed event moved by whole days in a zone: the same wall-clock start on the new day and

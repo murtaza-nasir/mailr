@@ -16,6 +16,8 @@ import { displayColour } from '../calendar/colour'
 import { useCollections } from '../calendar/data'
 import { useVisibility } from '../calendar/LeftColumn'
 import { EventDetail } from '../calendar/EventDetail'
+import { nextMeeting } from '../calendar/eventInfo'
+import { gridInstant } from '../calendar/geometry'
 import { phoneFreshness } from '../calendar/phone'
 import { useCalPrefs } from '../calendar/prefs'
 import { EventRow } from '../calendar/ScheduleView'
@@ -60,7 +62,7 @@ function PanelBody({ day, setDay }: { day: ISODate; setDay: (d: ISODate) => void
   const allDay = events.filter((e) => e.allDay || e.firstDay !== e.lastDay)
   const timed = events.filter((e) => !allDay.includes(e))
   // ACT event.last_recording @web.panel: today's next meeting (or the one going on) shows "Last time" from Speakr.
-  const next = isToday ? timed.find((e) => e.endAt.getTime() > cal.now.getTime() && e.status !== 'CANCELLED') : undefined
+  const next = isToday ? nextMeeting(timed, cal.now) : undefined
   const writable = useMemo(() => cal.collections.filter((c) => c.events !== false && !c.read_only && !c.error), [cal.collections])
   const qctx: QuickCtx = useMemo(() => ({
     prefs: cal.prefs, now: cal.now, defaultDuration: cal.prefs.defaultDuration, morningHour: cal.prefs.morningHour, videoTemplate: cal.prefs.videoTemplate,
@@ -73,7 +75,8 @@ function PanelBody({ day, setDay }: { day: ISODate; setDay: (d: ISODate) => void
     const typedDay = r.tokens.some((t) => t.kind === 'date' || t.kind === 'span' || t.kind === 'repeat')
     if (!typedDay && !isToday && !body.all_day) {
       const timeTyped = r.start ? Number(r.start.slice(11, 13)) * 60 + Number(r.start.slice(14, 16)) : 9 * 60
-      const s = new Date(startOfDay(day, cal.prefs.zone).getTime() + timeTyped * 60_000)
+      // The typed clock time on that day (midnight + minutes is an hour off on a daylight-saving day).
+      const s = gridInstant(day, timeTyped, cal.prefs.zone)
       const len = new Date(body.end!).getTime() - new Date(body.start!).getTime()
       body.start = s.toISOString()
       body.end = new Date(s.getTime() + len).toISOString()

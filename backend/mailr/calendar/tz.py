@@ -222,4 +222,10 @@ def to_zone(v: datetime | date, tz: tzinfo | None) -> datetime | date:
         v = v.replace(tzinfo=tz or UTC)
     if tz is None or zone_name(tz) == "UTC":
         return v.astimezone(UTC)
-    return v.astimezone(tz)
+    local = v.astimezone(tz)
+    if local.fold and local.replace(fold=0).utcoffset() != local.utcoffset():
+        # The second pass of a repeated hour (the autumn change, 01:27 CST after 01:27 CDT). A wall
+        # time with a TZID names the first pass (RFC 5545 3.3.5), so this value is written in UTC
+        # to keep its instant: 07:27Z read back as 06:27Z put the end of an event before its start.
+        return local.astimezone(UTC)
+    return local

@@ -172,3 +172,24 @@ describe('duration-cases.yaml (durations)', () => {
     })
   }
 })
+
+describe('the repeated autumn hour (1 Nov 2026, America/Chicago)', () => {
+  // 07:12:34Z is 01:12:34 CST, the second 1 AM. Dropping the seconds through the local clock
+  // picks the first pass (06:12Z), an hour too early; the presets must count from the instant.
+  const now = new Date('2026-11-01T07:12:34Z')
+
+  it('the snooze presets count from now, not an hour earlier', () => {
+    const s: SheetSpec = { verb: 'snooze', kind: 'event', now, anchor: new Date('2026-11-01T08:00:00Z') }
+    const ten = sheetGroups(s).flatMap((g) => g.tiles).find((x) => x.id === '10m')
+    expect(ten?.at.toISOString()).toBe('2026-11-01T07:22:00.000Z')
+  })
+
+  it('a custom amount counts from now', () => {
+    const s: SheetSpec = { verb: 'snooze', kind: 'task', now, anchor: null }
+    expect(customResult(s, 'now', 30, 'minutes').at.toISOString()).toBe('2026-11-01T07:42:00.000Z')
+  })
+
+  it('"in 10 min" reads 10 minutes', () => {
+    expect(relative(new Date('2026-11-01T07:22:00Z'), now)).toBe('in 10 min')
+  })
+})

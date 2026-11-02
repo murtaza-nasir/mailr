@@ -3,7 +3,7 @@
 # stays on the internal network and is reached by the mailr backend as http://stalwart:8080.
 services:
   stalwart:
-    image: stalwartlabs/stalwart:v0.16.23   # pin; :latest moves weekly
+    image: stalwartlabs/stalwart:v0.16.27   # pin; :latest moves weekly
     restart: unless-stopped
     entrypoint: ["/bin/sh", "/opt/mailr/entrypoint.sh"]
     environment:

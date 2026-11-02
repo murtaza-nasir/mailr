@@ -162,12 +162,12 @@ async def test_the_export_file_leaves_the_export_the_manifest_and_the_backup_tar
     manifest = backup.exported_manifest(user.id)
     blob_gone, blob_kept = (await _row(gone)).blob_id, (await _row(kept)).blob_id
     assert set(manifest) == {blob_gone, blob_kept}
-    assert _files(base) == _files(tgt) == set(manifest.values())
+    assert _files(tgt) == set(manifest.values()) and _files(base) == set()  # the files are on the target only
 
     await _delete_forever(client, conv)
     await run_jobs(JOB, user.id)
     assert set(backup.exported_manifest(user.id)) == {blob_kept}
-    assert _files(base) == _files(tgt) == {manifest[blob_kept]}
+    assert _files(tgt) == {manifest[blob_kept]} and _files(base) == set()
     assert blob_gone not in (tgt / ".exported").read_text()
     assert not (base / backup.PURGED).exists()
 
@@ -175,7 +175,7 @@ async def test_the_export_file_leaves_the_export_the_manifest_and_the_backup_tar
     await purge.purge_job({"user_id": user.id, "message_ids": [gone], "export": True}, None)
     await _export(user.id)
     assert set(backup.exported_manifest(user.id)) == {blob_kept}
-    assert _files(base) == {manifest[blob_kept]}
+    assert _files(tgt) == {manifest[blob_kept]}
 
 
 async def test_an_unmounted_target_gets_the_removal_when_it_is_back(client, user, raw, export_dirs):
@@ -309,12 +309,12 @@ async def test_a_small_vanish_from_the_store_is_scrubbed_and_keeps_its_export_fi
     assert r["held"] is False and r["rows"] == 1 and r["files"] == 0 and r["files_kept"] == 1
     assert (await _row(mid)).body_text == ""
     assert backup.exported_manifest(user.id)[m.blob_id] == rel
-    assert (backup.export_root(user.id) / rel).is_file() and (backup.target_root(user.id) / rel).is_file()
+    assert (backup.target_root(user.id) / rel).is_file()
     assert not (backup.export_root(user.id) / backup.PURGED).exists()
     # The next export does not count it as missing, and nothing removes it later.
     await _export(user.id)
     await purge.sweep_user(user.id)
-    assert (backup.export_root(user.id) / rel).is_file() and (backup.target_root(user.id) / rel).is_file()
+    assert (backup.target_root(user.id) / rel).is_file()
 
 
 async def test_an_export_run_that_read_a_message_before_delete_forever_leaves_its_file_out(

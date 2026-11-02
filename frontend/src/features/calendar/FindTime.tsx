@@ -11,7 +11,7 @@ import { useQuery } from '@tanstack/react-query'
 import { api } from '../../api/client'
 import { Dialog } from '../../components/Dialog'
 import { Spinner } from '../../components/bits'
-import { addDaysISO, formatDate, formatHour, formatTime, minutesOfDay, startOfDay, utcIsoformat, type ISODate } from '../../lib/dates'
+import { addDaysISO, dayRange, formatDate, formatHour, formatTime, minutesOnDay, startOfDay, toISODate, utcIsoformat, type ISODate } from '../../lib/dates'
 import { useCal } from './context'
 import { isMissingRoute, useNormalized, useRange } from './data'
 import { findSlots, rangeDays, type Slot } from './findtime'
@@ -167,14 +167,16 @@ function DayTrack({ day, span, work, busy, slots, onPick, others = [] }: {
   const zone = cal.prefs.zone
   const pct = (m: number) => `${((Math.min(span.end, Math.max(span.start, m)) - span.start) / (span.end - span.start)) * 100}%`
   const w = (a: number, b: number) => `${((Math.min(span.end, b) - Math.max(span.start, a)) / (span.end - span.start)) * 100}%`
+  const range = dayRange(day, zone)
   return (
     <div className="cal-ft-row">
       <span className="cal-ft-label">{formatDate(day, 'day')}</span>
       <div className="cal-ft-track">
         <div className="cal-ft-work" style={{ insetInlineStart: pct(work.start), width: w(work.start, work.end) }} />
         {busy.map((e) => {
-          const a = e.firstDay < day ? 0 : minutesOfDay(e.startAt, zone)
-          const b = e.lastDay > day ? 1440 : minutesOfDay(e.endAt, zone) || 1440
+          const m = minutesOnDay(e.startAt, e.endAt, day, zone, range)
+          if (!m) return null
+          const { start: a, end: b } = m
           if (b <= span.start || a >= span.end) return null
           return <div key={e.key} className={`cal-ft-busy${(e.my_status ?? e.status ?? '').toUpperCase() === 'TENTATIVE' ? ' hatched' : ''}`} style={{ insetInlineStart: pct(a), width: w(a, b) }} title={`${e.summary} ${formatTime(e.startAt, cal.prefs)}`} />
         })}
@@ -182,17 +184,14 @@ function DayTrack({ day, span, work, busy, slots, onPick, others = [] }: {
         {others.flatMap((p) => [...p.busy, ...p.tentative].map((b) => {
           const s0 = new Date(b.start)
           const e0 = new Date(b.end)
-          const d0 = startOfDay(day, zone)
-          const d1 = startOfDay(addDaysISO(day, 1), zone)
-          if (e0 <= d0 || s0 >= d1) return null
-          const a = s0 <= d0 ? 0 : minutesOfDay(s0, zone)
-          const z = e0 >= d1 ? 1440 : minutesOfDay(e0, zone)
+          const m = minutesOnDay(s0, e0, day, zone, range)
+          if (!m) return null
+          const { start: a, end: z } = m
           if (z <= span.start || a >= span.end) return null
           return <div key={`${p.id}-${b.start}`} className="cal-ft-other" style={{ insetInlineStart: pct(a), width: w(a, z) }} title={t('calendar.findTime.isBusy', { itemName: p.name, time: formatTime(s0, cal.prefs), time2: formatTime(e0, cal.prefs) })} />
         }))}
-        {slots.filter((s) => formatDate(s.start, 'day', zone) === formatDate(day, 'day')).map((s) => {
-          const a = minutesOfDay(s.start, zone)
-          const b = a + Math.round((s.end.getTime() - s.start.getTime()) / 60_000)
+        {slots.filter((s) => toISODate(s.start, zone) === day).map((s) => {
+          const { start: a, end: b } = minutesOnDay(s.start, s.end, day, zone, range) ?? { start: 0, end: 0 }
           return <button key={s.start.toISOString()} type="button" className="cal-ft-free" style={{ insetInlineStart: pct(a), width: w(a, b) }} onClick={() => onPick(s)} aria-label={t('calendar.findTime.pick', { time: formatTime(s.start, cal.prefs) })} />
         })}
       </div>

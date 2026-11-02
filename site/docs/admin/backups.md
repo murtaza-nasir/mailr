@@ -6,7 +6,7 @@ Back up three things. With all three, everything can be restored.
 |---|---|---|
 | **Postgres** | the `postgres-data` volume | the nightly [database dump](#database-dumps), written by the worker |
 | **The mail store** | the `stalwart-data` volume | a nightly snapshot of the volume (below); it holds mail, the Mailr calendars and their contacts |
-| **Mailr's data** | the `mailr-data` volume (`/data`) | copy or snapshot it: uploads, caches and the exports |
+| **Mailr's data** | the `mailr-data` volume (`/data`) | copy or snapshot it: uploads, caches, the exports and the mail export's state files |
 
 The daily exports of mail, of calendars and contacts, and of notes and tables (below) are a second, plain-file copy. They are no substitute for the three backups.
 
@@ -78,7 +78,7 @@ The dump adds about a minute to the first start of a new version on a database o
 
 ## The daily export
 
-A Maildir copy of every user's mail is written once a day, under `/data/exports/user-<id>/`. Only new messages are added in each run. The export is a plain copy in a standard format readable by any mail tool, independent of Mailr and of the mail server. Each file starts with an `X-Mailr-Labels:` header listing its labels and an `X-Keywords:` header readable by Thunderbird and Dovecot, followed by the original message.
+A Maildir copy of every user's mail is written once a day. Only new messages are added in each run. The export is a plain copy in a standard format readable by any mail tool, independent of Mailr and of the mail server. Each file starts with an `X-Mailr-Labels:` header listing its labels and an `X-Keywords:` header readable by Thunderbird and Dovecot, followed by the original message.
 
 The exports run every 24 hours, counted from when the worker started. A new user's first export, and the first export after their first account, note, table or calendar, is queued within about 5 minutes, so a new server does not wait a day for it; a first export that fails is tried again at most once an hour. To write the exports at once:
 
@@ -86,6 +86,21 @@ The exports run every 24 hours, counted from when the worker started. A new user
 docker compose exec app mailr export                                  # everyone
 docker compose exec app mailr export --user alex@example.com --mail   # one user, mail only
 ```
+
+### Where the mail export is
+
+| Backup target | Message files | State files |
+|---|---|---|
+| not set | `/data/exports/user-<id>/` in the data volume | the same folder |
+| set (`MAILR_BACKUP_TARGET`) | `user-<id>/` on the target only | `/data/exports/user-<id>/` in the data volume |
+
+With a backup target, no message file is kept in the data volume: a second full copy on the server's own disk would only repeat the mail store. The state files are small and stay in the data volume, so that they survive a target that is offline:
+
+- `.exported`: the list of exported messages and their files. A message counts as exported only when its line is in this list. A copy of the list is kept on the target too.
+- `.cursor`: the position of the last run, so each run reads only newer messages.
+- `.last_run`: the time of the last run that caught up (also written to the target).
+- `.purged`: files removed with **Delete forever** while the target was offline, still to be removed there.
+- `.forgotten`, `.lock`, `.verified` and `.on_target`: short records used by the export runs and the restore check.
 
 The time of each run that catches up is recorded in `.last_run` in the export folder (and on the backup target). It is read in the `export` and `backup_target` checks of [Monitoring](monitoring.md).
 
@@ -133,7 +148,7 @@ While it is off:
 - For an account where Mailr keeps the mail, nothing is deleted at the provider, and deletion at the provider cannot be turned on, unless `MAILR_STORE_BACKUP_CHECK=false`. The account shows "Deletion at the provider paused: the mail export is off" under **Settings → Mail → Mail accounts** and in **Settings → Admin → Diagnostics**. Deletion resumes when the export is on again.
 - The `export` check of [Monitoring](monitoring.md) reports `off` and passes.
 
-The mail exported before stays in `/data/exports/user-<id>/` and on the backup target. While the export is off, it is not updated and does not count for deletion at the provider. Remove the folders by hand when they are no longer needed. When the export is turned on again, the next run adds every message that arrived in the meantime.
+The mail exported before stays where it is: in `/data/exports/user-<id>/`, or on the backup target. While the export is off, it is not updated and does not count for deletion at the provider. Remove the folders by hand when they are no longer needed. When the export is turned on again, the next run adds every message that arrived in the meantime.
 
 ## Notes, lists and tables
 
@@ -258,10 +273,34 @@ Then create the marker file `.mailr-backup-target` at the top of the share itsel
 
 Run `docker compose up -d`. With a target set:
 
-- every new export file is also copied to the target;
-- a message counts as backed up only when its copy exists on the target;
-- files exported before you set the target are copied on the next export run;
+- every new export file is written to the target only, and fsynced there before it is listed in `.exported`;
+- a message counts as backed up only when it is listed in `.exported` and its file exists on the mounted target;
 - the sample for the restore check, which is run when deletion at the provider is turned on, is read from the target.
+
+### When the target is offline
+
+While the share is not mounted (no marker file) or cannot be written, no message file is written anywhere: no local copy is made in its place. The export is paused, no new message counts as backed up, and nothing more is deleted at the provider. The `backup_target` check of [Monitoring](monitoring.md) fails and names the problem, and a warning is logged at most once an hour. The mail is still in the mail store and at the provider. When the share is back, the next export run continues from `.cursor`, and every message that arrived in the meantime is written to the target.
+
+A message deleted with **Delete forever** while the target is offline leaves `.exported` at once. Its file on the target is listed in `.purged` and removed at the next export run, or the next daily cleanup, after the share is back.
+
+### Files from before the target was set
+
+Files written to `/data/exports/user-<id>/` before a target was set, or by a release that kept a copy in the data volume, are moved to the target by the export runs:
+
+1. Each file listed in `.exported` that the target lacks, or holds with another size, is copied to the target and fsynced.
+2. A local file is removed only when the target's copy exists and has the same size. A file whose copy still differs stays in the data volume, and the move is tried again an hour later.
+3. A line of `.exported` whose file is neither in the data volume nor on the target is removed from the list, and the message is exported again from the mail store.
+4. Files that are in no line of `.exported` stay in the data volume.
+
+The move can stop at any point, for example when the share goes away, and is resumed at the next run. The number of files found on the target, copied and removed is logged at each run. To see what the move would do, or to run it at once:
+
+```sh
+docker compose exec app mailr export-move --dry-run   # count only; change nothing
+docker compose exec app mailr export-move             # move now
+docker compose exec app mailr export-move alex@example.com
+```
+
+When `MAILR_BACKUP_TARGET` is later removed from `.env`, the files stay on the share. At the next export run the old list is set aside (`.exported.on-target`), and every message is written to `/data/exports/user-<id>/` again. Until that run has caught up, no message counts as backed up.
 
 !!! tip
     Give the share its own snapshots, so a mistake on the Mailr host cannot remove older copies.
@@ -283,6 +322,10 @@ The newest dump that this server wrote is checked against its checksum, loaded i
 The checksum of every dump is also kept in the database when the dump is written, because anyone who can write to the backup target could put a dump there with a manifest that matches it. The drill loads only dumps whose checksum is on that record. A newer file without a record is listed as `NOT CHECKED` and is not loaded. A dump that differs from its recorded checksum is refused, by the drill and by a restore by hand. The drill loads the dump as a role without superuser rights (`mailr_restore`, created on first use), so the dump's contents cannot run programs on the database server. The scratch database is dropped again. The command ends with "every table has the row count of the dump", or lists each table that differs and exits with 1. A database of 2 GB takes a few minutes and needs as much free space in the Postgres volume while it runs. Run the drill once a month, and after any change to the backup setup.
 
 ## Restore
+
+The mail export is in `/data/exports/user-<id>/` without a backup target, and in `user-<id>/` on the target with one (see [Where the mail export is](#where-the-mail-export-is)). On the target, each user's folder holds the Maildir folders and a copy of `.exported`, so it can be read without the server: it opens in any mail program that reads Maildir, and each file is the original message after two header lines.
+
+To bring mail from the export back into Mailr, use `mailr store import-export` (step 7 of [The mail store on the same server](#the-mail-store-on-the-same-server)). With a target set, the files are read from the target, which must be mounted and hold its marker file. When the data volume is lost but the target is not, the export on the target can still be imported: mount it, set `MAILR_BACKUP_TARGET` as before, and run the command.
 
 Pick the procedure for what you restore. Each one is written for the bundled compose file, run in the deploy folder of your clone.
 

@@ -14,7 +14,7 @@ Mailr does not encrypt mail at rest. Only the secrets listed above (account pass
 |---|---|---|
 | The mail server's store | the full original messages with their attachments, read by Mailr and by IMAP apps | Stalwart's RocksDB store (`deploy/stalwart/config.json`) in the `stalwart-data` volume |
 | Postgres | headers, a plain-text copy of each body without quoted history (at most 60,000 characters), previews, the text of attached emails, attachment names and sizes, the search index and embeddings | the `postgres-data` volume |
-| The [daily mail export](backups.md#the-daily-export) | a full copy of every message, unless `MAILR_MAIL_EXPORT=false` | `/data/exports` in the `mailr-data` volume |
+| The [daily mail export](backups.md#the-daily-export) | a full copy of every message, unless `MAILR_MAIL_EXPORT=false` | `/data/exports` in the `mailr-data` volume, or only on the backup target when one is set |
 | The nightly [database dumps](backups.md#database-dumps) | everything Postgres holds | `/data/backups/postgres`, or `postgres/` on the backup target |
 | The [backup target](backups.md#the-backup-target), when one is set | the copies of the exports and the dumps | the share mounted at `MAILR_BACKUP_DIR` |
 

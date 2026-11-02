@@ -7,13 +7,13 @@
 import { Lock, Repeat, Users, Video, EyeOff, CircleHelp } from 'lucide-react'
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as RPointerEvent } from 'react'
 import { Popover } from '../../components/Popover'
-import { addDaysISO, formatDate, formatHour, formatTime, minutesOfDay, parseISO, toISODate, weekdayOf, zoneAbbr, zoneParts, type ISODate } from '../../lib/dates'
-import { layoutDay, splitDays, type DayLayout } from '../../lib/eventLayout'
+import { addDaysISO, formatDate, formatHour, formatTime, minutesOfDay, minutesOnDay, parseISO, toISODate, weekdayOf, zoneAbbr, zoneParts, type ISODate } from '../../lib/dates'
+import { layoutDay, type DayLayout } from '../../lib/eventLayout'
 import { displayColour, textOn, tint } from './colour'
 import { useCal } from './context'
 import { conflictLine } from './actions'
 import {
-  clamp, dragResult, gridInstant, isoWeek, layoutBars, rubberBand, snap, snapDown, wallString, type DragKind, type GridSpan,
+  clamp, daySegments, dragResult, gridInstant, isoWeek, layoutBars, rubberBand, snap, snapDown, spanInstants, type DragKind, type GridSpan,
 } from './geometry'
 import {
   conferenceLink, hasGuests, isCancelled, isPrivate, joinable, layoutPartstat, needsReply, timeSpan, titleOf,
@@ -88,7 +88,8 @@ export function TimeGrid({ days }: { days: ISODate[] }) {
   const stripEvents = useMemo(() => events.filter(inStrip), [events])
 
   const layouts = useMemo(() => {
-    const segs = splitDays(timed.map((e) => ({ id: e.key, start: wallString(e.startAt, zone), end: wallString(e.endAt, zone) })))
+    // Cut by instants: a wall-clock cut gave an event in the repeated autumn hour no height (1 Nov 2026).
+    const segs = daySegments(timed.map((e) => ({ id: e.key, start: e.startAt, end: e.endAt })), days, zone)
     const out = new Map<ISODate, DayLayout & { segs: Map<string, { continued: boolean; continues: boolean }> }>()
     for (const d of days) {
       const mine = segs.filter((s) => s.date === d)
@@ -154,7 +155,7 @@ export function TimeGrid({ days }: { days: ISODate[] }) {
 
   const spanOf = useCallback((e: CalEvent, day: ISODate): GridSpan => {
     const i = Math.max(0, days.indexOf(day))
-    const start = e.firstDay < day ? 0 : minutesOfDay(e.startAt, zone)
+    const start = minutesOnDay(e.startAt, e.endAt, day, zone)?.start ?? 0
     const dur = Math.max(step, Math.round((e.endAt.getTime() - e.startAt.getTime()) / 60_000))
     return { day: i, start, end: start + dur }
   }, [days, zone, step])
@@ -293,8 +294,7 @@ export function TimeGrid({ days }: { days: ISODate[] }) {
       return
     }
     if (cur.day === d.orig.day && cur.start === d.orig.start && cur.end === d.orig.end) return // dragged back: nothing
-    const start = gridInstant(days[cur.day], cur.start, zone)
-    const end = gridInstant(days[cur.day], cur.end, zone)
+    const { start, end } = spanInstants(days[cur.day], cur, zone, d.kind === 'move')
     if (d.kind === 'move' && d.dup) await actions.duplicateAt(e, start, end, false) // ACT event.duplicate @web.calendar
     else if (d.kind === 'move') await actions.reschedule(e, start, end, false) // ACT event.reschedule @web.calendar
     else await actions.reschedule(e, start, end, false, tr('calendar.timeGrid.resize')) // ACT event.resize @web.calendar
@@ -548,8 +548,7 @@ function secondaryHour(day: ISODate, h: number, zone: string, other: string, hou
 function Ghost({ d, hourH, days }: { d: Drag; hourH: number; days: ISODate[] }) {
   const cal = useCal()
   const { cur } = d
-  const start = gridInstant(days[cur.day], cur.start, cal.prefs.zone)
-  const end = gridInstant(days[cur.day], Math.min(cur.end, 1440 * 2), cal.prefs.zone)
+  const { start, end } = spanInstants(days[cur.day], { start: cur.start, end: Math.min(cur.end, 1440 * 2) }, cal.prefs.zone, d.kind === 'move')
   const label = timeSpan(start, end, cal.prefs)
   const colour = d.ev ? displayColour(d.ev.colour, cal.dark) : undefined
   const clash = d.kind === 'create' ? null : conflictLine(cal.busy, start, end, d.ev?.key, cal.prefs)
@@ -571,8 +570,7 @@ function KbdGhost({ hourH, days }: { hourH: number; days: ISODate[] }) {
   const k = useCalUI((s) => s.kbdDrag)!
   const e = cal.events.find((x) => x.key === k.key)
   if (!e) return null
-  const start = gridInstant(days[k.span.day], k.span.start, cal.prefs.zone)
-  const end = gridInstant(days[k.span.day], k.span.end, cal.prefs.zone)
+  const { start, end } = spanInstants(days[k.span.day], k.span, cal.prefs.zone, !k.resize)
   const colour = displayColour(e.colour, cal.dark)
   return (
     <div className="cal-ghost kbd" style={{ top: (k.span.start / 60) * hourH, height: Math.max(12, ((Math.min(k.span.end, 1440) - k.span.start) / 60) * hourH - 1), background: colour, color: textOn(colour) }} role="status">

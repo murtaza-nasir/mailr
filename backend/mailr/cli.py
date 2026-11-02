@@ -581,8 +581,9 @@ async def _export(a: argparse.Namespace) -> int:
     for uid, email in await _pick_users(a.user):
         if "mail" in kinds:
             n, done = await backup.export_until_caught_up(uid)
-            print(f"{email}: mail {n} messages written" + ("" if done else ", NOT caught up (see the log)"),
-                  flush=True)
+            problem = None if done or backup.target_root(uid) is None else backup.target_problem()
+            print(f"{email}: mail {n} messages written" + ("" if done else ", NOT caught up (see the log)")
+                  + (f"; the export waits for the backup target: {problem}" if problem else ""), flush=True)
             failed += not done
         if "notes" in kinds:
             r = await notes_backup.export_user(uid)
@@ -597,7 +598,38 @@ async def _export(a: argparse.Namespace) -> int:
         print("group calendars: " + (f"snapshot {r['snapshot']}" if r.get("snapshot") else "no change")
               + (f", copied {r['copied']}" if r.get("copied") else ""), flush=True)
     if kinds:
-        print(f"written to {backup.export_root(0).parent} (mail in user-<id>, notes, calendars)")
+        print(f"written to {backup.export_root(0).parent} (mail in user-<id>, notes, calendars)"
+              + (f"; the mail files are on the backup target {get_settings().backup_target}"
+                 if get_settings().backup_target and "mail" in kinds else ""))
+    return 1 if failed else 0
+
+
+async def _export_move(who: str | None, dry_run: bool) -> int:
+    """`mailr export-move`: move the mail export's local files to the backup target, as each export
+    run does (core/backup.py move_to_target), and print the counts. Exit 1 when no target is set or
+    usable, or when a file could not be moved."""
+    from mailr.config import get_settings
+    from mailr.core import backup
+
+    if not get_settings().backup_target:
+        print("no backup target is set (MAILR_BACKUP_TARGET): the mail export stays in the data volume",
+              file=sys.stderr)
+        return 1
+    failed = 0
+    for uid, email in await _pick_users(who):
+        r = await asyncio.to_thread(backup.move_to_target, uid, dry_run=dry_run, force=True)
+        if r["problem"]:
+            print(f"{email}: the backup target cannot be used: {r['problem']}", flush=True)
+            failed += 1
+            continue
+        verb = "would be" if dry_run else "were"
+        print(f"{email}: {r['verified']} local files already on the target {verb} removed, {r['copied']} "
+              f"{verb} copied to the target and then removed, {r['kept']} stay (their copy differs), "
+              f"{r['lost']} are on neither side ({'would be' if dry_run else 'are'} exported again), "
+              f"{r['unlisted']} local files are in no manifest line and stay", flush=True)
+        failed += bool(r["kept"])
+    if dry_run:
+        print("dry run, nothing changed")
     return 1 if failed else 0
 
 
@@ -711,9 +743,14 @@ async def _store_import_export(who: str | None) -> int:
 
     failed = 0
     for uid, email in await _pick_users(who):
-        src = backup.export_root(uid)
-        if not (src / ".exported").exists():
+        # The files are on the backup target when one is set (core/backup.py files_root).
+        src = backup.files_root(uid)
+        if not (backup.export_root(uid) / ".exported").exists() and not (src / ".exported").exists():
             print(f"{email}: no mail export", flush=True)
+            continue
+        if backup.target_root(uid) is not None and (problem := backup.target_problem()) is not None:
+            print(f"{email}: the mail export is on the backup target, which cannot be used: {problem}", flush=True)
+            failed += 1
             continue
         async with session_scope() as db:
             st = await db.get(StoreSyncState, uid)
@@ -1065,6 +1102,11 @@ def main() -> None:
     pd.add_argument("--exports", action="store_true",
                     help="also remove the files of all deleted mail from the mail export and the backup target, "
                          "mail that vanished from the mail store included; only with a healthy mail store")
+    xm = sub.add_parser("export-move", help="move the mail export's files from the data volume to the backup target: "
+                                            "copy what the target lacks, then remove the local copy once the "
+                                            "target's has the same size (each export run does this)")
+    xm.add_argument("user", nargs="?", help="email or user id (default: every enabled user)")
+    xm.add_argument("--dry-run", action="store_true", help="only count; change nothing")
     ex = sub.add_parser("export", help="write the exports now: mail (Maildir), notes and tables, calendars and "
                                        "contacts (the worker does them daily)")
     ex.add_argument("--user", help="email or user id (default: every enabled user, and the group calendars)")
@@ -1236,6 +1278,8 @@ def main() -> None:
         sys.exit(_run(_export(a)))
     elif a.cmd == "purge-deleted":
         sys.exit(_run(_purge_deleted(a.user, a.dry_run, a.exports)))
+    elif a.cmd == "export-move":
+        sys.exit(_run(_export_move(a.user, a.dry_run)))
     elif a.cmd == "calendars":
         _run(_calendars(a))
     elif a.cmd == "store" and a.action == "resync":

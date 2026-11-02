@@ -1,8 +1,19 @@
 """Per-user Maildir export: a copy of every message in a standard format that does not
 depend on mailr or Stalwart, and the backup check that gates upstream deletion.
 
-Layout: `<data_dir>/exports/user-<id>/<label>/cur/<ts>.<id>.mailr:2,<flags>` plus
-- `.exported`: manifest lines `blob_id<TAB>relative path` (what retention trusts),
+Where the message files are (`files_root`):
+- without `MAILR_BACKUP_TARGET`: `<data_dir>/exports/user-<id>/<label>/cur/<ts>.<id>.mailr:2,<flags>`;
+- with a target: `<target>/user-<id>/<label>/cur/…` only. A local copy would only repeat the mail
+  store on the same disk (6.3 GB beside a 5.0 GB store, 1 Nov 2026); the copy on the target is
+  the backup. While the target cannot be used, no file is written anywhere: the export waits and
+  catches up from its cursor when the target is back (no local spool: the mail store and the
+  provider still hold the mail, and upstream deletion waits for the target anyway).
+
+The small state stays in `<data_dir>/exports/user-<id>/` in both cases, so that it survives a
+target that is offline, and so that the files on the target cannot vouch for themselves:
+- `.exported`: manifest lines `blob_id<TAB>relative path` (what retention trusts; a line is added
+  only after its file was fsynced where the files live). A copy is kept on the target, for a
+  restore without this server.
 - `.cursor`: `<message id><TAB><blob id>` of the last row a run went past (incremental; each
   run reads only newer rows). A run that finds no such row in the database (a database restored
   from a dump older than the export) starts again from the first row (`_read_cursor`); files
@@ -13,6 +24,7 @@ Layout: `<data_dir>/exports/user-<id>/<label>/cur/<ts>.<id>.mailr:2,<flags>` plu
   (`remove_exported`) that the backup target still has; removed there when it is usable.
 - `.forgotten`: lines `message id<TAB>unix time` of messages deleted forever in the last
   FORGOTTEN_SECONDS: an export run that read such a row before the deletion leaves its file out.
+- `.on_target`: the target the files were moved to (`move_to_target`); see below.
 - `.lock`: held (flock) while the manifest is appended to, rewritten or copied whole.
 
 Files leave the export only through Delete forever (`remove_exported`) and the removal of a
@@ -23,14 +35,20 @@ Every file starts with `X-Mailr-Labels:` (all labels) and `X-Keywords:` (the con
 Thunderbird and Dovecot understand) followed by the original bytes. Files are fsynced before
 they enter the manifest.
 
-With `MAILR_BACKUP_TARGET` set to a mounted path (e.g. a NAS share), new files are also
-copied there; a message counts as backed up only when that copy exists. The target counts only
-while it holds the marker file `.mailr-backup-target`, which the operator creates on the share
-itself: an unmounted share leaves an empty mount point on the local disk (or Docker creates
-one), and copies there would be no backup at all (Oct 2026). mailr never creates the
-marker or the target directory. Files exported before
-the target was set (or while it was unreachable) are copied by `seed_target`, which each export
-run starts with while the target's manifest is shorter than the local one.
+The target counts only while it holds the marker file `.mailr-backup-target`, which the operator
+creates on the share itself: an unmounted share leaves an empty mount point on the local disk (or
+Docker creates one), and copies there would be no backup at all (Oct 2026). mailr never creates
+the marker or the target directory. A message counts as backed up only when its manifest line
+exists and its file is on a usable target (connectors/tasks.py `exported_blobs`).
+
+`move_to_target`, which each export run starts with until it has finished once for the configured
+target, moves files written locally (before the target was set, or by a release that kept a local
+copy) to the target: a file the target lacks, or holds with another size, is copied and fsynced
+there first, and the local file is removed only once the target's copy has the same size. A
+manifest line whose file is on neither side is dropped and the cursor rewound, so the message is
+exported again from the store. When it finishes for the target, `.on_target` names it. With the
+target later removed from the configuration, the manifest names files that are not here: the next
+run sets it aside and exports everything locally again, and until then nothing counts as backed up.
 """
 
 from __future__ import annotations
@@ -276,14 +294,6 @@ def _exported_blobs(f: Path) -> set[str]:
     return blobs
 
 
-def _manifest_lines(f: Path) -> int:
-    try:
-        with f.open("rb") as fh:
-            return sum(1 for _ in fh)
-    except OSError:
-        return 0
-
-
 class ExportBusy(Exception):
     """Another process holds the export's lock (a long copy to the backup target)."""
 
@@ -310,30 +320,203 @@ def export_lock(base: Path, wait: float | None = None) -> Iterator[None]:
             fcntl.flock(f.fileno(), fcntl.LOCK_UN)
 
 
-def seed_target(user_id: int) -> int:
-    """Copy exported files that the backup target lacks, then its manifest. Returns how many
-    were copied. A no-op without a target, or when the target's manifest is complete."""
-    if target_root(user_id) is None:
-        return 0
-    tgt = _ready_target(user_id)
+def files_root(user_id: int) -> Path:
+    """Where the user's exported message files are: the target's folder when a target is
+    configured (usable or not), else the local export folder. The state files stay local."""
+    return target_root(user_id) or export_root(user_id)
+
+
+ON_TARGET = ".on_target"
+
+
+def _target_id() -> str:
+    return str(get_settings().backup_target)
+
+
+def _on_target(base: Path) -> str | None:
+    """The target `move_to_target` last finished for (`.on_target`), or None."""
+    try:
+        return (base / ON_TARGET).read_text().strip() or None
+    except OSError:
+        return None
+
+
+def files_elsewhere(user_id: int) -> bool:
+    """True when no target is configured but the export's files were moved to one: the local
+    manifest then names files that are not here, and proves nothing until the export ran again."""
+    return target_root(user_id) is None and _on_target(export_root(user_id)) is not None
+
+
+def _size(p: Path) -> int | None:
+    """The size of a file, None when there is none. Any other error (a share gone mid-walk) is
+    raised: a file that cannot be looked at is not missing."""
+    try:
+        st = p.stat()
+    except FileNotFoundError:
+        return None
+    return st.st_size
+
+
+def _copy_verified(src: Path, dest: Path) -> int | None:
+    """Copy src to dest (`<folder>/cur/<file>` in the user's folder on the target), fsync it, and
+    return the size of the copy (None when it vanished). Only the label folder and its cur/ are
+    created: on a share that went away, nothing is created under its empty mount point."""
+    private.mkdirs(dest.parent.parent, parents=False)
+    private.mkdirs(dest.parent, parents=False)
+    shutil.copy2(src, dest)
+    private.tighten(dest)
+    _fsync_file(dest)
+    _fsync_dir(dest.parent)
+    return _size(dest)
+
+
+def _remove_empty_dirs(base: Path) -> None:
+    """The emptied label folders of the local export (cur/, new/, tmp/ and the folder itself)."""
+    for folder in [d for d in base.iterdir() if d.is_dir()]:
+        for sub in ("cur", "new", "tmp"):
+            with contextlib.suppress(OSError):
+                (folder / sub).rmdir()
+        with contextlib.suppress(OSError):
+            folder.rmdir()
+
+
+def _move_needed(base: Path, tgt: Path) -> bool:
+    """Whether `move_to_target` has work: it never finished for this target, or the target's
+    copy of the manifest is not the local one (a batch or a removal that missed it)."""
+    return _on_target(base) != _target_id() or not _same_size(tgt / ".exported", base / ".exported")
+
+
+# When a move last ended with files left locally (a copy that kept differing), per user: the next
+# try waits MOVE_RETRY_SECONDS, so the batches of one export run do not each walk the whole export.
+_MOVE_KEPT: dict[int, float] = {}
+MOVE_RETRY_SECONDS = 3600
+
+
+def move_to_target(user_id: int, *, dry_run: bool = False, force: bool = False) -> dict[str, Any]:
+    """Move the user's local message files to the usable backup target (module docstring), and
+    bring the target's copy of the manifest up to date. Safe to stop and run again at any point.
+
+    For each manifest line: a local file whose copy on the target has the same size is removed
+    (`verified`); one the target lacks or holds with another size is copied, fsynced and checked
+    first (`copied`); one whose copy still differs stays (`kept`). A line with no file on either
+    side is dropped and the cursor rewound, so the message is exported again (`lost`). Local files
+    in no manifest line stay (`unlisted`). With `dry_run` nothing changes and the counts say what
+    would. Skipped (`skipped`: True) when nothing is to do, or within MOVE_RETRY_SECONDS of a move
+    that left files locally, unless `force`.
+
+    Returns {verified, copied, kept, lost, unlisted, done, skipped, problem}: done when every line
+    is on the target and `.on_target` was written; problem when the target cannot be used."""
+    out: dict[str, Any] = {"verified": 0, "copied": 0, "kept": 0, "lost": 0, "unlisted": 0,
+                           "done": False, "skipped": False, "problem": None}
+    tgt = target_root(user_id)
+    if tgt is None:
+        out["problem"] = target_problem()
+        return out
+    if dry_run:
+        if (problem := target_problem()) is not None:
+            out["problem"] = problem
+            return out
+    elif _ready_target(user_id) is None:
+        out["problem"] = target_problem() or "the backup target folder cannot be created"
+        return out
     base = export_root(user_id)
-    if tgt is None or _same_size(tgt / ".exported", base / ".exported") \
-            or _manifest_lines(tgt / ".exported") >= _manifest_lines(base / ".exported"):
-        return 0
-    copied = 0
+    if not force and base.is_dir() and not _move_needed(base, tgt):
+        out.update(done=True, skipped=True)
+        return out
+    if not force and not dry_run and time.monotonic() - _MOVE_KEPT.get(user_id, -MOVE_RETRY_SECONDS) \
+            < MOVE_RETRY_SECONDS:
+        out["skipped"] = True
+        return out
+    if not base.is_dir():
+        out["done"] = True
+        return out
+    lock = contextlib.nullcontext() if dry_run else export_lock(base)
+    lost: list[str] = []
+    with lock:
+        manifest = exported_manifest_from(base / ".exported")
+        listed = set(manifest.values())
+        try:
+            for i, rel in enumerate(manifest.values(), 1):
+                src, dest = _message_file(base, rel), _message_file(tgt, rel)
+                if src is None or dest is None:
+                    continue  # not the shape of an exported file: never touched
+                have, there = _size(src), _size(dest)
+                if have is None:
+                    if there is None:
+                        lost.append(rel)
+                    continue
+                if there != have:
+                    if not dry_run:
+                        there = _copy_verified(src, dest)
+                        if there != have:
+                            out["kept"] += 1
+                            log.warning("backup target for user %s: the copy of %s differs after copying; the "
+                                        "local file stays", user_id, rel)
+                            continue
+                    out["copied"] += 1
+                else:
+                    out["verified"] += 1
+                if not dry_run:
+                    src.unlink()
+                if i % 10000 == 0:
+                    log.info("backup target for user %s: %s of %s exported files checked", user_id, i, len(manifest))
+        except OSError as e:
+            log.warning("backup target for user %s: moving the export stopped: %s; the next run goes on", user_id, e)
+            out["problem"] = str(e)
+            return out
+        out["unlisted"] = sum(1 for f in base.glob("*/cur/*")
+                              if f.is_file() and f.relative_to(base).as_posix() not in listed)
+        out["lost"] = len(lost)
+        if dry_run:
+            return out
+        if (problem := target_problem()) is not None:  # gone during the walk: a missing file proves nothing
+            out["problem"] = problem
+            return out
+        if lost:
+            gone = set(lost)
+            _write_atomic(base / ".exported", "".join(f"{b}\t{rel}\n" for b, rel in manifest.items()
+                                                      if rel not in gone))
+            (base / ".cursor").unlink(missing_ok=True)
+            log.warning("backup target for user %s: %s exported files are neither here nor on the target; they are "
+                        "exported again from the mail store", user_id, len(lost))
+        if (base / ".exported").exists():
+            shutil.copy2(base / ".exported", tgt / ".exported")
+            _fsync_file(tgt / ".exported")
+        _remove_empty_dirs(base)
+        if not out["kept"]:
+            _write_atomic(base / ON_TARGET, _target_id() + "\n")
+            out["done"] = True
+            _MOVE_KEPT.pop(user_id, None)
+        else:
+            _MOVE_KEPT[user_id] = time.monotonic()
+    if out["verified"] or out["copied"] or out["lost"] or out["kept"]:
+        log.info("backup target for user %s: %s exported files already on the target and %s copied there were "
+                 "removed locally; %s kept locally, %s missing on both sides, %s local files in no manifest line",
+                 user_id, out["verified"], out["copied"], out["kept"], out["lost"], out["unlisted"])
+    return out
+
+
+def seed_target(user_id: int) -> int:
+    """`move_to_target` when it has work; how many files were copied to the target."""
+    return int(move_to_target(user_id)["copied"])
+
+
+def _left_target(user_id: int) -> None:
+    """No target is configured, but the files were moved to one (`.on_target`): the manifest names
+    files that are not here. It is set aside (`.exported.on-target`) with the cursor, so the next
+    runs export every message locally again."""
+    base = export_root(user_id)
+    was = _on_target(base)
+    if was is None or target_root(user_id) is not None:
+        return
     with export_lock(base):
-        for rel in exported_manifest(user_id).values():
-            src, dest = base / rel, tgt / rel
-            if dest.is_file() or not src.is_file():
-                continue
-            private.mkdirs(dest.parent)
-            shutil.copy2(src, dest)
-            _fsync_file(dest)
-            copied += 1
-        shutil.copy2(base / ".exported", tgt / ".exported")
-        _fsync_file(tgt / ".exported")
-    log.info("backup target for user %s: %s files copied", user_id, copied)
-    return copied
+        if (base / ".exported").exists():
+            os.replace(base / ".exported", base / ".exported.on-target")
+        (base / ".cursor").unlink(missing_ok=True)
+        (base / PURGED).unlink(missing_ok=True)
+        (base / ON_TARGET).unlink(missing_ok=True)
+    log.warning("export user %s: MAILR_BACKUP_TARGET is no longer set, and the exported files are on %s; the mail "
+                "is exported locally again (the old manifest is kept as .exported.on-target)", user_id, was)
 
 
 PURGED = ".purged"
@@ -473,21 +656,28 @@ def remove_user_export(user_id: int) -> bool:
     return True
 
 
-def _write_message(tmp: Path, data: bytes, dest: Path, tdest: Path | None) -> None:
-    """One exported message: written to tmp/, fsynced, moved into cur/, copied to the target."""
+def _write_message(tmp: Path, data: bytes, dest: Path) -> None:
+    """One exported message, where the files live (`files_root`): written to tmp/, fsynced, moved
+    into cur/."""
     private.write_bytes(tmp, data)
     _fsync_file(tmp)
     tmp.replace(dest)
-    if tdest is not None:
-        private.mkdirs(tdest.parent)
-        shutil.copy2(dest, tdest)
-        _fsync_file(tdest)
+
+
+def _maildir_write(folder: Path, tmp: Path, data: bytes, dest: Path) -> None:
+    """A message into a label folder of the export, creating the folder inside the user's export
+    folder only: on a share that went away, nothing is created under its empty mount point."""
+    private.mkdirs(folder, parents=False)
+    for sub in ("cur", "new", "tmp"):
+        private.mkdirs(folder / sub, parents=False)
+    _write_message(tmp, data, dest)
 
 
 def _finish_batch(base: Path, written: list[tuple[str, str]], tgt: Path | None) -> None:
-    """Directory fsyncs and the manifest of a batch (in a worker thread). A message deleted forever
-    while the batch was written (`.forgotten`) leaves its file out, here and on the target."""
-    for d in {base / Path(rel).parent for _, rel in written}:
+    """Directory fsyncs and the manifest of a batch (in a worker thread). `base` holds the
+    manifest; the files are on `tgt` when it is given, else in `base`. A message deleted forever
+    while the batch was written (`.forgotten`) leaves its file out."""
+    for d in {(tgt or base) / Path(rel).parent for _, rel in written}:
         _fsync_dir(d)
     with export_lock(base):
         gone = _forgotten(base)
@@ -511,13 +701,16 @@ def _finish_batch(base: Path, written: list[tuple[str, str]], tgt: Path | None) 
             f.flush()
             os.fsync(f.fileno())
         if tgt is not None:
-            if in_step:
-                with private.open_new(tgt / ".exported", "a") as f:
-                    f.write(lines)
-                    f.flush()
-                    os.fsync(f.fileno())
-            else:
-                shutil.copy2(base / ".exported", tgt / ".exported")
+            try:
+                if in_step:
+                    with private.open_new(tgt / ".exported", "a") as f:
+                        f.write(lines)
+                        f.flush()
+                        os.fsync(f.fileno())
+                else:
+                    shutil.copy2(base / ".exported", tgt / ".exported")
+            except OSError as e:  # the next run copies it whole (move_to_target)
+                log.warning("backup target: the copy of the manifest %s was not updated: %s", tgt, e)
 
 
 def _same_size(a: Path, b: Path) -> bool:
@@ -556,16 +749,29 @@ async def _checked_cursor(db, user_id: int, base: Path) -> int:
 
 async def export_batch(user_id: int) -> dict[str, Any]:
     """Export up to BATCH messages newer than the cursor. Returns {written, scanned, complete,
-    stalled}: complete when the run caught up with the store, stalled when an unreadable message
-    stopped it (the next run retries). Another batch is due while neither."""
+    stalled, waiting}: complete when the run caught up with the store, stalled when an unreadable
+    message or a backup target that cannot be used stopped it (waiting: the latter; the next run
+    retries). Another batch is due while neither."""
     from mailr.core.store import user_store
 
     base = private.mkdirs(export_root(user_id))
-    await asyncio.to_thread(seed_target, user_id)
+    waiting = {"written": 0, "scanned": 0, "complete": False, "stalled": True, "waiting": True}
+    if target_root(user_id) is None:
+        await asyncio.to_thread(_left_target, user_id)
     try:
         await asyncio.to_thread(apply_target_removals, user_id)
     except ExportBusy:
         pass  # the next run, or the daily purge sweep
+    tgt: Path | None = None
+    if target_root(user_id) is not None:
+        # The files live only on the target: while it cannot be used, nothing is written and the
+        # cursor stays, so the run after it is back catches up (no local copy in between).
+        tgt = await asyncio.to_thread(_ready_target, user_id)
+        if tgt is None:
+            return waiting
+        moved = await asyncio.to_thread(move_to_target, user_id)
+        if moved["problem"] is not None:
+            return waiting
     cur_file = base / ".cursor"
     async with session_scope() as db:
         user = await db.get(User, user_id)
@@ -581,15 +787,13 @@ async def export_batch(user_id: int) -> dict[str, Any]:
                 Message.draft.is_(False), Message.blob_id.is_not(None)).order_by(Message.id).limit(BATCH))).all()
     if not rows:
         mark_run(user_id)
-        return {"written": 0, "scanned": 0, "complete": True, "stalled": False}
+        return {"written": 0, "scanned": 0, "complete": True, "stalled": False, "waiting": False}
     done = await asyncio.to_thread(_exported_blobs, base / ".exported")
-    # An unusable target (share not mounted) gets nothing now; seed_target copies the files
-    # once it is back.
-    tgt = _ready_target(user_id)
+    root = tgt or base
     written: list[tuple[str, str]] = []
     last_ok, last_blob = cursor, None
     complete = len(rows) < BATCH
-    stalled = False
+    stalled = waiting_now = False
     scanned = 0
     for r in rows:
         if r.blob_id in done:
@@ -597,9 +801,7 @@ async def export_batch(user_id: int) -> dict[str, Any]:
             scanned += 1
             continue
         names = [labels[i] for i in (r.label_ids or []) if i in labels] or ["Archive"]
-        folder = base / _safe(names[0])
-        for sub in ("cur", "new", "tmp"):
-            private.mkdirs(folder / sub)
+        folder = root / _safe(names[0])
         flags = "".join(sorted(("S" if r.seen else "") + ("F" if r.flagged else "") + ("R" if r.answered else "")))
         ts = int((r.received_at or r.date or datetime.now(UTC)).timestamp())
         rel = f"{folder.name}/cur/{ts}.{r.id}.mailr:2,{flags}"
@@ -614,9 +816,18 @@ async def export_batch(user_id: int) -> dict[str, Any]:
                 + b"X-Keywords: " + ", ".join(n for n in names if n not in (
                     "Inbox", "Sent", "Drafts", "Spam", "Trash", "Archive")).encode("utf-8", "replace") + b"\r\n")
         tmp = folder / "tmp" / f"{ts}.{r.id}.tmp"
-        dest = base / rel
-        # Write, fsync and copy in a worker thread: an fsync per message held the event loop.
-        await asyncio.to_thread(_write_message, tmp, head + raw, dest, (tgt / rel) if tgt is not None else None)
+        dest = root / rel
+        # Write and fsync in a worker thread: an fsync per message held the event loop.
+        try:
+            await asyncio.to_thread(_maildir_write, folder, tmp, head + raw, dest)
+        except OSError as e:
+            if tgt is None:
+                raise
+            # The target went away: what was written so far is recorded, the rest waits.
+            log.warning("export user %s: the backup target cannot be written (%s); the export waits for it", user_id, e)
+            complete = False
+            stalled = waiting_now = True
+            break
         written.append((r.blob_id, rel))
         last_ok, last_blob = r.id, r.blob_id
         scanned += 1
@@ -626,7 +837,8 @@ async def export_batch(user_id: int) -> dict[str, Any]:
         _write_atomic(cur_file, f"{last_ok}\t{last_blob or ''}" if last_ok else "0")
     if complete:
         mark_run(user_id)
-    return {"written": len(written), "scanned": scanned, "complete": complete, "stalled": stalled}
+    return {"written": len(written), "scanned": scanned, "complete": complete, "stalled": stalled,
+            "waiting": waiting_now}
 
 
 async def export_user(user_id: int) -> int:

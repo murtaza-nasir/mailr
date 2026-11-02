@@ -59,6 +59,7 @@ class PhoneCalendarsTest {
     private val requests = CopyOnWriteArrayList<Pair<RecordedRequest, String>>()
     private val soon = CopyOnWriteArrayList<Long>()
     private val periodic = CopyOnWriteArrayList<Boolean>()
+    private val provider = CopyOnWriteArrayList<Boolean>()
     private val now = AppClock.millis()
     private val hour = 3_600_000L
     private val day = 24 * hour
@@ -96,6 +97,7 @@ class PhoneCalendarsTest {
             mailr = mailr).also {
             it.scheduleSoon = { d -> soon += d }
             it.schedulePeriodic = { on -> periodic += on }
+            it.watchProvider = { on -> provider += on }
         }
 
     @Before fun setUp() { requests.clear(); mailrEvents.value = emptyList() }
@@ -376,6 +378,34 @@ class PhoneCalendarsTest {
     }
 
     // ---------------- the provider watch and the schedule ----------------
+
+    @Test fun aStoppedAppIsWokenByCalendarChangesAndOpeningTheAppSends() {
+        // A change while mailr is not running reaches the server through the provider trigger;
+        // opening mailr sends the current snapshot. Both only while a calendar sends.
+        start()
+        pc.permissionAnswered(granted = true, canAskAgain = true)
+        pc.setMode(work.id, PhoneCalMode.SHOW)
+        assertEquals(false, provider.last())
+        soon.clear()
+        pc.onForeground()
+        assertTrue(soon.isEmpty())
+        pc.setMode(work.id, PhoneCalMode.SEND)
+        assertEquals(true, provider.last())
+        soon.clear()
+        pc.onForeground()
+        assertEquals(listOf(0L), soon)
+        pc.setMode(work.id, PhoneCalMode.OFF)
+        assertEquals(false, provider.last())
+    }
+
+    @Test fun theProviderTriggerWatchesTheCalendarProvider() {
+        val c = io.github.murtazanasir.mailr.data.phonecal.PhoneCalendarWork
+        val f = c::class.java.getDeclaredMethod("providerRequest").apply { isAccessible = true }
+        val req = f.invoke(c) as androidx.work.OneTimeWorkRequest
+        val triggers = req.workSpec.constraints.contentUriTriggers
+        assertTrue(triggers.any { it.uri == CalendarContract.Events.CONTENT_URI && it.isTriggeredForDescendants })
+        assertTrue(c.PROVIDER in req.tags)
+    }
 
     @Test fun providerChangesSendAMinuteLaterOnlyWhileACalendarSends() {
         start()

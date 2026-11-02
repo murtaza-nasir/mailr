@@ -105,7 +105,10 @@ async def _upsert(db: AsyncSession, user_id: int, key: str, *, state: str, devic
 
 
 def _device(p: Principal) -> str:
-    return f"token:{p.token.id}" if p.token is not None else "session"
+    """Who acted: an agent token, or the kind of device the session belongs to ("web", "android")."""
+    if p.token is not None:
+        return f"token:{p.token.id}"
+    return (p.session.device if p.session is not None else "") or "web"
 
 
 class SnoozeIn(BaseModel):

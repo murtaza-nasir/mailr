@@ -59,6 +59,7 @@ async def provision_store_account(db: AsyncSession, u: User) -> None:
     if u.stalwart_account_id:
         return
     from mailr.calendar.builtin import description_for
+    from mailr.dev import store_accounts
 
     local = _local_part(u.email, u.id)
     pw = secrets.token_urlsafe(24)
@@ -66,10 +67,13 @@ async def provision_store_account(db: AsyncSession, u: User) -> None:
         "@type": "User", "name": local, "domainId": await _domain_id(),
         # The display name: whoever can read one of the user's calendars sees it.
         "description": description_for(u),
-        "credentials": {"0": {"@type": "Password", "secret": pw}}}}})
+        "credentials": {"0": {"@type": "Password", "secret": pw}},
+        # In a test run on the dev store only (MAILR_DEV and MAILR_TEST_STORE_RUN): the test mark.
+        **store_accounts.mark()}}})
     created = (r.get("created") or {}).get("a")
     if not created:
         raise RuntimeError(f"could not create mail store account: {r.get('notCreated')}")
+    store_accounts.note_created(service_client().base_url, created["id"], local)
     u.stalwart_account_id = created["id"]
     u.stalwart_login = f"{local}@{get_settings().stalwart_domain}"
     u.stalwart_secret_enc = encrypt_for_user(u.id, u.data_key_wrapped, pw)

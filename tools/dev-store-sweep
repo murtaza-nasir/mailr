@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+# Destroy the test accounts that crashed runs left in the shared dev services (internal;
+# docs/dev/agents.md, "Shared dev services"):
+#
+#   tools/dev-store-sweep                 the dev Stalwart (:18080), the fake upstream (:18091), the dev Radicale
+#   tools/dev-store-sweep --dry-run       count only
+#   tools/dev-store-sweep --min-age 12    only accounts older than 12 hours (default 6)
+#   tools/dev-store-sweep --limit 0       every due account (default: the 1000 oldest per store)
+#   tools/dev-store-sweep --quiet         no output unless something was destroyed or refused
+#
+# Only test accounts are destroyed: accounts with the test mark (externalId `mailr-test:…`), or
+# named like the test accounts of earlier versions, and only when they are older than the minimum
+# age, so the runs going on now keep theirs. Admins, the service account and the provisioned
+# accounts are never touched, and a store that is not the dev store is refused
+# (backend/mailr/dev/store_accounts.py). Radicale: `tools/agent-env radicale-prune` with the same age.
+#
+# tools/test-backend and `tools/agent-env e2e` run it at their start with --quiet. Two sweeps never
+# run at once: a second one leaves at once.
+set -uo pipefail
+ROOT=$(git -C "$(dirname "$0")" rev-parse --show-toplevel)
+PY="$ROOT/backend/.venv/bin/python"
+[ -x "$PY" ] || { echo "dev-store-sweep: backend/.venv is missing (uv sync --all-extras)" >&2; exit 2; }
+
+DRY=() ; AGE=6 ; LIMIT=1000 ; QUIET=0
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --dry-run) DRY=(--dry-run); shift ;;
+    --min-age) AGE=$2; shift 2 ;;
+    --limit) LIMIT=$2; shift 2 ;;
+    --quiet) QUIET=1; shift ;;
+    *) echo "dev-store-sweep: unknown option $1" >&2; exit 2 ;;
+  esac
+done
+
+LOCK="${XDG_RUNTIME_DIR:-/tmp}/mailr-dev-store-sweep.lock"
+exec 9>"$LOCK"
+flock -n 9 || exit 0
+
+OUT=$(cd "$ROOT/backend" && timeout 300 "$PY" -m mailr.dev.store_accounts sweep "${DRY[@]}" \
+  --min-age "$AGE" --limit "$LIMIT" 2>&1)
+RC=$?
+if [ "$QUIET" = 0 ] || [ "$RC" != 0 ] || grep -qE 'destroyed [1-9]' <<<"$OUT"; then
+  [ -n "$OUT" ] && echo "$OUT" >&2
+fi
+
+# The dev Radicale, when its container runs here.
+if docker inspect mailr-dev-radicale-1 >/dev/null 2>&1; then
+  ROUT=$(cd "$ROOT" && timeout 300 tools/agent-env radicale-prune "${DRY[@]}" \
+    --min-age "$(awk -v h="$AGE" 'BEGIN { printf "%d", h * 60 }')" 2>&1)
+  if [ "$QUIET" = 0 ] || grep -q 'deleted [1-9]' <<<"$ROUT"; then
+    [ -n "$ROUT" ] && echo "$ROUT" >&2
+  fi
+fi
+exit "$RC"

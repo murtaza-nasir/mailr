@@ -67,6 +67,13 @@ export function inProgress(e: CalEvent, now: Date): boolean {
   return e.startAt <= now && e.endAt > now
 }
 
+/** Today's next meeting for the calendar panel: the first timed event, in the order given, that has
+ *  not ended and is not cancelled (the one going on counts). Instants are compared, never clock
+ *  minutes, so the repeated autumn hour changes nothing. */
+export function nextMeeting<E extends Pick<CalEvent, 'endAt' | 'status'>>(timed: E[], now: Date): E | undefined {
+  return timed.find((e) => e.endAt.getTime() > now.getTime() && e.status !== 'CANCELLED')
+}
+
 /** The Join badge shows in the five minutes before the start, and while it runs. */
 export function joinable(e: CalEvent, now: Date): boolean {
   if (!conferenceLink(e)) return false

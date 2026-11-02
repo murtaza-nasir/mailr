@@ -122,6 +122,9 @@ class PhoneCalendars(
     /** Set by the app: the 30-minute run on (true) or off (false). */
     var schedulePeriodic: (on: Boolean) -> Unit = {}
 
+    /** Set by the app: the provider trigger that wakes a stopped app on a calendar change, on or off. */
+    var watchProvider: (on: Boolean) -> Unit = {}
+
     private val mutex = Mutex()
 
     fun key(cal: PhoneCalendar): String = PhoneBusy.calendarKey(installId, cal.accountType, cal.accountName, cal.id)
@@ -179,9 +182,18 @@ class PhoneCalendars(
      * After a settings change or at start: the 30-minute run and the provider watch are on while a
      * calendar sends busy times; a run comes at once to send a new choice or to remove one.
      */
+    /** Calendars are set to send, calendar access is allowed and the user is signed in. */
+    fun sending(): Boolean = sendIds().isNotEmpty() && source.granted() && signedIn()
+
+    /** The app came to the front: the current snapshot goes out (nothing is sent when it is unchanged). */
+    fun onForeground() {
+        if (sending()) scheduleSoon(0)
+    }
+
     fun follow(changed: Boolean = false) {
-        val sending = sendIds().isNotEmpty() && source.granted() && signedIn()
+        val sending = sending()
         schedulePeriodic(sending)
+        watchProvider(sending)
         watch(sending)
         val held = prefs.sent().isNotEmpty()
         // A choice changed, nothing sent yet, or the server still holds calendars this phone no longer sends.

@@ -509,6 +509,7 @@ class MailrApp : Application(), Configuration.Provider, io.github.murtazanasir.m
         Work.drainOutbox(this)
         g.scope.launch { catching { g.mail.refreshLabels() } }
         g.syncCalendarSoon()
+        catching { g.phoneCalendars.onForeground() }
         g.notes.syncNow()
         // A newer version on the server, at most once a day (Settings shows it).
         g.scope.launch { g.updates.check() }
@@ -569,6 +570,7 @@ class MailrApp : Application(), Configuration.Provider, io.github.murtazanasir.m
         override fun phoneCalendars(p: io.github.murtazanasir.mailr.data.phonecal.PhoneCalendars) {
             p.scheduleSoon = { delay -> io.github.murtazanasir.mailr.data.phonecal.PhoneCalendarWork.soon(this@MailrApp, delay) }
             p.schedulePeriodic = { on -> io.github.murtazanasir.mailr.data.phonecal.PhoneCalendarWork.periodic(this@MailrApp, on) }
+            p.watchProvider = { on -> io.github.murtazanasir.mailr.data.phonecal.PhoneCalendarWork.watch(this@MailrApp, on) }
         }
 
         override fun live(l: LiveEvents) {

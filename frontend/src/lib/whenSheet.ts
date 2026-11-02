@@ -90,11 +90,8 @@ function nextDow(d: Date, dow: number): Date {
   return addDays(d, ((dow - d.getDay() + 7) % 7) || 7)
 }
 
-const trunc = (d: Date) => {
-  const x = new Date(d)
-  x.setSeconds(0, 0)
-  return x
-}
+// Seconds dropped on the instant (setSeconds picks the first pass in the repeated autumn hour).
+const trunc = (d: Date) => new Date(Math.floor(d.getTime() / MIN) * MIN)
 
 const startOfDay = (d: Date) => atTime(d, 0)
 
@@ -247,8 +244,7 @@ export function relative(at: Date, now: Date, dateOnly = false): string {
   }
   // Whole minutes from the current minute: the custom result counts from now without its
   // seconds, so 12 hours reads "in 12 h", not "in 11 h 59 min".
-  const minute = new Date(now)
-  minute.setSeconds(0, 0)
+  const minute = trunc(now)
   const mins = Math.round((at.getTime() - minute.getTime()) / MIN)
   const a = Math.abs(mins)
   const text = a < 60 ? tr('lib.whenSheet.min', { a }) : a % 60 ? tr('lib.whenSheet.hMin', { floor: Math.floor(a / 60), value: a % 60 }) : `${a / 60} h`

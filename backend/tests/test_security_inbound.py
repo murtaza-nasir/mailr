@@ -247,6 +247,8 @@ def test_backup_target_without_its_marker_is_not_a_backup(tmp_path, monkeypatch)
 
 
 async def test_export_copies_nothing_to_an_unmarked_target(app, user, raw, tmp_path, monkeypatch):
+    """With a target set, the files live only there: an unmarked target gets nothing, and no
+    local copy is written in its place (the export waits for the target)."""
     from mailr.config import get_settings
     from mailr.core import backup
 
@@ -255,9 +257,10 @@ async def test_export_copies_nothing_to_an_unmarked_target(app, user, raw, tmp_p
     nas.mkdir()
     monkeypatch.setattr(get_settings(), "backup_target", str(nas))
     await _ingest(user.id, raw("hello", body="x"))
-    assert await backup.export_user(user.id) == 1
+    assert await backup.export_user(user.id) == 0
     assert list(nas.iterdir()) == []
-    assert backup.exported_manifest(user.id)  # the local export still runs
+    assert backup.exported_manifest(user.id) == {}
+    assert not list(backup.export_root(user.id).glob("*/cur/*"))
     assert (await backup.verify(user.id))["ok"] is False
 
 

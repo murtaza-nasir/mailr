@@ -2,6 +2,7 @@
 
 /** The greeting for the hour of the day (0–23). */
 import { t } from '../../i18n'
+import { dayRange, minutesOnDay, type ISODate } from '../../lib/dates'
 
 export function greeting(hour: number): string {
   if (hour < 5) return t('calendar.today.upLate')
@@ -41,4 +42,17 @@ export function lineSpan(work: { start: number; end: number }, events: { start: 
     end = Math.max(end, Math.ceil(e.end / 60) * 60)
   }
   return { start: Math.max(0, start), end: Math.min(1440, end) }
+}
+
+/**
+ * The day line's blocks: each timed event's minutes on the day (minutesOnDay, so an event in the
+ * repeated autumn hour keeps its length) and whether it is over. "Over" compares the end with now
+ * as instants, and only today's line dims anything.
+ */
+export function dayLineBlocks<E extends { startAt: Date; endAt: Date }>(events: E[], date: ISODate, zone: string, now: Date, isToday: boolean): { e: E; start: number; end: number; past: boolean }[] {
+  const range = dayRange(date, zone)
+  return events.flatMap((e) => {
+    const m = minutesOnDay(e.startAt, e.endAt, date, zone, range)
+    return m ? [{ e, start: m.start, end: m.end, past: isToday && e.endAt.getTime() <= now.getTime() }] : []
+  })
 }

@@ -39,7 +39,7 @@ async def test_the_cursor_keeps_the_blob_of_its_row_and_a_run_goes_on_from_it(us
     cur.write_text(str(b))
     assert backup._read_cursor(cur) == (b, None)
     r = await backup.export_batch(user.id)
-    assert r == {"written": 0, "scanned": 0, "complete": True, "stalled": False}
+    assert r == {"written": 0, "scanned": 0, "complete": True, "stalled": False, "waiting": False}
 
 
 async def test_a_cursor_ahead_of_a_restored_database_starts_again(user, raw, export_dirs):

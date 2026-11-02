@@ -1,4 +1,5 @@
 import datetime as dt
+import os
 import socket
 import ssl
 
@@ -29,7 +30,9 @@ def _served_cn() -> str:
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
     ctx.verify_mode = ssl.CERT_NONE
-    with socket.create_connection(("localhost", 11993), timeout=5) as s, ctx.wrap_socket(s) as t:
+    # The suite's store: the dev Stalwart's 993, or the one MAILR_TEST_STALWART_IMAPS names.
+    host, port = os.environ.get("MAILR_TEST_STALWART_IMAPS", "127.0.0.1:11993").rsplit(":", 1)
+    with socket.create_connection((host, int(port)), timeout=5) as s, ctx.wrap_socket(s) as t:
         der = t.getpeercert(binary_form=True)
     return x509.load_der_x509_certificate(der).subject.get_attributes_for_oid(NameOID.COMMON_NAME)[0].value
 

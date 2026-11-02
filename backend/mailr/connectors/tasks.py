@@ -336,15 +336,18 @@ def _is_primary(up: dict[str, Any] | None, r: dict[str, Any]) -> bool:
 
 
 def exported_blobs(user_id: int, among: set[str] | None = None) -> set[str]:
-    """Blobs present in the (fsynced) Maildir export, and in the backup target if set. With
+    """Blobs listed in the export's manifest whose (fsynced) file is where the files live: on the
+    backup target when one is set (and only while it is usable), else in the local export. With
     `among`, only those blobs are looked up: on a NAS target each file is one round trip, and
     checking the whole export (93,000 files) took 26 s (2 Oct 2026). Nothing while the mail
     export is off (MAILR_MAIL_EXPORT=false): an export left from before is not kept up to date,
     so it proves nothing."""
-    from mailr.core.backup import exported_manifest, target_problem, target_root
+    from mailr.core.backup import exported_manifest, files_elsewhere, target_problem, target_root
 
     if not get_settings().mail_export:
         return set()
+    if files_elsewhere(user_id):
+        return set()  # the files were moved to a target that is no longer configured
     manifest = exported_manifest(user_id)
     if among is not None:
         manifest = {b: rel for b, rel in manifest.items() if b in among}

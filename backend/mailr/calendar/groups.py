@@ -158,9 +158,12 @@ async def _account_exists(acct_id: str | None) -> bool:
 
 
 async def _create_account(kind: str, local: str, description: str) -> tuple[str, str]:
+    from mailr.core.store import service_client
     from mailr.core.users import _domain_id
+    from mailr.dev import store_accounts
 
-    obj: dict[str, Any] = {"@type": kind, "name": local, "domainId": await _domain_id(), "description": description[:200]}
+    obj: dict[str, Any] = {"@type": kind, "name": local, "domainId": await _domain_id(), "description": description[:200],
+                           **store_accounts.mark()}
     if kind == "Group":
         # No role. The stock group role grants the principal permissions mailr took away from the
         # User role (core/store_groupware.py), and the service account may not grant those: the
@@ -170,6 +173,7 @@ async def _create_account(kind: str, local: str, description: str) -> tuple[str,
     made = (r.get("created") or {}).get("a")
     if not made:
         raise GroupCalendarError(f"the mail store did not create the account: {r.get('notCreated')}")
+    store_accounts.note_created(service_client().base_url, made["id"], local)
     return made["id"], f"{local}@{_domain()}".lower()
 
 

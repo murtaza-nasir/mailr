@@ -761,8 +761,11 @@ async def tasks(db: AsyncSession, user_id: int, status: str = "open", *, lists: 
 
 
 async def sync_state(db: AsyncSession, user_id: int, p: Any = None) -> dict[str, Any]:
-    """{state, last_sync_at} across the collections p may see (the `sync` field of reads)."""
-    cols = await collections_of(db, await visible_connector_ids(db, user_id, p))
+    """{state, last_sync_at} across the collections p may see (the `sync` field of reads).
+
+    Phone calendars are left out: their busy times arrive when the phone sends them, which can be
+    12 hours apart on a quiet calendar, and each one shows its own "Updated from <device>" line."""
+    cols = [c for c in await collections_of(db, await visible_connector_ids(db, user_id, p)) if not phonecal.is_phone(c)]
     if not cols:
         return {"state": "idle", "last_sync_at": None}
     if any(c.last_full_sync_at is None for c in cols):

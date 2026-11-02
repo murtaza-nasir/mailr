@@ -30,7 +30,7 @@ import { displayColour } from './colour'
 import { useCal } from './context'
 import { isCancelled, isDeclined } from './eventInfo'
 import { EventRow } from './ScheduleView'
-import { dayPart, greeting, lineSpan, summary, type DayPart } from './today'
+import { dayLineBlocks, dayPart, greeting, lineSpan, summary, type DayPart } from './today'
 import type { ApiTask, CalEvent } from './types'
 import './today.css'
 import { t as tr } from '../../i18n'
@@ -170,11 +170,7 @@ function Rows({ n }: { n: number }) {
 function DayLine({ events, isToday }: { events: CalEvent[]; isToday: boolean }) {
   const cal = useCal()
   const zone = cal.prefs.zone
-  const mins = events.map((e) => ({
-    e,
-    start: e.firstDay < cal.date ? 0 : minutesOfDay(e.startAt, zone),
-    end: e.lastDay > cal.date ? 1440 : minutesOfDay(e.endAt, zone) || 1440,
-  }))
+  const mins = dayLineBlocks(events, cal.date, zone, cal.now, isToday)
   const span = lineSpan({ start: cal.prefs.workStart, end: cal.prefs.workEnd }, mins)
   const pct = (m: number) => `${((Math.min(span.end, Math.max(span.start, m)) - span.start) / (span.end - span.start)) * 100}%`
   const now = minutesOfDay(cal.now, zone)
@@ -185,12 +181,12 @@ function DayLine({ events, isToday }: { events: CalEvent[]; isToday: boolean }) 
     <div className="today-line" aria-hidden data-testid="today-line">
       <div className="today-track">
         <div className="today-work" style={{ insetInlineStart: pct(cal.prefs.workStart), width: `calc(${pct(cal.prefs.workEnd)} - ${pct(cal.prefs.workStart)})` }} />
-        {mins.map(({ e, start, end }) => (
+        {mins.map(({ e, start, end, past }) => (
           <button
             key={e.key}
             type="button"
             tabIndex={-1}
-            className={`today-block${isToday && end <= now ? ' past' : ''}`}
+            className={`today-block${past ? ' past' : ''}`}
             style={{ insetInlineStart: pct(start), width: `max(6px, calc(${pct(end)} - ${pct(start)}))`, background: displayColour(e.colour, cal.dark) }}
             title={`${e.summary || tr('common.noTitle')} ${formatTime(e.startAt, cal.prefs)}`}
             onClick={(ev) => cal.openEvent(e, ev.currentTarget)}

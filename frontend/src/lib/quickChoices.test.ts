@@ -28,3 +28,10 @@ describe('quick-choice presets (web)', () => {
     expect(roundUp5(t(1, 10, 1))).toEqual(t(1, 10, 5))
   })
 })
+
+describe('the repeated autumn hour (1 Nov 2026, America/Chicago)', () => {
+  it('rounding up to 5 minutes stays in the second 1 AM', () => {
+    // 01:12:34 CST (second pass) → 01:15 CST, not 01:15 CDT an hour earlier.
+    expect(roundUp5(new Date('2026-11-01T07:12:34Z')).toISOString()).toBe('2026-11-01T07:15:00.000Z')
+  })
+})

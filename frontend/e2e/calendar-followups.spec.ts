@@ -138,8 +138,9 @@ test('The series question: All on a series with a changed occurrence says it kee
 
 test('event detail: Snooze and Remind before while its reminder is up (ACT event.snooze, ACT event.remind_before)', async ({ page, seeded }) => {
   await connectCalendar(page.request, seeded)
-  const start = new Date(Date.now() + 40 * 60_000)
-  start.setSeconds(0, 0)
+  // Rounded on the instant: setSeconds reads the local time back, and in the repeated autumn hour
+  // that gives the first pass, an hour early (1 Nov 2026: the meeting was already on).
+  const start = new Date(Math.floor((Date.now() + 40 * 60_000) / 60_000) * 60_000)
   const end = new Date(start.getTime() + 30 * 60_000)
   const created = await (await page.request.post('/api/v1/calendar/events', { data: { summary: 'Reminded meeting', start: start.toISOString(), end: end.toISOString() } })).json() as { uid: string }
   const occ = start.toISOString().replace('.000Z', '+00:00')

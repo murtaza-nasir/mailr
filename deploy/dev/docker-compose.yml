@@ -5,7 +5,7 @@
 name: mailr-dev
 services:
   stalwart:
-    image: stalwartlabs/stalwart:v0.16.23
+    image: stalwartlabs/stalwart:v0.16.27
     entrypoint: ["/bin/sh", "/opt/mailr/entrypoint.sh"]
     environment:
       STALWART_HOSTNAME: mail.mailr.internal
@@ -27,7 +27,7 @@ services:
       - "11993:993"
   # A second Stalwart that plays the upstream provider (a hosted IMAP provider) in tests.
   upstream:
-    image: stalwartlabs/stalwart:v0.16.23
+    image: stalwartlabs/stalwart:v0.16.27
     entrypoint: ["/bin/sh", "/opt/mailr/entrypoint.sh"]
     environment:
       STALWART_HOSTNAME: mail.upstream.test

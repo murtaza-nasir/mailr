@@ -196,6 +196,15 @@ export function fromZoned(w: WallTime, zone: string, disambiguation: 'compatible
   return new Date(disambiguation === 'earlier' ? utc - after * MIN : utc - before * MIN)
 }
 
+/**
+ * True when the instant is the second pass of a repeated wall time (the autumn change: 01:27 CST
+ * after 01:27 CDT). fromZoned with 'later' gives the instant back from its wall time.
+ */
+export function isLaterPass(instant: Date, zone: string): boolean {
+  const p = zoneParts(instant, zone)
+  return fromZoned(p, zone, 'earlier').getTime() !== instant.getTime()
+}
+
 // ---------- plain dates ----------
 
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/
@@ -276,10 +285,41 @@ export function dayRange(date: ISODate, zone: string): { start: Date; end: Date 
   return { start: startOfDay(date, zone), end: startOfDay(addDaysISO(date, 1), zone) }
 }
 
-/** Minutes since local midnight (a DST day still counts wall minutes: 09:00 is 540). */
+/** Minutes since local midnight (a DST day still counts wall minutes: 09:00 is 540). The place of
+ *  one instant (the now line, a task chip); the extent of a span from start to end is minutesOnDay. */
 export function minutesOfDay(instant: Date, zone: string): number {
   const p = zoneParts(instant, zone)
   return p.hour * 60 + p.minute
+}
+
+/**
+ * The minutes a timed span (an event, a busy block) covers on one day of a 24-hour grid, counted
+ * from the day's midnight: [start, end), both within 0..1440. Null when the span is not on the day.
+ *
+ * - `start` is the clock minute of the span's start, or 0 when it began on an earlier day.
+ * - `end` is 1440 when the span goes on past the day. Otherwise it is the larger of the clock minute
+ *   of the end and `start` plus the minutes that really pass on this day, at most 1440.
+ *
+ * On a normal day both readings of the end are the same clock minute. In the repeated hour of the
+ * autumn change the clock end can come before the start (01:42 CDT to 01:27 CST is 45 minutes): the
+ * elapsed minutes keep the real length, so the block is 45 minutes tall. Across the spring gap the
+ * clock end is the larger (01:30 CST to 03:30 CDT is 60 minutes), so the block still ends on the
+ * line of the hour its end time names. Decisions about now, next or past compare the instants,
+ * never these minutes.
+ *
+ * A span that ends exactly at the day's start belongs to the day before; an empty span belongs to
+ * the day its instant falls on. `range` is the day's dayRange when the caller has it already.
+ */
+export function minutesOnDay(start: Date, end: Date, day: ISODate, zone: string, range: { start: Date; end: Date } = dayRange(day, zone)): { start: number; end: number } | null {
+  const s = start.getTime()
+  const e = Math.max(s, end.getTime())
+  const d0 = range.start.getTime()
+  const d1 = range.end.getTime()
+  if (s >= d1 || (e > s ? e <= d0 : s < d0)) return null
+  const a = s <= d0 ? 0 : minutesOfDay(start, zone)
+  if (e >= d1) return { start: a, end: 1440 }
+  const elapsed = Math.round((e - Math.max(s, d0)) / MIN)
+  return { start: a, end: Math.min(1440, Math.max(minutesOfDay(end, zone), a + elapsed)) }
 }
 
 export function sameDay(a: Date, b: Date, zone: string): boolean {

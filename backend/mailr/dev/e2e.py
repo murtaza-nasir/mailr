@@ -779,6 +779,8 @@ def _upstream_mailbox() -> dict | None:
     running."""
     import httpx
 
+    from mailr.dev import store_accounts
+
     auth = ("up-svc@upstream.test", "up-svc-pass")
     using = ["urn:ietf:params:jmap:core", "urn:stalwart:jmap"]
     try:
@@ -788,9 +790,13 @@ def _upstream_mailbox() -> dict | None:
         local, pw = f"rosa{uuid.uuid4().hex[:6]}", "Upstream-pass-123"
         r = httpx.post("http://localhost:18091/jmap/", auth=auth, timeout=10, json={"using": using, "methodCalls": [
             ["x:Account/set", {"create": {"a": {"@type": "User", "name": local, "domainId": dom,
-                                                "credentials": {"0": {"@type": "Password", "secret": pw}}}}}, "c"]]})
-        if "a" not in r.json()["methodResponses"][0][1].get("created", {}):
+                                                "credentials": {"0": {"@type": "Password", "secret": pw}},
+                                                **store_accounts.mark()}}}, "c"]]})
+        made = r.json()["methodResponses"][0][1].get("created", {})
+        if "a" not in made:
             return None
+        # Under tools/agent-env e2e: destroyed when the run ends (MAILR_TEST_STORE_LEDGER).
+        store_accounts.note_created(store_accounts.UPSTREAM, made["a"]["id"], local)
     except Exception:  # noqa: BLE001  the upstream is optional
         return None
     return {"email": f"{local}@upstream.test", "password": pw, "imap": {"host": "localhost", "port": 12143}}

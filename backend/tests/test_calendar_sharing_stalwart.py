@@ -237,15 +237,21 @@ async def test_own_grant_wins_over_a_group_grant(people):
     """Bob is in a store group that may only read Alice's calendar (written first, as a phone could).
     mailr puts Bob's own grant before the group's, so his edit level holds; with his own view level
     and the group's write, he is read-only."""
+    from mailr.core.store import service_client
     from mailr.core.users import _domain_id, _mgmt
+    from mailr.dev import store_accounts
 
     users, clients = people
     work = await _work(users, clients)
     path = groups.path_of(work["url"])
+    gname = f"grp-test-{uuid.uuid4().hex[:6]}"
     r = await _mgmt("x:Account/set", {"create": {"g": {
-        "@type": "Group", "name": f"grp-test-{uuid.uuid4().hex[:6]}", "domainId": await _domain_id(),
-        "roles": {"@type": "Custom", "roleIds": {}}}}})
+        "@type": "Group", "name": gname, "domainId": await _domain_id(),
+        "roles": {"@type": "Custom", "roleIds": {}}, **store_accounts.mark()}}})
     gid = r["created"]["g"]["id"]
+    # Bob is still a member at the end of the test, so the store refuses to destroy the group then;
+    # it is destroyed after Bob's account, at the end of the session.
+    store_accounts.note_created(service_client().base_url, gid, gname)
     glogin = f"{(await _mgmt('x:Account/get', {'ids': [gid], 'properties': ['name']}))['list'][0]['name']}@" \
              f"{(await _login_of(users['bob'])).split('@')[1]}"
     try:

@@ -4,6 +4,32 @@ The changes in each Mailr release are listed here, newest first. A release is ta
 on GitHub, and its image is published as `ghcr.io/murtaza-nasir/mailr:<version>`. The Android app
 of a release has the same version number; the separate Notes app has its own.
 
+## 0.40.33
+
+- Calendar: on the night clocks go back, an event in the repeated hour keeps its real times and
+  length. It is drawn at full height with its Join link, offers Record this meeting, shows as the
+  calendar panel's next meeting, and can be edited and saved. A new event created during that
+  hour no longer starts an hour in the past.
+- Snooze and the when-sheet: times picked during the repeated autumn hour no longer land an hour
+  early.
+- Backups: with a backup target set, the mail export's message files are kept on the target only.
+  Files already in `/data/exports` are moved there and removed locally once the target's copy is
+  verified; `mailr export-move --dry-run` shows what will be moved. While the target is offline,
+  the export waits and no new mail counts as backed up.
+- The mail store moves to Stalwart 0.16.27. Its internal log no longer grows without limit, old
+  stored files are no longer rewritten on every compaction, and an IMAP sign-in with a wrong app
+  password is refused at once.
+
+## 0.40.32
+
+- Android: a change to a phone calendar now reaches the server within a few minutes while Mailr
+  is closed (before, it could wait for the 30-minute check, or longer at night), and opening
+  Mailr sends the current phone calendars.
+- Calendar: the "Synced … ago" line covers the synced calendars only; a quiet phone calendar no
+  longer makes it read as hours old.
+- Reminders: snoozing or dismissing a reminder records the device kind (android or web) instead
+  of "session".
+
 ## 0.40.31
 
 - Android: a phone calendar event that is also in Mailr's calendar (same time and title) is shown
