@@ -63,6 +63,7 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import io.github.murtazanasir.mailr.data.api.CalendarCollection
 import java.time.LocalDate
@@ -149,11 +150,15 @@ fun CalendarDrawer(
             vm.prefs.setDeviceOnly(it)
         }
         val calendarsWord = stringResource(R.string.cal_calendars)
+        // One heading per source: the Mailr calendar, an account (name · host), shared with you, a
+        // phone (its name), calendar links.
         accounts.forEach { a ->
-            if (accounts.size > 1 || a.name != calendarsWord) Text(a.name, style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 24.dp, top = 12.dp, bottom = 4.dp))
-            a.error?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error,
-                modifier = Modifier.padding(start = 24.dp, end = 16.dp, bottom = 4.dp)) }
+            if (accounts.size > 1 || a.name != calendarsWord) Text(a.heading, style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(start = 24.dp, end = 16.dp, top = 12.dp, bottom = 4.dp).semantics { heading() }.testTag("cal-group-heading"))
+            // The failure in plain words; the technical text is behind Details on the banner.
+            a.error?.let { Text(SyncProblems.text(a.errorKind, a.errorHost, a.name), style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(start = 24.dp, end = 16.dp, bottom = 4.dp)) }
             a.collections.forEach { c ->
                 CalendarRow(c, c.url == defaultCalendar, deviceOnly, vm,
                     onRename = { renaming = c }, onColor = { coloring = c }, onDelete = { deleting = c },
@@ -170,7 +175,7 @@ fun CalendarDrawer(
         ZoneRow(vm)
     }
 
-    if (creating) NewCalendarDialog(accounts, onDismiss = { creating = false }) { name, color, account ->
+    if (creating) NewCalendarDialog(accounts.filter { it.canCreate }, onDismiss = { creating = false }) { name, color, account ->
         creating = false
         vm.createCalendar(name, color, account)
     }
@@ -387,6 +392,15 @@ fun busyDays(events: List<DayEvent>): Set<LocalDate> = buildSet {
 
 /** "Shared with the Family group" or "Shared by Rosa", or null for the user's own calendar. */
 internal fun sharedLabel(c: CalendarCollection): String? = c.shared?.let {
-    if (it.kind == "user") AppText.get(R.string.cal_shared_by, it.owner ?: AppText.get(R.string.cal_shared_someone))
-    else AppText.get(R.string.cal_shared_with_group, it.group ?: AppText.get(R.string.cal_shared_group_fallback))
+    if (it.kind != "user") return@let AppText.get(R.string.cal_shared_with_group, it.group ?: AppText.get(R.string.cal_shared_group_fallback))
+    val owner = it.owner ?: AppText.get(R.string.cal_shared_someone)
+    val via = it.via.joinToString(", ")
+    when {
+        // Server calendar/sharing.py: free/busy only (Stalwart 1.x), or access a group of theirs gives.
+        it.level == "freebusy" -> AppText.get(R.string.cal_shared_by_free_busy, owner)
+        via.isNotEmpty() && it.level == "share" -> AppText.get(R.string.cal_shared_by_share_through, owner, via)
+        via.isNotEmpty() && it.level == "edit" -> AppText.get(R.string.cal_shared_by_edit_through, owner, via)
+        via.isNotEmpty() -> AppText.get(R.string.cal_shared_by_view_through, owner, via)
+        else -> AppText.get(R.string.cal_shared_by, owner)
+    }
 }

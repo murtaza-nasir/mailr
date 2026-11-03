@@ -13,8 +13,17 @@ reads each setting first and writes only what differs, so a normal start sends n
 - No directory: `x:Sharing.allowDirectoryQueries` false, and the principal permissions removed
   from the default user role. Stalwart's setting alone does not stop a user from listing every
   account (it only applies to users without these permissions, and its stock User role has them).
+- The full-text index of mail (`x:Search.indexEmail`): off on Stalwart 1.x, on for 0.16. mailr
+  searches its own index and never asks Stalwart to search, and the index costs disk and CPU for
+  every message (docs/design/stalwart-1.0-migration.md, section a). An empty `indexEmailFields`
+  would mean "index every field", so the switch is `indexEmail`. On 0.16 every `Email/query` sort
+  and date filter needs the index (without it the store sorts by message number and a date filter
+  finds nothing), so mailr turns it back on there, for a store rolled back from 1.x, and asks for
+  a reindex of every account.
 `ensure_phone_settings(on)` follows the phone access switch (calendar/phones.py):
-- `x:Http.useXForwarded` = on: Stalwart takes the client's address from X-Forwarded-For.
+- On: Stalwart takes the client's address from X-Forwarded-For. On 0.16 the field is
+  `x:Http.useXForwarded` (true); on 1.x it is `x:Http.clientIpSource` ("xForwardedFor", with
+  `forwardedHops` 1, the last entry). Off: false, or "peer".
 - `x:AddressBook.defaultHrefName` null while on: Stalwart makes an address book in every account the
   first time anyone lists it, a group account included, and every member of a group sees and edits
   the group's, on a phone too. mailr makes a user's own "Contacts" book itself
@@ -25,6 +34,7 @@ reads each setting first and writes only what differs, so a normal start sends n
 from __future__ import annotations
 
 import logging
+import time
 from typing import Any
 
 from mailr.core.jmap import CORE
@@ -46,6 +56,11 @@ AT_LEAST: dict[str, dict[str, int]] = {
     "x:Calendar": {"maxAttendees": 100},
     "x:Sharing": {"maxShares": 50},
 }
+# Values that depend on the Stalwart version (is_v1): True for 1.x, False for 0.16.
+EXACT_BY_VERSION: dict[bool, dict[str, dict[str, Any]]] = {
+    True: {"x:Search": {"indexEmail": False}},
+    False: {"x:Search": {"indexEmail": True}},
+}
 # Names that replace only Stalwart's stock value ("Stalwart Calendar (alice@…)" in every list).
 NAMES: dict[str, tuple[str, str]] = {
     "x:Calendar": ("Stalwart Calendar", "Calendar"),
@@ -60,10 +75,34 @@ DIRECTORY_PERMISSIONS = (
 )
 
 
-def wanted_singletons() -> dict[str, dict[str, Any]]:
-    """The singleton settings a new store is provisioned with (provision-groupware.json)."""
+_V1_TTL = 300.0
+_v1_seen: dict[str, tuple[bool, float]] = {}
+
+
+async def is_v1(client: Any, cache: bool = True) -> bool:
+    """True when the store runs Stalwart 1.x, false on 0.16. The server does not report its version
+    over JMAP, so the shape of `x:Http` tells: 1.x has `clientIpSource` where 0.16 has
+    `useXForwarded`. Kept five minutes per server URL, so a store replaced under a running mailr is
+    seen again soon."""
+    key = getattr(client, "base_url", None) if cache else None
+    if key is not None and (hit := _v1_seen.get(key)) and time.monotonic() - hit[1] < _V1_TTL:
+        return hit[0]
+    got = await _calls(client, [["x:Http/get", {"ids": ["singleton"]}, "h"]])
+    v1 = "clientIpSource" in ((got[0][1].get("list") or [{}])[0])
+    if key is not None:
+        _v1_seen[key] = (v1, time.monotonic())
+    return v1
+
+
+def forget_version() -> None:
+    _v1_seen.clear()
+
+
+def wanted_singletons(v1: bool = False) -> dict[str, dict[str, Any]]:
+    """The singleton settings a new store is provisioned with (provision-groupware.json, and
+    provision-groupware.v1.json on Stalwart 1.x)."""
     out: dict[str, dict[str, Any]] = {}
-    for table in (EXACT, AT_LEAST):
+    for table in (EXACT, AT_LEAST, EXACT_BY_VERSION[v1]):
         for obj, vals in table.items():
             out.setdefault(obj, {}).update(vals)
     for obj, (_stock, name) in NAMES.items():
@@ -71,10 +110,11 @@ def wanted_singletons() -> dict[str, dict[str, Any]]:
     return out
 
 
-def singleton_patch(obj: str, cur: dict[str, Any]) -> dict[str, Any]:
+def singleton_patch(obj: str, cur: dict[str, Any], v1: bool = False) -> dict[str, Any]:
     """What to write to one singleton so it meets mailr's needs (empty: nothing)."""
     patch: dict[str, Any] = {}
-    for k, v in EXACT.get(obj, {}).items():
+    exact = EXACT.get(obj, {}) | EXACT_BY_VERSION[v1].get(obj, {})
+    for k, v in exact.items():
         if cur.get(k) != v:
             patch[k] = v
     for k, v in AT_LEAST.get(obj, {}).items():
@@ -99,12 +139,13 @@ async def ensure_groupware_settings(client: Any = None) -> list[str]:
 
         client = service_client()
     changed: list[str] = []
-    objs = list(wanted_singletons())
+    v1 = await is_v1(client, cache=False)
+    objs = list(wanted_singletons(v1))
     got = await _calls(client, [[f"{o}/get", {"ids": ["singleton"]}, o] for o in objs])
     updates = []
     for _name, args, tag in got:
         cur = (args.get("list") or [{}])[0]
-        patch = singleton_patch(tag, cur)
+        patch = singleton_patch(tag, cur, v1)
         if patch:
             updates.append([f"{tag}/set", {"update": {"singleton": patch}}, tag])
             changed += [f"{tag}.{k}" for k in patch]
@@ -122,6 +163,11 @@ async def ensure_groupware_settings(client: Any = None) -> list[str]:
     if actions:
         await _calls(client, [["x:Action/set", {"create": {f"a{i}": a for i, a in enumerate(actions)}}, "act"]])
         log.warning("Stalwart groupware settings updated: %s", ", ".join(changed))
+    if not v1 and "x:Search.indexEmail" in changed:
+        # Mail stored while the index was off (a store rolled back from 1.x) is in no index.
+        await _calls(client, [["x:Task/set", {"create": {"r": {"@type": "StoreMaintenance",
+                                                               "maintenanceType": "reindexAccounts"}}}, "reindex"]])
+        log.warning("Stalwart: mail index turned on; every account is being reindexed")
     return changed
 
 
@@ -152,10 +198,12 @@ async def _restrict_user_roles(client: Any, changed: list[str]) -> bool:
 async def ensure_phone_settings(on: bool, client: Any = None) -> list[str]:
     """The store settings of phone access (above). Returns what changed (empty: nothing).
 
-    useXForwarded on: Stalwart takes the client's address from the first X-Forwarded-For entry (or
-    `Forwarded: for=`) of every HTTP request, so its auto-ban and app-password IP limits see the
-    phone, not the proxy. It trusts the header from anyone, which is why only the DAV gateway may
-    reach port 8080 from outside, and the gateway overwrites the header (deploy/dav-gateway)."""
+    On, Stalwart takes the client's address from X-Forwarded-For of every HTTP request, so its
+    auto-ban and app-password IP limits see the phone, not the proxy. 0.16 (`useXForwarded`) reads
+    the first entry or `Forwarded: for=`; 1.x (`clientIpSource` "xForwardedFor", `forwardedHops` 1)
+    reads the last entry. It trusts the header from anyone, which is why only the DAV gateway may
+    reach port 8080 from outside, and the gateway overwrites the header with one entry
+    (deploy/dav-gateway), which both versions read the same way."""
     if client is None:
         from mailr.core.store import service_client
 
@@ -164,7 +212,12 @@ async def ensure_phone_settings(on: bool, client: Any = None) -> list[str]:
                                 ["x:AddressBook/get", {"ids": ["singleton"]}, "x:AddressBook"]])
     cur = {tag: (args.get("list") or [{}])[0] for _, args, tag in got}
     patch: dict[str, dict[str, Any]] = {}
-    if bool(cur["x:Http"].get("useXForwarded")) != bool(on):
+    http = cur["x:Http"]
+    if "clientIpSource" in http:  # Stalwart 1.x
+        want = {"clientIpSource": "xForwardedFor" if on else "peer"} | ({"forwardedHops": 1} if on else {})
+        if diff := {k: v for k, v in want.items() if http.get(k) != v}:
+            patch["x:Http"] = diff
+    elif bool(http.get("useXForwarded")) != bool(on):
         patch["x:Http"] = {"useXForwarded": bool(on)}
     href = cur["x:AddressBook"].get("defaultHrefName")
     if on and href is not None:

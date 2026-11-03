@@ -93,11 +93,6 @@ fun gridDays(view: CalView, anchor: LocalDate): List<LocalDate> = when (view) {
 /** A task with a due date drawn on the calendar ("Show tasks on calendar"). */
 data class TaskChip(val task: TaskItem, val at: LocalDateTime, val dateOnly: Boolean)
 
-/** One CalDAV account in the drawer: its calendars and its sync error, if any; [authFailed] when
- *  the server refused the password. */
-data class AccountGroup(val id: Long?, val name: String, val error: String?, val collections: List<CalendarCollection>,
-                        val authFailed: Boolean = false)
-
 enum class ChangeKind { MOVE, RESIZE, DELETE }
 
 /**
@@ -194,16 +189,12 @@ class CalendarViewModel(private val g: AppGraph, val prefs: CalendarPrefs = Cale
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    /** Calendars grouped by account, in the user's order; one group when the server does not say. */
+    /**
+     * Calendars grouped by where they come from (CalendarGroups): the Mailr calendar, each account,
+     * shared with you, phones, links; in the user's order inside a group.
+     */
     val accounts: StateFlow<List<AccountGroup>> = combine(collections, g.calendar.accounts) { cols, acc ->
-        val evCols = cols.filter { it.events }
-        val byId = acc.associateBy { it.id }
-        evCols.groupBy { it.connectorId }.map { (id, cs) ->
-            val a = id?.let { byId[it] }
-            AccountGroup(id, a?.name?.ifBlank { null } ?: if (evCols.map { it.connectorId }.distinct().size > 1) AppText.get(R.string.cal_account_n, id ?: "").trim() else AppText.get(R.string.cal_calendars),
-                a?.detail?.takeIf { a.status == "error" } ?: cs.firstNotNullOfOrNull { it.error ?: it.sync?.error },
-                cs.sortedBy { it.sortOrder }, authFailed = a?.errorKind == "auth")
-        }
+        CalendarGroups.group(cols.filter { it.events }, acc).map { it.copy(collections = it.collections.sortedBy { c -> c.sortOrder }) }
     }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     /** When the calendars were last in step with the server ("Synced n min ago"). */

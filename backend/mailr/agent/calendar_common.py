@@ -250,7 +250,8 @@ def _named(out: dict[str, Any], key: str, names: dict[str, str] | None) -> None:
 
 
 # What Ambrose reads of a block from a phone calendar (calendar/phonecal.py): its time, and for a
-# calendar that sends details its title and place.
+# calendar that sends details its title and place. A block of a calendar shared as free/busy only
+# (calendar/shared_busy.py): its time.
 _BUSY_KEYS = ("uid", "occurrence", "start", "end", "all_day", "tz")
 
 
@@ -262,7 +263,11 @@ def busy_block(e: dict[str, Any], names: dict[str, str] | None = None) -> dict[s
     (`phone_details`: the calendar is set to send titles and places) reads like an ordinary
     read-only event: its title, place, calendar name and times. Its connector is "normal" like the
     owner's other calendar events (see calendar/phonecal.py on the outbound data policy). Guests,
-    descriptions and links never reach mailr from a phone, so neither kind has them."""
+    descriptions and links never reach mailr from a phone, so neither kind has them.
+
+    A block of a calendar shared with the user as free/busy only (`shared_busy`,
+    calendar/shared_busy.py) reads "Busy (<calendar>)" with its times: the server gives mailr
+    nothing else for it."""
     from mailr.calendar import phonecal
 
     out = {k: e[k] for k in _BUSY_KEYS if k in e and e[k] not in (None, "", [])}
@@ -276,13 +281,16 @@ def busy_block(e: dict[str, Any], names: dict[str, str] | None = None) -> dict[s
         out["read_only"] = "event from a phone calendar; it changes only on the phone"
         return out
     out["summary"] = phonecal.model_title(calendar)
+    if e.get("shared_busy"):  # calendar/shared_busy.py: someone shares only their busy times
+        out["read_only"] = "busy time from a calendar shared with the user as free/busy only; only its owner sees the details"
+        return out
     out["read_only"] = "busy time from a phone calendar; it changes only on the phone"
     return out
 
 
 def _ev_brief(e: dict[str, Any], keys: tuple[str, ...] = _EV_KEYS, zone: Any = None,
               names: dict[str, str] | None = None, clock: str = "24h") -> dict[str, Any]:
-    if e.get("phone_busy"):
+    if e.get("phone_busy") or e.get("shared_busy"):
         out = busy_block(e, names)
         if zone is not None:
             _localize(out, zone, "start", "end", bool(e.get("all_day")), "when", clock)
@@ -584,7 +592,8 @@ async def _event_ref(ctx: ToolCtx, args: dict[str, Any]) -> tuple[str, str | Non
 
 
 async def _refuse_phone(ctx: ToolCtx, uid: str) -> None:
-    """A busy block from a phone calendar is never changed, deleted, cancelled or answered here."""
+    """A busy block from a phone calendar, or from a calendar shared as free/busy only, is never
+    changed, deleted, cancelled or answered here."""
     from fastapi import HTTPException
 
     from mailr.calendar import phonecal
@@ -592,6 +601,9 @@ async def _refuse_phone(ctx: ToolCtx, uid: str) -> None:
     try:
         await phonecal.refuse_uid(ctx.db, ctx.p.user_id, uid)
     except HTTPException as e:
+        if getattr(e, "code", "") == "calendar.shared_busy_read_only":
+            raise ToolError(f"{e.detail} It is a busy time from a calendar shared with the user as free/busy "
+                            "only; only its owner changes it.") from None
         raise ToolError(f"{e.detail} It is a busy time from a phone calendar; it changes only on the phone.") from None
 
 

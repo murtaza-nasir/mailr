@@ -18,7 +18,7 @@ from sqlalchemy import and_, delete, func, insert, or_, select, text, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import defer
 
-from mailr.calendar import expand, ical, phonecal
+from mailr.calendar import expand, ical, phonecal, shared_busy, sync_errors
 from mailr.calendar import tz as tzmod
 from mailr.calendar.describe import calendar_name
 from mailr.config import get_settings
@@ -463,6 +463,23 @@ def _shareable(coll: CalCollection, connector: Connector | None, pref: dict[str,
     return bool(connector and connector.builtin) and "VEVENT" in comps
 
 
+def source_of(coll: CalCollection, connector: Connector | None, pref: dict[str, Any]) -> dict[str, Any]:
+    """Where a calendar comes from, for the clients' grouping (Settings → Calendar & tasks):
+    "builtin" (the Mailr calendar), "account" (a connected CalDAV account: its name and host),
+    "shared" (a group calendar or one a person shares), "phone" (busy times from a phone: the
+    device) or "link" (a subscribed calendar link)."""
+    if pref.get("shared"):
+        return {"kind": "shared"}
+    if connector is not None and phonecal.is_phone(coll):
+        return {"kind": "phone", "device": (connector.config or {}).get("device") or ""}
+    if connector is not None and connector.kind == "webcal":
+        return {"kind": "link"}
+    if connector is not None and connector.builtin:
+        return {"kind": "builtin"}
+    return {"kind": "account", "name": connector.name if connector is not None else "",
+            "host": sync_errors.connector_host(connector) if connector is not None else None}
+
+
 def collection_out(coll: CalCollection, connector: Connector | None, overrides: dict[str, Any]) -> dict[str, Any]:
     ev, tk = kinds_of(coll, overrides)
     comps = [c.upper() for c in coll.components or []] or ["VEVENT", "VTODO", "VJOURNAL"]
@@ -486,9 +503,13 @@ def collection_out(coll: CalCollection, connector: Connector | None, overrides: 
             # ACT calendar.phone_list @api: busy times sent from a calendar on the user's phone
             # (calendar/phonecal.py): read-only, with the device and when it last sent them.
             "phone": phonecal.info(coll, connector) if phonecal.is_phone(coll) else None,
+            # The account (or other source) the calendar belongs to, for grouping in the lists.
+            "source": source_of(coll, connector, pref),
             "sync": {"state": coll.sync_status if coll.last_full_sync_at else "initial",
                      "last_sync_at": coll.last_sync_at.isoformat() if coll.last_sync_at else None,
-                     "error": coll.sync_error or None}}
+                     "error": coll.sync_error or None,
+                     # The class of that error (calendar/sync_errors.py), which the clients explain.
+                     "error_kind": sync_errors.classify_text(coll.sync_error)}}
 
 
 def event_out(obj: CalObject, coll: CalCollection | None, user_tz: tzinfo, *, local_only: bool = False,
@@ -519,6 +540,9 @@ def event_out(obj: CalObject, coll: CalCollection | None, user_tz: tzinfo, *, lo
         # phone_details (the calendar sends titles and places, and this block has one).
         "phone_busy": phonecal.is_phone(coll),
         "phone_details": phonecal.is_phone(coll) and phonecal.has_details(obj.uid),
+        # A busy time of a calendar shared with this user as free/busy only (calendar/shared_busy.py):
+        # read-only, times only.
+        "shared_busy": bool(coll is not None and coll.read_only and shared_busy.is_block(obj.uid)),
     }
 
 

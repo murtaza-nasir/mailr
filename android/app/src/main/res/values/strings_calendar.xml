@@ -439,9 +439,22 @@
         <item quantity="other">Offline · %d changes waiting</item>
     </plurals>
     <string name="cal_offline_showing">Offline · showing what\'s on this phone</string>
-    <!-- %1$s the account, %2$s the error -->
-    <string name="cal_account_not_syncing">%1$s isn\'t syncing.</string>
-    <string name="cal_account_password">%1$s stopped accepting the calendar password. Enter it again on the web, in Settings → Calendar &amp; tasks.</string>
+    <!-- A calendar sync failure in plain words (ui/calendar/CalendarGroups.kt SyncProblems; the server's
+         calendar/sync_errors.py kinds). %1$s the host of the calendar server, or the account's name. -->
+    <string name="cal_sync_problem_auth">The calendar server at %1$s refused the user name or password. If the password changed, disconnect this account on the web and connect it again with the new password.</string>
+    <string name="cal_sync_problem_not_found">The calendar server at %1$s no longer has calendars at this address. It may have moved or been switched off. Check the address, or disconnect this account if you no longer use it.</string>
+    <string name="cal_sync_problem_tls">The security certificate of %1$s could not be verified, so no connection was made. The certificate may have expired, or the address may now lead to a different server. Check the address, or ask the server\'s administrator to renew the certificate.</string>
+    <string name="cal_sync_problem_unreachable">The calendar server at %1$s could not be reached. It may be offline, or the address may be wrong. Syncing resumes when the server can be reached again.</string>
+    <string name="cal_sync_problem_server">The calendar server at %1$s reported an error. This is usually temporary. Syncing resumes when the server works again.</string>
+    <string name="cal_sync_problem_blocked">This Mailr server does not connect to %1$s, because the address is private or local, or does not use https. Use the calendar server\'s public https address, or ask your administrator.</string>
+    <string name="cal_sync_problem_partial">The calendar server at %1$s listed only part of a calendar. Nothing was removed, and the calendar is read again at the next sync.</string>
+    <string name="cal_sync_problem_unknown">Syncing with %1$s failed. The technical message is under Details.</string>
+    <string name="cal_sync_problem_somewhere">the account\'s address</string>
+    <!-- The drawer's group headings: where the calendars come from. -->
+    <string name="cal_group_mailr">Mailr calendar</string>
+    <string name="cal_group_shared">Shared with you</string>
+    <string name="cal_group_phone">Calendars from your phone</string>
+    <string name="cal_group_links">Calendar links</string>
     <string name="cal_remove_from_my_calendar">Remove from my calendar</string>
     <string name="cal_open_on_web">Open on web</string>
     <string name="cal_details">Details</string>
@@ -633,6 +646,10 @@
     <string name="cal_delete_type_name">Type the name to confirm</string>
     <string name="cal_shared_by">Shared by %s</string>
     <string name="cal_shared_someone">someone</string>
+    <string name="cal_shared_by_free_busy">Shared by %s · free/busy only</string>
+    <string name="cal_shared_by_view_through">Shared by %1$s · can view (through %2$s)</string>
+    <string name="cal_shared_by_edit_through">Shared by %1$s · can edit (through %2$s)</string>
+    <string name="cal_shared_by_share_through">Shared by %1$s · can edit and share (through %2$s)</string>
     <!-- %s: the group's name -->
     <string name="cal_shared_with_group">Shared with the %s group</string>
     <string name="cal_shared_group_fallback">group</string>

@@ -24,6 +24,8 @@ import { escapeHtml } from '../../lib/html'
 import { EventChangeCard, FromMessageDialog, InviteCard } from './CalendarBits'
 import { hasInvite } from '../../lib/calendarForm'
 import { MessageBody } from './MessageBody'
+import { useDraftCard } from './draftCard'
+import { byName } from '../../lib/live/store'
 import { AddressCopyButton, CopyableAddress, copyAddress, useAddressMenu } from './AddressCopy'
 import { TranslateBar, TranslatedText, useTranslate } from './Translate'
 import { ReplySuggestions } from './ReplySuggestions'
@@ -80,6 +82,12 @@ function unsubscribeTarget(header: string | null): { kind: 'http' | 'mailto'; ur
 
 export function MessageCard({ m, expanded, onToggle, onReply, onEditDraft, labelsById, inSpam, isLast, highlight, sendState }: Props) {
   const translate = useTranslate(m.id)
+  // A draft changed elsewhere (the assistant, an approval, another device): its body refetches and
+  // the card says so for a moment.
+  const updated = useDraftCard(m)
+  const updatedNote = updated && (
+    <span className="draft-updated" role="status" data-testid="draft-updated">{t('conversation.messageCard.updatedByJustNow', { who: byName(updated.by) })}</span>
+  )
   const [showTranslation, setShowTranslation] = useState(false)
   const vipList = useSettings().vip ?? []
   const saveSettings = useUpdateSettings()
@@ -135,6 +143,7 @@ export function MessageCard({ m, expanded, onToggle, onReply, onEditDraft, label
               <span className="snip" dir="auto">{m.snippet}</span>
             </div>
             <div className="meta">
+              {updatedNote}
               {m.has_attachments && <FileIcon size={14} />}
               <span className="date">{formatListDate(m.date)}</span>
               {m.flagged && <Star size={16} fill="var(--star)" color="var(--star)" />}
@@ -221,6 +230,7 @@ export function MessageCard({ m, expanded, onToggle, onReply, onEditDraft, label
           </div>
         </div>
         {addrMenu.menu}
+        {updatedNote && <div className="draft-updated-line">{updatedNote}</div>}
         {sendState && <SendStatusLine state={sendState} onEditDraft={() => onEditDraft(m)} />}
 
         <Popover anchor={details.anchor} open={details.open} onClose={details.close} role="dialog" label={t('conversation.messageCard.messageDetails')} minWidth={320} className="details-popover">

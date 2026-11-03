@@ -282,7 +282,8 @@ services:
       MAILR_TRUSTED_NET: ${MAILR_TRUSTED_NET:-10.253.54.250/31}
       MAILR_RESOLVER_IP: ${MAILR_RESOLVER_IP:-10.253.53.2}
     volumes:
-      - stalwart-data:/var/lib/stalwart
+      # Stalwart 1.0 store since the cut-over on 2 Nov 2026; stalwart-data (0.16) is kept for rollback.
+      - stalwart-data-v1:/var/lib/stalwart
     networks:
       default:
       dns:
@@ -616,6 +617,7 @@ volumes:
   mailr-data:
   postgres-data:
   stalwart-data:
+  stalwart-data-v1:
   # The resolver's trust anchor (root.key), first copied from its image.
   resolver-data:
   glitchtip-uploads:

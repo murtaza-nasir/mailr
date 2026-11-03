@@ -110,8 +110,11 @@ setting is in **Settings → Admin → Calendars** even while built-in calendars
 
 Users can share their own Mailr calendars with other people on this server, from the **Share…**
 item in Calendar or the share button in **Settings → Calendar & tasks**. They pick people from
-Mailr's own list of users, never from the mail server's directory. Each person gets one of three
-levels: **View**, **Edit**, or **Edit and share** (edit, and share it further).
+Mailr's own list of users, never from the mail server's directory. Each person gets one of these
+levels: **Free/busy only** (busy times without titles or details), **View**, **Edit**, or **Edit
+and share** (edit, and share it further). **Free/busy only** needs Stalwart 1.0 or later as the mail
+server: on Stalwart 0.16 the other person would see nothing, so the level is not offered there, and
+a request for it through the API is refused.
 
 Under **Settings → Admin → Calendars → Sharing between users: calendars, notes and tables**, choose
 who users can share with:
@@ -129,8 +132,21 @@ until the owner or someone with **Edit and share** stops them.
   is disabled, and take effect again when you enable it.
 - When you delete a user, they are removed from every calendar shared with them. Calendars they owned are
   removed from everyone else's list.
-- No "free/busy only" level is offered. Such a grant can be stored on the mail server, but the other person
-  then sees nothing.
+- With **Free/busy only**, the busy times are read from the mail server as the other person, at
+  each sync of their calendars. One **Busy** entry is stored for each busy time, from about two
+  months back to a year ahead, and nothing else. After a move back to Stalwart 0.16 such shares
+  show no busy times until the owner chooses another level.
+- A grant can also name a group of the mail server, for example one set in the mail server's own
+  administration. What a person may do then follows the mail server's rule, and the same rule
+  applies in Mailr:
+    - Stalwart 1.0 and later: everything any of the person's grants allows (their own and their
+      groups').
+    - Stalwart 0.16: the same for viewing and for sharing further, but for changing events the
+      first grant in the calendar's list that names the person or one of their groups. People are
+      listed before groups, so a person's own level decides.
+
+  The Share dialog and the calendar list show where more access comes from, for example
+  **can edit (through Family)**.
 - A calendar can be shared with at most 50 people.
 - API tokens and Ambrose cannot share calendars, notes or tables. Users share them while signed in.
 - Notes and tables can also be shared with a group the user is in, and moved into a group. When you

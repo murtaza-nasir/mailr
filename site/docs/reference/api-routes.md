@@ -342,7 +342,7 @@ Scope: `read`, `calendar` to change.
 | `DELETE /api/v1/calendar/collections/{calendar_id}` | Delete a calendar or list (confirmed with its name). |
 | `GET /api/v1/calendar/collections/{calendar_id}/export` | Download a calendar or list as one .ics file. |
 | `GET /api/v1/calendar/collections/{calendar_id}/shares` | Who a calendar is shared with, at which level, and who else you can add. Signed-in only. |
-| `PUT /api/v1/calendar/collections/{calendar_id}/shares/{user_id}` | Share a calendar with a person, or change their level (`view`, `edit`, `share`). Signed-in only. |
+| `PUT /api/v1/calendar/collections/{calendar_id}/shares/{user_id}` | Share a calendar with a person, or change their level (`view`, `edit`, `share`, and `freebusy` when the mail server is Stalwart 1.0 or later: the GET lists the levels offered in `levels`). Signed-in only. |
 | `DELETE /api/v1/calendar/collections/{calendar_id}/shares/{user_id}` | Stop sharing a calendar with a person. Signed-in only. |
 | `GET /api/v1/calendar/share-notices` | Calendars people shared with you since you last dismissed the notice. |
 | `DELETE /api/v1/calendar/share-notices` | Dismiss those notices. |

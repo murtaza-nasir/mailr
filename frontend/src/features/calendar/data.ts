@@ -129,9 +129,10 @@ export function normalizeEvent(e: ApiEvent, ctx: Ctx): CalEvent | null {
   return {
     ...e, key: `${e.uid}|${occurrence}`, occurrence, startAt, endAt, allDay, firstDay, lastDay, colour,
     // A phone calendar's busy time reads "Busy" in the app's language and is never edited here; a
-    // block with details keeps the title the phone sent.
-    ...(e.phone_busy && !e.phone_details ? { summary: busyTitle() } : {}),
-    readOnly: !!col?.read_only || !!e.phone_busy,
+    // block with details keeps the title the phone sent. So does a busy time of a calendar shared
+    // as free/busy only.
+    ...((e.phone_busy && !e.phone_details) || e.shared_busy ? { summary: busyTitle() } : {}),
+    readOnly: !!col?.read_only || !!e.phone_busy || !!e.shared_busy,
   }
 }
 

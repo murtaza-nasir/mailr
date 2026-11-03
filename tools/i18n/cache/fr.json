@@ -3171,6 +3171,26 @@
    "state": "model",
    "text": "%1$s à %2$s"
   },
+  "android:app:cal_group_links": {
+   "sha": "15a1d3ceb3f88815",
+   "state": "model",
+   "text": "Liens d'agenda"
+  },
+  "android:app:cal_group_mailr": {
+   "sha": "2f8c17a30670f4ed",
+   "state": "model",
+   "text": "Agenda Mailr"
+  },
+  "android:app:cal_group_phone": {
+   "sha": "0f7da40143f67115",
+   "state": "model",
+   "text": "Agendas de votre téléphone"
+  },
+  "android:app:cal_group_shared": {
+   "sha": "933c23e2bc5ad969",
+   "state": "model",
+   "text": "Partagés avec vous"
+  },
   "android:app:cal_guest_optional": {
    "sha": "4f29f48c6bcec67c",
    "state": "model",
@@ -4722,6 +4742,26 @@
    "state": "model",
    "text": "Partagé par %s"
   },
+  "android:app:cal_shared_by_edit_through": {
+   "sha": "98087ac7089ba6e1",
+   "state": "model",
+   "text": "Partagé par %1$s · peut modifier (via %2$s)"
+  },
+  "android:app:cal_shared_by_free_busy": {
+   "sha": "e43d82b2ddda905b",
+   "state": "model",
+   "text": "Partagé par %s · disponibilité uniquement"
+  },
+  "android:app:cal_shared_by_share_through": {
+   "sha": "2ece78bc131e0708",
+   "state": "model",
+   "text": "Partagé par %1$s · peut modifier et partager (via %2$s)"
+  },
+  "android:app:cal_shared_by_view_through": {
+   "sha": "457961e314ab6c1d",
+   "state": "model",
+   "text": "Partagé par %1$s · peut consulter (via %2$s)"
+  },
   "android:app:cal_shared_group_fallback": {
    "sha": "654e1e2086cfe138",
    "state": "model",
@@ -4796,6 +4836,51 @@
    "sha": "42761be2d0e9f99d",
    "state": "model",
    "text": "Déplacé"
+  },
+  "android:app:cal_sync_problem_auth": {
+   "sha": "ada08bfa750495cd",
+   "state": "model",
+   "text": "Le serveur d'agenda %1$s a refusé le nom d'utilisateur ou le mot de passe. Si le mot de passe a changé, déconnectez ce compte sur le web et reconnectez-le avec le nouveau mot de passe."
+  },
+  "android:app:cal_sync_problem_blocked": {
+   "sha": "d724213ec918527f",
+   "state": "model",
+   "text": "Ce serveur Mailr ne se connecte pas à %1$s, car l'adresse est privée ou locale, ou n'utilise pas https. Utilisez l'adresse https publique du serveur d'agenda, ou contactez votre administrateur."
+  },
+  "android:app:cal_sync_problem_not_found": {
+   "sha": "42892f7714898649",
+   "state": "model",
+   "text": "Le serveur d'agenda %1$s ne contient plus d'agendas à cette adresse. Il a peut-être été déplacé ou désactivé. Vérifiez l'adresse, ou déconnectez ce compte si vous ne l'utilisez plus."
+  },
+  "android:app:cal_sync_problem_partial": {
+   "sha": "134decb1d32b0dec",
+   "state": "model",
+   "text": "Le serveur d'agenda %1$s n'a listé qu'une partie d'un agenda. Rien n'a été supprimé, et l'agenda sera relu lors de la prochaine synchronisation."
+  },
+  "android:app:cal_sync_problem_server": {
+   "sha": "d41b1544c41e1ff5",
+   "state": "model",
+   "text": "Le serveur d'agenda %1$s a signalé une erreur. Ce problème est généralement temporaire. La synchronisation reprendra lorsque le serveur fonctionnera de nouveau."
+  },
+  "android:app:cal_sync_problem_somewhere": {
+   "sha": "369735e24ea4f7b1",
+   "state": "model",
+   "text": "l'adresse du compte"
+  },
+  "android:app:cal_sync_problem_tls": {
+   "sha": "358a9cc836aa090e",
+   "state": "model",
+   "text": "Le certificat de sécurité de %1$s n'a pas pu être vérifié, aucune connexion n'a donc été établie. Le certificat a peut-être expiré, ou l'adresse pointe peut-être vers un autre serveur. Vérifiez l'adresse, ou demandez à l'administrateur du serveur de renouveler le certificat."
+  },
+  "android:app:cal_sync_problem_unknown": {
+   "sha": "f3760ef33a4c0705",
+   "state": "model",
+   "text": "La synchronisation avec %1$s a échoué. Le message technique figure dans Détails."
+  },
+  "android:app:cal_sync_problem_unreachable": {
+   "sha": "343319ca8e2b1f53",
+   "state": "model",
+   "text": "Le serveur d'agenda %1$s est injoignable. Il est peut-être hors ligne, ou l'adresse est incorrecte. La synchronisation reprendra lorsque le serveur sera de nouveau accessible."
   },
   "android:app:cal_synced_days_ago": {
    "sha": "925840e073020c63",
@@ -22768,6 +22853,11 @@
    "state": "model",
    "text": "Les agendas ne peuvent pas être partagés via un jeton d'API."
   },
+  "server:errors.calendar.shared_busy_read_only": {
+   "sha": "93b97bff0051c9cd",
+   "state": "model",
+   "text": "« {{name}} » est partagé avec vous en mode disponibilité uniquement. Seul son propriétaire peut modifier ses événements."
+  },
   "server:errors.calendar.signin_failed": {
    "sha": "27cdf9b68d743274",
    "state": "model",
@@ -26953,6 +27043,11 @@
    "state": "model",
    "text": "« {{titleOf}} » n'est plus dans votre agenda."
   },
+  "web:calendar.eventDetail.itsOwner": {
+   "sha": "610c46e9d866eeac",
+   "state": "manual",
+   "text": "Son propriétaire"
+  },
   "web:calendar.eventDetail.linkCopied": {
    "sha": "7cde41165fe82bad",
    "state": "model",
@@ -27012,6 +27107,11 @@
    "sha": "91889ce519203bb2",
    "state": "model",
    "text": "Rappels modifiés"
+  },
+  "web:calendar.eventDetail.sharedBusyNote": {
+   "sha": "67443902fe3f15f8",
+   "state": "model",
+   "text": "{{owner}} ne partage avec vous que les créneaux occupés de cet agenda. Les titres et les détails restent privés."
   },
   "web:calendar.eventDetail.snooze": {
    "sha": "5aedbba1e0e600c6",
@@ -28559,6 +28659,51 @@
    "state": "model",
    "text": "Le nom de l'agenda lui-même"
   },
+  "web:calendar.syncProblem.auth": {
+   "sha": "9d887ed9815a80d4",
+   "state": "model",
+   "text": "Le serveur d'agenda {{host}} a refusé le nom d'utilisateur ou le mot de passe. Si le mot de passe a changé, déconnectez ce compte puis reconnectez-le avec le nouveau mot de passe."
+  },
+  "web:calendar.syncProblem.blocked": {
+   "sha": "222ba03bc4290adf",
+   "state": "model",
+   "text": "Ce serveur Mailr ne se connecte pas à {{host}}, car l'adresse est privée ou locale, ou n'utilise pas https. Utilisez l'adresse https publique du serveur d'agenda, ou contactez votre administrateur."
+  },
+  "web:calendar.syncProblem.notFound": {
+   "sha": "cfa3bc455ac19464",
+   "state": "model",
+   "text": "Le serveur d'agenda {{host}} ne contient plus d'agendas à cette adresse. Il a peut-être été déplacé ou arrêté. Vérifiez l'adresse, ou déconnectez ce compte si vous ne l'utilisez plus."
+  },
+  "web:calendar.syncProblem.partial": {
+   "sha": "cf9dce588abc320f",
+   "state": "model",
+   "text": "Le serveur d'agenda {{host}} n'a listé qu'une partie d'un agenda. Rien n'a été supprimé, et l'agenda sera relu lors de la prochaine synchronisation."
+  },
+  "web:calendar.syncProblem.server": {
+   "sha": "17c4632b6ab75094",
+   "state": "model",
+   "text": "Le serveur d'agenda {{host}} a signalé une erreur. Ce problème est généralement temporaire. La synchronisation reprendra lorsque le serveur fonctionnera de nouveau."
+  },
+  "web:calendar.syncProblem.theServer": {
+   "sha": "369735e24ea4f7b1",
+   "state": "model",
+   "text": "l'adresse du compte"
+  },
+  "web:calendar.syncProblem.tls": {
+   "sha": "2113eefa013c56f8",
+   "state": "model",
+   "text": "Le certificat de sécurité de {{host}} n'a pas pu être vérifié, la connexion n'a donc pas été établie. Le certificat a peut-être expiré, ou l'adresse pointe peut-être vers un autre serveur. Vérifiez l'adresse, ou demandez à l'administrateur du serveur de renouveler le certificat."
+  },
+  "web:calendar.syncProblem.unknown": {
+   "sha": "8bff5459f2bd3333",
+   "state": "model",
+   "text": "La synchronisation avec {{host}} a échoué. Le message technique figure dans Détails."
+  },
+  "web:calendar.syncProblem.unreachable": {
+   "sha": "46522757176192df",
+   "state": "model",
+   "text": "Le serveur d'agenda {{host}} est injoignable. Il est peut-être hors ligne, ou l'adresse est incorrecte. La synchronisation reprendra lorsque le serveur sera de nouveau accessible."
+  },
   "web:calendar.tableDates.untitledRow": {
    "sha": "dce69bd7799471e7",
    "state": "model",
@@ -28837,6 +28982,21 @@
    "state": "model",
    "text": " et un groupe"
   },
+  "web:calendar.types.canEdit": {
+   "sha": "bdbe4bf06482c7b1",
+   "state": "model",
+   "text": "peut modifier"
+  },
+  "web:calendar.types.canEditAndShare": {
+   "sha": "3f24d27f2f0e595c",
+   "state": "model",
+   "text": "peut modifier et partager"
+  },
+  "web:calendar.types.canView": {
+   "sha": "202d13e8a181d787",
+   "state": "model",
+   "text": "peut afficher"
+  },
   "web:calendar.types.editAndShare": {
    "sha": "f7e8c5f5345aab19",
    "state": "model",
@@ -28846,6 +29006,21 @@
    "sha": "153824df7219b29c",
    "state": "model",
    "text": "Modifie et partage avec d'autres."
+  },
+  "web:calendar.types.freeBusyOnly": {
+   "sha": "883638ffa96db0e3",
+   "state": "model",
+   "text": "Disponibilité uniquement"
+  },
+  "web:calendar.types.freeBusyOnlySuffix": {
+   "sha": "6a117e3a854797b0",
+   "state": "model",
+   "text": " · disponibilité uniquement"
+  },
+  "web:calendar.types.levelThrough": {
+   "sha": "51f90464228f96b5",
+   "state": "model",
+   "text": "{{level}} (via {{groups}})"
   },
   "web:calendar.types.onlyAnAdministratorRenamesOr": {
    "sha": "372256056e0adc8b",
@@ -28861,6 +29036,16 @@
    "sha": "05cbe48a0d11c6d1",
    "state": "model",
    "text": "Consulte les événements uniquement."
+  },
+  "web:calendar.types.seesFreeBusyOnly": {
+   "sha": "748c0b783221dab6",
+   "state": "model",
+   "text": "voit uniquement la disponibilité"
+  },
+  "web:calendar.types.seesOnlyWhenYouAreBusy": {
+   "sha": "0d29ecd2de628636",
+   "state": "model",
+   "text": "Voit vos créneaux occupés, sans titres ni détails."
   },
   "web:calendar.types.sharedBy": {
    "sha": "a2f2ba5fff873783",
@@ -33315,6 +33500,11 @@
    "sha": "b4b576e4b24dce69",
    "state": "model",
    "text": "Se désabonner de {{displayName}} ?"
+  },
+  "web:conversation.messageCard.updatedByJustNow": {
+   "sha": "c4a0f48348ebad6a",
+   "state": "model",
+   "text": "Mis à jour par {{who}} · à l'instant"
   },
   "web:conversation.messageCard.waitingForApproval": {
    "sha": "68a4cf4ad6df9a3f",
@@ -51787,6 +51977,21 @@
    "sha": "a7b3504d1e2e2600",
    "state": "model",
    "text": "Ce serveur ne peut pas encore modifier les agendas."
+  },
+  "web:settings.calendarGroups.calendarLinks": {
+   "sha": "15a1d3ceb3f88815",
+   "state": "model",
+   "text": "Liens d'agenda"
+  },
+  "web:settings.calendarGroups.fromYourPhone": {
+   "sha": "0f7da40143f67115",
+   "state": "model",
+   "text": "Agendas de votre téléphone"
+  },
+  "web:settings.calendarGroups.sharedWithYou": {
+   "sha": "933c23e2bc5ad969",
+   "state": "model",
+   "text": "Partagé avec vous"
   },
   "web:settings.calendarMigration.alreadyThere": {
    "sha": "16960dde493206cf",

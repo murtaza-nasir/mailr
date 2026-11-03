@@ -22,6 +22,7 @@ import { HELLO_EVENT } from '../features/notes/presenceBeacon'
 import { outboxEvent, plainSendError } from '../features/mail/outbox'
 import { t } from '../i18n'
 import { approvalTag, closeApprovalNotifications } from '../lib/serviceWorker'
+import { invalidateDraftBody } from '../features/conversation/draftCard'
 
 type Entity = 'conversation' | 'message' | 'label' | 'outbox' | 'connector' | 'rule' | 'identity' | 'task' | 'event' | 'calendar' | 'reminder' | string
 
@@ -291,7 +292,12 @@ export function useLiveUpdates(enabled: boolean, assistantDesktop = true) {
             window.dispatchEvent(new CustomEvent(HELLO_EVENT, { detail: { id: String(ev.id ?? '') } }))
         }
         // Live editing (lib/live/store.ts): a new version of an item, and agents writing one.
-        else if (ev.type === 'item' && ev.kind) onItemEvent(ev as unknown as ItemEvent)
+        else if (ev.type === 'item' && ev.kind) {
+          // A saved draft keeps its message id through every save: the body a thread's draft card
+          // cached for it is stale now, whoever wrote (this tab included: a closed editor's card).
+          if (ev.kind === 'draft' && ev.id != null && !ev.deleted) invalidateDraftBody(qc, ev.id as number)
+          onItemEvent(ev as unknown as ItemEvent)
+        }
         else if (ev.type === 'editing' && ev.kind) onEditingEvent(ev as unknown as EditingEvent)
         else if (ev.type === 'counts' && ev.views) {
           // The sidebar numbers after a change (core/sidebar.py): set, not refetched.

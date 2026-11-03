@@ -1324,6 +1324,18 @@
 .msg-draft-word.s-approval {
   color: var(--primary);
 }
+/* A draft changed by someone else (the assistant, an approval, another device): said for a moment. */
+.draft-updated {
+  font-size: 12px;
+  color: var(--primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+.draft-updated-line {
+  margin: 2px 0 6px;
+}
 .send-status {
   display: flex;
   align-items: center;

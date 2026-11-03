@@ -12,6 +12,7 @@ import { CloudOff, Eye, Globe, RefreshCw, TriangleAlert } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router'
 import { NoCalendarConnected } from './BuiltinCalendarHint'
+import { syncProblemText } from './syncProblem'
 import { api } from '../../api/client'
 import { Dialog } from '../../components/Dialog'
 import { ItemBoundary, Skeleton } from '../../components/bits'
@@ -400,11 +401,16 @@ export function CalendarApp() {
   const eventCals = collections.filter((c) => c.events !== false && !c.error)
   const allHidden = eventCals.length > 0 && eventCals.every((c) => hidden.has(c.url ?? c.id))
   const accountErrors = [
-    ...collections.filter((c) => c.error).map((c) => ({ id: c.url ?? c.id, auth: false, detail: undefined as string | undefined, text: `${c.name || tr('calendar.calendarApp.aCalendar')}: ${c.error}` })),
-    ...(sync.data?.connectors ?? []).filter((c) => c.status === 'error').map((c) => ({
-      id: String(c.id), auth: c.error_kind === 'auth', detail: c.detail ?? undefined,
-      text: c.error_kind === 'auth' ? tr('calendar.calendarApp.passwordRefused', { name: c.name }) : `${c.name}: ${c.detail ?? tr('calendar.calendarApp.syncFailed')}`,
+    // What went wrong in plain words (calendar/syncProblem.tsx); the technical text under Details.
+    ...collections.filter((c) => c.error).map((c) => ({
+      id: c.url ?? c.id, auth: c.error_kind === 'auth', detail: c.error,
+      text: syncProblemText(c.error_kind, c.error_host, c.name),
     })),
+    ...(sync.data?.connectors ?? []).filter((c) => c.status === 'error')
+      .filter((c) => !collections.some((x) => x.error && x.connector_id === c.id)).map((c) => ({
+        id: String(c.id), auth: c.error_kind === 'auth', detail: c.detail ?? undefined,
+        text: syncProblemText(c.error_kind, c.error_host, c.name),
+      })),
   ]
   const zoneDiffers = prefs.zone !== prefs.homeZone
   // A server error or an unreachable server is not "no events": say so, with Retry.
@@ -483,7 +489,16 @@ export function CalendarApp() {
             </div>
           )}
           {accountErrors.map((a) => (
-            <div key={a.id} className="cal-banner error" role="alert" title={a.detail}><TriangleAlert size={16} aria-hidden /> {a.text}
+            <div key={a.id} className="cal-banner error" role="alert" data-testid="cal-account-error"><TriangleAlert size={16} aria-hidden />
+              <span className="cal-banner-text">
+                {a.text}
+                {a.detail && (
+                  <details className="cal-banner-details">
+                    <summary>{tr('common.details')}</summary>
+                    <code>{a.detail}</code>
+                  </details>
+                )}
+              </span>
               {/* A refused password: Retry cannot work; the way out is the account's password. */}
               {a.auth
                 ? <Link className="btn text sm" to="/settings/calendar">{tr('calendar.calendarApp.checkThePassword')}</Link>

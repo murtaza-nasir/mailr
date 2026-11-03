@@ -393,8 +393,19 @@
         <item quantity="other">Hors ligne · %d modifications en attente</item>
     </plurals>
     <string name="cal_offline_showing">Hors ligne · affichage des éléments présents sur ce téléphone</string>
-    <string name="cal_account_not_syncing">%1$s ne se synchronise pas.</string>
-    <string name="cal_account_password">%1$s n\'accepte plus le mot de passe de l\'agenda. Saisissez-le à nouveau sur le web, dans Paramètres → Agenda et tâches.</string>
+    <string name="cal_sync_problem_auth">Le serveur d\'agenda %1$s a refusé le nom d\'utilisateur ou le mot de passe. Si le mot de passe a changé, déconnectez ce compte sur le web et reconnectez-le avec le nouveau mot de passe.</string>
+    <string name="cal_sync_problem_not_found">Le serveur d\'agenda %1$s ne contient plus d\'agendas à cette adresse. Il a peut-être été déplacé ou désactivé. Vérifiez l\'adresse, ou déconnectez ce compte si vous ne l\'utilisez plus.</string>
+    <string name="cal_sync_problem_tls">Le certificat de sécurité de %1$s n\'a pas pu être vérifié, aucune connexion n\'a donc été établie. Le certificat a peut-être expiré, ou l\'adresse pointe peut-être vers un autre serveur. Vérifiez l\'adresse, ou demandez à l\'administrateur du serveur de renouveler le certificat.</string>
+    <string name="cal_sync_problem_unreachable">Le serveur d\'agenda %1$s est injoignable. Il est peut-être hors ligne, ou l\'adresse est incorrecte. La synchronisation reprendra lorsque le serveur sera de nouveau accessible.</string>
+    <string name="cal_sync_problem_server">Le serveur d\'agenda %1$s a signalé une erreur. Ce problème est généralement temporaire. La synchronisation reprendra lorsque le serveur fonctionnera de nouveau.</string>
+    <string name="cal_sync_problem_blocked">Ce serveur Mailr ne se connecte pas à %1$s, car l\'adresse est privée ou locale, ou n\'utilise pas https. Utilisez l\'adresse https publique du serveur d\'agenda, ou contactez votre administrateur.</string>
+    <string name="cal_sync_problem_partial">Le serveur d\'agenda %1$s n\'a listé qu\'une partie d\'un agenda. Rien n\'a été supprimé, et l\'agenda sera relu lors de la prochaine synchronisation.</string>
+    <string name="cal_sync_problem_unknown">La synchronisation avec %1$s a échoué. Le message technique figure dans Détails.</string>
+    <string name="cal_sync_problem_somewhere">l\'adresse du compte</string>
+    <string name="cal_group_mailr">Agenda Mailr</string>
+    <string name="cal_group_shared">Partagés avec vous</string>
+    <string name="cal_group_phone">Agendas de votre téléphone</string>
+    <string name="cal_group_links">Liens d\'agenda</string>
     <string name="cal_remove_from_my_calendar">Retirer de mon agenda</string>
     <string name="cal_open_on_web">Ouvrir sur le web</string>
     <string name="cal_details">Détails</string>
@@ -574,6 +585,10 @@
     <string name="cal_delete_type_name">Saisissez le nom pour confirmer</string>
     <string name="cal_shared_by">Partagé par %s</string>
     <string name="cal_shared_someone">quelqu\'un</string>
+    <string name="cal_shared_by_free_busy">Partagé par %s · disponibilité uniquement</string>
+    <string name="cal_shared_by_view_through">Partagé par %1$s · peut consulter (via %2$s)</string>
+    <string name="cal_shared_by_edit_through">Partagé par %1$s · peut modifier (via %2$s)</string>
+    <string name="cal_shared_by_share_through">Partagé par %1$s · peut modifier et partager (via %2$s)</string>
     <string name="cal_shared_with_group">Partagé avec le groupe %s</string>
     <string name="cal_shared_group_fallback">groupe</string>
     <string name="cal_live_when_all_day">%1$s – %2$s, toute la journée</string>

@@ -338,7 +338,6 @@
       "askForBuiltInCalendars": "Noch keinen eigenen Kalender? Bitte die Person, die diesen Mailr-Server betreibt, die integrierten Kalender einzuschalten. Dann bekommst du hier einen Kalender und eine Aufgabenliste ohne weiteres Konto."
     },
     "calendarApp": {
-      "aCalendar": "Ein Kalender",
       "allCalendarsAreHidden": "Alle Kalender sind ausgeblendet",
       "couldNotSync": "Sync fehlgeschlagen",
       "couldntLoadEvents": "Termine konnten nicht geladen werden.",
@@ -354,7 +353,6 @@
       "offlineTheCalendarIsRead2": "Offline · Kalender ist schreibgeschützt.",
       "resize": "Größe ändern",
       "searchFailed": "Suche fehlgeschlagen.",
-      "syncFailed": "Sync fehlgeschlagen",
       "synced": "Synchronisiert",
       "syncedAgo": "Synchronisiert vor {{value}}",
       "syncing": "Synchronisiere…",
@@ -362,7 +360,6 @@
       "typeADateThenEnter": "Datum eingeben, dann Enter.",
       "use": "{{zoneAbbr}} verwenden",
       "viewingInTime": "Ansicht in {{replace}} Zeit ({{utcLabel}})",
-      "passwordRefused": "{{name}}: Der Kalenderserver nimmt das Passwort nicht mehr an.",
       "checkThePassword": "Passwort in den Einstellungen prüfen"
     },
     "commands": {
@@ -394,6 +391,7 @@
       "ask": "{{name}} fragen",
       "askShiftA": "{{name}} fragen (Shift+A)",
       "calendarColour": "Kalenderfarbe",
+      "cancelledBy": "Abgesagt von {{who}}",
       "changeRemindersFor": "Erinnerungen ändern für",
       "colourChanged": "Farbe geändert",
       "delete": "Löschen (#)",
@@ -402,6 +400,7 @@
       "eventColour": "Terminfarbe",
       "fromAnEmail": "Aus einer E-Mail",
       "isNoLongerInYour": "„{{titleOf}}“ ist nicht mehr in deinem Kalender.",
+      "itsOwner": "Der Besitzer",
       "linkCopied": "Link kopiert",
       "map": "Karte",
       "moveTo": "Verschieben nach…",
@@ -414,10 +413,10 @@
       "recolour": "Farbe ändern",
       "reminder": "Erinnerung: {{detail}}",
       "remindersChanged": "Erinnerungen geändert",
+      "sharedBusyNote": "{{owner}} teilt nur die Belegungszeiten dieses Kalenders mit dir. Titel und Details bleiben privat.",
       "snooze": "{{label}} zurückstellen",
       "tentative": "Vorläufig",
-      "thisEventWasDeletedElsewhere": "Dieser Termin wurde anderswo gelöscht",
-      "cancelledBy": "Abgesagt von {{who}}"
+      "thisEventWasDeletedElsewhere": "Dieser Termin wurde anderswo gelöscht"
     },
     "eventEditor": {
       "addDescription": "Beschreibung hinzufügen",
@@ -821,11 +820,19 @@
     "types": {
       "addsChangesAndDeletesEvents": "Fügt Termine hinzu, ändert und löscht sie.",
       "andAGroup": " und eine Gruppe",
+      "canEdit": "kann bearbeiten",
+      "canEditAndShare": "kann bearbeiten und teilen",
+      "canView": "kann anzeigen",
       "editAndShare": "Bearbeiten und teilen",
       "editsAndSharesItWith": "Ändert und teilt mit anderen.",
+      "freeBusyOnly": "Nur Verfügbarkeit",
+      "freeBusyOnlySuffix": " · nur Verfügbarkeit",
+      "levelThrough": "{{level}} (über {{groups}})",
       "onlyAnAdministratorRenamesOr": "Nur ein Administrator kann es umbenennen oder löschen. Du kannst es ausblenden.",
       "onlyRenamesOrDeletesIt": "Nur {{owner}} kann es umbenennen oder löschen. Du kannst es ausblenden.",
       "seesEveryEventChangesNothing": "Zeigt nur Termine an.",
+      "seesFreeBusyOnly": "sieht nur die Verfügbarkeit",
+      "seesOnlyWhenYouAreBusy": "Sieht, wann du beschäftigt bist, ohne Titel oder Details.",
       "sharedBy": "Geteilt von {{owner}}",
       "sharedWithAGroup": "Mit einer Gruppe geteilt",
       "sharedWithPeople_one": "Mit {{count}} Person geteilt{{value}}",
@@ -844,6 +851,17 @@
       "menuNote": "Belegte Zeiten aus einem Kalender auf deinem Telefon. Sie ändern sich nur auf dem Telefon.",
       "menuNoteDetails": "Termine aus einem Kalender auf deinem Telefon, mit Titeln und Orten. Sie werden nur auf dem Telefon geändert.",
       "phoneCalendarSettings": "Einstellungen für Telefonkalender"
+    },
+    "syncProblem": {
+      "theServer": "die Adresse des Kontos",
+      "auth": "Der Kalender-Server unter {{host}} hat den Benutzernamen oder das Passwort abgelehnt. Wenn das Passwort geändert wurde, trenne die Verbindung zu diesem Konto und verbinde es erneut mit dem neuen Passwort.",
+      "notFound": "Der Kalender-Server unter {{host}} hat unter dieser Adresse keine Kalender mehr. Er wurde möglicherweise verschoben oder deaktiviert. Überprüfe die Adresse oder trenne die Verbindung zu diesem Konto, wenn du es nicht mehr nutzt.",
+      "tls": "Das Sicherheitszertifikat von {{host}} konnte nicht überprüft werden, daher wurde keine Verbindung hergestellt. Das Zertifikat ist möglicherweise abgelaufen oder die Adresse führt nun zu einem anderen Server. Überprüfe die Adresse oder bitte den Administrator des Servers, das Zertifikat zu erneuern.",
+      "unreachable": "Der Kalender-Server unter {{host}} konnte nicht erreicht werden. Er ist möglicherweise offline oder die Adresse ist falsch. Die Synchronisierung wird fortgesetzt, wenn der Server wieder erreichbar ist.",
+      "server": "Der Kalender-Server unter {{host}} hat einen Fehler gemeldet. Dies ist in der Regel vorübergehend. Die Synchronisierung wird fortgesetzt, wenn der Server wieder funktioniert.",
+      "blocked": "Dieser Mailr-Server stellt keine Verbindung zu {{host}} her, da die Adresse privat oder lokal ist oder https nicht verwendet. Verwende die öffentliche https-Adresse des Kalender-Servers oder wende dich an deinen Administrator.",
+      "partial": "Der Kalender-Server unter {{host}} hat nur einen Teil eines Kalenders aufgelistet. Es wurde nichts entfernt, und der Kalender wird bei der nächsten Synchronisierung erneut gelesen.",
+      "unknown": "Die Synchronisierung mit {{host}} ist fehlgeschlagen. Die technische Meldung findest du unter Details."
     }
   },
   "colour": {
@@ -1811,7 +1829,8 @@
       "translateToEnglish": "Ins Englische übersetzen",
       "unsubscribe": "Abmelden",
       "unsubscribeFrom": "Von {{displayName}} abmelden?",
-      "waitingForApproval": "Warten auf Freigabe"
+      "waitingForApproval": "Warten auf Freigabe",
+      "updatedByJustNow": "Aktualisiert von {{who}} · gerade eben"
     },
     "replySuggestions": {
       "suggestedReplies": "Vorgeschlagene Antworten"
@@ -6631,7 +6650,6 @@
       "couldNotChangeTheCalendar": "Kalender konnte nicht geändert werden",
       "couldNotCreateIt": "Kalender oder Liste konnte nicht erstellt werden",
       "couldNotDeleteIt": "Kalender oder Liste konnte nicht gelöscht werden",
-      "couldNotReadOneCalendar": "Ein Kalenderkonto konnte nicht gelesen werden: {{error}}",
       "countingItsEvents": " Termine werden gezählt…",
       "created": "{{itemName}} erstellt",
       "defaultCalendar": "Standardkalender",
@@ -8220,6 +8238,11 @@
       "removeBody": "Die Belegungszeiten werden aus Mailr entfernt. Wenn das Telefon sie weiterhin sendet, kehren sie beim nächsten Update zurück. Um das zu verhindern, stelle den Kalender in der Android-App auf Aus oder Anzeigen auf diesem Telefon.",
       "removed": "„{{name}}“ entfernt",
       "notRemoved": "Der Telefonkalender konnte nicht entfernt werden"
+    },
+    "calendarGroups": {
+      "sharedWithYou": "Mit dir geteilt",
+      "fromYourPhone": "Kalender von deinem Telefon",
+      "calendarLinks": "Kalender-Links"
     }
   },
   "shortcuts": {

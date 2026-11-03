@@ -304,7 +304,6 @@
       "askForBuiltInCalendars": "还没有自己的日历？请让管理此 Mailr 服务器的人开启内置日历。之后您无需其他账户，即可在此获得日历和任务列表。"
     },
     "calendarApp": {
-      "aCalendar": "一个日历",
       "allCalendarsAreHidden": "所有日历均已隐藏",
       "couldNotSync": "无法同步",
       "couldntLoadEvents": "无法加载活动。",
@@ -320,7 +319,6 @@
       "offlineTheCalendarIsRead2": "离线 · 日历为只读。",
       "resize": "调整大小",
       "searchFailed": "无法搜索。",
-      "syncFailed": "同步失败",
       "synced": "已同步",
       "syncedAgo": "{{value}} 前已同步",
       "syncing": "正在同步…",
@@ -328,7 +326,6 @@
       "typeADateThenEnter": "输入日期，然后按 Enter。",
       "use": "使用 {{zoneAbbr}}",
       "viewingInTime": "正在以 {{replace}} 时间查看 ({{utcLabel}})",
-      "passwordRefused": "{{name}}：日历服务器不再接受该密码。",
       "checkThePassword": "在设置中检查密码"
     },
     "commands": {
@@ -359,6 +356,7 @@
       "ask": "询问 {{name}}",
       "askShiftA": "询问 {{name}} (Shift+A)",
       "calendarColour": "日历颜色",
+      "cancelledBy": "由 {{who}} 取消",
       "changeRemindersFor": "更改提醒",
       "colourChanged": "颜色已更改",
       "delete": "删除 (#)",
@@ -367,6 +365,7 @@
       "eventColour": "活动颜色",
       "fromAnEmail": "来自邮件",
       "isNoLongerInYour": "“{{titleOf}}”已不在您的日历中。",
+      "itsOwner": "其所有者",
       "linkCopied": "链接已复制",
       "map": "地图",
       "moveTo": "移动到…",
@@ -379,10 +378,10 @@
       "recolour": "重新着色",
       "reminder": "提醒：{{detail}}",
       "remindersChanged": "提醒已更改",
+      "sharedBusyNote": "{{owner}} 仅与您共享此日历的忙碌时间。标题和详情仍归其所有。",
       "snooze": "延后 {{label}}",
       "tentative": "暂定",
-      "thisEventWasDeletedElsewhere": "此活动已在别处删除",
-      "cancelledBy": "由 {{who}} 取消"
+      "thisEventWasDeletedElsewhere": "此活动已在别处删除"
     },
     "eventEditor": {
       "addDescription": "添加描述",
@@ -763,11 +762,19 @@
     "types": {
       "addsChangesAndDeletesEvents": "添加、更改和删除活动。",
       "andAGroup": " 和一个群组",
+      "canEdit": "可编辑",
+      "canEditAndShare": "可编辑和共享",
+      "canView": "可查看",
       "editAndShare": "编辑和共享",
       "editsAndSharesItWith": "编辑并与他人共享。",
+      "freeBusyOnly": "仅显示忙碌/空闲",
+      "freeBusyOnlySuffix": " · 仅显示忙碌/空闲",
+      "levelThrough": "{{level}}（通过 {{groups}}）",
       "onlyAnAdministratorRenamesOr": "只有管理员可以重命名或删除。您可以将其隐藏。",
       "onlyRenamesOrDeletesIt": "只有 {{owner}} 可以重命名或删除。您可以将其隐藏。",
       "seesEveryEventChangesNothing": "仅查看活动。",
+      "seesFreeBusyOnly": "仅显示忙碌/空闲",
+      "seesOnlyWhenYouAreBusy": "仅显示您何时忙碌，不包含标题或详情。",
       "sharedBy": "由 {{owner}} 共享",
       "sharedWithAGroup": "与群组共享",
       "sharedWithPeople_other": "与 {{count}} 人共享{{value}}",
@@ -785,6 +792,17 @@
       "menuNote": "来自您手机日历的忙碌时间。仅在手机上更改。",
       "menuNoteDetails": "您手机日历中的活动，包含标题和地点。仅在手机上更改。",
       "phoneCalendarSettings": "手机日历设置"
+    },
+    "syncProblem": {
+      "theServer": "该账户的地址",
+      "auth": "{{host}} 处的日历服务器拒绝了用户名或密码。如果密码已更改，请断开此账户的连接，并使用新密码重新连接。",
+      "notFound": "{{host}} 处的日历服务器在此地址下已没有日历。它可能已移动或已关闭。请检查地址，或者如果您不再使用此账户，请将其断开连接。",
+      "tls": "无法验证 {{host}} 的安全证书，因此未建立连接。证书可能已过期，或者该地址现在可能指向不同的服务器。请检查地址，或要求服务器管理员更新证书。",
+      "unreachable": "无法连接到 {{host}} 处的日历服务器。它可能已离线，或者地址可能有误。当服务器再次可访问时，同步将恢复。",
+      "server": "{{host}} 处的日历服务器报告了错误。这通常是暂时性的。当服务器恢复正常工作时，同步将恢复。",
+      "blocked": "此 Mailr 服务器不会连接到 {{host}}，因为该地址是私有或本地地址，或未使用 https。请使用日历服务器的公共 https 地址，或联系您的管理员。",
+      "partial": "{{host}} 处的日历服务器仅列出了部分日历。未删除任何内容，该日历将在下次同步时重新读取。",
+      "unknown": "与 {{host}} 同步失败。技术消息请参见“详细信息”。"
     }
   },
   "colour": {
@@ -1740,7 +1758,8 @@
       "translateToEnglish": "翻译为英文",
       "unsubscribe": "退订",
       "unsubscribeFrom": "退订 {{displayName}}？",
-      "waitingForApproval": "等待审批"
+      "waitingForApproval": "等待审批",
+      "updatedByJustNow": "由 {{who}} 更新 · 刚刚"
     },
     "replySuggestions": {
       "suggestedReplies": "建议回复"
@@ -6366,7 +6385,6 @@
       "couldNotChangeTheCalendar": "无法更改日历",
       "couldNotCreateIt": "无法创建日历或列表",
       "couldNotDeleteIt": "无法删除日历或列表",
-      "couldNotReadOneCalendar": "无法读取一个日历账户：{{error}}",
       "countingItsEvents": " 正在统计其活动…",
       "created": "已创建 {{itemName}}",
       "defaultCalendar": "默认日历",
@@ -7907,6 +7925,11 @@
       "removeBody": "其忙碌时间将从 Mailr 中移除。如果手机仍发送这些时间，它们将在下次更新时重新出现。若要停止此情况，请在 Android 应用中将此日历设置为“关闭”或在此手机上设置为“显示”。",
       "removed": "已移除“{{name}}”",
       "notRemoved": "无法移除手机日历"
+    },
+    "calendarGroups": {
+      "sharedWithYou": "已与您共享",
+      "fromYourPhone": "来自您手机的日历",
+      "calendarLinks": "日历链接"
     }
   },
   "shortcuts": {

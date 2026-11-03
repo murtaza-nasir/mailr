@@ -26,6 +26,7 @@ import { useCalUI } from './store'
 import { ShareDialog } from './ShareDialog'
 import { ownerNote, sharedLabel, sharingLabel, type Collection } from './types'
 import { t } from '../../i18n'
+import { syncProblemText } from './syncProblem'
 
 const urlOf = (c: Collection) => c.url ?? c.id
 const noop = () => {}
@@ -255,7 +256,8 @@ function CalendarList() {
         )
       })}
       {cal.collections.filter((c) => c.error).map((c) => (
-        <div key={urlOf(c)} className="cal-cal error" title={c.error}>{c.name || t('common.calendar')}: {c.error}</div>
+        // The plain message; the technical text in the tooltip (the banner above the grid has Details).
+        <div key={urlOf(c)} className="cal-cal error" title={c.error}>{syncProblemText(c.error_kind, c.error_host, c.name || t('common.calendar'))}</div>
       ))}
       <button type="button" className="cal-newcal" onClick={() => setCreating(true)} disabled={cal.readOnly}>
         <Plus size={16} aria-hidden />{' '}{t('calendar.leftColumn.newCalendar')}

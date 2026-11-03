@@ -301,14 +301,16 @@ class MailRepository(val api: MailrApi, private val db: MailrDb) {
         return d
     }
 
-    suspend fun body(messageId: Long, imagesAllowed: Boolean, quote: String? = null): MessageBody {
-        if (quote == null) {
+    /** A message's body. `cache = false` (a draft, whose text changes under the same id) neither reads
+     *  nor keeps the stored copy. */
+    suspend fun body(messageId: Long, imagesAllowed: Boolean, quote: String? = null, cache: Boolean = true): MessageBody {
+        if (quote == null && cache) {
             db.cache().body(messageId, imagesAllowed)?.let {
                 return MailrJson.decodeFromString(MessageBody.serializer(), it.json)
             }
         }
         val b = api.body(messageId, imagesAllowed, quote)
-        if (quote == null) {
+        if (quote == null && cache) {
             db.cache().putBody(BodyEntity(messageId, imagesAllowed, MailrJson.encodeToString(MessageBody.serializer(), b),
                 System.currentTimeMillis()))  // clock-ok: cache stamp
             db.cache().trimBodies(400)

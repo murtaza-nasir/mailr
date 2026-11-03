@@ -58,6 +58,22 @@ class SharedCalendarGuardTest {
         assertNull(sharedLabel(o))
     }
 
+    /** Server calendar/sharing.py: free/busy only (Stalwart 1.x), and access a group of the user's gives. */
+    @Test fun free_busy_only_and_access_through_a_group_are_named() {
+        val fb = coll("""{"url":"c4","name":"Rosa's rota","calendar_id":14,"events":true,"read_only":true,
+            "shared":{"kind":"user","owner":"Rosa","owner_id":7,"level":"freebusy","access":"freebusy","can_share":false}}""")
+        val viaGroup = coll("""{"url":"c5","name":"Rosa's plans","calendar_id":15,"events":true,"read_only":false,
+            "shared":{"kind":"user","owner":"Rosa","owner_id":7,"level":"edit","access":"write","can_share":false,
+            "own_level":"view","via":["Family"]}}""")
+        val share = coll("""{"url":"c6","name":"Board","calendar_id":16,"events":true,"read_only":false,
+            "shared":{"kind":"user","owner":"Rosa","level":"share","access":"write","can_share":true,"via":["Family","Team"]}}""")
+        assertEquals("Shared by Rosa · free/busy only", sharedLabel(fb))
+        assertEquals("Shared by Rosa · can edit (through Family)", sharedLabel(viaGroup))
+        assertEquals("Shared by Rosa · can edit and share (through Family, Team)", sharedLabel(share))
+        assertFalse(fb.canRenameOrDelete)
+        assertEquals(listOf("Family"), viaGroup.shared?.via)
+    }
+
     @Test fun the_repository_refuses_rename_and_delete_of_a_shared_calendar() = runBlocking {
         val g = coll(group)
         val before = h.requests.size

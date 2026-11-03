@@ -9,10 +9,17 @@ admin has attached at least one calendar to it (table calendar_groups):
 - an **owner** account (a User with no password, description "mailr group calendar owner"). Read-only
   group calendars live there, with an ACL that grants each editor read + write and then the group
   read. Stalwart takes the first ACE that names the user, so the editors come first: an editor
-  listed after the group gets only the group's read (verified on 0.16.23).
+  listed after the group gets only the group's read (verified on 0.16.23). Stalwart 1.0.1 checks
+  writes against the union of the ACEs (tests/test_calendar_sharing_stalwart.py), so there the
+  order does not matter; it does no harm.
+
+Group calendars have no "free/busy only" access (calendar/sharing.py has it for people's calendars
+on Stalwart 1.x): members of a read-write calendar get every right through the group account, so
+there is no ACL to narrow, and a read-only calendar is one the whole group reads.
 
 After every ACL write mailr runs `x:Action InvalidateCaches`: a first share to a group stays
-invisible to its members until then (Stalwart refreshes only the group's own token).
+invisible to its members until then (Stalwart refreshes only the group's own token). Stalwart
+1.0.1 shows it at once; the call stays while 0.16 is supported.
 
 Membership is reconciled (`reconcile()`): each user's `memberGroupIds` holds exactly the managed
 groups the user is in. Only managed groups are touched. It runs as the job

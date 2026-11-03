@@ -17,7 +17,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from mailr import i18n
 from mailr.api import contract as C
 from mailr.calendar import client as cal
-from mailr.calendar import dav, ical, itip, mirror, phonecal, writer
+from mailr.calendar import dav, ical, itip, mirror, phonecal, sync_errors, writer
 from mailr.calendar.describe import calendar_name
 from mailr.core import permissions
 from mailr.core.audit import audit
@@ -1663,15 +1663,20 @@ async def sync_status(p: Principal = Depends(scope("read")), db: AsyncSession = 
     out = []
     for c in conns:
         cols = await mirror.collections_of(db, [c.id])
+        problem = sync_errors.connector_problem(c)
         out.append({"id": c.id, "name": c.name, "status": c.status, "detail": c.status_detail,
-                    # "auth": the server refused the password, so retrying cannot help (the phone
-                    # sends the user to the password instead of offering Retry).
-                    "error_kind": "auth" if ((c.state or {}).get("caldav") or {}).get("auth_failed") else None,
+                    # The class of the failure (calendar/sync_errors.py), which the clients explain in
+                    # words; `detail` is the technical text behind "Details". "auth": the server refused
+                    # the password, so retrying cannot help (the phone sends the user to the password
+                    # instead of offering Retry).
+                    "error_kind": problem["kind"] if problem else None,
+                    "error_host": problem["host"] if problem else None,
                     "last_sync_at": c.last_sync_at.isoformat() if c.last_sync_at else None,
                     "collections": [{"calendar_id": x.id, "url": x.href,
                                      "name": calendar_name(x.displayname, x.href),
                                      "state": x.sync_status if x.last_full_sync_at else "initial",
                                      "error": x.sync_error or None,
+                                     "error_kind": sync_errors.classify_text(x.sync_error),
                                      "last_sync_at": x.last_sync_at.isoformat() if x.last_sync_at else None,
                                      "next_sync_at": x.next_sync_at.isoformat() if x.next_sync_at else None}
                                     for x in cols]})

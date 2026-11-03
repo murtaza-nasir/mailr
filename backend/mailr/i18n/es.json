@@ -110,6 +110,7 @@
       "unverified_user_only": "Solo el usuario conectado puede aplicar un cambio de un remitente no verificado",
       "window_two_years": "El intervalo debe ser positivo y de un máximo de dos años",
       "phone_read_only": "«{{name}}» muestra los horarios ocupados de tu teléfono y no se puede modificar aquí. Cambia el evento en el teléfono.",
+      "shared_busy_read_only": "«{{name}}» está compartido contigo solo como disponibilidad. Solo su propietario puede cambiar sus eventos.",
       "phone_limit": "como máximo {{max}} calendarios del teléfono",
       "phone_needs_allow": "una regla hace que las actualizaciones de calendarios del teléfono requieran aprobación; permítelas para este token en Ajustes → Permisos"
     },

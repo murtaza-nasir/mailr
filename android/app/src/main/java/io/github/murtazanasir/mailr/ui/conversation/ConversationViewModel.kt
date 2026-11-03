@@ -90,6 +90,7 @@ class ConversationViewModel(
     init {
         viewModelScope.launch {
             detail.collect { d ->
+                if (d != null) reloadChangedDrafts(d)
                 if (d != null) extras.onDetail(d, (g.mail.me.value?.settings?.get("reply_suggestions") as? kotlinx.serialization.json.JsonPrimitive)?.content != "false")
             }
         }
@@ -159,9 +160,25 @@ class ConversationViewModel(
         ids.forEach { loadBody(it) }
     }
 
+    /** The draft revisions of the last conversation seen (DraftRevisions.kt). */
+    private var draftsSeen: Map<Long, String> = emptyMap()
+
+    /** A draft changed since the conversation was last read (the assistant, an approval, the web):
+     *  its body, if loaded, loads again; the old text stays on screen until the new one arrives. */
+    private fun reloadChangedDrafts(d: ConversationDetail) {
+        val changed = changedDrafts(draftsSeen, d.messages)
+        draftsSeen = draftRevisions(d.messages)
+        for (id in changed) {
+            val cur = _bodies.value[id]
+            if (cur is BodyState.Ready) loadBody(id, cur.imagesAllowed)
+        }
+    }
+
     fun loadBody(messageId: Long, allowImages: Boolean? = null) {
         val current = _bodies.value[messageId]
         if (allowImages == null && current is BodyState.Ready) return
+        // A draft's body is never read from or kept in the body cache: the draft changes under the same id.
+        val draft = detail.value?.messages?.firstOrNull { it.id == messageId }?.draft == true
         viewModelScope.launch {
             // The web's image choice, or this phone's override (data/settings/ServerPrefs).
             val images = allowImages ?: g.settings.prefs.first().showImages()
@@ -170,10 +187,10 @@ class ConversationViewModel(
             // suspension and drop bodies that parallel loads stored meanwhile.
             val result = try {
                 val q = if (messageId == focusMessageId) quote else null
-                val b = g.mail.body(messageId, images, q)
+                val b = g.mail.body(messageId, images, q, cache = !draft)
                 // Spam never loads images on its own: the proxy's fetch would tell the sender
                 // that the address is live. ACT mail.show_images @android.reader
-                if (allowImages == null && images && b.junk) BodyState.Ready(g.mail.body(messageId, false, q), false)
+                if (allowImages == null && images && b.junk) BodyState.Ready(g.mail.body(messageId, false, q, cache = !draft), false)
                 else BodyState.Ready(b, images)
             } catch (e: Exception) {
                 BodyState.Failed(e.userMessage())

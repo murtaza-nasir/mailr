@@ -369,8 +369,19 @@
         <item quantity="other">离线 · %d 项更改待处理</item>
     </plurals>
     <string name="cal_offline_showing">离线 · 显示此手机上的内容</string>
-    <string name="cal_account_not_syncing">%1$s 未在同步。</string>
-    <string name="cal_account_password">%1$s 不再接受日历密码。请在网页版的“设置 → 日历与任务”中重新输入。</string>
+    <string name="cal_sync_problem_auth">%1$s 处的日历服务器拒绝了用户名或密码。如果密码已更改，请在网页端断开此账户的连接，然后使用新密码重新连接。</string>
+    <string name="cal_sync_problem_not_found">%1$s 处的日历服务器在该地址下已没有日历。它可能已迁移或已关闭。请检查地址，或者如果您不再使用此账户，请将其断开连接。</string>
+    <string name="cal_sync_problem_tls">无法验证 %1$s 的安全证书，因此未建立连接。证书可能已过期，或者该地址现在指向了不同的服务器。请检查地址，或要求服务器管理员更新证书。</string>
+    <string name="cal_sync_problem_unreachable">无法连接到 %1$s 处的日历服务器。它可能处于离线状态，或者地址有误。当服务器再次可访问时，同步将自动恢复。</string>
+    <string name="cal_sync_problem_server">%1$s 处的日历服务器报告了错误。这通常是暂时性的。当服务器恢复正常工作时，同步将自动恢复。</string>
+    <string name="cal_sync_problem_blocked">此 Mailr 服务器不会连接到 %1$s，因为该地址是私有或本地地址，或未使用 https。请使用日历服务器的公共 https 地址，或联系您的管理员。</string>
+    <string name="cal_sync_problem_partial">%1$s 处的日历服务器仅列出了部分日历。未删除任何内容，将在下次同步时重新读取该日历。</string>
+    <string name="cal_sync_problem_unknown">与 %1$s 同步失败。技术详细信息请见“详情”。</string>
+    <string name="cal_sync_problem_somewhere">账户地址</string>
+    <string name="cal_group_mailr">Mailr 日历</string>
+    <string name="cal_group_shared">共享给您</string>
+    <string name="cal_group_phone">来自您手机的日历</string>
+    <string name="cal_group_links">日历链接</string>
     <string name="cal_remove_from_my_calendar">从我的日历中移除</string>
     <string name="cal_open_on_web">在网页版中打开</string>
     <string name="cal_details">详情</string>
@@ -543,6 +554,10 @@
     <string name="cal_delete_type_name">输入名称以确认</string>
     <string name="cal_shared_by">由 %s 共享</string>
     <string name="cal_shared_someone">某人</string>
+    <string name="cal_shared_by_free_busy">由 %s 共享 · 仅显示忙/闲状态</string>
+    <string name="cal_shared_by_view_through">由 %1$s 共享 · 可查看（通过 %2$s）</string>
+    <string name="cal_shared_by_edit_through">由 %1$s 共享 · 可编辑（通过 %2$s）</string>
+    <string name="cal_shared_by_share_through">由 %1$s 共享 · 可编辑和共享（通过 %2$s）</string>
     <string name="cal_shared_with_group">与 %s 群组共享</string>
     <string name="cal_shared_group_fallback">群组</string>
     <string name="cal_live_when_all_day">%1$s – %2$s，全天</string>

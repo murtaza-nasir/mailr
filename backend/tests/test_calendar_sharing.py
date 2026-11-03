@@ -15,6 +15,7 @@ from __future__ import annotations
 import contextlib
 import uuid
 import xml.etree.ElementTree as ET
+from datetime import UTC, datetime
 
 import pytest
 import pytest_asyncio
@@ -90,10 +91,46 @@ def test_people_go_before_groups_and_keep_their_place():
 
 
 def test_levels_map_to_privileges():
-    assert sharing.PRIVS == {"view": ["read"], "edit": ["read", "write"], "share": ["read", "write", "write-acl"]}
-    for lvl in sharing.LEVELS:
+    assert sharing.PRIVS == {"freebusy": ["read-free-busy"], "view": ["read"], "edit": ["read", "write"],
+                             "share": ["read", "write", "write-acl"]}
+    for lvl in sharing.LEVELS_V1:
         assert sharing.level_of(sharing.ace_for("x@example.test", lvl).privs) == lvl
-    assert sharing.level_of([f"{{{C}}}read-free-busy"]) is None
+    assert sharing.level_of([f"{{{C}}}read-free-busy"]) == "freebusy"
+    assert sharing.ace_for("x@example.test", "freebusy").privs == [f"{{{C}}}read-free-busy"]
+    assert "<c:read-free-busy/>" in sharing.acl_body([sharing.ace_for("x@example.test", "freebusy")])
+    # A listing's privilege set (local names) reads the same way.
+    assert sharing.level_of(frozenset({"read", "write-content", "bind"})) == "edit"
+    assert sharing.level_of(frozenset({"read-free-busy"})) == "freebusy"
+    assert sharing.levels_for(True) == ["freebusy", "view", "edit", "share"]
+    assert sharing.levels_for(False) == ["view", "edit", "share"]
+
+
+ME, GRP, OTHER = "bob@example.test", "grp-family@example.test", "cal@example.test"
+
+
+@pytest.mark.parametrize(("entries", "v1", "want"), [
+    # Own view, a group of his may edit: 1.x writes (union); 0.16 too only when the group comes first.
+    ([(ME, "view"), (GRP, "edit")], True, ("edit", False, "view", [GRP])),
+    ([(ME, "view"), (GRP, "edit")], False, ("view", False, "view", [])),
+    ([(GRP, "edit"), (ME, "view")], False, ("edit", False, "view", [GRP])),
+    # write-acl is the union on both versions.
+    ([(ME, "view"), (GRP, "share")], False, ("view", True, "view", [GRP])),
+    ([(ME, "view"), (GRP, "share")], True, ("share", True, "view", [GRP])),
+    ([(GRP, "view"), (ME, "share")], False, ("view", True, "share", [])),
+    ([(GRP, "view"), (ME, "share")], True, ("share", True, "share", [])),
+    # Free/busy only, raised by a group's view; a group's free/busy below the own view.
+    ([(ME, "freebusy"), (GRP, "view")], True, ("view", False, "freebusy", [GRP])),
+    ([(ME, "view"), (GRP, "freebusy")], True, ("view", False, "view", [])),
+    ([(GRP, "freebusy")], True, ("freebusy", False, None, [GRP])),
+    # Nothing that names him or his groups.
+    ([(OTHER, "share")], True, (None, False, None, [])),
+])
+def test_access_follows_the_servers_rule(entries, v1, want):
+    """Stalwart 1.x: the union of a person's and their groups' grants. 0.16: the union for read,
+    free/busy and write-acl; write by the first ACE naming the person or one of their groups
+    (verified on both servers, tests/test_calendar_sharing_stalwart.py). ACT calendar.user_shared"""
+    a = sharing.access_of(entries, ME, {GRP: "Family"}, v1)
+    assert (a.level, a.can_share, a.own, a.via) == want
 
 
 # ---------------- people, connectors and a fake ACL ----------------
@@ -395,22 +432,185 @@ async def test_admin_policy_route(acl, app):
         assert (await c.put(f"{API}/admin/calendars", json={"builtin": True, "sharing": "all"})).status_code == 422
 
 
-async def test_sync_marks_a_view_share_read_only(acl, app, monkeypatch):
-    """The listing reports the union of grants; a person's own view grant decides writes, so the
-    sync stores the calendar read-only (on_listing)."""
+class _Client:
+    """The sharee's DAV client, as far as on_listing uses it."""
+
+    def abs(self, path: str) -> str:
+        return BASE + path
+
+
+async def _listing(monkeypatch, bob: User, infos, *, v1: bool, groups_of: dict[str, str] | None = None,
+                   busy=None, previous=None):
+    async def no_summaries(client, home, who):
+        return {}
+
+    async def version():
+        return v1
+
+    async def member(db, users):
+        return {u.id: dict(groups_of or {}) for u in users}
+
+    monkeypatch.setattr(sharing, "owner_summaries", no_summaries)
+    monkeypatch.setattr(sharing, "server_v1", version)
+    monkeypatch.setattr(sharing, "store_groups", member)
+    if busy is not None:
+        from mailr.calendar import shared_busy
+
+        monkeypatch.setattr(shared_busy, "query", busy)
+    return await sharing.on_listing(_Client(), bob.id, BASE + groups.home_of(_login(bob)), infos, previous)
+
+
+@pytest.mark.parametrize("v1", [False, True])
+async def test_sync_marks_a_calendar_read_only_by_the_servers_rule(acl, app, monkeypatch, v1):
+    """Bob's own grant is view, a store group of his may edit; the listing reports the union.
+    Stalwart 0.16 decides writes by the first ACE naming him (his own, mailr puts people first):
+    read-only. Stalwart 1.x checks the union: writable, "through" the group (on_listing).
+    ACT calendar.user_shared"""
     ann, bob = await _person(acl, "Ann"), await _person(acl, "Bob")
     _c, _w, path = await _connect(ann.id, own_cal="board")
     async with sessionmaker()() as db:
         conn = await builtin.find(db, ann.id)
         conn.state = {"caldav": {"acl": {path: [[_login(bob), "view", True], ["grp-x@example.test", "edit", False]]}}}
         await db.commit()
-
-    async def no_summaries(client, home, who):
-        return {}
-
-    monkeypatch.setattr(sharing, "owner_summaries", no_summaries)
-    infos = [dav.CollectionInfo(href=BASE + path, displayname="Board", read_only=False),
+    union = frozenset({"read", "write", "write-content", "read-current-user-privilege-set"})
+    infos = [dav.CollectionInfo(href=BASE + path, displayname="Board", read_only=False, privileges=union),
              dav.CollectionInfo(href=BASE + groups.home_of(_login(bob)) + "work/", displayname="Work")]
-    shared_in, own = await sharing.on_listing(None, bob.id, BASE + groups.home_of(_login(bob)), infos)
-    assert infos[0].read_only is True and infos[1].read_only is False
-    assert shared_in == {path: {"owner_id": ann.id, "level": "view", "direct": True}} and own == {}
+    got = await _listing(monkeypatch, bob, infos, v1=v1, groups_of={"grp-x@example.test": "Family"})
+    assert got.acl == {} and got.busy == []
+    if v1:
+        assert infos[0].read_only is False
+        assert got.shared_in == {path: {"owner_id": ann.id, "level": "edit", "can_share": False, "own": "view",
+                                        "via": ["Family"], "direct": True}}
+    else:
+        assert infos[0].read_only is True
+        assert got.shared_in == {path: {"owner_id": ann.id, "level": "view", "can_share": False, "own": "view",
+                                        "via": [], "direct": True}}
+    assert infos[1].read_only is False
+    # What the calendar list shows (overrides_for), after the sync stored the state.
+    _cid, fid, _p = await _connect(bob.id, own_cal="unused")
+    await _foreign(bob.id, ann, path, read_only=infos[0].read_only, level=got.shared_in[path]["level"])
+    async with sessionmaker()() as db:
+        bconn = await builtin.find(db, bob.id)
+        st = dict(bconn.state or {})
+        bconn.state = {**st, "caldav": {**(st.get("caldav") or {}), "shared_in": got.shared_in}}
+        await db.commit()
+        ov = await sharing.overrides_for(db, bob.id)
+    shared = ov[BASE + path]["shared"]
+    if v1:
+        assert shared == {"kind": "user", "owner": "Ann", "owner_id": ann.id, "level": "edit", "access": "write",
+                          "can_share": False, "own_level": "view", "via": ["Family"]}
+    else:
+        assert shared == {"kind": "user", "owner": "Ann", "owner_id": ann.id, "level": "view", "access": "read",
+                          "can_share": False}
+    assert fid
+
+
+async def test_sync_adds_a_free_busy_only_calendar(acl, app, monkeypatch):
+    """Stalwart 1.x: a calendar Bob may see as free/busy only is not listed; the sync asks the
+    server for its busy times as Bob and adds it read-only (level freebusy). A refusal leaves it
+    out; a server error keeps the one he had. On 0.16 nothing is asked. ACT calendar.user_shared"""
+    from mailr.calendar import shared_busy
+
+    ann, bob = await _person(acl, "Ann"), await _person(acl, "Bob")
+    _c, _w, path = await _connect(ann.id, own_cal="rota")
+    async with sessionmaker()() as db:
+        conn = await builtin.find(db, ann.id)
+        conn.state = {"caldav": {"acl": {path: [[_login(bob), "freebusy", True]]}}}
+        await db.commit()
+    asked: list[str] = []
+    period = shared_busy.Period(datetime(2026, 11, 24, 15, tzinfo=UTC), datetime(2026, 11, 24, 16, tzinfo=UTC))
+
+    async def answer(client, href, start, end):
+        asked.append(href)
+        return [period]
+
+    got = await _listing(monkeypatch, bob, [], v1=True, busy=answer)
+    assert asked == [BASE + path]
+    [(info, periods)] = got.busy
+    assert (info.href, info.displayname, info.read_only, periods) == (BASE + path, "Rota", True, [period])
+    assert got.shared_in[path] == {"owner_id": ann.id, "level": "freebusy", "can_share": False, "own": "freebusy",
+                                   "via": [], "direct": True}
+
+    async def refused(client, href, start, end):
+        raise shared_busy.Refused("403")
+
+    got = await _listing(monkeypatch, bob, [], v1=True, busy=refused)
+    assert got.busy == [] and got.kept == [] and path not in got.shared_in
+
+    async def broken(client, href, start, end):
+        raise dav.DavError("502 from the server", 502)
+
+    got = await _listing(monkeypatch, bob, [], v1=True, busy=broken, previous={path: {"level": "freebusy"}})
+    assert [i.href for i in got.kept] == [BASE + path] and got.shared_in[path]["level"] == "freebusy"
+    asked.clear()
+    got = await _listing(monkeypatch, bob, [], v1=False, busy=answer)
+    assert asked == [] and got.busy == [] and got.shared_in == {}
+
+
+async def test_free_busy_level_only_on_stalwart_1(acl, app, monkeypatch):
+    """The Share dialog offers "freebusy" on 1.x only; a request for it on 0.16 is refused.
+    ACT calendar.share"""
+    ann, bob = await _person(acl, "Ann"), await _person(acl, "Bob")
+    _c, work_id, path = await _connect(ann.id, own_cal="rota")
+    v1 = {"on": False}
+
+    async def version():
+        return v1["on"]
+
+    monkeypatch.setattr(sharing, "server_v1", version)
+    async with sessionmaker()() as db:
+        a = await db.get(User, ann.id)
+        coll = await db.get(CalCollection, work_id)
+        assert (await sharing.describe(db, a, coll))["levels"] == ["view", "edit", "share"]
+        with pytest.raises(sharing.SharingError) as e:
+            await sharing.set_level(db, a, coll, bob.id, "freebusy")
+        assert e.value.status == 400 and "free/busy" in str(e.value)
+        assert path not in acl.acl
+        v1["on"] = True
+        got = await sharing.set_level(db, a, coll, bob.id, "freebusy")
+        assert got["levels"] == ["freebusy", "view", "edit", "share"]
+        assert [(p["id"], p["level"]) for p in got["people"]] == [(bob.id, "freebusy")]
+        assert acl.acl[path][0].privs == [f"{{{C}}}read-free-busy"]
+        conn = await builtin.find(db, ann.id)
+        assert conn.state["caldav"]["acl"][path] == [[_login(bob), "freebusy", True]]
+        await db.commit()
+
+
+async def test_a_groups_grant_shows_in_the_dialog_and_lets_reshare(acl, app, monkeypatch):
+    """A store group of Bob's may share Ann's calendar while his own grant is view: the dialog
+    shows his access through the group, and he may re-share (write-acl is the union on 0.16 and
+    1.x). ACT calendar.share"""
+    ann, bob, cal = await _person(acl, "Ann"), await _person(acl, "Bob"), await _person(acl, "Cal")
+    _c, work_id, path = await _connect(ann.id, own_cal="rota")
+    fid = await _foreign(bob.id, ann, path, read_only=True, level="view")
+
+    async def member(db, users):
+        return {u.id: ({"grp-x@example.test": "Family"} if u.id == bob.id else {}) for u in users}
+
+    for v1, level in ((False, "view"), (True, "share")):
+        async def version(v1=v1):
+            return v1
+
+        monkeypatch.setattr(sharing, "server_v1", version)
+        monkeypatch.setattr(sharing, "store_groups", member)
+        acl.acl[path] = [sharing.ace_for(_login(bob), "view"), sharing.ace_for("grp-x@example.test", "share")]
+        async with sessionmaker()() as db:
+            a, b = await db.get(User, ann.id), await db.get(User, bob.id)
+            got = await sharing.describe(db, a, await db.get(CalCollection, work_id))
+            [row] = got["people"]
+            assert row["level"] == "view" and got["others"] == 1
+            assert row["access"] == {"level": level, "can_share": True, "via": ["Family"]}
+            mine = await sharing.describe(db, b, await db.get(CalCollection, fid))
+            assert mine["own"] is False
+            await sharing.set_level(db, b, await db.get(CalCollection, fid), cal.id, "view")
+            assert _login(cal) in [x.login for x in acl.acl[path]]
+            await db.rollback()
+
+    async def nobody(db, users):
+        return {u.id: {} for u in users}
+
+    monkeypatch.setattr(sharing, "store_groups", nobody)
+    async with sessionmaker()() as db:
+        with pytest.raises(sharing.SharingError) as e:
+            await sharing.describe(db, await db.get(User, bob.id), await db.get(CalCollection, fid))
+        assert e.value.status == 403

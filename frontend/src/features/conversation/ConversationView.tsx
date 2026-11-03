@@ -720,7 +720,9 @@ export function ConversationView({ id, view, q, pane }: Props) {
           )}
 
           {shown.map((m) =>
-            m === 'older' ? (
+            // A draft open in the inline editor below is shown by the editor alone (while it is still
+            // opening, the card stays): its card comes back, with the current text, when the editor closes.
+            m !== 'older' && m.draft && reply && !reply.loading && reply.draftId === m.id ? null : m === 'older' ? (
               <div key="older" className="older-pill" role="button" tabIndex={0} aria-label={tr('conversation.conversationView.showOlderMessages', { count: hiddenCount })} onClick={() => setShowOlder(true)} onKeyDown={(e) => e.key === 'Enter' && setShowOlder(true)}>
                 <span>{hiddenCount}</span>
               </div>

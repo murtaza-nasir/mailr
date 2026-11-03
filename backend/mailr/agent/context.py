@@ -332,15 +332,16 @@ async def _calendar(db: AsyncSession, p, texts: list[str], subject: str = "",
         want = {d.isoformat() for d in set(days) | {today, today + timedelta(days=1)}}
 
         names: dict[str, str] | None = None
-        if any(e.get("phone_busy") for e in evs):
+        if any(e.get("phone_busy") or e.get("shared_busy") for e in evs):
             from mailr.calendar.describe import labels
 
             names = await labels(db, p.user_id, p)
 
         def brief(e):
             # A phone calendar's block (calendar/phonecal.py): the time only, or with details its
-            # title and place, marked read-only.
-            if e.get("phone_busy"):
+            # title and place, marked read-only. A free/busy-only calendar's block
+            # (calendar/shared_busy.py): the time only.
+            if e.get("phone_busy") or e.get("shared_busy"):
                 from mailr.agent.calendar_common import busy_block
 
                 b = {k: v for k, v in busy_block(e, names).items() if k != "tz"}
@@ -358,7 +359,7 @@ async def _calendar(db: AsyncSession, p, texts: list[str], subject: str = "",
             day = when.local_day(e.get("start"), zone) or ""
             if day in want:
                 out["busy"].setdefault(day, []).append(brief(e))
-            if keys and (e.get("phone_details") or not e.get("phone_busy")) and keys & _keywords(e.get("summary") or ""):
+            if keys and (e.get("phone_details") or not (e.get("phone_busy") or e.get("shared_busy"))) and keys & _keywords(e.get("summary") or ""):
                 out["related_events"].append(brief(e))
             elif day >= today.isoformat() and len(out["upcoming"]) < 8:
                 out["upcoming"].append(brief(e))

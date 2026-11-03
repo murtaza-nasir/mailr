@@ -21,6 +21,8 @@ import { exportIcs } from '../calendar/ics'
 import { ShareDialog } from '../calendar/ShareDialog'
 import { sharedLabel, sharingLabel, type Collection } from '../calendar/types'
 import { Section } from './common'
+import { groupCollections, groupLabel, type CollectionGroup } from './calendarGroups'
+import { SyncProblem } from '../calendar/syncProblem'
 import '../calendar/calendar.css'
 import { t } from '../../i18n'
 
@@ -96,11 +98,18 @@ export function CollectionsSection() {
       setRefreshing(false)
     }
   }
+  const accounts = useAccounts().data ?? []
   const all = cals.data ?? []
   const good = all.filter((c) => !c.error)
   const broken = all.filter((c) => c.error)
   const events = good.filter((c) => c.events)
   const lists = good.filter((c) => c.tasks)
+  // Grouped by where each calendar comes from; the pickers use the same groups (two accounts may
+  // each have a "Calendar").
+  const groups = groupCollections(good, accounts)
+  const pickGroups = (keep: (c: Collection) => boolean) => groups.map((g) => ({ ...g, items: g.items.filter(keep) })).filter((g) => g.items.length)
+  const eventGroups = pickGroups((c) => !!c.events)
+  const listGroups = pickGroups((c) => !!c.tasks)
   const d = defaults.data
   const isDefault = (c: Collection) => d?.calendar === urlOf(c) || d?.task_list === urlOf(c) || d?.calendar === c.id || d?.task_list === c.id
   // The last collection that holds events (or tasks) cannot be deleted.
@@ -129,22 +138,14 @@ export function CollectionsSection() {
               <label htmlFor="def-cal">{t('settings.calendarCollections.defaultCalendar')}</label>
               <select id="def-cal" className="select" value={d?.calendar ?? ''} disabled={!events.length || save.isPending} onChange={(e) => save.mutate({ calendar: e.target.value || null })}>
                 {!events.length && <option value="">{t('settings.calendarCollections.noCalendarAcceptsEvents')}</option>}
-                {events.map((c) => (
-                  <option key={keyOf(c)} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
+                <PickerOptions groups={eventGroups} />
               </select>
             </div>
             <div className="field">
               <label htmlFor="def-list">{t('settings.calendarCollections.defaultTaskList')}</label>
               <select id="def-list" className="select" value={d?.task_list ?? ''} disabled={!lists.length || save.isPending} onChange={(e) => save.mutate({ task_list: e.target.value || null })}>
                 {!lists.length && <option value="">{t('settings.calendarCollections.noCollectionAcceptsTasks')}</option>}
-                {lists.map((c) => (
-                  <option key={keyOf(c)} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
+                <PickerOptions groups={listGroups} />
               </select>
             </div>
           </div>
@@ -159,8 +160,17 @@ export function CollectionsSection() {
                   <th aria-label={t('common.actions')} />
                 </tr>
               </thead>
-              <tbody>
-                {good.map((c) => (
+              {groups.map((g) => (
+              <tbody key={g.key} data-testid="settings-collection-group" data-source={g.kind}>
+                <tr className="settings-collection-head">
+                  {/* The group's heading: the account (name and host), or the kind of source. */}
+                  <th colSpan={5} scope="rowgroup" data-testid="settings-collection-heading">
+                    {g.title}
+                    {g.sub && ' '}
+                    {g.sub && <span className="muted" style={{ fontWeight: 400, marginInlineStart: 8 }}>{g.sub}</span>}
+                  </th>
+                </tr>
+                {g.items.map((c) => (
                   <tr key={keyOf(c)} data-testid="settings-collection">
                     <td style={{ width: 32 }}>
                       {/* ACT calendar.color @web.settings */}
@@ -214,14 +224,16 @@ export function CollectionsSection() {
                   </tr>
                 ))}
               </tbody>
+              ))}
             </table>
           </div>
           <p className="muted" style={{ fontSize: 12, marginTop: 6 }}>
             {t('settings.calendarCollections.detectedFromWhatEachServer')}
           </p>
           {broken.map((c) => (
-            <div key={`err:${c.connector_id}`} className="banner error" style={{ marginTop: 8 }}>
-              <AlertTriangle /> <span>{t('settings.calendarCollections.couldNotReadOneCalendar', { error: c.error })}</span>
+            <div key={`err:${c.connector_id}`} className="banner error" style={{ marginTop: 8 }} data-testid="settings-collections-error">
+              <AlertTriangle />
+              <SyncProblem kind={c.error_kind} host={c.error_host} detail={c.error} fallback={c.name} />
             </div>
           ))}
         </>
@@ -253,6 +265,13 @@ export function CollectionsSection() {
       {creating && <NewCollectionDialog onClose={() => setCreating(false)} onDone={done} />}
     </Section>
   )
+}
+
+/** The picker's options, under one heading per source when there is more than one. */
+function PickerOptions({ groups }: { groups: CollectionGroup[] }) {
+  const options = (g: CollectionGroup) => g.items.map((c) => <option key={keyOf(c)} value={c.id}>{c.name}</option>)
+  if (groups.length <= 1) return <>{groups.map(options)}</>
+  return <>{groups.map((g) => <optgroup key={g.key} label={groupLabel(g)}>{options(g)}</optgroup>)}</>
 }
 
 function RenameDialog({ c, onClose, onSave }: { c: Collection; onClose: () => void; onSave: (n: string) => void }) {

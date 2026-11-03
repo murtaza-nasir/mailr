@@ -3140,14 +3140,6 @@
                     "endColumn": 43,
                     "lineCount": 1
                 }
-            },
-            {
-                "code": "reportArgumentType",
-                "range": {
-                    "startColumn": 41,
-                    "endColumn": 68,
-                    "lineCount": 1
-                }
             }
         ],
         "./mailr/calendar/sync.py": [
@@ -3186,14 +3178,6 @@
             {
                 "code": "reportArgumentType",
                 "range": {
-                    "startColumn": 79,
-                    "endColumn": 83,
-                    "lineCount": 1
-                }
-            },
-            {
-                "code": "reportArgumentType",
-                "range": {
                     "startColumn": 71,
                     "endColumn": 75,
                     "lineCount": 1
@@ -3204,22 +3188,6 @@
                 "range": {
                     "startColumn": 47,
                     "endColumn": 54,
-                    "lineCount": 1
-                }
-            },
-            {
-                "code": "reportOptionalMemberAccess",
-                "range": {
-                    "startColumn": 49,
-                    "endColumn": 56,
-                    "lineCount": 1
-                }
-            },
-            {
-                "code": "reportOptionalMemberAccess",
-                "range": {
-                    "startColumn": 41,
-                    "endColumn": 48,
                     "lineCount": 1
                 }
             },

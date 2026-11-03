@@ -56,7 +56,7 @@ async def list_shares(calendar_id: int, p: Principal = Depends(scope("calendar")
 
 
 class ShareIn(BaseModel):
-    level: str = Field(pattern="^(view|edit|share)$")
+    level: str = Field(pattern="^(freebusy|view|edit|share)$", description="freebusy (Stalwart 1.x only), view, edit or share")
 
 
 @router.put("/calendar/collections/{calendar_id}/shares/{user_id}")

@@ -17,7 +17,7 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from mailr.calendar import ical, mirror, writer
+from mailr.calendar import ical, mirror, sync_errors, writer
 from mailr.calendar import tz as tzmod
 from mailr.calendar.describe import calendar_name
 from mailr.calendar.writer import CalendarNotConnected, Conflict  # noqa: F401  (re-exported)
@@ -108,7 +108,10 @@ async def collections(db: AsyncSession, user_id: int, *, refresh: bool = False, 
     for c in conns:
         cols = await mirror.collections_of(db, [c.id])
         if not cols and c.status == "error":
-            out.append({"connector_id": c.id, "error": (c.status_detail or "calendar unavailable")[:300]})
+            problem = sync_errors.connector_problem(c) or {"kind": "unknown", "host": sync_errors.connector_host(c)}
+            out.append({"id": f"account-error:{c.id}", "connector_id": c.id, "name": c.name,
+                        "error": (c.status_detail or "calendar unavailable")[:300],
+                        "error_kind": problem["kind"], "error_host": problem["host"]})
             continue
         out += [mirror.collection_out(col, c, ov) for col in cols]
     return out

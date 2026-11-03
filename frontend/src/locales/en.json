@@ -338,7 +338,6 @@
       "askForBuiltInCalendars": "No calendar of your own yet? Ask whoever runs this Mailr server to turn on built-in calendars. You then get a calendar and a task list here with no other account."
     },
     "calendarApp": {
-      "aCalendar": "A calendar",
       "allCalendarsAreHidden": "All calendars are hidden",
       "couldNotSync": "Couldn't sync",
       "couldntLoadEvents": "Couldn't load events.",
@@ -354,7 +353,6 @@
       "offlineTheCalendarIsRead2": "Offline · the calendar is read-only.",
       "resize": "Resize",
       "searchFailed": "Couldn't search.",
-      "syncFailed": "sync failed",
       "synced": "Synced",
       "syncedAgo": "Synced {{value}} ago",
       "syncing": "Syncing…",
@@ -362,7 +360,6 @@
       "typeADateThenEnter": "Type a date, then Enter.",
       "use": "Use {{zoneAbbr}}",
       "viewingInTime": "Viewing in {{replace}} time ({{utcLabel}})",
-      "passwordRefused": "{{name}}: the calendar server stopped accepting the password.",
       "checkThePassword": "Check the password in Settings"
     },
     "commands": {
@@ -394,6 +391,7 @@
       "ask": "Ask {{name}}",
       "askShiftA": "Ask {{name}} (Shift+A)",
       "calendarColour": "Calendar colour",
+      "cancelledBy": "Cancelled by {{who}}",
       "changeRemindersFor": "Change reminders for",
       "colourChanged": "Colour changed",
       "delete": "Delete (#)",
@@ -402,6 +400,7 @@
       "eventColour": "Event colour",
       "fromAnEmail": "From an email",
       "isNoLongerInYour": "“{{titleOf}}” is no longer in your calendar.",
+      "itsOwner": "Its owner",
       "linkCopied": "Link copied",
       "map": "Map",
       "moveTo": "Move to…",
@@ -414,10 +413,10 @@
       "recolour": "Recolour",
       "reminder": "Reminder: {{detail}}",
       "remindersChanged": "Reminders changed",
+      "sharedBusyNote": "{{owner}} shares only the busy times of this calendar with you. Titles and details stay with them.",
       "snooze": "Snooze {{label}}",
       "tentative": "Tentative",
-      "thisEventWasDeletedElsewhere": "This event was deleted elsewhere",
-      "cancelledBy": "Cancelled by {{who}}"
+      "thisEventWasDeletedElsewhere": "This event was deleted elsewhere"
     },
     "eventEditor": {
       "addDescription": "Add description",
@@ -821,11 +820,19 @@
     "types": {
       "addsChangesAndDeletesEvents": "Adds, changes and deletes events.",
       "andAGroup": " and a group",
+      "canEdit": "can edit",
+      "canEditAndShare": "can edit and share",
+      "canView": "can view",
       "editAndShare": "Edit and share",
       "editsAndSharesItWith": "Edits and shares with others.",
+      "freeBusyOnly": "Free/busy only",
+      "freeBusyOnlySuffix": " · free/busy only",
+      "levelThrough": "{{level}} (through {{groups}})",
       "onlyAnAdministratorRenamesOr": "Only an administrator can rename or delete it. You can hide it.",
       "onlyRenamesOrDeletesIt": "Only {{owner}} can rename or delete it. You can hide it.",
       "seesEveryEventChangesNothing": "Views events only.",
+      "seesFreeBusyOnly": "sees free/busy only",
+      "seesOnlyWhenYouAreBusy": "Sees when you are busy, without titles or details.",
       "sharedBy": "Shared by {{owner}}",
       "sharedWithAGroup": "Shared with a group",
       "sharedWithPeople_one": "Shared with {{count}} person{{value}}",
@@ -844,6 +851,17 @@
       "menuNote": "Busy times from a calendar on your phone. They change only on the phone.",
       "menuNoteDetails": "Events from a calendar on your phone, with titles and places. They change only on the phone.",
       "phoneCalendarSettings": "Phone calendar settings"
+    },
+    "syncProblem": {
+      "theServer": "the account's address",
+      "auth": "The calendar server at {{host}} refused the user name or password. If the password changed, disconnect this account and connect it again with the new password.",
+      "notFound": "The calendar server at {{host}} no longer has calendars at this address. It may have moved or been switched off. Check the address, or disconnect this account if you no longer use it.",
+      "tls": "The security certificate of {{host}} could not be verified, so no connection was made. The certificate may have expired, or the address may now lead to a different server. Check the address, or ask the server's administrator to renew the certificate.",
+      "unreachable": "The calendar server at {{host}} could not be reached. It may be offline, or the address may be wrong. Syncing resumes when the server can be reached again.",
+      "server": "The calendar server at {{host}} reported an error. This is usually temporary. Syncing resumes when the server works again.",
+      "blocked": "This Mailr server does not connect to {{host}}, because the address is private or local, or does not use https. Use the calendar server's public https address, or ask your administrator.",
+      "partial": "The calendar server at {{host}} listed only part of a calendar. Nothing was removed, and the calendar is read again at the next sync.",
+      "unknown": "Syncing with {{host}} failed. The technical message is under Details."
     }
   },
   "colour": {
@@ -1811,7 +1829,8 @@
       "translateToEnglish": "Translate to English",
       "unsubscribe": "Unsubscribe",
       "unsubscribeFrom": "Unsubscribe from {{displayName}}?",
-      "waitingForApproval": "Waiting for approval"
+      "waitingForApproval": "Waiting for approval",
+      "updatedByJustNow": "Updated by {{who}} · just now"
     },
     "replySuggestions": {
       "suggestedReplies": "Suggested replies"
@@ -6631,7 +6650,6 @@
       "couldNotChangeTheCalendar": "Couldn't change the calendar",
       "couldNotCreateIt": "Couldn't create the calendar or list",
       "couldNotDeleteIt": "Couldn't delete the calendar or list",
-      "couldNotReadOneCalendar": "Couldn't read one calendar account: {{error}}",
       "countingItsEvents": " Counting its events…",
       "created": "Created {{itemName}}",
       "defaultCalendar": "Default calendar",
@@ -8220,6 +8238,11 @@
       "removeBody": "Its busy times are removed from Mailr. If the phone still sends them, they return at its next update. To stop that, set the calendar to Off or Show on this phone in the Android app.",
       "removed": "“{{name}}” removed",
       "notRemoved": "Could not remove the phone calendar"
+    },
+    "calendarGroups": {
+      "sharedWithYou": "Shared with you",
+      "fromYourPhone": "Calendars from your phone",
+      "calendarLinks": "Calendar links"
     }
   },
   "shortcuts": {

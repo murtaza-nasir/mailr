@@ -345,7 +345,7 @@ fun CalendarRoute(vm: CalendarViewModel, morningHour: Int, defaultReminder: Int?
                 if (homeZone != null && homeZone.rules != phoneZone.rules && travel[phoneZone.id] == null)
                     TravelBanner(phoneZone, homeZone) { vm.prefs.setTravel(phoneZone.id, it) }
                 accounts.filter { it.error != null }.forEach { a ->
-                    AccountErrorBanner(a.name, a.error!!, a.authFailed,
+                    AccountErrorBanner(a.name, a.error!!, a.authFailed, a.errorKind, a.errorHost,
                         onOpenWeb = { openUrl(ctx, vm.graph.sessions.server.trimEnd('/') + "/settings/calendar") }, onRetry = vm::refresh)
                 }
                 val allHidden = eventCollections.isNotEmpty() && eventCollections.none { it.visible }

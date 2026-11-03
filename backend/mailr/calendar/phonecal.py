@@ -418,7 +418,17 @@ async def list_for(db: AsyncSession, user_id: int) -> list[dict[str, Any]]:
 
 
 async def refuse_uid(db: AsyncSession, user_id: int, uid: str) -> None:
-    """Refuse a change to a busy block before it is gated or queued for approval (ApiError 409)."""
+    """Refuse a change to a busy block before it is gated or queued for approval (ApiError 409):
+    a phone calendar's, or a free/busy-only calendar's (calendar/shared_busy.py)."""
+    from mailr.calendar import shared_busy
+
+    if shared_busy.is_block(uid):
+        row = (await db.execute(select(CalCollection).join(CalObject, CalObject.collection_id == CalCollection.id).where(
+            CalObject.user_id == user_id, CalObject.uid == uid, CalObject.deleted_at.is_(None)).limit(1))
+        ).scalar_one_or_none()
+        if row is not None and row.read_only:
+            raise ApiError(409, "calendar.shared_busy_read_only", name=row.displayname or "")
+        return
     if not uid or not uid.startswith("phone-"):
         return
     row = (await db.execute(select(CalCollection).join(CalObject, CalObject.collection_id == CalCollection.id).where(

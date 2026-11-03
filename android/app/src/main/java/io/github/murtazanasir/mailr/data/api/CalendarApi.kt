@@ -163,6 +163,21 @@ data class CollectionSync(
     val state: String = "idle",
     @SerialName("last_sync_at") val lastSyncAt: String? = null,
     val error: String? = null,
+    /** The class of [error] (the server's calendar/sync_errors.py), which [SyncProblems] explains. */
+    @SerialName("error_kind") val errorKind: String? = null,
+)
+
+/**
+ * Where a calendar comes from (the server's mirror.source_of), for the drawer's groups: "builtin"
+ * (the Mailr calendar), "account" (a connected account: [name], [host]), "shared", "phone"
+ * ([device]) or "link".
+ */
+@Serializable
+data class CollectionSource(
+    val kind: String = "",
+    val name: String? = null,
+    val host: String? = null,
+    val device: String? = null,
 )
 
 /**
@@ -182,6 +197,8 @@ data class SharedInfo(
     val access: String? = null,
     val level: String? = null,
     val editor: Boolean = false,
+    /** Groups that give this user more than their own grant ("can edit (through Family)"). */
+    val via: List<String> = emptyList(),
 )
 
 /** Busy times sent from a calendar on a phone (server `phone`): the key, the device and when it last sent them. */
@@ -221,6 +238,11 @@ data class CalendarCollection(
     val shared: SharedInfo? = null,
     /** Busy times from a phone calendar (null: not one). */
     val phone: PhoneInfo? = null,
+    /** Where the calendar comes from (null: an older server). */
+    val source: CollectionSource? = null,
+    /** An account whose calendars could not be read: the class of [error] and the account's host. */
+    @SerialName("error_kind") val errorKind: String? = null,
+    @SerialName("error_host") val errorHost: String? = null,
     @kotlinx.serialization.Transient val deviceHidden: Boolean? = null,
 ) {
     /** Only the owner (or an admin, for a group calendar) renames or deletes a shared calendar. */
@@ -463,6 +485,7 @@ data class CollectionSyncStatus(
     val name: String = "",
     val state: String = "idle",
     val error: String? = null,
+    @SerialName("error_kind") val errorKind: String? = null,
     @SerialName("last_sync_at") val lastSyncAt: String? = null,
     @SerialName("next_sync_at") val nextSyncAt: String? = null,
 )
@@ -473,8 +496,14 @@ data class ConnectorSyncStatus(
     val name: String = "",
     val status: String = "",
     val detail: String? = null,
-    /** "auth": the calendar server refused the password; Retry cannot help. */
+    /**
+     * The class of the failure (the server's calendar/sync_errors.py): auth, not_found, tls,
+     * unreachable, server, blocked, partial or unknown. "auth": the calendar server refused the
+     * password; Retry cannot help.
+     */
     @SerialName("error_kind") val errorKind: String? = null,
+    /** The host of the account's address, for the message. */
+    @SerialName("error_host") val errorHost: String? = null,
     @SerialName("last_sync_at") val lastSyncAt: String? = null,
     val collections: List<CollectionSyncStatus> = emptyList(),
 )

@@ -3113,6 +3113,26 @@
    "state": "model",
    "text": "%1$s 至 %2$s"
   },
+  "android:app:cal_group_links": {
+   "sha": "15a1d3ceb3f88815",
+   "state": "model",
+   "text": "日历链接"
+  },
+  "android:app:cal_group_mailr": {
+   "sha": "2f8c17a30670f4ed",
+   "state": "model",
+   "text": "Mailr 日历"
+  },
+  "android:app:cal_group_phone": {
+   "sha": "0f7da40143f67115",
+   "state": "model",
+   "text": "来自您手机的日历"
+  },
+  "android:app:cal_group_shared": {
+   "sha": "933c23e2bc5ad969",
+   "state": "model",
+   "text": "共享给您"
+  },
   "android:app:cal_guest_optional": {
    "sha": "4f29f48c6bcec67c",
    "state": "model",
@@ -4637,6 +4657,26 @@
    "state": "model",
    "text": "由 %s 共享"
   },
+  "android:app:cal_shared_by_edit_through": {
+   "sha": "98087ac7089ba6e1",
+   "state": "model",
+   "text": "由 %1$s 共享 · 可编辑（通过 %2$s）"
+  },
+  "android:app:cal_shared_by_free_busy": {
+   "sha": "e43d82b2ddda905b",
+   "state": "model",
+   "text": "由 %s 共享 · 仅显示忙/闲状态"
+  },
+  "android:app:cal_shared_by_share_through": {
+   "sha": "2ece78bc131e0708",
+   "state": "model",
+   "text": "由 %1$s 共享 · 可编辑和共享（通过 %2$s）"
+  },
+  "android:app:cal_shared_by_view_through": {
+   "sha": "457961e314ab6c1d",
+   "state": "model",
+   "text": "由 %1$s 共享 · 可查看（通过 %2$s）"
+  },
   "android:app:cal_shared_group_fallback": {
    "sha": "654e1e2086cfe138",
    "state": "model",
@@ -4711,6 +4751,51 @@
    "sha": "42761be2d0e9f99d",
    "state": "model",
    "text": "已移动"
+  },
+  "android:app:cal_sync_problem_auth": {
+   "sha": "ada08bfa750495cd",
+   "state": "model",
+   "text": "%1$s 处的日历服务器拒绝了用户名或密码。如果密码已更改，请在网页端断开此账户的连接，然后使用新密码重新连接。"
+  },
+  "android:app:cal_sync_problem_blocked": {
+   "sha": "d724213ec918527f",
+   "state": "manual",
+   "text": "此 Mailr 服务器不会连接到 %1$s，因为该地址是私有或本地地址，或未使用 https。请使用日历服务器的公共 https 地址，或联系您的管理员。"
+  },
+  "android:app:cal_sync_problem_not_found": {
+   "sha": "42892f7714898649",
+   "state": "model",
+   "text": "%1$s 处的日历服务器在该地址下已没有日历。它可能已迁移或已关闭。请检查地址，或者如果您不再使用此账户，请将其断开连接。"
+  },
+  "android:app:cal_sync_problem_partial": {
+   "sha": "134decb1d32b0dec",
+   "state": "model",
+   "text": "%1$s 处的日历服务器仅列出了部分日历。未删除任何内容，将在下次同步时重新读取该日历。"
+  },
+  "android:app:cal_sync_problem_server": {
+   "sha": "d41b1544c41e1ff5",
+   "state": "model",
+   "text": "%1$s 处的日历服务器报告了错误。这通常是暂时性的。当服务器恢复正常工作时，同步将自动恢复。"
+  },
+  "android:app:cal_sync_problem_somewhere": {
+   "sha": "369735e24ea4f7b1",
+   "state": "model",
+   "text": "账户地址"
+  },
+  "android:app:cal_sync_problem_tls": {
+   "sha": "358a9cc836aa090e",
+   "state": "model",
+   "text": "无法验证 %1$s 的安全证书，因此未建立连接。证书可能已过期，或者该地址现在指向了不同的服务器。请检查地址，或要求服务器管理员更新证书。"
+  },
+  "android:app:cal_sync_problem_unknown": {
+   "sha": "f3760ef33a4c0705",
+   "state": "model",
+   "text": "与 %1$s 同步失败。技术详细信息请见“详情”。"
+  },
+  "android:app:cal_sync_problem_unreachable": {
+   "sha": "343319ca8e2b1f53",
+   "state": "model",
+   "text": "无法连接到 %1$s 处的日历服务器。它可能处于离线状态，或者地址有误。当服务器再次可访问时，同步将自动恢复。"
   },
   "android:app:cal_synced_days_ago": {
    "sha": "925840e073020c63",
@@ -22486,6 +22571,11 @@
    "state": "model",
    "text": "日历不能通过 API 令牌共享。"
   },
+  "server:errors.calendar.shared_busy_read_only": {
+   "sha": "93b97bff0051c9cd",
+   "state": "model",
+   "text": "“{{name}}”仅以空闲/忙碌状态共享给您。只有其所有者可以更改其活动。"
+  },
   "server:errors.calendar.signin_failed": {
    "sha": "27cdf9b68d743274",
    "state": "model",
@@ -26604,6 +26694,11 @@
    "state": "model",
    "text": "“{{titleOf}}”已不在您的日历中。"
   },
+  "web:calendar.eventDetail.itsOwner": {
+   "sha": "610c46e9d866eeac",
+   "state": "model",
+   "text": "其所有者"
+  },
   "web:calendar.eventDetail.linkCopied": {
    "sha": "7cde41165fe82bad",
    "state": "model",
@@ -26663,6 +26758,11 @@
    "sha": "91889ce519203bb2",
    "state": "model",
    "text": "提醒已更改"
+  },
+  "web:calendar.eventDetail.sharedBusyNote": {
+   "sha": "67443902fe3f15f8",
+   "state": "model",
+   "text": "{{owner}} 仅与您共享此日历的忙碌时间。标题和详情仍归其所有。"
   },
   "web:calendar.eventDetail.snooze": {
    "sha": "5aedbba1e0e600c6",
@@ -28193,6 +28293,51 @@
    "state": "model",
    "text": "日历自身的名称"
   },
+  "web:calendar.syncProblem.auth": {
+   "sha": "9d887ed9815a80d4",
+   "state": "model",
+   "text": "{{host}} 处的日历服务器拒绝了用户名或密码。如果密码已更改，请断开此账户的连接，并使用新密码重新连接。"
+  },
+  "web:calendar.syncProblem.blocked": {
+   "sha": "222ba03bc4290adf",
+   "state": "manual",
+   "text": "此 Mailr 服务器不会连接到 {{host}}，因为该地址是私有或本地地址，或未使用 https。请使用日历服务器的公共 https 地址，或联系您的管理员。"
+  },
+  "web:calendar.syncProblem.notFound": {
+   "sha": "cfa3bc455ac19464",
+   "state": "model",
+   "text": "{{host}} 处的日历服务器在此地址下已没有日历。它可能已移动或已关闭。请检查地址，或者如果您不再使用此账户，请将其断开连接。"
+  },
+  "web:calendar.syncProblem.partial": {
+   "sha": "cf9dce588abc320f",
+   "state": "model",
+   "text": "{{host}} 处的日历服务器仅列出了部分日历。未删除任何内容，该日历将在下次同步时重新读取。"
+  },
+  "web:calendar.syncProblem.server": {
+   "sha": "17c4632b6ab75094",
+   "state": "model",
+   "text": "{{host}} 处的日历服务器报告了错误。这通常是暂时性的。当服务器恢复正常工作时，同步将恢复。"
+  },
+  "web:calendar.syncProblem.theServer": {
+   "sha": "369735e24ea4f7b1",
+   "state": "model",
+   "text": "该账户的地址"
+  },
+  "web:calendar.syncProblem.tls": {
+   "sha": "2113eefa013c56f8",
+   "state": "model",
+   "text": "无法验证 {{host}} 的安全证书，因此未建立连接。证书可能已过期，或者该地址现在可能指向不同的服务器。请检查地址，或要求服务器管理员更新证书。"
+  },
+  "web:calendar.syncProblem.unknown": {
+   "sha": "8bff5459f2bd3333",
+   "state": "model",
+   "text": "与 {{host}} 同步失败。技术消息请参见“详细信息”。"
+  },
+  "web:calendar.syncProblem.unreachable": {
+   "sha": "46522757176192df",
+   "state": "model",
+   "text": "无法连接到 {{host}} 处的日历服务器。它可能已离线，或者地址可能有误。当服务器再次可访问时，同步将恢复。"
+  },
   "web:calendar.tableDates.untitledRow": {
    "sha": "dce69bd7799471e7",
    "state": "model",
@@ -28445,6 +28590,21 @@
    "state": "model",
    "text": " 和一个群组"
   },
+  "web:calendar.types.canEdit": {
+   "sha": "bdbe4bf06482c7b1",
+   "state": "model",
+   "text": "可编辑"
+  },
+  "web:calendar.types.canEditAndShare": {
+   "sha": "3f24d27f2f0e595c",
+   "state": "model",
+   "text": "可编辑和共享"
+  },
+  "web:calendar.types.canView": {
+   "sha": "202d13e8a181d787",
+   "state": "model",
+   "text": "可查看"
+  },
   "web:calendar.types.editAndShare": {
    "sha": "f7e8c5f5345aab19",
    "state": "model",
@@ -28454,6 +28614,21 @@
    "sha": "153824df7219b29c",
    "state": "model",
    "text": "编辑并与他人共享。"
+  },
+  "web:calendar.types.freeBusyOnly": {
+   "sha": "883638ffa96db0e3",
+   "state": "model",
+   "text": "仅显示忙碌/空闲"
+  },
+  "web:calendar.types.freeBusyOnlySuffix": {
+   "sha": "6a117e3a854797b0",
+   "state": "model",
+   "text": " · 仅显示忙碌/空闲"
+  },
+  "web:calendar.types.levelThrough": {
+   "sha": "51f90464228f96b5",
+   "state": "model",
+   "text": "{{level}}（通过 {{groups}}）"
   },
   "web:calendar.types.onlyAnAdministratorRenamesOr": {
    "sha": "372256056e0adc8b",
@@ -28469,6 +28644,16 @@
    "sha": "05cbe48a0d11c6d1",
    "state": "model",
    "text": "仅查看活动。"
+  },
+  "web:calendar.types.seesFreeBusyOnly": {
+   "sha": "748c0b783221dab6",
+   "state": "model",
+   "text": "仅显示忙碌/空闲"
+  },
+  "web:calendar.types.seesOnlyWhenYouAreBusy": {
+   "sha": "0d29ecd2de628636",
+   "state": "model",
+   "text": "仅显示您何时忙碌，不包含标题或详情。"
   },
   "web:calendar.types.sharedBy": {
    "sha": "a2f2ba5fff873783",
@@ -32911,6 +33096,11 @@
    "sha": "b4b576e4b24dce69",
    "state": "model",
    "text": "退订 {{displayName}}？"
+  },
+  "web:conversation.messageCard.updatedByJustNow": {
+   "sha": "c4a0f48348ebad6a",
+   "state": "model",
+   "text": "由 {{who}} 更新 · 刚刚"
   },
   "web:conversation.messageCard.waitingForApproval": {
    "sha": "68a4cf4ad6df9a3f",
@@ -51175,6 +51365,21 @@
    "sha": "a7b3504d1e2e2600",
    "state": "model",
    "text": "此服务器尚不支持更改日历。"
+  },
+  "web:settings.calendarGroups.calendarLinks": {
+   "sha": "15a1d3ceb3f88815",
+   "state": "model",
+   "text": "日历链接"
+  },
+  "web:settings.calendarGroups.fromYourPhone": {
+   "sha": "0f7da40143f67115",
+   "state": "model",
+   "text": "来自您手机的日历"
+  },
+  "web:settings.calendarGroups.sharedWithYou": {
+   "sha": "933c23e2bc5ad969",
+   "state": "model",
+   "text": "已与您共享"
   },
   "web:settings.calendarMigration.alreadyThere": {
    "sha": "16960dde493206cf",

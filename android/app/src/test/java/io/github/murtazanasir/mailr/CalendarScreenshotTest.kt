@@ -135,7 +135,10 @@ class CalendarScreenshotTest(private val dark: Boolean) {
             CalendarCollection("/h/", "US holidays", "#d50000", events = true, calendarId = 3, connectorId = 2, readOnly = true))
         ModalDrawerSheet(Modifier.widthIn(max = 340.dp)) {
             CalendarDrawer(vm, day, day to day.plusDays(3), setOf(day, day.plusDays(1), day.plusDays(4)),
-                listOf(AccountGroup(1, "Fastmail", null, cols.take(2)), AccountGroup(2, "Holidays", "Sync failed: 401 Unauthorized", cols.drop(2))),
+                // One heading per source; the account in error says what went wrong in plain words.
+                listOf(AccountGroup(1, "Mailr calendar", null, cols.take(2), kind = "builtin"),
+                    AccountGroup(2, "Studio", "PROPFIND https://cal.example.org/dav/: not found", cols.drop(2), kind = "account",
+                        sub = "cal.example.org", errorKind = "not_found", errorHost = "cal.example.org")),
                 "/w/", onGo = {})
         }
     }
@@ -144,7 +147,8 @@ class CalendarScreenshotTest(private val dark: Boolean) {
         Column {
             TravelBanner(ZoneId.of("Europe/Lisbon"), ZoneId.of("America/New_York")) {}
             OfflineBanner(3)
-            AccountErrorBanner("Fastmail", "Sign-in failed. Check the password.", authFailed = true) {}
+            AccountErrorBanner("Studio", "Sign-in failed. Check the password.", authFailed = true, host = "cal.example.org") {}
+            AccountErrorBanner("Office", "PROPFIND https://dav.example.net/: not found", kind = "not_found", host = "dav.example.net") {}
             AllHiddenBanner {}
         }
     }

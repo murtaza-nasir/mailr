@@ -18,7 +18,7 @@ from typing import Any
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from mailr.calendar import builtin, dav, ical, mirror
+from mailr.calendar import builtin, dav, ical, mirror, sync_errors
 from mailr.calendar import tz as tzmod
 from mailr.core.crypto import connector_context, decrypt_for_user
 from mailr.core.events import notify, record_change
@@ -253,31 +253,60 @@ async def _sync(connector_id: int, full: bool) -> SyncResult:
         except dav.Unauthorized as e:
             res.error = str(e)
             await _set_connector(connector_id, status="error", status_detail="Sign-in failed. Check the password.",
-                                 caldav={"auth_failed": True, "checked_at": datetime.now(UTC).isoformat()})
+                                 caldav={"auth_failed": True, "error_kind": "auth",
+                                         "checked_at": datetime.now(UTC).isoformat()})
             return res
         except (dav.DavError, UnsafeTarget) as e:
             res.error = str(e)[:500]
+            # The text stays for Details and Admin → Diagnostics; the kind is what the clients explain.
             await _set_connector(connector_id, status="error", status_detail=res.error,
-                                 caldav={"checked_at": datetime.now(UTC).isoformat()})
+                                 caldav={"error_kind": sync_errors.classify(e),
+                                         "checked_at": datetime.now(UTC).isoformat()})
             return res
         share_state: dict[str, Any] = {}
+        busy_now: dict[str, list[Any]] = {}  # free/busy-only calendars: href → busy periods
+        kept: set[str] = set()  # free/busy-only calendars left as they are this time
         if is_builtin:  # calendars people share with this user, and this user's own grants (calendar/sharing.py)
             from mailr.calendar import sharing
 
             try:
-                shared_in, own_acl = await sharing.on_listing(client, user_id, home, infos)
-                share_state = {"shared_in": shared_in, **({"acl": own_acl} if own_acl is not None else {})}
+                got = await sharing.on_listing(client, user_id, str(home), infos, cstate.get("shared_in"))
+                share_state = {"shared_in": got.shared_in, **({"acl": got.acl} if got.acl is not None else {})}
+                for info, periods in got.busy:
+                    infos.append(info)
+                    busy_now[info.href] = periods
+                infos.extend(got.kept)
+                kept = {i.href for i in got.kept}
             except Exception as e:  # noqa: BLE001  the calendars still sync; the marks wait for the next run
                 log.warning("could not read the calendar shares of connector %s: %s", connector_id, e)
-        colls = await _diff_collections(connector_id, infos, res, listed_at)
+                # Free/busy-only calendars are not listed: keep them until the next run can read them.
+                for p, v in (cstate.get("shared_in") or {}).items():
+                    if (v or {}).get("level") == sharing.FREEBUSY:
+                        infos.append(dav.CollectionInfo(href=client.abs(p), read_only=True, components=["VEVENT"]))
+                        kept.add(client.abs(p))
+        # Free/busy-only calendars cannot be read as calendars, so they are never probed.
+        gone = await _still_gone(client, connector_id, [i for i in infos if i.href not in kept and i.href not in busy_now],
+                                 listed_at)
+        colls = await _diff_collections(connector_id, infos, res, listed_at, keep=kept, gone=gone)
         initial_done = True
         for info in infos:
             coll_id = colls.get(info.href)
-            if coll_id is None:
+            if coll_id is None or info.href in kept:
                 continue
             try:
+                if info.href in busy_now:  # free/busy only: the busy blocks (calendar/shared_busy.py)
+                    from mailr.calendar import shared_busy
+
+                    await shared_busy.store(coll_id, busy_now[info.href])
+                    continue
                 ok = await _sync_collection(client, coll_id, info, full, user_tz, me, interval, res)
                 initial_done = initial_done and ok
+            except dav.NotFound as e:
+                # Listed, yet the calendar itself is gone (deleted on the server, the listing not yet
+                # updated): out of the mirror, events included. A later listing brings it back only
+                # when its own address answers again (_still_gone).
+                log.info("calendar %s is listed but gone (%s); removed from the mirror", info.href, e)
+                await _collection_gone(coll_id)
             except Exception as e:  # noqa: BLE001  one collection failing must not stop the others
                 log.warning("calendar sync of %s failed: %s", info.href, e)
                 initial_done = False
@@ -292,6 +321,7 @@ async def _sync(connector_id: int, full: bool) -> SyncResult:
         connector_id, status="error" if worst else "idle",
         status_detail=worst or f"{len(infos)} calendars", last_sync_at=now,
         caldav={"home": home, "checked_at": now.isoformat(), "listed_at": listed_at.isoformat(), "auth_failed": False,
+                "error_kind": None,  # a calendar's own failure (status_detail) is classified from its text
                 **({"initial_done": True} if initial_done else {}), **ready, **share_state})
     return res
 
@@ -309,13 +339,54 @@ def _read_only(info: dav.CollectionInfo) -> bool:
     return bool(get_settings().dev and (info.description or "").startswith(DEV_READ_ONLY_MARK))
 
 
+async def _still_gone(client: dav.DavClient, connector_id: int, infos: list[dav.CollectionInfo],
+                      listed_at: datetime) -> set[str]:
+    """The listed collections whose mirror row is a tombstone and whose own address answers 404:
+    they stay deleted. A server can list a deleted calendar for a while; undeleting it then left an
+    empty row that never synced again (seen on 2 Nov 2026). A probe that fails
+    otherwise also keeps the tombstone, until a later run can tell."""
+    listed = {i.href for i in infos}
+    async with session_scope() as db:
+        tombs = [c.href for c in await mirror.collections_of(db, [connector_id], include_deleted=True)
+                 if c.deleted_at is not None and c.href in listed and c.deleted_at < listed_at]
+    out: set[str] = set()
+    for href in tombs:
+        try:
+            if not await client.exists(href):
+                out.add(href)
+        except (dav.DavError, UnsafeTarget) as e:
+            log.info("could not check whether calendar %s exists again: %s", href, e)
+            out.add(href)
+    return out
+
+
+async def _tombstone(db: AsyncSession, user_id: int, c: CalCollection) -> None:
+    """The collection and its events and tasks become tombstones; clients learn it from the delta."""
+    gone = await mirror.soft_delete_collection(db, c)
+    for kind in ("event", "task"):
+        ids = [i for k, i in gone if k == kind]
+        if ids:
+            await record_change(db, user_id, kind, ids, op="delete")
+    await record_change(db, user_id, "calendar", c.id, op="delete")
+
+
+async def _collection_gone(coll_id: int) -> None:
+    async with session_scope() as db:
+        c = await db.get(CalCollection, coll_id)
+        if c is not None and c.deleted_at is None:
+            await _tombstone(db, c.user_id, c)
+
+
 async def _diff_collections(connector_id: int, infos: list[dav.CollectionInfo], res: SyncResult,
-                            listed_at: datetime | None = None) -> dict[str, int]:
+                            listed_at: datetime | None = None, keep: set[str] | None = None,
+                            gone: set[str] | None = None) -> dict[str, int]:
     """Upsert the discovered collections, tombstone the ones that are gone; {href: id}.
+    A collection in `keep` that exists stays as it is (a free/busy-only calendar not read this time).
 
     A tombstone newer than `listed_at` (when the listing was asked for) stays: the collection
     was deleted here while the listing was on its way, so the listing is older than the delete.
-    Bringing it back would show a deleted list until the next sync."""
+    Bringing it back would show a deleted list until the next sync. A tombstone in `gone` (still
+    listed, but its own address answers 404: _still_gone) stays too."""
     out: dict[str, int] = {}
     async with session_scope() as db:
         conn = await db.get(Connector, connector_id)
@@ -326,6 +397,8 @@ async def _diff_collections(connector_id: int, infos: list[dav.CollectionInfo], 
             props = {"displayname": info.displayname, "description": info.description, "color": info.color,
                      "components": info.components, "server_order": info.order, "read_only": _read_only(info),
                      "calendar_tz": info.calendar_tz}
+            if c is None and keep and info.href in keep:
+                continue
             if c is None:
                 c = CalCollection(user_id=conn.user_id, connector_id=connector_id, href=info.href, **props)
                 db.add(c)
@@ -333,6 +406,11 @@ async def _diff_collections(connector_id: int, infos: list[dav.CollectionInfo], 
                 changed.append(c.id)
             elif c.deleted_at is not None and listed_at is not None and c.deleted_at >= listed_at:
                 continue
+            elif c.deleted_at is not None and gone and info.href in gone:
+                continue
+            elif keep and info.href in keep:
+                if c.deleted_at is not None:
+                    continue
             else:
                 diff = {k: v for k, v in props.items() if getattr(c, k) != v}
                 if diff or c.deleted_at is not None:
@@ -348,12 +426,7 @@ async def _diff_collections(connector_id: int, infos: list[dav.CollectionInfo], 
         for href, c in rows.items():
             if href in seen or c.deleted_at is not None:
                 continue
-            gone = await mirror.soft_delete_collection(db, c)
-            for kind in ("event", "task"):
-                ids = [i for k, i in gone if k == kind]
-                if ids:
-                    await record_change(db, conn.user_id, kind, ids, op="delete")
-            await record_change(db, conn.user_id, "calendar", c.id, op="delete")
+            await _tombstone(db, c.user_id, c)
         if changed:
             await record_change(db, conn.user_id, "calendar", changed)
         # Older readers (and one release of clients) still look at config.collections.

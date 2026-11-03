@@ -8,7 +8,9 @@ from pathlib import Path
 
 from mailr.core import store_groupware as sg
 
-PLAN = Path(__file__).resolve().parents[2] / "deploy" / "stalwart" / "provision-groupware.json"
+DEPLOY = Path(__file__).resolve().parents[2] / "deploy" / "stalwart"
+PLAN = DEPLOY / "provision-groupware.json"
+PLAN_V1 = DEPLOY / "provision-groupware.v1.json"
 
 STOCK = {
     "x:CalendarScheduling": {"enable": True, "httpRsvpEnable": True, "maxRecipients": 100},
@@ -17,7 +19,12 @@ STOCK = {
     "x:Calendar": {"defaultDisplayName": "Stalwart Calendar", "maxAttendees": 20},
     "x:AddressBook": {"defaultDisplayName": "Stalwart Address Book"},
     "x:Sharing": {"allowDirectoryQueries": False, "maxShares": 10},
+    "x:Http": {"useXForwarded": False},
+    "x:Search": {"indexEmail": True},
 }
+# Stalwart 1.x: x:Http has clientIpSource, and the search index settings matter.
+STOCK_V1 = {**STOCK, "x:Http": {"clientIpSource": "peer", "forwardedHops": 1},
+            "x:Search": {"indexEmail": True, "indexEmailFields": {"body": True}, "indexContacts": True}}
 
 
 class FakeMgmt:
@@ -25,6 +32,7 @@ class FakeMgmt:
         self.s = {k: dict(v) for k, v in singletons.items()}
         self.role = dict(role_perms)
         self.writes: list[str] = []
+        self.tasks: list[dict] = []
 
     async def call(self, calls, using=None):
         out = []
@@ -39,8 +47,10 @@ class FakeMgmt:
                     self.role.pop(k.split("/", 1)[1], None)
                 self.writes.append("x:Role")
                 out.append([method, {"updated": {"b": None}}, tag])
-            elif obj == "x:Action":
+            elif obj in ("x:Action", "x:Task"):
                 self.writes += [a["@type"] for a in args["create"].values()]
+                if obj == "x:Task":
+                    self.tasks += list(args["create"].values())
                 out.append([method, {"created": {}}, tag])
             elif verb == "get":
                 out.append([method, {"list": [{"id": "singleton", **self.s[obj]}]}, tag])
@@ -52,10 +62,47 @@ class FakeMgmt:
 
 
 def test_plan_file_matches_the_reconcile():
-    plan = json.loads(PLAN.read_text())
-    got = {m.split("/")[0]: a["update"]["singleton"] for m, a, _ in plan["methodCalls"]}
-    assert got == sg.wanted_singletons()
-    assert len(plan["methodCalls"]) <= 16  # Stalwart's maxMethodCalls
+    for path, v1 in ((PLAN, False), (PLAN_V1, True)):
+        plan = json.loads(path.read_text())
+        got = {m.split("/")[0]: a["update"]["singleton"] for m, a, _ in plan["methodCalls"]}
+        assert got == sg.wanted_singletons(v1), path.name
+        assert len(plan["methodCalls"]) <= 16  # Stalwart's maxMethodCalls
+
+
+def test_v1_provisioning_differs_only_by_the_renames():
+    """provision.v1.json is provision.json with Stalwart 1.0's field renames
+    (docs/design/stalwart-1.0-migration.md, section c), and nothing else."""
+    old = (DEPLOY / "provision.json").read_text()
+    renamed = (old.replace('"tlsImplicit"', '"implicitTls"').replace('"enabled": false', '"enable": false')
+               .replace("releases/latest/download/webui.zip", "releases/download/v2/webui.zip"))
+    assert renamed != old
+    assert (DEPLOY / "provision.v1.json").read_text() == renamed
+
+
+async def test_search_index_off_only_on_stalwart_1():
+    m = FakeMgmt(STOCK_V1, {})
+    changed = await sg.ensure_groupware_settings(m)
+    assert "x:Search.indexEmail" in changed and m.s["x:Search"]["indexEmail"] is False
+    assert m.s["x:Search"]["indexEmailFields"] == {"body": True}  # empty would mean "every field"
+    assert m.s["x:Search"]["indexContacts"] is True
+    m.writes.clear()
+    assert await sg.ensure_groupware_settings(m) == [] and m.writes == []
+    assert "StoreMaintenance" not in m.writes
+    m0 = FakeMgmt({**STOCK, "x:Search": {"indexEmail": True}}, {})
+    assert not any(c.startswith("x:Search") for c in await sg.ensure_groupware_settings(m0))
+    assert m0.s["x:Search"]["indexEmail"] is True
+
+
+async def test_search_index_back_on_with_a_reindex_on_0_16():
+    """A 0.16 store rolled back from 1.x carries indexEmail false: mailr turns it on and asks for a
+    reindex of every account, once."""
+    m = FakeMgmt({**STOCK, "x:Search": {"indexEmail": False}}, {})
+    changed = await sg.ensure_groupware_settings(m)
+    assert "x:Search.indexEmail" in changed and m.s["x:Search"]["indexEmail"] is True
+    assert m.writes.count("StoreMaintenance") == 1 and m.tasks == [{"@type": "StoreMaintenance",
+                                                                   "maintenanceType": "reindexAccounts"}]
+    m.writes.clear()
+    assert await sg.ensure_groupware_settings(m) == [] and m.writes == []
 
 
 async def test_reconcile_fixes_a_stock_store_once():

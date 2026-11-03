@@ -450,6 +450,44 @@ Turn on `calendar_week_numbers` to add week numbers, and `calendar_dim_past` to 
 have ended.
 The full list is in [Settings](../reference/settings.md).
 
+### Calendars and task lists
+
+**Settings → Calendar & tasks → Calendars and task lists** lists every calendar and task list under
+a heading that names where it comes from:
+
+| Heading | What is under it |
+|---|---|
+| Mailr calendar | The calendars and task lists on your Mailr server. |
+| The account's name and address, for example "Studio cal.example.org" | The calendars of a connected CalDAV account. |
+| Shared with you | Group calendars and calendars other people share with you. |
+| Calendars from your phone, with the phone's name | Busy times sent from a calendar on that phone (see [Phone calendars](phone-calendar.md)). |
+| Calendar links | Calendars you subscribed to by link. |
+
+Each row keeps its colour, its **Shows events** and **Shows tasks** ticks and its Share, Rename and
+Delete buttons. Hidden calendars stay in the list. The **Default calendar** and **Default task
+list** pickers use the same headings, so two calendars with the same name, such as two
+"Calendar"s, can be told apart.
+
+### When an account stops syncing
+
+An account that cannot sync shows a sentence that says what went wrong and what to do, on its card
+in **Settings → Calendar & tasks** and in a banner above the calendar. **Details** opens the
+technical message, which an administrator also finds under **Admin → Diagnostics**.
+
+| Message begins with | Cause | What to do |
+|---|---|---|
+| The calendar server at cal.example.org no longer has calendars at this address. | The address has no calendars any more: the server moved, or was switched off. | Check the address, or disconnect the account if it is no longer used. |
+| The calendar server at cal.example.org refused the user name or password. | The password changed, or the account was closed. | Disconnect the account and connect it again with the new password. |
+| The security certificate of cal.example.org could not be verified. | The certificate expired, or the address now leads to a different server. | Check the address, or ask the server's administrator to renew the certificate. |
+| The calendar server at cal.example.org could not be reached. | The server is offline, or the name no longer exists. | Wait, or check the address. Syncing resumes when the server can be reached. |
+| The calendar server at cal.example.org reported an error. | A fault on the server. | Usually nothing: syncing resumes when the server works again. |
+| This Mailr server does not connect to cal.example.org. | The address is private or local, or uses plain http. | Use the server's public https address, or ask your administrator. |
+| The calendar server at cal.example.org listed only part of a calendar. | The calendar holds more than the server lists at once. | Nothing: no event is removed, and the calendar is read again at the next sync. |
+| Syncing with cal.example.org failed. | Anything else. | Open **Details** for the technical message. |
+
+On Android, the banner above the calendar shows the same sentence, with **Details** for the
+technical message, and the drawer lists the calendars under the same headings.
+
 ## On the phone
 
 ![The calendar on a phone-sized browser window, in day view](../assets/shots/cal-day-phone.png)

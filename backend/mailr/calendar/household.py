@@ -8,7 +8,7 @@ their built-in calendars, when they have chosen to share it.
   (core/access.effective_groups). The instance's calendar sharing setting applies: "nobody" turns
   this off for everyone. The built-in calendars must be on for the person (calendar/builtin.shown_for).
 - **Which calendars.** Only the person's own calendars on the built-in connector that count toward
-  free/busy (CalCollection.busy). Calendars of an account marked local only are left out, and so
+  free/busy (CalCollection.busy), and group calendars; not calendars other people share with them. Calendars of an account marked local only are left out, and so
   are other accounts (Google, a university server): their copies live on mailr, but the person
   connected them for themselves.
 - **Who asks.** The signed-in person only, in Find a time. An agent token is refused, and Ambrose
@@ -60,13 +60,23 @@ async def people(db: AsyncSession, me: User) -> list[User]:
 
 
 async def calendars_of(db: AsyncSession, user_id: int) -> list[str]:
-    """The ids of a person's built-in calendars that count toward free/busy."""
+    """The ids of a person's built-in calendars that count toward free/busy. Calendars other
+    people share with the person (calendar/sharing.py, free/busy only included) are left out: they
+    are the owner's to share."""
+    from mailr.calendar import groups
+
     rows = (await db.execute(
-        select(CalCollection.id).join(Connector, Connector.id == CalCollection.connector_id).where(
+        select(CalCollection.id, CalCollection.href, Connector.state).join(
+            Connector, Connector.id == CalCollection.connector_id).where(
             Connector.user_id == user_id, Connector.builtin.is_(True),
             Connector.data_class != "local_only", CalCollection.deleted_at.is_(None),
-            CalCollection.busy.is_(True)))).scalars().all()
-    return [str(i) for i in rows]
+            CalCollection.busy.is_(True)))).all()
+    out = []
+    for cid, href, state in rows:
+        if groups.path_of(href) in (((state or {}).get("caldav") or {}).get("shared_in") or {}):
+            continue
+        out.append(str(cid))
+    return out
 
 
 async def busy_of(db: AsyncSession, user: User, start: datetime, end: datetime):

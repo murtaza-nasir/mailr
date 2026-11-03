@@ -51,11 +51,15 @@ def norm_href(url: str) -> str:
 
 
 class DavError(Exception):
+    """`kind` names the class of failure when the raiser knows it better than the status does
+    (a transport failure: "tls", "unreachable" or "server"); calendar/sync_errors.py reads it."""
     status: int = 0
+    kind: str | None = None
 
-    def __init__(self, message: str, status: int = 0):
+    def __init__(self, message: str, status: int = 0, kind: str | None = None):
         super().__init__(message)
         self.status = status
+        self.kind = kind
 
 
 class PreconditionFailed(DavError):  # 412: If-Match / If-None-Match did not hold
@@ -80,6 +84,27 @@ class ServerError(DavError):
 
 class Truncated(DavError):  # a listing the server cut short (507 number-of-matches-within-limits)
     pass
+
+
+def transport_kind(e: BaseException) -> str:
+    """The class of an httpx transport failure: "tls" (the certificate or the TLS handshake),
+    "unreachable" (DNS, refused or reset connection, timeout) or "server" (a reply that breaks
+    the protocol)."""
+    import ssl
+
+    seen: list[BaseException] = []
+    x: BaseException | None = e
+    while x is not None and x not in seen and len(seen) < 8:
+        seen.append(x)
+        x = x.__cause__ or x.__context__
+    if any(isinstance(x, ssl.SSLError) for x in seen) or any(
+            m in str(x) for x in seen for m in ("CERTIFICATE_VERIFY_FAILED", "[SSL", "certificate verify failed")):
+        return "tls"
+    if isinstance(e, (httpx.TimeoutException, httpx.NetworkError)):
+        return "unreachable"
+    if isinstance(e, (httpx.RemoteProtocolError, httpx.DecodingError)):
+        return "server"
+    return "unreachable"
 
 
 # Stalwart refuses an account's request past `maxConcurrentRequests` (default 4, DAV included)
@@ -109,6 +134,9 @@ class CollectionInfo:
     sync_token: str | None = None
     read_only: bool = False
     calendar_tz: str | None = None
+    # The current user's privileges as the listing reports them (local names: read, write,
+    # write-acl, read-free-busy, ...). Empty when the server sent none.
+    privileges: frozenset[str] = frozenset()
 
 
 def _q(tag: str) -> str:
@@ -215,7 +243,11 @@ class DavClient:
             except netguard.TooLarge:
                 raise ServerError(f"{method} {url}: the response is too large") from None
             except httpx.HTTPError as e:
-                raise ServerError(f"{method} {url}: {type(e).__name__}") from None
+                # The exception's own text is local (the TLS library's or the resolver's words), never
+                # the server's response; it stays in the stored detail for Admin → Diagnostics.
+                why = str(e).strip()[:200]
+                raise ServerError(f"{method} {url}: {type(e).__name__}" + (f": {why}" if why else ""),
+                                  kind=transport_kind(e)) from None
             if self.internal and _busy_refusal(resp.status_code, data) and attempt < len(BUSY_RETRIES):
                 await asyncio.sleep(BUSY_RETRIES[attempt])
                 continue
@@ -231,18 +263,18 @@ class DavClient:
                 # Only the store's own origin, never a hop elsewhere (the credentials are the
                 # service account's).
                 if not netguard.same_origin(url, self.base):
-                    raise DavError("the calendar store sent Mailr to another address; refused")
+                    raise DavError("the calendar store sent Mailr to another address; refused", kind="blocked")
                 auth = self.auth
             else:
                 try:
                     await netguard.check_url(url, private_ok=self.private_ok)
                 except netguard.UnsafeTarget as e:
-                    raise DavError(str(e)) from None
+                    raise DavError(str(e), kind="unreachable" if str(e).startswith("cannot resolve") else "blocked") from None
                 auth = self._credentials_for(url)
                 if auth is not None and u.scheme == "http" and not await asyncio.to_thread(
                         netguard.is_private_target, u.hostname or ""):
                     raise DavError("use https:// for a server on the internet; Mailr does not send the password "
-                                   "over plain http")
+                                   "over plain http", kind="blocked")
             resp, data, req = await self._send(method, url, body, headers, auth)
             # The body is decoded already: drop the encoding headers that described the wire form.
             hdrs = [(k, v) for k, v in resp.headers.multi_items()
@@ -251,7 +283,7 @@ class DavClient:
             if resp.status_code in (301, 302, 303, 307, 308) and resp.headers.get("location"):
                 nxt = urljoin(url, resp.headers["location"])
                 if u.scheme == "https" and urlsplit(nxt).scheme != "https":
-                    raise ServerError(f"{method} {url}: the server redirected from https to http; refused")
+                    raise ServerError(f"{method} {url}: the server redirected from https to http; refused", kind="blocked")
                 url = nxt
                 if resp.status_code == 303:
                     method, body = "GET", None
@@ -303,6 +335,16 @@ class DavClient:
                 return self.abs(_text(el))
         return None
 
+    async def exists(self, href: str) -> bool:
+        """Does the collection itself answer (a depth-0 PROPFIND)? False on 404/410; any other
+        failure raises. A server can keep listing a calendar under its home for a while after it
+        was deleted, while the calendar's own address already answers 404."""
+        try:
+            await self._multistatus("PROPFIND", href, _propfind_body(["d:resourcetype"]), "0")
+        except NotFound:
+            return False
+        return True
+
     async def home(self) -> str:
         """The calendar home set (falls back to the principal, then the base URL)."""
         principal = await self._href_prop(self.base, "d:current-user-principal") or self.base
@@ -339,7 +381,7 @@ class DavClient:
                 components=[c for c in comps if c] or ["VEVENT", "VTODO", "VJOURNAL"],
                 ctag=_text(p.find("cs:getctag", NS)) or None, sync_token=_text(p.find("d:sync-token", NS)) or None,
                 read_only=bool(privs) and not ({"write", "write-content", "all"} & privs),
-                calendar_tz=_tz_from_vcal(_text(p.find("c:calendar-timezone", NS)))))
+                calendar_tz=_tz_from_vcal(_text(p.find("c:calendar-timezone", NS))), privileges=frozenset(privs)))
         return out
 
     # ---------------- reading ----------------

@@ -1941,6 +1941,16 @@
               }
             ]
           },
+          "source": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CollectionSource"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "sync": {
             "anyOf": [
               {
@@ -1960,7 +1970,32 @@
                 "type": "null"
               }
             ],
-            "title": "Error"
+            "title": "Error",
+            "description": "An account whose calendars could not be read: the technical text."
+          },
+          "error_kind": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Kind",
+            "description": "The class of `error`: auth, not_found, tls, unreachable, server, blocked, partial or unknown."
+          },
+          "error_host": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Host",
+            "description": "The host of the account in error."
           }
         },
         "type": "object",
@@ -1997,6 +2032,56 @@
           "others"
         ],
         "title": "CollectionSharing"
+      },
+      "CollectionSource": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name",
+            "description": "account: the account's name."
+          },
+          "host": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Host",
+            "description": "account: the host of the account's address."
+          },
+          "device": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Device",
+            "description": "phone: the phone's name."
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind"
+        ],
+        "title": "CollectionSource",
+        "description": "Where a calendar comes from, for grouping: builtin (the Mailr calendar), account (a connected\nCalDAV account), shared (a group calendar or one a person shares), phone or link."
       },
       "ConversationDetail": {
         "properties": {
@@ -2679,6 +2764,18 @@
             ],
             "title": "Phone Details",
             "description": "A phone calendar's block that carries the phone's title and place (the calendar is set to send details)."
+          },
+          "shared_busy": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shared Busy",
+            "description": "A busy time of a calendar shared with me as free/busy only: read-only, its times and nothing else."
           },
           "my_status": {
             "anyOf": [
@@ -4968,6 +5065,18 @@
               }
             ],
             "title": "Error"
+          },
+          "error_kind": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Kind",
+            "description": "The class of `error`: auth, not_found, tls, unreachable, server, blocked, partial or unknown."
           }
         },
         "type": "object",

@@ -22,6 +22,7 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy import delete, func, select
 
 from mailr.calendar import builtin, dav, groups, writer
+from mailr.config import get_settings
 from mailr.core.access import EVERYONE
 from mailr.db import sessionmaker
 from mailr.models import (
@@ -38,9 +39,13 @@ API = "/api/v1"
 
 
 class FakeStore:
-    """x:Account get/set (memberGroupIds, create, destroy) and x:Action, in memory."""
+    """x:Account get/set (memberGroupIds, create, destroy) and x:Action, in memory. A person's
+    account (one made with a password: create_user, the `user` fixture) is made in the suite's real
+    store too, because create_user goes on to make that account's mailboxes there; on a fresh store
+    an account id the fake made up does not exist ("Account not found")."""
 
-    def __init__(self) -> None:
+    def __init__(self, real: Any = None) -> None:
+        self.real = real
         self.accounts: dict[str, dict[str, Any]] = {}
         self.actions: list[str] = []
         self.n = 0
@@ -63,8 +68,13 @@ class FakeStore:
         if method == "x:Account/set":
             out: dict[str, Any] = {}
             for key, obj in (args.get("create") or {}).items():
-                self.n += 1
-                aid = f"g{self.n}"
+                if self.real is not None and obj.get("credentials"):
+                    made = await self.real("x:Account/set", {"create": {key: {
+                        **obj, "domainId": (await self.real("x:Domain/query", {"filter": {"name": get_settings().stalwart_domain}}))["ids"][0]}}})
+                    aid = made["created"][key]["id"]
+                else:
+                    self.n += 1
+                    aid = f"g{self.n}"
                 self.accounts[aid] = {"id": aid, **obj, "memberGroupIds": {}}
                 out.setdefault("created", {})[key] = {"id": aid}
             for aid, patch in (args.get("update") or {}).items():
@@ -93,11 +103,11 @@ class FakeStore:
 
 @pytest_asyncio.fixture
 async def store(monkeypatch):
-    fake = FakeStore()
-    monkeypatch.setattr(groups, "_mgmt", fake)
-    monkeypatch.setattr(groups, "seal_home", fake.seal)
     import mailr.core.users as users_mod
 
+    fake = FakeStore(users_mod._mgmt)
+    monkeypatch.setattr(groups, "_mgmt", fake)
+    monkeypatch.setattr(groups, "seal_home", fake.seal)
     monkeypatch.setattr(users_mod, "_mgmt", fake)
     yield fake
     async with sessionmaker()() as db:

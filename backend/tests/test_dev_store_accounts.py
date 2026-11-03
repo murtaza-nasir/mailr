@@ -93,6 +93,14 @@ def test_the_mark_needs_dev_mode_and_a_run(monkeypatch):
     assert sa.mark() == {}
 
 
+def _app_store() -> str:
+    """The store the app makes its accounts in: the dev store, or the throwaway store a run names in
+    MAILR_STALWART_URL (a loopback one is allowed while MAILR_DEV is set)."""
+    from mailr.config import get_settings
+
+    return get_settings().stalwart_url
+
+
 async def test_a_test_user_is_marked_noted_and_released(app, tmp_path, monkeypatch):
     ledger = tmp_path / "ledger.jsonl"
     monkeypatch.setenv(sa.LEDGER_ENV, str(ledger))
@@ -103,14 +111,14 @@ async def test_a_test_user_is_marked_noted_and_released(app, tmp_path, monkeypat
         u = await create_user(db, f"t-{uuid.uuid4().hex[:8]}@example.com", "Noted")
     entry = next(e for e in sa.noted() if e[1] == u.stalwart_account_id)
     assert entry in sa.read_ledger(str(ledger))
-    with sa.Store(sa.DEV_STORE) as st:
+    with sa.Store(_app_store()) as st:
         (acct,) = st.get([u.stalwart_account_id])
         assert acct["externalId"] == f"{sa.MARK_PREFIX}{os.environ[sa.MARK_ENV]}"
         assert sa.is_test_account(st, acct)
     # A noted id that now names another account is left alone.
     assert sa.release([(entry[0], entry[1], entry[2] + "-other")]) == {entry[0]: 0}
     assert sa.release_ledger(str(ledger)) == {entry[0]: 1} and not ledger.exists()
-    with sa.Store(sa.DEV_STORE) as st:
+    with sa.Store(_app_store()) as st:
         assert st.get([u.stalwart_account_id]) == []
 
 
@@ -124,13 +132,13 @@ async def test_release_db_takes_only_the_accounts_its_rows_name(app):
     await asyncio.sleep(since - time.time())  # createdAt counts whole seconds
     async with session_scope() as db:
         u = await create_user(db, f"t-{uuid.uuid4().hex[:8]}@example.com", "Released")
-    with sa.Store(sa.DEV_STORE) as st:
+    with sa.Store(_app_store()) as st:
         assert st.get([u.stalwart_account_id])
     # Only accounts made since `since`: this one. Nothing made after an hour from now.
     assert await sa.release_db_async(url, since=time.time() + 3600, dry_run=True) == 0
     assert await sa.release_db_async(url, since=since, dry_run=True) == 1
     assert await sa.release_db_async(url, since=since) == 1
-    with sa.Store(sa.DEV_STORE) as st:
+    with sa.Store(_app_store()) as st:
         assert st.get([u.stalwart_account_id]) == []
 
 

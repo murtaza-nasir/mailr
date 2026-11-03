@@ -425,6 +425,10 @@ export interface Connector {
   /** Mail sent from mailr saved in the provider's Sent folder (backend connectors/sentcopy.py):
    *  null except for a mirror-mode IMAP account. */
   sent_copies?: SentCopies | null
+  /** Calendar accounts in error: the class of the failure and the server's host (backend
+   *  calendar/sync_errors.py). status_detail is the technical text behind "Details". */
+  error_kind?: string | null
+  error_host?: string | null
 }
 
 export interface SentCopies {

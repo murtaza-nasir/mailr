@@ -180,6 +180,22 @@
   background: var(--danger-container);
   color: var(--on-danger-container);
 }
+/* A sync failure: the plain message, then the technical text folded under Details. */
+.cal-banner-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding-block: 4px;
+}
+.cal-banner-details summary {
+  cursor: pointer;
+  font-size: 12px;
+}
+.cal-banner-details code {
+  display: block;
+  font-size: 12px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 .cal-banner.offline {
   background: var(--warning-container);
   color: var(--warning-fg);

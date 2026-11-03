@@ -107,8 +107,14 @@ export interface Collection {
   shareable?: boolean | null
   subscription?: Record<string, unknown> | null
   phone?: PhoneCalendar | null
+  source?: CollectionSource | null
   sync?: SyncState | null
+  /** An account whose calendars could not be read: the technical text. */
   error?: string | null
+  /** The class of `error`: auth, not_found, tls, unreachable, server, blocked, partial or unknown. */
+  error_kind?: string | null
+  /** The host of the account in error. */
+  error_host?: string | null
 }
 
 /** GET /calendar/calendars. */
@@ -117,6 +123,20 @@ export type CollectionList = Collection[]
 export interface CollectionSharing {
   people: number
   others: number
+}
+
+/**
+ * Where a calendar comes from, for grouping: builtin (the Mailr calendar), account (a connected
+ * CalDAV account), shared (a group calendar or one a person shares), phone or link.
+ */
+export interface CollectionSource {
+  kind: string
+  /** account: the account's name. */
+  name?: string | null
+  /** account: the host of the account's address. */
+  host?: string | null
+  /** phone: the phone's name. */
+  device?: string | null
 }
 
 /** GET /conversations/{id}. */
@@ -217,6 +237,8 @@ export interface Event {
   phone_busy?: boolean | null
   /** A phone calendar's block that carries the phone's title and place (the calendar is set to send details). */
   phone_details?: boolean | null
+  /** A busy time of a calendar shared with me as free/busy only: read-only, its times and nothing else. */
+  shared_busy?: boolean | null
   /** My answer as a guest (ACCEPTED, NEEDS-ACTION…), else null. */
   my_status?: string | null
   is_organizer?: boolean | null
@@ -634,6 +656,8 @@ export interface SyncState {
   state?: string | null
   last_sync_at?: string | null
   error?: string | null
+  /** The class of `error`: auth, not_found, tls, unreachable, server, blocked, partial or unknown. */
+  error_kind?: string | null
 }
 
 /**

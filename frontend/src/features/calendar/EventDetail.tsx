@@ -211,6 +211,14 @@ function EventDetailBody({ e, mode, anchor, onClose, deleted, onRestore }: Event
           <span className="cal-note cal-phone-note">{tr(e.phone_details ? 'calendar.phone.eventChangeOnThePhone' : 'calendar.phone.changeOnThePhone')}</span>
         </Line>
       )}
+      {e.shared_busy && (
+        // ACT calendar.user_shared @web.calendar: a free/busy-only calendar's block says why it shows no details.
+        <Line icon={<Lock />}>
+          <span className="cal-note" data-testid="shared-busy-note">
+            {tr('calendar.eventDetail.sharedBusyNote', { owner: col?.shared?.kind === 'user' ? col.shared.owner : tr('calendar.eventDetail.itsOwner') })}
+          </span>
+        </Line>
+      )}
       {(e.attendee_list?.length ?? 0) > 0 && (
         <div className="cal-detail-guests">
           <button type="button" className="cal-line cal-line-btn" aria-expanded={guestsOpen} onClick={() => setGuestsOpen(!guestsOpen)}>
@@ -255,7 +263,7 @@ function EventDetailBody({ e, mode, anchor, onClose, deleted, onRestore }: Event
         </div>
       )}
       {/* A phone calendar's busy time has no reminders: the phone's own calendar app reminds. */}
-      {!e.phone_busy && (
+      {!e.phone_busy && !e.shared_busy && (
         <div className="cal-line">
           <span className="cal-line-icon" aria-hidden><AlarmClock /></span>
           <span className="cal-line-body cal-reminders">

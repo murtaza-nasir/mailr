@@ -11,7 +11,7 @@ On the dev Stalwart two more are set by default:
                                                       # deploy/dav-gateway in front of it (docker)
 
 For the length of each test mailr's store settings point at that server. It changes the server's
-settings (useXForwarded, automatic address books). Every other test process's start (bootstrap)
+settings (the client address from X-Forwarded-For, automatic address books). Every other test process's start (bootstrap)
 sets them back to its own database's phone-access switch, so a test that depends on them checks
 afterwards that they held, and runs again when another process changed them meanwhile
 (`_holding`).
@@ -163,13 +163,17 @@ async def setup(store):
 
 
 async def _phone_settings() -> tuple:
-    """(useXForwarded, the automatic address book's name) as the server has them now."""
+    """(client address from X-Forwarded-For, the automatic address book's name) as the server has
+    them now: `useXForwarded` on Stalwart 0.16, `clientIpSource` on 1.x."""
     from mailr.core.store import service_client
 
     got = await service_client().call([["x:Http/get", {"ids": ["singleton"]}, "h"],
                                        ["x:AddressBook/get", {"ids": ["singleton"]}, "a"]],
                                       using=["urn:ietf:params:jmap:core", "urn:stalwart:jmap"])
-    return got[0][1]["list"][0]["useXForwarded"], got[1][1]["list"][0]["defaultHrefName"]
+    http = got[0][1]["list"][0]
+    fwd = (http["clientIpSource"] == "xForwardedFor" and http["forwardedHops"] == 1) if "clientIpSource" in http \
+        else http["useXForwarded"]
+    return fwd, got[1][1]["list"][0]["defaultHrefName"]
 
 
 async def _holding(attempt, tries: int = 3) -> None:
@@ -284,7 +288,8 @@ async def test_disabled_user_and_phone_access_off_give_401(setup):
 
 
 async def test_store_settings_follow_the_switch(setup):
-    """ACT settings.phone_access: on → useXForwarded and no automatic address books; off → back."""
+    """ACT settings.phone_access: on → the client address from X-Forwarded-For and no automatic
+    address books; off → back."""
     async def attempt(n):
         assert await _phone_settings() == (True, None)
         assert await phones.apply_store_settings() == []
@@ -401,7 +406,7 @@ def gateway():
 async def test_the_documented_gateway_restricts_and_passes_the_real_address(setup, gateway):
     """ACT settings.phone_access: deploy/dav-gateway in front of the server: the discovery
     redirects, DAV with an app password, only a Basic challenge, everything else refused, the
-    body limit, and the phone's address reaching Stalwart (useXForwarded) and not a forged one."""
+    body limit, and the phone's address reaching Stalwart (X-Forwarded-For) and not a forged one."""
     app, user, c, _ = setup
 
     async def attempt(n):
@@ -440,7 +445,7 @@ async def test_the_documented_gateway_restricts_and_passes_the_real_address(setu
         assert await _propfind(gateway, limited, headers={"X-Forwarded-For": "198.51.100.1"}) == 403
         assert await _propfind(gateway, limited, headers={"X-Forwarded-For": "203.0.113.9, 198.51.100.1"}) == 403
         assert await _propfind(gateway, limited) == 403
-        # Without useXForwarded Stalwart sees the gateway's own address: the limit cannot match.
+        # Without X-Forwarded-For as the client address Stalwart sees the gateway's own address: the limit cannot match.
         from mailr.core.store_groupware import ensure_phone_settings
 
         await ensure_phone_settings(False)

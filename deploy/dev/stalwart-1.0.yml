@@ -1,0 +1,35 @@
+# A Stalwart 1.x mail store for development and tests, beside the shared 0.16 one of
+# docker-compose.yml. Its own project, ports and volume, so it never touches the shared stores:
+#   docker compose -f deploy/dev/stalwart-1.0.yml up -d
+#   docker compose -f deploy/dev/stalwart-1.0.yml down -v      # remove it and its data
+# Point a test run at it (backend/tests/dev_services.py):
+#   MAILR_STALWART_URL=http://localhost:28080 MAILR_TEST_STALWART_URL=http://localhost:28080 \
+#   MAILR_TEST_STALWART_ADMIN=mailr-svc@mailr.internal:dev-svc-pass \
+#   MAILR_TEST_STALWART_IMAPS=127.0.0.1:21993 MAILR_TEST_STALWART_CONTAINER=mailr-dev-s1-stalwart-1
+# The fake upstream provider stays the shared 0.16 one. This file goes away when 1.x becomes the
+# default (docs/design/stalwart-1.0-cutover.md).
+name: mailr-dev-s1
+services:
+  stalwart:
+    image: stalwartlabs/stalwart:v1.0.1@sha256:b9da4df8b4efc06bc926dd6e990bdeb0ad7b9261a7c3893d74b0461a00bb389b
+    entrypoint: ["/bin/sh", "/opt/mailr/entrypoint.sh"]
+    environment:
+      STALWART_HOSTNAME: mail.mailr.internal
+      STALWART_PUBLIC_URL: http://localhost:28080
+      STALWART_RECOVERY_ADMIN: admin:dev-admin-pass
+      MAILR_DOMAIN: mailr.internal
+      MAILR_SVC_USER: mailr-svc
+      MAILR_SVC_PASSWORD: dev-svc-pass
+      MAILR_TRUSTED_NET: 172.16.0.0/12
+    volumes:
+      - ../stalwart/config.json:/etc/stalwart/config.json:ro
+      - ../stalwart/provision.v1.json:/opt/mailr/provision.v1.json:ro
+      - ../stalwart/provision-groupware.v1.json:/opt/mailr/provision-groupware.v1.json:ro
+      - ../stalwart/entrypoint.sh:/opt/mailr/entrypoint.sh:ro
+      - stalwart-data:/var/lib/stalwart
+    ports:
+      - "28080:8080"
+      - "21143:143"
+      - "21993:993"
+volumes:
+  stalwart-data:

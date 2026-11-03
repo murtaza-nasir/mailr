@@ -310,13 +310,15 @@ fun OfflineBanner(waiting: Int) {
 }
 
 /**
- * An account that does not sync. A refused password gets the place to enter it again (on the web)
- * instead of Retry, which cannot help; the server's own words stay behind Details.
+ * An account that does not sync: what went wrong and what to do in plain words, from the failure's
+ * kind (SyncProblems). A refused password opens Settings on the web (where the account is
+ * reconnected) instead of Retry, which cannot help; the technical text stays behind Details.
  */
 @Composable
-fun AccountErrorBanner(name: String, error: String, authFailed: Boolean = false, onOpenWeb: () -> Unit = {}, onRetry: () -> Unit) {
+fun AccountErrorBanner(name: String, error: String, authFailed: Boolean = false, kind: String? = if (authFailed) "auth" else null,
+                       host: String? = null, onOpenWeb: () -> Unit = {}, onRetry: () -> Unit) {
     var details by remember { mutableStateOf(false) }
-    val summary = if (authFailed) stringResource(R.string.cal_account_password, name) else stringResource(R.string.cal_account_not_syncing, name)
+    val summary = SyncProblems.text(kind, host, name)
     val first = if (authFailed) stringResource(R.string.cal_open_on_web) to onOpenWeb else stringResource(R.string.cal_retry) to onRetry
     val more = if (details) stringResource(R.string.cal_hide_details) else stringResource(R.string.cal_details)
     CalBanner(Icons.Outlined.SyncProblem, if (details) "$summary\n$error" else summary,

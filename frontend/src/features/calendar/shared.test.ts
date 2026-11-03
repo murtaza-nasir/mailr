@@ -5,8 +5,9 @@
 // ACT calendar.user_shared ACT calendar.share
 import { describe, expect, it } from 'vitest'
 import { accessLabel } from '../settings/GroupCalendars'
-import { matching, policyNote } from './ShareDialog'
-import { ownerNote, sharedLabel, sharingLabel } from './types'
+import { normalizeEvent } from './data'
+import { levelChoices, matching, policyNote } from './ShareDialog'
+import { ownerNote, sharedLabel, sharingLabel, throughLabel } from './types'
 
 describe('group calendar labels', () => {
   it('names the group, and says view only when the member cannot write', () => {
@@ -30,6 +31,29 @@ describe('calendars people share', () => {
     expect(sharedLabel({ shared: { kind: 'user', owner: 'Rosa', level: 'view', access: 'read' }, read_only: true })).toBe('Shared by Rosa · view only')
     expect(ownerNote({ shared: { kind: 'user', owner: 'Rosa', level: 'view', access: 'read' } })).toBe('Only Rosa can rename or delete it. You can hide it.')
     expect(ownerNote({ shared: { kind: 'group', group: 'Family', access: 'read' } })).toMatch(/administrator/)
+  })
+
+  it('says free/busy only, and the access a group gives', () => {
+    expect(sharedLabel({ shared: { kind: 'user', owner: 'Rosa', level: 'freebusy', access: 'freebusy' }, read_only: true })).toBe('Shared by Rosa · free/busy only')
+    expect(sharedLabel({ shared: { kind: 'user', owner: 'Rosa', level: 'edit', access: 'write', own_level: 'view', via: ['Family'] }, read_only: false }))
+      .toBe('Shared by Rosa · can edit (through Family)')
+    expect(throughLabel('share', ['Family', 'Team'])).toBe('can edit and share (through Family, Team)')
+  })
+
+  it('offers the levels the server lists, and keeps a level it no longer offers visible', () => {
+    expect(levelChoices(['freebusy', 'view', 'edit', 'share']).map((l) => l.id)).toEqual(['freebusy', 'view', 'edit', 'share'])
+    expect(levelChoices(['view', 'edit', 'share']).map((l) => l.id)).toEqual(['view', 'edit', 'share'])
+    expect(levelChoices(['view', 'edit', 'share'], 'freebusy').map((l) => l.id)).toEqual(['freebusy', 'view', 'edit', 'share'])
+    expect(levelChoices(undefined).map((l) => l.id)).toEqual(['view', 'edit', 'share'])
+  })
+
+  it('reads a free/busy-only block as "Busy", read-only', () => {
+    const url = 'https://mail.example/dav/cal/rosa/rota/'
+    const col = { url, name: 'Rota', read_only: true, shared: { kind: 'user' as const, owner: 'Rosa', level: 'freebusy' as const, access: 'freebusy' as const } }
+    const e = normalizeEvent({ uid: 'mailr-busy-1@mailr', summary: 'Beschäftigt', start: '2026-10-30T17:00:00Z', end: '2026-10-30T18:00:00Z',
+      calendar: url, shared_busy: true }, { zone: 'UTC', collections: new Map([[url, col as never]]) })
+    expect(e?.summary).toBe('Busy')
+    expect(e?.readOnly).toBe(true)
   })
 
   it("sums up the owner's shares", () => {

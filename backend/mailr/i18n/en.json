@@ -110,6 +110,7 @@
       "unverified_user_only": "only the signed-in user can apply a change from an unverified sender",
       "window_two_years": "the window must be positive and at most two years",
       "phone_read_only": "“{{name}}” shows busy times from your phone and can't be changed here. Change the event on the phone.",
+      "shared_busy_read_only": "“{{name}}” is shared with you as free/busy only. Only its owner can change its events.",
       "phone_limit": "at most {{max}} phone calendars",
       "phone_needs_allow": "a rule makes phone calendar updates ask first; allow them for this token in Settings → Permissions"
     },

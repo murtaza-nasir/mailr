@@ -328,33 +328,49 @@ async def test_deleting_a_user_revokes_first_then_shares_then_the_account(app, u
     assert store.creds[acct] == {}
 
 
+class _PhoneStore:
+    """A fake management API with the x:Http shape of Stalwart 0.16 or 1.x."""
+
+    def __init__(self, http):
+        self.s = {"x:Http": dict(http), "x:AddressBook": {"defaultHrefName": "default"}}
+        self.writes = 0
+
+    async def call(self, calls, using=None):
+        out = []
+        for method, args, tag in calls:
+            obj, verb = method.split("/")
+            if verb == "get":
+                out.append([method, {"list": [dict(self.s[obj])]}, tag])
+            elif obj == "x:Action":
+                out.append([method, {"created": {"a": {}}}, tag])
+            else:
+                self.s[obj].update(args["update"]["singleton"])
+                self.writes += 1
+                out.append([method, {"updated": {"singleton": None}}, tag])
+        return out
+
+
 async def test_store_settings_follow_the_switch():
     """ACT settings.phone_access: on → useXForwarded on and no automatic address books; off → back."""
-    class Store:
-        def __init__(self):
-            self.s = {"x:Http": {"useXForwarded": False}, "x:AddressBook": {"defaultHrefName": "default"}}
-            self.writes = 0
-
-        async def call(self, calls, using=None):
-            out = []
-            for method, args, tag in calls:
-                obj, verb = method.split("/")
-                if verb == "get":
-                    out.append([method, {"list": [dict(self.s[obj])]}, tag])
-                elif obj == "x:Action":
-                    out.append([method, {"created": {"a": {}}}, tag])
-                else:
-                    self.s[obj].update(args["update"]["singleton"])
-                    self.writes += 1
-                    out.append([method, {"updated": {"singleton": None}}, tag])
-            return out
-
-    st = Store()
+    st = _PhoneStore({"useXForwarded": False})
     assert set(await sg.ensure_phone_settings(True, st)) == {"x:Http.useXForwarded", "x:AddressBook.defaultHrefName"}
     assert st.s == {"x:Http": {"useXForwarded": True}, "x:AddressBook": {"defaultHrefName": None}}
     assert await sg.ensure_phone_settings(True, st) == [] and st.writes == 2
     await sg.ensure_phone_settings(False, st)
     assert st.s == {"x:Http": {"useXForwarded": False}, "x:AddressBook": {"defaultHrefName": "default"}}
+
+
+async def test_store_settings_follow_the_switch_on_stalwart_1():
+    """ACT settings.phone_access: Stalwart 1.x names the setting clientIpSource (with forwardedHops)."""
+    st = _PhoneStore({"clientIpSource": "peer", "forwardedHops": 1})
+    assert set(await sg.ensure_phone_settings(True, st)) == {"x:Http.clientIpSource", "x:AddressBook.defaultHrefName"}
+    assert st.s["x:Http"] == {"clientIpSource": "xForwardedFor", "forwardedHops": 1}
+    assert "useXForwarded" not in st.s["x:Http"]
+    assert await sg.ensure_phone_settings(True, st) == [] and st.writes == 2
+    st.s["x:Http"]["forwardedHops"] = 3  # the last entry is the gateway's: one hop
+    assert await sg.ensure_phone_settings(True, st) == ["x:Http.forwardedHops"]
+    await sg.ensure_phone_settings(False, st)
+    assert st.s == {"x:Http": {"clientIpSource": "peer", "forwardedHops": 1}, "x:AddressBook": {"defaultHrefName": "default"}}
 
 
 # ---------------- the admin's phone access check ----------------

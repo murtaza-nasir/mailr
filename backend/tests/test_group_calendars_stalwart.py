@@ -232,8 +232,8 @@ async def test_group_calendars_end_to_end(family):
 
 async def test_first_share_to_a_group_needs_invalidate_caches(family):
     """Stalwart 0.16.23: a first grant from an account to a group stays invisible to its members
-    until InvalidateCaches. If this starts failing at the first assert, Stalwart fixed it; the
-    call in calendar/groups.py can then go."""
+    until InvalidateCaches. Stalwart 1.0.1 shows it at once; the call in calendar/groups.py can go
+    once 0.16 is no longer supported."""
     group, users, clients = family
     # Alice is in the store group and her access token is built (a read-write calendar first, then
     # a sync), before the owner account shares anything with the group.
@@ -252,6 +252,12 @@ async def test_first_share_to_a_group_needs_invalidate_caches(family):
     finally:
         groups.invalidate_caches = real
     assert r.status_code == 200, r.text
+    from mailr.core.store import service_client
+    from mailr.core.store_groupware import is_v1
+
+    if await is_v1(service_client(), cache=False):
+        assert _named(await _sync(users["alice"]), "Club")
+        return
     assert not _named(await _sync(users["alice"]), "Club"), "the first-share bug is gone"
     await groups.invalidate_caches()
     assert _named(await _sync(users["alice"]), "Club")

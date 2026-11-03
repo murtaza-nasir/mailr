@@ -3287,6 +3287,26 @@
    "state": "model",
    "text": "%1$s — %2$s"
   },
+  "android:app:cal_group_links": {
+   "sha": "15a1d3ceb3f88815",
+   "state": "model",
+   "text": "Ссылки на календари"
+  },
+  "android:app:cal_group_mailr": {
+   "sha": "2f8c17a30670f4ed",
+   "state": "model",
+   "text": "Календарь Mailr"
+  },
+  "android:app:cal_group_phone": {
+   "sha": "0f7da40143f67115",
+   "state": "model",
+   "text": "Календари с вашего телефона"
+  },
+  "android:app:cal_group_shared": {
+   "sha": "933c23e2bc5ad969",
+   "state": "model",
+   "text": "Общие с вами"
+  },
   "android:app:cal_guest_optional": {
    "sha": "4f29f48c6bcec67c",
    "state": "model",
@@ -4892,6 +4912,26 @@
    "state": "model",
    "text": "Доступно: %s"
   },
+  "android:app:cal_shared_by_edit_through": {
+   "sha": "98087ac7089ba6e1",
+   "state": "model",
+   "text": "Доступно от %1$s · изменение (через %2$s)"
+  },
+  "android:app:cal_shared_by_free_busy": {
+   "sha": "e43d82b2ddda905b",
+   "state": "model",
+   "text": "Доступно от %s · только занятость"
+  },
+  "android:app:cal_shared_by_share_through": {
+   "sha": "2ece78bc131e0708",
+   "state": "model",
+   "text": "Доступно от %1$s · изменение и доступ (через %2$s)"
+  },
+  "android:app:cal_shared_by_view_through": {
+   "sha": "457961e314ab6c1d",
+   "state": "model",
+   "text": "Доступно от %1$s · просмотр (через %2$s)"
+  },
   "android:app:cal_shared_group_fallback": {
    "sha": "654e1e2086cfe138",
    "state": "model",
@@ -4966,6 +5006,51 @@
    "sha": "42761be2d0e9f99d",
    "state": "model",
    "text": "Перенесено"
+  },
+  "android:app:cal_sync_problem_auth": {
+   "sha": "ada08bfa750495cd",
+   "state": "model",
+   "text": "Сервер календаря по адресу %1$s отклонил имя пользователя или пароль. Если пароль был изменен, отключите эту учетную запись в веб-интерфейсе и подключите ее заново с новым паролем."
+  },
+  "android:app:cal_sync_problem_blocked": {
+   "sha": "d724213ec918527f",
+   "state": "manual",
+   "text": "Этот сервер Mailr не подключается к %1$s: адрес частный или локальный либо не использует https. Укажите публичный адрес https сервера календаря или обратитесь к администратору."
+  },
+  "android:app:cal_sync_problem_not_found": {
+   "sha": "42892f7714898649",
+   "state": "model",
+   "text": "Сервер календаря по адресу %1$s больше не содержит календарей по этому адресу. Возможно, он перемещен или отключен. Проверьте адрес или отключите эту учетную запись, если вы больше ею не пользуетесь."
+  },
+  "android:app:cal_sync_problem_partial": {
+   "sha": "134decb1d32b0dec",
+   "state": "model",
+   "text": "Сервер календаря по адресу %1$s предоставил только часть календаря. Ничего не было удалено, и календарь будет снова прочитан при следующей синхронизации."
+  },
+  "android:app:cal_sync_problem_server": {
+   "sha": "d41b1544c41e1ff5",
+   "state": "model",
+   "text": "Сервер календаря по адресу %1$s сообщил об ошибке. Обычно это временное явление. Синхронизация возобновится, когда сервер снова заработает."
+  },
+  "android:app:cal_sync_problem_somewhere": {
+   "sha": "369735e24ea4f7b1",
+   "state": "model",
+   "text": "адрес учетной записи"
+  },
+  "android:app:cal_sync_problem_tls": {
+   "sha": "358a9cc836aa090e",
+   "state": "model",
+   "text": "Не удалось проверить сертификат безопасности %1$s, поэтому соединение не установлено. Возможно, срок действия сертификата истек или адрес теперь указывает на другой сервер. Проверьте адрес или попросите администратора сервера продлить сертификат."
+  },
+  "android:app:cal_sync_problem_unknown": {
+   "sha": "f3760ef33a4c0705",
+   "state": "model",
+   "text": "Не удалось выполнить синхронизацию с %1$s. Техническое сообщение находится в разделе «Сведения»."
+  },
+  "android:app:cal_sync_problem_unreachable": {
+   "sha": "343319ca8e2b1f53",
+   "state": "model",
+   "text": "Не удалось связаться с сервером календаря по адресу %1$s. Возможно, он отключен или указан неверный адрес. Синхронизация возобновится, когда сервер снова станет доступен."
   },
   "android:app:cal_synced_days_ago": {
    "sha": "925840e073020c63",
@@ -23333,6 +23418,11 @@
    "state": "model",
    "text": "Календарями нельзя делиться через токен API."
   },
+  "server:errors.calendar.shared_busy_read_only": {
+   "sha": "93b97bff0051c9cd",
+   "state": "model",
+   "text": "Календарь «{{name}}» доступен вам только в режиме занятости. Изменять его мероприятия может только владелец."
+  },
   "server:errors.calendar.signin_failed": {
    "sha": "27cdf9b68d743274",
    "state": "model",
@@ -27653,6 +27743,11 @@
    "state": "model",
    "text": "«{{titleOf}}» больше нет в вашем календаре."
   },
+  "web:calendar.eventDetail.itsOwner": {
+   "sha": "610c46e9d866eeac",
+   "state": "model",
+   "text": "Владелец"
+  },
   "web:calendar.eventDetail.linkCopied": {
    "sha": "7cde41165fe82bad",
    "state": "model",
@@ -27712,6 +27807,11 @@
    "sha": "91889ce519203bb2",
    "state": "model",
    "text": "Напоминания изменены"
+  },
+  "web:calendar.eventDetail.sharedBusyNote": {
+   "sha": "67443902fe3f15f8",
+   "state": "model",
+   "text": "{{owner}} делится с вами только занятостью этого календаря. Названия и детали остаются у него."
   },
   "web:calendar.eventDetail.snooze": {
    "sha": "5aedbba1e0e600c6",
@@ -29293,6 +29393,51 @@
    "state": "model",
    "text": "Название календаря"
   },
+  "web:calendar.syncProblem.auth": {
+   "sha": "9d887ed9815a80d4",
+   "state": "model",
+   "text": "Сервер календаря {{host}} отклонил имя пользователя или пароль. Если пароль был изменён, отключите эту учётную запись и подключите её заново с новым паролем."
+  },
+  "web:calendar.syncProblem.blocked": {
+   "sha": "222ba03bc4290adf",
+   "state": "manual",
+   "text": "Этот сервер Mailr не подключается к {{host}}: адрес частный или локальный либо не использует https. Укажите публичный адрес https сервера календаря или обратитесь к администратору."
+  },
+  "web:calendar.syncProblem.notFound": {
+   "sha": "cfa3bc455ac19464",
+   "state": "model",
+   "text": "Сервер календаря {{host}} больше не предоставляет календари по этому адресу. Возможно, он перемещён или отключён. Проверьте адрес или отключите эту учётную запись, если вы больше её не используете."
+  },
+  "web:calendar.syncProblem.partial": {
+   "sha": "cf9dce588abc320f",
+   "state": "model",
+   "text": "Сервер календаря {{host}} предоставил только часть календаря. Ничего не было удалено, и календарь будет загружен заново при следующей синхронизации."
+  },
+  "web:calendar.syncProblem.server": {
+   "sha": "17c4632b6ab75094",
+   "state": "model",
+   "text": "Сервер календаря {{host}} сообщил об ошибке. Обычно это временная проблема. Синхронизация возобновится, когда сервер снова заработает."
+  },
+  "web:calendar.syncProblem.theServer": {
+   "sha": "369735e24ea4f7b1",
+   "state": "model",
+   "text": "адрес учётной записи"
+  },
+  "web:calendar.syncProblem.tls": {
+   "sha": "2113eefa013c56f8",
+   "state": "model",
+   "text": "Не удалось проверить сертификат безопасности {{host}}, поэтому соединение не установлено. Возможно, срок действия сертификата истёк или адрес теперь указывает на другой сервер. Проверьте адрес или попросите администратора сервера обновить сертификат."
+  },
+  "web:calendar.syncProblem.unknown": {
+   "sha": "8bff5459f2bd3333",
+   "state": "model",
+   "text": "Не удалось выполнить синхронизацию с {{host}}. Техническое сообщение приведено в разделе «Сведения»."
+  },
+  "web:calendar.syncProblem.unreachable": {
+   "sha": "46522757176192df",
+   "state": "model",
+   "text": "Не удалось подключиться к серверу календаря {{host}}. Возможно, он отключён или указан неверный адрес. Синхронизация возобновится, когда сервер снова станет доступен."
+  },
   "web:calendar.tableDates.untitledRow": {
    "sha": "dce69bd7799471e7",
    "state": "model",
@@ -29583,6 +29728,21 @@
    "state": "model",
    "text": " и группа"
   },
+  "web:calendar.types.canEdit": {
+   "sha": "bdbe4bf06482c7b1",
+   "state": "model",
+   "text": "может редактировать"
+  },
+  "web:calendar.types.canEditAndShare": {
+   "sha": "3f24d27f2f0e595c",
+   "state": "model",
+   "text": "может редактировать и делиться"
+  },
+  "web:calendar.types.canView": {
+   "sha": "202d13e8a181d787",
+   "state": "model",
+   "text": "может просматривать"
+  },
   "web:calendar.types.editAndShare": {
    "sha": "f7e8c5f5345aab19",
    "state": "model",
@@ -29592,6 +29752,21 @@
    "sha": "153824df7219b29c",
    "state": "model",
    "text": "Изменяет и делится с другими."
+  },
+  "web:calendar.types.freeBusyOnly": {
+   "sha": "883638ffa96db0e3",
+   "state": "model",
+   "text": "Только занятость"
+  },
+  "web:calendar.types.freeBusyOnlySuffix": {
+   "sha": "6a117e3a854797b0",
+   "state": "model",
+   "text": " · только занятость"
+  },
+  "web:calendar.types.levelThrough": {
+   "sha": "51f90464228f96b5",
+   "state": "model",
+   "text": "{{level}} (через {{groups}})"
   },
   "web:calendar.types.onlyAnAdministratorRenamesOr": {
    "sha": "372256056e0adc8b",
@@ -29607,6 +29782,16 @@
    "sha": "05cbe48a0d11c6d1",
    "state": "model",
    "text": "Просмотр мероприятий без изменений."
+  },
+  "web:calendar.types.seesFreeBusyOnly": {
+   "sha": "748c0b783221dab6",
+   "state": "model",
+   "text": "видит только занятость"
+  },
+  "web:calendar.types.seesOnlyWhenYouAreBusy": {
+   "sha": "0d29ecd2de628636",
+   "state": "model",
+   "text": "Видит, когда вы заняты, без названий и деталей."
   },
   "web:calendar.types.sharedBy": {
    "sha": "a2f2ba5fff873783",
@@ -34087,6 +34272,11 @@
    "sha": "b4b576e4b24dce69",
    "state": "model",
    "text": "Отписаться от {{displayName}}?"
+  },
+  "web:conversation.messageCard.updatedByJustNow": {
+   "sha": "c4a0f48348ebad6a",
+   "state": "model",
+   "text": "Обновлено {{who}} · только что"
   },
   "web:conversation.messageCard.waitingForApproval": {
    "sha": "68a4cf4ad6df9a3f",
@@ -52894,6 +53084,21 @@
    "sha": "a7b3504d1e2e2600",
    "state": "model",
    "text": "Этот сервер пока не может изменять календари."
+  },
+  "web:settings.calendarGroups.calendarLinks": {
+   "sha": "15a1d3ceb3f88815",
+   "state": "model",
+   "text": "Ссылки на календари"
+  },
+  "web:settings.calendarGroups.fromYourPhone": {
+   "sha": "0f7da40143f67115",
+   "state": "model",
+   "text": "Календари с телефона"
+  },
+  "web:settings.calendarGroups.sharedWithYou": {
+   "sha": "933c23e2bc5ad969",
+   "state": "model",
+   "text": "Доступ к заметке имеете вы"
   },
   "web:settings.calendarMigration.alreadyThere": {
    "sha": "16960dde493206cf",

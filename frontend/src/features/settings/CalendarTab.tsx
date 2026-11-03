@@ -10,6 +10,7 @@ import { ConfirmDialog, Dialog } from '../../components/Dialog'
 import { formatRelative } from '../../lib/format'
 import { toast, toastError } from '../../stores/ui'
 import { Section } from './common'
+import { SyncProblem } from '../calendar/syncProblem'
 import { CollectionsSection } from './CalendarCollections'
 import { MigrateDialog } from './CalendarMigration'
 import { PhoneAppsSection } from './PhoneApps'
@@ -68,7 +69,8 @@ export function CalendarAccountsSection() {
                       {hostOf(String((c.config as { url?: string }).url ?? ''))}
                       {c.last_sync_at ? t('settings.calendarTab.synced', { relative: formatRelative(c.last_sync_at) }) : ''}
                     </div>
-                    {c.status === 'error' && <div className="sub" style={{ color: 'var(--danger)' }}>{c.status_detail}</div>}
+                    {/* What went wrong in plain words; the server's technical text under Details. */}
+                    {c.status === 'error' && <SyncProblem kind={c.error_kind} host={c.error_host} detail={c.status_detail} fallback={c.name} />}
                   </div>
                   {canCopy && (
                     <button type="button" className="btn outlined sm" onClick={() => setCopying(c)} data-testid="migrate-open">
@@ -141,7 +143,7 @@ function BuiltinCard({ c }: { c: Connector }) {
           <div className="sub">
             {t('settings.calendarTab.yourCalendarAndTaskList', { value: c.enabled ? (c.last_sync_at ? t('settings.calendarTab.synced2', { relative: formatRelative(c.last_sync_at) }) : '') : t('settings.calendarTab.hiddenItsEventsAndTasks') })}
           </div>
-          {c.enabled && c.status === 'error' && <div className="sub" style={{ color: 'var(--danger)' }}>{c.status_detail}</div>}
+          {c.enabled && c.status === 'error' && <SyncProblem kind={c.error_kind} host={c.error_host} detail={c.status_detail} fallback={t('settings.calendarTab.mailrCalendar')} />}
         </div>
         <Switch checked={c.enabled} disabled={toggle.isPending} onChange={(v) => toggle.mutate(v)} label={t('settings.calendarTab.showTheMailrCalendar')} />
       </div>

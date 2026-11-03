@@ -25,6 +25,7 @@ from mailr.models import CalCollection, CalObject, Connector
 BASE = "https://dav.northwind.example/dav/cal/"
 HOME = BASE + "u/"
 COLL = HOME + "work/"
+SECOND = HOME + "home/"
 D = "{DAV:}"
 
 
@@ -47,6 +48,11 @@ class FakeDav:
         self.cap_report = self.cap_propfind = True
         self.future_tokens = False
         self.requests: list[str] = []
+        # The collection deleted on the server (DELETE, or another client): its own address answers
+        # 404; `listed_when_gone` keeps it in the home listing (a server whose listing lags).
+        self.gone = False
+        self.listed_when_gone = True
+        self.second = False  # a second, empty calendar "Home" (so "Work" is not the last one)
         for i in range(n):
             self.put(f"e{i}", f"Event {i}")
 
@@ -94,7 +100,20 @@ class FakeDav:
         path = unquote(req.url.path)
         self.requests.append(f"{req.method} {path}")
         body = ET.fromstring(req.content) if req.content else None
+        if path.startswith(urlsplit(SECOND).path):
+            return self.ms([], "urn:fake:home")
+        if req.method == "DELETE" and path == urlsplit(COLL).path:
+            self.gone = True
+            return httpx.Response(204)
+        if self.gone and path.startswith(urlsplit(COLL).path):
+            return httpx.Response(404)
         if req.method == "PROPFIND" and path == urlsplit(HOME).path:
+            second = (f"<d:response><d:href>{urlsplit(SECOND).path}</d:href><d:propstat><d:prop>"
+                      "<d:resourcetype><d:collection/><c:calendar/></d:resourcetype><d:displayname>Home</d:displayname>"
+                      "<cs:getctag>\"h1\"</cs:getctag><d:sync-token>urn:fake:home</d:sync-token>"
+                      "<c:supported-calendar-component-set><c:comp name=\"VEVENT\"/></c:supported-calendar-component-set>"
+                      "<d:current-user-privilege-set><d:privilege><d:all/></d:privilege></d:current-user-privilege-set>"
+                      "</d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response>") if self.second else ""
             coll = (f"<d:response><d:href>{urlsplit(COLL).path}</d:href><d:propstat><d:prop>"
                     "<d:resourcetype><d:collection/><c:calendar/></d:resourcetype><d:displayname>Work</d:displayname>"
                     f"<cs:getctag>\"{max([v for v, _ in self.items.values()] + list(self.tombs.values()) + [0])}\"</cs:getctag>"
@@ -102,7 +121,9 @@ class FakeDav:
                     "<c:supported-calendar-component-set><c:comp name=\"VEVENT\"/></c:supported-calendar-component-set>"
                     "<d:current-user-privilege-set><d:privilege><d:all/></d:privilege></d:current-user-privilege-set>"
                     "</d:prop><d:status>HTTP/1.1 200 OK</d:status></d:propstat></d:response>")
-            return self.ms([coll])
+            if self.gone and not self.listed_when_gone:
+                coll = ""
+            return self.ms([x for x in (coll, second) if x])
         if req.method == "PROPFIND" and path == urlsplit(COLL).path:
             names, cut = self.capped(sorted(self.items), self.cap_propfind)
             return self.ms([self.item(n) for n in names] + ([self.cut()] if cut else []))
@@ -456,3 +477,66 @@ async def test_a_run_that_already_served_the_reader_is_not_repeated(fake, user, 
     await sync.sync_connector(cid, served_since=datetime.now(UTC))  # asked after that listing: runs
     await sync.sync_connector(cid, full=True, served_since=asked)  # a full sync always runs
     assert runs == [cid, cid, cid]
+
+
+async def _tombstones(cid: int) -> tuple[CalCollection, int]:
+    """The "Work" row (deleted or not) and how many of its events are live."""
+    async with sessionmaker()() as db:
+        coll = (await db.execute(select(CalCollection).where(CalCollection.connector_id == cid,
+                                                             CalCollection.href == COLL))).scalar_one()
+        live = len((await db.execute(select(CalObject.id).where(
+            CalObject.collection_id == coll.id, CalObject.deleted_at.is_(None)))).all())
+        return coll, live
+
+
+@pytest.mark.parametrize("listed_when_gone", [True, False])
+async def test_a_calendar_deleted_in_mailr_stays_deleted(fake, user, client, listed_when_gone):
+    """Production, 2 Nov 2026: a calendar deleted in Mailr came back as an empty row that never
+    synced again, because the server kept listing it for a while and the next sync undeleted it.
+    Now a listed tombstone comes back only when the calendar's own address answers again."""
+    fake.second, fake.listed_when_gone = True, listed_when_gone
+    cid = await _connector(user)
+    await sync.sync_connector(cid)
+    coll, live = await _tombstones(cid)
+    assert coll.deleted_at is None and live == 5
+    cursor = (await client.get("/api/v1/calendar/delta")).json()["cursor"]
+    r = await client.delete(f"/api/v1/calendar/collections/{coll.id}", params={"confirm": "Work"})
+    assert r.status_code == 200, r.text
+    assert fake.gone
+    for _ in range(2):
+        res = await sync.sync_connector(cid)
+        assert res.error is None
+        coll, live = await _tombstones(cid)
+        assert coll.deleted_at is not None and live == 0
+    rev = coll.rev
+    await sync.sync_connector(cid)
+    assert (await _tombstones(cid))[0].rev == rev  # nothing to tell the clients again
+    names = [c["name"] for c in (await client.get("/api/v1/calendar/calendars")).json()]
+    assert names == ["Home"], names
+    delta = (await client.get("/api/v1/calendar/delta", params={"cursor": cursor})).json()
+    assert coll.id in {d["calendar_id"] for d in delta["deleted_collections"]}
+    assert len(delta["deleted"]) == 5
+
+
+@pytest.mark.parametrize("listed_when_gone", [False, True])
+async def test_a_calendar_removed_by_another_client_leaves_the_mirror(fake, user, client, listed_when_gone):
+    """Deleted on the server by another client: gone from the listing, the row and its events
+    become tombstones at the next sync. While a lagging listing still names it unchanged, the
+    periodic full sync reads it, gets 404 and does the same. Both stay so; when the calendar really
+    exists again, it comes back."""
+    fake.second, fake.listed_when_gone = True, listed_when_gone
+    cid = await _connector(user)
+    await sync.sync_connector(cid)
+    cursor = (await client.get("/api/v1/calendar/delta")).json()["cursor"]
+    fake.gone = True
+    for _ in range(2):
+        await sync.sync_connector(cid, full=listed_when_gone)
+        coll, live = await _tombstones(cid)
+        assert coll.deleted_at is not None and live == 0
+    delta = (await client.get("/api/v1/calendar/delta", params={"cursor": cursor})).json()
+    assert coll.id in {d["calendar_id"] for d in delta["deleted_collections"]} and len(delta["deleted"]) == 5
+
+    fake.gone = False  # made again on the server
+    await sync.sync_connector(cid)
+    coll, live = await _tombstones(cid)
+    assert coll.deleted_at is None and live == 5

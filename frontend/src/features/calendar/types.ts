@@ -62,6 +62,8 @@ export interface ApiEvent {
   phone_busy?: boolean
   /** A phone calendar's block with the phone's title and place (the calendar sends details). */
   phone_details?: boolean
+  /** A busy time of a calendar shared with this user as free/busy only (calendar/shared_busy.py): read-only, times only. */
+  shared_busy?: boolean
 }
 
 /** An event as the views use it: times parsed, colour and identity resolved. */
@@ -84,6 +86,18 @@ export interface SyncInfo {
   state?: string
   last_sync_at?: string | null
   error?: string | null
+  /** The class of `error` (backend calendar/sync_errors.py), which syncProblemText explains. */
+  error_kind?: string | null
+}
+
+/** Where a calendar comes from (backend mirror.source_of), for the grouped lists. */
+export interface CollectionSource {
+  kind: 'builtin' | 'account' | 'shared' | 'phone' | 'link'
+  /** account: its name and the host of its address. */
+  name?: string
+  host?: string | null
+  /** phone: the phone's name. */
+  device?: string
 }
 
 export interface Collection {
@@ -109,7 +123,11 @@ export interface Collection {
   sort_order?: number
   local_only?: boolean
   sync?: SyncInfo
+  source?: CollectionSource
+  /** An account whose calendars could not be read: the technical text, its kind and host. */
   error?: string
+  error_kind?: string | null
+  error_host?: string | null
   /** Minutes, or separate lists for timed and all-day events. */
   default_reminders?: number[] | { timed?: number[]; all_day?: number[] } | null
   color_local?: boolean
@@ -143,22 +161,48 @@ export interface GroupShared {
   group_calendar_id?: number
 }
 
-export type ShareLevel = 'view' | 'edit' | 'share'
+/** freebusy exists on Stalwart 1.x only; the Share dialog offers the levels the server lists. */
+export type ShareLevel = 'freebusy' | 'view' | 'edit' | 'share'
 
 export interface UserShared {
   kind: 'user'
   owner: string
   owner_id?: number
+  /** What this user can do, by all their grants (their own and their groups'). */
   level: ShareLevel
-  access: 'read' | 'write'
+  access: 'freebusy' | 'read' | 'write'
   can_share?: boolean
+  /** Set when a group gives more than this user's own grant: the own level and the groups. */
+  own_level?: ShareLevel | null
+  via?: string[]
 }
 
-/** "Shared with the Family group" or "Shared by Rosa", plus "view only" when this user cannot write. */
+/** What a level lets someone do, as a short phrase: "can edit". */
+export function levelPhrase(l: ShareLevel): string {
+  return {
+    freebusy: t('calendar.types.seesFreeBusyOnly'),
+    view: t('calendar.types.canView'),
+    edit: t('calendar.types.canEdit'),
+    share: t('calendar.types.canEditAndShare'),
+  }[l]
+}
+
+/** "can edit (through Family)": the access a group gives, more than the person's own grant. */
+export function throughLabel(level: ShareLevel, via: string[] | undefined): string {
+  return t('calendar.types.levelThrough', { level: levelPhrase(level), groups: (via ?? []).join(', ') })
+}
+
+/** "Shared with the Family group" or "Shared by Rosa", plus "view only" when this user cannot write,
+ *  "free/busy only", or the access a group of theirs gives ("can edit (through Family)"). */
 export function sharedLabel(c: Pick<Collection, 'shared' | 'read_only'>): string {
   if (!c.shared) return ''
-  const who = c.shared.kind === 'user' ? t('calendar.types.sharedBy', { owner: c.shared.owner }) : t('calendar.types.sharedWithTheGroup', { group: c.shared.group })
-  return `${who}${c.read_only ? t('calendar.types.viewOnly') : ''}`
+  if (c.shared.kind === 'user') {
+    const who = t('calendar.types.sharedBy', { owner: c.shared.owner })
+    if (c.shared.level === 'freebusy') return `${who}${t('calendar.types.freeBusyOnlySuffix')}`
+    if (c.shared.via?.length) return `${who} · ${throughLabel(c.shared.level, c.shared.via)}`
+    return `${who}${c.read_only ? t('calendar.types.viewOnly') : ''}`
+  }
+  return `${t('calendar.types.sharedWithTheGroup', { group: c.shared.group })}${c.read_only ? t('calendar.types.viewOnly') : ''}`
 }
 
 /** Who renames or deletes a calendar this user only shares. */
@@ -179,6 +223,7 @@ export function sharingLabel(c: Pick<Collection, 'sharing'>): string {
 }
 
 export const SHARE_LEVELS: { id: ShareLevel; label: string; desc: string }[] = [
+  { id: 'freebusy', label: t('calendar.types.freeBusyOnly'), desc: t('calendar.types.seesOnlyWhenYouAreBusy') },
   { id: 'view', label: t('common.view'), desc: t('calendar.types.seesEveryEventChangesNothing') },
   { id: 'edit', label: t('common.edit2'), desc: t('calendar.types.addsChangesAndDeletesEvents') },
   { id: 'share', label: t('calendar.types.editAndShare'), desc: t('calendar.types.editsAndSharesItWith') },
@@ -202,10 +247,13 @@ export interface SyncStatus {
     name: string
     status: string
     detail?: string | null
-    /** "auth": the server stopped accepting the password; Retry cannot help. */
+    /** The class of the failure (backend calendar/sync_errors.py). "auth": the server stopped
+     *  accepting the password; Retry cannot help. */
     error_kind?: string | null
+    /** The host of the account's address, for the message. */
+    error_host?: string | null
     last_sync_at?: string | null
-    collections?: { calendar_id: number; url: string; name: string; state: string; error?: string | null }[]
+    collections?: { calendar_id: number; url: string; name: string; state: string; error?: string | null; error_kind?: string | null }[]
   }[]
 }
 
@@ -284,7 +332,14 @@ export interface ShareState {
   owner: SharePerson
   policy: 'anyone' | 'groups' | 'nobody'
   levels: ShareLevel[]
-  people: (SharePerson & { level: ShareLevel; disabled: boolean; you: boolean; outside_policy: boolean })[]
+  people: (SharePerson & {
+    level: ShareLevel
+    disabled: boolean
+    you: boolean
+    outside_policy: boolean
+    /** Set when a group of theirs gives more than `level` (calendar/sharing.py `access_of`). */
+    access?: { level: ShareLevel; can_share: boolean; via: string[] }
+  })[]
   others: number
   candidates: SharePerson[]
   max: number

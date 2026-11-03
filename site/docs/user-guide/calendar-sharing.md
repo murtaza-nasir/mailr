@@ -49,6 +49,8 @@ same groups, or nobody.
    calendar instead.
 2. Type part of a name or an address to find someone.
 3. Choose what they can do, then select **Add**:
+    - **Free/busy only**: they see when you are busy, without titles, places or other details.
+      This level is listed only when the server supports it.
     - **View**: they see every event and change nothing.
     - **Edit**: they add, change and delete events.
     - **Edit and share**: they edit, and they can share the calendar with other people too.
@@ -78,6 +80,13 @@ The calendar is listed under **Shared**, with the line **Shared by** and the own
 
 - If you can only view it, it is marked **view only** and has a lock. It is not offered
   when you create an event, and Ambrose does not write into it either.
+- If the owner shares only free/busy, the line reads **Shared by … · free/busy only**. Each busy
+  time shows as **Busy**, with no title or details, and a tentative event shows as a tentative busy
+  time. The busy times count when you look for a free time. You cannot change them. Ambrose reads
+  them as busy times too. Busy times are shown from about two months back to a year ahead.
+- Someone can also give access to a group you are in, for example in the mail server's own
+  settings. You can then do what any of your grants allows. When a group allows more than your
+  own level, the line says so, for example **Shared by Rosa · can edit (through Family)**.
 - You can hide it and give it a colour of your own. The owner and other people keep theirs.
 - You cannot rename or delete it. Only the owner can.
 - If the owner allows resharing, **Share…** appears in its menu, and you can add people within

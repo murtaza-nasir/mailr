@@ -3171,6 +3171,26 @@
    "state": "model",
    "text": "%1$s bis %2$s"
   },
+  "android:app:cal_group_links": {
+   "sha": "15a1d3ceb3f88815",
+   "state": "model",
+   "text": "Kalender-Links"
+  },
+  "android:app:cal_group_mailr": {
+   "sha": "2f8c17a30670f4ed",
+   "state": "model",
+   "text": "Mailr-Kalender"
+  },
+  "android:app:cal_group_phone": {
+   "sha": "0f7da40143f67115",
+   "state": "model",
+   "text": "Kalender von deinem Telefon"
+  },
+  "android:app:cal_group_shared": {
+   "sha": "933c23e2bc5ad969",
+   "state": "model",
+   "text": "Mit dir geteilt"
+  },
   "android:app:cal_guest_optional": {
    "sha": "4f29f48c6bcec67c",
    "state": "model",
@@ -4722,6 +4742,26 @@
    "state": "model",
    "text": "Geteilt von %s"
   },
+  "android:app:cal_shared_by_edit_through": {
+   "sha": "98087ac7089ba6e1",
+   "state": "model",
+   "text": "Geteilt von %1$s · kann bearbeiten (über %2$s)"
+  },
+  "android:app:cal_shared_by_free_busy": {
+   "sha": "e43d82b2ddda905b",
+   "state": "model",
+   "text": "Geteilt von %s · nur Verfügbarkeit"
+  },
+  "android:app:cal_shared_by_share_through": {
+   "sha": "2ece78bc131e0708",
+   "state": "model",
+   "text": "Geteilt von %1$s · kann bearbeiten und teilen (über %2$s)"
+  },
+  "android:app:cal_shared_by_view_through": {
+   "sha": "457961e314ab6c1d",
+   "state": "model",
+   "text": "Geteilt von %1$s · kann anzeigen (über %2$s)"
+  },
   "android:app:cal_shared_group_fallback": {
    "sha": "654e1e2086cfe138",
    "state": "model",
@@ -4796,6 +4836,51 @@
    "sha": "42761be2d0e9f99d",
    "state": "model",
    "text": "Verschoben"
+  },
+  "android:app:cal_sync_problem_auth": {
+   "sha": "ada08bfa750495cd",
+   "state": "model",
+   "text": "Der Kalender-Server unter %1$s hat den Benutzernamen oder das Passwort abgelehnt. Wenn das Passwort geändert wurde, trenne die Verbindung zu diesem Konto im Web und verbinde es erneut mit dem neuen Passwort."
+  },
+  "android:app:cal_sync_problem_blocked": {
+   "sha": "d724213ec918527f",
+   "state": "model",
+   "text": "Dieser Mailr-Server stellt keine Verbindung zu %1$s her, da die Adresse privat oder lokal ist oder https nicht verwendet. Verwende die öffentliche https-Adresse des Kalender-Servers oder frage deinen Administrator."
+  },
+  "android:app:cal_sync_problem_not_found": {
+   "sha": "42892f7714898649",
+   "state": "model",
+   "text": "Der Kalender-Server unter %1$s hat an dieser Adresse keine Kalender mehr. Er ist möglicherweise umgezogen oder abgeschaltet. Überprüfe die Adresse oder trenne die Verbindung zu diesem Konto, wenn du es nicht mehr nutzt."
+  },
+  "android:app:cal_sync_problem_partial": {
+   "sha": "134decb1d32b0dec",
+   "state": "model",
+   "text": "Der Kalender-Server unter %1$s hat nur einen Teil eines Kalenders aufgelistet. Es wurde nichts entfernt, und der Kalender wird bei der nächsten Synchronisierung erneut gelesen."
+  },
+  "android:app:cal_sync_problem_server": {
+   "sha": "d41b1544c41e1ff5",
+   "state": "model",
+   "text": "Der Kalender-Server unter %1$s hat einen Fehler gemeldet. Dies ist in der Regel vorübergehend. Die Synchronisierung wird fortgesetzt, wenn der Server wieder funktioniert."
+  },
+  "android:app:cal_sync_problem_somewhere": {
+   "sha": "369735e24ea4f7b1",
+   "state": "model",
+   "text": "die Adresse des Kontos"
+  },
+  "android:app:cal_sync_problem_tls": {
+   "sha": "358a9cc836aa090e",
+   "state": "model",
+   "text": "Das Sicherheitszertifikat von %1$s konnte nicht überprüft werden, daher wurde keine Verbindung hergestellt. Das Zertifikat ist möglicherweise abgelaufen, oder die Adresse führt jetzt zu einem anderen Server. Überprüfe die Adresse oder bitte den Administrator des Servers, das Zertifikat zu erneuern."
+  },
+  "android:app:cal_sync_problem_unknown": {
+   "sha": "f3760ef33a4c0705",
+   "state": "model",
+   "text": "Die Synchronisierung mit %1$s ist fehlgeschlagen. Die technische Meldung findest du unter Details."
+  },
+  "android:app:cal_sync_problem_unreachable": {
+   "sha": "343319ca8e2b1f53",
+   "state": "model",
+   "text": "Der Kalender-Server unter %1$s konnte nicht erreicht werden. Er ist möglicherweise offline, oder die Adresse ist falsch. Die Synchronisierung wird fortgesetzt, wenn der Server wieder erreichbar ist."
   },
   "android:app:cal_synced_days_ago": {
    "sha": "925840e073020c63",
@@ -22768,6 +22853,11 @@
    "state": "model",
    "text": "Kalender können nicht über ein API-Token geteilt werden."
   },
+  "server:errors.calendar.shared_busy_read_only": {
+   "sha": "93b97bff0051c9cd",
+   "state": "manual",
+   "text": "„{{name}}“ ist mit dir nur mit der Verfügbarkeit geteilt. Nur der Besitzer kann die Termine ändern."
+  },
   "server:errors.calendar.signin_failed": {
    "sha": "27cdf9b68d743274",
    "state": "model",
@@ -26953,6 +27043,11 @@
    "state": "model",
    "text": "„{{titleOf}}“ ist nicht mehr in deinem Kalender."
   },
+  "web:calendar.eventDetail.itsOwner": {
+   "sha": "610c46e9d866eeac",
+   "state": "manual",
+   "text": "Der Besitzer"
+  },
   "web:calendar.eventDetail.linkCopied": {
    "sha": "7cde41165fe82bad",
    "state": "model",
@@ -27012,6 +27107,11 @@
    "sha": "91889ce519203bb2",
    "state": "model",
    "text": "Erinnerungen geändert"
+  },
+  "web:calendar.eventDetail.sharedBusyNote": {
+   "sha": "67443902fe3f15f8",
+   "state": "model",
+   "text": "{{owner}} teilt nur die Belegungszeiten dieses Kalenders mit dir. Titel und Details bleiben privat."
   },
   "web:calendar.eventDetail.snooze": {
    "sha": "5aedbba1e0e600c6",
@@ -28559,6 +28659,51 @@
    "state": "model",
    "text": "Der Name des Kalenders"
   },
+  "web:calendar.syncProblem.auth": {
+   "sha": "9d887ed9815a80d4",
+   "state": "model",
+   "text": "Der Kalender-Server unter {{host}} hat den Benutzernamen oder das Passwort abgelehnt. Wenn das Passwort geändert wurde, trenne die Verbindung zu diesem Konto und verbinde es erneut mit dem neuen Passwort."
+  },
+  "web:calendar.syncProblem.blocked": {
+   "sha": "222ba03bc4290adf",
+   "state": "model",
+   "text": "Dieser Mailr-Server stellt keine Verbindung zu {{host}} her, da die Adresse privat oder lokal ist oder https nicht verwendet. Verwende die öffentliche https-Adresse des Kalender-Servers oder wende dich an deinen Administrator."
+  },
+  "web:calendar.syncProblem.notFound": {
+   "sha": "cfa3bc455ac19464",
+   "state": "model",
+   "text": "Der Kalender-Server unter {{host}} hat unter dieser Adresse keine Kalender mehr. Er wurde möglicherweise verschoben oder deaktiviert. Überprüfe die Adresse oder trenne die Verbindung zu diesem Konto, wenn du es nicht mehr nutzt."
+  },
+  "web:calendar.syncProblem.partial": {
+   "sha": "cf9dce588abc320f",
+   "state": "model",
+   "text": "Der Kalender-Server unter {{host}} hat nur einen Teil eines Kalenders aufgelistet. Es wurde nichts entfernt, und der Kalender wird bei der nächsten Synchronisierung erneut gelesen."
+  },
+  "web:calendar.syncProblem.server": {
+   "sha": "17c4632b6ab75094",
+   "state": "model",
+   "text": "Der Kalender-Server unter {{host}} hat einen Fehler gemeldet. Dies ist in der Regel vorübergehend. Die Synchronisierung wird fortgesetzt, wenn der Server wieder funktioniert."
+  },
+  "web:calendar.syncProblem.theServer": {
+   "sha": "369735e24ea4f7b1",
+   "state": "model",
+   "text": "die Adresse des Kontos"
+  },
+  "web:calendar.syncProblem.tls": {
+   "sha": "2113eefa013c56f8",
+   "state": "model",
+   "text": "Das Sicherheitszertifikat von {{host}} konnte nicht überprüft werden, daher wurde keine Verbindung hergestellt. Das Zertifikat ist möglicherweise abgelaufen oder die Adresse führt nun zu einem anderen Server. Überprüfe die Adresse oder bitte den Administrator des Servers, das Zertifikat zu erneuern."
+  },
+  "web:calendar.syncProblem.unknown": {
+   "sha": "8bff5459f2bd3333",
+   "state": "model",
+   "text": "Die Synchronisierung mit {{host}} ist fehlgeschlagen. Die technische Meldung findest du unter Details."
+  },
+  "web:calendar.syncProblem.unreachable": {
+   "sha": "46522757176192df",
+   "state": "model",
+   "text": "Der Kalender-Server unter {{host}} konnte nicht erreicht werden. Er ist möglicherweise offline oder die Adresse ist falsch. Die Synchronisierung wird fortgesetzt, wenn der Server wieder erreichbar ist."
+  },
   "web:calendar.tableDates.untitledRow": {
    "sha": "dce69bd7799471e7",
    "state": "model",
@@ -28837,6 +28982,21 @@
    "state": "model",
    "text": " und eine Gruppe"
   },
+  "web:calendar.types.canEdit": {
+   "sha": "bdbe4bf06482c7b1",
+   "state": "model",
+   "text": "kann bearbeiten"
+  },
+  "web:calendar.types.canEditAndShare": {
+   "sha": "3f24d27f2f0e595c",
+   "state": "model",
+   "text": "kann bearbeiten und teilen"
+  },
+  "web:calendar.types.canView": {
+   "sha": "202d13e8a181d787",
+   "state": "model",
+   "text": "kann anzeigen"
+  },
   "web:calendar.types.editAndShare": {
    "sha": "f7e8c5f5345aab19",
    "state": "model",
@@ -28846,6 +29006,21 @@
    "sha": "153824df7219b29c",
    "state": "model",
    "text": "Ändert und teilt mit anderen."
+  },
+  "web:calendar.types.freeBusyOnly": {
+   "sha": "883638ffa96db0e3",
+   "state": "manual",
+   "text": "Nur Verfügbarkeit"
+  },
+  "web:calendar.types.freeBusyOnlySuffix": {
+   "sha": "6a117e3a854797b0",
+   "state": "manual",
+   "text": " · nur Verfügbarkeit"
+  },
+  "web:calendar.types.levelThrough": {
+   "sha": "51f90464228f96b5",
+   "state": "model",
+   "text": "{{level}} (über {{groups}})"
   },
   "web:calendar.types.onlyAnAdministratorRenamesOr": {
    "sha": "372256056e0adc8b",
@@ -28861,6 +29036,16 @@
    "sha": "05cbe48a0d11c6d1",
    "state": "model",
    "text": "Zeigt nur Termine an."
+  },
+  "web:calendar.types.seesFreeBusyOnly": {
+   "sha": "748c0b783221dab6",
+   "state": "manual",
+   "text": "sieht nur die Verfügbarkeit"
+  },
+  "web:calendar.types.seesOnlyWhenYouAreBusy": {
+   "sha": "0d29ecd2de628636",
+   "state": "model",
+   "text": "Sieht, wann du beschäftigt bist, ohne Titel oder Details."
   },
   "web:calendar.types.sharedBy": {
    "sha": "a2f2ba5fff873783",
@@ -33315,6 +33500,11 @@
    "sha": "b4b576e4b24dce69",
    "state": "model",
    "text": "Von {{displayName}} abmelden?"
+  },
+  "web:conversation.messageCard.updatedByJustNow": {
+   "sha": "c4a0f48348ebad6a",
+   "state": "model",
+   "text": "Aktualisiert von {{who}} · gerade eben"
   },
   "web:conversation.messageCard.waitingForApproval": {
    "sha": "68a4cf4ad6df9a3f",
@@ -51788,6 +51978,21 @@
    "sha": "a7b3504d1e2e2600",
    "state": "model",
    "text": "Dieser Server kann Kalender noch nicht ändern."
+  },
+  "web:settings.calendarGroups.calendarLinks": {
+   "sha": "15a1d3ceb3f88815",
+   "state": "manual",
+   "text": "Kalender-Links"
+  },
+  "web:settings.calendarGroups.fromYourPhone": {
+   "sha": "0f7da40143f67115",
+   "state": "model",
+   "text": "Kalender von deinem Telefon"
+  },
+  "web:settings.calendarGroups.sharedWithYou": {
+   "sha": "933c23e2bc5ad969",
+   "state": "manual",
+   "text": "Mit dir geteilt"
   },
   "web:settings.calendarMigration.alreadyThere": {
    "sha": "16960dde493206cf",

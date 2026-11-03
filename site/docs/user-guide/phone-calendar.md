@@ -1,7 +1,7 @@
-# Your Mailr calendar on iPhone, Mac, Android and Thunderbird
+# Your Mailr calendar on iPhone, Mac, Android, Thunderbird and KOrganizer
 
 Mailr calendars, task lists and contacts can be used in other calendar and contacts apps: Calendar, Reminders and Contacts on an iPhone, iPad or Mac, any calendar app on
-Android through DAVx5, and Thunderbird on a computer. Changes are synchronised in both
+Android through DAVx5, and Thunderbird or KOrganizer on a computer. Changes are synchronised in both
 directions: an event added on the phone appears in Mailr, and an event added in Mailr appears on the
 phone.
 
@@ -76,6 +76,27 @@ CardDAV Account**).
   for once.
 - **Contacts:** in the Address Book, choose **New Address Book → Add CardDAV Address Book**, with
   the same username and address.
+
+## KOrganizer (KDE)
+
+KOrganizer and the other KDE apps (Kontact, Merkuro, the clock in the panel) read calendars through
+one **DAV groupware resource**.
+
+1. In KOrganizer, open **Settings → Configure KOrganizer → General → Calendars** and choose **Add**,
+   then **DAV groupware resource**.
+2. Enter your username and an app password. When **Store password** is offered, tick it so the
+   password is kept in KWallet.
+3. Choose **Configure the resource manually**. None of the listed servers apply.
+4. Under **Server configuration**, choose **Add**, select **CalDAV**, and enter
+   `https://<server>/dav/cal/<username>/` as the remote URL, with the `@` in the username written
+   as `%40` (for example `https://cal.example.com/dav/cal/rosa%40northwind.example/`). Choose
+   **Fetch**, and tick the calendars and task lists you want.
+5. For contacts, add a second entry with **CardDAV** and `https://<server>/dav/card/<username>/`.
+6. Finish the wizard. Events, tasks and contacts appear after the first synchronisation.
+
+When **Fetch** lists nothing, enter `https://<server>/dav/cal/` instead: your calendars are then
+found from there. When you move from another calendar server, remove that server's resource
+afterwards, so events are not shown twice.
 
 ## Invitations made on a phone are not sent
 

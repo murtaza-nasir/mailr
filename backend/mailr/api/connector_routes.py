@@ -77,6 +77,13 @@ def connector_out(c: Connector, lang: str = i18n.DEFAULT, unsynced: int = 0, uns
                             "internal_sharing": speakr_store.feature(c, "internal_sharing"),
                             "webhook_v2": speakr_store.feature(c, "webhook_signature_v2"),
                             "speakr_model_ok": speakr_store.speakr_model_ok(c)}}
+    elif c.kind in ("caldav", "webcal", "phone"):
+        # The class of a calendar sync failure and the server's host (calendar/sync_errors.py):
+        # the clients explain it in words and keep status_detail behind "Details".
+        from mailr.calendar import sync_errors
+
+        problem = sync_errors.connector_problem(c)
+        extra = {"error_kind": problem["kind"] if problem else None, "error_host": problem["host"] if problem else None}
     else:
         extra = {}
     return extra | {

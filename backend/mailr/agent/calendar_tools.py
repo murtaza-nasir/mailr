@@ -205,7 +205,7 @@ async def get_event(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     if hidden:
         raise ToolError("this event is in a calendar that is hidden from this model (a local-only account)")
     ev = dict(kept[0])
-    if ev.get("phone_busy"):  # a phone calendar's block: "Busy (<calendar>)", or its title and place
+    if ev.get("phone_busy") or ev.get("shared_busy"):  # a block: "Busy (<calendar>)", or a phone's title and place
         ev = busy_block(ev, await _names(ctx))
     _localize(ev, await _zone(ctx), "start", "end", bool(ev.get("all_day")), "when", _clock(ctx))
     ev["cite"] = cite_event(uid, ev.get("occurrence"))

@@ -17,7 +17,7 @@ checks=(
   "$(grep -o 'ghcr.io/astral-sh/uv:[^ ]*@sha256:[0-9a-f]*' Dockerfile)      ghcr.io/astral-sh/uv:0.8"
   "$(grep -o 'pgvector/pgvector:[^ ]*@sha256:[0-9a-f]*' deploy/docker-compose.yml) pgvector/pgvector:pg17"
   "$(grep -o 'klutchell/unbound:[^ ]*@sha256:[0-9a-f]*' deploy/docker-compose.yml) klutchell/unbound:latest"
-  "$(grep -o 'stalwartlabs/stalwart:[^ ]*@sha256:[0-9a-f]*' deploy/stalwart/Dockerfile) stalwartlabs/stalwart:latest"
+  "$(grep '^ARG STALWART_IMAGE=' deploy/stalwart/Dockerfile | grep -o 'stalwartlabs/stalwart:[^ ]*@sha256:[0-9a-f]*') stalwartlabs/stalwart:latest"
 )
 
 digest_of() {

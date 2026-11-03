@@ -8,10 +8,18 @@ import { Skeleton } from '../../components/bits'
 import { Dialog } from '../../components/Dialog'
 import { toast, toastError } from '../../stores/ui'
 import { calApi } from './data'
-import { SHARE_LEVELS, type Collection, type ShareLevel, type ShareState } from './types'
+import { SHARE_LEVELS, throughLabel, type Collection, type ShareLevel, type ShareState } from './types'
 import { t } from '../../i18n'
 
 const levelName = (l: ShareLevel) => SHARE_LEVELS.find((x) => x.id === l)?.label ?? l
+
+/** The levels the server offers (free/busy only on Stalwart 1.x), plus `current` when the server no
+ *  longer offers it (a free/busy-only share after a move back to 0.16), so the select shows it. */
+export function levelChoices(levels: ShareLevel[] | undefined, current?: ShareLevel) {
+  const offered = SHARE_LEVELS.filter((l) => (levels ?? ['view', 'edit', 'share']).includes(l.id))
+  const extra = current && !offered.some((l) => l.id === current) ? SHARE_LEVELS.filter((l) => l.id === current) : []
+  return [...extra, ...offered]
+}
 
 /** The policy line under the title. */
 export function policyNote(s: Pick<ShareState, 'policy' | 'own' | 'owner'>): string {
@@ -73,7 +81,7 @@ export function ShareDialog({ c, onClose }: { c: Collection; onClose: () => void
                     data-testid="share-search"
                   />
                   <select className="input share-level" aria-label={t('calendar.shareDialog.levelForNewPeople')} value={level} onChange={(e) => setLevel(e.target.value as ShareLevel)} data-testid="share-new-level">
-                    {SHARE_LEVELS.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}
+                    {levelChoices(s.levels).map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}
                   </select>
                 </div>
                 <p className="muted share-level-desc">{SHARE_LEVELS.find((l) => l.id === level)?.desc}</p>
@@ -115,6 +123,10 @@ export function ShareDialog({ c, onClose }: { c: Collection; onClose: () => void
                         {p.disabled ? t('calendar.shareDialog.accountDisabled') : ''}
                         {p.outside_policy && !p.disabled ? t('calendar.shareDialog.outsideTheSharingPolicy') : ''}
                       </span>
+                      {p.access && (
+                        // A group of theirs gives more than the level set here (calendar/sharing.py access_of).
+                        <span className="muted share-through" data-testid="share-through">{throughLabel(p.access.level, p.access.via)}</span>
+                      )}
                     </span>
                     <select
                       className="input share-level"
@@ -126,7 +138,7 @@ export function ShareDialog({ c, onClose }: { c: Collection; onClose: () => void
                         run(p.id, calApi.setShare(c, p.id, l), `${p.name} can now: ${levelName(l).toLowerCase()}`)
                       }}
                     >
-                      {SHARE_LEVELS.map((l) => <option key={l.id} value={l.id}>{l.label}</option>)}
+                      {levelChoices(s.levels, p.level).map((l) => <option key={l.id} value={l.id} disabled={!s.levels.includes(l.id)}>{l.label}</option>)}
                     </select>
                     {!p.you && (
                       <button

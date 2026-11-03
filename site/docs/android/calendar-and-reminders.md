@@ -2,13 +2,13 @@
 
 ## Calendar
 
-The Calendar tab has schedule, day, three-day, work week, week and month views. Swipe sideways to change the period. Tap an empty slot to create an event there. The calendars are listed in the drawer, where each one can be shown or hidden.
+The Calendar tab has schedule, day, three-day, work week, week and month views. Swipe sideways to change the period. Tap an empty slot to create an event there. The calendars are listed in the drawer, where each one can be shown or hidden. The drawer groups them under where they come from: the Mailr calendar, each connected account (its name and address), **Shared with you**, **Calendars from your phone** and **Calendar links**.
 
 From an event you can edit it, move it to another calendar, invite guests, find a free time, answer an invitation and join its video call. On an unfolded foldable or a tablet, event details and the editor are opened in a side pane. The **Join** button is shown for Google Meet, Zoom, Microsoft Teams, Jitsi, Whereby, Webex, BlueJeans and GoTo Meeting links on those services' own addresses; any other https link in the event's URL is shown as **Join on** followed by its address.
 
 ![The Android calendar in week view](../assets/shots/android-calendar-week.png)
 
-When a calendar account stops syncing, a banner above the calendar names it. If the calendar server no longer accepts the account's password, the banner says so, and **Open on web** opens **Settings → Calendar & tasks** in the browser, where you enter the password again. For any other sync problem, **Retry** tries again. **Details** shows the server's own message.
+When a calendar account stops syncing, a banner above the calendar says what went wrong and what to do, for example "The calendar server at cal.example.org no longer has calendars at this address." The messages are listed in [When an account stops syncing](../user-guide/calendar.md#when-an-account-stops-syncing). If the calendar server no longer accepts the account's password, **Open on web** opens **Settings → Calendar & tasks** in the browser, where the account is disconnected and connected again with the new password. For any other sync problem, **Retry** tries again. **Details** shows the technical message.
 
 ### Month view
 

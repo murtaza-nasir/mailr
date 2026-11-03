@@ -4,6 +4,43 @@ The changes in each Mailr release are listed here, newest first. A release is ta
 on GitHub, and its image is published as `ghcr.io/murtaza-nasir/mailr:<version>`. The Android app
 of a release has the same version number; the separate Notes app has its own.
 
+## 0.40.36
+
+- A draft shown in its conversation now updates as soon as it changes, including edits by Ambrose
+  after you approve them, and says who changed it. A draft you are editing shows only once, in the
+  editor. The Android app also shows a changed draft's new text.
+- The mail store runs on Stalwart 1.0.1 (moved on 2 November 2026); the "Free/busy only" sharing
+  level is now offered.
+
+## 0.40.35
+
+- Shared calendars follow the mail server's grant rules: on Stalwart 1.x a calendar is editable
+  when any of your grants allows it, including a group's, and the calendar list and Share dialog
+  show "can edit (through Family)". On 0.16 the server's own rule for writes is shown.
+- New "Free/busy only" sharing level (Stalwart 1.0 or later): the other person sees busy times
+  without titles or details in Calendar, Find a time and Ambrose.
+- Household free/busy no longer includes calendars other people share with you.
+- Calendar accounts that stop syncing now say what went wrong and what to do (address no longer
+  has calendars, password refused, certificate, unreachable, server error, address not allowed,
+  partial listing), on the web and on Android; the technical message is under Details.
+- Settings → Calendar & tasks and the Android calendar drawer list calendars under where they come
+  from: the Mailr calendar, each account (name and address), Shared with you, Calendars from your
+  phone, Calendar links. The default calendar and task list pickers use the same groups.
+- A calendar deleted in Mailr no longer comes back as an empty row when the calendar server keeps
+  listing it for a while.
+- Fixed: an account in error with no calendars made the calendar list fail to load.
+
+## 0.40.34
+
+- The mail store code works with Stalwart 1.0.1 as well as 0.16.27, chosen by the server's
+  version; production stays on 0.16.27 until the move to 1.0 (docs/design/stalwart-1.0-cutover.md
+  in the repository). On 1.x the store's own full-text index is off; on 0.16 it is turned back on
+  and rebuilt after a rollback.
+- The Stalwart container's start-up check no longer sends a forwarded-address header, which 1.0
+  refuses when phone access is on.
+- Calendar sharing: grants left to deleted accounts are removed.
+- Docs: connecting KOrganizer (KDE) to Mailr's calendars.
+
 ## 0.40.33
 
 - Calendar: on the night clocks go back, an event in the repeated hour keeps its real times and

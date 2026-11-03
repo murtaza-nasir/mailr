@@ -220,7 +220,11 @@ def test_every_compose_image_is_pinned_by_digest():
 def test_every_dockerfile_base_and_download_is_pinned():
     for f in (REPO / "Dockerfile", REPO / "deploy" / "stalwart" / "Dockerfile"):
         text = f.read_text()
+        # A base named by a build argument (deploy/stalwart: STALWART_IMAGE) is checked by its default.
+        args = dict(re.findall(r"(?m)^ARG\s+(\w+)=(\S+)", text))
         for line in re.findall(r"(?m)^FROM\s+(?:--platform=\S+\s+)?(\S+)", text):
+            for name, default in args.items():
+                line = line.replace("${" + name + "}", default)
             assert re.search(r"@sha256:[0-9a-f]{64}$", line), (f.name, line)
         for m in re.finditer(r"(?m)^ADD\s+(.*)$", text):
             assert "--checksum=sha256:" in m.group(1), (f.name, m.group(0))

@@ -165,3 +165,71 @@ async def test_parallel_writes_through_the_builtin_client_all_land(setup):
         etags = await asyncio.gather(*(put(a if i % 2 else b, i) for i in range(200)))
         assert all(etags)
         assert len(await a.etags(coll)) >= 200
+
+
+async def _rows(conn_id: int) -> dict[str, tuple[int, bool]]:
+    """{href: (id, deleted)} of the connector's mirror rows, tombstones included."""
+    from mailr.calendar import mirror
+    from mailr.db import sessionmaker
+
+    async with sessionmaker()() as db:
+        return {c.href: (c.id, c.deleted_at is not None)
+                for c in await mirror.collections_of(db, [conn_id], include_deleted=True)}
+
+
+async def _live_objects(coll_id: int) -> int:
+    from sqlalchemy import func, select
+
+    from mailr.db import sessionmaker
+    from mailr.models import CalObject
+
+    async with sessionmaker()() as db:
+        return (await db.execute(select(func.count()).select_from(CalObject).where(
+            CalObject.collection_id == coll_id, CalObject.deleted_at.is_(None)))).scalar_one()
+
+
+async def test_a_deleted_calendar_leaves_the_mirror(setup):
+    """A calendar deleted through Mailr's own route, and one removed on the store by another
+    client, leave the mirror at the next sync: the row and its events become tombstones (the delta
+    feed hands them out as deleted), the lists stop showing them, and later syncs keep them gone."""
+    from mailr.calendar import sync
+    from mailr.db import sessionmaker
+
+    user, client = setup
+    async with sessionmaker()() as db:
+        conn = await builtin.find(db, user.id)
+    assert (await sync.sync_connector(conn.id)).error is None
+    cursor = (await client.get(f"{API}/calendar/delta")).json()["cursor"]
+
+    made = {}
+    for name in ("Spare", "Elsewhere"):
+        r = await client.post(f"{API}/calendar/collections", json={"name": name, "kind": "events"})
+        assert r.status_code == 200, r.text
+        made[name] = r.json()
+        r = await client.post(f"{API}/calendar/events", json={
+            "summary": f"In {name}", "start": "2026-11-20T15:00:00Z", "end": "2026-11-20T16:00:00Z",
+            "calendar": made[name]["url"]})
+        assert r.status_code == 200, r.text
+    assert (await sync.sync_connector(conn.id)).error is None
+    for m in made.values():
+        assert await _live_objects(m["calendar_id"]) == 1
+
+    # Through Mailr: DELETE /calendar/collections/{id}.
+    spare = made["Spare"]
+    r = await client.delete(f"{API}/calendar/collections/{spare['calendar_id']}", params={"confirm": "Spare"})
+    assert r.status_code == 200, r.text
+    # On the store, by another client.
+    async with _service_as(conn.config["account"]) as c:
+        await c.delete_collection(made["Elsewhere"]["url"])
+
+    for _ in range(2):  # the next sync drops them, and the one after does not bring them back
+        assert (await sync.sync_connector(conn.id)).error is None
+        rows = await _rows(conn.id)
+        for m in made.values():
+            assert rows[m["url"]] == (m["calendar_id"], True), rows
+            assert await _live_objects(m["calendar_id"]) == 0
+    names = [c["name"] for c in (await client.get(f"{API}/calendar/calendars")).json()]
+    assert "Spare" not in names and "Elsewhere" not in names, names
+    delta = (await client.get(f"{API}/calendar/delta", params={"cursor": cursor})).json()
+    gone = {d["calendar_id"] for d in delta["deleted_collections"]}
+    assert {m["calendar_id"] for m in made.values()} <= gone, delta["deleted_collections"]

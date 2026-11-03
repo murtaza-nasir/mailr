@@ -338,7 +338,6 @@
       "askForBuiltInCalendars": "Ainda não tem uma agenda própria? Peça a quem administra este servidor do Mailr para ativar as agendas integradas. Assim você terá aqui uma agenda e uma lista de tarefas, sem outra conta."
     },
     "calendarApp": {
-      "aCalendar": "Uma agenda",
       "allCalendarsAreHidden": "Todas as agendas estão ocultas",
       "couldNotSync": "Não foi possível sincronizar",
       "couldntLoadEvents": "Não foi possível carregar os eventos.",
@@ -354,7 +353,6 @@
       "offlineTheCalendarIsRead2": "Offline · a agenda é somente leitura.",
       "resize": "Redimensionar",
       "searchFailed": "Não foi possível pesquisar.",
-      "syncFailed": "falha na sincronização",
       "synced": "Sincronizado",
       "syncedAgo": "Sincronizado {{value}} atrás",
       "syncing": "Sincronizando…",
@@ -362,7 +360,6 @@
       "typeADateThenEnter": "Digite uma data e pressione Enter.",
       "use": "Usar {{zoneAbbr}}",
       "viewingInTime": "Exibindo no fuso horário {{replace}} ({{utcLabel}})",
-      "passwordRefused": "{{name}}: o servidor da agenda deixou de aceitar a senha.",
       "checkThePassword": "Verificar a senha nas Configurações"
     },
     "commands": {
@@ -394,6 +391,7 @@
       "ask": "Perguntar a {{name}}",
       "askShiftA": "Perguntar a {{name}} (Shift+A)",
       "calendarColour": "Cor da agenda",
+      "cancelledBy": "Cancelado por {{who}}",
       "changeRemindersFor": "Alterar lembretes para",
       "colourChanged": "Cor alterada",
       "delete": "Excluir (#)",
@@ -402,6 +400,7 @@
       "eventColour": "Cor do evento",
       "fromAnEmail": "De um e-mail",
       "isNoLongerInYour": "“{{titleOf}}” não está mais na sua agenda.",
+      "itsOwner": "O proprietário",
       "linkCopied": "Link copiado",
       "map": "Mapa",
       "moveTo": "Mover para…",
@@ -414,10 +413,10 @@
       "recolour": "Alterar cor",
       "reminder": "Lembrete: {{detail}}",
       "remindersChanged": "Lembretes alterados",
+      "sharedBusyNote": "{{owner}} compartilha apenas os horários ocupados desta agenda com você. Os títulos e detalhes permanecem com eles.",
       "snooze": "Adiar {{label}}",
       "tentative": "Provisório",
-      "thisEventWasDeletedElsewhere": "Este evento foi excluído em outro lugar",
-      "cancelledBy": "Cancelado por {{who}}"
+      "thisEventWasDeletedElsewhere": "Este evento foi excluído em outro lugar"
     },
     "eventEditor": {
       "addDescription": "Adicionar descrição",
@@ -821,11 +820,19 @@
     "types": {
       "addsChangesAndDeletesEvents": "Adiciona, altera e exclui eventos.",
       "andAGroup": " e um grupo",
+      "canEdit": "pode editar",
+      "canEditAndShare": "pode editar e compartilhar",
+      "canView": "pode ver",
       "editAndShare": "Editar e compartilhar",
       "editsAndSharesItWith": "Edita e compartilha com outros.",
+      "freeBusyOnly": "Apenas livre/ocupado",
+      "freeBusyOnlySuffix": " · apenas livre/ocupado",
+      "levelThrough": "{{level}} (através de {{groups}})",
       "onlyAnAdministratorRenamesOr": "Somente um administrador pode renomear ou excluir. Você pode ocultá-lo.",
       "onlyRenamesOrDeletesIt": "Somente {{owner}} pode renomear ou excluir. Você pode ocultá-lo.",
       "seesEveryEventChangesNothing": "Visualiza apenas os eventos.",
+      "seesFreeBusyOnly": "vê apenas livre/ocupado",
+      "seesOnlyWhenYouAreBusy": "Vê quando você está ocupado, sem títulos ou detalhes.",
       "sharedBy": "Compartilhado por {{owner}}",
       "sharedWithAGroup": "Compartilhado com um grupo",
       "sharedWithPeople_one": "Compartilhado com {{count}} pessoa{{value}}",
@@ -844,6 +851,17 @@
       "menuNote": "Horários ocupados de uma agenda no seu celular. Eles mudam apenas no celular.",
       "menuNoteDetails": "Eventos de uma agenda no seu celular, com títulos e locais. Eles mudam apenas no celular.",
       "phoneCalendarSettings": "Configurações da agenda do celular"
+    },
+    "syncProblem": {
+      "theServer": "o endereço da conta",
+      "auth": "O servidor de agenda em {{host}} recusou o nome de usuário ou a senha. Se a senha foi alterada, desconecte esta conta e conecte-a novamente com a nova senha.",
+      "notFound": "O servidor de agenda em {{host}} não possui mais agendas neste endereço. Ele pode ter sido movido ou desativado. Verifique o endereço ou desconecte esta conta se você não a utiliza mais.",
+      "tls": "O certificado de segurança de {{host}} não pôde ser verificado, por isso nenhuma conexão foi feita. O certificado pode ter expirado ou o endereço pode levar agora a um servidor diferente. Verifique o endereço ou peça ao administrador do servidor para renovar o certificado.",
+      "unreachable": "Não foi possível acessar o servidor de agenda em {{host}}. Ele pode estar offline ou o endereço pode estar incorreto. A sincronização será retomada quando o servidor estiver acessível novamente.",
+      "server": "O servidor de agenda em {{host}} relatou um erro. Isso geralmente é temporário. A sincronização será retomada quando o servidor voltar a funcionar.",
+      "blocked": "Este servidor Mailr não se conecta a {{host}}, porque o endereço é privado ou local, ou não usa https. Use o endereço https público do servidor de agenda ou consulte seu administrador.",
+      "partial": "O servidor de agenda em {{host}} listou apenas parte de uma agenda. Nada foi removido e a agenda será lida novamente na próxima sincronização.",
+      "unknown": "Falha na sincronização com {{host}}. A mensagem técnica está em Detalhes."
     }
   },
   "colour": {
@@ -1811,7 +1829,8 @@
       "translateToEnglish": "Traduzir para inglês",
       "unsubscribe": "Cancelar inscrição",
       "unsubscribeFrom": "Cancelar a inscrição em {{displayName}}?",
-      "waitingForApproval": "Aguardando aprovação"
+      "waitingForApproval": "Aguardando aprovação",
+      "updatedByJustNow": "Atualizado por {{who}} · agora mesmo"
     },
     "replySuggestions": {
       "suggestedReplies": "Respostas sugeridas"
@@ -6631,7 +6650,6 @@
       "couldNotChangeTheCalendar": "Não foi possível alterar a agenda",
       "couldNotCreateIt": "Não foi possível criar a agenda ou lista",
       "couldNotDeleteIt": "Não foi possível excluir a agenda ou lista",
-      "couldNotReadOneCalendar": "Não foi possível ler uma conta de agenda: {{error}}",
       "countingItsEvents": " Contando os eventos…",
       "created": "{{itemName}} criado",
       "defaultCalendar": "Agenda padrão",
@@ -8220,6 +8238,11 @@
       "removeBody": "Os horários ocupados dela são removidos do Mailr. Se o celular continuar enviando, eles retornarão na próxima atualização. Para evitar isso, defina a agenda como Desativada ou Mostrar neste celular no aplicativo Android.",
       "removed": "“{{name}}” removida",
       "notRemoved": "Não foi possível remover a agenda do celular"
+    },
+    "calendarGroups": {
+      "sharedWithYou": "Compartilhado com você",
+      "fromYourPhone": "Agendas do seu celular",
+      "calendarLinks": "Links de agenda"
     }
   },
   "shortcuts": {

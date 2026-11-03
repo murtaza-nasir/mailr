@@ -48,6 +48,7 @@ from mailr.core.audit import audit
 from mailr.core.auth import Principal, scope
 from mailr.core.jmap import CORE
 from mailr.core.store import service_client, user_store
+from mailr.core.store_groupware import is_v1
 from mailr.db import get_db
 from mailr.i18n import ApiError
 from mailr.models import Label, LabelDecision, Message, Person, User
@@ -187,11 +188,14 @@ async def classify(db: AsyncSession, m: Message, raw: bytes) -> dict[str, Any] |
     if env is None:
         return None
     rcpt = [a for a in (m.delivered_to or [])] or [a["email"] for a in (m.to or [])][:5]
+    client = service_client()
+    # The envelope fields are mailFrom/rcptTo on Stalwart 1.x, envFrom/envRcptTo on 0.16.
+    frm, to = ("mailFrom", "rcptTo") if await is_v1(client) else ("envFrom", "envRcptTo")
     req = {"@type": "ClassifySpam", "message": raw.decode("utf-8", "replace"),
            "remoteIp": env["remoteIp"], "ehloDomain": env["ehloDomain"],
-           "envFrom": m.from_email or "", "envRcptTo": {r: True for r in rcpt if r},
+           frm: m.from_email or "", to: {r: True for r in rcpt if r},
            "isTls": env["isTls"]}
-    res = await service_client().one("x:Action/set", {"create": {"c": req}}, using=MGMT)
+    res = await client.one("x:Action/set", {"create": {"c": req}}, using=MGMT)
     created = (res.get("created") or {}).get("c")
     if not created:
         log.info("ClassifySpam refused: %s", res.get("notCreated"))

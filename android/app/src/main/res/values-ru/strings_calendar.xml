@@ -441,8 +441,19 @@
         <item quantity="other">Нет сети · ожидают %d изменений</item>
     </plurals>
     <string name="cal_offline_showing">Нет сети · показаны данные с этого телефона</string>
-    <string name="cal_account_not_syncing">%1$s не синхронизируется.</string>
-    <string name="cal_account_password">%1$s больше не принимает пароль календаря. Введите его снова в веб-версии: Настройки → Календарь и задачи.</string>
+    <string name="cal_sync_problem_auth">Сервер календаря по адресу %1$s отклонил имя пользователя или пароль. Если пароль был изменен, отключите эту учетную запись в веб-интерфейсе и подключите ее заново с новым паролем.</string>
+    <string name="cal_sync_problem_not_found">Сервер календаря по адресу %1$s больше не содержит календарей по этому адресу. Возможно, он перемещен или отключен. Проверьте адрес или отключите эту учетную запись, если вы больше ею не пользуетесь.</string>
+    <string name="cal_sync_problem_tls">Не удалось проверить сертификат безопасности %1$s, поэтому соединение не установлено. Возможно, срок действия сертификата истек или адрес теперь указывает на другой сервер. Проверьте адрес или попросите администратора сервера продлить сертификат.</string>
+    <string name="cal_sync_problem_unreachable">Не удалось связаться с сервером календаря по адресу %1$s. Возможно, он отключен или указан неверный адрес. Синхронизация возобновится, когда сервер снова станет доступен.</string>
+    <string name="cal_sync_problem_server">Сервер календаря по адресу %1$s сообщил об ошибке. Обычно это временное явление. Синхронизация возобновится, когда сервер снова заработает.</string>
+    <string name="cal_sync_problem_blocked">Этот сервер Mailr не подключается к %1$s: адрес частный или локальный либо не использует https. Укажите публичный адрес https сервера календаря или обратитесь к администратору.</string>
+    <string name="cal_sync_problem_partial">Сервер календаря по адресу %1$s предоставил только часть календаря. Ничего не было удалено, и календарь будет снова прочитан при следующей синхронизации.</string>
+    <string name="cal_sync_problem_unknown">Не удалось выполнить синхронизацию с %1$s. Техническое сообщение находится в разделе «Сведения».</string>
+    <string name="cal_sync_problem_somewhere">адрес учетной записи</string>
+    <string name="cal_group_mailr">Календарь Mailr</string>
+    <string name="cal_group_shared">Общие с вами</string>
+    <string name="cal_group_phone">Календари с вашего телефона</string>
+    <string name="cal_group_links">Ссылки на календари</string>
     <string name="cal_remove_from_my_calendar">Удалить из моего календаря</string>
     <string name="cal_open_on_web">Открыть в веб-версии</string>
     <string name="cal_details">Подробности</string>
@@ -636,6 +647,10 @@
     <string name="cal_delete_type_name">Введите название для подтверждения</string>
     <string name="cal_shared_by">Доступно: %s</string>
     <string name="cal_shared_someone">кто-то</string>
+    <string name="cal_shared_by_free_busy">Доступно от %s · только занятость</string>
+    <string name="cal_shared_by_view_through">Доступно от %1$s · просмотр (через %2$s)</string>
+    <string name="cal_shared_by_edit_through">Доступно от %1$s · изменение (через %2$s)</string>
+    <string name="cal_shared_by_share_through">Доступно от %1$s · изменение и доступ (через %2$s)</string>
     <string name="cal_shared_with_group">Общий доступ с группой %s</string>
     <string name="cal_shared_group_fallback">группа</string>
     <string name="cal_live_when_all_day">%1$s – %2$s, весь день</string>

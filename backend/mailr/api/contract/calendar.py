@@ -15,6 +15,8 @@ class SyncState(Out):
     state: str | None = None
     last_sync_at: IsoTime | None = None
     error: str | None = None
+    error_kind: str | None = absent(description="The class of `error`: auth, not_found, "
+                                                 "tls, unreachable, server, blocked, partial or unknown.")
 
 
 class Attendee(Out):
@@ -68,6 +70,8 @@ class Event(Out):
                                               "phone_details.")
     phone_details: bool | None = absent(description="A phone calendar's block that carries the phone's title "
                                                  "and place (the calendar is set to send details).")
+    shared_busy: bool | None = absent(description="A busy time of a calendar shared with me as free/busy only: "
+                                              "read-only, its times and nothing else.")
     my_status: str | None = absent(description="My answer as a guest (ACCEPTED, NEEDS-ACTION…), else null.")
     is_organizer: bool | None = None
     conversation_id: int | None = absent(description="The email the event came from, when it has one.")
@@ -98,6 +102,16 @@ class PhoneCalendar(Out):
     details: bool | None = absent(description="The phone sends titles and places too, not busy times only.")
 
 
+class CollectionSource(Out):
+    """Where a calendar comes from, for grouping: builtin (the Mailr calendar), account (a connected
+    CalDAV account), shared (a group calendar or one a person shares), phone or link."""
+
+    kind: str
+    name: str | None = absent(description="account: the account's name.")
+    host: str | None = absent(description="account: the host of the account's address.")
+    device: str | None = absent(description="phone: the phone's name.")
+
+
 class Collection(Out):
     """A calendar or task list."""
 
@@ -125,8 +139,11 @@ class Collection(Out):
     shareable: bool | None = None
     subscription: Untyped | None = None
     phone: PhoneCalendar | None = None
+    source: CollectionSource | None = None
     sync: SyncState | None = None
-    error: str | None = None
+    error: str | None = absent(description="An account whose calendars could not be read: the technical text.")
+    error_kind: str | None = absent(description="The class of `error`: auth, not_found, tls, unreachable, server, blocked, partial or unknown.")
+    error_host: str | None = absent(description="The host of the account in error.")
 
 
 class CollectionList(RootModel[list[Collection]]):

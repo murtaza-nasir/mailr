@@ -393,8 +393,19 @@
         <item quantity="other">Offline · %d Änderungen ausstehend</item>
     </plurals>
     <string name="cal_offline_showing">Offline · Zeige, was auf diesem Telefon ist</string>
-    <string name="cal_account_not_syncing">%1$s wird nicht synchronisiert.</string>
-    <string name="cal_account_password">%1$s akzeptiert das Kalenderpasswort nicht mehr. Gib es im Web erneut ein, unter Einstellungen → Kalender &amp; Aufgaben.</string>
+    <string name="cal_sync_problem_auth">Der Kalender-Server unter %1$s hat den Benutzernamen oder das Passwort abgelehnt. Wenn das Passwort geändert wurde, trenne die Verbindung zu diesem Konto im Web und verbinde es erneut mit dem neuen Passwort.</string>
+    <string name="cal_sync_problem_not_found">Der Kalender-Server unter %1$s hat an dieser Adresse keine Kalender mehr. Er ist möglicherweise umgezogen oder abgeschaltet. Überprüfe die Adresse oder trenne die Verbindung zu diesem Konto, wenn du es nicht mehr nutzt.</string>
+    <string name="cal_sync_problem_tls">Das Sicherheitszertifikat von %1$s konnte nicht überprüft werden, daher wurde keine Verbindung hergestellt. Das Zertifikat ist möglicherweise abgelaufen, oder die Adresse führt jetzt zu einem anderen Server. Überprüfe die Adresse oder bitte den Administrator des Servers, das Zertifikat zu erneuern.</string>
+    <string name="cal_sync_problem_unreachable">Der Kalender-Server unter %1$s konnte nicht erreicht werden. Er ist möglicherweise offline, oder die Adresse ist falsch. Die Synchronisierung wird fortgesetzt, wenn der Server wieder erreichbar ist.</string>
+    <string name="cal_sync_problem_server">Der Kalender-Server unter %1$s hat einen Fehler gemeldet. Dies ist in der Regel vorübergehend. Die Synchronisierung wird fortgesetzt, wenn der Server wieder funktioniert.</string>
+    <string name="cal_sync_problem_blocked">Dieser Mailr-Server stellt keine Verbindung zu %1$s her, da die Adresse privat oder lokal ist oder https nicht verwendet. Verwende die öffentliche https-Adresse des Kalender-Servers oder frage deinen Administrator.</string>
+    <string name="cal_sync_problem_partial">Der Kalender-Server unter %1$s hat nur einen Teil eines Kalenders aufgelistet. Es wurde nichts entfernt, und der Kalender wird bei der nächsten Synchronisierung erneut gelesen.</string>
+    <string name="cal_sync_problem_unknown">Die Synchronisierung mit %1$s ist fehlgeschlagen. Die technische Meldung findest du unter Details.</string>
+    <string name="cal_sync_problem_somewhere">die Adresse des Kontos</string>
+    <string name="cal_group_mailr">Mailr-Kalender</string>
+    <string name="cal_group_shared">Mit dir geteilt</string>
+    <string name="cal_group_phone">Kalender von deinem Telefon</string>
+    <string name="cal_group_links">Kalender-Links</string>
     <string name="cal_remove_from_my_calendar">Aus meinem Kalender entfernen</string>
     <string name="cal_open_on_web">Im Web öffnen</string>
     <string name="cal_details">Details</string>
@@ -574,6 +585,10 @@
     <string name="cal_delete_type_name">Name zur Bestätigung eingeben</string>
     <string name="cal_shared_by">Geteilt von %s</string>
     <string name="cal_shared_someone">jemandem</string>
+    <string name="cal_shared_by_free_busy">Geteilt von %s · nur Verfügbarkeit</string>
+    <string name="cal_shared_by_view_through">Geteilt von %1$s · kann anzeigen (über %2$s)</string>
+    <string name="cal_shared_by_edit_through">Geteilt von %1$s · kann bearbeiten (über %2$s)</string>
+    <string name="cal_shared_by_share_through">Geteilt von %1$s · kann bearbeiten und teilen (über %2$s)</string>
     <string name="cal_shared_with_group">Geteilt mit der Gruppe %s</string>
     <string name="cal_shared_group_fallback">Gruppe</string>
     <string name="cal_live_when_all_day">%1$s – %2$s, ganztägig</string>

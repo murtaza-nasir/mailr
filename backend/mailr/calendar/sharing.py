@@ -7,34 +7,52 @@
   built-in calendar, the default), "groups" (users who share at least one mailr group with the
   person sharing) or "nobody". A narrower policy applies to new shares and level changes;
   existing shares stay until someone stops them.
-- **Levels.** view (`read`), edit (`read` + `write`) and share (`read` + `write` + `write-acl`).
-  A free/busy-only level is not offered: on Stalwart 0.16.23 an ACE with only CalDAV
-  `read-free-busy` is stored, but the sharee does not list the calendar, a free-busy-query on it
-  answers 403, and the schedule outbox's VFREEBUSY reply carries no busy times from it, so
-  mailr would have nothing to show (tests/test_calendar_sharing_stalwart.py).
+- **Levels.** view (`read`), edit (`read` + `write`) and share (`read` + `write` + `write-acl`),
+  on every server; free/busy only (`freebusy`: CalDAV `read-free-busy` alone) on Stalwart 1.x only
+  (`levels_for`). On Stalwart 0.16 an ACE with only `read-free-busy` is stored, but the sharee
+  neither lists the calendar nor may run a free-busy-query on it (403), so mailr would have nothing
+  to show: the level is not offered there and a request for it is refused. On 1.0.1 the
+  free-busy-query answers with the busy times and nothing else; calendar/shared_busy.py turns them
+  into busy blocks (tests/test_calendar_sharing_stalwart.py).
 - **The ACL.** Read, modify, write: an `ACL` request replaces the whole list. mailr writes it as
   the owner (impersonation) and puts the ACEs of mailr users first, in their old order, then every
-  other ACE (a group, an account mailr does not know) in its old order. Stalwart takes the first
-  ACE that names the user, so a person's own level wins over a group's grant. Privileges are
-  written back in their base form (read, write, write-acl, CalDAV free/busy and schedule-*);
-  the derived ones Stalwart reports (write-content, read-acl, …) are left out.
-  After a write whose ACL names anything but a mailr user (a group), mailr runs
-  `InvalidateCaches`; direct grants to a user take effect at once.
-- **Re-sharing.** Someone with the share level manages the calendar's people like the owner,
-  within the policy as it applies to them, except their own entry. mailr checks their level in
-  the owner's ACL and writes as the owner.
+  other ACE (a group, an account mailr does not know) in its old order. Privileges are written back
+  in their base form (read, write, write-acl, CalDAV free/busy and schedule-*); the derived ones
+  Stalwart reports (write-content, read-acl, …) are left out. After a write whose ACL names anything
+  but a mailr user (a group), mailr runs `InvalidateCaches`; direct grants to a user take effect at
+  once.
+- **What a person may do** (`access_of`, verified on 0.16.27 and 1.0.1 on 2 November 2026 with a
+  person's own ACE and a store group's ACE in either order). A person's grants are their own ACE
+  and the ACE of every store group they are a member of (`store_groups`).
+    - Stalwart 1.x: every check (read, free/busy, write, write-acl) takes the union of those grants.
+      Own view plus a group's edit: the person writes.
+    - Stalwart 0.16: read, free/busy and write-acl take the union too; write takes the first of
+      those ACEs in the ACL's order. mailr puts people before groups, so a person's own grant
+      decides writes when they have one.
+  mailr follows the server it runs on (`server_v1`), so it never allows more than the server, and
+  shows where a level comes from when a group gives more than the person's own grant
+  ("Can edit (through Family)").
+- **Re-sharing.** Someone who may change the calendar's ACL (write-acl through any of their
+  grants, on both versions) manages the calendar's people like the owner, within the policy as it
+  applies to them, except their own entry. mailr checks this in the owner's ACL and writes as the
+  owner.
 - **What the sharee sees.** The calendar appears in the sharee's home (assisted discovery). The
-  sync records it in the connector state (`caldav.shared_in`: path → owner, level), and a
-  view-only share is stored read-only even when a group grant would allow more (Stalwart's
-  listing reports the union, its write check the first ACE). `overrides_for` marks it
-  `shared = {kind: "user", owner, owner_id, level, access, can_share}`.
+  sync records it in the connector state (`caldav.shared_in`: path → owner, level, can_share, own
+  level, groups that give more) and stores it read-only when the person may not write by the rule
+  above (on 0.16 the listing reports the union, its write check the first ACE, so the listing alone
+  is not enough there). `overrides_for` marks it
+  `shared = {kind: "user", owner, owner_id, level, access, can_share}`, plus `own_level` and `via`
+  (group names) when a group gives more. A free/busy-only calendar is not listed; the sync adds it
+  (calendar/shared_busy.py) with level `freebusy` and access `freebusy`.
 - **The owner's side.** Each sync of a built-in connector reads the ACLs of its own calendars in
   one depth-1 PROPFIND and keeps a summary (`caldav.acl`: path → [[login, level, is_user]]).
   The sharee's sync reads its level there; the owner's list shows "Shared with 2 people".
-- **A deleted account.** Stalwart answers 500 to an ACL read once an ACE names an account that
-  was destroyed (0.16.23). mailr removes a user's grants before it deletes their store account,
-  and the job `calendar.shares_cleanup` removes any grant left to a missing account through JMAP
-  (`Calendar/set` `shareWith/<id>: null`), which works where the DAV read fails.
+- **A deleted account.** Stalwart 0.16 answers 500 to an ACL read once an ACE names an account
+  that was destroyed (0.16.23). Stalwart 1.x answers, and names that ACE's principal by the
+  account's number (`/dav/pal/_2110/`). mailr removes a user's grants before it deletes their
+  store account, and the job `calendar.shares_cleanup` removes any grant left to a missing account
+  through JMAP (`Calendar/set` `shareWith/<id>: null`), which works where the DAV read fails.
+  `read_acl` repairs both cases before it returns the list.
 - **Notices.** A new share leaves a quiet notice for the sharee: a toast in an open session and a
   line in the calendar list until they dismiss it (`users.settings.calendar_share_notices`).
   No mail, no push, no desktop notification.
@@ -43,6 +61,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -63,8 +82,12 @@ log = logging.getLogger("mailr.calendar.sharing")
 SETTING = "calendars.sharing"
 POLICIES = ("anyone", "groups", "nobody")
 DEFAULT_POLICY = "anyone"
-LEVELS = ("view", "edit", "share")
-PRIVS = {"view": ["read"], "edit": ["read", "write"], "share": ["read", "write", "write-acl"]}
+FREEBUSY = "freebusy"
+LEVELS = ("view", "edit", "share")  # on every server
+LEVELS_V1 = (FREEBUSY, *LEVELS)  # Stalwart 1.x: free/busy only too
+PRIVS = {FREEBUSY: ["read-free-busy"], "view": ["read"], "edit": ["read", "write"],
+         "share": ["read", "write", "write-acl"]}
+RANK = {FREEBUSY: 1, "view": 2, "edit": 3, "share": 4}
 MAX_PEOPLE = 50  # provisioning sets x:Sharing.maxShares to 50
 NOTICES = "calendar_share_notices"
 CLEANUP_JOB = "calendar.shares_cleanup"
@@ -150,15 +173,101 @@ class Ace:
         return level_of(self.privs)
 
 
-def level_of(privs: list[str] | set[str]) -> str | None:
+def level_of(privs: list[str] | set[str] | frozenset[str]) -> str | None:
+    """The level an ACE (Clark names) or a listing's privilege set (local names) amounts to."""
     names = {p.rsplit("}", 1)[-1] for p in privs}
-    if "write-acl" in names:
+    if "write-acl" in names or "all" in names:
         return "share"
-    if "write" in names:
+    if "write" in names or "write-content" in names:
         return "edit"
     if "read" in names:
         return "view"
+    if "read-free-busy" in names:
+        return FREEBUSY
     return None
+
+
+async def server_v1() -> bool:
+    """Whether the mail store runs Stalwart 1.x (core/store_groupware.is_v1, kept five minutes).
+    False when it cannot be asked: 0.16's rules never allow more than 1.x's."""
+    from mailr.core.store import service_client
+    from mailr.core.store_groupware import is_v1
+
+    try:
+        return await is_v1(service_client())
+    except Exception as e:  # noqa: BLE001
+        log.info("could not tell the mail store's version: %s", e)
+        return False
+
+
+def levels_for(v1: bool) -> list[str]:
+    return list(LEVELS_V1 if v1 else LEVELS)
+
+
+@dataclass
+class Access:
+    """What a person may do with a calendar, by all their grants (`access_of`)."""
+
+    level: str | None  # freebusy, view, edit or share; None: nothing
+    can_share: bool = False
+    own: str | None = None  # the level of the person's own ACE
+    via: list[str] = field(default_factory=list)  # logins of the groups that give more than `own`
+
+
+def access_of(entries: list[tuple[str, str | None]] | list[list[Any]], me: str, my_groups: set[str] | dict[str, str],
+              v1: bool) -> Access:
+    """A person's access from an ACL's entries ([login, level, …] in ACL order), their own login
+    and the logins of their store groups. Stalwart 1.x: the union of the grants. Stalwart 0.16: the
+    union too, except write, which the first ACE naming the person or one of their groups decides
+    (verified on both, 2 November 2026; the module docstring)."""
+    me = me.lower()
+    mine = [(str(e[0]).lower(), e[1]) for e in entries if e[1] and (str(e[0]).lower() == me or str(e[0]).lower() in my_groups)]
+    if not mine:
+        return Access(None)
+    own = next((lv for lg, lv in mine if lg == me), None)
+    best = max(RANK[lv] for _, lv in mine)
+    can_share = any(lv == "share" for _, lv in mine)
+    write = (any(RANK[lv] >= RANK["edit"] for _, lv in mine) if v1 else RANK[mine[0][1]] >= RANK["edit"])
+    if write:
+        level = "share" if can_share else "edit"
+    else:
+        level = "view" if best >= RANK["view"] else FREEBUSY
+    own_rank = RANK.get(own or "", 0)
+    raised = RANK[level] > own_rank or (can_share and own != "share")
+    via = list(dict.fromkeys(lg for lg, lv in mine if lg != me and RANK[lv] > own_rank)) if raised else []
+    return Access(level, can_share, own, via)
+
+
+async def store_groups(db: AsyncSession, users: list[User]) -> dict[int, dict[str, str]]:
+    """Per user id: {store group login: name to show} for the store groups the person is a member
+    of. A group of mailr's group calendars shows its mailr group name; another one its description,
+    else its account name. One or two management calls for all the people."""
+    from mailr.config import get_settings
+    from mailr.models import CalendarGroup
+
+    accts = {u.stalwart_account_id: u.id for u in users if u.stalwart_account_id}
+    out: dict[int, dict[str, str]] = {u.id: {} for u in users}
+    if not accts:
+        return out
+    got = await groups._mgmt("x:Account/get", {"ids": list(accts), "properties": ["memberGroupIds"]})
+    member = {a["id"]: [g for g, on in (a.get("memberGroupIds") or {}).items() if on] for a in got.get("list") or []}
+    gids = sorted({g for gs in member.values() for g in gs})
+    if not gids:
+        return out
+    info = await groups._mgmt("x:Account/get", {"ids": gids, "properties": ["name", "description"]})
+    domain = get_settings().stalwart_domain.lower()
+    managed = {(cg.store_group_login or "").lower(): cg.group_name
+               for cg in (await db.execute(select(CalendarGroup))).scalars() if cg.store_group_login}
+    names: dict[str, tuple[str, str]] = {}
+    for g in info.get("list") or []:
+        name = str(g.get("name") or "")
+        login = (name if "@" in name else f"{name}@{domain}").lower()
+        names[g["id"]] = (login, managed.get(login) or str(g.get("description") or "") or name.split("@")[0])
+    for acct, gs in member.items():
+        uid = accts.get(acct)
+        if uid is not None:
+            out[uid] = {names[g][0]: names[g][1] for g in gs if g in names}
+    return out
 
 
 def _base(privs: list[str]) -> list[str]:
@@ -180,7 +289,7 @@ def parse_acl(resp: ET.Element) -> list[Ace]:
 
 
 def ace_for(login: str, level: str) -> Ace:
-    return Ace(groups.principal_of(login), [f"{{{D}}}{p}" for p in PRIVS[level]])
+    return Ace(groups.principal_of(login), [f"{{{C if p == 'read-free-busy' else D}}}{p}" for p in PRIVS[level]])
 
 
 def ordered(aces: list[Ace], user_logins: set[str] | dict[str, int]) -> list[Ace]:
@@ -231,17 +340,25 @@ async def _read(owner_login: str, path: str) -> list[Ace]:
     return parse_acl(resp) if resp is not None else []
 
 
+# How Stalwart 1.x names the principal of a grant whose account was destroyed: its number.
+_GONE = re.compile(r"_\d+")
+
+
 async def read_acl(owner: User, owner_login: str, path: str) -> list[Ace]:
-    """The calendar's ACL as its owner sees it. A 5xx (an ACE naming a destroyed account) is
-    repaired through JMAP and the read repeated once."""
+    """The calendar's ACL as its owner sees it. An ACE naming a destroyed account (a 5xx on
+    Stalwart 0.16, a numbered principal on 1.x) is repaired through JMAP and the read repeated once."""
     try:
-        return await _read(owner_login, path)
+        aces = await _read(owner_login, path)
     except dav.ServerError as e:
         if e.status < 500:
             raise
         log.info("ACL read of %s failed (%s); removing grants to missing accounts", path, e)
-        await heal(owner)
-        return await _read(owner_login, path)
+    else:
+        if not any(_GONE.fullmatch(a.login) for a in aces):
+            return aces
+        log.info("ACL of %s names a deleted account; removing grants to missing accounts", path)
+    await heal(owner)
+    return await _read(owner_login, path)
 
 
 async def write_acl(owner_login: str, path: str, aces: list[Ace], user_logins: set[str] | dict[str, int]) -> None:
@@ -282,14 +399,46 @@ _JMAP_CAL = "urn:ietf:params:jmap:calendars"
 
 async def heal(owner: User) -> int:
     """Remove from the owner's calendars every grant to an account that no longer exists.
-    JMAP, because the DAV ACL read fails while such a grant is there. Returns how many."""
+    JMAP, because the DAV ACL read fails while such a grant is there (0.16). On Stalwart 1.x the
+    DAV read works and JMAP's shareWith leaves such a grant out, so the DAV ACL is rewritten
+    without it (`_heal_numbered`). Returns how many."""
     from mailr.core.jmap import CORE
     from mailr.core.store import service_client
 
     if not owner.stalwart_account_id:
         return 0
-    cli = service_client()
-    using = [CORE, _JMAP_CAL]
+    return await _heal_shared_with(owner, service_client(), [CORE, _JMAP_CAL]) + await _heal_numbered(owner)
+
+
+async def _heal_numbered(owner: User) -> int:
+    """Stalwart 1.x: grants to destroyed accounts that the owner's DAV ACLs still list under the
+    account's number (`_GONE`). Each such ACL is written again without them."""
+    async with session_scope() as db:
+        login = await groups.user_login(db, owner)
+        who = await logins(db)
+    if not login:
+        return 0
+    try:
+        async with groups.owner_client(login) as c:
+            ms = await c._multistatus("PROPFIND", groups._url(groups.home_of(login)), dav._propfind_body(["d:acl"]), "1")
+    except dav.DavError as e:  # 0.16 with such a grant: the JMAP repair above runs first
+        log.info("could not read the ACLs of user %s: %s", owner.id, e)
+        return 0
+    n = 0
+    for resp in ms.findall("d:response", dav.NS):
+        aces = parse_acl(resp)
+        keep = [a for a in aces if not _GONE.fullmatch(a.login)]
+        if len(keep) == len(aces):
+            continue
+        path = groups.path_of(dav._text(resp.find("d:href", dav.NS)))
+        await write_acl(login, path, keep, who)
+        n += len(aces) - len(keep)
+    if n:
+        log.info("removed %s grants to deleted accounts from the calendar ACLs of user %s", n, owner.id)
+    return n
+
+
+async def _heal_shared_with(owner: User, cli: Any, using: list[str]) -> int:
     got = await cli.one("Calendar/get", {"accountId": owner.stalwart_account_id, "properties": ["shareWith"]},
                         using=using)
     cals = got.get("list") or []
@@ -306,6 +455,9 @@ async def heal(owner: User) -> int:
     if not update:
         return 0
     res = await cli.one("Calendar/set", {"accountId": owner.stalwart_account_id, "update": update}, using=using)
+    if res.get("notUpdated"):
+        log.warning("could not remove grants to deleted accounts from the calendars of user %s: %s", owner.id,
+                    res["notUpdated"])
     n = sum(len(update[k]) for k in (res.get("updated") or {}))
     log.info("removed %s grants to deleted accounts from the calendars of user %s", n, owner.id)
     return n
@@ -413,11 +565,27 @@ def _person(u: User) -> dict[str, Any]:
     return {"id": u.id, "name": u.name or u.email.split("@")[0], "email": u.email}
 
 
-async def _actor_may_share(t: Target, actor_login: str, aces: list[Ace]) -> None:
+def _entries(aces: list[Ace]) -> list[tuple[str, str | None]]:
+    return [(a.login, a.level) for a in aces if a.level]
+
+
+async def _groups_if_needed(db: AsyncSession, people: list[User], aces: list[Ace],
+                            who: dict[str, int]) -> dict[int, dict[str, str]]:
+    """The people's store groups, asked of the store only when the ACL grants anything to an
+    account that is not a mailr user (a group)."""
+    if not any(a.level and a.login not in who for a in aces):
+        return {u.id: {} for u in people}
+    return await store_groups(db, people)
+
+
+async def _actor_may_share(db: AsyncSession, t: Target, actor: User, actor_login: str, aces: list[Ace],
+                           who: dict[str, int], v1: bool) -> None:
+    """The owner, or someone whose grants give write-acl (the person's own, or a group's: the
+    server checks the union on 0.16 and on 1.x)."""
     if t.own:
         return
-    mine = next((a for a in aces if a.login == actor_login), None)
-    if mine is None or mine.level != "share":
+    mine = (await _groups_if_needed(db, [actor], aces, who)).get(actor.id) or {}
+    if not access_of(_entries(aces), actor_login, mine, v1).can_share:
         raise SharingError(f"{_person(t.owner)['name']} has not let you share “{_name(t.coll)}”.", 403)
 
 
@@ -432,9 +600,13 @@ async def describe(db: AsyncSession, actor: User, coll: CalCollection) -> dict[s
     who = await logins(db)
     me = await groups.user_login(db, actor)
     aces = await read_acl(t.owner, t.owner_login, t.path)
-    await _actor_may_share(t, me, aces)
+    v1 = await server_v1()
+    await _actor_may_share(db, t, actor, me, aces, who, v1)
     by_id = {u.id: u for u in (await db.execute(select(User).where(User.id.in_(
         [who[a.login] for a in aces if a.login in who])))).scalars()}
+    member = await _groups_if_needed(db, list(by_id.values()), aces, who)
+    login_of = {v: k for k, v in who.items()}
+    entries = _entries(aces)
     pol = await policy(db)
     people, seen, others = [], set(), 0
     for a in aces:
@@ -448,18 +620,26 @@ async def describe(db: AsyncSession, actor: User, coll: CalCollection) -> dict[s
         u = by_id.get(uid)
         if u is None:
             continue
-        people.append({**_person(u), "level": a.level, "disabled": bool(u.disabled), "you": uid == actor.id,
-                       "outside_policy": uid != actor.id and not allowed_by(pol, actor, u)})
+        row = {**_person(u), "level": a.level, "disabled": bool(u.disabled), "you": uid == actor.id,
+               "outside_policy": uid != actor.id and not allowed_by(pol, actor, u)}
+        mine = member.get(uid) or {}
+        acc = access_of(entries, login_of.get(uid, a.login), mine, v1)
+        if acc.via:  # a group gives this person more than the level set here
+            row["access"] = {"level": acc.level, "can_share": acc.can_share, "via": [mine.get(g, g) for g in acc.via]}
+        people.append(row)
     cands = [_person(u) for u in await eligible(db, actor) if u.id not in seen and u.id != t.owner.id]
     return {"calendar_id": coll.id, "name": _name(coll), "own": t.own, "owner": _person(t.owner),
-            "policy": pol, "levels": list(LEVELS), "people": people, "others": others,
+            "policy": pol, "levels": levels_for(v1), "people": people, "others": others,
             "candidates": cands, "max": MAX_PEOPLE}
 
 
 async def set_level(db: AsyncSession, actor: User, coll: CalCollection, user_id: int, level: str | None) -> dict[str, Any]:
     """Share with a person at a level, change it, or stop (level None). The caller commits."""
-    if level is not None and level not in LEVELS:
-        raise SharingError("The level is view, edit or share.")
+    if level is not None and level not in LEVELS_V1:
+        raise SharingError("The level is freebusy, view, edit or share.")
+    v1 = await server_v1()
+    if level is not None and level not in levels_for(v1):
+        raise SharingError("This server cannot share free/busy only yet. Choose View, Edit or Edit and share.")
     pol = await policy(db)
     if level is not None and pol == "nobody":
         raise SharingError("Calendar sharing is turned off on this server.", 403)
@@ -477,7 +657,7 @@ async def set_level(db: AsyncSession, actor: User, coll: CalCollection, user_id:
         raise SharingError("That person has no Mailr calendar.")
     me = await groups.user_login(db, actor)
     aces = await read_acl(t.owner, t.owner_login, t.path)
-    await _actor_may_share(t, me, aces)
+    await _actor_may_share(db, t, actor, me, aces, who, v1)
     before = next((a.level for a in aces if a.login == login), None)
     if level is not None:
         if other.disabled or not allowed_by(pol, actor, other) or not await builtin.policy_allows(db, other):
@@ -554,14 +734,37 @@ async def dismiss(db: AsyncSession, user_id: int) -> None:
 # ---------------- the sync of a built-in connector ----------------
 
 
-async def on_listing(client: dav.DavClient, user_id: int, home: str, infos: list[dav.CollectionInfo]
-                     ) -> tuple[dict[str, Any], dict[str, Any] | None]:
-    """During a sync: the owner summaries of the user's own calendars, and the calendars shared
-    with the user (path → owner, level). A view-only share is set read-only in `infos`.
-    Returns (shared_in, acl); acl is None when it could not be read (the old one stays)."""
+@dataclass
+class Listing:
+    """What a built-in sync learns about sharing (`on_listing`)."""
+
+    shared_in: dict[str, Any]  # path → owner_id, level, can_share, own, via, direct
+    acl: dict[str, Any] | None  # the user's own calendars' ACL summaries; None: could not be read
+    busy: list[tuple[dav.CollectionInfo, list[Any]]] = field(default_factory=list)  # free/busy only: (info, periods)
+    kept: list[dav.CollectionInfo] = field(default_factory=list)  # free/busy only, not refreshed this time
+
+
+def _listed_level(info: dav.CollectionInfo) -> str:
+    """The level the listing reports for the current user (the union of their grants)."""
+    if info.privileges:
+        return level_of(info.privileges) or "view"
+    return "view" if info.read_only else "edit"
+
+
+async def on_listing(client: dav.DavClient, user_id: int, home: str, infos: list[dav.CollectionInfo],
+                     previous: dict[str, Any] | None = None) -> Listing:
+    """During a sync: the owner summaries of the user's own calendars, the calendars shared with
+    the user (path → owner, level), and the calendars shared with the user as free/busy only
+    (Stalwart 1.x; calendar/shared_busy.py). A calendar the user may not write to by the server's
+    rule (`access_of`) is set read-only in `infos`. `previous` is the last `shared_in`: a
+    free/busy-only calendar whose busy times cannot be read this time (a server error) is kept."""
+    v1 = await server_v1()
     async with session_scope() as db:
         who = await logins(db)
-        me = await groups.user_login(db, await db.get(User, user_id))
+        user = await db.get(User, user_id)
+        if user is None:
+            return Listing({}, None)
+        me = await groups.user_login(db, user)
         managed = await groups.managed_homes(db)
         own_home = groups.path_of(home)
         foreign: dict[str, dav.CollectionInfo] = {}
@@ -570,23 +773,37 @@ async def on_listing(client: dav.DavClient, user_id: int, home: str, infos: list
             if p.startswith(own_home) or any(p.startswith(h) for h in managed):
                 continue
             foreign[p] = i
-        owner_of = {p: unquote(p.split("/")[3]).lower() for p in foreign if p.count("/") >= 4}
-        need = {who[o] for o in owner_of.values() if o in who}
+        # Every other owner's summaries: listed calendars, and free/busy-only grants (not listed).
         states = {c.user_id: ((c.state or {}).get("caldav") or {}).get("acl") or {}
                   for c in (await db.execute(select(Connector).where(Connector.builtin.is_(True),
-                                                                      Connector.user_id.in_(need)))).scalars()} \
-            if need else {}
+                                                                      Connector.user_id != user_id))).scalars()}
+        need_groups = any(not e[2] for acl in states.values() for entries in acl.values() for e in entries
+                          if len(e) > 2 and e[1])
+        mine = (await store_groups(db, [user])).get(user_id, {}) if need_groups else {}
     shared_in: dict[str, Any] = {}
     for p, info in foreign.items():
-        oid = who.get(owner_of.get(p, ""))
+        owner_login = unquote(p.split("/")[3]).lower() if p.count("/") >= 4 else ""
+        oid = who.get(owner_login)
         if oid is None or oid == user_id:
             continue
         entries = states.get(oid, {}).get(p) or []
-        level = next((e[1] for e in entries if e[0] == me), None)
-        if level == "view":
-            info.read_only = True  # the first ACE decides writes; the listing reports the union
-        shared_in[p] = {"owner_id": oid, "level": level or ("view" if info.read_only else "edit"),
-                        "direct": level is not None}
+        acc = access_of(entries, me, mine, v1) if entries else Access(None)
+        listed = _listed_level(info)
+        if v1 or acc.level is None:
+            # Stalwart 1.x: the listing reports the union, as the server's checks use it.
+            level, can_share = listed, "write-acl" in info.privileges or listed == "share"
+        else:
+            # Stalwart 0.16: the listing reports the union, but writes follow the first ACE.
+            level, can_share = acc.level, acc.can_share
+            if RANK[level] < RANK["edit"]:
+                info.read_only = True
+        if level == FREEBUSY:  # listed, so at least view through some grant
+            level = "view"
+        shared_in[p] = {"owner_id": oid, "level": level, "can_share": can_share, "own": acc.own,
+                        "via": [mine.get(g, g) for g in acc.via], "direct": acc.own is not None}
+    out = Listing(shared_in, None)
+    if v1:
+        await _free_busy_only(client, user_id, me, mine, states, foreign, own_home, managed, previous or {}, out)
     acl = await owner_summaries(client, home, who)
     if acl is None:
         try:
@@ -596,7 +813,56 @@ async def on_listing(client: dav.DavClient, user_id: int, home: str, infos: list
                     acl = await owner_summaries(client, home, who)
         except Exception as e:  # noqa: BLE001  the next sync tries again
             log.warning("could not repair the calendar grants of user %s: %s", user_id, e)
-    return shared_in, acl
+    out.acl = acl
+    return out
+
+
+async def _free_busy_only(client: dav.DavClient, user_id: int, me: str, mine: dict[str, str],
+                          states: dict[int, dict[str, Any]], foreign: dict[str, Any], own_home: str, managed: set[str],
+                          previous: dict[str, Any], out: Listing) -> None:
+    """The calendars the user may see as free/busy only (not listed), with their busy periods,
+    asked of the server as the user. A refusal leaves the calendar out."""
+    from mailr.calendar import shared_busy
+
+    want: dict[str, tuple[int, Access]] = {}
+    for oid, acl in states.items():
+        if oid == user_id:
+            continue
+        for p, entries in acl.items():
+            if p in foreign or p.startswith(own_home) or any(p.startswith(h) for h in managed):
+                continue
+            acc = access_of(entries, me, mine, True)
+            if acc.level == FREEBUSY:
+                want[p] = (oid, acc)
+    if not want:
+        return
+    async with session_scope() as db:  # the owners' names and colours for the calendars
+        rows = (await db.execute(select(CalCollection).join(Connector, Connector.id == CalCollection.connector_id).where(
+            Connector.builtin.is_(True), Connector.user_id.in_({o for o, _ in want.values()}),
+            CalCollection.deleted_at.is_(None)))).scalars().all()
+        meta = {groups.path_of(c.href): c for c in rows}
+    start, end = shared_busy.window()
+    for p, (oid, acc) in want.items():
+        c = meta.get(p)
+        href = client.abs(p) if client is not None else p
+        info = dav.CollectionInfo(href=href, displayname=(c.displayname if c else "") or "",
+                                  color=c.color if c else None, components=["VEVENT"], read_only=True,
+                                  privileges=frozenset({"read-free-busy"}))
+        entry = {"owner_id": oid, "level": FREEBUSY, "can_share": False, "own": acc.own,
+                 "via": [mine.get(g, g) for g in acc.via], "direct": acc.own is not None}
+        try:
+            periods = await shared_busy.query(client, href, start, end)
+        except shared_busy.Refused as e:
+            log.info("free/busy of %s not readable for user %s: %s", p, user_id, e)
+            continue
+        except Exception as e:  # noqa: BLE001  kept as it was until the next sync
+            log.warning("could not read the free/busy of %s for user %s: %s", p, user_id, e)
+            if (previous.get(p) or {}).get("level") == FREEBUSY:
+                out.kept.append(info)
+                out.shared_in[p] = entry
+            continue
+        out.busy.append((info, periods))
+        out.shared_in[p] = entry
 
 
 # ---------------- what the user's calendar list shows ----------------
@@ -625,9 +891,13 @@ async def overrides_for(db: AsyncSession, user_id: int) -> dict[str, dict[str, A
             s = shared_in[p]
             o = owners.get(s.get("owner_id"))
             lvl = s.get("level") or "view"
-            out[href] = {"shared": {"kind": "user", "owner": _person(o)["name"] if o else "someone",
-                                    "owner_id": s.get("owner_id"), "level": lvl,
-                                    "access": "read" if lvl == "view" else "write", "can_share": lvl == "share"}}
+            shared = {"kind": "user", "owner": _person(o)["name"] if o else "someone",
+                      "owner_id": s.get("owner_id"), "level": lvl,
+                      "access": FREEBUSY if lvl == FREEBUSY else "read" if lvl == "view" else "write",
+                      "can_share": bool(s.get("can_share", lvl == "share"))}
+            if s.get("via"):  # a group gives more than the person's own grant
+                shared.update({"own_level": s.get("own"), "via": list(s["via"])})
+            out[href] = {"shared": shared}
         elif p in acl:
             people = sum(1 for e in acl[p] if e[2])
             others = sum(1 for e in acl[p] if not e[2])

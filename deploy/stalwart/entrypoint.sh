@@ -1,5 +1,5 @@
 #!/bin/sh
-# mailr wrapper entrypoint for stalwartlabs/stalwart (v0.16.x).
+# mailr wrapper entrypoint for stalwartlabs/stalwart (v0.16.x and v1.x).
 #
 # On a blank data store: boot Stalwart once, apply provision.json through the
 # JMAP management API (as the STALWART_RECOVERY_ADMIN credential), stop it, then
@@ -15,12 +15,15 @@
 set -eu
 
 CONF="${STALWART_CONFIG:-/etc/stalwart/config.json}"
-PLAN="${MAILR_PROVISION_PLAN:-/opt/mailr/provision.json}"
-# The calendar and contacts settings, a second request: one JMAP request takes at most 16 calls.
-# The mailr backend applies the same settings to existing stores at every start.
-PLAN2="${MAILR_PROVISION_PLAN2:-/opt/mailr/provision-groupware.json}"
 API="http://127.0.0.1:8080"
 BIN=/usr/local/bin/stalwart
+# Stalwart 1.x renamed some fields that provisioning sets (docs/design/stalwart-1.0-migration.md),
+# so it has its own plan files, *.v1.json, next to the 0.16 ones.
+case "$("$BIN" --version 2>/dev/null)" in 0.*) V="" ;; *) V=".v1" ;; esac
+PLAN="${MAILR_PROVISION_PLAN:-/opt/mailr/provision$V.json}"
+# The calendar and contacts settings, a second request: one JMAP request takes at most 16 calls.
+# The mailr backend applies the same settings to existing stores at every start.
+PLAN2="${MAILR_PROVISION_PLAN2:-/opt/mailr/provision-groupware$V.json}"
 : "${MAILR_SVC_USER:=mailr-svc}"
 : "${MAILR_TRUSTED_NET:=172.16.0.0/12}"
 : "${MAILR_RESOLVER_IP:=10.253.53.2}"
@@ -31,7 +34,10 @@ case "${MAILR_IMAP_PLAIN_TEXT_AUTH:=false}" in true|false) ;; *) echo "[mailr-in
 
 wait_up() {
   i=0
-  until curl -fsS -H 'X-Forwarded-For: 127.0.0.1' "$API/healthz/live" >/dev/null 2>&1; do
+  # No X-Forwarded-For: with phone access on, Stalwart 1.x reads the client address from it and
+  # answers 400 to a loopback address there (0.16 accepted it). Without the header it logs a
+  # warning and uses the peer address.
+  until curl -fsS "$API/healthz/live" >/dev/null 2>&1; do
     i=$((i + 1))
     if [ "$i" -gt 180 ]; then echo "[mailr-init] stalwart did not come up" >&2; return 1; fi
     sleep 1
