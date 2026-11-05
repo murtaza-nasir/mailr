@@ -4,7 +4,7 @@ The built-in assistant, the MCP server and the tool API share the tools below. O
 
 Tools for changes are checked by the permission engine. Many are carried out at once; others return `pending_approval` and are held for a decision. See [Approvals for agents](approvals.md).
 
-When the id is left out, most calendar and task tools are applied to the event or task focused on screen; a request to Ambrose such as "move this to Friday" is resolved this way.
+When the id is left out, most calendar and task tools are applied to the event or task focused on screen; a request to the assistant, Ambrose, such as "move this to Friday" is resolved this way.
 
 Call any tool over HTTP with `POST /api/v1/agent/tools/{name}`. See [REST API](rest-api.md#calling-agent-tools-over-http).
 

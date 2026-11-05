@@ -13,7 +13,7 @@ Open **Settings → Mail → People & groups** to see them.
 Search by name, address or organisation in the People list. In this order, the people you write
 to most, and most recently, come first; people who write back rank higher than those who never do. The
 same order is used for the suggestions in the To, Cc and Bcc fields, the guest field of the calendar,
-and Ambrose's people search.
+and the people search of the assistant, Ambrose.
 <!-- covers: person.find -->
 
 ## A person's card

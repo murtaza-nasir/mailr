@@ -434,7 +434,12 @@ export interface Message {
   /** "android-share": shared in by another app, not the user's words. */
   origin: string | null
   category: string | null
+  /** The addresses that received it: those of the user's own, else the first the headers name. */
   delivered_to: string[]
+  /** The mail accounts it came through (one per copy); empty for mail with no account. */
+  account: MessageAccount[]
+  /** Received without the user being named in To or Cc. */
+  received_bcc: boolean
   /** The Message-ID header. */
   message_id: string | null
   connector_id: number | null
@@ -445,6 +450,16 @@ export interface Message {
   offer_translate: boolean
   /** Read with an API token: the content is untrusted. */
   untrusted?: boolean
+}
+
+/** A mail account a message came through. */
+export interface MessageAccount {
+  id: number
+  name: string
+  /** The account's address; null for a file import. */
+  address: string | null
+  /** imap, gmail, m365 or file. */
+  kind: string
 }
 
 /** GET /messages/{id}/body: the sanitised body for the reader. */

@@ -3,7 +3,7 @@
 Notifications for new mail, and reminders of events and tasks, can be shown on a computer. The phone
 app has its own notifications; see [Calendar, tasks and reminders](../android/calendar-and-reminders.md)
 and [App settings](../android/settings.md). For Mailr added to a phone's home screen (new mail,
-approvals and Ambrose, also on an iPhone), see [The web app on your phone](phone.md#notifications).
+approvals and the assistant (Ambrose), also on an iPhone), see [The web app on your phone](phone.md#notifications).
 
 ## Notification choices
 

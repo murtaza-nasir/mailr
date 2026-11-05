@@ -420,6 +420,17 @@ async def _auth_results_backfill(who: str | None, days: int, batch: int, dry_run
             print(f"  #{ex['id']} {ex['subject']!r} from {ex['from']}: not sent by you")
 
 
+async def _delivered_to_backfill(who: str | None, days: int, batch: int, dry_run: bool) -> None:
+    from mailr.core import reparse
+
+    for uid, email in await _pick_users(who):
+        def show(st, email=email):
+            print(f"{email}: {st['seen']} read, {st['changed']} {'would change' if dry_run else 'changed'}, "
+                  f"{st['failed']} failed", flush=True)
+
+        await reparse.delivered_to_backfill(uid, days=days, batch=batch, dry_run=dry_run, progress=show)
+
+
 async def _reparse_attached_emails(who: str | None, batch: int, rate: float, dry_run: bool, restart: bool) -> None:
     """Counts only, per user and mail account: never a subject, an address or any text."""
     from mailr.core import reparse
@@ -709,6 +720,21 @@ async def _tally_rebuild(who: str | None) -> int:
         t0 = time.monotonic()
         await tally.rebuild(uid)
         print(f"{email}: counted in {time.monotonic() - t0:.1f}s", flush=True)
+    return 0
+
+
+async def _reattribute_orders(who: str | None, dry_run: bool, batch: int) -> int:
+    """`mailr decisions reattribute-orders`: record the label, importance and category decisions
+    that standing orders made before 0.40.37, stored as the user's own, as the orders' decisions
+    (assistant/reattribute.py), and queue a retrain of each model whose examples changed."""
+    from mailr.assistant import reattribute
+
+    for uid, email in await _pick_users(who):
+        rep = await reattribute.reattribute(uid, dry_run=dry_run, batch=batch)
+        for line in reattribute.describe(email, rep, dry_run=dry_run):
+            print(line, flush=True)
+    if dry_run:
+        print("dry run, nothing changed")
     return 0
 
 
@@ -1075,6 +1101,13 @@ def main() -> None:
     ab.add_argument("--days", type=int, default=365, help="mail from the last N days (default 365)")
     ab.add_argument("--batch", type=int, default=200, help="messages per transaction (default 200)")
     ab.add_argument("--dry-run", action="store_true", help="only count and list them")
+    dtb = sub.add_parser("delivered-to-backfill",
+                         help="re-read stored mail's receiving addresses (Delivered-To, X-Original-To, Envelope-To, "
+                              "the Received for clause) for the message details; counts only")
+    dtb.add_argument("user", nargs="?", help="email or user id (default: every enabled user)")
+    dtb.add_argument("--days", type=int, default=365, help="mail from the last N days (default 365)")
+    dtb.add_argument("--batch", type=int, default=200, help="messages per transaction (default 200)")
+    dtb.add_argument("--dry-run", action="store_true", help="only count them")
     rae = sub.add_parser("reparse-attached-emails",
                          help="parse again the mail whose attached emails (message/rfc822) leaked into its body; "
                               "--dry-run only counts, per user and account")
@@ -1161,6 +1194,14 @@ def main() -> None:
                                                  "bring back mail a restore of the mail store lost; messages "
                                                  "already in Mailr are skipped")
     si.add_argument("--user", help="only this user (email or id; default: every enabled user)")
+    dc = sub.add_parser("decisions", help="the label, importance and category decisions the models learn from")
+    dc_sub = dc.add_subparsers(dest="action", required=True)
+    dro = dc_sub.add_parser("reattribute-orders", help="record the decisions standing orders made before 0.40.37, "
+                                                       "stored as the user's own, as the orders' decisions, and "
+                                                       "retrain the models they changed")
+    dro.add_argument("--user", help="only this user (email or id; default: every enabled user)")
+    dro.add_argument("--dry-run", action="store_true", help="count them per order and per label, change nothing")
+    dro.add_argument("--batch", type=int, default=500, help="decisions per transaction (default 500)")
     ty = sub.add_parser("tally", help="the mail tally behind the Subscriptions and Clean up pages")
     ty_sub = ty.add_subparsers(dest="action", required=True)
     tr = ty_sub.add_parser("rebuild", help="count the mail of the Subscriptions and Clean up pages again from "
@@ -1274,6 +1315,8 @@ def main() -> None:
         _run(_address_clean_backfill(a.user, a.batch, a.dry_run))
     elif a.cmd == "auth-results-backfill":
         _run(_auth_results_backfill(a.user, a.days, a.batch, a.dry_run))
+    elif a.cmd == "delivered-to-backfill":
+        _run(_delivered_to_backfill(a.user, a.days, a.batch, a.dry_run))
     elif a.cmd == "export":
         sys.exit(_run(_export(a)))
     elif a.cmd == "purge-deleted":
@@ -1286,6 +1329,8 @@ def main() -> None:
         sys.exit(_run(_store_resync(a.user, a.accounts)))
     elif a.cmd == "store" and a.action == "import-export":
         sys.exit(_run(_store_import_export(a.user)))
+    elif a.cmd == "decisions" and a.action == "reattribute-orders":
+        sys.exit(_run(_reattribute_orders(a.user, a.dry_run, max(1, a.batch))))
     elif a.cmd == "tally" and a.action == "rebuild":
         sys.exit(_run(_tally_rebuild(a.user)))
     elif a.cmd == "reparse-attached-emails":

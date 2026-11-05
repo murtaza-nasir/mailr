@@ -108,7 +108,7 @@ it is applied, and with **Apply** the same preview is shown as with **Category**
 
 ## Cleanup through Ambrose
 
-Ambrose can list the subscriptions and the cleanup groups, and propose a cleanup. Every proposal
+The assistant, Ambrose, can list the subscriptions and the cleanup groups, and propose a cleanup. Every proposal
 requires approval: the approval shows the number of conversations, what is left alone and sample
 subjects, and nothing changes before it is approved. The same applies to an
 unsubscribe through Ambrose. See [Approvals](approvals.md).

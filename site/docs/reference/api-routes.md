@@ -48,7 +48,7 @@ Scope: a signed-in session (API tokens are refused with 403). See [Your first si
 
 | Route | Description |
 |---|---|
-| `GET /api/v1/onboarding` | The guide's progress (status, step, steps done or skipped), whether Ambrose can chat, and the phone links. A new account is given its prepared defaults here. |
+| `GET /api/v1/onboarding` | The guide's progress (status, step, steps done or skipped), whether the assistant (Ambrose) can chat, and the phone links. A new account is given its prepared defaults here. |
 | `PUT /api/v1/onboarding` | Move to a step, mark steps done or skipped, finish (`status: done`) or close (`dismissed`). |
 | `POST /api/v1/onboarding/restart` | Open the guide again at the start. |
 | `POST /api/v1/onboarding/chat` | The next turn of the quick chat (`{messages}` → `{reply, done}`); your access policy's chat model. Nothing is saved. |

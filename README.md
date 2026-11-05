@@ -44,7 +44,7 @@ Ambrose and by search can be run on your own hardware.
 - No mail is received directly from the internet. An MX record, open mail ports and a sending
   reputation are therefore not required.
 - New mail is copied to the Mailr mail store within seconds of arrival. Message lists, search
-  results and the answers from Ambrose are based on the copy in the Mailr mail store.
+  results and the answers from the assistant, Ambrose, are based on the copy in the Mailr mail store.
 - One of three modes is chosen for each account. With **Keep in sync**, Mailr and the provider
   stay in step. With **Mailr keeps the mail**, Mailr becomes the long-term home of the mail. With
   **Copy once**, an old account is copied a single time.

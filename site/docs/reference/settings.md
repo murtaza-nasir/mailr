@@ -41,7 +41,7 @@ Where: Settings → Mail → Inbox, the navigation.
 | `account_folders_more_open` | `[]` | list of account ids | The accounts whose **More folders** is open. |
 | `account_folders_show_unread` | `false` | on / off | Show folders with unread mail above **More folders** until they are read. |
 | `account_folders_hint_dismissed` | `false` | on / off | The hint in the navigation that offers **Show each account separately** was dismissed (or the setting was changed). It does not come back. |
-| `side_panel` | none | `none`, `calendar`, `tasks`, `agent` | The side panel shown next to mail: none, calendar, tasks or Ambrose. |
+| `side_panel` | none | `none`, `calendar`, `tasks`, `agent` | The side panel shown next to mail: none, calendar, tasks or the assistant (Ambrose). |
 
 ## Archiving
 

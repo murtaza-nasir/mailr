@@ -123,7 +123,7 @@ They are explained by topic on the [Configuration](../admin/configuration.md) pa
 | Variable | Default | Description |
 |---|---|---|
 | `MAILR_OVERDUE_DAYS` | `7` | Days a passed deadline still counts in an inbox tab's Due indicator. |
-| `MAILR_ASSISTANT_PROMPT_TOKENS` | `100000` | The largest prompt Ambrose sends to its chat model, in tokens (a rough count). The oldest turns of a long chat are left out first; a question that still does not fit is answered with the reason. Set it below the chat model's context window, for example `28000` for a 32k local model. |
+| `MAILR_ASSISTANT_PROMPT_TOKENS` | `100000` | The largest prompt the assistant, Ambrose, sends to its chat model, in tokens (a rough count). The oldest turns of a long chat are left out first; a question that still does not fit is answered with the reason. Set it below the chat model's context window, for example `28000` for a 32k local model. |
 
 ## Ambrose's memory
 

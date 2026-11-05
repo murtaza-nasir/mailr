@@ -25,7 +25,7 @@ Press `?` anywhere for the shortcuts of the page you are on. Turn shortcuts on o
 | Command palette | `Ctrl + K` (`⌘ K`) |
 | Close / clear | `Esc` |
 | Settings | `Ctrl + ,` |
-| Show or hide Ambrose | `Ctrl + .` |
+| Show or hide the assistant (Ambrose) | `Ctrl + .` |
 | Rerun Ambrose's last reply | `Shift + r` |
 | Ask Ambrose about what is open | `Shift + a` |
 | New note (#List adds to a list) | `Shift + n` |

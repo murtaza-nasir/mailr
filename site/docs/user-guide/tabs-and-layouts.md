@@ -134,7 +134,7 @@ category, whatever your tabs are, use **More → Category** (see
 [Categories](triage.md#categories)). In the command palette (`Ctrl + K`), type "show in tab" or
 "category". On Android, the same choices are in the selection menu and the reader's menu.
 
-Ambrose can do the same with its `show_in_tab` tool, naming the tab.
+The assistant, Ambrose, can do the same with its `show_in_tab` tool, naming the tab.
 <!-- covers: mail.show_in_tab -->
 
 ## The Inbox count

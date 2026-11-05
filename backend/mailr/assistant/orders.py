@@ -400,8 +400,11 @@ def principal_for(user: User):
     return Principal(user=user, scopes=set(ALL_SCOPES) - {"admin", "tls"})
 
 
-async def run_instant(db: AsyncSession, user: User, conv_ids: list[int], actions: dict[str, Any]) -> list[dict[str, Any]]:
-    """Apply an order's instant actions to whole conversations (like any user action)."""
+async def run_instant(db: AsyncSession, user: User, conv_ids: list[int], actions: dict[str, Any],
+                      by: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    """Apply an order's instant actions to whole conversations, through the user's actions. `by`
+    ({"name", "reason", "confidence"}, see attribution) records them as the order's decisions,
+    not the user's."""
     from mailr.core import actions as act
     from mailr.core.store import user_store
 
@@ -411,7 +414,7 @@ async def run_instant(db: AsyncSession, user: User, conv_ids: list[int], actions
     msgs = await act.messages_for(db, p, conv_ids=conv_ids)
     if not msgs:
         return []
-    ctx = act.ActionContext(db, await user_store(db, user), p)
+    ctx = act.ActionContext(db, await user_store(db, user), p, by=by)
     done: list[dict[str, Any]] = []
     steps: list[tuple[str, dict[str, Any]]] = []
     if actions.get("add_labels"):
@@ -432,6 +435,24 @@ async def run_instant(db: AsyncSession, user: User, conv_ids: list[int], actions
         res = await act.apply(ctx, msgs, name, args)
         done.append({"action": name, **({"args": args} if args else {}), "affected": res.get("affected", 0)})
     return done
+
+
+def attribution(order: AssistantOrder, cond: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Who applied an order's actions, for their decisions (core/actions._train): the order's name,
+    and the model's answer when a question decided it."""
+    cond = cond or {}
+    why = str(cond.get("reason") or "")
+    if cond.get("choice"):
+        why = f"chose {cond['choice']}" + (f" ({why})" if why else "")
+    elif cond.get("question"):
+        why = "answered yes" + (f" ({why})" if why else "")
+    elif order.trigger == "message":
+        why = "the order's search matched" if order.query else "every new message"
+    else:
+        why = "scheduled routine"
+    conf = cond.get("confidence")
+    return {"name": order.name, "reason": f"standing order: {why}",
+            "confidence": float(conf) if isinstance(conf, int | float) else None}
 
 
 def by_order(order: AssistantOrder | None) -> dict[str, Any]:
@@ -617,7 +638,7 @@ async def run_message_order(db: AsyncSession, user: User, order: AssistantOrder,
 
     token = activity.VIA.set(via) if via else None
     try:
-        done = await run_instant(db, user, [m.conversation_id], acts)
+        done = await run_instant(db, user, [m.conversation_id], acts, by=attribution(order, cond))
         if invite_too:
             done.append(await add_to_calendar(db, user, m, order=order, seen=seen))
         run.actions = done  # assigned whole: the permission check flushes in between
@@ -815,7 +836,7 @@ async def start_routine(db: AsyncSession, user: User, order: AssistantOrder, slo
         run.condition = {**run.condition, "recordings": await routine_recordings(db, user, order)}
     if order.actions:
         acts = {k: v for k, v in (order.actions or {}).items() if k != "notify"}
-        run.actions = await run_instant(db, user, convs, acts)
+        run.actions = await run_instant(db, user, convs, acts, by=attribution(order))
     order.runs = (order.runs or 0) + 1
     order.last_run_at = datetime.now(UTC)
     if order.errand:

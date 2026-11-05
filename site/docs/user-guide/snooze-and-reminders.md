@@ -69,7 +69,7 @@ its actions:
 | **Snooze** | Events | Remind me again: In 5 min, In 10 min, At start time, or a time you pick. |
 | **Remind before** | Events | This reminder ends and a new one is set: at the start, or 5, 10, 15 or 30 minutes, 1 or 2 hours, or 1 or 2 days before. Only offsets still in the future are offered. |
 | **Dismiss** | Both | The reminder is closed. The event or task does not change. |
-| **Ask Ambrose** | Both | Ask Ambrose about the item. |
+| **Ask Ambrose** | Both | Ask the assistant, Ambrose, about the item. |
 
 After every action, **Undo** is shown for a few seconds.
 <!-- covers: notification.open task.snooze event.snooze event.remind_before reminder.dismiss -->

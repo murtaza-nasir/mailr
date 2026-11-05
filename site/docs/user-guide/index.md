@@ -1,7 +1,7 @@
 # User guide
 
 This guide describes the daily use of Mailr: reading and writing mail, keeping the inbox in
-order, the calendar and tasks, and Ambrose. The examples follow Alex Rivera, a
+order, the calendar and tasks, and the assistant, Ambrose. The examples follow Alex Rivera, a
 design lead at Northwind Studio, who reads a work account, a personal account and a clinic board
 mailbox in one place.
 

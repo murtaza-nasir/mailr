@@ -31,7 +31,7 @@ under **Shared** in the calendar list, each with the line **Shared with the … 
 - In most group calendars every member can add and change events.
 - Some are view only: they are marked **view only** and have a lock. Only the editors
   named by the administrator can change it. A view-only calendar is not offered
-  when you create an event, and Ambrose does not write into it either.
+  when you create an event, and the assistant, Ambrose, does not write into it either.
 - You can hide a group calendar with its box, like any calendar, and give it a colour of your
   own. Other members keep theirs.
 - A group calendar cannot be renamed or deleted by members. Only the administrator can.

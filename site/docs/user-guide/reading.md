@@ -94,6 +94,16 @@ Click the small arrow next to the sender, **Show details**, to see the recipient
 mailing list, and whether the message passed sender authentication. A message that failed DMARC has
 a warning above its text.
 
+The details also show how the message reached you:
+
+| Row | What it shows |
+|---|---|
+| **delivered to** | The address of yours that received the message, read from the headers your provider adds (Delivered-To, X-Original-To, Envelope-To, or the Received header). **(Bcc)** follows it when the To and Cc lines do not name you. |
+| **account** | The mail account that collected the message. A message that came in through two of your accounts lists both. |
+
+When you were only in Bcc, the line under the sender also says **Bcc to you**. The phone app shows
+the same rows when you tap the recipients line.
+
 A warning is shown beside the sender's address in these cases:
 
 - the name shows another address than the one the message came from;
@@ -132,7 +142,7 @@ address.
 A link whose text shows a web address or a domain, but which opens a different site, is a common
 trick in phishing mail ("www.yourbank.example" that leads somewhere else). In the web app, such a
 link asks first: "This link opens another site" names the site it really opens, and **Open** goes
-there. Ambrose's drafts show the real address beside such a link instead.
+there. Drafts by the assistant, Ambrose, show the real address beside such a link instead.
 
 Choose how images appear under **Settings → Mail → Reading → Images** (`images`):
 

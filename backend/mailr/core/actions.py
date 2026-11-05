@@ -110,11 +110,14 @@ async def preview(db: AsyncSession, msgs: list[Message], action: str, args: dict
 
 
 class ActionContext:
-    def __init__(self, db: AsyncSession, store: UserStore, principal):
+    def __init__(self, db: AsyncSession, store: UserStore, principal, by: dict[str, Any] | None = None):
         self.db = db
         self.store = store
         self.p = principal
         self.uid = principal.user_id
+        # A standing order acting for the user (assistant/orders.run_instant): {"name", "reason",
+        # "confidence"}. Its decisions name the order, are not the user's choice and train no model.
+        self.by = by
         self._roles: dict[str, Label] | None = None
         # One local-change time per action, so the messages are written once, not once per mark.
         self.now = datetime.now(UTC)
@@ -145,14 +148,28 @@ async def messages_for(db: AsyncSession, p, conv_ids: list[int] | None = None,
 async def _train(ctx: ActionContext, msgs: list[Message], kind: str, target: str,
                  value: bool) -> tuple[list[LabelDecision], list[list[Any]]]:
     """Record the user's choice as "user" decisions. Returns the decisions added and, as
-    [id, status] pairs, the model decisions it rejected (an undo needs both)."""
+    [id, status] pairs, the model decisions it rejected (an undo needs both).
+
+    A standing order's action (ctx.by) is recorded as an "order" decision naming the order and why
+    it acted. It is not the user's choice: no model trains on it (3 Nov 2026: an order's
+    decision-model guesses were recorded as "user action" and trained the label classifier with
+    the weight of the user's own labelling)."""
     made = []
+    by = ctx.by
     for m in msgs[:200]:
-        d = LabelDecision(user_id=ctx.uid, message_id=m.id, kind=kind, target=target, value=value,
-                          source="user", source_ref=ctx.p.actor, confidence=1.0,
-                          reason="user action", status="accepted")
+        if by is not None:
+            d = LabelDecision(user_id=ctx.uid, message_id=m.id, kind=kind, target=target, value=value,
+                              source="order", source_ref=str(by.get("name") or "")[:200],
+                              confidence=by.get("confidence"), reason=str(by.get("reason") or ""),
+                              status="applied")
+        else:
+            d = LabelDecision(user_id=ctx.uid, message_id=m.id, kind=kind, target=target, value=value,
+                              source="user", source_ref=ctx.p.actor, confidence=1.0,
+                              reason="user action", status="accepted")
         ctx.db.add(d)
         made.append(d)
+    if by is not None:
+        return made, []
     rejected: list[list[Any]] = []
     # Reject pending model suggestions that the user contradicted.
     if msgs:

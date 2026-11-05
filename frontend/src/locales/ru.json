@@ -1840,6 +1840,7 @@
       "decisionModel": "Модель принятия решений",
       "due": "{{who}} · срок {{sourceRef}}",
       "filter": "Фильтр {{value}}",
+      "order": "Постоянное поручение {{value}}",
       "rules": "Правила",
       "vipSender": "VIP-отправитель",
       "waitingOn": "Ожидание ответа",
@@ -1972,7 +1973,11 @@
       "unsubscribe": "Отписаться",
       "unsubscribeFrom": "Отписаться от {{displayName}}?",
       "waitingForApproval": "Ожидает подтверждения",
-      "updatedByJustNow": "Обновлено {{who}} · только что"
+      "updatedByJustNow": "Обновлено {{who}} · только что",
+      "account": "аккаунт:",
+      "deliveredTo": "доставлено:",
+      "bccMark": "(скрытая копия)",
+      "bccToYou": "Скрытая копия вам"
     },
     "replySuggestions": {
       "suggestedReplies": "Предложенные ответы"

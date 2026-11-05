@@ -36,7 +36,7 @@ A message removed in the mail store by other means (another mail app, the store'
 
 ## Isolation between users
 
-Every query is scoped to the signed-in user in the data layer, not only in the interface. One user can never read or change another user's mail through any route, tool or job. Sorting models and Ambrose learn from each user's own mail only.
+Every query is scoped to the signed-in user in the data layer, not only in the interface. One user can never read or change another user's mail through any route, tool or job. Sorting models and the assistant, Ambrose, learn from each user's own mail only.
 
 ## Sign-in
 

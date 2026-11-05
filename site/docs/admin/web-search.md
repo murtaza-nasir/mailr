@@ -1,6 +1,6 @@
 # Web search
 
-Ambrose can look things up on the web: facts, news, documentation, opening hours. It searches through a **search provider** set up by an admin, reads pages from the results, and cites each page it relied on. The exact query is shown in the chat.
+The assistant, Ambrose, can look things up on the web: facts, news, documentation, opening hours. It searches through a **search provider** set up by an admin, reads pages from the results, and cites each page it relied on. The exact query is shown in the chat.
 
 Nothing from local-only accounts ever goes into a query.
 

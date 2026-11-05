@@ -553,6 +553,8 @@ private fun MessageItem(m: Message, open: Boolean, body: BodyState?, labels: Map
                     val undisclosed = stringResource(R.string.conv_undisclosed_recipients)
                     Text(
                         stringResource(R.string.conv_to_recipients, (m.to + m.cc).joinToString { if (it.email == m.from.email) me else Format.firstName(it.display) }.ifBlank { undisclosed }) +
+                            // Received without being named in To or Cc (backend core/delivery.py).
+                            (if (m.receivedBcc && (m.to + m.cc).isNotEmpty()) " · " + stringResource(R.string.conv_bcc_to_you) else "") +
                             if (details) "" else "  ▾",
                         style = MaterialTheme.typography.bodySmall, color = cs.onSurfaceVariant, maxLines = if (details) 10 else 1,
                         overflow = TextOverflow.Ellipsis,
@@ -631,6 +633,13 @@ private fun Details(m: Message, onClick: () -> Unit) {
         }
         if (m.to.isNotEmpty()) AddressLine(R.string.conv_detail_to, m.to, onClick)
         if (m.cc.isNotEmpty()) AddressLine(R.string.conv_detail_cc, m.cc, onClick)
+        // Which of my addresses and accounts received it; "(Bcc)" when To and Cc leave me out.
+        if (m.deliveredTo.isNotEmpty()) Box(Modifier.testTag("detail-delivered-to")) {
+            AddressLine(if (m.receivedBcc) R.string.conv_detail_delivered_to_bcc else R.string.conv_detail_delivered_to,
+                m.deliveredTo.map { io.github.murtazanasir.mailr.data.api.Address(it) }, onClick)
+        }
+        if (m.account.isNotEmpty()) Text(stringResource(R.string.conv_detail_account, m.account.joinToString { SafeText.isolate(it.display) }),
+            style = style, color = c, modifier = Modifier.testTag("detail-account"))
         Text(stringResource(R.string.conv_detail_date, Format.messageDate(m.date)), style = style, color = c)
         if (m.authResults.isNotEmpty()) Text(stringResource(R.string.conv_detail_security, m.authResults.entries.joinToString { "${it.key}=${it.value}" }), style = style, color = c)
     }

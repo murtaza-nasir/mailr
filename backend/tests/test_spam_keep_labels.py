@@ -232,6 +232,10 @@ async def test_gmail_keeps_its_labels_on_reported_spam(monkeypatch):
     calls: list[tuple[str, tuple]] = []
 
     class FakeClient:
+        def search(self, criteria):  # Not spam looks for it in [Gmail]/Spam; Gmail has it in All Mail here
+            calls.append(("search", (criteria,)))
+            return []
+
         def __getattr__(self, name):
             return lambda *a: calls.append((name, a))
 
@@ -240,6 +244,13 @@ async def test_gmail_keeps_its_labels_on_reported_spam(monkeypatch):
 
         async def call(self, fn, *a, **kw):
             return fn(*a, **kw)
+
+        async def select(self, folder, readonly=True):
+            calls.append(("select", (folder,)))
+            return {b"UIDVALIDITY": 1}
+
+        def has(self, cap):
+            return cap in ("MOVE", "UIDPLUS")
 
     row = SimpleNamespace(id=7, preset="gmail", config={"email": "a@gmail.example"}, mode="mirror", kind="gmail")
     conn = GmailConnector.__new__(GmailConnector)
@@ -271,6 +282,7 @@ async def test_gmail_keeps_its_labels_on_reported_spam(monkeypatch):
     # Not spam adds the label again (a no-op on Gmail, needed on IMAP servers).
     await conn.write_back([WriteBack(upstream=up, add_labels=["inbox", "Clients"], remove_labels=["junk"])])
     assert ("add_gmail_labels", ([42], ["\\Inbox", "Clients"])) in calls
+    assert not any(n == "move" for n, _a in calls)  # not in Gmail's Spam: nothing to move
 
 
 # ---------------- the guard on expunging untracked label copies upstream ----------------

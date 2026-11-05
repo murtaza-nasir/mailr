@@ -64,7 +64,7 @@ At phone width every style has the same frame:
   the groups **Create from email** (in a conversation), **Organise** and **More** (Mute, Report spam).
   A long sheet scrolls.
 - An open conversation has the whole screen; go back to see the tab bar again.
-- Ambrose fills the screen above the tab bar. Tap a citation, a source or a link in an answer to
+- The assistant, Ambrose, fills the screen above the tab bar. Tap a citation, a source or a link in an answer to
   hide the Ambrose panel and show the email, event, task or note. Tap **Back to Ambrose**, the
   **Ambrose** tab or go back to see the same chat again. Links to other websites open in a new tab.
 

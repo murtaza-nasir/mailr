@@ -44,7 +44,7 @@ every part of Mailr:
 | Setting | Description |
 |---|---|
 | Language | The language of Mailr's words: English, Deutsch, Español, Français, Português (Brasil), Русский or 中文（简体）. With **Automatic**, this browser's language is used when Mailr has it, and English otherwise. A language chosen here is required for notifications sent to your phone or computer; with **Automatic** they are in English. After a change, the page is reloaded, so every word changes at once; the notice that follows still has **Undo**. Dates and numbers follow the language, in your browser's variant of it (English with a British browser shows 6 October). |
-| Time zone | Your home zone. Times you type are read in it, the calendar is shown in it, and Ambrose's "today" is the day there. With **Automatic**, the zone of the browser or phone you last used Mailr on is used, also for what is done on the server: Ambrose's times, notifications, quiet hours, dates in templates and the away reply. |
+| Time zone | Your home zone. Times you type are read in it, the calendar is shown in it, and "today" for the assistant, Ambrose, is the day there. With **Automatic**, the zone of the browser or phone you last used Mailr on is used, also for what is done on the server: Ambrose's times, notifications, quiet hours, dates in templates and the away reply. |
 | Clock | 12-hour or 24-hour times: in the mail list, the calendar, tasks, reminders and their notifications. Ambrose writes times the same way ("5:08 PM" or "17:08"). With **Automatic**, the clock of the browser or phone you last used Mailr on is followed. |
 | Week starts on | The first day of the week. |
 | Dates like 12/10 | Month first or day first, for tables and CSV imports. |

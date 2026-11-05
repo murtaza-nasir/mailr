@@ -1,7 +1,7 @@
 """Spam: training on user verdicts, and optional scoring with Stalwart's filter.
 
 Layering: the upstream provider decides first (its Junk folder or
-X-Spam headers, applied at ingest). Stalwart's spam filter does not run on JMAP import, so
+X-Spam headers, applied at ingest; a later move to its Junk folder, core/ingest._merge_duplicate). Stalwart's spam filter does not run on JMAP import, so
 mailr asks it to score a message with the admin `ClassifySpam` action, using the connecting
 IP and HELO name from the provider's topmost external Received header.
 

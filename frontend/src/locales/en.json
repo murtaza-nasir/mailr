@@ -1706,6 +1706,7 @@
       "decisionModel": "Decision model",
       "due": "{{who}} · due {{sourceRef}}",
       "filter": "Filter {{value}}",
+      "order": "Standing order {{value}}",
       "rules": "Rules",
       "vipSender": "VIP sender",
       "waitingOn": "Waiting on",
@@ -1830,7 +1831,11 @@
       "unsubscribe": "Unsubscribe",
       "unsubscribeFrom": "Unsubscribe from {{displayName}}?",
       "waitingForApproval": "Waiting for approval",
-      "updatedByJustNow": "Updated by {{who}} · just now"
+      "updatedByJustNow": "Updated by {{who}} · just now",
+      "account": "account:",
+      "deliveredTo": "delivered to:",
+      "bccMark": "(Bcc)",
+      "bccToYou": "Bcc to you"
     },
     "replySuggestions": {
       "suggestedReplies": "Suggested replies"

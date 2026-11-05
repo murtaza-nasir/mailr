@@ -51,7 +51,7 @@ a new password can be entered or the account fixed.
 | **Swipe right** | The action for a swipe to the right on a conversation: Archive, Delete, Mark read/unread, Snooze, Star or None. |
 | **Swipe left** | The action for a swipe to the left, from the same choices. |
 | **Remote images** | With **As on the web** (the default), the choice in Settings → Mail → Reading on the web is used. **Always show here** and **Ask first here** apply to this phone only. Images are fetched when mail arrives and shown from the Mailr server, so senders cannot tell when a message is opened. For spam, a prompt is always shown. |
-| **Recordings (Speakr)** | Meeting recordings are shown in events, mail and Ambrose. Off: nothing is loaded from Speakr. Shown when the account has a Speakr connection. |
+| **Recordings (Speakr)** | Meeting recordings are shown in events, mail and the assistant (Ambrose). Off: nothing is loaded from Speakr. Shown when the account has a Speakr connection. |
 
 ## Privacy
 

@@ -123,7 +123,7 @@ the recording's address pasted in), its conversation is linked to that recording
 recording is in Mailr. The link is made directly only when the email comes from your Speakr server's own
 domain and passes the sender checks, or when you sent it; from anyone else it is shown as
 **Suggested** in the **Links** tab until you click **Confirm**. For a recording order, only links
-you confirmed, links Ambrose made, or the email an attachment was sent from are used, and only
+you confirmed, links the assistant, Ambrose, made, or the email an attachment was sent from are used, and only
 confirmed links are written to Speakr as references.
 
 Remove a link in the **Links** tab, or answer no to a suggestion. A dismissed suggestion does not

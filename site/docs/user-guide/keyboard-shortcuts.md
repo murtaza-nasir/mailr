@@ -8,7 +8,7 @@ Press `?` in any app to see every key for the page you are on. Turn shortcuts of
 
 Every key, app by app, is listed in the [shortcut reference](../reference/keyboard-shortcuts.md).
 The most-used ones are `c` to compose, `r` to reply, `e` to archive, `/` to search, `g then i` for
-the Inbox and `Ctrl + .` for Ambrose.
+the Inbox and `Ctrl + .` for the assistant, Ambrose.
 
 ## Key conventions
 

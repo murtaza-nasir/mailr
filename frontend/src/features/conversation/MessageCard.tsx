@@ -194,6 +194,8 @@ export function MessageCard({ m, expanded, onToggle, onReply, onEditDraft, label
             </div>
             <div className="to-line">
               <span className="ellipsis">{recipientSummary(m)}</span>
+              {/* Received without being named in To or Cc (backend core/delivery.py). */}
+              {m.received_bcc && (m.to.length > 0 || m.cc.length > 0) && <span className="to-bcc" data-testid="to-bcc">{t('conversation.messageCard.bccToYou')}</span>}
               <button type="button" className="icon-btn xs" aria-label={t('conversation.messageCard.showDetails')} data-tip={t('conversation.messageCard.showDetails')} onClick={(e) => { e.stopPropagation(); details.toggle(e.currentTarget) }}>
                 <ChevronDown />
               </button>
@@ -259,6 +261,23 @@ export function MessageCard({ m, expanded, onToggle, onReply, onEditDraft, label
               <>
                 <dt>{t('conversation.messageCard.bcc')}</dt>
                 <dd><AddressList list={m.bcc} press={addrMenu.press} /></dd>
+              </>
+            )}
+            {m.delivered_to.length > 0 && (
+              <>
+                <dt>{t('conversation.messageCard.deliveredTo')}</dt>
+                <dd data-testid="detail-delivered-to">
+                  <AddressList list={m.delivered_to.map((email) => ({ email }))} press={addrMenu.press} />
+                  {m.received_bcc && <span className="muted"> {t('conversation.messageCard.bccMark')}</span>}
+                </dd>
+              </>
+            )}
+            {m.account.length > 0 && (
+              <>
+                <dt>{t('conversation.messageCard.account')}</dt>
+                <dd data-testid="detail-account">
+                  {m.account.map((a, i) => <Fragment key={a.id}>{i > 0 && ', '}<bdi>{accountLine(a)}</bdi></Fragment>)}
+                </dd>
               </>
             )}
             <dt>{t('conversation.messageCard.date')}</dt>
@@ -445,6 +464,13 @@ export function MessageCard({ m, expanded, onToggle, onReply, onEditDraft, label
       />
     </article>
   )
+}
+
+/** A mail account the message came through: its name and address, or the one of them it has. */
+function accountLine(a: Message['account'][number]): string {
+  const name = safeText(a.name)
+  if (!a.address || name.toLowerCase() === a.address) return a.address ?? name
+  return `${name} <${a.address}>`
 }
 
 /** The details popover's To, Cc, Bcc and Reply-To: each address with its copy button. */

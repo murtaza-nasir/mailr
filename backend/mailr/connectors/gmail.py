@@ -269,6 +269,15 @@ class GmailConnector(ImapConnector):
             for ch in changes:
                 if "trash" in ch.remove_labels and "trash" not in ch.add_labels and not ch.delete:
                     await _untrash(self, ch, all_mail)
+                spam = plan.get(("role", "junk"))
+                if "junk" in ch.remove_labels and "junk" not in ch.add_labels and "trash" not in ch.add_labels \
+                        and not ch.delete and await _unspam(self, ch, all_mail, spam):
+                    # Not spam: moved out of Gmail's Spam, so its ref there is gone; the copy in All
+                    # Mail (a new UID) is recorded by the next pass.
+                    spam = spam or await _special(self, b"\\junk")
+                    ch.upstream = refs_to_upstream(
+                        [r for r in all_refs(ch.upstream) if not (str(r.get("connector")) == str(self.row.id)
+                                                                   and r.get("folder") == spam)], keep=ch.upstream)
                 refs = [r for r in all_refs(ch.upstream) if str(r.get("connector")) == str(self.row.id) and r["folder"] == all_mail]
                 if not refs:
                     out.append(ch.upstream)
@@ -347,11 +356,24 @@ async def _untrash(conn: Any, ch: WriteBack, all_mail: str) -> bool:
     Mail, so the All Mail ref no longer finds it): it is looked up there by its Gmail id, else
     its Message-ID, and moved back to the Inbox, or to All Mail when it is restored archived.
     False when it is not in Gmail's Trash."""
-    trash = await _special(conn, b"\\trash")
-    if not trash:
+    return await _move_out(conn, ch, all_mail, b"\\trash")
+
+
+async def _unspam(conn: Any, ch: WriteBack, all_mail: str, folder: str | None = None) -> bool:
+    """Not spam. Gmail keeps spam only in its Spam folder, as it keeps trash in Trash: the message
+    is moved from there to the Inbox (or All Mail), which is how Gmail is told it is not spam.
+    False when it is not in Gmail's Spam (Gmail never had it there, or it was moved already)."""
+    return await _move_out(conn, ch, all_mail, b"\\junk", folder)
+
+
+async def _move_out(conn: Any, ch: WriteBack, all_mail: str, flag: bytes, folder: str | None = None) -> bool:
+    """Move the message out of the Gmail folder with this special-use flag (Trash or Spam); `folder`
+    is that folder when the sync plan already names it (no LIST needed)."""
+    source = folder or await _special(conn, flag)
+    if not source:
         return False
     s = await conn._open()
-    await s.select(trash, readonly=False)
+    await s.select(source, readonly=False)
     found: list[int] = []
     gm = (ch.upstream or {}).get("gm_msgid")
     if gm and str(gm).isdigit():

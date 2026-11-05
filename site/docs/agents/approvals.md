@@ -12,7 +12,7 @@ One of three effects is chosen for each action:
 
 1. **Scope.** The token must hold the scope for the action, or the action is denied. The built-in assistant acts with your rights.
 2. **Deny rules.** Any matching **Deny** rule takes precedence.
-3. **Allow and ask rules.** A matching rule is looked for from the most specific subject to the least: one token or one chat, then Ambrose, then every agent. At the first level with a match, **Ask** takes precedence over **Allow**.
+3. **Allow and ask rules.** A matching rule is looked for from the most specific subject to the least: one token or one chat, then the assistant (Ambrose), then every agent. At the first level with a match, **Ask** takes precedence over **Allow**.
 4. **Defaults.** Without a matching rule, the built-in default applies (table below).
 5. **Hard rules.** In a few cases approval is always required, whatever the rules allow.
 

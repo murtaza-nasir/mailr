@@ -6872,6 +6872,11 @@
    "state": "model",
    "text": "Назад"
   },
+  "android:app:conv_bcc_to_you": {
+   "sha": "cd5b45286469ed50",
+   "state": "model",
+   "text": "Скрытая копия вам"
+  },
   "android:app:conv_brief_approval_approved": {
    "sha": "1a9f56594878f9c1",
    "state": "model",
@@ -7047,6 +7052,11 @@
    "state": "model",
    "text": "Удалить навсегда"
   },
+  "android:app:conv_detail_account": {
+   "sha": "b026e4de36ef1fde",
+   "state": "manual",
+   "text": "аккаунт %1$s"
+  },
   "android:app:conv_detail_cc": {
    "sha": "17a6670b587cf16e",
    "state": "model",
@@ -7056,6 +7066,16 @@
    "sha": "ef1353a57897ec45",
    "state": "model",
    "text": "дата: %1$s"
+  },
+  "android:app:conv_detail_delivered_to": {
+   "sha": "fe4cea402bac696d",
+   "state": "manual",
+   "text": "доставлено: %1$s"
+  },
+  "android:app:conv_detail_delivered_to_bcc": {
+   "sha": "138fec9d57fbdb8e",
+   "state": "manual",
+   "text": "доставлено: %1$s (скрытая копия)"
   },
   "android:app:conv_detail_from": {
    "sha": "4dab68116d780aa0",
@@ -33708,6 +33728,11 @@
    "state": "model",
    "text": "Фильтр {{value}}"
   },
+  "web:conversation.decisionSource.order": {
+   "sha": "122adcc457039764",
+   "state": "model",
+   "text": "Постоянное поручение {{value}}"
+  },
   "web:conversation.decisionSource.rules": {
    "sha": "bffbf4285d4f4e8e",
    "state": "model",
@@ -33978,6 +34003,11 @@
     "other": "Удалено {{count}} ссылок для отслеживания"
    }
   },
+  "web:conversation.messageCard.account": {
+   "sha": "3d6353064f368308",
+   "state": "model",
+   "text": "аккаунт:"
+  },
   "web:conversation.messageCard.addToTasks": {
    "sha": "bed7b05e99948e29",
    "state": "model",
@@ -34003,10 +34033,20 @@
    "state": "model",
    "text": "скрытая копия:"
   },
+  "web:conversation.messageCard.bccMark": {
+   "sha": "148f371467368c75",
+   "state": "manual",
+   "text": "(скрытая копия)"
+  },
   "web:conversation.messageCard.bccMe": {
    "sha": "20d324cd78a6e61f",
    "state": "model",
    "text": "скрытая копия: мне"
+  },
+  "web:conversation.messageCard.bccToYou": {
+   "sha": "cd5b45286469ed50",
+   "state": "model",
+   "text": "Скрытая копия вам"
   },
   "web:conversation.messageCard.beCarefulWithThisMessage": {
    "sha": "3ab986338eff6b4f",
@@ -34072,6 +34112,11 @@
    "sha": "0879f32472853da5",
    "state": "model",
    "text": "Удалить это сообщение"
+  },
+  "web:conversation.messageCard.deliveredTo": {
+   "sha": "2d62dfc4e1a145bb",
+   "state": "manual",
+   "text": "доставлено:"
   },
   "web:conversation.messageCard.download": {
    "sha": "60d64b84685c1b64",

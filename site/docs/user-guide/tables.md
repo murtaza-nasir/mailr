@@ -249,5 +249,5 @@ add another** it stays open for logging several rows. Tap a row to open its form
 
 ## Ambrose
 
-Ambrose reads and changes your tables with your own access. Answers cite a table or a row;
+The assistant, Ambrose, reads and changes your tables with your own access. Answers cite a table or a row;
 click the chip to open the table with that row's form.

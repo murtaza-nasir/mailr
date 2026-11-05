@@ -470,8 +470,9 @@ export interface Decision {
   kind: 'label' | 'category' | 'importance' | 'spam' | 'smart' | 'triage'
   target: string
   value: boolean
-  /** llm: a chat model; decision_model: a Jev-protocol decision model; heuristic: mailr's rules. */
-  source: 'rule' | 'classifier' | 'llm' | 'decision_model' | 'heuristic' | 'provider' | 'vip' | 'user'
+  /** llm: a chat model; decision_model: a Jev-protocol decision model; heuristic: mailr's rules;
+   * order: a standing order (source_ref is its name). */
+  source: 'rule' | 'order' | 'classifier' | 'llm' | 'decision_model' | 'heuristic' | 'provider' | 'vip' | 'user'
   source_ref: string
   confidence: number | null
   reason: string

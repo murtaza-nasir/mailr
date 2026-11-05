@@ -16,7 +16,7 @@ Keep a copy of `.env` too. Without `MAILR_SECRET_KEY` the stored account passwor
 
 ## Database dumps
 
-Notes and their history, tables, task details, settings, layouts, Ambrose's memory, chats and approvals are stored only in Postgres. A snapshot of the host holds the database only as it was on disk at that moment. A database dump is a second, consistent copy that can be loaded into any Postgres 17 server.
+Notes and their history, tables, task details, settings, layouts, the memory of the assistant (Ambrose), chats and approvals are stored only in Postgres. A snapshot of the host holds the database only as it was on disk at that moment. A database dump is a second, consistent copy that can be loaded into any Postgres 17 server.
 
 A dump is written by the worker every night, at `MAILR_DB_DUMP_HOUR` (UTC, 9 by default). When the newest good dump is more than 26 hours old, for example after the server was off at that hour, a dump is written at once, and again every 6 hours while it fails.
 

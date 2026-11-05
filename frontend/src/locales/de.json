@@ -1706,6 +1706,7 @@
       "decisionModel": "Entscheidungsmodell",
       "due": "{{who}} · fällig {{sourceRef}}",
       "filter": "Filter {{value}}",
+      "order": "Dauerauftrag {{value}}",
       "rules": "Regeln",
       "vipSender": "VIP-Absender",
       "waitingOn": "Warten auf",
@@ -1830,7 +1831,11 @@
       "unsubscribe": "Abmelden",
       "unsubscribeFrom": "Von {{displayName}} abmelden?",
       "waitingForApproval": "Warten auf Freigabe",
-      "updatedByJustNow": "Aktualisiert von {{who}} · gerade eben"
+      "updatedByJustNow": "Aktualisiert von {{who}} · gerade eben",
+      "account": "Konto:",
+      "deliveredTo": "Zugestellt an:",
+      "bccMark": "(BCC)",
+      "bccToYou": "BCC an dich"
     },
     "replySuggestions": {
       "suggestedReplies": "Vorgeschlagene Antworten"

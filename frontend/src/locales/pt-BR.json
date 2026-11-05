@@ -1706,6 +1706,7 @@
       "decisionModel": "Modelo de decisão",
       "due": "{{who}} · prazo {{sourceRef}}",
       "filter": "Filtro {{value}}",
+      "order": "Ordem permanente {{value}}",
       "rules": "Regras",
       "vipSender": "Remetente VIP",
       "waitingOn": "Aguardando",
@@ -1830,7 +1831,11 @@
       "unsubscribe": "Cancelar inscrição",
       "unsubscribeFrom": "Cancelar a inscrição em {{displayName}}?",
       "waitingForApproval": "Aguardando aprovação",
-      "updatedByJustNow": "Atualizado por {{who}} · agora mesmo"
+      "updatedByJustNow": "Atualizado por {{who}} · agora mesmo",
+      "account": "conta:",
+      "deliveredTo": "entregue para:",
+      "bccMark": "(Cco)",
+      "bccToYou": "Cco para você"
     },
     "replySuggestions": {
       "suggestedReplies": "Respostas sugeridas"

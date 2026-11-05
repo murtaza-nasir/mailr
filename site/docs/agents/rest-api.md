@@ -65,7 +65,7 @@ In responses to token callers, email text is wrapped as `{"untrusted": true, "co
 ## Live editing
 
 Drafts, events, tasks, memories and filters have a `version` that goes up with every change,
-whoever makes it: a user in a browser, the Android app, Ambrose or another agent.
+whoever makes it: a user in a browser, the Android app, the assistant (Ambrose) or another agent.
 
 - Reads and writes return the item's `version` (`GET /api/v1/live/{kind}/{item}` returns it with the
   editable content).

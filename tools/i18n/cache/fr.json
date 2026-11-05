@@ -6660,6 +6660,11 @@
    "state": "model",
    "text": "Retour"
   },
+  "android:app:conv_bcc_to_you": {
+   "sha": "cd5b45286469ed50",
+   "state": "model",
+   "text": "Cci à vous"
+  },
   "android:app:conv_brief_approval_approved": {
    "sha": "1a9f56594878f9c1",
    "state": "model",
@@ -6835,6 +6840,11 @@
    "state": "model",
    "text": "Supprimer définitivement"
   },
+  "android:app:conv_detail_account": {
+   "sha": "b026e4de36ef1fde",
+   "state": "model",
+   "text": "compte %1$s"
+  },
   "android:app:conv_detail_cc": {
    "sha": "17a6670b587cf16e",
    "state": "model",
@@ -6844,6 +6854,16 @@
    "sha": "ef1353a57897ec45",
    "state": "model",
    "text": "date %1$s"
+  },
+  "android:app:conv_detail_delivered_to": {
+   "sha": "fe4cea402bac696d",
+   "state": "manual",
+   "text": "remis à %1$s"
+  },
+  "android:app:conv_detail_delivered_to_bcc": {
+   "sha": "138fec9d57fbdb8e",
+   "state": "manual",
+   "text": "remis à %1$s (cci)"
   },
   "android:app:conv_detail_from": {
    "sha": "4dab68116d780aa0",
@@ -32944,6 +32964,11 @@
    "state": "model",
    "text": "Filtrer {{value}}"
   },
+  "web:conversation.decisionSource.order": {
+   "sha": "122adcc457039764",
+   "state": "model",
+   "text": "Consigne permanente {{value}}"
+  },
   "web:conversation.decisionSource.rules": {
    "sha": "bffbf4285d4f4e8e",
    "state": "model",
@@ -33208,6 +33233,11 @@
     "other": "{{count}} liens de suivi supprimés"
    }
   },
+  "web:conversation.messageCard.account": {
+   "sha": "3d6353064f368308",
+   "state": "model",
+   "text": "compte :"
+  },
   "web:conversation.messageCard.addToTasks": {
    "sha": "bed7b05e99948e29",
    "state": "model",
@@ -33231,10 +33261,20 @@
    "state": "model",
    "text": "cci :"
   },
+  "web:conversation.messageCard.bccMark": {
+   "sha": "148f371467368c75",
+   "state": "manual",
+   "text": "(cci)"
+  },
   "web:conversation.messageCard.bccMe": {
    "sha": "20d324cd78a6e61f",
    "state": "model",
    "text": "cci : moi"
+  },
+  "web:conversation.messageCard.bccToYou": {
+   "sha": "cd5b45286469ed50",
+   "state": "manual",
+   "text": "Cci à vous"
   },
   "web:conversation.messageCard.beCarefulWithThisMessage": {
    "sha": "3ab986338eff6b4f",
@@ -33300,6 +33340,11 @@
    "sha": "0879f32472853da5",
    "state": "model",
    "text": "Supprimer ce message"
+  },
+  "web:conversation.messageCard.deliveredTo": {
+   "sha": "2d62dfc4e1a145bb",
+   "state": "manual",
+   "text": "remis à :"
   },
   "web:conversation.messageCard.download": {
    "sha": "60d64b84685c1b64",

@@ -60,7 +60,7 @@ Tasks can also be added from other places:
 - **Create → Task** in the calendar, or the + in the Calendar and Tasks panels beside the page.
 - **New task** in the command palette (Ctrl+K).
 - The share sheet on Android: share text or a link to Mailr and choose **New task**.
-- Ambrose: "Add a task to renew the studio insurance by Friday".
+- The assistant, Ambrose: "Add a task to renew the studio insurance by Friday".
 
 ![The quick-add bar with parsed chips for date, priority, list and tag](../assets/shots/tasks-quickadd.png)
 

@@ -150,7 +150,7 @@ Details: [MCP for Claude Code and other agents](../agents/mcp.md) and [Approvals
 
 ## Ambrose's memory
 
-A memory is used only when it fits the request: a person or topic named, a shared word, or a close meaning. When a local decision model is registered under **Admin → Models** with the task **Sorting and decisions**, each memory found by words or meaning is checked with that model before it is added to the prompt.
+A memory of the assistant, Ambrose, is used only when it fits the request: a person or topic named, a shared word, or a close meaning. When a local decision model is registered under **Admin → Models** with the task **Sorting and decisions**, each memory found by words or meaning is checked with that model before it is added to the prompt.
 
 | Variable | Description |
 |---|---|

@@ -1,6 +1,6 @@
 # Users
 
-Every user has their own mail store, mail accounts, labels, filters, model choices and API tokens. No user can see another user's mail, and one user's mail is never mixed with another's in Ambrose or the sorting models.
+Every user has their own mail store, mail accounts, labels, filters, model choices and API tokens. No user can see another user's mail, and one user's mail is never mixed with another's in the assistant (Ambrose) or the sorting models.
 
 ## Manage users in the app
 

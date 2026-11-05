@@ -1,6 +1,6 @@
 # Trusted addresses
 
-Mail in accounts that Mailr is not connected to, such as a work account, can still be passed to Ambrose. Forward an email to your Mailr address and write a note on top: "add this to my calendar", "remember that the meeting moved to room 210", "draft a reply saying I will attend". Ambrose reads the note as an instruction.
+Mail in accounts that Mailr is not connected to, such as a work account, can still be passed to the assistant, Ambrose. Forward an email to your Mailr address and write a note on top: "add this to my calendar", "remember that the meeting moved to room 210", "draft a reply saying I will attend". Ambrose reads the note as an instruction.
 
 Notes are followed only from addresses you confirmed, and only in mail verified by the address's own domain.
 

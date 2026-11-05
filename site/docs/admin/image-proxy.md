@@ -66,7 +66,7 @@ While the setting is on:
 - fetches are paused while the VPN is down or leaking according to the [egress check](#the-egress-check), and resumed once it passes again;
 - the image proxy stays on: **Load images through Mailr** cannot be turned off, since images would otherwise be loaded in the browser from the senders' servers;
 - readers see "Images are not displayed" with the reason instead of broken images; the images load once the egress works again;
-- Ambrose's page reads go through the egress proxy too, or are paused. The one exception is a browser page reader an admin set to **Directly from this network** ([Web search](web-search.md#page-readers)): that admin choice, for that reader only, is allowed, marked **direct** in the list and recorded in the audit log.
+- Page reads by the assistant, Ambrose, go through the egress proxy too, or are paused. The one exception is a browser page reader an admin set to **Directly from this network** ([Web search](web-search.md#page-readers)): that admin choice, for that reader only, is allowed, marked **direct** in the list and recorded in the audit log.
 
 ![A newsletter with its images paused because the VPN egress is not reachable](../assets/shots/mail-images-paused.png)
 

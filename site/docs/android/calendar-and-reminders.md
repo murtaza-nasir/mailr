@@ -20,7 +20,7 @@ Tap a day to see its events under the month: the start and end times, the calend
 
 ### Meeting prep
 
-An upcoming event with guests has a **Meeting prep** card in its details. Tap it to see the last recording of the meeting and its open action items, open questions and threads waiting on the guests, recent threads, related tasks, memories Ambrose keeps and recent files. Tap **Summarise** to ask the assistant model for a short paragraph. See [Meeting prep](../user-guide/calendar.md#meeting-prep).
+An upcoming event with guests has a **Meeting prep** card in its details. Tap it to see the last recording of the meeting and its open action items, open questions and threads waiting on the guests, recent threads, related tasks, memories the assistant, Ambrose, keeps and recent files. Tap **Summarise** to ask the assistant model for a short paragraph. See [Meeting prep](../user-guide/calendar.md#meeting-prep).
 
 ### Phone calendars
 

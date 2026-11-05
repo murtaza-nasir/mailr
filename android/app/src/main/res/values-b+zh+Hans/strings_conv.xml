@@ -62,6 +62,10 @@
     <string name="conv_detail_cc">抄送：%1$s</string>
     <string name="conv_detail_date">日期：%1$s</string>
     <string name="conv_detail_security">安全性：%1$s</string>
+    <string name="conv_detail_delivered_to">已送达 %1$s</string>
+    <string name="conv_detail_delivered_to_bcc">已送达 %1$s（密送）</string>
+    <string name="conv_detail_account">账户 %1$s</string>
+    <string name="conv_bcc_to_you">密送给您</string>
     <string name="conv_message_actions">邮件操作</string>
     <string name="conv_translate">翻译…</string>
     <string name="conv_retry">重试</string>

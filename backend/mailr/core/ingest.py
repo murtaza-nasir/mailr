@@ -20,7 +20,7 @@ from sqlalchemy import delete, select, text
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from mailr.core import people, rules, threading
+from mailr.core import delivery, people, rules, threading
 from mailr.core.jobs import enqueue
 from mailr.core.mime import content_hash, norm_subject, parse, semantic_digest
 from mailr.core.store import UserStore
@@ -122,6 +122,11 @@ async def ingest_raw(db: AsyncSession, store: UserStore, raw: bytes, opts: Inges
     existing, match = await _find_duplicate(db, store, uid, msgid, chash, p, raw, ref=opts.upstream)
     if existing is not None:
         await _merge_duplicate(db, store, existing, opts, chash, match)
+        # A copy received at another address (Bcc to two of the user's accounts): the message's
+        # details name both (core/delivery.py).
+        more = [a for a in p.delivered_to or [] if a not in (existing.delivered_to or [])]
+        if more:
+            existing.delivered_to = [*(existing.delivered_to or []), *more][:delivery.MAX_DELIVERED]
         return IngestResult(existing, duplicate=True)
 
     mine = await my_addresses(db, user)
@@ -449,6 +454,15 @@ async def _merge_duplicate(db: AsyncSession, store: UserStore, m: Message, opts:
     # Labels picked when sending: the copy that arrived first (the inbox copy of a note to self)
     # gets them too. Adding a label it has already changes nothing.
     add |= {i for i in opts.label_ids if i in {lb.id for lb in by_name.values()}}
+    # The provider moved it to its Spam folder after delivery (Gmail re-checks mail it already
+    # delivered; 3 Nov 2026 a message stayed in the Inbox with Spam beside it): Spam replaces the
+    # Inbox and Archive placement. The provider decides first (docs/spam.md). The user's labels stay,
+    # as on any upstream move to Spam (label views leave Spam out); the classifier's come off below.
+    # The user's own "Not spam" stands against a copy the provider still holds in Spam.
+    provider_spam = False
+    if "junk" in by_role and by_role["junk"].id in add:
+        add.discard(by_role["junk"].id)
+        provider_spam = not binned and not await _user_said_not_spam(db, m)
     if opts.state_authoritative and opts.merge_provider_state and m.local_change_at is None:
         await apply_provider_state(db, store, m, roles=opts.roles, label_names=opts.label_names,
                                    keywords=opts.keywords)
@@ -456,6 +470,13 @@ async def _merge_duplicate(db: AsyncSession, store: UserStore, m: Message, opts:
         new = add - current
         if new:
             await store.set_labels([m], add=sorted(new), remove=[], db=db)
+        if provider_spam:
+            placed = [by_role[r].id for r in ("inbox", "archive") if r in by_role
+                      and by_role[r].id in (m.label_ids or [])]
+            await store.set_labels([m], add=[by_role["junk"].id], remove=placed, db=db)
+            db.add(provider_spam_decision(m, opts))
+            # The provider's verdict trains Stalwart's Bayes filter, as an imported Spam folder does.
+            await enqueue(db, "spam.train", {"message_id": m.id, "spam": True}, user_id=m.user_id)
     if opts.upstream and (m.upstream or {}).get("orphan") and opts.connector is not None \
             and str(m.upstream["orphan"].get("connector")) == str(opts.connector.id):
         # Found again in another folder of the same account: it was moved, not deleted.
@@ -504,6 +525,25 @@ async def _merge_duplicate(db: AsyncSession, store: UserStore, m: Message, opts:
         await withdraw_labels(db, store, [m])
     if m.conversation_id:
         await threading.refresh(db, m.user_id, [m.conversation_id])
+
+
+async def _user_said_not_spam(db: AsyncSession, m: Message) -> bool:
+    """The user's latest Spam verdict on this message is "Not spam": a copy the provider still holds
+    in its Spam folder (the write-back has not moved it yet) does not put it back."""
+    last = (await db.execute(select(LabelDecision.value).where(
+        LabelDecision.message_id == m.id, LabelDecision.kind == "spam", LabelDecision.source == "user")
+        .order_by(LabelDecision.id.desc()).limit(1))).scalar_one_or_none()
+    return last is False
+
+
+def provider_spam_decision(m: Message, opts: IngestOptions) -> LabelDecision:
+    """The provider's Spam verdict (its Spam folder), for the Why panel."""
+    conn = opts.connector
+    folder = str((opts.upstream or {}).get("folder") or "")
+    return LabelDecision(user_id=m.user_id, message_id=m.id, kind="spam", target="spam", value=True,
+                         source="provider", source_ref=(conn.kind if conn is not None else "")[:200],
+                         confidence=1.0, status="applied",
+                         reason=f"in the provider's Spam folder{f' ({folder})' if folder else ''}")
 
 
 async def _sent_copy_seen(db: AsyncSession, store: UserStore, m: Message, opts: IngestOptions,

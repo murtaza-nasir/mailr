@@ -111,6 +111,6 @@ notes sent to yourself.
 
 !!! tip "Search by meaning"
 
-    When you remember what a message said but not its words, ask Ambrose, or use
+    When you remember what a message said but not its words, ask the assistant, Ambrose, or use
     `GET /api/v1/search/semantic?q=…`. An embedding model is required for meaning-based search
     (see [Models](../admin/models.md)).

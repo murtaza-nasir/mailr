@@ -1,4 +1,4 @@
-// The Why panel's "who decided" line (ConversationView WhyButton): a filter, you, mailr's rules,
+// The Why panel's "who decided" line (ConversationView WhyButton): a filter, a standing order, you, mailr's rules,
 // or which kind of model and which one. A chat model is "Chat model"; a Jev-protocol model is
 // "Decision model".
 
@@ -14,6 +14,7 @@ export const SOURCE_NAMES: Record<string, string> = {
  * date, so the model is named in its reason ("… · from jev (jev-latest)"). */
 export function decisionSource(d: Pick<Decision, 'kind' | 'target' | 'source' | 'source_ref'>): string {
   if (d.source === 'rule') return t('conversation.decisionSource.filter', { value: d.source_ref ? `“${d.source_ref}”` : '' })
+  if (d.source === 'order') return t('conversation.decisionSource.order', { value: d.source_ref ? `“${d.source_ref}”` : '' })
   if (d.source === 'user') return t('common.you')
   const who = SOURCE_NAMES[d.source] ?? t('conversation.decisionSource.classifier')
   if (d.kind === 'smart' && d.target === 'deadline') return d.source_ref ? t('conversation.decisionSource.due', { who, sourceRef: d.source_ref }) : who

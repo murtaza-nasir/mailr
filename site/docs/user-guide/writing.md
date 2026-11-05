@@ -3,7 +3,7 @@
 Press `c`, or choose **Compose**, to write a new email. A compose window opens at the bottom right.
 You can keep several open, minimise them, or switch one to full screen.
 
-An email link (`mailto:`) opens a draft here too: in a message, in Ambrose's answers, on a person's
+An email link (`mailto:`) opens a draft here too: in a message, in an answer from the assistant (Ambrose), on a person's
 card. With **Settings → Mail → Writing → Email links**, the email links of other websites and
 programs open a draft in Mailr as well. See [Make Mailr your email app](email-links.md).
 

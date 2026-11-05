@@ -303,11 +303,35 @@ data class Message(
     @SerialName("list_unsubscribe") val listUnsubscribe: String? = null,
     @SerialName("auth_results") val authResults: Map<String, String> = emptyMap(),
     @SerialName("sent_by_me") val sentByMe: Boolean = false,
+    /** The receiving addresses that are mine (backend core/delivery.py). */
+    @SerialName("delivered_to") val deliveredTo: List<@Serializable(with = SafeAddressSerializer::class) String> = emptyList(),
+    /** The mail accounts the message came through, one per copy. */
+    val account: List<MessageAccount> = emptyList(),
+    /** I received it without being named in To or Cc. */
+    @SerialName("received_bcc") val receivedBcc: Boolean = false,
     /** The body may be in a language the reader did not list as their own (backend core/langid.py). */
     @SerialName("offer_translate") val offerTranslate: Boolean = false,
     /** A move of one of my events this email announces in words (backend intel/event_changes.py); only while open. */
     @SerialName("event_change") val eventChange: EventChange? = null,
 )
+
+/** A mail account a message came through (backend core/delivery.py). */
+@Serializable
+data class MessageAccount(
+    val id: Long = 0,
+    @Serializable(with = SafeTextSerializer::class) val name: String = "",
+    /** Null for a file import. Cleaned on use ([display]): the serializer for addresses takes no null. */
+    @SerialName("address") val rawAddress: String? = null,
+    val kind: String = "",
+) {
+    val address: String? get() = rawAddress?.let(SafeText::cleanAddress)?.takeIf { it.isNotBlank() }
+
+    /** "Work <sam@example.org>", or the one of name and address it has. */
+    val display: String get() {
+        val a = address ?: return name
+        return if (name.isBlank() || name.equals(a, ignoreCase = true)) a else "$name <$a>"
+    }
+}
 
 /**
  * A move of one of my events that an email announces in words ("Could we move our meeting to Oct 28?"),

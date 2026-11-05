@@ -261,7 +261,7 @@ From the details you can:
 - Open the **linked email** when the event came from a conversation. The chip shows the subject;
   click it to open the conversation.
   <!-- covers: event.open_email -->
-- **Ask Ambrose** to open Ambrose with this event attached.
+- **Ask Ambrose** to open the assistant, Ambrose, with this event attached.
 
 A meeting recording of the event is also shown in the details. See
 [Recordings](recordings.md#recordings-in-the-calendar).

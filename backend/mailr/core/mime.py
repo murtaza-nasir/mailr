@@ -16,7 +16,7 @@ from typing import Any
 
 import html2text
 
-from mailr.core import fromline, langid, textsafe, visible
+from mailr.core import delivery, fromline, langid, textsafe, visible
 
 _WS = re.compile(r"\s+")
 _MSGID = re.compile(r"<[^<>\s]+>")
@@ -690,12 +690,9 @@ def _parse(raw: bytes, depth: int = 0) -> Parsed:
     # One reading of the body for the list preview and the language: what the reader shows.
     shown, description = shown_text(html, body or text)
     lang, lang_confidence = langid.detect(shown)
-    delivered = [
-        a.lower()
-        for v in (msg.get_all("Delivered-To", []) + msg.get_all("X-Original-To", []))
-        for _, a in getaddresses([str(v)])
-        if a
-    ]
+    # The receiving addresses (core/delivery.py): Delivered-To, X-Original-To, Envelope-To, the
+    # top-most Received headers' `for` clause.
+    delivered = delivery.envelope_recipients(msg)
     list_id = hdr("List-Id") or None
     if list_id:
         m = re.search(r"<([^>]+)>", list_id)
@@ -712,7 +709,7 @@ def _parse(raw: bytes, depth: int = 0) -> Parsed:
         cc=_addr_list(msg, "Cc"),
         bcc=_addr_list(msg, "Bcc"),
         reply_to=_addr_list(msg, "Reply-To"),
-        delivered_to=list(dict.fromkeys(delivered)),
+        delivered_to=delivered,
         list_id=list_id,
         list_unsubscribe=hdr("List-Unsubscribe") or None,
         date=date,
@@ -780,7 +777,7 @@ def _parse_minimal(raw: bytes) -> Parsed:
         in_reply_to=(parse_msgids(one("In-Reply-To")) or [None])[0],
         references=parse_msgids(one("References"))[-50:],
         subject=textsafe.clean(one("Subject")), from_email=frm.email, from_name=frm.name,
-        to=addrs("To"), cc=addrs("Cc"), bcc=addrs("Bcc"), reply_to=addrs("Reply-To"), delivered_to=[],
+        to=addrs("To"), cc=addrs("Cc"), bcc=addrs("Bcc"), reply_to=addrs("Reply-To"), delivered_to=delivery.envelope_recipients(msg),
         list_id=None, list_unsubscribe=None, date=date, text=body, html=None,
         snippet=make_snippet(body), body_text=body, attachments=[],
         auth_results={"from_problem": frm.problem} if frm.problem not in ("", "missing") else {}, headers={}, size=len(raw),

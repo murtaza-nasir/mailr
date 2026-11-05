@@ -3,7 +3,7 @@
 **Activity** lists the recent changes in the account, newest first and grouped by day:
 
 - changes you made in mail, the calendar, tasks, notes and tables;
-- changes made by Ambrose;
+- changes made by the assistant, Ambrose;
 - changes made by agents through their API tokens (each under its token's name);
 - changes made by the administrator, such as your name, your groups or a password reset.
 

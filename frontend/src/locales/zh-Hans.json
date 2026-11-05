@@ -1639,6 +1639,7 @@
       "decisionModel": "决策模型",
       "due": "{{who}} · 截止 {{sourceRef}}",
       "filter": "过滤器 {{value}}",
+      "order": "常设指令 {{value}}",
       "rules": "规则",
       "vipSender": "VIP 发件人",
       "waitingOn": "等待回复",
@@ -1759,7 +1760,11 @@
       "unsubscribe": "退订",
       "unsubscribeFrom": "退订 {{displayName}}？",
       "waitingForApproval": "等待审批",
-      "updatedByJustNow": "由 {{who}} 更新 · 刚刚"
+      "updatedByJustNow": "由 {{who}} 更新 · 刚刚",
+      "account": "账户：",
+      "deliveredTo": "送达：",
+      "bccMark": "（密送）",
+      "bccToYou": "密送给您"
     },
     "replySuggestions": {
       "suggestedReplies": "建议回复"

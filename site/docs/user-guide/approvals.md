@@ -5,7 +5,7 @@ search:
 
 # Approvals
 
-By default, Ambrose and outside agents send mail, delete things or change rules only after approval. Such an action is shown on an **approval card** and held until it is approved or denied.
+By default, the assistant (Ambrose) and outside agents send mail, delete things or change rules only after approval. Such an action is shown on an **approval card** and held until it is approved or denied.
 
 Approvals apply only to Ambrose and to agents with API tokens, never to your own clicks in Mailr.
 

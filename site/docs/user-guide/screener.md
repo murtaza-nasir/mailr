@@ -102,7 +102,7 @@ still go to their label.
 
 - When a routine has a digest, the digest ends with how many senders wait in the Screener and a
   **review** link. See [Standing orders and briefs](standing-orders.md#routines).
-- Ambrose and connected agents can list the senders waiting (`list_screened_senders`). An
+- The assistant (Ambrose) and connected agents can list the senders waiting (`list_screened_senders`). An
   agent can ask to allow, block or label a sender (`screener_decide`), but such a request always
   requires approval, even when everything else is allowed by a rule, so that a stranger cannot use an
   email to ask an agent to let them in. See [Approvals](approvals.md).

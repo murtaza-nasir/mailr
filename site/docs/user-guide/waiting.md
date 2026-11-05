@@ -9,7 +9,7 @@ something in them are shown:
 
 | Section | Contents |
 |---|---|
-| **Approvals** | Actions Ambrose or an agent asks to take, each with its approval card. Decide them right there. |
+| **Approvals** | Actions the assistant (Ambrose) or an agent asks to take, each with its approval card. Decide them right there. |
 | **Not sent** | Messages not accepted by the mail server, in plain words, each with **Retry**. Under **Open Outbox**, they are listed with **Edit** and **Discard**. |
 | **Reminders** | Reminders that fired, then the **Missed** ones. Click one to open it. |
 

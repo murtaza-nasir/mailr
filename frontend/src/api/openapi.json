@@ -3776,7 +3776,21 @@
               "type": "string"
             },
             "type": "array",
-            "title": "Delivered To"
+            "title": "Delivered To",
+            "description": "The addresses that received it: those of the user's own, else the first the headers name."
+          },
+          "account": {
+            "items": {
+              "$ref": "#/components/schemas/MessageAccount"
+            },
+            "type": "array",
+            "title": "Account",
+            "description": "The mail accounts it came through (one per copy); empty for mail with no account."
+          },
+          "received_bcc": {
+            "type": "boolean",
+            "title": "Received Bcc",
+            "description": "Received without the user being named in To or Cc."
           },
           "message_id": {
             "anyOf": [
@@ -3863,6 +3877,8 @@
           "origin",
           "category",
           "delivered_to",
+          "account",
+          "received_bcc",
           "message_id",
           "connector_id",
           "primary_action",
@@ -3871,6 +3887,44 @@
         ],
         "title": "Message",
         "description": "A message in a thread (api/schemas.message_out)."
+      },
+      "MessageAccount": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Address",
+            "description": "The account's address; null for a file import."
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind",
+            "description": "imap, gmail, m365 or file."
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "address",
+          "kind"
+        ],
+        "title": "MessageAccount",
+        "description": "A mail account a message came through."
       },
       "MessageBody": {
         "properties": {

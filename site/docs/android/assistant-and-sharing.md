@@ -2,7 +2,7 @@
 
 ## Ambrose tab
 
-The **Assistant** tab is the same assistant as on the web. Type or dictate a question, read the answer with citations, and open what it cites: an email opens in the Mail tab, an event in Calendar, a task in Tasks and a note in Notes. Go back to return to the chat. Approval cards are shown in the chat, with the same choices as on the web.
+The **Ambrose** tab (it carries the assistant's name) is the same assistant as on the web. Type or dictate a question, read the answer with citations, and open what it cites: an email opens in the Mail tab, an event in Calendar, a task in Tasks and a note in Notes. Go back to return to the chat. Approval cards are shown in the chat, with the same choices as on the web.
 
 <!-- covers: android:assistant -->
 
@@ -10,7 +10,7 @@ The **Assistant** tab is the same assistant as on the web. Type or dictate a que
 
 ## Chats
 
-Earlier chats with Ambrose are under **Chats**, the clock button at the top of the Ambrose tab. Each chat shows its title, when it last changed and the start of the latest answer. A new chat is given a short title of a few words while its first answer is written, by the chat's own model; when none can be made, the first question is the title. Tap a chat to open it with its answers, sources, approval cards, **Used memories** and person chips, and write to go on with it. Tap **New chat** for a fresh one. To delete a chat, open its **⋮** menu and tap **Delete**; you can undo this while the message is shown. A deleted chat is gone for good. On a phone the list fills the screen. On an unfolded Fold or a tablet it is opened beside the chat.
+Earlier chats with the assistant, Ambrose, are under **Chats**, the clock button at the top of the Ambrose tab. Each chat shows its title, when it last changed and the start of the latest answer. A new chat is given a short title of a few words while its first answer is written, by the chat's own model; when none can be made, the first question is the title. Tap a chat to open it with its answers, sources, approval cards, **Used memories** and person chips, and write to go on with it. Tap **New chat** for a fresh one. To delete a chat, open its **⋮** menu and tap **Delete**; you can undo this while the message is shown. A deleted chat is gone for good. On a phone the list fills the screen. On an unfolded Fold or a tablet it is opened beside the chat.
 
 To search your chats, tap the search icon at the top of the list and type. Ambrose's answers, your questions and the chat titles are searched, and the newest match is listed first. Under each chat, the words around the match are shown, with the match marked. Tap the back arrow to close the search.
 

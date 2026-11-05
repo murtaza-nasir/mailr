@@ -109,7 +109,7 @@ these people, or with this subject.
 
 ## Search by meaning
 
-When you remember what an email said but not its words, ask Ambrose: "find the thread where
+When you remember what an email said but not its words, ask the assistant, Ambrose: "find the thread where
 the vendor promised a refund". Ambrose searches by meaning as well as by words, and answers with
 links to the passages found. See [Ask Ambrose](assistant.md).
 

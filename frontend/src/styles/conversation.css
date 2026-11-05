@@ -282,6 +282,15 @@
   color: var(--text-3);
   min-width: 0;
 }
+/* "· Bcc to you" after the recipients: the user received it without being named in To or Cc. */
+.msg-head .to-line .to-bcc {
+  flex: none;
+  white-space: nowrap;
+}
+.msg-head .to-line .to-bcc::before {
+  content: "·";
+  margin-inline: 4px;
+}
 .msg-head .to-line .lucide {
   width: 16px;
   height: 16px;

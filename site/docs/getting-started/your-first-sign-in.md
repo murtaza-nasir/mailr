@@ -7,7 +7,7 @@ A short setup guide is shown at the first sign-in. It takes about five minutes. 
 
 ![The first step of the setup guide](../assets/shots/setup-welcome.png)
 
-A bar at the top shows progress: it counts the eight steps below (seven when Ambrose is not offered), and **All set** is the closing screen. **Welcome** has only **Start**. From step 2, **Back**, **Skip for now** (**Not now** on the phone and notifications steps) and **Continue** are at the bottom of each step. On the email step, only **Skip for now** is at the bottom until an account is connected (the form's own **Next** continues); **Continue** appears once an account is connected. Choose **Finish later** to close the guide, and the **Continue setup** card in the inbox to return to the same step.
+A bar at the top shows progress: it counts the eight steps below (seven when the assistant, Ambrose, is not offered), and **All set** is the closing screen. **Welcome** has only **Start**. From step 2, **Back**, **Skip for now** (**Not now** on the phone and notifications steps) and **Continue** are at the bottom of each step. On the email step, only **Skip for now** is at the bottom until an account is connected (the form's own **Next** continues); **Continue** appears once an account is connected. Choose **Finish later** to close the guide, and the **Continue setup** card in the inbox to return to the same step.
 
 ## 1. Welcome
 

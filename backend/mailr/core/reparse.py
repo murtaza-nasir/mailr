@@ -10,6 +10,9 @@ current is left as it is.
 `mailr reparse-attached-emails` parses again the mail stored while the text of attached
 emails (message/rfc822) leaked into the outer message's body (attached_emails).
 
+`mailr delivered-to-backfill` stores the receiving addresses (core/delivery.py) of mail stored
+before Envelope-To and the Received `for` clause were read (delivered_to_backfill).
+
 `mailr share-origin-backfill` repairs the phone's "Send to self" shares stored between the change
 that stopped marking them as sent by the user and messages.origin (share_origin_backfill).
 """
@@ -300,6 +303,58 @@ async def auth_results_backfill(user_id: int, days: int = 365, batch: int = 200,
                 await db.rollback()
             else:
                 await threading.refresh(db, user_id, convs)
+        if progress:
+            progress(stats)
+    return stats
+
+
+async def delivered_to_backfill(user_id: int, days: int = 365, batch: int = 200, dry_run: bool = False,
+                                progress: Callable[[dict[str, Any]], None] | None = None) -> dict[str, Any]:
+    """Re-read the receiving addresses of the user's mail from the last `days` days
+    (core/delivery.envelope_recipients) and store them: mail stored before Envelope-To and the
+    Received `for` clause were read. Addresses a copy of the message added (another account that
+    received it) stay; text that is not one plain address goes. Each batch is committed; a second
+    run finds nothing to change. Counts only: no address is printed."""
+    import email
+    import email.policy
+
+    from mailr.core import delivery
+
+    since = datetime.now(UTC) - timedelta(days=days)
+    stats: dict[str, Any] = {"seen": 0, "changed": 0, "failed": 0}
+    cursor = 0
+    while True:
+        async with session_scope() as db:
+            user = await db.get(User, user_id)
+            if user is None:
+                raise ValueError(f"no user {user_id}")
+            rows = list((await db.execute(
+                select(Message).where(Message.user_id == user_id, Message.deleted.is_(False),
+                                      Message.blob_id.is_not(None), Message.date >= since, Message.id > cursor)
+                .order_by(Message.id).limit(batch))).scalars())
+            if not rows:
+                break
+            cursor = rows[-1].id
+            store = await user_store(db, user)
+            for m in rows:
+                stats["seen"] += 1
+                try:
+                    raw = await store.get_raw(m)
+                except (JMAPError, OSError) as e:
+                    stats["failed"] += 1
+                    log.warning("delivered-to backfill: message %s: %s", m.id, e)
+                    continue
+                head = raw.split(b"\r\n\r\n", 1)[0].split(b"\n\n", 1)[0] + b"\r\n\r\n"
+                found = delivery.envelope_recipients(email.message_from_bytes(head, policy=email.policy.default))
+                kept = [a for a in (m.delivered_to or []) if a not in found and delivery.clean(a) == a]
+                new = [*found, *kept][:delivery.MAX_DELIVERED]
+                if new == list(m.delivered_to or []):
+                    continue
+                stats["changed"] += 1
+                if not dry_run:
+                    m.delivered_to = new
+            if dry_run:
+                await db.rollback()
         if progress:
             progress(stats)
     return stats

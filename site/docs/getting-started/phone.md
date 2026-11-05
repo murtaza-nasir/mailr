@@ -39,4 +39,4 @@ The Mailr store can be read directly from any IMAP app, such as Thunderbird, Fai
 3. Click **New app password** and copy the password. It is shown only once.
 4. Add an IMAP account in your mail app with those details.
 
-Use the app password, not your sign-in password. In IMAP apps, mail and labels are shown as folders. Features such as Ambrose, briefs and approvals are only in Mailr's own apps.
+Use the app password, not your sign-in password. In IMAP apps, mail and labels are shown as folders. Features such as the assistant (Ambrose), briefs and approvals are only in Mailr's own apps.

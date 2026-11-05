@@ -32,7 +32,7 @@ from sqlalchemy.orm import defer
 
 from mailr.api import contract as C
 from mailr.api.schemas import conversation_out, label_out, message_out
-from mailr.core import publicid
+from mailr.core import delivery, publicid
 from mailr.core import search as searchmod
 from mailr.core.audit import audit
 from mailr.core.auth import Principal, scope
@@ -631,8 +631,9 @@ async def get_conversation(cid: int, response: Response, p: Principal = Depends(
     # The reader shows the same signal chips as the list row (the Due chip and its menu).
     signals = (await conversation_signals(db, p, [conv.id])).get(conv.id, [])
     own = await own_languages(db, p.user_id)
+    rc = await delivery.receipt(db, p)
     return {"conversation": conversation_out(conv, {**views.get(conv.id, {}), "signals": signals}),
-            "messages": [message_out(m, untrusted=p.is_token, own_langs=own) for m in msgs]}
+            "messages": [message_out(m, untrusted=p.is_token, own_langs=own, receipt=rc) for m in msgs]}
 
 
 async def load_message(db: AsyncSession, p: Principal, mid: int) -> Message:
@@ -649,7 +650,8 @@ async def load_message(db: AsyncSession, p: Principal, mid: int) -> Message:
 @router.get("/messages/{mid}")
 async def get_message(mid: int, p: Principal = Depends(scope("read")), db: AsyncSession = Depends(get_db)):
     m = await load_message(db, p, mid)
-    return message_out(m, untrusted=p.is_token, own_langs=await own_languages(db, p.user_id))
+    return message_out(m, untrusted=p.is_token, own_langs=await own_languages(db, p.user_id),
+                       receipt=await delivery.receipt(db, p))
 
 
 async def render_for_reader(db: AsyncSession, m: Message, raw: bytes | Callable[[], Awaitable[bytes]],

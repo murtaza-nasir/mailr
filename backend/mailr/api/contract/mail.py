@@ -146,6 +146,15 @@ class EventChange(Out):
     sentence: str
 
 
+class MessageAccount(Out):
+    """A mail account a message came through."""
+
+    id: int
+    name: str
+    address: str | None = Field(description="The account's address; null for a file import.")
+    kind: str = Field(description="imap, gmail, m365 or file.")
+
+
 class Message(Out):
     """A message in a thread (api/schemas.message_out)."""
 
@@ -173,7 +182,9 @@ class Message(Out):
     sent_by_me: bool
     origin: str | None = Field(description='"android-share": shared in by another app, not the user\'s words.')
     category: str | None
-    delivered_to: list[str]
+    delivered_to: list[str] = Field(description="The addresses that received it: those of the user's own, else the first the headers name.")
+    account: list[MessageAccount] = Field(description="The mail accounts it came through (one per copy); empty for mail with no account.")
+    received_bcc: bool = Field(description="Received without the user being named in To or Cc.")
     message_id: str | None = Field(description="The Message-ID header.")
     connector_id: int | None
     primary_action: PrimaryAction | None

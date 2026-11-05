@@ -83,7 +83,7 @@ Linking makes the invitation's organiser the organiser of your event, so it has 
   invitation?", with the organiser's name and address. Link only when you know the organiser.
 <!-- covers: invite.link_existing -->
 
-An event you make from an email that carries an invitation (**Create event**, or Ambrose) gets
+An event you make from an email that carries an invitation (**Create event**, or Ambrose, the assistant) gets
 the invitation's identity from the start, and "Fw:", "RE:" and similar prefixes are removed from
 its title. This happens only when the invitation's organiser is verified, or you forwarded it from
 a trusted address, and when every invitation in the conversation names the same organiser.

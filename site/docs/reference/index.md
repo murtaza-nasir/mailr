@@ -11,4 +11,4 @@ These pages hold complete lookup tables. For context, see the guides.
 | [Keyboard shortcuts](keyboard-shortcuts.md) | Every shortcut, per app |
 | [Command line](cli.md) | The `mailr` commands |
 | [API routes](api-routes.md) | Every REST route, by area |
-| [Agent tools](../agents/tools.md) | Every tool Ambrose and MCP agents can call |
+| [Agent tools](../agents/tools.md) | Every tool the assistant (Ambrose) and MCP agents can call |

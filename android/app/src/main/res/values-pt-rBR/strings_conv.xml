@@ -62,6 +62,10 @@
     <string name="conv_detail_cc">cc %1$s</string>
     <string name="conv_detail_date">data %1$s</string>
     <string name="conv_detail_security">segurança %1$s</string>
+    <string name="conv_detail_delivered_to">entregue para %1$s</string>
+    <string name="conv_detail_delivered_to_bcc">entregue para %1$s (Cco)</string>
+    <string name="conv_detail_account">conta %1$s</string>
+    <string name="conv_bcc_to_you">Cco para você</string>
     <string name="conv_message_actions">Ações da mensagem</string>
     <string name="conv_translate">Traduzir…</string>
     <string name="conv_retry">Tentar novamente</string>

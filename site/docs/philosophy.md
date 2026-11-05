@@ -28,7 +28,7 @@ is never used to train a model for another.
 All core functions work without a language model. Without models, search is by keyword and sorting
 is by filters. Models are configured per task, and any OpenAI-compatible server, local or hosted, can
 be used. Model work is done in the background; a request waits on a model only when it is a direct
-question to Ambrose.
+question to the assistant, Ambrose.
 
 ## Local-only accounts
 
@@ -68,7 +68,7 @@ using a fixed grammar and no model.
 ## Several users on one server
 
 Mailr is multi-user. Accounts, labels, filters, models and tokens are kept per user, and no user's
-mail is visible to another user or to another user's Ambrose. Sign-in is through any OIDC provider or
+mail is visible to another user or to another user's assistant (Ambrose). Sign-in is through any OIDC provider or
 with a password. The whole system is deployed as one Docker Compose stack.
 
 ## Licence

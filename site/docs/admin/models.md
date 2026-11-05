@@ -4,7 +4,7 @@ Mailr can be run with no models at all. Keyword search, threading, filters, the 
 
 With models, the following are also available:
 
-- meaning-based search and the citations in Ambrose's answers;
+- meaning-based search and the citations in answers from the assistant, Ambrose;
 - conversation summaries, briefs and translation;
 - reply suggestions and drafting help;
 - model-based importance, categories and triage signals;

@@ -1,6 +1,6 @@
 # Organisations and small businesses
 
-Mailr can be run for a household as well as for a small business, a club or an office. Each person still has their own mail store, accounts, labels and Ambrose, and no person can see another person's mail. The settings below apply to a server run for people at work.
+Mailr can be run for a household as well as for a small business, a club or an office. Each person still has their own mail store, accounts, labels and the assistant (Ambrose), and no person can see another person's mail. The settings below apply to a server run for people at work.
 
 ## Sign-in and groups
 

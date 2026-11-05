@@ -43,9 +43,12 @@ def conversation_out(c: Conversation, extra: dict[str, Any] | None = None) -> di
     return d
 
 
-def message_out(m: Message, untrusted: bool = False, own_langs: frozenset[str] | None = None) -> dict[str, Any]:
+def message_out(m: Message, untrusted: bool = False, own_langs: frozenset[str] | None = None,
+                receipt: Any = None) -> dict[str, Any]:
     """own_langs: the reader's own languages (langid.own_languages), for `offer_translate`;
-    English when not given."""
+    English when not given. receipt (core/delivery.receipt, read once per request): the accounts
+    and own addresses that say which account and address received the message; without it
+    `account` is empty, `delivered_to` the stored list and `received_bcc` false."""
     from mailr.core.langid import offer_translate
 
     d = {
@@ -63,7 +66,11 @@ def message_out(m: Message, untrusted: bool = False, own_langs: frozenset[str] |
         "auth_results": m.auth_results or {}, "sent_by_me": m.sent_by_me,
         # "android-share": shared in by another app ("Send to self"); not the user's own words.
         "origin": m.origin,
-        "category": m.category, "delivered_to": m.delivered_to or [],
+        "category": m.category,
+        # How the message reached the user (core/delivery.py): the accounts it came through, the
+        # receiving addresses that are the user's own, and whether To and Cc leave the user out.
+        **(receipt.fields(m) if receipt is not None
+           else {"account": [], "delivered_to": list(m.delivered_to or []), "received_bcc": False}),
         "message_id": m.message_id_hdr, "connector_id": m.connector_id, "primary_action": m.primary_action,
         # A move of one of the user's events this email announces in words (intel/event_changes.py).
         **({"event_change": ec} if (ec := _event_change(m)) else {}),

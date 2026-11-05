@@ -6660,6 +6660,11 @@
    "state": "model",
    "text": "Voltar"
   },
+  "android:app:conv_bcc_to_you": {
+   "sha": "cd5b45286469ed50",
+   "state": "model",
+   "text": "Cco para você"
+  },
   "android:app:conv_brief_approval_approved": {
    "sha": "1a9f56594878f9c1",
    "state": "model",
@@ -6835,6 +6840,11 @@
    "state": "model",
    "text": "Excluir permanentemente"
   },
+  "android:app:conv_detail_account": {
+   "sha": "b026e4de36ef1fde",
+   "state": "model",
+   "text": "conta %1$s"
+  },
   "android:app:conv_detail_cc": {
    "sha": "17a6670b587cf16e",
    "state": "model",
@@ -6844,6 +6854,16 @@
    "sha": "ef1353a57897ec45",
    "state": "model",
    "text": "data %1$s"
+  },
+  "android:app:conv_detail_delivered_to": {
+   "sha": "fe4cea402bac696d",
+   "state": "model",
+   "text": "entregue para %1$s"
+  },
+  "android:app:conv_detail_delivered_to_bcc": {
+   "sha": "138fec9d57fbdb8e",
+   "state": "model",
+   "text": "entregue para %1$s (Cco)"
   },
   "android:app:conv_detail_from": {
    "sha": "4dab68116d780aa0",
@@ -32945,6 +32965,11 @@
    "state": "model",
    "text": "Filtro {{value}}"
   },
+  "web:conversation.decisionSource.order": {
+   "sha": "122adcc457039764",
+   "state": "model",
+   "text": "Ordem permanente {{value}}"
+  },
   "web:conversation.decisionSource.rules": {
    "sha": "bffbf4285d4f4e8e",
    "state": "model",
@@ -33209,6 +33234,11 @@
     "other": "{{count}} links de rastreamento removidos"
    }
   },
+  "web:conversation.messageCard.account": {
+   "sha": "3d6353064f368308",
+   "state": "model",
+   "text": "conta:"
+  },
   "web:conversation.messageCard.addToTasks": {
    "sha": "bed7b05e99948e29",
    "state": "model",
@@ -33232,10 +33262,20 @@
    "state": "model",
    "text": "cco:"
   },
+  "web:conversation.messageCard.bccMark": {
+   "sha": "148f371467368c75",
+   "state": "model",
+   "text": "(Cco)"
+  },
   "web:conversation.messageCard.bccMe": {
    "sha": "20d324cd78a6e61f",
    "state": "model",
    "text": "cco: eu"
+  },
+  "web:conversation.messageCard.bccToYou": {
+   "sha": "cd5b45286469ed50",
+   "state": "model",
+   "text": "Cco para você"
   },
   "web:conversation.messageCard.beCarefulWithThisMessage": {
    "sha": "3ab986338eff6b4f",
@@ -33301,6 +33341,11 @@
    "sha": "0879f32472853da5",
    "state": "model",
    "text": "Excluir esta mensagem"
+  },
+  "web:conversation.messageCard.deliveredTo": {
+   "sha": "2d62dfc4e1a145bb",
+   "state": "manual",
+   "text": "entregue para:"
   },
   "web:conversation.messageCard.download": {
    "sha": "60d64b84685c1b64",

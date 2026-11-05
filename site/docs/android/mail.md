@@ -76,7 +76,7 @@ The reader shows the whole conversation. From its toolbar and menu you can:
 - add an `.ics` attachment to the calendar;
 - tap an attachment to open it, or long-press it for **Share** (to another app) and **Save to
   Downloads**;
-- read Ambrose's brief and open linked meeting recordings.
+- read the brief from the assistant (Ambrose) and open linked meeting recordings.
 
 <!-- covers: mail.attachment_share mail.attachment_save -->
 

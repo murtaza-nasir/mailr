@@ -6554,6 +6554,11 @@
    "state": "model",
    "text": "返回"
   },
+  "android:app:conv_bcc_to_you": {
+   "sha": "cd5b45286469ed50",
+   "state": "model",
+   "text": "密送给您"
+  },
   "android:app:conv_brief_approval_approved": {
    "sha": "1a9f56594878f9c1",
    "state": "model",
@@ -6729,6 +6734,11 @@
    "state": "model",
    "text": "永久删除"
   },
+  "android:app:conv_detail_account": {
+   "sha": "b026e4de36ef1fde",
+   "state": "model",
+   "text": "账户 %1$s"
+  },
   "android:app:conv_detail_cc": {
    "sha": "17a6670b587cf16e",
    "state": "model",
@@ -6738,6 +6748,16 @@
    "sha": "ef1353a57897ec45",
    "state": "model",
    "text": "日期：%1$s"
+  },
+  "android:app:conv_detail_delivered_to": {
+   "sha": "fe4cea402bac696d",
+   "state": "model",
+   "text": "已送达 %1$s"
+  },
+  "android:app:conv_detail_delivered_to_bcc": {
+   "sha": "138fec9d57fbdb8e",
+   "state": "model",
+   "text": "已送达 %1$s（密送）"
   },
   "android:app:conv_detail_from": {
    "sha": "4dab68116d780aa0",
@@ -32544,6 +32564,11 @@
    "state": "model",
    "text": "过滤器 {{value}}"
   },
+  "web:conversation.decisionSource.order": {
+   "sha": "122adcc457039764",
+   "state": "model",
+   "text": "常设指令 {{value}}"
+  },
   "web:conversation.decisionSource.rules": {
    "sha": "bffbf4285d4f4e8e",
    "state": "model",
@@ -32805,6 +32830,11 @@
     "other": "已移除 {{count}} 个跟踪链接"
    }
   },
+  "web:conversation.messageCard.account": {
+   "sha": "3d6353064f368308",
+   "state": "model",
+   "text": "账户："
+  },
   "web:conversation.messageCard.addToTasks": {
    "sha": "bed7b05e99948e29",
    "state": "model",
@@ -32827,10 +32857,20 @@
    "state": "model",
    "text": "密送："
   },
+  "web:conversation.messageCard.bccMark": {
+   "sha": "148f371467368c75",
+   "state": "model",
+   "text": "（密送）"
+  },
   "web:conversation.messageCard.bccMe": {
    "sha": "20d324cd78a6e61f",
    "state": "model",
    "text": "密送：我"
+  },
+  "web:conversation.messageCard.bccToYou": {
+   "sha": "cd5b45286469ed50",
+   "state": "model",
+   "text": "密送给您"
   },
   "web:conversation.messageCard.beCarefulWithThisMessage": {
    "sha": "3ab986338eff6b4f",
@@ -32896,6 +32936,11 @@
    "sha": "0879f32472853da5",
    "state": "model",
    "text": "删除此邮件"
+  },
+  "web:conversation.messageCard.deliveredTo": {
+   "sha": "2d62dfc4e1a145bb",
+   "state": "manual",
+   "text": "送达："
   },
   "web:conversation.messageCard.download": {
    "sha": "60d64b84685c1b64",

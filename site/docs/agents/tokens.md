@@ -32,7 +32,7 @@ Authorization: Bearer mlr_...
 | `delete` | Delete forever. |
 | `rules` | Create and change filters, settings and layouts. |
 | `calendar` | Read and create events and tasks. |
-| `memory` | Save memories, people and skills for Ambrose. |
+| `memory` | Save memories, people and skills for the assistant, Ambrose. |
 | `recordings` | Read Speakr recordings and link them to events and tasks. |
 | `notes` | Read and change notes, checklists and tables. Text from a token is written into a note or a table only after approval, unless a rule allows it. Local-only notes are hidden from a token that is not local-only. |
 | `profile` | Only your name, address and account picture (`GET /api/v1/me`, `GET /api/v1/users/me/avatar`). Intended for apps such as Speakr, in which the account picture is shown. |

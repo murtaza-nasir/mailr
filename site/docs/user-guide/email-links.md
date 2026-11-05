@@ -16,7 +16,7 @@ recipient shows its name; point at it, or move to its **×** with the keyboard, 
 These open a draft in Mailr, in the current style:
 
 - an email link in a message you read;
-- an address in an answer from Ambrose;
+- an address in an answer from the assistant, Ambrose;
 - the address on a person's card (**Settings → Mail → People & groups**, or a card opened from Ambrose);
 - **Email it** in the invite dialog (**Settings → Admin → Users → Invite someone**): the draft is
   addressed to the person you invited and holds the link and its last day.

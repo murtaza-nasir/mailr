@@ -5,7 +5,7 @@ search:
 
 # Standing orders and briefs
 
-A **standing order** is an instruction to Ambrose for when certain mail arrives: "When a bill reminder arrives, label it Bills and tell me the due date." A **routine** is run on a schedule: "Every weekday at 8:00, list what needs a reply." Both are run in the background, with the same permissions and approvals as a chat.
+A **standing order** is an instruction to the assistant, Ambrose, for when certain mail arrives: "When a bill reminder arrives, label it Bills and tell me the due date." A **routine** is run on a schedule: "Every weekday at 8:00, list what needs a reply." Both are run in the background, with the same permissions and approvals as a chat.
 
 Mail is never sent from a standing order or a routine. A draft that Ambrose prepares waits on an approval card, and once it is approved and saved, you send it yourself. To forward matching mail automatically, use a [filter](organize.md#filters) with **Forward it to:** instead.
 

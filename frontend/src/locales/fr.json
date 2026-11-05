@@ -1706,6 +1706,7 @@
       "decisionModel": "Modèle de décision",
       "due": "{{who}} · échéance {{sourceRef}}",
       "filter": "Filtrer {{value}}",
+      "order": "Consigne permanente {{value}}",
       "rules": "Règles",
       "vipSender": "Expéditeur VIP",
       "waitingOn": "En attente de",
@@ -1830,7 +1831,11 @@
       "unsubscribe": "Se désabonner",
       "unsubscribeFrom": "Se désabonner de {{displayName}} ?",
       "waitingForApproval": "En attente d'approbation",
-      "updatedByJustNow": "Mis à jour par {{who}} · à l'instant"
+      "updatedByJustNow": "Mis à jour par {{who}} · à l'instant",
+      "account": "compte :",
+      "deliveredTo": "remis à :",
+      "bccMark": "(cci)",
+      "bccToYou": "Cci à vous"
     },
     "replySuggestions": {
       "suggestedReplies": "Réponses suggérées"

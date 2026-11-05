@@ -1,6 +1,6 @@
 # Android app
 
-The Mailr Android app is a native client for a Mailr server. It covers mail, calendar, tasks, reminders, notes, recordings and Ambrose. The app and the web app are connected to the same server, so a change made in one is shown in the other.
+The Mailr Android app is a native client for a Mailr server. It covers mail, calendar, tasks, reminders, notes, recordings and the assistant, Ambrose. The app and the web app are connected to the same server, so a change made in one is shown in the other.
 
 ![The Android inbox on a phone](../assets/shots/android-inbox.png)
 

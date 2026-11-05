@@ -84,7 +84,7 @@ Members can:
 - Hide a group calendar, like any calendar, and show it again.
 - Give it a colour of their own. The admin's colour stays for everyone else.
 - Add and change events, in a **Can edit** calendar or as an editor. Elsewhere the write is refused,
-  with a note that the calendar is read-only for them. The same rule applies to Ambrose.
+  with a note that the calendar is read-only for them. The same rule applies to the assistant, Ambrose.
 
 Members cannot rename or delete a group calendar.
 
@@ -222,7 +222,7 @@ The report lists what cannot be carried over in a copy, with what to do:
 | On the other server | In Mailr |
 |---|---|
 | A calendar shared with other people | Share the copy again with the same people. |
-| A delegate or assistant (Davis "Delegates", Apple's calendar-proxy) | Share the user's calendars with that person in Mailr (**Share…**, level **Edit**), or give Ambrose a Mailr account if they have none. |
+| A delegate or assistant (Davis "Delegates", Apple's calendar-proxy) | Share the user's calendars with that person in Mailr (**Share…**, level **Edit**), or give that person a Mailr account if they have none. |
 | A calendar someone else shared with the user | The owner shares it in Mailr. A copy of it is made only on request (`--collections`). |
 | A subscription to a calendar link | Keep the old account connected for it, or import the calendar's file. |
 | Invitations waiting in the server's scheduling inbox | The user answers them on the old server first. |

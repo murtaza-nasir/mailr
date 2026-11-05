@@ -16,8 +16,8 @@ time. Notes are stored on the Mailr server, next to mail, events and tasks.
 
     Tap **Notes** in the bottom bar of the Mailr app. See [Notes, lists and tables](../android/notes.md).
 
-Notes are separate from Ambrose's memories, which are under **Settings → Ambrose →
-Memory**.
+Notes are separate from the memories of the assistant, Ambrose. Those memories are under
+**Settings → Ambrose → Memory**.
 
 ## The grid
 

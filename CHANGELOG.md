@@ -4,6 +4,28 @@ The changes in each Mailr release are listed here, newest first. A release is ta
 on GitHub, and its image is published as `ghcr.io/murtaza-nasir/mailr:<version>`. The Android app
 of a release has the same version number; the separate Notes app has its own.
 
+## 0.40.38
+
+- The message details (web and Android) now show which of your accounts collected a message and
+  the address it was delivered to, marked "(Bcc)" when the To and Cc lines don't name you; the line
+  under the sender then says "Bcc to you". Envelope-To, X-Envelope-To and the Received header's
+  `for` clause are read too, and `mailr delivered-to-backfill` re-reads them for stored mail.
+- `mailr decisions reattribute-orders` records the labels, importance marks and categories that
+  standing orders set before 0.40.37 as the orders' decisions instead of yours, and retrains the
+  models they changed; `--dry-run` counts them per order and per label first.
+
+## 0.40.37
+
+- Mail that Gmail (or another provider) moves to its Spam folder after delivery now goes to Spam
+  in Mailr, not to the Inbox with Spam next to it. Its labels stay on it but it leaves label views
+  while in Spam, and "Not spam" puts it back in the Inbox.
+- "Not spam" on Gmail mail now moves the message out of Gmail's Spam folder, so Gmail learns the
+  verdict too.
+- Labels, importance and categories set by a standing order now show as "Standing order “name”"
+  with the model's reason, instead of "You", and Mailr's models no longer learn from them as if you
+  had chosen them.
+- Docs: the assistant, Ambrose, is introduced as the assistant at its first mention on each page.
+
 ## 0.40.36
 
 - A draft shown in its conversation now updates as soon as it changes, including edits by Ambrose

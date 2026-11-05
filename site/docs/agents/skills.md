@@ -4,7 +4,7 @@ A skill is a named set of instructions: a writing style ("how I decline invitati
 
 ## Use a skill
 
-Type `/` and the skill's name in Ambrose chat or in **Help me write**, for example `/formal`. To combine several, type `/formal /concise`. When you type `/`, your skills are listed with their descriptions; use the arrow keys and `Enter` to pick one. In a chat, the [commands](../user-guide/assistant.md#commands) such as `/today` and `/sweep` are listed first, and a command comes before a skill of the same name.
+Type `/` and the skill's name in a chat with the assistant, Ambrose, or in **Help me write**, for example `/formal`. To combine several, type `/formal /concise`. When you type `/`, your skills are listed with their descriptions; use the arrow keys and `Enter` to pick one. In a chat, the [commands](../user-guide/assistant.md#commands) such as `/today` and `/sweep` are listed first, and a command comes before a skill of the same name.
 
 In a chat, a skill you call stays active for the rest of that chat and is shown as a chip above the box. A new chat has no active skill. If you mistype a name, the closest skill is suggested.
 
