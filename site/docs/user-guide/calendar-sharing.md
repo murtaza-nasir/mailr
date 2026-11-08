@@ -32,6 +32,11 @@ under **Shared** in the calendar list, each with the line **Shared with the … 
 - Some are view only: they are marked **view only** and have a lock. Only the editors
   named by the administrator can change it. A view-only calendar is not offered
   when you create an event, and the assistant, Ambrose, does not write into it either.
+- Some share only free/busy. The line reads **Shared with the … group · free/busy only**. Each
+  busy time shows as **Busy**, with no title or details. The busy times count when you look for a
+  free time, and Ambrose reads them as busy times too. You cannot change them. Busy times are
+  shown from about two months back to a year ahead. The editors named by the administrator see
+  the events in full.
 - You can hide a group calendar with its box, like any calendar, and give it a colour of your
   own. Other members keep theirs.
 - A group calendar cannot be renamed or deleted by members. Only the administrator can.

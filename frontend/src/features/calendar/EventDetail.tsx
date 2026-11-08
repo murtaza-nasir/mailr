@@ -215,7 +215,9 @@ function EventDetailBody({ e, mode, anchor, onClose, deleted, onRestore }: Event
         // ACT calendar.user_shared @web.calendar: a free/busy-only calendar's block says why it shows no details.
         <Line icon={<Lock />}>
           <span className="cal-note" data-testid="shared-busy-note">
-            {tr('calendar.eventDetail.sharedBusyNote', { owner: col?.shared?.kind === 'user' ? col.shared.owner : tr('calendar.eventDetail.itsOwner') })}
+            {col?.shared?.kind === 'group'
+              ? tr('calendar.eventDetail.groupBusyNote', { group: col.shared.group })
+              : tr('calendar.eventDetail.sharedBusyNote', { owner: col?.shared?.kind === 'user' ? col.shared.owner : tr('calendar.eventDetail.itsOwner') })}
           </span>
         </Line>
       )}

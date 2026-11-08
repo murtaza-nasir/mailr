@@ -157,6 +157,51 @@ A short clip is recorded in your browser and passed to the server's speech-to-te
 
 In a chat that has read local-only items, and in a new chat about an email or a recording, the clip goes only to a local speech server. Without one, "Not available with local models only" is shown, and the request has to be typed. In other chats the clip may go to a hosted speech service, when your administrator set one up. With **Local models only for me**, every clip stays local. See [Dictation server](../admin/dictation.md) for setup.
 
+## Images and files
+
+Images and files can be sent to Ambrose with a message. Click the paperclip beside the message box, paste a
+screenshot, or drop files on the panel. Each file shows as a chip above the box while it uploads; click a
+chip's **×** to remove it. Press **Send** when the chips have finished uploading. A message can carry up to
+five files of up to 15 MB each, with or without text.
+
+<!-- covers: agent.chat_attach -->
+
+| You attach | Ambrose reads |
+|---|---|
+| A photo or screenshot (PNG, JPEG, GIF, WebP) | The image, when the model can view images; otherwise only its size |
+| A PDF | Its text, and its first page as an image when the model can view images |
+| Word, Excel or PowerPoint (`.docx`, `.xlsx`, `.pptx`) | The text. Sheets come as rows of values, slides with their speaker notes |
+| OpenDocument (`.odt`, `.ods`, `.odp`) and RTF | The text, in the same way |
+| Text, Markdown, CSV, JSON, calendar and contact files, HTML, attached emails | The text |
+
+Long files are cut short: a sheet is read up to 2,000 rows and 60 columns, and any file up to 200,000
+characters. Pictures inside a document are counted, not read. Older Office formats (`.doc`, `.xls`,
+`.ppt`) and HEIC photos cannot be read; save them as one of the formats above first.
+
+The sent message shows a thumbnail for each image and a chip for each file. Click one to download it. Files
+are kept with the chat and deleted when the chat is deleted.
+
+![Ambrose panel with a photo and a budget file attached to a question, and the answer](../assets/shots/assistant-attachments.png)
+
+### Images in your mail
+
+Ambrose can open the attachments of an email too: "What does the photo in my note to myself show?" With a
+model that can view images, Ambrose looks at the photo itself; a PDF's page is shown the same way.
+
+- At most four images reach the model in one question. Each is scaled down to 1,024 pixels on its long
+  side, and its location and camera details are removed first.
+- An image is seen only in the question it came with. Later in the chat, Ambrose knows that it saw the
+  image and what it said about it, and opens the image again when needed.
+- **Settings → Ambrose → Models → Let Ambrose see images** turns this off for your chats. Ambrose then
+  learns only each image's size. The setting also says whether the models in use can view images.
+- An image from a local-only account reaches only a local model that can view images. With no such
+  model, Ambrose learns only the image's size.
+
+Whether a model can view images is set by your administrator. See
+[Models that can view images](../admin/models.md#models-that-can-view-images).
+
+<!-- covers: settings.assistant_images -->
+
 ## Commands
 
 <!-- covers: agent.commands agent.chat_retitle -->

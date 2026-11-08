@@ -28,7 +28,12 @@ Tap **Edit** next to Labels to rename, recolour, reorder or delete labels.
   ⋮ menu has Move up, Move down, Move to section, Make it a task and Delete.
 - Tap a section's name to fold it. Its ⋮ menu has Rename, the order of its items (learned or by
   hand), Move up, Move down and Delete.
-- Checked items are folded into **n checked** at the bottom. Tap **Clear checked** to remove them.
+- A checked item stays in its place, ticked, struck through and dimmed, so the list does not move
+  while you work through it. Tap its box again to uncheck it. The next time the list is opened,
+  checked items are folded into **n checked** at the bottom. The count includes the items still in
+  place, and **Clear checked** removes those too.
+- A list opened from a link to one item, such as a citation in Ambrose's answer, is scrolled to that
+  item, and the item is marked. The mark fades after three seconds or at the first touch in the list.
 - With **Suggest usual items** on, regularly bought items are shown under the add line. Tap one to
   add it; tap its × to hide it for now or for good.
 

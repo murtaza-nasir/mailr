@@ -515,6 +515,16 @@ async def _db_dump_due() -> None:
     await dbdump.enqueue_if_due()
 
 
+async def _model_capabilities_due() -> None:
+    """Daily: ask the model servers about models nobody has checked yet, whether they can view
+    images (intel/modelcaps.check_unknown; also queued at every worker start)."""
+    from mailr.intel import modelcaps
+
+    async with session_scope() as db:
+        await modelcaps.queue_check(db)
+        await db.commit()
+
+
 PERIODIC = [
     (timedelta(minutes=1), _wake_overdue_snoozes),
     (timedelta(minutes=1), _due_follow_ups),
@@ -538,6 +548,7 @@ PERIODIC = [
     (timedelta(minutes=30), _address_books_due),
     (timedelta(hours=24), _tables_nightly),
     (timedelta(minutes=15), _db_dump_due),
+    (timedelta(hours=24), _model_capabilities_due),
 ]
 
 

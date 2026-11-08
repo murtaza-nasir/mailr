@@ -212,6 +212,211 @@
     <string name="srv_approvals_forward_summary">Você encaminhou este e-mail de um endereço confiável. {{name}} executa a solicitação na nota; cada etapa ainda está sujeita à sua própria permissão.</string>
     <string name="srv_approvals_forward_title">Aja sobre a nota encaminhada</string>
     <string name="srv_approvals_generic_title">Aprovar esta ação</string>
+    <plurals name="srv_approvals_group_calendar">
+        <item quantity="one">{{who}} quer alterar {{count}} agenda</item>
+        <item quantity="other">{{who}} quer alterar {{count}} agendas</item>
+    </plurals>
+    <plurals name="srv_approvals_group_cleanup">
+        <item quantity="one">{{who}} quer aplicar {{count}} plano de limpeza</item>
+        <item quantity="other">{{who}} quer aplicar {{count}} planos de limpeza</item>
+    </plurals>
+    <plurals name="srv_approvals_group_contacts">
+        <item quantity="one">{{who}} quer alterar grupos de contatos: {{count}} solicitação</item>
+        <item quantity="other">{{who}} quer alterar grupos de contatos: {{count}} solicitações</item>
+    </plurals>
+    <plurals name="srv_approvals_group_draft_change">
+        <item quantity="one">{{who}} quer alterar {{count}} rascunho</item>
+        <item quantity="other">{{who}} quer alterar {{count}} rascunhos</item>
+    </plurals>
+    <plurals name="srv_approvals_group_draft_new">
+        <item quantity="one">{{who}} quer salvar {{count}} rascunho</item>
+        <item quantity="other">{{who}} quer salvar {{count}} rascunhos</item>
+    </plurals>
+    <plurals name="srv_approvals_group_event_cancel">
+        <item quantity="one">{{who}} quer cancelar {{count}} evento</item>
+        <item quantity="other">{{who}} quer cancelar {{count}} eventos</item>
+    </plurals>
+    <plurals name="srv_approvals_group_event_change">
+        <item quantity="one">{{who}} quer alterar {{count}} evento</item>
+        <item quantity="other">{{who}} quer alterar {{count}} eventos</item>
+    </plurals>
+    <plurals name="srv_approvals_group_event_delete">
+        <item quantity="one">{{who}} quer excluir {{count}} evento</item>
+        <item quantity="other">{{who}} quer excluir {{count}} eventos</item>
+    </plurals>
+    <plurals name="srv_approvals_group_event_new">
+        <item quantity="one">{{who}} quer adicionar {{count}} evento</item>
+        <item quantity="other">{{who}} quer adicionar {{count}} eventos</item>
+    </plurals>
+    <plurals name="srv_approvals_group_filter">
+        <item quantity="one">{{who}} quer alterar {{count}} filtro</item>
+        <item quantity="other">{{who}} quer alterar {{count}} filtros</item>
+    </plurals>
+    <plurals name="srv_approvals_group_forwarded">
+        <item quantity="one">{{who}} quer agir sobre {{count}} nota encaminhada</item>
+        <item quantity="other">{{who}} quer agir sobre {{count}} notas encaminhadas</item>
+    </plurals>
+    <plurals name="srv_approvals_group_invite">
+        <item quantity="one">{{who}} quer enviar convites para {{count}} evento</item>
+        <item quantity="other">{{who}} quer enviar convites para {{count}} eventos</item>
+    </plurals>
+    <plurals name="srv_approvals_group_label_change">
+        <item quantity="one">{{who}} quer alterar {{count}} marcador</item>
+        <item quantity="other">{{who}} quer alterar {{count}} marcadores</item>
+    </plurals>
+    <plurals name="srv_approvals_group_label_delete">
+        <item quantity="one">{{who}} quer excluir {{count}} marcador</item>
+        <item quantity="other">{{who}} quer excluir {{count}} marcadores</item>
+    </plurals>
+    <plurals name="srv_approvals_group_label_new">
+        <item quantity="one">{{who}} quer adicionar {{count}} marcador</item>
+        <item quantity="other">{{who}} quer adicionar {{count}} marcadores</item>
+    </plurals>
+    <plurals name="srv_approvals_group_mail_delete">
+        <item quantity="one">{{who}} quer excluir e-mails definitivamente: {{count}} solicitação</item>
+        <item quantity="other">{{who}} quer excluir e-mails definitivamente: {{count}} solicitações</item>
+    </plurals>
+    <plurals name="srv_approvals_group_mail_organise">
+        <item quantity="one">{{who}} quer organizar e-mails: {{count}} solicitação</item>
+        <item quantity="other">{{who}} quer organizar e-mails: {{count}} solicitações</item>
+    </plurals>
+    <plurals name="srv_approvals_group_mail_spam">
+        <item quantity="one">{{who}} quer marcar como spam: {{count}} solicitação</item>
+        <item quantity="other">{{who}} quer marcar como spam: {{count}} solicitações</item>
+    </plurals>
+    <plurals name="srv_approvals_group_mail_trash">
+        <item quantity="one">{{who}} quer mover e-mails para a Lixeira: {{count}} solicitação</item>
+        <item quantity="other">{{who}} quer mover e-mails para a Lixeira: {{count}} solicitações</item>
+    </plurals>
+    <plurals name="srv_approvals_group_memory">
+        <item quantity="one">{{who}} quer manter {{count}} memória</item>
+        <item quantity="other">{{who}} quer manter {{count}} memórias</item>
+    </plurals>
+    <plurals name="srv_approvals_group_note_change">
+        <item quantity="one">{{who}} quer alterar {{count}} nota</item>
+        <item quantity="other">{{who}} quer alterar {{count}} notas</item>
+    </plurals>
+    <plurals name="srv_approvals_group_note_delete">
+        <item quantity="one">{{who}} quer excluir {{count}} nota</item>
+        <item quantity="other">{{who}} quer excluir {{count}} notas</item>
+    </plurals>
+    <plurals name="srv_approvals_group_note_labels">
+        <item quantity="one">{{who}} quer alterar marcadores de notas: {{count}} solicitação</item>
+        <item quantity="other">{{who}} quer alterar marcadores de notas: {{count}} solicitações</item>
+    </plurals>
+    <plurals name="srv_approvals_group_note_new">
+        <item quantity="one">{{who}} quer adicionar {{count}} nota</item>
+        <item quantity="other">{{who}} quer adicionar {{count}} notas</item>
+    </plurals>
+    <plurals name="srv_approvals_group_order">
+        <item quantity="one">{{who}} quer alterar {{count}} ordem permanente</item>
+        <item quantity="other">{{who}} quer alterar {{count}} ordens permanentes</item>
+    </plurals>
+    <plurals name="srv_approvals_group_phone_sync">
+        <item quantity="one">{{who}} quer enviar horários ocupados: {{count}} solicitação</item>
+        <item quantity="other">{{who}} quer enviar horários ocupados: {{count}} solicitações</item>
+    </plurals>
+    <plurals name="srv_approvals_group_recording">
+        <item quantity="one">{{who}} quer alterar {{count}} gravação</item>
+        <item quantity="other">{{who}} quer alterar {{count}} gravações</item>
+    </plurals>
+    <plurals name="srv_approvals_group_request">
+        <item quantity="one">{{who}} tem {{count}} solicitação</item>
+        <item quantity="other">{{who}} tem {{count}} solicitações</item>
+    </plurals>
+    <plurals name="srv_approvals_group_review">
+        <item quantity="one">{{who}} quer que você revise {{count}} plano</item>
+        <item quantity="other">{{who}} quer que você revise {{count}} planos</item>
+    </plurals>
+    <plurals name="srv_approvals_group_rsvp">
+        <item quantity="one">{{who}} quer responder a {{count}} convite</item>
+        <item quantity="other">{{who}} quer responder a {{count}} convites</item>
+    </plurals>
+    <plurals name="srv_approvals_group_screener">
+        <item quantity="one">{{who}} quer tomar {{count}} decisão do Screener</item>
+        <item quantity="other">{{who}} quer tomar {{count}} decisões do Screener</item>
+    </plurals>
+    <plurals name="srv_approvals_group_send">
+        <item quantity="one">{{who}} quer enviar {{count}} e-mail</item>
+        <item quantity="other">{{who}} quer enviar {{count}} e-mails</item>
+    </plurals>
+    <plurals name="srv_approvals_group_settings">
+        <item quantity="one">{{who}} quer alterar configurações: {{count}} solicitação</item>
+        <item quantity="other">{{who}} quer alterar configurações: {{count}} solicitações</item>
+    </plurals>
+    <plurals name="srv_approvals_group_skill">
+        <item quantity="one">{{who}} quer alterar {{count}} habilidade</item>
+        <item quantity="other">{{who}} quer alterar {{count}} habilidades</item>
+    </plurals>
+    <plurals name="srv_approvals_group_table">
+        <item quantity="one">{{who}} quer alterar {{count}} tabela</item>
+        <item quantity="other">{{who}} quer alterar {{count}} tabelas</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_change">
+        <item quantity="one">{{who}} quer alterar {{count}} tarefa</item>
+        <item quantity="other">{{who}} quer alterar {{count}} tarefas</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_complete">
+        <item quantity="one">{{who}} quer concluir {{count}} tarefa</item>
+        <item quantity="other">{{who}} quer concluir {{count}} tarefas</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_delete">
+        <item quantity="one">{{who}} quer excluir {{count}} tarefa</item>
+        <item quantity="other">{{who}} quer excluir {{count}} tarefas</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_list">
+        <item quantity="one">{{who}} quer alterar {{count}} lista de tarefas</item>
+        <item quantity="other">{{who}} quer alterar {{count}} listas de tarefas</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_new">
+        <item quantity="one">{{who}} quer adicionar {{count}} tarefa</item>
+        <item quantity="other">{{who}} quer adicionar {{count}} tarefas</item>
+    </plurals>
+    <plurals name="srv_approvals_group_unsubscribe">
+        <item quantity="one">{{who}} quer cancelar inscrição: {{count}} solicitação</item>
+        <item quantity="other">{{who}} quer cancelar inscrição: {{count}} solicitações</item>
+    </plurals>
+    <string name="srv_approvals_kind_calendar">Agenda</string>
+    <string name="srv_approvals_kind_cleanup">Limpeza</string>
+    <string name="srv_approvals_kind_contacts">Grupos de contatos</string>
+    <string name="srv_approvals_kind_draft_change">Alterar rascunho</string>
+    <string name="srv_approvals_kind_draft_new">Novo rascunho</string>
+    <string name="srv_approvals_kind_event_cancel">Cancelar evento</string>
+    <string name="srv_approvals_kind_event_change">Alterar evento</string>
+    <string name="srv_approvals_kind_event_delete">Excluir evento</string>
+    <string name="srv_approvals_kind_event_new">Novo evento</string>
+    <string name="srv_approvals_kind_filter">Filtro</string>
+    <string name="srv_approvals_kind_forwarded">Nota encaminhada</string>
+    <string name="srv_approvals_kind_invite">Enviar convites</string>
+    <string name="srv_approvals_kind_label_change">Alterar marcador</string>
+    <string name="srv_approvals_kind_label_delete">Excluir marcador</string>
+    <string name="srv_approvals_kind_label_new">Novo marcador</string>
+    <string name="srv_approvals_kind_mail_delete">Excluir permanentemente</string>
+    <string name="srv_approvals_kind_mail_organise">Organizar e-mails</string>
+    <string name="srv_approvals_kind_mail_spam">Denunciar spam</string>
+    <string name="srv_approvals_kind_mail_trash">Mover para Lixeira</string>
+    <string name="srv_approvals_kind_memory">Memória</string>
+    <string name="srv_approvals_kind_note_change">Alterar nota</string>
+    <string name="srv_approvals_kind_note_delete">Excluir nota</string>
+    <string name="srv_approvals_kind_note_labels">Marcadores de notas</string>
+    <string name="srv_approvals_kind_note_new">Nova nota</string>
+    <string name="srv_approvals_kind_order">Ordem permanente</string>
+    <string name="srv_approvals_kind_phone_sync">Agendas do celular</string>
+    <string name="srv_approvals_kind_recording">Gravação</string>
+    <string name="srv_approvals_kind_request">Solicitação</string>
+    <string name="srv_approvals_kind_review">Revisão</string>
+    <string name="srv_approvals_kind_rsvp">Responder ao convite</string>
+    <string name="srv_approvals_kind_screener">Screener</string>
+    <string name="srv_approvals_kind_send">Enviar e-mail</string>
+    <string name="srv_approvals_kind_settings">Configurações</string>
+    <string name="srv_approvals_kind_skill">Habilidade</string>
+    <string name="srv_approvals_kind_table">Tabela</string>
+    <string name="srv_approvals_kind_task_change">Alterar tarefa</string>
+    <string name="srv_approvals_kind_task_complete">Concluir tarefa</string>
+    <string name="srv_approvals_kind_task_delete">Excluir tarefa</string>
+    <string name="srv_approvals_kind_task_list">Lista de tarefas</string>
+    <string name="srv_approvals_kind_task_new">Nova tarefa</string>
+    <string name="srv_approvals_kind_unsubscribe">Cancelar inscrição</string>
     <string name="srv_approvals_mail_add_labels_ask">Adicionar marcadores a {{what}}</string>
     <string name="srv_approvals_mail_add_labels_done">marcou {{what}}</string>
     <string name="srv_approvals_mail_add_labels_ing">Adicionando marcadores a {{what}}</string>
@@ -342,6 +547,29 @@
     <string name="srv_approvals_reason_read_mail_agent_outsider">Um agente escreveu isso após ler e-mails. {{names}} não estava naquela conversa.</string>
     <string name="srv_approvals_reason_read_mail_agent_outsiders">Um agente escreveu isso após ler e-mails. {{names}} e {{last}} não estavam naquela conversa.</string>
     <string name="srv_approvals_reason_read_mail_agent_plain">Um agente escreveu isso após ler e-mails.</string>
+    <string name="srv_approvals_reason_short_bcc">Pergunta antes: após ler e-mails, com um Bcc</string>
+    <string name="srv_approvals_reason_short_cleanup">Pergunta antes: planos de limpeza sempre aguardam sua confirmação</string>
+    <string name="srv_approvals_reason_short_draft_new_people">Pergunta antes: um rascunho para pessoas fora da conversa</string>
+    <string name="srv_approvals_reason_short_draft_recipients">Pergunta antes: os destinatários do rascunho mudam</string>
+    <string name="srv_approvals_reason_short_errand_no_send">Pergunta antes: uma tarefa nunca envia por si só</string>
+    <string name="srv_approvals_reason_short_errand_shared">Pergunta antes: escreve em uma nota compartilhada</string>
+    <string name="srv_approvals_reason_short_forever">Pergunta antes: não pode ser desfeito</string>
+    <string name="srv_approvals_reason_short_forwarded">Pergunta antes: ninguém pôde verificar quem escreveu</string>
+    <string name="srv_approvals_reason_short_hides_mail">Pergunta antes: oculta e-mails após ler e-mails</string>
+    <string name="srv_approvals_reason_short_local_copy">Pergunta antes: copiaria conteúdo somente local</string>
+    <string name="srv_approvals_reason_short_lower_local">Pergunta antes: modelos hospedados poderiam ler isso</string>
+    <string name="srv_approvals_reason_short_new_address">Pergunta antes: primeira mensagem para um novo endereço</string>
+    <string name="srv_approvals_reason_short_notes_hides">Pergunta antes: oculta algo após ler texto de outras pessoas</string>
+    <string name="srv_approvals_reason_short_notes_tainted">Pergunta antes: escrito após ler texto de outras pessoas</string>
+    <string name="srv_approvals_reason_short_other">Pergunta antes</string>
+    <string name="srv_approvals_reason_short_outsider">Pergunta antes: {{names}} não estava naquela conversa</string>
+    <string name="srv_approvals_reason_short_outsiders">Pergunta antes: {{names}} e {{last}} não estavam naquela conversa</string>
+    <string name="srv_approvals_reason_short_public_link">Pergunta antes: cria um link público</string>
+    <string name="srv_approvals_reason_short_read_mail">Pergunta antes: escrito após ler e-mails</string>
+    <string name="srv_approvals_reason_short_screener">Pergunta antes: as decisões do Screener são suas</string>
+    <string name="srv_approvals_reason_short_tainted">Pergunta antes: escrito após ler e-mails</string>
+    <string name="srv_approvals_reason_short_token_text">Pergunta antes: escrito por meio de um token de API</string>
+    <string name="srv_approvals_reason_short_whole_list">Pergunta antes: age sobre uma lista inteira</string>
     <string name="srv_approvals_result_already_done">já feito acima</string>
     <plurals name="srv_approvals_result_changes_made">
         <item quantity="one">{{count}} alteração feita</item>

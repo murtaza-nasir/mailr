@@ -577,6 +577,11 @@
    "state": "model",
    "text": "Разрешить на 12 часов"
   },
+  "android:app:appr_allow_all": {
+   "sha": "18bbf69cfe4e1755",
+   "state": "model",
+   "text": "Разрешить все"
+  },
   "android:app:appr_allow_all_n": {
    "sha": "8cef7c3d281ab3ca",
    "state": "model",
@@ -742,10 +747,45 @@
     "other": "Отклонено. Также отклонены %d других запросов."
    }
   },
+  "android:app:appr_denied_count": {
+   "sha": "a817f711a2cda873",
+   "state": "model",
+   "text": {
+    "one": "Отклонено %d запрос.",
+    "few": "Отклонено %d запроса.",
+    "many": "Отклонено %d запросов.",
+    "other": "Отклонено %d запроса."
+   }
+  },
+  "android:app:appr_deny_all": {
+   "sha": "8bd9b8dbe3661b93",
+   "state": "model",
+   "text": "Отклонить все"
+  },
+  "android:app:appr_deny_all_title": {
+   "sha": "ed236022a94b1f23",
+   "state": "model",
+   "text": {
+    "one": "Отклонить %d запрос?",
+    "few": "Отклонить все %d запроса?",
+    "many": "Отклонить все %d запросов?",
+    "other": "Отклонить все %d запроса?"
+   }
+  },
   "android:app:appr_empty_text": {
    "sha": "a7ad5d8141612d6e",
    "state": "model",
    "text": "Здесь отображаются подтверждения, неотправленные сообщения и напоминания."
+  },
+  "android:app:appr_group_fold": {
+   "sha": "48cfe1f03df53329",
+   "state": "model",
+   "text": "Свернуть эти запросы"
+  },
+  "android:app:appr_group_unfold": {
+   "sha": "61c88b53f2f73de4",
+   "state": "model",
+   "text": "Показать эти запросы"
   },
   "android:app:appr_header_approvals": {
    "sha": "9968828089b03728",
@@ -1346,6 +1386,51 @@
    "sha": "1afe3ad2b666f062",
    "state": "model",
    "text": "Спросить об этой задаче…"
+  },
+  "android:app:asst_attach": {
+   "sha": "d203cefd9f6d83f1",
+   "state": "model",
+   "text": "Прикрепить файлы или изображения"
+  },
+  "android:app:asst_attach_failed": {
+   "sha": "7fe32139ed01c0f2",
+   "state": "model",
+   "text": "Не удалось прикрепить %1$s: %2$s"
+  },
+  "android:app:asst_attach_image": {
+   "sha": "ffc37ef28098c2e0",
+   "state": "model",
+   "text": "Изображение %1$s"
+  },
+  "android:app:asst_attach_limit": {
+   "sha": "06d4124161aec1a7",
+   "state": "model",
+   "text": {
+    "one": "В письме можно прикрепить не более %1$d файла.",
+    "few": "В письме можно прикрепить не более %1$d файлов.",
+    "many": "В письме можно прикрепить не более %1$d файлов.",
+    "other": "В письме можно прикрепить не более %1$d файлов."
+   }
+  },
+  "android:app:asst_attach_remove": {
+   "sha": "b2ba32534a7eab17",
+   "state": "model",
+   "text": "Удалить %1$s"
+  },
+  "android:app:asst_attach_sharing": {
+   "sha": "00d6d46ec376b9b7",
+   "state": "model",
+   "text": "Прикрепление для %1$s…"
+  },
+  "android:app:asst_attach_too_big": {
+   "sha": "8b1f426b9ddaf5b5",
+   "state": "model",
+   "text": "%1$s превышает %2$d МБ и не может быть прикреплен."
+  },
+  "android:app:asst_attach_uploading": {
+   "sha": "703c93b211d12a2a",
+   "state": "model",
+   "text": "Прикрепление…"
   },
   "android:app:asst_chat_title_cd": {
    "sha": "ad011d801b5fa8d6",
@@ -4946,6 +5031,11 @@
    "sha": "76d3ee78a0e5b73b",
    "state": "model",
    "text": "Общий доступ с группой %s"
+  },
+  "android:app:cal_shared_with_group_free_busy": {
+   "sha": "fc65a3770d68ef1d",
+   "state": "model",
+   "text": "Общий доступ с группой %s · только занятость"
   },
   "android:app:cal_show_as": {
    "sha": "51fc7734454c58c6",
@@ -10082,6 +10172,16 @@
    "state": "manual",
    "text": "Другие варианты разрешения"
   },
+  "android:app:more_allow_menu_also": {
+   "sha": "6dd286c353ecd5ad",
+   "state": "model",
+   "text": {
+    "one": "Другие способы разрешить, также подтверждение %d другого ожидающего запроса",
+    "few": "Другие способы разрешить, также подтверждение %d других ожидающих запросов",
+    "many": "Другие способы разрешить, также подтверждение %d других ожидающих запросов",
+    "other": "Другие способы разрешить, также подтверждение %d других ожидающих запросов"
+   }
+  },
   "android:app:more_allow_once": {
    "sha": "d2ce72fd95f825da",
    "state": "model",
@@ -10122,6 +10222,11 @@
    "state": "model",
    "text": "Это действие нельзя отменить в Mailr."
   },
+  "android:app:more_card_menu": {
+   "sha": "149682255a9fc3dc",
+   "state": "model",
+   "text": "Другие действия"
+  },
   "android:app:more_deny": {
    "sha": "c0456fee0bc09c7e",
    "state": "model",
@@ -10141,6 +10246,16 @@
    "sha": "7eccff321619b1ac",
    "state": "model",
    "text": "Скрыть детали"
+  },
+  "android:app:more_why_asks": {
+   "sha": "ad2d98e123d06064",
+   "state": "model",
+   "text": "Почему это требуется"
+  },
+  "android:app:more_why_hide": {
+   "sha": "f342b24ef10ae213",
+   "state": "model",
+   "text": "Скрыть причину"
   },
   "android:app:new_task_tile_label": {
    "sha": "cfe1b5e64c6eee08",
@@ -13062,6 +13177,11 @@
    "sha": "1a19295cf564147a",
    "state": "model",
    "text": "Обработка аудио"
+  },
+  "android:app:share_ask_label": {
+   "sha": "34bc1aff3340800c",
+   "state": "model",
+   "text": "Спросить Ambrose"
   },
   "android:app:share_compose_label": {
    "sha": "4db253ebb2f2ba46",
@@ -17888,6 +18008,11 @@
    "state": "model",
    "text": "Восстановить"
   },
+  "android:notes-core:notes_uncheck": {
+   "sha": "bdbcabd5fb0d19dd",
+   "state": "model",
+   "text": "Снять отметку"
+  },
   "android:notes-core:notes_uncheck_all": {
    "sha": "6fa3629d436ed245",
    "state": "model",
@@ -20423,6 +20548,621 @@
    "state": "model",
    "text": "Подтвердить это действие"
   },
+  "server:approvals.group.calendar": {
+   "sha": "21dc1c45ea097aad",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить {{count}} календарь",
+    "few": "{{who}} хочет изменить {{count}} календаря",
+    "many": "{{who}} хочет изменить {{count}} календарей",
+    "other": "{{who}} хочет изменить {{count}} календаря"
+   }
+  },
+  "server:approvals.group.cleanup": {
+   "sha": "652f9eb16c6fd1f7",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет применить {{count}} план очистки",
+    "few": "{{who}} хочет применить {{count}} плана очистки",
+    "many": "{{who}} хочет применить {{count}} планов очистки",
+    "other": "{{who}} хочет применить {{count}} плана очистки"
+   }
+  },
+  "server:approvals.group.contacts": {
+   "sha": "c6e0431a010564cf",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить группы контактов: {{count}} запрос",
+    "few": "{{who}} хочет изменить группы контактов: {{count}} запроса",
+    "many": "{{who}} хочет изменить группы контактов: {{count}} запросов",
+    "other": "{{who}} хочет изменить группы контактов: {{count}} запроса"
+   }
+  },
+  "server:approvals.group.draft_change": {
+   "sha": "3909418ffeb8dcdf",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить {{count}} черновик",
+    "few": "{{who}} хочет изменить {{count}} черновика",
+    "many": "{{who}} хочет изменить {{count}} черновиков",
+    "other": "{{who}} хочет изменить {{count}} черновика"
+   }
+  },
+  "server:approvals.group.draft_new": {
+   "sha": "2693b0fc7b7f506e",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет сохранить {{count}} черновик",
+    "few": "{{who}} хочет сохранить {{count}} черновика",
+    "many": "{{who}} хочет сохранить {{count}} черновиков",
+    "other": "{{who}} хочет сохранить {{count}} черновика"
+   }
+  },
+  "server:approvals.group.event_cancel": {
+   "sha": "0f87d83051b853f3",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет отменить {{count}} мероприятие",
+    "few": "{{who}} хочет отменить {{count}} мероприятия",
+    "many": "{{who}} хочет отменить {{count}} мероприятий",
+    "other": "{{who}} хочет отменить {{count}} мероприятия"
+   }
+  },
+  "server:approvals.group.event_change": {
+   "sha": "aac1d29d35e4c8e3",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить {{count}} мероприятие",
+    "few": "{{who}} хочет изменить {{count}} мероприятия",
+    "many": "{{who}} хочет изменить {{count}} мероприятий",
+    "other": "{{who}} хочет изменить {{count}} мероприятия"
+   }
+  },
+  "server:approvals.group.event_delete": {
+   "sha": "e3c5eda7c4dc83f5",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет удалить {{count}} мероприятие",
+    "few": "{{who}} хочет удалить {{count}} мероприятия",
+    "many": "{{who}} хочет удалить {{count}} мероприятий",
+    "other": "{{who}} хочет удалить {{count}} мероприятия"
+   }
+  },
+  "server:approvals.group.event_new": {
+   "sha": "def1ffe34bef76d3",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет добавить {{count}} мероприятие",
+    "few": "{{who}} хочет добавить {{count}} мероприятия",
+    "many": "{{who}} хочет добавить {{count}} мероприятий",
+    "other": "{{who}} хочет добавить {{count}} мероприятия"
+   }
+  },
+  "server:approvals.group.filter": {
+   "sha": "6c1cc0e7d0076817",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить {{count}} фильтр",
+    "few": "{{who}} хочет изменить {{count}} фильтра",
+    "many": "{{who}} хочет изменить {{count}} фильтров",
+    "other": "{{who}} хочет изменить {{count}} фильтра"
+   }
+  },
+  "server:approvals.group.forwarded": {
+   "sha": "2370e38a18408045",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет выполнить действие с {{count}} пересланной заметкой",
+    "few": "{{who}} хочет выполнить действие с {{count}} пересланными заметками",
+    "many": "{{who}} хочет выполнить действие с {{count}} пересланными заметками",
+    "other": "{{who}} хочет выполнить действие с {{count}} пересланной заметкой"
+   }
+  },
+  "server:approvals.group.invite": {
+   "sha": "725a71a1a4aeb53a",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет отправить приглашения для {{count}} мероприятия",
+    "few": "{{who}} хочет отправить приглашения для {{count}} мероприятий",
+    "many": "{{who}} хочет отправить приглашения для {{count}} мероприятий",
+    "other": "{{who}} хочет отправить приглашения для {{count}} мероприятия"
+   }
+  },
+  "server:approvals.group.label_change": {
+   "sha": "c23abc5560cdb640",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить {{count}} ярлык",
+    "few": "{{who}} хочет изменить {{count}} ярлыка",
+    "many": "{{who}} хочет изменить {{count}} ярлыков",
+    "other": "{{who}} хочет изменить {{count}} ярлыка"
+   }
+  },
+  "server:approvals.group.label_delete": {
+   "sha": "f62dd6f237e95850",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет удалить {{count}} ярлык",
+    "few": "{{who}} хочет удалить {{count}} ярлыка",
+    "many": "{{who}} хочет удалить {{count}} ярлыков",
+    "other": "{{who}} хочет удалить {{count}} ярлыка"
+   }
+  },
+  "server:approvals.group.label_new": {
+   "sha": "af0b2f0c378cc422",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет добавить {{count}} ярлык",
+    "few": "{{who}} хочет добавить {{count}} ярлыка",
+    "many": "{{who}} хочет добавить {{count}} ярлыков",
+    "other": "{{who}} хочет добавить {{count}} ярлыка"
+   }
+  },
+  "server:approvals.group.mail_delete": {
+   "sha": "afb16d25585c0dfa",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет удалить почту навсегда: {{count}} запрос",
+    "few": "{{who}} хочет удалить почту навсегда: {{count}} запроса",
+    "many": "{{who}} хочет удалить почту навсегда: {{count}} запросов",
+    "other": "{{who}} хочет удалить почту навсегда: {{count}} запроса"
+   }
+  },
+  "server:approvals.group.mail_organise": {
+   "sha": "60763784766d0702",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет упорядочить почту: {{count}} запрос",
+    "few": "{{who}} хочет упорядочить почту: {{count}} запроса",
+    "many": "{{who}} хочет упорядочить почту: {{count}} запросов",
+    "other": "{{who}} хочет упорядочить почту: {{count}} запроса"
+   }
+  },
+  "server:approvals.group.mail_spam": {
+   "sha": "db884bfeecff179e",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет сообщить о спаме: {{count}} запрос",
+    "few": "{{who}} хочет сообщить о спаме: {{count}} запроса",
+    "many": "{{who}} хочет сообщить о спаме: {{count}} запросов",
+    "other": "{{who}} хочет сообщить о спаме: {{count}} запроса"
+   }
+  },
+  "server:approvals.group.mail_trash": {
+   "sha": "8dc44a55819dec8b",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет переместить почту в Корзину: {{count}} запрос",
+    "few": "{{who}} хочет переместить почту в Корзину: {{count}} запроса",
+    "many": "{{who}} хочет переместить почту в Корзину: {{count}} запросов",
+    "other": "{{who}} хочет переместить почту в Корзину: {{count}} запроса"
+   }
+  },
+  "server:approvals.group.memory": {
+   "sha": "ef352423305131e2",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет сохранить {{count}} запись в памяти",
+    "few": "{{who}} хочет сохранить {{count}} записи в памяти",
+    "many": "{{who}} хочет сохранить {{count}} записей в памяти",
+    "other": "{{who}} хочет сохранить {{count}} записи в памяти"
+   }
+  },
+  "server:approvals.group.note_change": {
+   "sha": "1b6e79c479da07c5",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить {{count}} заметку",
+    "few": "{{who}} хочет изменить {{count}} заметки",
+    "many": "{{who}} хочет изменить {{count}} заметок",
+    "other": "{{who}} хочет изменить {{count}} заметки"
+   }
+  },
+  "server:approvals.group.note_delete": {
+   "sha": "1aef44cea36f6a51",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет удалить {{count}} заметку",
+    "few": "{{who}} хочет удалить {{count}} заметки",
+    "many": "{{who}} хочет удалить {{count}} заметок",
+    "other": "{{who}} хочет удалить {{count}} заметки"
+   }
+  },
+  "server:approvals.group.note_labels": {
+   "sha": "d4a9a52573f8a91d",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить ярлыки заметок: {{count}} запрос",
+    "few": "{{who}} хочет изменить ярлыки заметок: {{count}} запроса",
+    "many": "{{who}} хочет изменить ярлыки заметок: {{count}} запросов",
+    "other": "{{who}} хочет изменить ярлыки заметок: {{count}} запроса"
+   }
+  },
+  "server:approvals.group.note_new": {
+   "sha": "1e03d24f6bfa84b0",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет добавить {{count}} заметку",
+    "few": "{{who}} хочет добавить {{count}} заметки",
+    "many": "{{who}} хочет добавить {{count}} заметок",
+    "other": "{{who}} хочет добавить {{count}} заметки"
+   }
+  },
+  "server:approvals.group.order": {
+   "sha": "f533d876aec10f65",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить {{count}} постоянное поручение",
+    "few": "{{who}} хочет изменить {{count}} постоянных поручения",
+    "many": "{{who}} хочет изменить {{count}} постоянных поручений",
+    "other": "{{who}} хочет изменить {{count}} постоянного поручения"
+   }
+  },
+  "server:approvals.group.phone_sync": {
+   "sha": "d42f8bb5b852a1bc",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет отправить занятые слоты: {{count}} запрос",
+    "few": "{{who}} хочет отправить занятые слоты: {{count}} запроса",
+    "many": "{{who}} хочет отправить занятые слоты: {{count}} запросов",
+    "other": "{{who}} хочет отправить занятые слоты: {{count}} запроса"
+   }
+  },
+  "server:approvals.group.recording": {
+   "sha": "c712986efa082928",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить {{count}} запись",
+    "few": "{{who}} хочет изменить {{count}} записи",
+    "many": "{{who}} хочет изменить {{count}} записей",
+    "other": "{{who}} хочет изменить {{count}} записи"
+   }
+  },
+  "server:approvals.group.request": {
+   "sha": "d43142552fd614ad",
+   "state": "model",
+   "text": {
+    "one": "У {{who}} {{count}} запрос",
+    "few": "У {{who}} {{count}} запроса",
+    "many": "У {{who}} {{count}} запросов",
+    "other": "У {{who}} {{count}} запроса"
+   }
+  },
+  "server:approvals.group.review": {
+   "sha": "caa3b4a4dadebecc",
+   "state": "model",
+   "text": {
+    "one": "{{who}} просит вас проверить {{count}} план",
+    "few": "{{who}} просит вас проверить {{count}} плана",
+    "many": "{{who}} просит вас проверить {{count}} планов",
+    "other": "{{who}} просит вас проверить {{count}} плана"
+   }
+  },
+  "server:approvals.group.rsvp": {
+   "sha": "0a74df64a2fb42de",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет ответить на {{count}} приглашение",
+    "few": "{{who}} хочет ответить на {{count}} приглашения",
+    "many": "{{who}} хочет ответить на {{count}} приглашений",
+    "other": "{{who}} хочет ответить на {{count}} приглашения"
+   }
+  },
+  "server:approvals.group.screener": {
+   "sha": "1eefdca1b91cac2a",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет принять {{count}} решение Screener",
+    "few": "{{who}} хочет принять {{count}} решения Screener",
+    "many": "{{who}} хочет принять {{count}} решений Screener",
+    "other": "{{who}} хочет принять {{count}} решения Screener"
+   }
+  },
+  "server:approvals.group.send": {
+   "sha": "eb01ac811c095387",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет отправить {{count}} письмо",
+    "few": "{{who}} хочет отправить {{count}} письма",
+    "many": "{{who}} хочет отправить {{count}} писем",
+    "other": "{{who}} хочет отправить {{count}} письма"
+   }
+  },
+  "server:approvals.group.settings": {
+   "sha": "3c77e615e3e5143d",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить настройки: {{count}} запрос",
+    "few": "{{who}} хочет изменить настройки: {{count}} запроса",
+    "many": "{{who}} хочет изменить настройки: {{count}} запросов",
+    "other": "{{who}} хочет изменить настройки: {{count}} запроса"
+   }
+  },
+  "server:approvals.group.skill": {
+   "sha": "d45fde311706eda3",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить {{count}} навык",
+    "few": "{{who}} хочет изменить {{count}} навыка",
+    "many": "{{who}} хочет изменить {{count}} навыков",
+    "other": "{{who}} хочет изменить {{count}} навыка"
+   }
+  },
+  "server:approvals.group.table": {
+   "sha": "ef1b1d8983913fa6",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить {{count}} таблицу",
+    "few": "{{who}} хочет изменить {{count}} таблицы",
+    "many": "{{who}} хочет изменить {{count}} таблиц",
+    "other": "{{who}} хочет изменить {{count}} таблицы"
+   }
+  },
+  "server:approvals.group.task_change": {
+   "sha": "ff62eba4ce43d85d",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить {{count}} задачу",
+    "few": "{{who}} хочет изменить {{count}} задачи",
+    "many": "{{who}} хочет изменить {{count}} задач",
+    "other": "{{who}} хочет изменить {{count}} задачи"
+   }
+  },
+  "server:approvals.group.task_complete": {
+   "sha": "3f9992c979e8a9d9",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет завершить {{count}} задачу",
+    "few": "{{who}} хочет завершить {{count}} задачи",
+    "many": "{{who}} хочет завершить {{count}} задач",
+    "other": "{{who}} хочет завершить {{count}} задачи"
+   }
+  },
+  "server:approvals.group.task_delete": {
+   "sha": "996b99595eb5a994",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет удалить {{count}} задачу",
+    "few": "{{who}} хочет удалить {{count}} задачи",
+    "many": "{{who}} хочет удалить {{count}} задач",
+    "other": "{{who}} хочет удалить {{count}} задачи"
+   }
+  },
+  "server:approvals.group.task_list": {
+   "sha": "df053e11de342ec4",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет изменить {{count}} список задач",
+    "few": "{{who}} хочет изменить {{count}} списка задач",
+    "many": "{{who}} хочет изменить {{count}} списков задач",
+    "other": "{{who}} хочет изменить {{count}} списка задач"
+   }
+  },
+  "server:approvals.group.task_new": {
+   "sha": "f2657b6c5e13689e",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет добавить {{count}} задачу",
+    "few": "{{who}} хочет добавить {{count}} задачи",
+    "many": "{{who}} хочет добавить {{count}} задач",
+    "other": "{{who}} хочет добавить {{count}} задач"
+   }
+  },
+  "server:approvals.group.unsubscribe": {
+   "sha": "59b3d872b8fd46ca",
+   "state": "model",
+   "text": {
+    "one": "{{who}} хочет отписаться: {{count}} запрос",
+    "few": "{{who}} хочет отписаться: {{count}} запроса",
+    "many": "{{who}} хочет отписаться: {{count}} запросов",
+    "other": "{{who}} хочет отписаться: {{count}} запроса"
+   }
+  },
+  "server:approvals.kind.calendar": {
+   "sha": "727181e2e1586d2c",
+   "state": "model",
+   "text": "Календарь"
+  },
+  "server:approvals.kind.cleanup": {
+   "sha": "4d9ff1500db29b4f",
+   "state": "model",
+   "text": "Очистка"
+  },
+  "server:approvals.kind.contacts": {
+   "sha": "aef901fe3bb3ab73",
+   "state": "model",
+   "text": "Группы контактов"
+  },
+  "server:approvals.kind.draft_change": {
+   "sha": "bdb42950c7d7e88f",
+   "state": "model",
+   "text": "Изменить черновик"
+  },
+  "server:approvals.kind.draft_new": {
+   "sha": "30c17ce3ed14da43",
+   "state": "model",
+   "text": "Новый черновик"
+  },
+  "server:approvals.kind.event_cancel": {
+   "sha": "d707efa262aa6a70",
+   "state": "model",
+   "text": "Отменить мероприятие"
+  },
+  "server:approvals.kind.event_change": {
+   "sha": "2b6ffd2b34bea229",
+   "state": "model",
+   "text": "Изменить мероприятие"
+  },
+  "server:approvals.kind.event_delete": {
+   "sha": "0f676bf8f232f234",
+   "state": "model",
+   "text": "Удалить мероприятие"
+  },
+  "server:approvals.kind.event_new": {
+   "sha": "fc91c3619341a550",
+   "state": "model",
+   "text": "Новое мероприятие"
+  },
+  "server:approvals.kind.filter": {
+   "sha": "806fd7d0fadddfcd",
+   "state": "model",
+   "text": "Фильтр"
+  },
+  "server:approvals.kind.forwarded": {
+   "sha": "0c38519e121dc4a7",
+   "state": "model",
+   "text": "Пересланная заметка"
+  },
+  "server:approvals.kind.invite": {
+   "sha": "14e1b82e3cab8de3",
+   "state": "model",
+   "text": "Отправить приглашения"
+  },
+  "server:approvals.kind.label_change": {
+   "sha": "1b47ee05b6775c1a",
+   "state": "model",
+   "text": "Изменить ярлык"
+  },
+  "server:approvals.kind.label_delete": {
+   "sha": "dabe11ab518b58ae",
+   "state": "model",
+   "text": "Удалить ярлык"
+  },
+  "server:approvals.kind.label_new": {
+   "sha": "cd70b6f578855cfd",
+   "state": "model",
+   "text": "Новый ярлык"
+  },
+  "server:approvals.kind.mail_delete": {
+   "sha": "ccfc104b838c9d9c",
+   "state": "model",
+   "text": "Удалить навсегда"
+  },
+  "server:approvals.kind.mail_organise": {
+   "sha": "768e4c4093d2de2c",
+   "state": "model",
+   "text": "Организовать почту"
+  },
+  "server:approvals.kind.mail_spam": {
+   "sha": "a5e0c6c692535769",
+   "state": "model",
+   "text": "Пожаловаться на спам"
+  },
+  "server:approvals.kind.mail_trash": {
+   "sha": "11b9283d7b52d5d5",
+   "state": "model",
+   "text": "В Корзину"
+  },
+  "server:approvals.kind.memory": {
+   "sha": "ecbeaaaec5fafe42",
+   "state": "model",
+   "text": "Память"
+  },
+  "server:approvals.kind.note_change": {
+   "sha": "3313d1e0ee6bbcf0",
+   "state": "model",
+   "text": "Изменить заметку"
+  },
+  "server:approvals.kind.note_delete": {
+   "sha": "90d6fbb5822daa69",
+   "state": "model",
+   "text": "Удалить заметку"
+  },
+  "server:approvals.kind.note_labels": {
+   "sha": "1890947ea3dd8076",
+   "state": "model",
+   "text": "Ярлыки заметок"
+  },
+  "server:approvals.kind.note_new": {
+   "sha": "6bc294575523ebc9",
+   "state": "model",
+   "text": "Новая заметка"
+  },
+  "server:approvals.kind.order": {
+   "sha": "13a8661944a7d473",
+   "state": "model",
+   "text": "Постоянное поручение"
+  },
+  "server:approvals.kind.phone_sync": {
+   "sha": "87538b0705e7b07c",
+   "state": "model",
+   "text": "Календари телефона"
+  },
+  "server:approvals.kind.recording": {
+   "sha": "b35872b56f1995a5",
+   "state": "model",
+   "text": "Запись"
+  },
+  "server:approvals.kind.request": {
+   "sha": "f9939f2c12bf64be",
+   "state": "model",
+   "text": "Запрос"
+  },
+  "server:approvals.kind.review": {
+   "sha": "552e425de43e12fc",
+   "state": "model",
+   "text": "Проверка"
+  },
+  "server:approvals.kind.rsvp": {
+   "sha": "9976b6728c63caf0",
+   "state": "model",
+   "text": "Ответить на приглашение"
+  },
+  "server:approvals.kind.screener": {
+   "sha": "e0ea0cbac51a01f2",
+   "state": "same",
+   "text": "Screener"
+  },
+  "server:approvals.kind.send": {
+   "sha": "a6b0b0ac391df2ec",
+   "state": "model",
+   "text": "Отправить письмо"
+  },
+  "server:approvals.kind.settings": {
+   "sha": "83909f82446ee9c3",
+   "state": "model",
+   "text": "Настройки"
+  },
+  "server:approvals.kind.skill": {
+   "sha": "b8a4eaf2427d7c8d",
+   "state": "model",
+   "text": "Навык"
+  },
+  "server:approvals.kind.table": {
+   "sha": "0b982d8e0e671a51",
+   "state": "model",
+   "text": "Таблица"
+  },
+  "server:approvals.kind.task_change": {
+   "sha": "c6bee2fde8ca0129",
+   "state": "model",
+   "text": "Изменить задачу"
+  },
+  "server:approvals.kind.task_complete": {
+   "sha": "11bf90ccf60bc48f",
+   "state": "model",
+   "text": "Завершить задачу"
+  },
+  "server:approvals.kind.task_delete": {
+   "sha": "7c19332661ed817b",
+   "state": "model",
+   "text": "Удалить задачу"
+  },
+  "server:approvals.kind.task_list": {
+   "sha": "7708a5fb9dce94d9",
+   "state": "model",
+   "text": "Список задач"
+  },
+  "server:approvals.kind.task_new": {
+   "sha": "cfe1b5e64c6eee08",
+   "state": "model",
+   "text": "Новая задача"
+  },
+  "server:approvals.kind.unsubscribe": {
+   "sha": "ed1372ad165aa9bb",
+   "state": "model",
+   "text": "Отписаться"
+  },
   "server:approvals.mail.add_labels.ask": {
    "sha": "87caaf09e5edd623",
    "state": "model",
@@ -21042,6 +21782,121 @@
    "sha": "b5d5e6638443c37b",
    "state": "model",
    "text": "Агент написал это после прочтения почты."
+  },
+  "server:approvals.reason_short.bcc": {
+   "sha": "33b3a383f857686b",
+   "state": "model",
+   "text": "Сначала спрашивает: после прочтения почты, с скрытой копией"
+  },
+  "server:approvals.reason_short.cleanup": {
+   "sha": "6a5dbf362ffad64f",
+   "state": "model",
+   "text": "Сначала спрашивает: планы очистки всегда требуют вашего подтверждения"
+  },
+  "server:approvals.reason_short.draft_new_people": {
+   "sha": "8b2cac4871e0447d",
+   "state": "model",
+   "text": "Сначала спрашивает: черновик адресован людям вне цепочки"
+  },
+  "server:approvals.reason_short.draft_recipients": {
+   "sha": "bf7ae8d36b5d37a6",
+   "state": "model",
+   "text": "Сначала спрашивает: получатели черновика изменились"
+  },
+  "server:approvals.reason_short.errand_no_send": {
+   "sha": "5ac2c4bd88c19473",
+   "state": "model",
+   "text": "Сначала спрашивает: поручение не отправляется само по себе"
+  },
+  "server:approvals.reason_short.errand_shared": {
+   "sha": "524d09046c4f3d3a",
+   "state": "model",
+   "text": "Сначала спрашивает: запись в общую заметку"
+  },
+  "server:approvals.reason_short.forever": {
+   "sha": "44f9fe90b0427153",
+   "state": "model",
+   "text": "Сначала спрашивает: действие необратимо"
+  },
+  "server:approvals.reason_short.forwarded": {
+   "sha": "745a80aab324a7ca",
+   "state": "model",
+   "text": "Сначала спрашивает: невозможно проверить автора"
+  },
+  "server:approvals.reason_short.hides_mail": {
+   "sha": "2f53f55b223f4aa6",
+   "state": "model",
+   "text": "Сначала спрашивает: скрывает почту после прочтения"
+  },
+  "server:approvals.reason_short.local_copy": {
+   "sha": "b7e883da5996de80",
+   "state": "model",
+   "text": "Сначала спрашивает: будет скопировано только локальное содержимое"
+  },
+  "server:approvals.reason_short.lower_local": {
+   "sha": "06844c507f30efb3",
+   "state": "model",
+   "text": "Сначала спрашивает: облачные модели могут прочитать это"
+  },
+  "server:approvals.reason_short.new_address": {
+   "sha": "49490d04fc5b9872",
+   "state": "model",
+   "text": "Сначала спрашивает: первое сообщение на новый адрес"
+  },
+  "server:approvals.reason_short.notes_hides": {
+   "sha": "4a5fc8ff36298607",
+   "state": "model",
+   "text": "Сначала спрашивает: скрывает элементы после прочтения чужих сообщений"
+  },
+  "server:approvals.reason_short.notes_tainted": {
+   "sha": "11b44b07e368ebc6",
+   "state": "model",
+   "text": "Сначала спрашивает: текст написан после прочтения чужих сообщений"
+  },
+  "server:approvals.reason_short.other": {
+   "sha": "4a7c2bd30534b1fa",
+   "state": "model",
+   "text": "Сначала спрашивает"
+  },
+  "server:approvals.reason_short.outsider": {
+   "sha": "3e5750f62ce5092d",
+   "state": "model",
+   "text": "Сначала спрашивает: {{names}} не было в этой цепочке"
+  },
+  "server:approvals.reason_short.outsiders": {
+   "sha": "af861b2082b5edf4",
+   "state": "model",
+   "text": "Сначала спрашивает: {{names}} и {{last}} не было в этой цепочке"
+  },
+  "server:approvals.reason_short.public_link": {
+   "sha": "cb04f5b11e77c221",
+   "state": "model",
+   "text": "Сначала спрашивает: создается общедоступная ссылка"
+  },
+  "server:approvals.reason_short.read_mail": {
+   "sha": "bdaf265a40ffe456",
+   "state": "model",
+   "text": "Сначала спрашивает: текст написан после прочтения почты"
+  },
+  "server:approvals.reason_short.screener": {
+   "sha": "6e16ef97fb50ec2d",
+   "state": "model",
+   "text": "Сначала спрашивает: решения Screener принимаете вы"
+  },
+  "server:approvals.reason_short.tainted": {
+   "sha": "0abea5fee6628627",
+   "state": "model",
+   "text": "Сначала спрашивает: текст написан после прочтения почты"
+  },
+  "server:approvals.reason_short.token_text": {
+   "sha": "f7b5395bb50ecc89",
+   "state": "model",
+   "text": "Сначала спрашивает: текст написан через API-токен"
+  },
+  "server:approvals.reason_short.whole_list": {
+   "sha": "18a4307b74f1444b",
+   "state": "model",
+   "text": "Сначала спрашивает: действие применяется ко всему списку"
   },
   "server:approvals.result.already_done": {
    "sha": "a6d64c12097e8998",
@@ -22888,6 +23743,51 @@
    "state": "model",
    "text": "пользователь не найден"
   },
+  "server:errors.assistant.attachment_empty": {
+   "sha": "35a969468517bbed",
+   "state": "model",
+   "text": "Файл пуст"
+  },
+  "server:errors.assistant.attachment_gone": {
+   "sha": "23a98c02724f6bc0",
+   "state": "model",
+   "text": "вложение больше не доступно; прикрепите его снова"
+  },
+  "server:errors.assistant.attachment_heic": {
+   "sha": "381a568997e06fee",
+   "state": "model",
+   "text": "Фотографии в форматах HEIC и HEIF не поддерживаются на этом сервере; прикрепите JPEG или PNG"
+  },
+  "server:errors.assistant.attachment_not_found": {
+   "sha": "0383a16cbb846090",
+   "state": "model",
+   "text": "вложение не найдено"
+  },
+  "server:errors.assistant.attachment_sent": {
+   "sha": "f57792fbdf42fba8",
+   "state": "model",
+   "text": "этот файл был отправлен с сообщением; он будет удален при удалении чата"
+  },
+  "server:errors.assistant.attachment_too_large": {
+   "sha": "b8e19d11802d56c0",
+   "state": "model",
+   "text": "размер вложения не может превышать {{max}} МБ"
+  },
+  "server:errors.assistant.attachment_type": {
+   "sha": "753ef8929e682d83",
+   "state": "model",
+   "text": "этот тип файла не поддерживается; прикрепите изображение, PDF, текстовый файл или файл Word, Excel, PowerPoint, OpenDocument или RTF"
+  },
+  "server:errors.assistant.attachment_unreadable": {
+   "sha": "a0b746ff7cd67418",
+   "state": "model",
+   "text": "не удалось прочитать файл: {{reason}}"
+  },
+  "server:errors.assistant.attachments_waiting": {
+   "sha": "6b4a71a28c29c78e",
+   "state": "model",
+   "text": "{{max}} файлов уже ожидают отправки; сначала отправьте их или удалите некоторые"
+  },
   "server:errors.assistant.chat_title_too_long": {
    "sha": "46b9048feb1fe29d",
    "state": "model",
@@ -22952,6 +23852,11 @@
    "sha": "42827835971e7fc2",
    "state": "model",
    "text": "ассистент ещё отвечает в этом чате; сначала остановите его"
+  },
+  "server:errors.assistant.too_many_attachments": {
+   "sha": "2aae4a37addf52c5",
+   "state": "model",
+   "text": "одно сообщение может содержать не более {{max}} файлов"
   },
   "server:errors.assistant.unknown_review": {
    "sha": "ad3b42155d9a3765",
@@ -26713,6 +27618,91 @@
    "state": "model",
    "text": "{{value}} не найдено. Возможно, ссылка неверна или относится к другому аккаунту."
   },
+  "web:approvals.cards.allowAll": {
+   "sha": "18bbf69cfe4e1755",
+   "state": "model",
+   "text": "Разрешить все"
+  },
+  "web:approvals.cards.allowAllTip": {
+   "sha": "06e03592ac09bd5a",
+   "state": "model",
+   "text": "Разрешить каждый запрос из этого списка один раз"
+  },
+  "web:approvals.cards.couldNotDenyThem": {
+   "sha": "7e168bb8696e0c58",
+   "state": "model",
+   "text": "Не удалось отклонить"
+  },
+  "web:approvals.cards.deniedRequests": {
+   "sha": "e193619c72a66df0",
+   "state": "model",
+   "text": {
+    "one": "Отклонен запрос ({{count}}).{{skipped}}",
+    "few": "Отклонено запросов: {{count}}.{{skipped}}",
+    "many": "Отклонено запросов: {{count}}.{{skipped}}",
+    "other": "Отклонено запросов: {{count}}.{{skipped}}"
+   }
+  },
+  "web:approvals.cards.denyAll": {
+   "sha": "8bd9b8dbe3661b93",
+   "state": "model",
+   "text": "Отклонить все"
+  },
+  "web:approvals.cards.denyAllQuestion": {
+   "sha": "5bfc4c3e37663c6d",
+   "state": "model",
+   "text": {
+    "one": "Отклонить этот запрос ({{count}})? Агент будет уведомлен об отказе.",
+    "few": "Отклонить все запросы ({{count}})? Агент будет уведомлен об отказе.",
+    "many": "Отклонить все запросы ({{count}})? Агент будет уведомлен об отказе.",
+    "other": "Отклонить все запросы ({{count}})? Агент будет уведомлен об отказе."
+   }
+  },
+  "web:approvals.cards.expires": {
+   "sha": "a933f408f4cbec16",
+   "state": "model",
+   "text": "истекает {{relative}}"
+  },
+  "web:approvals.cards.hideRequests": {
+   "sha": "eefdd1bfae511823",
+   "state": "model",
+   "text": "Скрыть запросы"
+  },
+  "web:approvals.cards.more": {
+   "sha": "ba2a8232349d2f54",
+   "state": "model",
+   "text": "Ещё"
+  },
+  "web:approvals.cards.moreWaysToAllow": {
+   "sha": "f1d8c575803c167d",
+   "state": "model",
+   "text": "Другие способы разрешить"
+  },
+  "web:approvals.cards.moreWaysToAllowAlso": {
+   "sha": "e4c72ab1b5f0ff48",
+   "state": "model",
+   "text": {
+    "one": "Другие способы разрешить (также подтвердит {{count}} другое ожидающее)",
+    "few": "Другие способы разрешить (также подтвердит {{count}} других ожидающих)",
+    "many": "Другие способы разрешить (также подтвердит {{count}} других ожидающих)",
+    "other": "Другие способы разрешить (также подтвердит {{count}} других ожидающих)"
+   }
+  },
+  "web:approvals.cards.plusN": {
+   "sha": "e840a9b8eeb25af2",
+   "state": "same",
+   "text": "+{{n}}"
+  },
+  "web:approvals.cards.showRequests": {
+   "sha": "7ba145a01ab40c62",
+   "state": "model",
+   "text": "Показать запросы"
+  },
+  "web:approvals.cards.whyItAsks": {
+   "sha": "ad2d98e123d06064",
+   "state": "model",
+   "text": "Почему запрошено"
+  },
   "web:approvals.grant.aStandingRuleForThis": {
    "sha": "9c534521cb582715",
    "state": "model",
@@ -27757,6 +28747,11 @@
    "sha": "a5000c5f16365a88",
    "state": "model",
    "text": "Из письма"
+  },
+  "web:calendar.eventDetail.groupBusyNote": {
+   "sha": "1631ef1e7a0d55f8",
+   "state": "model",
+   "text": "Календарь группы {{group}} показывает вам только занятость. Его редакторы видят названия и подробности."
   },
   "web:calendar.eventDetail.isNoLongerInYour": {
    "sha": "978a152a4ac78f85",
@@ -45196,6 +46191,61 @@
    "state": "model",
    "text": "Администратор еще не предоставил вам доступ к {{name}}."
   },
+  "web:rail.assistant.attachments.attach": {
+   "sha": "fee8fc0dfaf2afb1",
+   "state": "model",
+   "text": "Прикрепить изображения или файлы"
+  },
+  "web:rail.assistant.attachments.download": {
+   "sha": "c62d2a7f8df865ee",
+   "state": "model",
+   "text": "Скачать {{name}}"
+  },
+  "web:rail.assistant.attachments.dropHere": {
+   "sha": "eb9f0d0c7bda01ac",
+   "state": "model",
+   "text": "Перетащите файлы сюда, чтобы прикрепить их"
+  },
+  "web:rail.assistant.attachments.imageAlt": {
+   "sha": "6cf533d5dac778db",
+   "state": "model",
+   "text": "Прикрепленное изображение {{name}}"
+  },
+  "web:rail.assistant.attachments.notReadable": {
+   "sha": "a1c1d0d06aa55515",
+   "state": "model",
+   "text": "Невозможно прочитать {{name}}: прикрепите изображение, PDF, текстовый файл или файл Word, Excel, PowerPoint, OpenDocument или RTF."
+  },
+  "web:rail.assistant.attachments.pastedImage": {
+   "sha": "39a6c5c3d04bbe27",
+   "state": "model",
+   "text": "Вставленное изображение"
+  },
+  "web:rail.assistant.attachments.remove": {
+   "sha": "f87ea03cf025802a",
+   "state": "model",
+   "text": "Удалить {{name}}"
+  },
+  "web:rail.assistant.attachments.tooLarge": {
+   "sha": "2c4e1e17e9e34735",
+   "state": "model",
+   "text": "Файл {{name}} превышает {{max}} МБ."
+  },
+  "web:rail.assistant.attachments.tooMany": {
+   "sha": "7a37d6f4720a4a5f",
+   "state": "model",
+   "text": "Одно сообщение может содержать не более {{max}} файлов."
+  },
+  "web:rail.assistant.attachments.uploadFailed": {
+   "sha": "04cbc0e13466824d",
+   "state": "model",
+   "text": "Не удалось прикрепить {{name}}: {{error}}"
+  },
+  "web:rail.assistant.attachments.uploading": {
+   "sha": "760282e4e0e235ab",
+   "state": "model",
+   "text": "Загрузка"
+  },
   "web:rail.assistant.chatList.backToChat": {
    "sha": "3f0f5060fc32cd1d",
    "state": "model",
@@ -49272,10 +50322,20 @@
    "state": "model",
    "text": "Может выполнять: {{map}}. Выберите его использование в разделе «Модели для задач»."
   },
+  "web:settings.adminTab.canModelViewImages": {
+   "sha": "186e624ddd465510",
+   "state": "model",
+   "text": "Может ли {{model}} просматривать изображения"
+  },
   "web:settings.adminTab.canSignIn": {
    "sha": "0080c1fbc96e0773",
    "state": "model",
    "text": "{{email}} может войти в систему"
+  },
+  "web:settings.adminTab.canViewImages": {
+   "sha": "7e2654b51e27f920",
+   "state": "model",
+   "text": "Просмотр изображений"
   },
   "web:settings.adminTab.couldNotChangeTheDefault": {
    "sha": "020a0832a943891e",
@@ -49311,6 +50371,21 @@
    "sha": "2a1445586127b5a8",
    "state": "model",
    "text": "Удалить пользователя"
+  },
+  "web:settings.adminTab.detect": {
+   "sha": "4927fecd81c3dd60",
+   "state": "model",
+   "text": "Определить"
+  },
+  "web:settings.adminTab.detectTip": {
+   "sha": "8a1068990c50a69b",
+   "state": "model",
+   "text": "Запросить у сервера моделей, какие модели могут просматривать изображения"
+  },
+  "web:settings.adminTab.detecting": {
+   "sha": "5bbcfbe2a7a10896",
+   "state": "model",
+   "text": "Определение…"
   },
   "web:settings.adminTab.discover": {
    "sha": "b22f790b1fd2ecd3",
@@ -49777,6 +50852,31 @@
    "sha": "3cff8c2059a11ad0",
    "state": "model",
    "text": "Пользователи по-прежнему могут отменять общие доступы, которые они создали ранее."
+  },
+  "web:settings.adminTab.visionAutoNo": {
+   "sha": "90d482f43a145e0e",
+   "state": "model",
+   "text": "Авто: нет"
+  },
+  "web:settings.adminTab.visionAutoUnknown": {
+   "sha": "11dc945ee1525dba",
+   "state": "model",
+   "text": "Авто: неизвестно (нет)"
+  },
+  "web:settings.adminTab.visionAutoYes": {
+   "sha": "add2d384929f5d58",
+   "state": "model",
+   "text": "Авто: да"
+  },
+  "web:settings.adminTab.visionNo": {
+   "sha": "b2cbc4e2e5545a6c",
+   "state": "model",
+   "text": "Нет"
+  },
+  "web:settings.adminTab.visionYes": {
+   "sha": "184fda5c980b9d9c",
+   "state": "model",
+   "text": "Да"
   },
   "web:settings.adminTab.whereTheModelsAreOpenai": {
    "sha": "89500f3d6c6e442a",
@@ -50929,6 +52029,41 @@
    "sha": "121c9b9d618a054d",
    "state": "manual",
    "text": " (облачная)"
+  },
+  "web:settings.assistant.modelsSection.images": {
+   "sha": "941b085d3176f81f",
+   "state": "model",
+   "text": "Изображения"
+  },
+  "web:settings.assistant.modelsSection.imagesDesc": {
+   "sha": "e8cba51cd628e8e5",
+   "state": "model",
+   "text": "Фото и сканы в вашей почте, а также изображения, которые вы прикрепляете в чате. За один вопрос модель {{name}} получает не более четырёх изображений."
+  },
+  "web:settings.assistant.modelsSection.imagesLocalCannot": {
+   "sha": "b89e38626c25ce07",
+   "state": "model",
+   "text": "Используемая модель может просматривать изображения. Модель для локальной почты не может: для такой почты показывается только размер изображения."
+  },
+  "web:settings.assistant.modelsSection.imagesModelCan": {
+   "sha": "6d7915801c24472b",
+   "state": "model",
+   "text": "Используемые модели могут просматривать изображения, в том числе для локальной почты."
+  },
+  "web:settings.assistant.modelsSection.imagesModelCannot": {
+   "sha": "a539d1fb66f6f807",
+   "state": "model",
+   "text": "Модель, которую использует {{name}}, не может просматривать изображения, поэтому {{name}} видит только размер изображения. Администратор может отметить модель с поддержкой изображений в разделе «Администрирование» → «Модели»."
+  },
+  "web:settings.assistant.modelsSection.imagesOnlyLocal": {
+   "sha": "ea21d67938861d38",
+   "state": "model",
+   "text": "Просматривать изображения может только модель для локальной почты. В остальных случаях показывается только размер изображения."
+  },
+  "web:settings.assistant.modelsSection.letSeeImages": {
+   "sha": "7ce85f094120c643",
+   "state": "model",
+   "text": "Разрешить {{name}} просматривать изображения"
   },
   "web:settings.assistant.modelsSection.localOnlyMail": {
    "sha": "9f37c8fa3239220d",
@@ -54541,9 +55676,9 @@
    "text": "Ваши группы видят, когда вы заняты."
   },
   "web:settings.groupCalendars.aGroupCalendarBelongsTo": {
-   "sha": "f510a9bb6121fa24",
+   "sha": "d7b0752512e4b866",
    "state": "model",
-   "text": "Групповой календарь отображается в разделе «Общие» в Календаре для всех участников группы. Участники могут редактировать его или просматривать, пока назначенные редакторы вносят изменения. Группы берутся из вашего провайдера входа или из Настройки → Администратор → Пользователи."
+   "text": "Групповой календарь отображается в разделе «Календарь» в папке «Общие» для всех участников группы. Участники могут редактировать его, просматривать его, пока назначенные редакторы вносят изменения, или видеть только занятые слоты. Группы создаются вашим провайдером входа или через «Настройки» → «Администрирование» → «Пользователи»."
   },
   "web:settings.groupCalendars.accessIsSetWhenThe": {
    "sha": "9b682a412e789839",
@@ -54620,6 +55755,16 @@
    "state": "model",
    "text": "Все участники могут добавлять и изменять мероприятия."
   },
+  "web:settings.groupCalendars.freeBusyNeedsStalwart1": {
+   "sha": "d7ffb2010c8130db",
+   "state": "model",
+   "text": "Требуется Stalwart 1.x на почтовом сервере."
+  },
+  "web:settings.groupCalendars.freeBusyOnly": {
+   "sha": "883638ffa96db0e3",
+   "state": "model",
+   "text": "Только занятость"
+  },
   "web:settings.groupCalendars.groupCalendarSaved": {
    "sha": "e475d68c5814dc63",
    "state": "model",
@@ -54675,6 +55820,26 @@
    "state": "model",
    "text": "Участники {{groupName}}"
   },
+  "web:settings.groupCalendars.membersSeeFreeBusy": {
+   "sha": "94d5deffb8ebb5d7",
+   "state": "model",
+   "text": "Участники видят только занятость"
+  },
+  "web:settings.groupCalendars.membersSeeFreeBusyEditors": {
+   "sha": "f5df1653ee35c8b7",
+   "state": "model",
+   "text": {
+    "one": "Участники видят только занятость · {{count}} редактор",
+    "few": "Участники видят только занятость · {{count}} редактора",
+    "many": "Участники видят только занятость · {{count}} редакторов",
+    "other": "Участники видят только занятость · {{count}} редактора"
+   }
+  },
+  "web:settings.groupCalendars.membersSeeOnlyBusyBlocks": {
+   "sha": "ba69b1bc01c3534f",
+   "state": "model",
+   "text": "Участники видят только занятые слоты календаря как блоки «Занято». Указанные ниже редакторы могут просматривать и изменять мероприятия."
+  },
   "web:settings.groupCalendars.membersSeeTheEventsOnly": {
    "sha": "98f11a83cc60b7ac",
    "state": "model",
@@ -54699,6 +55864,11 @@
    "sha": "82a30a8583b36c66",
    "state": "model",
    "text": "Групп пока нет. Группы появляются, если вход содержит утверждение о группах, или когда вы назначаете их в Настройки → Администратор → Пользователи."
+  },
+  "web:settings.groupCalendars.switchViewAndFreeBusy": {
+   "sha": "3c0859af8107848d",
+   "state": "model",
+   "text": "Вы можете переключаться между режимами «Просмотр» и «Только занятость». Режим «Редактирование» устанавливается при создании календаря."
   },
   "web:settings.groupCalendars.team": {
    "sha": "015c33c4ec95d38f",

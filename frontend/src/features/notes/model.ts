@@ -58,11 +58,14 @@ export interface ChecklistView {
   groups: Group[]
   /** The "n checked" fold (checked_at_bottom): newest check first. */
   checked: Item[]
+  /** The fold's "n checked": the items in it and the checked items that stay in their groups. */
+  checkedCount: number
 }
 
-/** The whole checklist in display order. */
+/** The whole checklist in display order. `stay`: the items the editor has shown unchecked since the
+ * note was opened. A checked one keeps its place (ticked, struck through) until the note is opened
+ * again; only the display waits. */
 export function checklistView(note: Pick<Note, 'checked_at_bottom' | 'top_order_mode' | 'top'>, sections: Section[], items: Item[], stay: ReadonlySet<string> = new Set()): ChecklistView {
-  // `stay`: items just checked, struck through in place for a moment before they move to the fold.
   const fold = note.checked_at_bottom
   const known = new Set(sections.map((s) => s.id))
   const inGroup = (sid: string | null) => items.filter((i) => (sid === null ? !i.section_id || !known.has(i.section_id) : i.section_id === sid) && (!fold || !i.checked || stay.has(i.id)))
@@ -70,8 +73,18 @@ export function checklistView(note: Pick<Note, 'checked_at_bottom' | 'top_order_
   const top: Group = { section: null, mode: note.top?.order_mode ?? note.top_order_mode ?? 'manual', items: [] }
   top.items = arrange(inGroup(null), top.mode)
   const groups: Group[] = [top, ...ordered.map((s) => ({ section: s, mode: s.order_mode, items: arrange(inGroup(s.id), s.order_mode) }))]
-  const checked = fold ? items.filter((i) => i.checked && !stay.has(i.id)).sort((a, b) => byKey(b.checked_at ?? '', a.checked_at ?? '')) : []
-  return { groups, checked }
+  const allChecked = fold ? items.filter((i) => i.checked) : []
+  const checked = allChecked.filter((i) => !stay.has(i.id)).sort((a, b) => byKey(b.checked_at ?? '', a.checked_at ?? ''))
+  return { groups, checked, checkedCount: allChecked.length }
+}
+
+/** The editor's view: `seen` holds the items it has shown unchecked since the note was opened (a new
+ * set on each opening). The items shown unchecked now join it, so a later check here or from
+ * elsewhere leaves the row where it is. */
+export function viewSinceOpened(seen: Set<string>, note: Pick<Note, 'checked_at_bottom' | 'top_order_mode' | 'top'>, sections: Section[], items: Item[]): ChecklistView {
+  const view = checklistView(note, sections, items, seen)
+  for (const g of view.groups) for (const i of g.items) if (!i.checked) seen.add(i.id)
+  return view
 }
 
 // Without the fold, checked items keep their place: they are sorted with the rest.

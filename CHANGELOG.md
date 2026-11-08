@@ -4,6 +4,50 @@ The changes in each Mailr release are listed here, newest first. A release is ta
 on GitHub, and its image is published as `ghcr.io/murtaza-nasir/mailr:<version>`. The Android app
 of a release has the same version number; the separate Notes app has its own.
 
+## 0.40.41
+
+- Group calendars can be shared with the group as **Free/busy only** (Stalwart 1.0 or later).
+  Members see "Busy" blocks with no titles, places or guests, in Calendar, Find a time and Ambrose;
+  the calendar's editors see and change everything. Admins can switch a group calendar between
+  Can view and Free/busy only; members' copies drop or regain the details at their next sync. On
+  Stalwart 0.16 the level is not offered, and the API refuses it.
+- Web notes: a checklist item checked while the note is open, here or on another device, now stays
+  in its place, ticked and struck through, until the note is opened again; "N checked" and Clear
+  checked include these rows, and the move into the fold after 600 ms is gone.
+
+## 0.40.40
+
+- Android (both apps): a checked item on an open list stays where it is, ticked and struck
+  through, until the list is opened again, so the list no longer moves while you check items off.
+  "N checked" counts these items and Clear checked removes them.
+- Android (both apps): checking an item on a list opened from a link no longer scrolls back to the
+  linked item. That item's mark fades after 3 seconds or at the first touch. Notes app 2.1.5 (32).
+- Ambrose can see images: photos and scans in your mail and PDF pages reach the chat model when it
+  can view images, at most four per question, never a local-only image to a hosted model.
+  Settings → Ambrose → Models → "Let Ambrose see images".
+- Attach images and files to a message to Ambrose: paperclip, paste or drop on the web, the attach
+  button and the new "Ask Ambrose" share target on Android. Thumbnails and file chips stay in the
+  chat and are deleted with it.
+- Word, Excel, PowerPoint, OpenDocument and RTF files are now read as text by Ambrose and by
+  `get_attachment` (MCP and REST), with caps against ZIP bombs and huge sheets.
+- Admin → Models shows which models can view images, detected from the server (OpenAI-compatible
+  `/models`, llama.cpp `/props`, Ollama `/api/show`), with a per-model override and a Detect
+  button. Existing endpoints are checked automatically at worker start and daily until their
+  server answers, and an admin's override is never changed.
+
+## 0.40.39
+
+- Approval cards show the kind of request and who asked at the top, the item's own title as the
+  heading (two lines, with "more"), its key facts on one line, and a short reason with ⓘ for the
+  whole explanation.
+- Approval card buttons fit on one row: Allow once, Deny, a grants menu that shows how many other
+  waiting requests a grant also approves, and ⋮ with Ask.
+- Consecutive requests of one kind from one chat or agent are grouped ("claude-code wants to add 2
+  tasks"), with Allow all and Deny all for exactly the listed requests (web and Android).
+- `POST /approvals/decide-many` reports an unknown id as `not_found` and still decides the others;
+  every approval card carries `head` (kind, label, name, short reason).
+- Fixed: an agent token with a long name could not make audited requests (error 500).
+
 ## 0.40.38
 
 - The message details (web and Android) now show which of your accounts collected a message and

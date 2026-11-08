@@ -15,14 +15,12 @@ import { taskPath } from '../../lib/routes'
 import { toast } from '../../stores/ui'
 import { addItems, addUsual, adoptPrefixed, clearChecked, createSection, deleteItem, deleteSection, dismissUsual, itemToTask, moveItem, patchItem, patchSection, prefixedItems } from './actions'
 import { runUndo, useUsual } from './api'
-import { authorLine, checklistView, flatOrder, qtyLabel, stepQty, type Group } from './model'
+import { authorLine, flatOrder, viewSinceOpened, qtyLabel, stepQty, type Group } from './model'
 import { useNotesUI } from './store'
 import { useNotesQueue } from './offline'
 import { useTouchedBy } from './presenceBeacon'
 import type { Item, Note, Section } from './types'
 import { t as tr } from '../../i18n'
-
-const CHECK_LINGER_MS = 600
 
 interface Props {
   note: Note
@@ -40,10 +38,12 @@ export const Checklist = forwardRef<ChecklistHandle, Props>(function Checklist({
   const qc = useQueryClient()
   const sections = useMemo(() => note.sections ?? [], [note.sections])
   const items = useMemo(() => note.items ?? [], [note.items])
-  // A check strikes the row first and moves it into the fold 600 ms later, so a mis-click can be
-  // undone in place.
-  const [lingering, setLingering] = useState<Set<string>>(new Set())
-  const view = useMemo(() => checklistView(note, sections, items, lingering), [note, sections, items, lingering])
+  // The items shown unchecked since the note was opened (the editor mounts anew on each opening). One
+  // of them checked here or on another device stays in its place, ticked and struck through, until
+  // the note is opened again, so the rows under the pointer do not move. The item is checked in the
+  // data at once; only the display waits.
+  const seen = useRef(new Set<string>())
+  const view = useMemo(() => viewSinceOpened(seen.current, note, sections, items), [note, sections, items])
   const order = useMemo(() => flatOrder(view), [view])
   const inputs = useRef(new Map<string, HTMLInputElement>())
   const topAdd = useRef<HTMLInputElement>(null)
@@ -82,15 +82,7 @@ export const Checklist = forwardRef<ChecklistHandle, Props>(function Checklist({
   // ACT checkitem.check @web.note, ACT checkitem.uncheck @web.note
   const toggle = (item: Item) => {
     if (readOnly) return
-    if (!item.checked && note.checked_at_bottom) {
-      setLingering((s) => new Set(s).add(item.id))
-      void patchItem(qc, note.id, item, { checked: true })
-      window.setTimeout(() => setLingering((s) => {
-        const n = new Set(s)
-        n.delete(item.id)
-        return n
-      }), CHECK_LINGER_MS)
-    } else void patchItem(qc, note.id, item, { checked: !item.checked })
+    void patchItem(qc, note.id, item, { checked: !item.checked })
   }
 
   const sectionNames = sections.map((s) => s.name)
@@ -165,12 +157,12 @@ export const Checklist = forwardRef<ChecklistHandle, Props>(function Checklist({
           <Plus size={16} />{' '}{tr('common.addSection')}
         </button>
       )}
-      {note.checked_at_bottom && view.checked.length > 0 && (
+      {note.checked_at_bottom && view.checkedCount > 0 && (
         <div className="nt-fold" data-testid="checked-fold">
           <div className="nt-fold-head">
             <button type="button" className="nt-fold-toggle" aria-expanded={foldOpen} onClick={() => setFoldOpen((v) => !v)}>
               {foldOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
-              {tr('notes.checklist.checked', { checkedLength: view.checked.length })}
+              {tr('notes.checklist.checked', { checkedLength: view.checkedCount })}
             </button>
             {/* ACT note.clear_checked @web.note */}
             {!readOnly && <button type="button" className="btn text sm" onClick={() => setConfirmClear(true)}>{tr('notes.checklist.clearChecked')}</button>}
@@ -214,7 +206,7 @@ export const Checklist = forwardRef<ChecklistHandle, Props>(function Checklist({
           void deleteSection(qc, note.id, deleting.id, mode)
           setDeleting(null)
         }} />}
-      <ConfirmDialog open={confirmClear} title={tr('notes.checklist.clearCheckedItems')} body={tr('notes.checklist.checkedItemsGoToThe', { count: view.checked.length })}
+      <ConfirmDialog open={confirmClear} title={tr('notes.checklist.clearCheckedItems')} body={tr('notes.checklist.checkedItemsGoToThe', { count: view.checkedCount })}
         confirmLabel={tr('notes.checklist.clear')} focusConfirm onClose={() => setConfirmClear(false)} onConfirm={() => {
           setConfirmClear(false)
           void clearChecked(qc, note.id)

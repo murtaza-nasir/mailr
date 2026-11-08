@@ -625,7 +625,11 @@ Scope: depends on the tool.
 
 | Route | Description |
 |---|---|
-| `POST /api/v1/agent/chat` | Send a message to Ambrose; the answer is streamed back. `local_only: true` keeps the chat on the local model. |
+| `POST /api/v1/agent/chat` | Send a message to Ambrose; the answer is streamed back. `local_only: true` keeps the chat on the local model; `attachments` lists up to 5 uploads to send with the message. |
+| `POST /api/v1/agent/attachments` | Upload one image or file for a message to Ambrose (multipart, field `file`, up to 15 MB): read at once, sent later with `POST /api/v1/agent/chat`. |
+| `GET /api/v1/agent/attachments/{aid}` | Download a file as it was attached. |
+| `GET /api/v1/agent/attachments/{aid}/thumb` | A small copy of an attached image, without metadata. |
+| `DELETE /api/v1/agent/attachments/{aid}` | Remove an upload that was not sent yet; sent ones are deleted with their chat. |
 | `POST /api/v1/agent/chat/{session_id}/stop` | Stop Ambrose's current answer. |
 | `GET /api/v1/agent/chat/{session_id}/stream` | Reconnect to an answer that is still streaming. |
 | `POST /api/v1/agent/draft` | Help me write: draft a message or edit the current draft. |
@@ -752,6 +756,8 @@ Scope: a signed-in admin session. API tokens are refused, except an admin's toke
 | `DELETE /api/v1/admin/models/{eid}` | Remove a model endpoint. |
 | `POST /api/v1/admin/models/{eid}/probe` | List the models a saved endpoint serves. |
 | `POST /api/v1/admin/models/{eid}/test` | Send one tiny request to an endpoint: the time it took, or the error in plain words. |
+| `POST /api/v1/admin/models/{eid}/detect` | Ask the endpoint's server again which of its models can view images. |
+| `PUT /api/v1/admin/models/{eid}/capabilities` | Set whether one model can view images (`vision`: true, false, or null for what the server said). |
 | `GET /api/v1/admin/policies` | Server-wide policies. |
 | `PUT /api/v1/admin/policies` | Change server-wide policies. |
 | `GET /api/v1/admin/access` | Access policies, the identity-provider groups seen at sign-in, and what a policy can hold. |

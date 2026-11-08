@@ -28,7 +28,8 @@ object SessionReplay {
     fun turns(session: JsonObject): List<ChatTurn> {
         val raw = (session["turns"] as? JsonArray).orEmpty().mapNotNull { it as? JsonObject }
         val out = raw.map { t ->
-            if (str(t, "role") == "user") ChatTurn("user", str(t, "content").orEmpty(), streaming = false, messageId = (t["id"] as? JsonPrimitive)?.longOrNull)
+            if (str(t, "role") == "user") ChatTurn("user", str(t, "content").orEmpty(), streaming = false,
+                messageId = (t["id"] as? JsonPrimitive)?.longOrNull, attachments = files(t["attachments"] as? JsonArray))
             else assistant(t)
         }
             .toMutableList()
@@ -83,6 +84,11 @@ object SessionReplay {
             count = (s["count"] as? JsonPrimitive)?.intOrNull, icon = str(s, "icon"),
             approvalId = (s["approval_id"] as? JsonPrimitive)?.longOrNull, repeatOf = str(s, "repeat_of")?.ifBlank { null },
             email = stepEmail(s))
+    }
+
+    /** A user turn's files and images (agent/chat_files.out), each kept only when it reads. */
+    private fun files(a: JsonArray?): List<io.github.murtazanasir.mailr.data.agent.ChatFile> = a.orEmpty().mapNotNull { f ->
+        catching { MailrJson.decodeFromJsonElement(io.github.murtazanasir.mailr.data.agent.ChatFile.serializer(), f) }.getOrNull()
     }
 
     private fun card(o: JsonObject?): Approval? = o?.let { catching { MailrJson.decodeFromJsonElement(Approval.serializer(), it) }.getOrNull() }

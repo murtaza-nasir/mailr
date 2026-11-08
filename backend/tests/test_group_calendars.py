@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import contextlib
 import uuid
+from datetime import timedelta
 from typing import Any
 
 import pytest
@@ -396,3 +397,145 @@ async def test_read_only_message_names_the_calendar():
     with pytest.raises(ValueError, match="read-only for you"):
         writer._refused(dav.DavError("PUT x: forbidden", 403), coll)
     writer._refused(dav.DavError("PUT x: HTTP 500", 500), coll)  # anything else is not about rights
+
+
+# ---------------- free/busy only (Stalwart 1.x) ----------------
+
+
+def test_the_group_ace_grants_read_free_busy_alone():
+    """A "Free/busy only" calendar's group ACE is CalDAV read-free-busy (the caldav namespace), a
+    "Can view" one DAV read."""
+    assert groups.group_privileges("freebusy") == ["read-free-busy"]
+    assert groups.group_privileges("read") == ["read"]
+    ace = groups._ace("/dav/pal/grp/", groups.group_privileges("freebusy"))
+    assert "<c:read-free-busy/>" in ace and "<d:read/>" not in ace
+    assert "<d:read/><" in groups._ace("/dav/pal/a/", ["read", "write"])
+
+
+async def test_free_busy_only_is_refused_on_stalwart_0_16(store, app, client, user, monkeypatch):
+    """ACT settings.group_calendars: the level needs Stalwart 1.x. On 0.16 the admin list does not
+    offer it, a new calendar at that level and a switch to it are refused with a plain message,
+    and nothing is written."""
+    from mailr.calendar import sharing
+
+    async with sessionmaker()() as db:
+        if not (await db.execute(select(AccessPolicy).where(AccessPolicy.group_name == EVERYONE))).first():
+            db.add(AccessPolicy(group_name=EVERYONE))
+            await db.commit()
+    await _on()
+    g = f"Fam {uuid.uuid4().hex[:6]}"
+    acls: list[str] = []
+
+    async def no_acl(db, cg, gc):
+        acls.append(gc.access)
+
+    monkeypatch.setattr(groups, "_write_acl", no_acl)
+    async with _admin(app) as adm:
+        monkeypatch.setattr(sharing, "server_v1", _const(False))
+        assert (await adm.get(f"{API}/admin/calendars/groups")).json()["access"] == ["write", "read"]
+        r = await adm.post(f"{API}/admin/calendars/groups", json={"group": g, "name": "Rota", "access": "freebusy"})
+        assert r.status_code == 400 and "free/busy only" in r.json()["detail"] and "1.x" in r.json()["detail"], r.text
+        gc = await _calendar(g, access="read")
+        r = await adm.patch(f"{API}/admin/calendars/groups/{gc.id}", json={"access": "freebusy"})
+        assert r.status_code == 400 and "free/busy only" in r.json()["detail"], r.text
+        async with sessionmaker()() as db:
+            assert (await db.get(GroupCalendar, gc.id)).access == "read"
+            assert not (await db.execute(select(GroupCalendar).where(GroupCalendar.name == "Rota"))).first()
+        assert acls == []
+        r = await adm.post(f"{API}/admin/calendars/groups", json={"group": g, "name": "X", "access": "busy"})
+        assert r.status_code == 422
+
+        # Stalwart 1.x: offered; a Can view calendar switches to free/busy only and back (the ACL is
+        # written again each time); Can edit stays fixed either way.
+        monkeypatch.setattr(sharing, "server_v1", _const(True))
+        assert (await adm.get(f"{API}/admin/calendars/groups")).json()["access"] == ["write", "read", "freebusy"]
+        async with sessionmaker()() as db:
+            db.add(CalendarGroup(group_name=g, store_group_id="g1", store_group_login="grp@example.test",
+                                 owner_id="o1", owner_login="grpcal@example.test"))
+            await db.commit()
+        r = await adm.patch(f"{API}/admin/calendars/groups/{gc.id}", json={"access": "freebusy"})
+        assert r.status_code == 200 and r.json()["access"] == "freebusy", r.text
+        r = await adm.patch(f"{API}/admin/calendars/groups/{gc.id}", json={"access": "read"})
+        assert r.status_code == 200 and r.json()["access"] == "read", r.text
+        assert acls == ["freebusy", "read"]
+        r = await adm.patch(f"{API}/admin/calendars/groups/{gc.id}", json={"access": "write"})
+        assert r.status_code == 400 and "fixed" in r.json()["detail"]
+        wgc = await _calendar(g, access="write")
+        r = await adm.patch(f"{API}/admin/calendars/groups/{wgc.id}", json={"access": "freebusy"})
+        assert r.status_code == 400 and "fixed" in r.json()["detail"]
+
+
+def _const(v):
+    async def f():
+        return v
+    return f
+
+
+async def test_members_get_busy_blocks_unless_the_calendar_is_listed(store, app, client, user, monkeypatch):
+    """ACT calendar.group_shared: during a member's sync, a free/busy-only group calendar that the
+    listing leaves out is asked as a free-busy-query and stored as busy blocks; a listed one (an
+    editor's, or through an own grant: Stalwart 1.x takes the union) is not asked and syncs in full;
+    a calendar of another group, a "Can view" one and a refusal give nothing. The member's list marks
+    the blocks' calendar access "freebusy"."""
+    from mailr.calendar import shared_busy, sharing
+
+    await _on()
+    g = f"Fam {uuid.uuid4().hex[:6]}"
+    asked: list[str] = []
+    refused: set[str] = set()
+
+    async def query(client_, href, start, end):
+        asked.append(groups.path_of(href))
+        if groups.path_of(href) in refused:
+            raise shared_busy.Refused("403")
+        return [shared_busy.Period(start + timedelta(days=70), start + timedelta(days=70, hours=1))]
+
+    monkeypatch.setattr(shared_busy, "query", query)
+    async with _shared_collection(user, g, access="freebusy", read_only=True) as (cid, coll_id, gc_id):
+        other = await _calendar(f"Other {uuid.uuid4().hex[:6]}", access="freebusy")
+        view = await _calendar(g, access="read")
+        async with sessionmaker()() as db:
+            gc = await db.get(GroupCalendar, gc_id)
+            path = gc.href
+        out = sharing.Listing({}, None)
+        await sharing._group_free_busy_only(None, user.id, set(), {}, out)
+        assert asked == [path]
+        assert [(groups.path_of(i.href), i.displayname, i.read_only) for i, _ in out.busy] == [(path, "Family", True)]
+        assert out.shared_in[path]["group_calendar_id"] == gc_id and out.shared_in[path]["level"] == "freebusy"
+        assert other.href not in asked and view.href not in asked
+
+        # Listed for this member (an editor, or an own grant): not asked.
+        asked.clear()
+        out2 = sharing.Listing({}, None)
+        await sharing._group_free_busy_only(None, user.id, {path}, {}, out2)
+        assert asked == [] and out2.busy == [] and out2.shared_in == {}
+
+        # Refused (not yet in the store group): left out.
+        refused.add(path)
+        out3 = sharing.Listing({}, None)
+        await sharing._group_free_busy_only(None, user.id, set(), {}, out3)
+        assert out3.busy == [] and out3.shared_in == {}
+
+        # The list: "freebusy" while the last sync stored blocks, else what the listing gave.
+        async with sessionmaker()() as db:
+            conn = await db.get(Connector, cid)
+            conn.state = {"caldav": {"shared_in": out.shared_in}}
+            await db.commit()
+        cals = (await client.get(f"{API}/calendar/calendars")).json()
+        fam = next(c for c in cals if c["calendar_id"] == coll_id)
+        assert fam["shared"] == {"kind": "group", "group": g, "access": "freebusy", "editor": False,
+                                 "group_calendar_id": gc_id}
+        async with sessionmaker()() as db:
+            conn = await db.get(Connector, cid)
+            conn.state = {"caldav": {"shared_in": {}}}
+            await db.commit()
+        fam = next(c for c in (await client.get(f"{API}/calendar/calendars")).json() if c["calendar_id"] == coll_id)
+        assert fam["shared"]["access"] == "read"
+        # Household free/busy leaves the blocks out, as for a person's free/busy-only calendar.
+        from mailr.calendar import household
+
+        async with sessionmaker()() as db:
+            conn = await db.get(Connector, cid)
+            conn.state = {"caldav": {"shared_in": out.shared_in}}
+            await db.commit()
+            assert str(coll_id) not in await household.calendars_of(db, user.id)

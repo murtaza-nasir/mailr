@@ -49,6 +49,11 @@ import androidx.compose.material.icons.outlined.GppMaybe
 import androidx.compose.material.icons.outlined.HourglassEmpty
 import androidx.compose.material.icons.outlined.Sync
 import androidx.compose.material.icons.outlined.VerifiedUser
+import androidx.compose.material.icons.outlined.ArrowDropDown
+import androidx.compose.material.icons.outlined.MoreTime
+import androidx.compose.material.icons.outlined.ExpandLess
+import androidx.compose.material.icons.outlined.ExpandMore
+import androidx.compose.runtime.mutableStateMapOf
 import io.github.murtazanasir.mailr.look.AlertDialog
 import androidx.compose.material3.Badge
 import io.github.murtazanasir.mailr.look.FilledTonalButton
@@ -114,13 +119,33 @@ fun badgeText(n: Int) = if (n > 99) "99+" else "$n"
 /** A decision on a card: the approval, allow (true) or deny, and the scope ("once", "session", "always"). */
 typealias Decide = (Approval, Boolean, String) -> Unit
 
+/** Kinds that never join a group: a review or a cleanup plan is answered on its own card. */
+private val UNGROUPED_KINDS = setOf("review", "cleanup")
+
+private fun groupable(a: Approval) = a.outboxId == null && a.status == "pending" && a.preview.kind != "review" && a.kind !in UNGROUPED_KINDS
+
 /**
- * "Allow all n": the requests waiting from one chat or one agent, where there are several,
- * oldest first (the order they were asked in). Approvals from the older outbox queue are left out.
+ * The waiting cards as they are listed (newest first), cut into runs: CONSECUTIVE requests from one
+ * requester (one chat, one token, the assistant) of one kind ("task_new") form one group under a header
+ * with Allow all and Deny all; any other card is a run of one. Outbox rows, reviews and cleanup plans
+ * are never grouped. The order of the list is kept.
  */
-fun allowAllGroups(pending: List<Approval>): List<List<Approval>> =
-    pending.filter { it.outboxId == null }.groupBy { it.requesterKey }.values
-        .filter { it.size > 1 }.map { g -> g.sortedWith(compareBy<Approval>({ it.createdAt ?: "" }, { it.id })) }
+fun approvalRuns(shown: List<Approval>): List<List<Approval>> {
+    val out = mutableListOf<MutableList<Approval>>()
+    for (a in shown) {
+        val last = out.lastOrNull()
+        val prev = last?.last()
+        if (prev != null && groupable(a) && groupable(prev) && prev.requesterKey == a.requesterKey && prev.kind == a.kind) last.add(a)
+        else out.add(mutableListOf(a))
+    }
+    return out
+}
+
+/** The groups among [approvalRuns]: runs of two or more. */
+fun approvalGroups(shown: List<Approval>): List<List<Approval>> = approvalRuns(shown).filter { it.size > 1 }
+
+/** A group's requests in the order they were asked in (oldest first), as Allow all and Deny all send them. */
+fun oldestFirst(group: List<Approval>): List<Approval> = group.sortedWith(compareBy<Approval>({ it.createdAt ?: "" }, { it.id }))
 
 /** "this chat", "Claude Code", "Ambrose": who a group of requests came from. */
 fun groupSource(a: Approval): String = when {
@@ -129,11 +154,28 @@ fun groupSource(a: Approval): String = when {
     else -> a.actor.ifBlank { AppText.get(R.string.appr_source_an_agent) }
 }
 
-/** The line after "Allow all": "Allowed 3 requests." and the ones already decided elsewhere. */
-fun allowedText(count: Int, skipped: Int): String =
-    AppText.plural(R.plurals.appr_allowed_count, count, count) + if (skipped > 0) AppText.plural(R.plurals.appr_skipped, skipped, skipped) else ""
+/** Who a group header names: the agent's token name, else the assistant (a chat's requests are the assistant's). */
+fun groupWho(a: Approval): String = when {
+    a.chatSessionId != null || a.subject == "assistant" || a.subject.startsWith("session:") -> io.github.murtazanasir.mailr.i18n.AssistantName.now()
+    else -> a.actor.ifBlank { AppText.get(R.string.appr_source_an_agent) }
+}
 
-private fun approvalLine(a: Approval): String = a.shown?.title ?: a.preview.title.ifBlank { a.action }
+/** "claude-code wants to add 2 tasks": the server's words for the group's kind (approvals.group.*), else the generic ones. */
+fun groupHeader(group: List<Approval>): String {
+    val first = group.first()
+    val params = kotlinx.serialization.json.buildJsonObject {
+        put("who", kotlinx.serialization.json.JsonPrimitive(groupWho(first)))
+        put("count", kotlinx.serialization.json.JsonPrimitive(group.size))
+    }
+    val text = { key: String -> io.github.murtazanasir.mailr.ui.present.ServerText.text(io.github.murtazanasir.mailr.ui.present.Msg(key, params), "") }
+    return text("approvals.group.${first.kind}").ifBlank { text("approvals.group.request") }
+        .ifBlank { AppText.plural(R.plurals.appr_requests_from, group.size, group.size, groupWho(first)) }
+}
+
+/** The line after "Allow all": "Allowed 3 requests." and the ones already decided elsewhere. */
+fun allowedText(count: Int, skipped: Int, approve: Boolean = true): String =
+    AppText.plural(if (approve) R.plurals.appr_allowed_count else R.plurals.appr_denied_count, count, count) +
+        if (skipped > 0) AppText.plural(R.plurals.appr_skipped, skipped, skipped) else ""
 
 /**
  * What waits for you, as the web's bell counts it (features/waiting): approvals, messages not sent,
@@ -292,8 +334,8 @@ fun ApprovalsScreen(
     /** Apply on a review card with the user's moves on it (ACT agent.review_move); null approves the whole card. */
     onApplyReview: ((Approval, Map<Long, String>) -> Unit)? = null,
     card: @Composable (Approval, Decide) -> Unit = { a, d -> ApprovalCard(a, onAsk, onApplyReview, onDecide = d) },
-    /** "Allow all n" for several requests from one chat or agent (ACT approval.approve_many). */
-    onDecideMany: ((List<Approval>) -> Unit)? = null,
+    /** Allow all (true) or Deny all (false) of a group of requests from one requester (ACT approval.approve_many). */
+    onDecideMany: ((List<Approval>, Boolean) -> Unit)? = null,
     /** Not sent: the messages that could not be sent, with Retry, and Open Outbox. */
     notSent: List<OutboxRow> = emptyList(),
     onRetry: (OutboxRow) -> Unit = {},
@@ -303,22 +345,25 @@ fun ApprovalsScreen(
     onReminder: (ReminderEntity) -> Unit = {},
     onReviewAll: (() -> Unit)? = null,
 ) {
-    var confirming by remember { mutableStateOf<List<Approval>?>(null) }
-    confirming?.let { group ->
+    // Deny all asks first: a denial cannot be undone. Allow all needs no second step, since its cards are listed under it.
+    var denying by remember { mutableStateOf<List<Approval>?>(null) }
+    denying?.let { group ->
         AlertDialog(
-            onDismissRequest = { confirming = null },
-            title = { Text(stringResource(R.string.appr_allow_each_once)) },
+            onDismissRequest = { denying = null },
+            title = { Text(pluralStringResource(R.plurals.appr_deny_all_title, group.size, group.size)) },
             text = {
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.testTag("allow-all-list")) {
-                    group.forEachIndexed { i, a -> Text("${i + 1}. ${approvalLine(a)}", style = MaterialTheme.typography.bodyMedium) }
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.testTag("deny-all-list")) {
+                    oldestFirst(group).forEach { a -> Text(a.heading, style = MaterialTheme.typography.bodyMedium, maxLines = 2, overflow = TextOverflow.Ellipsis) }
                 }
             },
-            // A touch through another app's overlay never approves the group.
-            confirmButton = { TextButton(onClick = { confirming = null; onDecideMany?.invoke(group) },
-                modifier = Modifier.refuseObscuredTouches().testTag("allow-all-confirm")) { Text(stringResource(R.string.appr_allow_all_n, group.size)) } },
-            dismissButton = { TextButton(onClick = { confirming = null }) { Text(stringResource(R.string.appr_cancel)) } },
+            // A touch through another app's overlay never decides the group.
+            confirmButton = { TextButton(onClick = { denying = null; onDecideMany?.invoke(oldestFirst(group), false) },
+                modifier = Modifier.refuseObscuredTouches().testTag("deny-all-confirm")) { Text(stringResource(R.string.appr_deny_all)) } },
+            dismissButton = { TextButton(onClick = { denying = null }) { Text(stringResource(R.string.appr_cancel)) } },
         )
     }
+    // A group's open or folded state, by its newest card; a group of up to three starts open.
+    val folded = remember { mutableStateMapOf<String, Boolean>() }
     // Other apps' overlays are hidden here, and the screen stays out of screenshots and Recents.
     io.github.murtazanasir.mailr.ui.components.SensitiveScreen()
     Scaffold(
@@ -340,9 +385,18 @@ fun ApprovalsScreen(
                 else -> {
                     val list = rememberLazyListState()
                     val sorted = pending  // newest first, as GET /approvals returns them
+                    val runs = approvalRuns(sorted)
+                    fun open(g: List<Approval>) = folded[NotifyDecisions.approvalKey(g.first())]?.not()
+                        ?: (g.size <= 3 || g.any { NotifyDecisions.approvalKey(it) == focus })
                     LaunchedEffect(focus, sorted) {
-                        val at = sorted.indexOfFirst { NotifyDecisions.approvalKey(it) == focus }
-                        if (at >= 0) list.animateScrollToItem(at + 1)  // + 1: the header
+                        // The row of the focused card: + 1 for the header, + 1 for each group header and folded list before it.
+                        var at = 1
+                        for (r in runs) {
+                            if (r.size > 1) at++
+                            val i = r.indexOfFirst { NotifyDecisions.approvalKey(it) == focus }
+                            if (i >= 0) { list.animateScrollToItem(at + i); break }
+                            at += if (r.size > 1 && !open(r)) 1 else r.size
+                        }
                     }
                     LazyColumn(state = list, contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp),
                         horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize().testTag("approvals-list")) {
@@ -352,15 +406,28 @@ fun ApprovalsScreen(
                                 color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp))
                             else Header(stringResource(R.string.appr_header_approvals, sorted.size))
                         }
-                        if (onDecideMany != null) items(allowAllGroups(sorted), key = { "all-" + it.first().requesterKey }) { group ->
-                            AllowAllRow(group) { confirming = group }
-                        }
-                        items(sorted, key = { "p-" + NotifyDecisions.approvalKey(it) }) { a ->
-                            val focused = NotifyDecisions.approvalKey(a) == focus
-                            Box(Modifier.widthIn(max = 640.dp).fillMaxWidth().testTag("approval-" + NotifyDecisions.approvalKey(a))
-                                .then(if (focused) Modifier.border(BorderStroke(2.dp, MaterialTheme.colorScheme.primary), RoundedCornerShape(14.dp))
-                                else Modifier)) {
-                                card(a, onDecide)
+                        for (run in runs) {
+                            val gk = NotifyDecisions.approvalKey(run.first())
+                            if (run.size > 1) {
+                                val isOpen = open(run)
+                                item(key = "g-$gk") {
+                                    GroupHeader(run, isOpen, onToggle = { folded[gk] = isOpen },
+                                        onAllow = onDecideMany?.let { f -> { f(oldestFirst(run), true) } },
+                                        onDeny = onDecideMany?.let { { denying = run } },
+                                        onDecide = onDecide)
+                                }
+                                if (!isOpen) {
+                                    item(key = "f-$gk") { FoldedGroup(run) }
+                                    continue
+                                }
+                            }
+                            items(run, key = { "p-" + NotifyDecisions.approvalKey(it) }) { a ->
+                                val focused = NotifyDecisions.approvalKey(a) == focus
+                                Box(Modifier.widthIn(max = 640.dp).fillMaxWidth().testTag("approval-" + NotifyDecisions.approvalKey(a))
+                                    .then(if (focused) Modifier.border(BorderStroke(2.dp, MaterialTheme.colorScheme.primary), RoundedCornerShape(14.dp))
+                                    else Modifier)) {
+                                    card(a, onDecide)
+                                }
                             }
                         }
                         // ACT draft.retry_send @android.approvals, ACT draft.outbox @android.approvals
@@ -391,15 +458,67 @@ fun ApprovalsScreen(
     }
 }
 
-/** "3 requests from claude-code · Allow all 3": the list opens in a dialog before anything is decided. */
+/**
+ * A group's header: "claude-code wants to add 2 tasks", with Allow all and Deny all (each request decided
+ * once, as its own card would be; ACT approval.approve_many @android.approvals, ACT approval.deny @android.approvals),
+ * the group's grant where its first card offers one (the same rule its card's menu makes, which covers the
+ * others too), and a toggle that folds the cards into one line each.
+ */
 @Composable
-private fun AllowAllRow(group: List<Approval>, onAllow: () -> Unit) {
+private fun GroupHeader(group: List<Approval>, open: Boolean, onToggle: () -> Unit, onAllow: (() -> Unit)?, onDeny: (() -> Unit)?,
+                        onDecide: Decide) {
+    val toggleDesc = stringResource(if (open) R.string.appr_group_fold else R.string.appr_group_unfold)
     Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        modifier = Modifier.widthIn(max = 640.dp).fillMaxWidth().testTag("allow-all")) {
-        Row(Modifier.padding(start = 16.dp, end = 8.dp, top = 6.dp, bottom = 6.dp), verticalAlignment = Alignment.CenterVertically) {
-            Text(pluralStringResource(R.plurals.appr_requests_from, group.size, group.size, groupSource(group.first())), style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f))
-            FilledTonalButton(onClick = onAllow, modifier = Modifier.refuseObscuredTouches()) { Text(stringResource(R.string.appr_allow_all_n, group.size)) }
+        modifier = Modifier.widthIn(max = 640.dp).fillMaxWidth().testTag("approval-group")) {
+        Column(Modifier.padding(start = 16.dp, end = 4.dp, top = 6.dp, bottom = 6.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(groupHeader(group), style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f).semantics { heading() })
+                IconButton(onClick = onToggle, modifier = Modifier.testTag("approval-group-toggle").semantics { contentDescription = toggleDesc }) {
+                    Icon(if (open) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore, null)
+                }
+            }
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (onAllow != null) FilledTonalButton(onClick = onAllow, modifier = Modifier.refuseObscuredTouches().testTag("allow-all")) {
+                    Text(stringResource(R.string.appr_allow_all)) }
+                if (onDeny != null) TextButton(onClick = onDeny, modifier = Modifier.refuseObscuredTouches().testTag("deny-all")) {
+                    Text(stringResource(R.string.appr_deny_all)) }
+                Spacer(Modifier.weight(1f))
+                group.firstOrNull { it.grants }?.let { a -> GroupGrant(a, onDecide) }
+            }
+        }
+    }
+}
+
+/** The group's "+N ▾": "Allow for 12 hours" (or for this chat) on its first card, which approves the others it covers too. */
+@Composable
+private fun GroupGrant(a: Approval, onDecide: Decide) {
+    var open by remember { mutableStateOf(false) }
+    val n = a.alsoCovers?.session ?: 0
+    val desc = if (n > 0) pluralStringResource(R.plurals.more_allow_menu_also, n, n) else stringResource(R.string.more_allow_menu)
+    Box {
+        TextButton(onClick = { open = true }, contentPadding = PaddingValues(horizontal = 8.dp),
+            modifier = Modifier.testTag("group-grants").semantics { contentDescription = desc }) {
+            if (n > 0) Text("+$n") else Icon(Icons.Outlined.MoreTime, null, Modifier.size(18.dp))
+            Icon(Icons.Outlined.ArrowDropDown, null, Modifier.size(20.dp))
+        }
+        io.github.murtazanasir.mailr.look.DropdownMenu(open, { open = false }) {
+            io.github.murtazanasir.mailr.look.DropdownMenuItem({
+                Column(Modifier.widthIn(max = 320.dp).padding(vertical = 4.dp)) {
+                    Text(GrantText.sessionLabel(a) + GrantText.also(n), style = MaterialTheme.typography.bodyLarge)
+                    Text(GrantText.sessionHelp(a), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+            }, { open = false; onDecide(a, true, "session") }, modifier = Modifier.refuseObscuredTouches().testTag("group-grant-session"))
+        }
+    }
+}
+
+/** A folded group: one line per request, newest first, as the cards would be. */
+@Composable
+private fun FoldedGroup(group: List<Approval>) {
+    Column(Modifier.widthIn(max = 640.dp).fillMaxWidth().padding(horizontal = 16.dp).testTag("approval-group-folded"),
+        verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        group.forEach { a ->
+            Text(a.heading, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
     }
 }

@@ -392,7 +392,11 @@ fun busyDays(events: List<DayEvent>): Set<LocalDate> = buildSet {
 
 /** "Shared with the Family group" or "Shared by Rosa", or null for the user's own calendar. */
 internal fun sharedLabel(c: CalendarCollection): String? = c.shared?.let {
-    if (it.kind != "user") return@let AppText.get(R.string.cal_shared_with_group, it.group ?: AppText.get(R.string.cal_shared_group_fallback))
+    if (it.kind != "user") {
+        val group = it.group ?: AppText.get(R.string.cal_shared_group_fallback)
+        // Server calendar/groups.py: a "Free/busy only" group calendar gives this member busy blocks.
+        return@let AppText.get(if (it.access == "freebusy") R.string.cal_shared_with_group_free_busy else R.string.cal_shared_with_group, group)
+    }
     val owner = it.owner ?: AppText.get(R.string.cal_shared_someone)
     val via = it.via.joinToString(", ")
     when {

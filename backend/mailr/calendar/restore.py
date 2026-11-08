@@ -520,7 +520,7 @@ async def _group_target(db, e: dict[str, Any], dry: bool, c: Counts) -> tuple[Gr
         href = await cl.mkcalendar(groups._url(home), slug, gc.name, groups.COMPONENTS, gc.color)
     gc.href = groups.path_of(href)
     await db.flush()
-    if gc.access == "read":
+    if gc.access != "write":  # "read" and "freebusy" live in the owner account, with an ACL
         await groups._write_acl(db, cg, gc)
     await db.commit()
     await groups.reconcile()

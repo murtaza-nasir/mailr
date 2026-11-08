@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api, ApiError } from '../../api/client'
 import { useApi, useApiList, useMe } from '../../api/hooks'
-import type { AdminUser, LastOutcome, ModelEndpoint } from '../../api/types'
+import type { AdminUser, LastOutcome, ModelCapability, ModelEndpoint } from '../../api/types'
 import { Link } from 'react-router'
 import { Skeleton, Switch } from '../../components/bits'
 import { ConfirmDialog, Dialog } from '../../components/Dialog'
@@ -564,6 +564,7 @@ export function ModelsSection() {
               <th>{tr('common.name')}</th>
               <th>{tr('settings.adminTab.locality')}</th>
               <th>{tr('settings.adminTab.usedFor')}</th>
+              <th>{tr('settings.adminTab.canViewImages')}</th>
               <th>{tr('settings.adminTab.enabled')}</th>
               <th />
             </tr>
@@ -597,6 +598,9 @@ export function ModelsSection() {
                   {Object.entries(m.defaults ?? {})
                     .map(([k, v]) => tr('settings.adminTab.text', { taskLabel: TASK_LABEL[k.replace('.local', '')] ?? k, value: k.endsWith('.local') ? tr('settings.adminTab.localOnlyMail') : '', v }))
                     .join(' · ') || <span className="muted">{tr('settings.adminTab.notUsedYet')}</span>}
+                </td>
+                <td style={{ fontSize: 12.5 }}>
+                  <VisionCell m={m} />
                 </td>
                 <td>
                   <Switch
@@ -898,5 +902,52 @@ export function PoliciesSection() {
         <textarea id="pol-domains" className="textarea" rows={5} value={text.value} disabled={!q.data} onChange={(e) => text.set(e.target.value)} onBlur={text.flush} placeholder={tr('settings.adminTab.exampleEduEdu')} />
       </div>
     </Section>
+  )
+}
+
+/** ACT settings.model_capabilities @web.settings: per model, whether it can view images, as the
+ *  server said (detected when the endpoint is added, saved or with Detect) or as the admin sets it. */
+function VisionCell({ m }: { m: ModelEndpoint }) {
+  const qc = useQueryClient()
+  const caps = m.capabilities ?? {}
+  const names = Object.keys(caps)
+  const done = () => void qc.invalidateQueries({ queryKey: ['admin', 'models'] })
+  const set = useMutation({
+    mutationFn: ({ model, vision }: { model: string; vision: boolean | null }) =>
+      api.put(`/admin/models/${m.id}/capabilities`, { model, vision }),
+    onSuccess: done,
+    onError: (e) => toastError(e, tr('common.notSaved')),
+  })
+  const detect = useMutation({
+    mutationFn: () => api.post(`/admin/models/${m.id}/detect`, {}),
+    onSuccess: done,
+    onError: (e) => toastError(e),
+  })
+  if (m.adapter !== 'openai' || !names.length) return <span className="muted">—</span>
+  const auto = (c: ModelCapability) => c.detected === true ? tr('settings.adminTab.visionAutoYes')
+    : c.detected === false ? tr('settings.adminTab.visionAutoNo') : tr('settings.adminTab.visionAutoUnknown')
+  return (
+    <div className="vision-cell" data-testid={`model-vision-${m.id}`}>
+      {names.map((n) => {
+        const c = caps[n]
+        const value = c.source === 'manual' ? (c.vision ? 'yes' : 'no') : 'auto'
+        return (
+          <label key={n} className="vision-row">
+            <span className="ellipsis" title={n}>{n}</span>
+            <select className="select sm" value={value} disabled={set.isPending}
+              aria-label={tr('settings.adminTab.canModelViewImages', { model: n })}
+              onChange={(e) => set.mutate({ model: n, vision: e.target.value === 'auto' ? null : e.target.value === 'yes' })}>
+              <option value="auto">{auto(c)}</option>
+              <option value="yes">{tr('settings.adminTab.visionYes')}</option>
+              <option value="no">{tr('settings.adminTab.visionNo')}</option>
+            </select>
+          </label>
+        )
+      })}
+      <button type="button" className="btn text sm" disabled={detect.isPending} onClick={() => detect.mutate()}
+        data-tip={tr('settings.adminTab.detectTip')}>
+        {detect.isPending ? tr('settings.adminTab.detecting') : tr('settings.adminTab.detect')}
+      </button>
+    </div>
   )
 }

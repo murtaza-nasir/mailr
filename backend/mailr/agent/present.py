@@ -1181,6 +1181,153 @@ def outcome(action: str, status: str, payload: dict[str, Any] | None = None, res
     return {"state": status, "text": en(m), "msg": m}
 
 
+# ---------------------------------------------------------------- card head
+
+# The kind of request a card is, for its small type label ("New task") and the group header
+# ("claude-code wants to add 2 tasks"): approvals.kind.<id> and approvals.group.<id>.
+_KIND_BY_TITLE = {
+    "approvals.task.add": "task_new", "approvals.task.change": "task_change", "approvals.task.move": "task_change",
+    "approvals.task.reopen": "task_change", "approvals.task.skip": "task_change",
+    "approvals.task.complete": "task_complete", "approvals.task.delete": "task_delete",
+    "approvals.task.delete_cascade": "task_delete",
+    "approvals.event.create": "event_new", "approvals.event.change": "event_change",
+    "approvals.event.change_occurrence": "event_change", "approvals.event.change_unnamed": "event_change",
+    "approvals.event.delete": "event_delete", "approvals.event.delete_occurrence": "event_delete",
+    "approvals.event.delete_unnamed": "event_delete", "approvals.event.cancel": "event_cancel",
+    "approvals.event.cancel_occurrence": "event_cancel",
+    "approvals.draft.title_save": "draft_new", "approvals.draft.title_change": "draft_change",
+    "approvals.draft.title_recipients": "draft_change",
+}
+_KIND_BY_ACTION = {
+    "tasks.create": "task_new", "tasks.update": "task_change", "tasks.complete": "task_complete",
+    "tasks.delete": "task_delete", "tasks.lists": "task_list", "tasks.bulk": "task_change",
+    "calendar.create": "event_new", "calendar.update": "event_change", "calendar.delete": "event_delete",
+    "calendar.cancel": "event_cancel", "calendar.rsvp": "rsvp", "calendar.invite": "invite",
+    "calendar.phone_sync": "phone_sync", "calendar.manage": "calendar",
+    "mail.send": "send", "mail.trash": "mail_trash", "mail.spam": "mail_spam", "mail.delete": "mail_delete",
+    "mail.label": "mail_organise", "mail.unsubscribe": "unsubscribe", "mail.screener": "screener",
+    "rules.write": "filter", "orders.write": "order", "labels.delete": "label_delete",
+    "contacts.write": "contacts", "memory.write": "memory", "skills.write": "skill", "prefs.write": "settings",
+    "notes.labels": "note_labels", "notes.delete": "note_delete", "tables.rows": "table",
+    "tables.rows_delete": "table", "tables.schema": "table", "speakr.upload": "recording",
+    "speakr.write": "recording", "speakr.share": "recording", "speakr.link": "recording",
+    "agent.forwarded_instructions": "forwarded",
+}
+_MAIL_KIND = {"trash": "mail_trash", "spam": "mail_spam", "delete_forever": "mail_delete"}
+KINDS = frozenset({*_KIND_BY_TITLE.values(), *_KIND_BY_ACTION.values(), "draft_new", "draft_change",
+                   "label_new", "label_change", "note_new", "note_change", "review", "cleanup", "request"})
+
+# The short line of why a card asks ("Asks first: written after reading email"), by the start of
+# the rule's reason; the whole reason stays the card's `reason`, behind the line's (i).
+_REASON_SHORT = (
+    ("hard rule: an agent wrote this text after reading email", "tainted"),
+    ("hard rule: an agent wrote this text after reading other people's text", "notes_tainted"),
+    ("hard rule: task text written through an API token", "token_text"),
+    ("hard rule: this chat has read local-only content", "local_copy"),
+    ("hard rule: first message to a new address", "new_address"),
+    ("hard rule: an agent's cleanup plan or unsubscribe", "cleanup"),
+    ("hard rule: an agent changes who a saved draft goes to", "draft_recipients"),
+    ("hard rule: an agent that read email (or an API token) writes a draft", "draft_new_people"),
+    ("hard rule: an agent that read email", "read_mail"),
+    ("hard rule: the assistant read email in this turn", "hides_mail"),
+    ("hard rule: the assistant read other people's text", "notes_hides"),
+    ("hard rule: an agent's action on a whole list", "whole_list"),
+    ("hard rule: a sender's own mail", "screener"),
+    ("hard rule: a Screener decision", "screener"),
+    ("hard rule: a forwarded organizer change", "forwarded"),
+    ("hard rule: a public share link", "public_link"),
+    ("hard rule: a background errand never sends", "errand_no_send"),
+    ("hard rule: an errand writes to a note other people share", "errand_shared"),
+    ("hard rule: turning Local models only off", "lower_local"),
+    ("hard rule: deleting forever", "forever"),
+)
+
+
+def card_kind(action: str, payload: dict[str, Any] | None, preview: dict[str, Any] | None,
+              d: dict[str, Any] | None) -> str:
+    """The kind of request (an id of KINDS): from the card's title key where it names one, else the
+    action and its op."""
+    pl, pv, d = payload or {}, preview or {}, d or {}
+    op = str(pl.get("op") or "")
+    if op == "review" or pv.get("kind") == "review":
+        return "review"
+    if op == "cleanup":
+        return "cleanup"
+    tm = d.get("title_msg") or pv.get("title_msg")
+    key = tm.get("key") if isinstance(tm, dict) else None
+    if key in _KIND_BY_TITLE:
+        return _KIND_BY_TITLE[key]
+    if action == "mail.draft":
+        return "draft_change" if pl.get("draft_id") else "draft_new"
+    if action.startswith("mail.") and pl.get("action"):
+        return _MAIL_KIND.get(str(pl["action"]), "mail_organise")
+    verb = "delete" if op.endswith("delete") else "new" if op.endswith("create") else "change"
+    if action == "labels.write":
+        return f"label_{'new' if verb == 'new' else 'change'}"
+    if action in ("notes.create", "notes.edit"):
+        return "note_new" if action == "notes.create" else "note_change"
+    return _KIND_BY_ACTION.get(action, "request")
+
+
+_QUOTED = re.compile(r"“([^“”]+)”")
+
+
+def card_name(preview: dict[str, Any] | None, d: dict[str, Any] | None) -> str | None:
+    """The object's own title, for the card's heading: the task's or event's title, the email's
+    subject, else the one name the card's title quotes. None when there is none (the heading is
+    then the card's title)."""
+    pv, d = preview or {}, d or {}
+    for k in ("task", "event"):
+        v = pv.get(k)
+        if isinstance(v, dict) and str(v.get("summary") or "").strip():
+            return str(v["summary"]).strip()
+    before = pv.get("before")
+    if isinstance(pv.get("event"), dict) and isinstance(before, dict) and str(before.get("summary") or "").strip():
+        return str(before["summary"]).strip()
+    e = pv.get("email")
+    if isinstance(e, dict):
+        subj = str(e.get("subject") or "").strip()
+        return subj or None
+    names = _QUOTED.findall(str(d.get("title") or pv.get("title") or ""))
+    return names[0].strip() if len(names) == 1 and names[0].strip() else None
+
+
+def reason_short(raw: Any, token: bool, pv: dict[str, Any] | None = None) -> Any:
+    """The short line of why a card asks, as a msg (approvals.reason_short.*), or None when the
+    card has no reason. A reason this list does not know gets "Asks first". After reading mail, the
+    people who were not in that conversation (or a Bcc) stay on the line itself."""
+    r = str(raw or "")
+    if not r:
+        return None
+    pv = pv or {}
+    if r.startswith("hard rule: an agent that read email") and pv.get("outsiders") is not None:
+        out = [str(x) for x in pv.get("outsiders") or [] if x]
+        if len(out) == 1:
+            return M("approvals.reason_short.outsider", names=out[0])
+        if out:
+            return M("approvals.reason_short.outsiders", names=", ".join(out[:-1]), last=out[-1])
+        if (pv.get("email") or {}).get("bcc"):
+            return M("approvals.reason_short.bcc")
+    for start, rid in _REASON_SHORT:
+        if r.startswith(start):
+            if rid == "tainted" and token:
+                rid = "token_text"
+            return M(f"approvals.reason_short.{rid}")
+    return M("approvals.reason_short.other")
+
+
+def card_head(pa, pv: dict[str, Any]) -> dict[str, Any]:
+    """The card's head line and heading for the clients: the kind (`kind`, with `kind_label` and
+    its msg), the object's own name (`name`, or None), and the short reason (`reason_short`, with its
+    msg, or None). The whole reason stays on the display."""
+    d = pv.get("display") if isinstance(pv.get("display"), dict) else {}
+    kind = card_kind(pa.action, pa.payload, pv, d)
+    label = M(f"approvals.kind.{kind}")
+    short = reason_short(pv.get("reason"), pa.token_id is not None, pv)
+    return {"kind": kind, "kind_label": en(label), "kind_label_msg": label, "name": card_name(pv, d),
+            "reason_short": en(short) if short else None, "reason_short_msg": short}
+
+
 async def approval_card(db: AsyncSession, pa, *, covers: bool = False) -> dict[str, Any]:
     """A pending action as the clients show it: pending_out, with `display` ensured on the
     preview (rows stored before the display model get one computed now) and `outcome`.
@@ -1197,6 +1344,7 @@ async def approval_card(db: AsyncSession, pa, *, covers: bool = False) -> dict[s
         out["preview"] = pv
     out["display"] = pv["display"]
     out["outcome"] = outcome(pa.action, pa.status, pa.payload, pa.result, pv["display"])
+    out["head"] = card_head(pa, pv)
     if covers and pa.status == "pending":
         out["also_covers"] = await would_cover(db, pa)
     return out

@@ -6,16 +6,41 @@ admin has attached at least one calendar to it (table calendar_groups):
 
 - a Stalwart **Group** account. Members of a Stalwart group get full rights on every calendar the
   group account owns. Read-write group calendars live there.
-- an **owner** account (a User with no password, description "mailr group calendar owner"). Read-only
-  group calendars live there, with an ACL that grants each editor read + write and then the group
-  read. Stalwart takes the first ACE that names the user, so the editors come first: an editor
-  listed after the group gets only the group's read (verified on 0.16.23). Stalwart 1.0.1 checks
-  writes against the union of the ACEs (tests/test_calendar_sharing_stalwart.py), so there the
-  order does not matter; it does no harm.
+- an **owner** account (a User with no password, description "mailr group calendar owner"). The
+  group's "Can view" and "Free/busy only" calendars live there, with an ACL that grants each editor
+  read + write and then the group read ("Can view") or CalDAV read-free-busy alone ("Free/busy
+  only"). Stalwart 0.16 takes the first ACE that names the user for writes, so the editors come
+  first: an editor listed after the group gets only the group's read (verified on 0.16.23).
+  Stalwart 1.0.1 checks every privilege against the union of the ACEs
+  (tests/test_calendar_sharing_stalwart.py), so there the order does not matter; it does no harm.
 
-Group calendars have no "free/busy only" access (calendar/sharing.py has it for people's calendars
-on Stalwart 1.x): members of a read-write calendar get every right through the group account, so
-there is no ACL to narrow, and a read-only calendar is one the whole group reads.
+**Free/busy only** (`access` "freebusy", Stalwart 1.x only, like the level of calendar/sharing.py).
+Why it is possible for a group: the group's rights on a calendar are only the ACEs that name the
+group account, except on the calendars the group account itself owns, where every member has every
+right (a Stalwart group's members act as the group's owner). So a "Can edit" calendar, which the
+group account owns, cannot be narrowed; a calendar of the owner account can, the same way as a
+"Can view" one: the group's ACE becomes read-free-busy instead of read. The roles:
+
+- **Editors** are the people who keep the calendar (its owners in practice). Their own ACE gives
+  read + write, and Stalwart 1.x takes the union with the group's read-free-busy, so they list the
+  calendar and see and change everything. Admins see only its name, colour and item count (and
+  the .ics export before a delete), as for every group calendar.
+- **Members** who are not editors: the calendar is not listed for them (Stalwart 1.0.1, docs/
+  stalwart-notes.md section 12). Their sync asks the free-busy-query as the member and stores
+  one "Busy" block per busy period (calendar/sharing._free_busy_only, calendar/shared_busy.py),
+  read-only, with no title, place, guests or description. A member's own grant on the calendar
+  (any ACE naming them that is not the group's) is unioned with the group's on 1.x, as
+  calendar/sharing.access_of says: such a member lists the calendar and gets its details. mailr
+  writes the whole ACL (`_write_acl`), so the only such grants are the editors'. The rule is still
+  "a listed calendar syncs in full; an unlisted one of the member's group gives busy blocks".
+- **The group account** holds no right of its own beyond its ACE: the calendar lives in the owner
+  account, never in the group's.
+
+The level is offered and accepted on Stalwart 1.x only: 0.16 answers the free-busy-query with 403
+for a read-free-busy grant, so members would see nothing. An admin switches a calendar between
+"Can view" and "Free/busy only" by rewriting the group's ACE (`update`); members' next sync turns
+the events into busy blocks (and clears every stored title and place) or back. "Can edit" stays fixed
+at creation: its calendar lives in another account.
 
 After every ACL write mailr runs `x:Action InvalidateCaches`: a first share to a group stays
 invisible to its members until then (Stalwart refreshes only the group's own token). Stalwart
@@ -34,7 +59,8 @@ managed account that is not a registered group calendar, the placeholder include
 
 Members see the calendars through their built-in connector (assisted discovery lists them in the
 user's own home). `overrides_for()` marks them for the client: `shared = {kind: "group", group,
-access, editor}`.
+access, editor}`, where `access` is what this member gets: "write", "read" or, for busy blocks,
+"freebusy".
 """
 
 from __future__ import annotations
@@ -58,7 +84,8 @@ log = logging.getLogger("mailr.calendar.groups")
 
 JOB = "calendar.groups_reconcile"
 OWNER_DESCRIPTION = "mailr group calendar owner"
-ACCESS = ("read", "write")
+FREEBUSY = "freebusy"
+ACCESS = ("read", "write", FREEBUSY)  # freebusy on Stalwart 1.x only
 COMPONENTS = ["VEVENT"]
 MAX_NAME = 200
 
@@ -418,20 +445,27 @@ async def groups_changed(db: AsyncSession, before: list[str], after: list[str]) 
 
 
 def _ace(principal: str, privs: list[str]) -> str:
-    p = "".join(f"<d:privilege><d:{x}/></d:privilege>" for x in privs)
+    p = "".join(f"<d:privilege><{'c' if x == 'read-free-busy' else 'd'}:{x}/></d:privilege>" for x in privs)
     return f"<d:ace><d:principal><d:href>{principal}</d:href></d:principal><d:grant>{p}</d:grant></d:ace>"
 
 
+def group_privileges(access: str) -> list[str]:
+    """What the group's ACE grants on a calendar of the owner account."""
+    return ["read-free-busy"] if access == FREEBUSY else ["read"]
+
+
 async def _write_acl(db: AsyncSession, cg: CalendarGroup, gc: GroupCalendar) -> None:
-    """The whole ACL of a read-only group calendar: editors (read + write) first, then the group
-    (read). An ACL request replaces the ACL, so it is always written in full."""
+    """The whole ACL of a group calendar of the owner account: editors (read + write) first, then
+    the group (read, or read-free-busy for "Free/busy only"). An ACL request replaces the ACL, so
+    it is always written in full."""
     aces = []
     for uid in gc.editors or []:
         u = await db.get(User, uid)
         if u is not None and u.stalwart_account_id and not u.disabled:
             aces.append(_ace(principal_of(await user_login(db, u)), ["read", "write"]))
-    aces.append(_ace(principal_of(cg.store_group_login or ""), ["read"]))
-    body = f'<?xml version="1.0" encoding="utf-8"?><d:acl xmlns:d="DAV:">{"".join(aces)}</d:acl>'
+    aces.append(_ace(principal_of(cg.store_group_login or ""), group_privileges(gc.access)))
+    body = ('<?xml version="1.0" encoding="utf-8"?><d:acl xmlns:d="DAV:" xmlns:c="urn:ietf:params:xml:ns:caldav">'
+            f'{"".join(aces)}</d:acl>')
     async with owner_client(cg.owner_login or "") as c:
         r = await c.request("ACL", _url(gc.href or ""), body=body, headers={"Content-Type": "application/xml"})
         c._raise(r, f"ACL {gc.href}")
@@ -448,6 +482,15 @@ def _clean_color(color: str | None) -> str | None:
     if not re.fullmatch(r"#[0-9A-Fa-f]{6}", color):
         raise GroupCalendarError("the colour must look like #2E7D32")
     return color.upper()
+
+
+async def _check_level(access: str) -> None:
+    """Free/busy only needs Stalwart 1.x (calendar/sharing.server_v1)."""
+    from mailr.calendar import sharing
+
+    if access == FREEBUSY and not await sharing.server_v1():
+        raise GroupCalendarError("This mail server cannot share a group calendar as free/busy only: it needs "
+                                 "Stalwart 1.x. Choose Can view or Can edit.")
 
 
 async def _check_editors(db: AsyncSession, group: str, editors: list[int]) -> list[int]:
@@ -468,11 +511,12 @@ async def create(db: AsyncSession, group: str, name: str, color: str | None, acc
     if not group or not name:
         raise GroupCalendarError("a group and a name are needed")
     if access not in ACCESS:
-        raise GroupCalendarError("access is read or write")
+        raise GroupCalendarError("access is read, write or freebusy")
     if not await builtin.instance_enabled(db):
         raise GroupCalendarError("built-in calendars are off; turn them on first")
+    await _check_level(access)
     color = _clean_color(color)
-    eds = await _check_editors(db, group, editors or []) if access == "read" else []
+    eds = await _check_editors(db, group, editors or []) if access != "write" else []
     cg = await ensure_group(db, group)
     # The row first (without a path), so the reconcile counts the group as having a calendar and
     # puts the members in before the calendar exists.
@@ -513,9 +557,14 @@ async def create(db: AsyncSession, group: str, name: str, color: str | None, acc
 
 async def update(db: AsyncSession, gc: GroupCalendar, *, name: str | None = None, color: str | None = None,
                  editors: list[int] | None = None, access: str | None = None) -> GroupCalendar:
-    """Rename, recolour, change the editors (read-only calendars). Access is fixed at creation."""
-    if access is not None and access != gc.access:
-        raise GroupCalendarError("access is fixed when the calendar is made; export it, make a new one and import")
+    """Rename, recolour, change the editors, switch between "read" and "freebusy" (calendars of
+    the owner account). "write" is fixed at creation: its calendar lives in the group account."""
+    switch = access is not None and access != gc.access
+    if switch and (access not in ACCESS or "write" in (access, gc.access)):
+        raise GroupCalendarError("Can edit is fixed when the calendar is made. To change it, export the calendar, "
+                                 "make a new one and import the file.")
+    if switch:
+        await _check_level(access or "")
     cg = await db.get(CalendarGroup, gc.group_name)
     if cg is None or not gc.href:
         raise GroupCalendarError("this group calendar is not on the server")
@@ -529,12 +578,20 @@ async def update(db: AsyncSession, gc: GroupCalendar, *, name: str | None = None
                 raise GroupCalendarError("the calendar server did not accept the change")
         gc.name = name if name is not None else gc.name
         gc.color = color or gc.color
-    if editors is not None:
-        if gc.access != "read":
-            raise GroupCalendarError("editors apply to read-only calendars; members already edit this one")
+    if editors is not None and gc.access == "write":
+        raise GroupCalendarError("editors apply to read-only calendars; members already edit this one")
+    if editors is not None or switch:
         before = set(gc.editors or [])
-        gc.editors = await _check_editors(db, gc.group_name, editors)
-        await _write_acl(db, cg, gc)
+        old = gc.access
+        if editors is not None:
+            gc.editors = await _check_editors(db, gc.group_name, editors)
+        if switch:
+            gc.access = access or old
+        try:
+            await _write_acl(db, cg, gc)
+        except Exception:
+            gc.access, gc.editors = old, sorted(before)
+            raise
         await queue_syncs(db, before | set(gc.editors))
     await queue_syncs(db, [u.id for u in await members(db, gc.group_name)])
     return gc
@@ -612,10 +669,24 @@ async def overrides_for(db: AsyncSession, user_id: int) -> dict[str, dict[str, A
     colls = (await db.execute(select(CalCollection).join(Connector, Connector.id == CalCollection.connector_id)
                               .where(CalCollection.user_id == user_id, Connector.builtin.is_(True),
                                      CalCollection.deleted_at.is_(None)))).scalars().all()
+    busy = await busy_paths(db, user_id)
     out: dict[str, dict[str, Any]] = {}
     for c in colls:
-        gc = by_path.get(path_of(c.href))
+        p = path_of(c.href)
+        gc = by_path.get(p)
         if gc is not None:
-            out[c.href] = {"shared": {"kind": "group", "group": gc.group_name, "access": gc.access,
-                                      "editor": user_id in (gc.editors or []), "group_calendar_id": gc.id}}
+            editor = user_id in (gc.editors or [])
+            access = gc.access
+            if access == FREEBUSY:  # what this member gets: busy blocks, or details through an own grant
+                access = FREEBUSY if p in busy else "write" if not c.read_only else "read"
+            out[c.href] = {"shared": {"kind": "group", "group": gc.group_name, "access": access,
+                                      "editor": editor, "group_calendar_id": gc.id}}
     return out
+
+
+async def busy_paths(db: AsyncSession, user_id: int) -> set[str]:
+    """The group calendars the user's last sync stored as busy blocks (connector state `shared_in`,
+    entries with a group_calendar_id and level freebusy)."""
+    conn = await builtin.find(db, user_id)
+    shared_in = (((conn.state or {}).get("caldav") or {}).get("shared_in") or {}) if conn else {}
+    return {p for p, v in shared_in.items() if (v or {}).get("group_calendar_id") and (v or {}).get("level") == FREEBUSY}

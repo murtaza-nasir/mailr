@@ -14,6 +14,7 @@
     <string name="channel_sending_desc">Сообщения, которые не удалось отправить</string>
     <string name="share_compose_label">Новое письмо</string>
     <string name="share_self_label">Отправить себе</string>
+    <string name="share_ask_label">Спросить Ambrose</string>
     <string name="share_self_long">Отправить самому себе</string>
     <string name="share_self_person">Я</string>
     <string name="self_sending">Отправка самому себе…</string>

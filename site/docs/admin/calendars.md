@@ -68,11 +68,19 @@ click **New group calendar**. Give it a name and a colour, and choose what membe
 - **Can view.** Members see the events, and only the ticked editors can change them. A school or
   club calendar that one or two people keep up to date is the usual example. Editors are chosen
   from the group's members.
+- **Free/busy only.** Members see when the calendar is busy, as **Busy** entries without titles,
+  places, guests or descriptions. Only the ticked editors see and change the events. A work rota or
+  an on-call calendar is the usual example. This level needs Stalwart 1.0 or later as the mail
+  server. On Stalwart 0.16 it is not offered, and a request for it through the API is refused.
 
-A group calendar holds events. Member access is set when the calendar is made. To change
-the access, download the calendar, make a new one with the other setting and import the file into it.
+A group calendar holds events. **Can view** and **Free/busy only** can be switched in the edit
+dialog. After a switch to **Free/busy only**, each member's copy keeps no title, place or other
+detail after their next sync; after a switch back, the events return at that sync. **Can edit** is
+set when the calendar is made. To change it, download the calendar, make a new one with the other
+setting and import the file into it.
 
-You can rename a group calendar, change its colour and, for a **Can view** calendar, its editors.
+You can rename a group calendar, change its colour and, for a **Can view** or **Free/busy only**
+calendar, its editors.
 Members see the change at their next sync. With **Delete**, the calendar and everything in it are removed
 for every member; in the dialog you can first download the whole calendar as an .ics file.
 
@@ -86,6 +94,20 @@ Members can:
 - Add and change events, in a **Can edit** calendar or as an editor. Elsewhere the write is refused,
   with a note that the calendar is read-only for them. The same rule applies to the assistant, Ambrose.
 
+In a **Free/busy only** calendar:
+
+- Editors see every event with its details and change them, as in a **Can view** calendar.
+- Other members get one **Busy** entry for each busy time, from about two months back to a year
+  ahead. The busy times are read from the mail server as the member, at each sync of their
+  calendars. The entries count when the member looks for a free time, and Ambrose reads them as
+  **Busy (Rota)**, for example. Members cannot change them.
+- The calendar does not appear on members' phones: the mail server lists it for the editors only.
+- The busy times are not passed on in household free/busy ("Share my free/busy with my groups").
+- A member with their own grant on the calendar, set in the mail server's own administration,
+  gets everything any of their grants allows, so they see the details. The calendar's whole
+  access list is written again whenever you change the calendar, so such a grant lasts only until
+  then.
+
 Members cannot rename or delete a group calendar.
 
 Membership is taken from the groups. Someone who joins the group sees its calendars within a minute or
@@ -95,9 +117,12 @@ calendars are not touched.
 The API, for admins only:
 
 - `GET /admin/calendars/groups`: every group known to Mailr, with its members and its calendars.
-- `POST /admin/calendars/groups` with `group`, `name`, `color` (`#RRGGBB`), `access` (`write` or
-  `read`) and `editors` (user ids, for `read`).
-- `PATCH /admin/calendars/groups/{cid}` with `name`, `color` or `editors`.
+- `GET /admin/calendars/groups` also lists in `access` the access levels this mail server
+  supports: `write` and `read`, and `freebusy` on Stalwart 1.0 or later.
+- `POST /admin/calendars/groups` with `group`, `name`, `color` (`#RRGGBB`), `access` (`write`,
+  `read` or `freebusy`) and `editors` (user ids, for `read` and `freebusy`).
+- `PATCH /admin/calendars/groups/{cid}` with `name`, `color`, `editors` or `access` (`read` or
+  `freebusy`, for a calendar that is one of the two).
 - `GET /admin/calendars/groups/{cid}/export`: the calendar as one .ics file.
 - `DELETE /admin/calendars/groups/{cid}?confirm=<name>`.
 <!-- covers: settings.group_calendars -->

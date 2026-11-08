@@ -29,6 +29,7 @@ SAMPLES = {
     "account_folders_show_unread": True,
     "advanced_settings": True,
     "archive_also_removes": [],
+    "assistant_images": False,
     "archive_removes_current_label": False,
     "auto_advance": "older",
     "auto_label": False,

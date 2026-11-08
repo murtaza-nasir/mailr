@@ -17,6 +17,8 @@ Scripted prompts (any wording that contains the keywords):
   "How long should coffee rest after roasting?"  searches the web (the demo search service below)
   "Add oat milk and 2 cans of chickpeas to my shopping list under Costco"
                                                  adds two items to the Shopping list (checklist_items)
+  "What is on the whiteboard, and what does the budget add up to?"
+                                                 answers about a photo and a CSV attached to the message
 
 GET /demo-search/api/search answers like a degoog server with fictional results on example domains;
 `mailr demo-seed` registers it as the web search provider "Web (demo)".
@@ -279,6 +281,11 @@ SCRIPTS: list[tuple[tuple[str, ...], list[Step]]] = [
             {"op": "add", "lines": "oat milk, 2 cans of chickpeas", "section": "Costco"}]})),
         lambda r: say(_shopping_text(r)),
     ]),
+    (("whiteboard", "budget"), [
+        lambda r: say("The whiteboard lists three steps for the Lumen Coffee launch: **taste the new blend** on "
+                      "Monday, **print the menus** on Wednesday and **open the pop-up** on Saturday. The budget file "
+                      "has four lines (beans, cups, menus and the stall) that add up to **$1,840**."),
+    ]),
     (("lucia",), [
         lambda r: calls(("search_conversations", {"q": "from:lucia@casaverde.example", "limit": 3})),
         lambda r: calls(("get_conversation", {"conversation_id": _first_conv(r[0])})),
@@ -291,7 +298,8 @@ HELP = ("This demo assistant answers a few scripted questions. Try one of these:
         "- Remind Marco about the quote\n- Make a filter for Circlet notifications\n"
         "- Add a task to renew the studio insurance\n- What did Lucía ask for?\n"
         "- How long should coffee rest after roasting?\n"
-        "- Add oat milk and 2 cans of chickpeas to my shopping list under Costco")
+        "- Add oat milk and 2 cans of chickpeas to my shopping list under Costco\n"
+        "- What is on the whiteboard, and what does the budget add up to? (with a photo and a file attached)")
 
 
 def _turn(messages: list[dict[str, Any]]) -> tuple[str, Results]:
@@ -299,7 +307,9 @@ def _turn(messages: list[dict[str, Any]]) -> tuple[str, Results]:
     idx = None
     for i in range(len(messages) - 1, -1, -1):
         m = messages[i]
-        if m.get("role") == "user" and not str(m.get("content") or "").startswith("[mailr"):
+        c = m.get("content")
+        first = (c[0].get("text") if c and isinstance(c[0], dict) else "") if isinstance(c, list) else c
+        if m.get("role") == "user" and not str(first or "").startswith("[mailr"):
             idx = i
             break
     if idx is None:

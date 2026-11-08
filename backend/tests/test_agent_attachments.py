@@ -156,7 +156,8 @@ async def test_builtin_assistant_gets_a_stub_not_the_image(user):
     mid, _ = await _ingest(user.id, _mail([("p.jpg", "image/jpeg", _photo())]))
     d = (await _call(user.id, "get_attachment", {"message_id": mid, "attachment": 0}, assistant=True)).data
     assert "_content" not in d and "data" not in d["image"]
-    assert d["image"]["note"].startswith("image attached (1067×1600)")
+    # The original's size, upright (the photo is stored sideways).
+    assert d["image"]["note"].startswith("image attached (2000×3000)")
 
 
 async def test_text_like_files(user):
@@ -198,11 +199,11 @@ async def test_pdf_text_and_rendered_page(user):
 async def test_unknown_heic_broken_and_too_large(user, monkeypatch):
     heic = b"\x00\x00\x00\x18ftypheic" + b"\x00" * 64
     xlsx = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    mid, _ = await _ingest(user.id, _mail([("data.xlsx", xlsx, b"PK\x03\x04zzzz"),
+    mid, _ = await _ingest(user.id, _mail([("data.bin", "application/x-unknown", b"PK\x03\x04zzzz"),
                                            ("phone.heic", "application/octet-stream", heic),
                                            ("broken.jpg", "image/jpeg", b"\xff\xd8\xff not a jpeg"),
                                            ("big.bin", "application/octet-stream", b"y" * 5000)]))
-    x = (await _call(user.id, "get_attachment", {"message_id": mid, "attachment": "data.xlsx"})).data
+    x = (await _call(user.id, "get_attachment", {"message_id": mid, "attachment": "data.bin"})).data
     assert x["kind"] == "other" and "cannot be returned" in x["note"] and x["attachment"]["size"] == 8
     assert "text" not in x and "image" not in x
     h = (await _call(user.id, "get_attachment", {"message_id": mid, "attachment": 1}, images=True)).data
@@ -211,6 +212,10 @@ async def test_unknown_heic_broken_and_too_large(user, monkeypatch):
         await _call(user.id, "get_attachment", {"message_id": mid, "attachment": 2}, images=True)
     with pytest.raises(ToolError, match="no attachment"):
         await _call(user.id, "get_attachment", {"message_id": mid, "attachment": 9})
+    # A spreadsheet is read as text now (test_agent_vision.py); a broken one is refused with the reason.
+    mid2, _ = await _ingest(user.id, _mail([("data.xlsx", xlsx, b"PK\x03\x04zzzz")]))
+    with pytest.raises(ToolError, match="damaged or not a document"):
+        await _call(user.id, "get_attachment", {"message_id": mid2, "attachment": "data.xlsx"})
     monkeypatch.setattr(attachfetch, "MAX_ORIGINAL", 4096)
     with pytest.raises(ToolError, match="are not returned"):
         await _call(user.id, "get_attachment", {"message_id": mid, "attachment": "big.bin"})

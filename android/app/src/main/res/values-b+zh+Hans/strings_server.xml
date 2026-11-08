@@ -195,6 +195,170 @@
     <string name="srv_approvals_forward_summary">您已从受信任的地址转发此邮件。{{name}} 将执行备注中的请求；每个步骤仍需单独获得授权。</string>
     <string name="srv_approvals_forward_title">处理您转发的备注</string>
     <string name="srv_approvals_generic_title">批准此操作</string>
+    <plurals name="srv_approvals_group_calendar">
+        <item quantity="other">{{who}} 想要更改 {{count}} 个日历</item>
+    </plurals>
+    <plurals name="srv_approvals_group_cleanup">
+        <item quantity="other">{{who}} 想要应用 {{count}} 个清理计划</item>
+    </plurals>
+    <plurals name="srv_approvals_group_contacts">
+        <item quantity="other">{{who}} 想要更改联系人组：{{count}} 个请求</item>
+    </plurals>
+    <plurals name="srv_approvals_group_draft_change">
+        <item quantity="other">{{who}} 想要更改 {{count}} 个草稿</item>
+    </plurals>
+    <plurals name="srv_approvals_group_draft_new">
+        <item quantity="other">{{who}} 想要保存 {{count}} 个草稿</item>
+    </plurals>
+    <plurals name="srv_approvals_group_event_cancel">
+        <item quantity="other">{{who}} 想要取消 {{count}} 个活动</item>
+    </plurals>
+    <plurals name="srv_approvals_group_event_change">
+        <item quantity="other">{{who}} 想要更改 {{count}} 个活动</item>
+    </plurals>
+    <plurals name="srv_approvals_group_event_delete">
+        <item quantity="other">{{who}} 想要删除 {{count}} 个活动</item>
+    </plurals>
+    <plurals name="srv_approvals_group_event_new">
+        <item quantity="other">{{who}} 想要添加 {{count}} 个活动</item>
+    </plurals>
+    <plurals name="srv_approvals_group_filter">
+        <item quantity="other">{{who}} 想要更改 {{count}} 个过滤器</item>
+    </plurals>
+    <plurals name="srv_approvals_group_forwarded">
+        <item quantity="other">{{who}} 想要处理 {{count}} 个转发的笔记</item>
+    </plurals>
+    <plurals name="srv_approvals_group_invite">
+        <item quantity="other">{{who}} 想要为 {{count}} 个活动发送邀请</item>
+    </plurals>
+    <plurals name="srv_approvals_group_label_change">
+        <item quantity="other">{{who}} 想要更改 {{count}} 个标签</item>
+    </plurals>
+    <plurals name="srv_approvals_group_label_delete">
+        <item quantity="other">{{who}} 想要删除 {{count}} 个标签</item>
+    </plurals>
+    <plurals name="srv_approvals_group_label_new">
+        <item quantity="other">{{who}} 想要添加 {{count}} 个标签</item>
+    </plurals>
+    <plurals name="srv_approvals_group_mail_delete">
+        <item quantity="other">{{who}} 想要永久删除邮件：{{count}} 个请求</item>
+    </plurals>
+    <plurals name="srv_approvals_group_mail_organise">
+        <item quantity="other">{{who}} 想要整理邮件：{{count}} 个请求</item>
+    </plurals>
+    <plurals name="srv_approvals_group_mail_spam">
+        <item quantity="other">{{who}} 想要报告垃圾邮件：{{count}} 个请求</item>
+    </plurals>
+    <plurals name="srv_approvals_group_mail_trash">
+        <item quantity="other">{{who}} 想要将邮件移至回收站：{{count}} 个请求</item>
+    </plurals>
+    <plurals name="srv_approvals_group_memory">
+        <item quantity="other">{{who}} 想要保留 {{count}} 条记忆</item>
+    </plurals>
+    <plurals name="srv_approvals_group_note_change">
+        <item quantity="other">{{who}} 想要更改 {{count}} 条笔记</item>
+    </plurals>
+    <plurals name="srv_approvals_group_note_delete">
+        <item quantity="other">{{who}} 想要删除 {{count}} 条笔记</item>
+    </plurals>
+    <plurals name="srv_approvals_group_note_labels">
+        <item quantity="other">{{who}} 想要更改笔记标签：{{count}} 个请求</item>
+    </plurals>
+    <plurals name="srv_approvals_group_note_new">
+        <item quantity="other">{{who}} 想要添加 {{count}} 条笔记</item>
+    </plurals>
+    <plurals name="srv_approvals_group_order">
+        <item quantity="other">{{who}} 想要更改 {{count}} 个常设指令</item>
+    </plurals>
+    <plurals name="srv_approvals_group_phone_sync">
+        <item quantity="other">{{who}} 想要发送忙碌时间：{{count}} 个请求</item>
+    </plurals>
+    <plurals name="srv_approvals_group_recording">
+        <item quantity="other">{{who}} 想要更改 {{count}} 个录音</item>
+    </plurals>
+    <plurals name="srv_approvals_group_request">
+        <item quantity="other">{{who}} 有 {{count}} 个请求</item>
+    </plurals>
+    <plurals name="srv_approvals_group_review">
+        <item quantity="other">{{who}} 希望您审阅 {{count}} 个计划</item>
+    </plurals>
+    <plurals name="srv_approvals_group_rsvp">
+        <item quantity="other">{{who}} 想要回复 {{count}} 个邀请</item>
+    </plurals>
+    <plurals name="srv_approvals_group_screener">
+        <item quantity="other">{{who}} 想要做出 {{count}} 个 Screener 决定</item>
+    </plurals>
+    <plurals name="srv_approvals_group_send">
+        <item quantity="other">{{who}} 想要发送 {{count}} 封邮件</item>
+    </plurals>
+    <plurals name="srv_approvals_group_settings">
+        <item quantity="other">{{who}} 想要更改设置：{{count}} 个请求</item>
+    </plurals>
+    <plurals name="srv_approvals_group_skill">
+        <item quantity="other">{{who}} 想要更改 {{count}} 项技能</item>
+    </plurals>
+    <plurals name="srv_approvals_group_table">
+        <item quantity="other">{{who}} 想要更改 {{count}} 个表格</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_change">
+        <item quantity="other">{{who}} 想要更改 {{count}} 个任务</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_complete">
+        <item quantity="other">{{who}} 想要完成 {{count}} 个任务</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_delete">
+        <item quantity="other">{{who}} 想要删除 {{count}} 个任务</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_list">
+        <item quantity="other">{{who}} 想要更改 {{count}} 个任务列表</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_new">
+        <item quantity="other">{{who}} 想要添加 {{count}} 个任务</item>
+    </plurals>
+    <plurals name="srv_approvals_group_unsubscribe">
+        <item quantity="other">{{who}} 想要退订：{{count}} 个请求</item>
+    </plurals>
+    <string name="srv_approvals_kind_calendar">日历</string>
+    <string name="srv_approvals_kind_cleanup">清理</string>
+    <string name="srv_approvals_kind_contacts">联系人组</string>
+    <string name="srv_approvals_kind_draft_change">修改草稿</string>
+    <string name="srv_approvals_kind_draft_new">新建草稿</string>
+    <string name="srv_approvals_kind_event_cancel">取消活动</string>
+    <string name="srv_approvals_kind_event_change">修改活动</string>
+    <string name="srv_approvals_kind_event_delete">删除活动</string>
+    <string name="srv_approvals_kind_event_new">新建活动</string>
+    <string name="srv_approvals_kind_filter">过滤器</string>
+    <string name="srv_approvals_kind_forwarded">转发的笔记</string>
+    <string name="srv_approvals_kind_invite">发送邀请</string>
+    <string name="srv_approvals_kind_label_change">修改标签</string>
+    <string name="srv_approvals_kind_label_delete">删除标签</string>
+    <string name="srv_approvals_kind_label_new">新建标签</string>
+    <string name="srv_approvals_kind_mail_delete">永久删除</string>
+    <string name="srv_approvals_kind_mail_organise">整理邮件</string>
+    <string name="srv_approvals_kind_mail_spam">举报垃圾邮件</string>
+    <string name="srv_approvals_kind_mail_trash">移至回收站</string>
+    <string name="srv_approvals_kind_memory">记忆</string>
+    <string name="srv_approvals_kind_note_change">修改笔记</string>
+    <string name="srv_approvals_kind_note_delete">删除笔记</string>
+    <string name="srv_approvals_kind_note_labels">笔记标签</string>
+    <string name="srv_approvals_kind_note_new">新建笔记</string>
+    <string name="srv_approvals_kind_order">常设指令</string>
+    <string name="srv_approvals_kind_phone_sync">手机日历</string>
+    <string name="srv_approvals_kind_recording">录音</string>
+    <string name="srv_approvals_kind_request">请求</string>
+    <string name="srv_approvals_kind_review">审阅</string>
+    <string name="srv_approvals_kind_rsvp">回复邀请</string>
+    <string name="srv_approvals_kind_screener">Screener</string>
+    <string name="srv_approvals_kind_send">发送邮件</string>
+    <string name="srv_approvals_kind_settings">设置</string>
+    <string name="srv_approvals_kind_skill">技能</string>
+    <string name="srv_approvals_kind_table">表格</string>
+    <string name="srv_approvals_kind_task_change">修改任务</string>
+    <string name="srv_approvals_kind_task_complete">完成任务</string>
+    <string name="srv_approvals_kind_task_delete">删除任务</string>
+    <string name="srv_approvals_kind_task_list">任务列表</string>
+    <string name="srv_approvals_kind_task_new">新建任务</string>
+    <string name="srv_approvals_kind_unsubscribe">退订</string>
     <string name="srv_approvals_mail_add_labels_ask">为 {{what}} 添加标签</string>
     <string name="srv_approvals_mail_add_labels_done">已为 {{what}} 添加标签</string>
     <string name="srv_approvals_mail_add_labels_ing">正在为 {{what}} 添加标签</string>
@@ -322,6 +486,29 @@
     <string name="srv_approvals_reason_read_mail_agent_outsider">代理在阅读邮件后撰写了此内容。{{names}} 不在该会话中。</string>
     <string name="srv_approvals_reason_read_mail_agent_outsiders">代理在阅读邮件后撰写了此内容。{{names}} 和 {{last}} 不在该会话中。</string>
     <string name="srv_approvals_reason_read_mail_agent_plain">代理在阅读邮件后撰写了此内容。</string>
+    <string name="srv_approvals_reason_short_bcc">需先询问：在读取邮件后，包含 Bcc</string>
+    <string name="srv_approvals_reason_short_cleanup">需先询问：清理计划始终等待您的确认</string>
+    <string name="srv_approvals_reason_short_draft_new_people">需先询问：向会话外的人发送草稿</string>
+    <string name="srv_approvals_reason_short_draft_recipients">需先询问：草稿的收件人已更改</string>
+    <string name="srv_approvals_reason_short_errand_no_send">需先询问：待办事项不会自行发送</string>
+    <string name="srv_approvals_reason_short_errand_shared">需先询问：写入共享笔记</string>
+    <string name="srv_approvals_reason_short_forever">需先询问：无法撤消</string>
+    <string name="srv_approvals_reason_short_forwarded">需先询问：无法核实作者</string>
+    <string name="srv_approvals_reason_short_hides_mail">需先询问：在读取邮件后隐藏邮件</string>
+    <string name="srv_approvals_reason_short_local_copy">需先询问：将复制仅限本地的内容</string>
+    <string name="srv_approvals_reason_short_lower_local">需先询问：托管模型可能会读取此内容</string>
+    <string name="srv_approvals_reason_short_new_address">需先询问：向新地址发送的第一条消息</string>
+    <string name="srv_approvals_reason_short_notes_hides">需先询问：在读取他人文本后隐藏内容</string>
+    <string name="srv_approvals_reason_short_notes_tainted">需先询问：在读取他人文本后编写</string>
+    <string name="srv_approvals_reason_short_other">需先询问</string>
+    <string name="srv_approvals_reason_short_outsider">需先询问：{{names}} 不在该会话中</string>
+    <string name="srv_approvals_reason_short_outsiders">需先询问：{{names}} 和 {{last}} 不在该会话中</string>
+    <string name="srv_approvals_reason_short_public_link">需先询问：创建公开链接</string>
+    <string name="srv_approvals_reason_short_read_mail">需先询问：在读取邮件后编写</string>
+    <string name="srv_approvals_reason_short_screener">需先询问：Screener 的决定由您做出</string>
+    <string name="srv_approvals_reason_short_tainted">需先询问：在读取邮件后编写</string>
+    <string name="srv_approvals_reason_short_token_text">需先询问：通过 API 令牌编写</string>
+    <string name="srv_approvals_reason_short_whole_list">需先询问：对整个列表执行操作</string>
     <string name="srv_approvals_result_already_done">已在上方完成</string>
     <plurals name="srv_approvals_result_changes_made">
         <item quantity="other">已进行 {{count}} 次更改</item>

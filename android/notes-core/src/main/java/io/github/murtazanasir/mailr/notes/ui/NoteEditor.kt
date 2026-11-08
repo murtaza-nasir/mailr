@@ -113,7 +113,14 @@ import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.semantics.SemanticsPropertyReceiver
+import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.CustomAccessibilityAction
@@ -506,7 +513,16 @@ private fun ChecklistBody(vm: NotesViewModel, s: NotesRepository.NoteState, read
     val note = s.note
     val repo = vm.repo
     val top = note.top ?: TopGroup(note.topOrderMode)
-    val layout = remember(s) { Checklist.layout(s.items.map { it.item }, s.sections, top, note.checkedAtBottom) }
+    // The items shown unchecked since the note was opened. One of them checked here or on another device
+    // stays in its place, ticked and struck through, until the note is opened again, so the list under the
+    // finger does not move; the fold takes it on the next opening. Only the display waits: the item is
+    // checked in the data at once.
+    val seen = remember(note.id) { HashSet<String>() }
+    val layout = remember(s) {
+        Checklist.layout(s.items.map { it.item }, s.sections, top, note.checkedAtBottom, stay = seen.toSet()).also { l ->
+            l.groups.forEach { g -> g.items.forEach { if (!it.checked) seen += it.id } }
+        }
+    }
     val byId = remember(s) { s.items.associateBy { it.item.id } }
     var foldOpen by remember(note.id) { mutableStateOf(false) }
     var usual by remember(note.id) { mutableStateOf<Usual?>(null) }
@@ -522,16 +538,32 @@ private fun ChecklistBody(vm: NotesViewModel, s: NotesRepository.NoteState, read
             g.items.forEach { i -> byId[i.id]?.let { add(Line.ItemLine(i, it.pending, it.conflict, sid)) } }
             if (!readOnly) add(Line.Add(sid))
         }
-        if (layout.checked.isNotEmpty()) {
-            add(Line.Fold(layout.checked.size))
+        if (layout.checkedCount > 0) {
+            add(Line.Fold(layout.checkedCount))
             if (foldOpen) layout.checked.forEach { i -> add(Line.Checked(i, byId[i.id]?.pending == true)) }
         }
     }
     val ticks by repo.ticks.collectAsState()
     val list = rememberLazyListState()
+    // A link to one item scrolls to it once, when it is first on screen (a later check, add or change from
+    // elsewhere leaves the scroll alone), and marks it for 3 s or until the first touch or key in the note.
+    var scrolledTo by remember(note.id) { mutableStateOf<String?>(null) }
+    val before = if (note.repeat != null) 2 else 1
     LaunchedEffect(focusItem, lines.size) {
-        val i = focusItem?.let { f -> lines.indexOfFirst { it.key == "i-$f" || it.key == "c-$f" } } ?: -1
-        if (i >= 0) list.scrollToItem(i + 1)
+        if (focusItem == null || scrolledTo == focusItem) return@LaunchedEffect
+        val i = lines.indexOfFirst { it.key == "i-$focusItem" || it.key == "c-$focusItem" }
+        if (i >= 0) {
+            scrolledTo = focusItem
+            list.scrollToItem(i + before)
+        }
+    }
+    val highlight = remember(note.id, focusItem) { mutableStateOf(focusItem) }
+    LaunchedEffect(highlight.value) {
+        if (highlight.value != null) {
+            // The repository's timeline: the time a user sees (tests move it themselves).
+            repo.time.delay(LINK_HIGHLIGHT_MS)
+            highlight.value = null
+        }
     }
     // Drag to move (long-press, then drag): the line under the finger when it lifts is the target.
     var dragging by remember { mutableStateOf<String?>(null) }
@@ -571,7 +603,8 @@ private fun ChecklistBody(vm: NotesViewModel, s: NotesRepository.NoteState, read
         // A title typed while the save ran stays dirty and is saved next (see TextBody).
         if (titleV.text == title) titleDirty = false
     }
-    LazyColumn(state = list, contentPadding = PaddingValues(bottom = 48.dp), modifier = Modifier.fillMaxSize().testTag("checklist")) {
+    LazyColumn(state = list, contentPadding = PaddingValues(bottom = 48.dp), modifier = Modifier.fillMaxSize().testTag("checklist")
+        .clearOnInteraction(highlight)) {
         item(key = "title") {
             PlainField(titleV, { v -> if (v.text != titleV.text) { recordEdit(vm, hist, "title", titleV.text, v.text); titleDirty = true }; titleV = v },
                 stringResource(R.string.notes_title), readOnly, MaterialTheme.typography.titleLarge, fg,
@@ -585,7 +618,7 @@ private fun ChecklistBody(vm: NotesViewModel, s: NotesRepository.NoteState, read
                 when (line) {
                     is Line.Header -> SectionHeader(vm, note, line.group, readOnly, s.sections, mod)
                     is Line.ItemLine -> ItemRow(vm, note, line.item, line.pending, line.conflict, readOnly, s.sections, host, fg,
-                        focused = line.item.id == focusItem, tickBy = ticks[line.item.id]?.first,
+                        focused = line.item.id == highlight.value, tickBy = ticks[line.item.id]?.first,
                         dragModifier = if (readOnly) Modifier else Modifier.pointerInput(line.item.id) {
                             detectDragGesturesAfterLongPress(
                                 onDragStart = { haptic.performHapticFeedback(HapticFeedbackType.LongPress); dragging = line.item.id; dragY = 0f },
@@ -649,7 +682,7 @@ private fun SectionHeader(vm: NotesViewModel, note: Note, g: Checklist.Group, re
         .semantics { heading(); stateDescription = AppText.get(if (g.collapsed) R.string.notes_collapsed else R.string.notes_expanded) }) {
         Icon(if (g.collapsed) Icons.Filled.ExpandMore else Icons.Filled.ExpandLess, null, Modifier.size(20.dp))
         Spacer(Modifier.width(8.dp))
-        Text(sec.name.uppercase() + if (g.collapsed) " (${g.items.size})" else "", style = MaterialTheme.typography.labelLarge,
+        Text(sec.name.uppercase() + if (g.collapsed) " (${g.items.count { !it.checked }})" else "", style = MaterialTheme.typography.labelLarge,
             modifier = Modifier.weight(1f))
         Text(if (sec.orderMode == "learned") stringResource(R.string.notes_section_learned) else "", style = MaterialTheme.typography.labelSmall)
         if (!readOnly) Box {
@@ -696,8 +729,8 @@ private fun ItemRow(vm: NotesViewModel, note: Note, item: Item, pending: Boolean
     var moveTo by remember { mutableStateOf(false) }
     val swipe = rememberSwipeToDismissBoxState(confirmValueChange = { v ->
         when (v) {
-            // ACT checkitem.check @android.notes @android.notesapp: swipe right checks.
-            SwipeToDismissBoxValue.StartToEnd -> vm.actIn(note.id) { repo.check(item.id, true) }
+            // ACT checkitem.check @android.notes @android.notesapp: swipe right checks (unchecks a row checked in place).
+            SwipeToDismissBoxValue.StartToEnd -> vm.actIn(note.id) { repo.check(item.id, !item.checked) }
             // ACT checkitem.delete @android.notes @android.notesapp: swipe left deletes, with undo.
             SwipeToDismissBoxValue.EndToStart -> vm.actIn(note.id) { repo.deleteItem(item.id) }
             SwipeToDismissBoxValue.Settled -> Unit
@@ -705,7 +738,9 @@ private fun ItemRow(vm: NotesViewModel, note: Note, item: Item, pending: Boolean
         false
     })
     val actions = if (readOnly) emptyList() else listOf(
-        CustomAccessibilityAction(stringResource(R.string.notes_check)) { vm.actIn(note.id) { repo.check(item.id, true) }; true },
+        CustomAccessibilityAction(stringResource(if (item.checked) R.string.notes_uncheck else R.string.notes_check)) {
+            vm.actIn(note.id) { repo.check(item.id, !item.checked) }; true
+        },
         CustomAccessibilityAction(stringResource(R.string.notes_move_up)) { vm.actIn(note.id) { repo.moveItem(item.id, direction = "up") }; true },
         CustomAccessibilityAction(stringResource(R.string.notes_move_down)) { vm.actIn(note.id) { repo.moveItem(item.id, direction = "down") }; true },
         CustomAccessibilityAction(stringResource(R.string.notes_move_to_section)) { moveTo = true; true },
@@ -718,12 +753,15 @@ private fun ItemRow(vm: NotesViewModel, note: Note, item: Item, pending: Boolean
             val toRight = swipe.dismissDirection == SwipeToDismissBoxValue.StartToEnd
             Box(Modifier.fillMaxSize().background(if (toRight) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.errorContainer)
                 .padding(horizontal = 24.dp), contentAlignment = if (toRight) Alignment.CenterStart else Alignment.CenterEnd) {
-                Text(stringResource(if (toRight) R.string.notes_check else R.string.notes_delete))
+                Text(stringResource(if (!toRight) R.string.notes_delete else if (item.checked) R.string.notes_uncheck else R.string.notes_check))
             }
         }) {
-        Column(Modifier.fillMaxWidth().background(if (focused) MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f) else NoteColors.background(note.color))
+        // The mark of a linked item fades out (LINK_HIGHLIGHT_MS); a row checked in place is dimmed.
+        val rowBg by animateColorAsState(if (focused) MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f) else NoteColors.background(note.color),
+            tween(if (focused) 0 else 600), label = "link-highlight") // i18n-ignore: an animation label for tools
+        Column(Modifier.fillMaxWidth().background(rowBg)
             .pendingEdge(pending, MaterialTheme.colorScheme.primary, 8f)
-            .semantics { customActions = actions }
+            .semantics { customActions = actions; linkMarked = focused }
             .testTag("item-" + item.id)) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
                 if (!readOnly) Icon(Icons.Outlined.DragIndicator, null, Modifier.then(dragModifier).padding(start = 4.dp).size(20.dp),
@@ -764,6 +802,7 @@ private fun ItemRow(vm: NotesViewModel, note: Note, item: Item, pending: Boolean
                     } else {
                         Text(item.text, style = MaterialTheme.typography.bodyLarge,
                             textDecoration = if (item.checked) TextDecoration.LineThrough else null,
+                            color = if (item.checked) fg.copy(alpha = 0.7f) else Color.Unspecified,
                             modifier = Modifier.fillMaxWidth().clickable(enabled = !readOnly, onClickLabel = stringResource(R.string.notes_edit)) { editing = true }
                                 .padding(vertical = 8.dp))
                     }
@@ -1060,3 +1099,24 @@ private fun QtyDialog(item: Item, onDismiss: () -> Unit, onSave: (io.github.murt
 /** A file name for an export: the title's letters, digits, spaces and dashes. */
 fun exportName(title: String, ext: String): String =
     (title.filter { it.isLetterOrDigit() || it in " -_" }.trim().ifBlank { "note" }).take(80) + "." + ext
+
+/** Whether a row carries a link's mark: for tests only; TalkBack does not read it (the mark is visual only). */
+val LinkMarked = SemanticsPropertyKey<Boolean>("LinkMarked")
+private var SemanticsPropertyReceiver.linkMarked by LinkMarked
+
+/** How long the item a link points to stays marked when nothing in the note is touched first. */
+const val LINK_HIGHLIGHT_MS = 3_000L
+
+/**
+ * Clears [mark] on the first touch, scroll (a wheel included) or key inside the element. It only watches:
+ * every event goes on to the list and its rows as before.
+ */
+private fun Modifier.clearOnInteraction(mark: MutableState<String?>): Modifier =
+    pointerInput(mark) {
+        awaitPointerEventScope {
+            while (true) {
+                val e = awaitPointerEvent(PointerEventPass.Initial)
+                if (mark.value != null && (e.type == PointerEventType.Press || e.type == PointerEventType.Scroll)) mark.value = null
+            }
+        }
+    }.onPreviewKeyEvent { if (mark.value != null) mark.value = null; false }

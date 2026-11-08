@@ -14,4 +14,11 @@
     <string name="more_allow_menu">Autres façons d\'autoriser</string>
     <string name="more_always_allow">Toujours autoriser</string>
     <string name="more_allow_once">Autoriser une fois</string>
+    <plurals name="more_allow_menu_also">
+        <item quantity="one">Autres moyens d\'autoriser, en approuvant également %d autre demande en attente</item>
+        <item quantity="other">Autres moyens d\'autoriser, en approuvant également %d autres demandes en attente</item>
+    </plurals>
+    <string name="more_card_menu">Plus d\'actions</string>
+    <string name="more_why_asks">Pourquoi cette demande</string>
+    <string name="more_why_hide">Masquer la raison de la demande</string>
 </resources>

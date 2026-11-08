@@ -93,6 +93,16 @@
     <string name="appr_arrival_more">%1$s · 还有 %2$d 项</string>
     <string name="appr_allow_each_once">允许这些操作各一次？</string>
     <string name="appr_allow_all_n">允许全部 %1$d 项</string>
+    <string name="appr_allow_all">全部允许</string>
+    <string name="appr_deny_all">全部拒绝</string>
+    <plurals name="appr_deny_all_title">
+        <item quantity="other">拒绝全部 %d 个请求？</item>
+    </plurals>
+    <plurals name="appr_denied_count">
+        <item quantity="other">已拒绝 %d 个请求。</item>
+    </plurals>
+    <string name="appr_group_fold">折叠这些请求</string>
+    <string name="appr_group_unfold">显示这些请求</string>
     <string name="appr_cancel">取消</string>
     <string name="appr_waiting_for_you">等待您处理</string>
     <string name="appr_back">返回</string>

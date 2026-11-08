@@ -40,7 +40,7 @@ class ApprovalGrantCardTest {
     @Test fun theMenuSaysWhatEachGrantCoversAndHowManyOthers() {
         val decided = mutableListOf<String>()
         compose.setContent { MaterialTheme { ApprovalCard(labelCreate) { _, ok, scope -> decided += "$ok/$scope" } } }
-        compose.onNodeWithTag("approval-more").performClick()
+        compose.onNodeWithTag("approval-grants").performClick()
         compose.waitForIdle()
         assertTrue(shows("Allow for 12 hours (also approves 2 other waiting requests)"))
         assertTrue(shows("This agent may create or change labels for 12 hours, with any input, without asking."))
@@ -52,7 +52,7 @@ class ApprovalGrantCardTest {
 
     @Test fun noCountWhenNothingElseWaits() {
         compose.setContent { MaterialTheme { ApprovalCard(labelCreate.copy(subject = "assistant", alsoCovers = AlsoCovers())) { _, _, _ -> } } }
-        compose.onNodeWithTag("approval-more").performClick()
+        compose.onNodeWithTag("approval-grants").performClick()
         compose.waitForIdle()
         assertTrue(shows("Allow for this chat"))
         assertTrue(!shows("also approves"))
@@ -74,7 +74,7 @@ class ApprovalGrantCardTest {
         compose.waitForIdle()
         assertTrue(shows("Allow once"))
         assertTrue(shows("Deny"))
-        assertTrue(compose.onAllNodesWithTag("approval-more").fetchSemanticsNodes().isEmpty())
+        assertTrue(compose.onAllNodesWithTag("approval-grants").fetchSemanticsNodes().isEmpty())
         assertTrue(!shows("Allow for this chat") && !shows("Always allow"))
         compose.onNodeWithText("Allow once").performClick()
         assertEquals(listOf("true/once"), decided)

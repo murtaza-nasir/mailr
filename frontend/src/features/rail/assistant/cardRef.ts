@@ -9,6 +9,6 @@ export function cardToRef(a: ApprovalCardData): ApprovalRef {
   return {
     id: a.id, action: a.action, title: (display ? displayTitle(display) : null) ?? a.preview?.title ?? a.target ?? a.action, target: a.target ?? null,
     preview: a.preview ?? null, status: a.status, expires_at: a.expires_at ?? null, display, outcome: a.outcome ?? null,
-    also_covers: a.also_covers ?? null, grants: a.grants ?? null,
+    also_covers: a.also_covers ?? null, grants: a.grants ?? null, head: a.head ?? null,
   }
 }

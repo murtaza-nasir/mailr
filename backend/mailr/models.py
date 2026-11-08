@@ -767,6 +767,11 @@ class ModelEndpoint(Base):
     # Set up by the server's environment (MAILR_ASR_URL, agent/transcribe.sync_env_asr): its URL
     # comes from there; an admin changes its models, defaults and whether it is on.
     from_env: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    # What each listed model can do beyond text (intel/modelcaps.py), by model name:
+    # {"<model>": {"vision": true|false|null, "vision_manual": true|false}}. `vision` is what the
+    # last detection found (null: the server did not say); `vision_manual` is the admin's override
+    # in Admin → Models, and wins when present.
+    capabilities: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict, server_default="{}")
     created_at: Mapped[datetime] = _now()
 
 
@@ -1100,8 +1105,9 @@ class CalendarGroup(Base):
 
 class GroupCalendar(Base):
     """A calendar an admin attached to a group (calendar/groups.py). `access` is what members may
-    do: "write" (a calendar of the group's own account) or "read" (a calendar of the group's owner
-    account, shared read-only with the group; `editors`, user ids, may write). `href` is the
+    do: "write" (a calendar of the group's own account), "read" (a calendar of the group's owner
+    account, shared read-only with the group; `editors`, user ids, may write) or "freebusy" (the same,
+    with the group's grant only CalDAV read-free-busy; Stalwart 1.x). `href` is the
     collection's path on the store (/dav/cal/<login>/<slug>/), set once it is made."""
 
     __tablename__ = "group_calendars"
@@ -1193,6 +1199,33 @@ class ChatMessage(Base):
     status: Mapped[str | None] = mapped_column(String(12))
     # User row: {"skills", "stop_reason", "error"}; assistant rows: {"segment": n, "final": bool}.
     meta: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
+    created_at: Mapped[datetime] = _now()
+
+
+class ChatAttachment(Base):
+    """A file or image the user attached to a message to the assistant (agent/chat_files.py).
+    Uploaded first (session and message empty), then tied to the user's chat message when it is
+    sent; deleted with the chat. `data` is the original; `image` the copy a model may see (scaled,
+    without metadata) and `thumb` the small copy the chat history shows; `text` what a model reads
+    of a file (core/attachfetch.extract, capped)."""
+
+    __tablename__ = "chat_attachments"
+    id: Mapped[str] = mapped_column(String(32), primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    session_id: Mapped[str | None] = mapped_column(ForeignKey("chat_sessions.id", ondelete="CASCADE"), index=True)
+    message_id: Mapped[int | None] = mapped_column(ForeignKey("chat_messages.id", ondelete="CASCADE"), index=True)
+    filename: Mapped[str] = mapped_column(String(200))
+    content_type: Mapped[str] = mapped_column(String(120))
+    size: Mapped[int] = mapped_column(Integer)
+    kind: Mapped[str] = mapped_column(String(10))  # image | file
+    data: Mapped[bytes] = mapped_column(LargeBinary, deferred=True)
+    image: Mapped[bytes | None] = mapped_column(LargeBinary, deferred=True)
+    image_type: Mapped[str | None] = mapped_column(String(40))
+    thumb: Mapped[bytes | None] = mapped_column(LargeBinary, deferred=True)
+    thumb_type: Mapped[str | None] = mapped_column(String(40))
+    text: Mapped[str | None] = mapped_column(Text)
+    # {"width", "height", "pages", "truncated", "note", "chars"}: what the extraction found.
+    info: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict, server_default="{}")
     created_at: Mapped[datetime] = _now()
 
 

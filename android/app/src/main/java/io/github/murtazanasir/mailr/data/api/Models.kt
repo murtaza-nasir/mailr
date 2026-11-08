@@ -656,9 +656,30 @@ data class Approval(
     val grants: Boolean = true,
     /** The assistant chat that asked, when one did ("Allow all" groups by it). */
     @SerialName("chat_session_id") val chatSessionId: String? = null,
+    /** The card's head line and heading (agent/present.py card_head); null from an older server. */
+    val head: ApprovalHead? = null,
 ) {
     /** Who asked, for "Allow all": one chat, else the agent token or the assistant (POST /approvals/decide-many). */
     val requesterKey: String get() = chatSessionId?.let { "chat:$it" } ?: subject
+
+    /** The kind of request ("task_new"), for grouping; the action from an older server. */
+    val kind: String get() = head?.kind?.ifBlank { null } ?: action
+
+    /** The small type label ("New task") in the app's language, or null from an older server. */
+    val typeLabel: String? get() = head?.let { io.github.murtazanasir.mailr.ui.present.ServerText.text(it.kindLabelMsg, it.kindLabel) }
+        ?.ifBlank { null }
+
+    /** The card's heading: the object's own title (a task's, an event's, an email's subject), else the card's title as is. */
+    val heading: String get() = head?.name?.takeIf { it.isNotBlank() } ?: shown?.title?.ifBlank { null } ?: preview.title.ifBlank { action }
+
+    /** The short line of why the card asks ("Asks first: written after reading email"), or null when it has no reason. */
+    val shortReason: String? get() {
+        val h = head
+        if (h?.reasonShort != null) return io.github.murtazanasir.mailr.ui.present.ServerText.text(h.reasonShortMsg, h.reasonShort)
+        if (shown?.reason.isNullOrBlank()) return null
+        return io.github.murtazanasir.mailr.ui.present.ServerText.text(
+            io.github.murtazanasir.mailr.ui.present.Msg("approvals.reason_short.other"), "Asks first")
+    }
 
     /** The display model from the card or its preview, in the app's language, or null from an older server. */
     val shown: io.github.murtazanasir.mailr.ui.present.Display? get() = (display ?: preview.display)?.localized()
@@ -666,6 +687,17 @@ data class Approval(
     /** A bulk review's plan when this is a review card (`preview.kind == "review"`), else null. */
     val review: ReviewPreview? get() = preview.review?.takeIf { preview.kind == "review" }
 }
+
+/** The card's head (agent/present.py card_head): its kind and type label, the object's own name, the short reason. */
+@Serializable
+data class ApprovalHead(
+    val kind: String = "",
+    @SerialName("kind_label") val kindLabel: String = "",
+    @SerialName("kind_label_msg") val kindLabelMsg: io.github.murtazanasir.mailr.ui.present.Msg? = null,
+    val name: String? = null,
+    @SerialName("reason_short") val reasonShort: String? = null,
+    @SerialName("reason_short_msg") val reasonShortMsg: io.github.murtazanasir.mailr.ui.present.Msg? = null,
+)
 
 /**
  * For a waiting card: how many OTHER waiting requests each grant would approve as well.
@@ -884,8 +916,9 @@ data class DecideManyResult(
     val skipped: List<SkippedApproval> = emptyList(),
 )
 
+/** One request the batch did not decide: its id as sent (a number, or text for an id that named nothing) and why. */
 @Serializable
-data class SkippedApproval(val id: Long = 0, val status: String = "")
+data class SkippedApproval(val id: kotlinx.serialization.json.JsonElement? = null, val status: String = "")
 
 /** One row of an answer's Sources: a cited record and every number that cites it ([first] opens it). */
 data class SourceRow(val key: String, val first: Citation, val all: List<Citation>)

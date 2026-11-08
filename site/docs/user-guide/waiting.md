@@ -20,10 +20,10 @@ When nothing is waiting, the bell panel states that it is empty. Use the links a
 
 ## Approvals
 
-Each approval shows who asked and when, and the card with its choices. See
-[Approvals](approvals.md) for what each choice does. When one chat or one agent has several
-requests waiting, you can use **Allow all** to see them listed and allow each of them once. See
-[Allow several at once](approvals.md#allow-several-at-once).
+Each approval card shows the kind of request, who asked and when, and its choices. See
+[Approvals](approvals.md) for what each choice does. Requests of the same kind from one chat or
+one agent that are next to each other are grouped, with **Allow all** and **Deny all** for the
+requests listed. See [Allow or deny several at once](approvals.md#allow-or-deny-several-at-once).
 
 With an approval link from an agent or a push notification, the bell opens on that request.
 

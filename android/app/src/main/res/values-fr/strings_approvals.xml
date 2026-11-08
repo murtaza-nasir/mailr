@@ -107,6 +107,18 @@
     <string name="appr_arrival_more">%1$s · %2$d autres</string>
     <string name="appr_allow_each_once">Autoriser chacune de ces actions une fois ?</string>
     <string name="appr_allow_all_n">Autoriser les %1$d</string>
+    <string name="appr_allow_all">Tout autoriser</string>
+    <string name="appr_deny_all">Tout refuser</string>
+    <plurals name="appr_deny_all_title">
+        <item quantity="one">Refuser %d demande ?</item>
+        <item quantity="other">Refuser les %d demandes ?</item>
+    </plurals>
+    <plurals name="appr_denied_count">
+        <item quantity="one">%d demande refusée.</item>
+        <item quantity="other">%d demandes refusées.</item>
+    </plurals>
+    <string name="appr_group_fold">Replier ces demandes</string>
+    <string name="appr_group_unfold">Afficher ces demandes</string>
     <string name="appr_cancel">Annuler</string>
     <string name="appr_waiting_for_you">En attente de votre validation</string>
     <string name="appr_back">Retour</string>

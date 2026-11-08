@@ -248,7 +248,7 @@ class AndroidHardeningTest {
         assertEquals("seed-123", body["nonce_seed"]!!.jsonPrimitive.content)
     }
 
-    // ---------------- "Allow all n" refuses touches through overlays ----------------
+    // ---------------- Allow all and Deny all refuse touches through overlays ----------------
 
     private fun label(id: Long, name: String, at: String) =
         Approval(id, "token:7", "claude-code", "messages.send", name, ApprovalPreview("Send “$name” to billing@evil.example"), createdAt = at)
@@ -276,18 +276,18 @@ class AndroidHardeningTest {
         compose.setContent {
             MaterialTheme {
                 ApprovalsScreen(pendingApprovals, emptyList(), null, false, SnackbarHostState(), {}, {}, { _, _, _ -> },
-                    onDecideMany = { g -> decided += g.map { it.id } })
+                    onDecideMany = { g, _ -> decided += g.map { it.id } })
             }
         }
     }
 
-    @Test fun allowAllConfirmRefusesATouchThroughAnOverlay() {
+    @Test fun denyAllConfirmRefusesATouchThroughAnOverlay() {
         val decided = mutableListOf<List<Long>>()
         showApprovals(decided)
-        compose.onNodeWithText("Allow all 3").performClick()
-        compose.onNodeWithText("Allow each of these once?").assertExists()
+        compose.onNodeWithTag("deny-all").performClick()
+        compose.onNodeWithTag("deny-all-list").assertExists()
         compose.waitForIdle()
-        val confirm = compose.onNodeWithTag("allow-all-confirm").fetchSemanticsNode()
+        val confirm = compose.onNodeWithTag("deny-all-confirm").fetchSemanticsNode()
         val c = confirm.boundsInWindow.center
         val dialog = windows().last().first
         compose.runOnIdle {
@@ -295,16 +295,17 @@ class AndroidHardeningTest {
             dialog.dispatchTouchEvent(touch(c.x, c.y, MotionEvent.ACTION_UP))
         }
         compose.waitForIdle()
-        assertTrue("an obscured touch approved the group", decided.isEmpty())
-        // The dialog is still open; an ordinary tap approves all three.
-        compose.onNodeWithTag("allow-all-confirm").performClick()
+        assertTrue("an obscured touch denied the group", decided.isEmpty())
+        // The dialog is still open; an ordinary tap denies all three.
+        compose.onNodeWithTag("deny-all-confirm").performClick()
         compose.waitForIdle()
         assertEquals(listOf(listOf(51L, 52L, 53L)), decided)
     }
 
-    @Test fun allowAllRowRefusesATouchThroughAnOverlay() {
-        showApprovals(mutableListOf())
-        val row = compose.onAllNodesWithText("Allow all 3")[0].fetchSemanticsNode()
+    @Test fun allowAllRefusesATouchThroughAnOverlay() {
+        val decided = mutableListOf<List<Long>>()
+        showApprovals(decided)
+        val row = compose.onNodeWithTag("allow-all").fetchSemanticsNode()
         val c = row.boundsInWindow.center
         val root = compose.activity.window.decorView
         compose.runOnIdle {
@@ -312,13 +313,16 @@ class AndroidHardeningTest {
             root.dispatchTouchEvent(touch(c.x, c.y, MotionEvent.ACTION_UP))
         }
         compose.waitForIdle()
-        compose.onNodeWithText("Allow each of these once?").assertDoesNotExist()
+        assertTrue("an obscured touch approved the group", decided.isEmpty())
+        compose.onNodeWithTag("allow-all").performClick()
+        compose.waitForIdle()
+        assertEquals(listOf(listOf(51L, 52L, 53L)), decided)
     }
 
     /** Every button that decides several approvals at once carries the overlay guard. */
     @Test fun everyAllowAllButtonIsGuarded() {
         val src = File("src/main/java/io/github/murtazanasir/mailr/ui/approvals/ApprovalsUi.kt").readText()
-        val buttons = Regex("""(TextButton|FilledTonalButton|Button)\(onClick = [^\n]*(onDecideMany|onAllow)[^\n]*(\n[^\n]*){0,1}""").findAll(src).toList()
+        val buttons = Regex("""(TextButton|FilledTonalButton|Button)\(onClick = [^\n]*(onDecideMany|onAllow|onDeny)[^\n]*(\n[^\n]*){0,1}""").findAll(src).toList()
         assertTrue(buttons.size >= 2)
         buttons.forEach { assertTrue("not guarded: ${it.value}", "refuseObscuredTouches()" in it.value) }
     }

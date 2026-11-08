@@ -24,6 +24,8 @@ import kotlinx.serialization.json.jsonPrimitive
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Rule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -58,8 +60,15 @@ class PresentFixturesTest {
         compose.setContent { MaterialTheme { card?.let { ApprovalCard(it) { _, _, _ -> } } } }
         approvals.forEach { f ->
             val d = display(f)
+            card = null
+            compose.waitForIdle()
             card = Approval(id = 1, action = f["action"]!!.jsonPrimitive.content, actor = "Ambrose", display = d)
             compose.waitForIdle()
+            // The whole reason is behind the card's ⓘ (its line shows the short one).
+            if (d.reason != null) {
+                compose.onNodeWithTag("approval-why").performClick()
+                compose.waitForIdle()
+            }
             expect(f).forEach { s -> assertTrue("${f["name"]}: “$s”", shows(s.replace(Regex("\\s+"), " ").trim())) }
             assertTrue("${f["name"]}: raw machine text", !shows("add_labels=") && !shows("Do: "))
         }

@@ -559,6 +559,7 @@
     <string name="cal_shared_by_edit_through">由 %1$s 共享 · 可编辑（通过 %2$s）</string>
     <string name="cal_shared_by_share_through">由 %1$s 共享 · 可编辑和共享（通过 %2$s）</string>
     <string name="cal_shared_with_group">与 %s 群组共享</string>
+    <string name="cal_shared_with_group_free_busy">已与 %s 群组共享 · 仅显示忙/闲状态</string>
     <string name="cal_shared_group_fallback">群组</string>
     <string name="cal_live_when_all_day">%1$s – %2$s，全天</string>
     <string name="cal_edit">编辑</string>

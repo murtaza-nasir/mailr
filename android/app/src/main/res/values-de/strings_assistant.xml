@@ -225,4 +225,15 @@
         <item quantity="one">%1$s von dir geändert</item>
         <item quantity="other">%1$s von dir geändert</item>
     </plurals>
+    <string name="asst_attach">Dateien oder Bilder anhängen</string>
+    <string name="asst_attach_too_big">%1$s ist größer als %2$d MB und kann nicht angehängt werden.</string>
+    <plurals name="asst_attach_limit">
+        <item quantity="one">Eine Nachricht kann maximal %1$d Datei enthalten.</item>
+        <item quantity="other">Eine Nachricht kann maximal %1$d Dateien enthalten.</item>
+    </plurals>
+    <string name="asst_attach_remove">%1$s entfernen</string>
+    <string name="asst_attach_uploading">Wird angehängt…</string>
+    <string name="asst_attach_failed">%1$s konnte nicht angehängt werden: %2$s</string>
+    <string name="asst_attach_image">Bild %1$s</string>
+    <string name="asst_attach_sharing">Wird für %1$s angehängt…</string>
 </resources>

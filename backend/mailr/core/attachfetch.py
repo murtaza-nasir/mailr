@@ -11,10 +11,13 @@ derived copy instead:
 - PDFs: the text of every page (or of `page`), and one page rendered as an image.
 - text, Markdown, CSV, JSON, calendar files, HTML (as text) and attached emails: text, at most
   TEXT_CAP characters.
+- Word, Excel and PowerPoint files (.docx, .xlsx, .pptx), their OpenDocument counterparts (.odt,
+  .ods, .odp) and RTF: text. Sheets come as comma-separated lines per sheet, slides with their
+  notes, all capped (core/attachwork.py); embedded images are counted, not read.
 - anything else: its name, size and type only.
 
-Images and PDFs are decoded in a child process with memory and CPU limits (core/attachwork.py).
-Originals above MAX_ORIGINAL bytes are refused.
+Images, PDFs and documents are decoded in a child process with memory and CPU limits
+(core/attachwork.py). Originals above MAX_ORIGINAL bytes are refused.
 """
 
 from __future__ import annotations
@@ -48,6 +51,19 @@ TEXT_TYPES = {"text/plain", "text/markdown", "text/x-markdown", "text/csv", "tex
               "text/json", "application/ld+json", "text/x-log"}
 HTML_TYPES = {"text/html", "application/xhtml+xml"}
 EML_TYPES = {"message/rfc822"}
+DOC_TYPES = {
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
+    "application/vnd.oasis.opendocument.text": "odt",
+    "application/vnd.oasis.opendocument.spreadsheet": "ods",
+    "application/vnd.oasis.opendocument.presentation": "odp",
+    "application/rtf": "rtf", "text/rtf": "rtf", "application/x-rtf": "rtf", "text/richtext": "rtf",
+}
+DOC_EXT = {".docx": "docx", ".xlsx": "xlsx", ".pptx": "pptx", ".odt": "odt", ".ods": "ods", ".odp": "odp",
+           ".rtf": "rtf"}
+# What extract() reads; "other" (and heic) it does not.
+READABLE = frozenset({"image", "pdf", "text", "html", "eml", *DOC_EXT.values()})
 EXT_KIND = {".png": "image", ".jpg": "image", ".jpeg": "image", ".gif": "image", ".webp": "image",
             ".heic": "heic", ".heif": "heic", ".pdf": "pdf", ".txt": "text", ".md": "text", ".markdown": "text",
             ".csv": "text", ".tsv": "text", ".ics": "text", ".vcf": "text", ".json": "text", ".log": "text",
@@ -69,9 +85,20 @@ def clamp_px(v: Any) -> int:
 
 
 def kind_of(ctype: str, fname: str, data: bytes = b"") -> str:
-    """image, heic, pdf, text, html, eml or other: by content type, then by file name and the
-    content's first bytes (many mailers send everything as application/octet-stream)."""
+    """image, heic, pdf, text, html, eml, a document format (docx, xlsx, pptx, odt, ods, odp, rtf)
+    or other: by content type, then by file name and the content's first bytes (many mailers send
+    everything as application/octet-stream)."""
     ctype = (ctype or "").lower()
+    ext = os.path.splitext((fname or "").lower())[1]
+    if ctype in DOC_TYPES:
+        return DOC_TYPES[ctype]
+    if data[:5] == b"{\\rtf":
+        return "rtf"
+    if ext in DOC_EXT and data[:4] == b"PK\x03\x04" and ext != ".rtf" and (
+            ctype.startswith(("application/octet", "binary/", "application/x-download", "application/download",
+                              "application/force-download", "application/unknown", "application/zip",
+                              "application/x-zip", "application/vnd.")) or not ctype):
+        return DOC_EXT[ext]
     if ctype in IMAGE_TYPES:
         return "image"
     if ctype in HEIC_TYPES:
@@ -92,7 +119,6 @@ def kind_of(ctype: str, fname: str, data: bytes = b"") -> str:
         return "image"
     if head[4:8] == b"ftyp" and head[8:12] in (b"heic", b"heix", b"mif1", b"msf1", b"heif"):
         return "heic"
-    ext = os.path.splitext((fname or "").lower())[1]
     if ext in EXT_KIND and (ctype.startswith(("application/octet", "binary/", "application/x-download",
                                               "application/download", "application/force-download",
                                               "text/", "application/unknown")) or not ctype):
@@ -200,6 +226,14 @@ async def _work(args: list[str], data: bytes) -> dict[str, Any]:
     return res
 
 
+def upright_size(img: dict[str, Any]) -> tuple[int, int]:
+    """An extracted image's original size, turned like the copy (EXIF orientation can swap the
+    sides): (width, height)."""
+    w, h = int(img.get("width") or 0), int(img.get("height") or 0)
+    ow, oh = int(img.get("original_width") or w), int(img.get("original_height") or h)
+    return (oh, ow) if (w > h) != (ow > oh) and w != h and ow != oh else (ow, oh)
+
+
 THUMB_PX = 320  # the Attachments grid's cards
 THUMB_MIN_BYTES = 150_000  # a smaller image is sent as it is: decoding it saves nothing
 
@@ -273,6 +307,16 @@ async def extract(data: bytes, ctype: str, fname: str, charset: str | None, *, m
         text, truncated = _cap(await asyncio.to_thread(_text_of, kind, data, charset))
         return {"kind": "text", "text": text, "truncated": truncated,
                 **({"note": f"truncated to the first {TEXT_CAP:,} characters"} if truncated else {})}
+    if kind in DOC_EXT.values():
+        res = await _work(["doc", kind], data)
+        text, truncated = _cap(res.get("text") or "")
+        out = {"kind": "text", "format": kind, "text": text, "truncated": bool(res.get("truncated")) or truncated}
+        notes = list(res.get("notes") or [])
+        if not text.strip():
+            notes.append("the document has no text")
+        if notes:
+            out["note"] = "; ".join(notes)
+        return out
     if kind == "heic":
         return {"kind": "other", "note": "HEIC/HEIF images cannot be converted on this server; download the "
                                          "file in Mailr to view it"}

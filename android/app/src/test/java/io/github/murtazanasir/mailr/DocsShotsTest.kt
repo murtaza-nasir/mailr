@@ -850,9 +850,9 @@ open class DocsShotsTest {
             onReviewAll = {})
     }
 
-    /** approval.approve, approval.undo_grant: two waiting label creates from one agent; the first card's ⋮ menu (More ways to allow) says what each grant covers. */
+    /** approval.approve, approval.undo_grant: two waiting label creates from one agent; the first card's grants menu (+1 ▾) says what each grant covers. */
     @Test fun approvalGrant() = shot("android-approval-grant", then = {
-        compose.onAllNodesWithTag("approval-more")[0].performClick()
+        compose.onAllNodesWithTag("approval-grants")[0].performClick()
     }) {
         val cover = io.github.murtazanasir.mailr.data.api.AlsoCovers(session = 1, always = 1, alwaysDerived = 1)
         ApprovalsScreen(listOf(

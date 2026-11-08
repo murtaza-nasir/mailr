@@ -555,6 +555,11 @@
    "state": "model",
    "text": "Permitir por 12 horas"
   },
+  "android:app:appr_allow_all": {
+   "sha": "18bbf69cfe4e1755",
+   "state": "model",
+   "text": "Permitir tudo"
+  },
   "android:app:appr_allow_all_n": {
    "sha": "8cef7c3d281ab3ca",
    "state": "model",
@@ -702,10 +707,41 @@
     "other": "Negado. Também negou %d outras solicitações."
    }
   },
+  "android:app:appr_denied_count": {
+   "sha": "a817f711a2cda873",
+   "state": "model",
+   "text": {
+    "one": "Solicitação %d negada.",
+    "other": "Solicitações %d negadas."
+   }
+  },
+  "android:app:appr_deny_all": {
+   "sha": "8bd9b8dbe3661b93",
+   "state": "model",
+   "text": "Negar tudo"
+  },
+  "android:app:appr_deny_all_title": {
+   "sha": "ed236022a94b1f23",
+   "state": "model",
+   "text": {
+    "one": "Negar %d solicitação?",
+    "other": "Negar todas as %d solicitações?"
+   }
+  },
   "android:app:appr_empty_text": {
    "sha": "a7ad5d8141612d6e",
    "state": "model",
    "text": "Aprovações, mensagens não enviadas e lembretes vencidos aparecem aqui."
+  },
+  "android:app:appr_group_fold": {
+   "sha": "48cfe1f03df53329",
+   "state": "model",
+   "text": "Ocultar essas solicitações"
+  },
+  "android:app:appr_group_unfold": {
+   "sha": "61c88b53f2f73de4",
+   "state": "model",
+   "text": "Mostrar essas solicitações"
   },
   "android:app:appr_header_approvals": {
    "sha": "9968828089b03728",
@@ -1294,6 +1330,49 @@
    "sha": "1afe3ad2b666f062",
    "state": "model",
    "text": "Perguntar sobre esta tarefa…"
+  },
+  "android:app:asst_attach": {
+   "sha": "d203cefd9f6d83f1",
+   "state": "model",
+   "text": "Anexar arquivos ou imagens"
+  },
+  "android:app:asst_attach_failed": {
+   "sha": "7fe32139ed01c0f2",
+   "state": "model",
+   "text": "Não foi possível anexar %1$s: %2$s"
+  },
+  "android:app:asst_attach_image": {
+   "sha": "ffc37ef28098c2e0",
+   "state": "model",
+   "text": "Imagem %1$s"
+  },
+  "android:app:asst_attach_limit": {
+   "sha": "06d4124161aec1a7",
+   "state": "model",
+   "text": {
+    "one": "Uma mensagem pode conter no máximo %1$d arquivo.",
+    "other": "Uma mensagem pode conter no máximo %1$d arquivos."
+   }
+  },
+  "android:app:asst_attach_remove": {
+   "sha": "b2ba32534a7eab17",
+   "state": "model",
+   "text": "Remover %1$s"
+  },
+  "android:app:asst_attach_sharing": {
+   "sha": "00d6d46ec376b9b7",
+   "state": "model",
+   "text": "Anexando para %1$s…"
+  },
+  "android:app:asst_attach_too_big": {
+   "sha": "8b1f426b9ddaf5b5",
+   "state": "model",
+   "text": "%1$s tem mais de %2$d MB e não pode ser anexado."
+  },
+  "android:app:asst_attach_uploading": {
+   "sha": "703c93b211d12a2a",
+   "state": "model",
+   "text": "Anexando…"
   },
   "android:app:asst_chat_title_cd": {
    "sha": "ad011d801b5fa8d6",
@@ -4776,6 +4855,11 @@
    "sha": "76d3ee78a0e5b73b",
    "state": "model",
    "text": "Compartilhado com o grupo %s"
+  },
+  "android:app:cal_shared_with_group_free_busy": {
+   "sha": "fc65a3770d68ef1d",
+   "state": "model",
+   "text": "Compartilhado com o grupo %s · apenas disponibilidade"
   },
   "android:app:cal_show_as": {
    "sha": "51fc7734454c58c6",
@@ -9796,6 +9880,14 @@
    "state": "manual",
    "text": "Mais formas de permitir"
   },
+  "android:app:more_allow_menu_also": {
+   "sha": "6dd286c353ecd5ad",
+   "state": "model",
+   "text": {
+    "one": "Mais formas de permitir, aprovando também %d outra solicitação pendente",
+    "other": "Mais formas de permitir, aprovando também %d outras solicitações pendentes"
+   }
+  },
   "android:app:more_allow_once": {
    "sha": "d2ce72fd95f825da",
    "state": "model",
@@ -9836,6 +9928,11 @@
    "state": "model",
    "text": "Isso não pode ser desfeito pelo Mailr."
   },
+  "android:app:more_card_menu": {
+   "sha": "149682255a9fc3dc",
+   "state": "model",
+   "text": "Mais ações"
+  },
   "android:app:more_deny": {
    "sha": "c0456fee0bc09c7e",
    "state": "model",
@@ -9855,6 +9952,16 @@
    "sha": "7eccff321619b1ac",
    "state": "model",
    "text": "Ocultar detalhes"
+  },
+  "android:app:more_why_asks": {
+   "sha": "ad2d98e123d06064",
+   "state": "model",
+   "text": "Por que ele pergunta"
+  },
+  "android:app:more_why_hide": {
+   "sha": "f342b24ef10ae213",
+   "state": "model",
+   "text": "Ocultar por que ele pergunta"
   },
   "android:app:new_task_tile_label": {
    "sha": "cfe1b5e64c6eee08",
@@ -12717,6 +12824,11 @@
    "sha": "1a19295cf564147a",
    "state": "model",
    "text": "Processamento de áudio"
+  },
+  "android:app:share_ask_label": {
+   "sha": "34bc1aff3340800c",
+   "state": "model",
+   "text": "Perguntar ao Ambrose"
   },
   "android:app:share_compose_label": {
    "sha": "4db253ebb2f2ba46",
@@ -17405,6 +17517,11 @@
    "state": "model",
    "text": "Desarquivar"
   },
+  "android:notes-core:notes_uncheck": {
+   "sha": "bdbcabd5fb0d19dd",
+   "state": "model",
+   "text": "Desmarcar"
+  },
   "android:notes-core:notes_uncheck_all": {
    "sha": "6fa3629d436ed245",
    "state": "model",
@@ -19888,6 +20005,539 @@
    "state": "model",
    "text": "Aprovar esta ação"
   },
+  "server:approvals.group.calendar": {
+   "sha": "21dc1c45ea097aad",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar {{count}} agenda",
+    "other": "{{who}} quer alterar {{count}} agendas"
+   }
+  },
+  "server:approvals.group.cleanup": {
+   "sha": "652f9eb16c6fd1f7",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer aplicar {{count}} plano de limpeza",
+    "other": "{{who}} quer aplicar {{count}} planos de limpeza"
+   }
+  },
+  "server:approvals.group.contacts": {
+   "sha": "c6e0431a010564cf",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar grupos de contatos: {{count}} solicitação",
+    "other": "{{who}} quer alterar grupos de contatos: {{count}} solicitações"
+   }
+  },
+  "server:approvals.group.draft_change": {
+   "sha": "3909418ffeb8dcdf",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar {{count}} rascunho",
+    "other": "{{who}} quer alterar {{count}} rascunhos"
+   }
+  },
+  "server:approvals.group.draft_new": {
+   "sha": "2693b0fc7b7f506e",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer salvar {{count}} rascunho",
+    "other": "{{who}} quer salvar {{count}} rascunhos"
+   }
+  },
+  "server:approvals.group.event_cancel": {
+   "sha": "0f87d83051b853f3",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer cancelar {{count}} evento",
+    "other": "{{who}} quer cancelar {{count}} eventos"
+   }
+  },
+  "server:approvals.group.event_change": {
+   "sha": "aac1d29d35e4c8e3",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar {{count}} evento",
+    "other": "{{who}} quer alterar {{count}} eventos"
+   }
+  },
+  "server:approvals.group.event_delete": {
+   "sha": "e3c5eda7c4dc83f5",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer excluir {{count}} evento",
+    "other": "{{who}} quer excluir {{count}} eventos"
+   }
+  },
+  "server:approvals.group.event_new": {
+   "sha": "def1ffe34bef76d3",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer adicionar {{count}} evento",
+    "other": "{{who}} quer adicionar {{count}} eventos"
+   }
+  },
+  "server:approvals.group.filter": {
+   "sha": "6c1cc0e7d0076817",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar {{count}} filtro",
+    "other": "{{who}} quer alterar {{count}} filtros"
+   }
+  },
+  "server:approvals.group.forwarded": {
+   "sha": "2370e38a18408045",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer agir sobre {{count}} nota encaminhada",
+    "other": "{{who}} quer agir sobre {{count}} notas encaminhadas"
+   }
+  },
+  "server:approvals.group.invite": {
+   "sha": "725a71a1a4aeb53a",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer enviar convites para {{count}} evento",
+    "other": "{{who}} quer enviar convites para {{count}} eventos"
+   }
+  },
+  "server:approvals.group.label_change": {
+   "sha": "c23abc5560cdb640",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar {{count}} marcador",
+    "other": "{{who}} quer alterar {{count}} marcadores"
+   }
+  },
+  "server:approvals.group.label_delete": {
+   "sha": "f62dd6f237e95850",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer excluir {{count}} marcador",
+    "other": "{{who}} quer excluir {{count}} marcadores"
+   }
+  },
+  "server:approvals.group.label_new": {
+   "sha": "af0b2f0c378cc422",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer adicionar {{count}} marcador",
+    "other": "{{who}} quer adicionar {{count}} marcadores"
+   }
+  },
+  "server:approvals.group.mail_delete": {
+   "sha": "afb16d25585c0dfa",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer excluir e-mails definitivamente: {{count}} solicitação",
+    "other": "{{who}} quer excluir e-mails definitivamente: {{count}} solicitações"
+   }
+  },
+  "server:approvals.group.mail_organise": {
+   "sha": "60763784766d0702",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer organizar e-mails: {{count}} solicitação",
+    "other": "{{who}} quer organizar e-mails: {{count}} solicitações"
+   }
+  },
+  "server:approvals.group.mail_spam": {
+   "sha": "db884bfeecff179e",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer marcar como spam: {{count}} solicitação",
+    "other": "{{who}} quer marcar como spam: {{count}} solicitações"
+   }
+  },
+  "server:approvals.group.mail_trash": {
+   "sha": "8dc44a55819dec8b",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer mover e-mails para a Lixeira: {{count}} solicitação",
+    "other": "{{who}} quer mover e-mails para a Lixeira: {{count}} solicitações"
+   }
+  },
+  "server:approvals.group.memory": {
+   "sha": "ef352423305131e2",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer manter {{count}} memória",
+    "other": "{{who}} quer manter {{count}} memórias"
+   }
+  },
+  "server:approvals.group.note_change": {
+   "sha": "1b6e79c479da07c5",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar {{count}} nota",
+    "other": "{{who}} quer alterar {{count}} notas"
+   }
+  },
+  "server:approvals.group.note_delete": {
+   "sha": "1aef44cea36f6a51",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer excluir {{count}} nota",
+    "other": "{{who}} quer excluir {{count}} notas"
+   }
+  },
+  "server:approvals.group.note_labels": {
+   "sha": "d4a9a52573f8a91d",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar marcadores de notas: {{count}} solicitação",
+    "other": "{{who}} quer alterar marcadores de notas: {{count}} solicitações"
+   }
+  },
+  "server:approvals.group.note_new": {
+   "sha": "1e03d24f6bfa84b0",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer adicionar {{count}} nota",
+    "other": "{{who}} quer adicionar {{count}} notas"
+   }
+  },
+  "server:approvals.group.order": {
+   "sha": "f533d876aec10f65",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar {{count}} ordem permanente",
+    "other": "{{who}} quer alterar {{count}} ordens permanentes"
+   }
+  },
+  "server:approvals.group.phone_sync": {
+   "sha": "d42f8bb5b852a1bc",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer enviar horários ocupados: {{count}} solicitação",
+    "other": "{{who}} quer enviar horários ocupados: {{count}} solicitações"
+   }
+  },
+  "server:approvals.group.recording": {
+   "sha": "c712986efa082928",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar {{count}} gravação",
+    "other": "{{who}} quer alterar {{count}} gravações"
+   }
+  },
+  "server:approvals.group.request": {
+   "sha": "d43142552fd614ad",
+   "state": "model",
+   "text": {
+    "one": "{{who}} tem {{count}} solicitação",
+    "other": "{{who}} tem {{count}} solicitações"
+   }
+  },
+  "server:approvals.group.review": {
+   "sha": "caa3b4a4dadebecc",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer que você revise {{count}} plano",
+    "other": "{{who}} quer que você revise {{count}} planos"
+   }
+  },
+  "server:approvals.group.rsvp": {
+   "sha": "0a74df64a2fb42de",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer responder a {{count}} convite",
+    "other": "{{who}} quer responder a {{count}} convites"
+   }
+  },
+  "server:approvals.group.screener": {
+   "sha": "1eefdca1b91cac2a",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer tomar {{count}} decisão do Screener",
+    "other": "{{who}} quer tomar {{count}} decisões do Screener"
+   }
+  },
+  "server:approvals.group.send": {
+   "sha": "eb01ac811c095387",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer enviar {{count}} e-mail",
+    "other": "{{who}} quer enviar {{count}} e-mails"
+   }
+  },
+  "server:approvals.group.settings": {
+   "sha": "3c77e615e3e5143d",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar configurações: {{count}} solicitação",
+    "other": "{{who}} quer alterar configurações: {{count}} solicitações"
+   }
+  },
+  "server:approvals.group.skill": {
+   "sha": "d45fde311706eda3",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar {{count}} habilidade",
+    "other": "{{who}} quer alterar {{count}} habilidades"
+   }
+  },
+  "server:approvals.group.table": {
+   "sha": "ef1b1d8983913fa6",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar {{count}} tabela",
+    "other": "{{who}} quer alterar {{count}} tabelas"
+   }
+  },
+  "server:approvals.group.task_change": {
+   "sha": "ff62eba4ce43d85d",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar {{count}} tarefa",
+    "other": "{{who}} quer alterar {{count}} tarefas"
+   }
+  },
+  "server:approvals.group.task_complete": {
+   "sha": "3f9992c979e8a9d9",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer concluir {{count}} tarefa",
+    "other": "{{who}} quer concluir {{count}} tarefas"
+   }
+  },
+  "server:approvals.group.task_delete": {
+   "sha": "996b99595eb5a994",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer excluir {{count}} tarefa",
+    "other": "{{who}} quer excluir {{count}} tarefas"
+   }
+  },
+  "server:approvals.group.task_list": {
+   "sha": "df053e11de342ec4",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer alterar {{count}} lista de tarefas",
+    "other": "{{who}} quer alterar {{count}} listas de tarefas"
+   }
+  },
+  "server:approvals.group.task_new": {
+   "sha": "f2657b6c5e13689e",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer adicionar {{count}} tarefa",
+    "other": "{{who}} quer adicionar {{count}} tarefas"
+   }
+  },
+  "server:approvals.group.unsubscribe": {
+   "sha": "59b3d872b8fd46ca",
+   "state": "model",
+   "text": {
+    "one": "{{who}} quer cancelar inscrição: {{count}} solicitação",
+    "other": "{{who}} quer cancelar inscrição: {{count}} solicitações"
+   }
+  },
+  "server:approvals.kind.calendar": {
+   "sha": "727181e2e1586d2c",
+   "state": "model",
+   "text": "Agenda"
+  },
+  "server:approvals.kind.cleanup": {
+   "sha": "4d9ff1500db29b4f",
+   "state": "model",
+   "text": "Limpeza"
+  },
+  "server:approvals.kind.contacts": {
+   "sha": "aef901fe3bb3ab73",
+   "state": "model",
+   "text": "Grupos de contatos"
+  },
+  "server:approvals.kind.draft_change": {
+   "sha": "bdb42950c7d7e88f",
+   "state": "model",
+   "text": "Alterar rascunho"
+  },
+  "server:approvals.kind.draft_new": {
+   "sha": "30c17ce3ed14da43",
+   "state": "model",
+   "text": "Novo rascunho"
+  },
+  "server:approvals.kind.event_cancel": {
+   "sha": "d707efa262aa6a70",
+   "state": "model",
+   "text": "Cancelar evento"
+  },
+  "server:approvals.kind.event_change": {
+   "sha": "2b6ffd2b34bea229",
+   "state": "model",
+   "text": "Alterar evento"
+  },
+  "server:approvals.kind.event_delete": {
+   "sha": "0f676bf8f232f234",
+   "state": "model",
+   "text": "Excluir evento"
+  },
+  "server:approvals.kind.event_new": {
+   "sha": "fc91c3619341a550",
+   "state": "model",
+   "text": "Novo evento"
+  },
+  "server:approvals.kind.filter": {
+   "sha": "806fd7d0fadddfcd",
+   "state": "model",
+   "text": "Filtro"
+  },
+  "server:approvals.kind.forwarded": {
+   "sha": "0c38519e121dc4a7",
+   "state": "model",
+   "text": "Nota encaminhada"
+  },
+  "server:approvals.kind.invite": {
+   "sha": "14e1b82e3cab8de3",
+   "state": "model",
+   "text": "Enviar convites"
+  },
+  "server:approvals.kind.label_change": {
+   "sha": "1b47ee05b6775c1a",
+   "state": "model",
+   "text": "Alterar marcador"
+  },
+  "server:approvals.kind.label_delete": {
+   "sha": "dabe11ab518b58ae",
+   "state": "model",
+   "text": "Excluir marcador"
+  },
+  "server:approvals.kind.label_new": {
+   "sha": "cd70b6f578855cfd",
+   "state": "model",
+   "text": "Novo marcador"
+  },
+  "server:approvals.kind.mail_delete": {
+   "sha": "ccfc104b838c9d9c",
+   "state": "model",
+   "text": "Excluir permanentemente"
+  },
+  "server:approvals.kind.mail_organise": {
+   "sha": "768e4c4093d2de2c",
+   "state": "model",
+   "text": "Organizar e-mails"
+  },
+  "server:approvals.kind.mail_spam": {
+   "sha": "a5e0c6c692535769",
+   "state": "model",
+   "text": "Denunciar spam"
+  },
+  "server:approvals.kind.mail_trash": {
+   "sha": "11b9283d7b52d5d5",
+   "state": "model",
+   "text": "Mover para Lixeira"
+  },
+  "server:approvals.kind.memory": {
+   "sha": "ecbeaaaec5fafe42",
+   "state": "model",
+   "text": "Memória"
+  },
+  "server:approvals.kind.note_change": {
+   "sha": "3313d1e0ee6bbcf0",
+   "state": "model",
+   "text": "Alterar nota"
+  },
+  "server:approvals.kind.note_delete": {
+   "sha": "90d6fbb5822daa69",
+   "state": "model",
+   "text": "Excluir nota"
+  },
+  "server:approvals.kind.note_labels": {
+   "sha": "1890947ea3dd8076",
+   "state": "model",
+   "text": "Marcadores de notas"
+  },
+  "server:approvals.kind.note_new": {
+   "sha": "6bc294575523ebc9",
+   "state": "model",
+   "text": "Nova nota"
+  },
+  "server:approvals.kind.order": {
+   "sha": "13a8661944a7d473",
+   "state": "model",
+   "text": "Ordem permanente"
+  },
+  "server:approvals.kind.phone_sync": {
+   "sha": "87538b0705e7b07c",
+   "state": "model",
+   "text": "Agendas do celular"
+  },
+  "server:approvals.kind.recording": {
+   "sha": "b35872b56f1995a5",
+   "state": "model",
+   "text": "Gravação"
+  },
+  "server:approvals.kind.request": {
+   "sha": "f9939f2c12bf64be",
+   "state": "model",
+   "text": "Solicitação"
+  },
+  "server:approvals.kind.review": {
+   "sha": "552e425de43e12fc",
+   "state": "model",
+   "text": "Revisão"
+  },
+  "server:approvals.kind.rsvp": {
+   "sha": "9976b6728c63caf0",
+   "state": "model",
+   "text": "Responder ao convite"
+  },
+  "server:approvals.kind.screener": {
+   "sha": "e0ea0cbac51a01f2",
+   "state": "same",
+   "text": "Screener"
+  },
+  "server:approvals.kind.send": {
+   "sha": "a6b0b0ac391df2ec",
+   "state": "model",
+   "text": "Enviar e-mail"
+  },
+  "server:approvals.kind.settings": {
+   "sha": "83909f82446ee9c3",
+   "state": "model",
+   "text": "Configurações"
+  },
+  "server:approvals.kind.skill": {
+   "sha": "b8a4eaf2427d7c8d",
+   "state": "model",
+   "text": "Habilidade"
+  },
+  "server:approvals.kind.table": {
+   "sha": "0b982d8e0e671a51",
+   "state": "model",
+   "text": "Tabela"
+  },
+  "server:approvals.kind.task_change": {
+   "sha": "c6bee2fde8ca0129",
+   "state": "model",
+   "text": "Alterar tarefa"
+  },
+  "server:approvals.kind.task_complete": {
+   "sha": "11bf90ccf60bc48f",
+   "state": "model",
+   "text": "Concluir tarefa"
+  },
+  "server:approvals.kind.task_delete": {
+   "sha": "7c19332661ed817b",
+   "state": "model",
+   "text": "Excluir tarefa"
+  },
+  "server:approvals.kind.task_list": {
+   "sha": "7708a5fb9dce94d9",
+   "state": "model",
+   "text": "Lista de tarefas"
+  },
+  "server:approvals.kind.task_new": {
+   "sha": "cfe1b5e64c6eee08",
+   "state": "model",
+   "text": "Nova tarefa"
+  },
+  "server:approvals.kind.unsubscribe": {
+   "sha": "ed1372ad165aa9bb",
+   "state": "model",
+   "text": "Cancelar inscrição"
+  },
   "server:approvals.mail.add_labels.ask": {
    "sha": "87caaf09e5edd623",
    "state": "model",
@@ -20501,6 +21151,121 @@
    "sha": "b5d5e6638443c37b",
    "state": "model",
    "text": "Um agente escreveu isso após ler e-mails."
+  },
+  "server:approvals.reason_short.bcc": {
+   "sha": "33b3a383f857686b",
+   "state": "model",
+   "text": "Pergunta antes: após ler e-mails, com um Bcc"
+  },
+  "server:approvals.reason_short.cleanup": {
+   "sha": "6a5dbf362ffad64f",
+   "state": "model",
+   "text": "Pergunta antes: planos de limpeza sempre aguardam sua confirmação"
+  },
+  "server:approvals.reason_short.draft_new_people": {
+   "sha": "8b2cac4871e0447d",
+   "state": "model",
+   "text": "Pergunta antes: um rascunho para pessoas fora da conversa"
+  },
+  "server:approvals.reason_short.draft_recipients": {
+   "sha": "bf7ae8d36b5d37a6",
+   "state": "model",
+   "text": "Pergunta antes: os destinatários do rascunho mudam"
+  },
+  "server:approvals.reason_short.errand_no_send": {
+   "sha": "5ac2c4bd88c19473",
+   "state": "model",
+   "text": "Pergunta antes: uma tarefa nunca envia por si só"
+  },
+  "server:approvals.reason_short.errand_shared": {
+   "sha": "524d09046c4f3d3a",
+   "state": "model",
+   "text": "Pergunta antes: escreve em uma nota compartilhada"
+  },
+  "server:approvals.reason_short.forever": {
+   "sha": "44f9fe90b0427153",
+   "state": "model",
+   "text": "Pergunta antes: não pode ser desfeito"
+  },
+  "server:approvals.reason_short.forwarded": {
+   "sha": "745a80aab324a7ca",
+   "state": "model",
+   "text": "Pergunta antes: ninguém pôde verificar quem escreveu"
+  },
+  "server:approvals.reason_short.hides_mail": {
+   "sha": "2f53f55b223f4aa6",
+   "state": "model",
+   "text": "Pergunta antes: oculta e-mails após ler e-mails"
+  },
+  "server:approvals.reason_short.local_copy": {
+   "sha": "b7e883da5996de80",
+   "state": "model",
+   "text": "Pergunta antes: copiaria conteúdo somente local"
+  },
+  "server:approvals.reason_short.lower_local": {
+   "sha": "06844c507f30efb3",
+   "state": "model",
+   "text": "Pergunta antes: modelos hospedados poderiam ler isso"
+  },
+  "server:approvals.reason_short.new_address": {
+   "sha": "49490d04fc5b9872",
+   "state": "model",
+   "text": "Pergunta antes: primeira mensagem para um novo endereço"
+  },
+  "server:approvals.reason_short.notes_hides": {
+   "sha": "4a5fc8ff36298607",
+   "state": "model",
+   "text": "Pergunta antes: oculta algo após ler texto de outras pessoas"
+  },
+  "server:approvals.reason_short.notes_tainted": {
+   "sha": "11b44b07e368ebc6",
+   "state": "model",
+   "text": "Pergunta antes: escrito após ler texto de outras pessoas"
+  },
+  "server:approvals.reason_short.other": {
+   "sha": "4a7c2bd30534b1fa",
+   "state": "model",
+   "text": "Pergunta antes"
+  },
+  "server:approvals.reason_short.outsider": {
+   "sha": "3e5750f62ce5092d",
+   "state": "model",
+   "text": "Pergunta antes: {{names}} não estava naquela conversa"
+  },
+  "server:approvals.reason_short.outsiders": {
+   "sha": "af861b2082b5edf4",
+   "state": "model",
+   "text": "Pergunta antes: {{names}} e {{last}} não estavam naquela conversa"
+  },
+  "server:approvals.reason_short.public_link": {
+   "sha": "cb04f5b11e77c221",
+   "state": "model",
+   "text": "Pergunta antes: cria um link público"
+  },
+  "server:approvals.reason_short.read_mail": {
+   "sha": "bdaf265a40ffe456",
+   "state": "model",
+   "text": "Pergunta antes: escrito após ler e-mails"
+  },
+  "server:approvals.reason_short.screener": {
+   "sha": "6e16ef97fb50ec2d",
+   "state": "model",
+   "text": "Pergunta antes: as decisões do Screener são suas"
+  },
+  "server:approvals.reason_short.tainted": {
+   "sha": "0abea5fee6628627",
+   "state": "model",
+   "text": "Pergunta antes: escrito após ler e-mails"
+  },
+  "server:approvals.reason_short.token_text": {
+   "sha": "f7b5395bb50ecc89",
+   "state": "model",
+   "text": "Pergunta antes: escrito por meio de um token de API"
+  },
+  "server:approvals.reason_short.whole_list": {
+   "sha": "18a4307b74f1444b",
+   "state": "model",
+   "text": "Pergunta antes: age sobre uma lista inteira"
   },
   "server:approvals.result.already_done": {
    "sha": "a6d64c12097e8998",
@@ -22323,6 +23088,51 @@
    "state": "model",
    "text": "usuário não encontrado"
   },
+  "server:errors.assistant.attachment_empty": {
+   "sha": "35a969468517bbed",
+   "state": "model",
+   "text": "o arquivo está vazio"
+  },
+  "server:errors.assistant.attachment_gone": {
+   "sha": "23a98c02724f6bc0",
+   "state": "model",
+   "text": "um arquivo anexado não está mais disponível; anexe-o novamente"
+  },
+  "server:errors.assistant.attachment_heic": {
+   "sha": "381a568997e06fee",
+   "state": "model",
+   "text": "As fotos HEIC e HEIF não podem ser lidas neste servidor; anexe uma imagem JPEG ou PNG em vez disso"
+  },
+  "server:errors.assistant.attachment_not_found": {
+   "sha": "0383a16cbb846090",
+   "state": "model",
+   "text": "anexo não encontrado"
+  },
+  "server:errors.assistant.attachment_sent": {
+   "sha": "f57792fbdf42fba8",
+   "state": "model",
+   "text": "este arquivo foi enviado com uma mensagem; ele é removido quando o chat é excluído"
+  },
+  "server:errors.assistant.attachment_too_large": {
+   "sha": "b8e19d11802d56c0",
+   "state": "model",
+   "text": "um arquivo anexado pode ter no máximo {{max}} MB"
+  },
+  "server:errors.assistant.attachment_type": {
+   "sha": "753ef8929e682d83",
+   "state": "model",
+   "text": "este tipo de arquivo não pode ser lido; anexe uma imagem, um PDF, um arquivo de texto ou um arquivo Word, Excel, PowerPoint, OpenDocument ou RTF"
+  },
+  "server:errors.assistant.attachment_unreadable": {
+   "sha": "a0b746ff7cd67418",
+   "state": "model",
+   "text": "o arquivo não pôde ser lido: {{reason}}"
+  },
+  "server:errors.assistant.attachments_waiting": {
+   "sha": "6b4a71a28c29c78e",
+   "state": "model",
+   "text": "{{max}} arquivos já estão aguardando envio; envie-os ou remova alguns primeiro"
+  },
   "server:errors.assistant.chat_title_too_long": {
    "sha": "46b9048feb1fe29d",
    "state": "model",
@@ -22387,6 +23197,11 @@
    "sha": "42827835971e7fc2",
    "state": "model",
    "text": "o assistente ainda está respondendo neste chat; pare-o primeiro"
+  },
+  "server:errors.assistant.too_many_attachments": {
+   "sha": "2aae4a37addf52c5",
+   "state": "model",
+   "text": "uma mensagem pode conter no máximo {{max}} arquivos"
   },
   "server:errors.assistant.unknown_review": {
    "sha": "ad3b42155d9a3765",
@@ -26032,6 +26847,85 @@
    "state": "model",
    "text": "{{value}} não foi encontrada. O link pode estar incorreto ou ser de outra conta."
   },
+  "web:approvals.cards.allowAll": {
+   "sha": "18bbf69cfe4e1755",
+   "state": "model",
+   "text": "Permitir tudo"
+  },
+  "web:approvals.cards.allowAllTip": {
+   "sha": "06e03592ac09bd5a",
+   "state": "model",
+   "text": "Permitir cada solicitação listada aqui uma vez"
+  },
+  "web:approvals.cards.couldNotDenyThem": {
+   "sha": "7e168bb8696e0c58",
+   "state": "model",
+   "text": "Não foi possível negá-las"
+  },
+  "web:approvals.cards.deniedRequests": {
+   "sha": "e193619c72a66df0",
+   "state": "model",
+   "text": {
+    "one": "{{count}} solicitação negada.{{skipped}}",
+    "other": "{{count}} solicitações negadas.{{skipped}}"
+   }
+  },
+  "web:approvals.cards.denyAll": {
+   "sha": "8bd9b8dbe3661b93",
+   "state": "model",
+   "text": "Negar tudo"
+  },
+  "web:approvals.cards.denyAllQuestion": {
+   "sha": "5bfc4c3e37663c6d",
+   "state": "model",
+   "text": {
+    "one": "Negar esta solicitação {{count}}? O agente será informado de que foi negada.",
+    "other": "Negar todas as {{count}} solicitações? O agente será informado de que foram negadas."
+   }
+  },
+  "web:approvals.cards.expires": {
+   "sha": "a933f408f4cbec16",
+   "state": "model",
+   "text": "expira {{relative}}"
+  },
+  "web:approvals.cards.hideRequests": {
+   "sha": "eefdd1bfae511823",
+   "state": "model",
+   "text": "Ocultar as solicitações"
+  },
+  "web:approvals.cards.more": {
+   "sha": "ba2a8232349d2f54",
+   "state": "model",
+   "text": "mais"
+  },
+  "web:approvals.cards.moreWaysToAllow": {
+   "sha": "f1d8c575803c167d",
+   "state": "model",
+   "text": "Mais formas de permitir"
+  },
+  "web:approvals.cards.moreWaysToAllowAlso": {
+   "sha": "e4c72ab1b5f0ff48",
+   "state": "model",
+   "text": {
+    "one": "Mais formas de permitir (também aprova {{count}} outro(s) aguardando)",
+    "other": "Mais formas de permitir (também aprova {{count}} outro(s) aguardando)"
+   }
+  },
+  "web:approvals.cards.plusN": {
+   "sha": "e840a9b8eeb25af2",
+   "state": "same",
+   "text": "+{{n}}"
+  },
+  "web:approvals.cards.showRequests": {
+   "sha": "7ba145a01ab40c62",
+   "state": "model",
+   "text": "Mostrar as solicitações"
+  },
+  "web:approvals.cards.whyItAsks": {
+   "sha": "ad2d98e123d06064",
+   "state": "model",
+   "text": "Por que ele pede"
+  },
   "web:approvals.grant.aStandingRuleForThis": {
    "sha": "9c534521cb582715",
    "state": "model",
@@ -27058,6 +27952,11 @@
    "sha": "a5000c5f16365a88",
    "state": "model",
    "text": "De um e-mail"
+  },
+  "web:calendar.eventDetail.groupBusyNote": {
+   "sha": "1631ef1e7a0d55f8",
+   "state": "model",
+   "text": "A agenda de grupo {{group}} compartilha apenas horários ocupados com você. Os editores veem os títulos e detalhes."
   },
   "web:calendar.eventDetail.isNoLongerInYour": {
    "sha": "978a152a4ac78f85",
@@ -44186,6 +45085,61 @@
    "state": "model",
    "text": "Seu administrador ainda não deu acesso a {{name}}."
   },
+  "web:rail.assistant.attachments.attach": {
+   "sha": "fee8fc0dfaf2afb1",
+   "state": "model",
+   "text": "Anexar imagens ou arquivos"
+  },
+  "web:rail.assistant.attachments.download": {
+   "sha": "c62d2a7f8df865ee",
+   "state": "model",
+   "text": "Baixar {{name}}"
+  },
+  "web:rail.assistant.attachments.dropHere": {
+   "sha": "eb9f0d0c7bda01ac",
+   "state": "model",
+   "text": "Solte arquivos aqui para anexá-los"
+  },
+  "web:rail.assistant.attachments.imageAlt": {
+   "sha": "6cf533d5dac778db",
+   "state": "model",
+   "text": "Imagem anexada {{name}}"
+  },
+  "web:rail.assistant.attachments.notReadable": {
+   "sha": "a1c1d0d06aa55515",
+   "state": "model",
+   "text": "{{name}} não pode ser lido: anexe uma imagem, um PDF, um arquivo de texto ou um arquivo Word, Excel, PowerPoint, OpenDocument ou RTF."
+  },
+  "web:rail.assistant.attachments.pastedImage": {
+   "sha": "39a6c5c3d04bbe27",
+   "state": "model",
+   "text": "Imagem colada"
+  },
+  "web:rail.assistant.attachments.remove": {
+   "sha": "f87ea03cf025802a",
+   "state": "model",
+   "text": "Remover {{name}}"
+  },
+  "web:rail.assistant.attachments.tooLarge": {
+   "sha": "2c4e1e17e9e34735",
+   "state": "model",
+   "text": "{{name}} é maior que {{max}} MB."
+  },
+  "web:rail.assistant.attachments.tooMany": {
+   "sha": "7a37d6f4720a4a5f",
+   "state": "model",
+   "text": "Uma mensagem pode conter no máximo {{max}} arquivos."
+  },
+  "web:rail.assistant.attachments.uploadFailed": {
+   "sha": "04cbc0e13466824d",
+   "state": "model",
+   "text": "{{name}} não pôde ser anexado: {{error}}"
+  },
+  "web:rail.assistant.attachments.uploading": {
+   "sha": "760282e4e0e235ab",
+   "state": "model",
+   "text": "Enviando"
+  },
   "web:rail.assistant.chatList.backToChat": {
    "sha": "3f0f5060fc32cd1d",
    "state": "model",
@@ -48199,10 +49153,20 @@
    "state": "model",
    "text": "Pode fazer: {{map}}. Escolha seus usos em Modelos por tarefa."
   },
+  "web:settings.adminTab.canModelViewImages": {
+   "sha": "186e624ddd465510",
+   "state": "model",
+   "text": "{{model}} pode ver imagens"
+  },
   "web:settings.adminTab.canSignIn": {
    "sha": "0080c1fbc96e0773",
    "state": "model",
    "text": "{{email}} pode fazer login"
+  },
+  "web:settings.adminTab.canViewImages": {
+   "sha": "7e2654b51e27f920",
+   "state": "model",
+   "text": "Pode ver imagens"
   },
   "web:settings.adminTab.couldNotChangeTheDefault": {
    "sha": "020a0832a943891e",
@@ -48238,6 +49202,21 @@
    "sha": "2a1445586127b5a8",
    "state": "model",
    "text": "Excluir usuário"
+  },
+  "web:settings.adminTab.detect": {
+   "sha": "4927fecd81c3dd60",
+   "state": "model",
+   "text": "Detectar"
+  },
+  "web:settings.adminTab.detectTip": {
+   "sha": "8a1068990c50a69b",
+   "state": "model",
+   "text": "Perguntar novamente ao servidor de modelos quais modelos podem ver imagens"
+  },
+  "web:settings.adminTab.detecting": {
+   "sha": "5bbcfbe2a7a10896",
+   "state": "model",
+   "text": "Detectando…"
   },
   "web:settings.adminTab.discover": {
    "sha": "b22f790b1fd2ecd3",
@@ -48702,6 +49681,31 @@
    "sha": "3cff8c2059a11ad0",
    "state": "model",
    "text": "Os usuários ainda podem interromper os compartilhamentos que fizeram antes."
+  },
+  "web:settings.adminTab.visionAutoNo": {
+   "sha": "90d482f43a145e0e",
+   "state": "model",
+   "text": "Automático: não"
+  },
+  "web:settings.adminTab.visionAutoUnknown": {
+   "sha": "11dc945ee1525dba",
+   "state": "model",
+   "text": "Automático: desconhecido (não)"
+  },
+  "web:settings.adminTab.visionAutoYes": {
+   "sha": "add2d384929f5d58",
+   "state": "model",
+   "text": "Automático: sim"
+  },
+  "web:settings.adminTab.visionNo": {
+   "sha": "b2cbc4e2e5545a6c",
+   "state": "model",
+   "text": "Não"
+  },
+  "web:settings.adminTab.visionYes": {
+   "sha": "184fda5c980b9d9c",
+   "state": "model",
+   "text": "Sim"
   },
   "web:settings.adminTab.whereTheModelsAreOpenai": {
    "sha": "89500f3d6c6e442a",
@@ -49840,6 +50844,41 @@
    "sha": "121c9b9d618a054d",
    "state": "manual",
    "text": " (hospedado)"
+  },
+  "web:settings.assistant.modelsSection.images": {
+   "sha": "941b085d3176f81f",
+   "state": "model",
+   "text": "Imagens"
+  },
+  "web:settings.assistant.modelsSection.imagesDesc": {
+   "sha": "e8cba51cd628e8e5",
+   "state": "model",
+   "text": "Fotos e digitalizações nos seus e-mails e imagens anexadas em um chat. No máximo quatro chegam ao modelo de {{name}} em uma pergunta."
+  },
+  "web:settings.assistant.modelsSection.imagesLocalCannot": {
+   "sha": "b89e38626c25ce07",
+   "state": "model",
+   "text": "O modelo em uso pode ver imagens. O modelo para e-mails somente locais não pode: para esses e-mails, apenas o tamanho da imagem é exibido."
+  },
+  "web:settings.assistant.modelsSection.imagesModelCan": {
+   "sha": "6d7915801c24472b",
+   "state": "model",
+   "text": "Os modelos em uso podem ver imagens, inclusive para e-mails somente locais."
+  },
+  "web:settings.assistant.modelsSection.imagesModelCannot": {
+   "sha": "a539d1fb66f6f807",
+   "state": "model",
+   "text": "O modelo usado por {{name}} não pode ver imagens, então {{name}} só sabe o tamanho da imagem. Um administrador pode marcar um modelo que pode em Admin → Modelos."
+  },
+  "web:settings.assistant.modelsSection.imagesOnlyLocal": {
+   "sha": "ea21d67938861d38",
+   "state": "model",
+   "text": "Apenas o modelo para e-mails somente locais pode ver imagens. Em outros casos, apenas o tamanho da imagem é exibido."
+  },
+  "web:settings.assistant.modelsSection.letSeeImages": {
+   "sha": "7ce85f094120c643",
+   "state": "model",
+   "text": "Permitir que {{name}} veja imagens"
   },
   "web:settings.assistant.modelsSection.localOnlyMail": {
    "sha": "9f37c8fa3239220d",
@@ -53410,9 +54449,9 @@
    "text": "Seus grupos veem quando você está ocupado."
   },
   "web:settings.groupCalendars.aGroupCalendarBelongsTo": {
-   "sha": "f510a9bb6121fa24",
+   "sha": "d7b0752512e4b866",
    "state": "model",
-   "text": "Uma agenda de grupo aparece na Agenda em Compartilhadas para todos os membros do grupo. Os membros podem editá-la ou visualizá-la enquanto editores nomeados fazem alterações. Os grupos vêm do seu provedor de login ou de Configurações → Admin → Usuários."
+   "text": "Uma agenda de grupo aparece na Agenda em Compartilhadas para todos os membros do grupo. Os membros podem editá-la, visualizá-la enquanto editores nomeados fazem alterações ou ver apenas os horários ocupados. Os grupos vêm do seu provedor de login ou Configurações → Admin → Usuários."
   },
   "web:settings.groupCalendars.accessIsSetWhenThe": {
    "sha": "9b682a412e789839",
@@ -53489,6 +54528,16 @@
    "state": "model",
    "text": "Todos os membros podem adicionar e alterar eventos."
   },
+  "web:settings.groupCalendars.freeBusyNeedsStalwart1": {
+   "sha": "d7ffb2010c8130db",
+   "state": "model",
+   "text": "Requer Stalwart 1.x no servidor de e-mail."
+  },
+  "web:settings.groupCalendars.freeBusyOnly": {
+   "sha": "883638ffa96db0e3",
+   "state": "model",
+   "text": "Apenas livre/ocupado"
+  },
   "web:settings.groupCalendars.groupCalendarSaved": {
    "sha": "e475d68c5814dc63",
    "state": "model",
@@ -53538,6 +54587,24 @@
    "state": "model",
    "text": "Membros de {{groupName}}"
   },
+  "web:settings.groupCalendars.membersSeeFreeBusy": {
+   "sha": "94d5deffb8ebb5d7",
+   "state": "model",
+   "text": "Membros veem apenas disponibilidade"
+  },
+  "web:settings.groupCalendars.membersSeeFreeBusyEditors": {
+   "sha": "f5df1653ee35c8b7",
+   "state": "model",
+   "text": {
+    "one": "Membros veem apenas disponibilidade · {{count}} editor",
+    "other": "Membros veem apenas disponibilidade · {{count}} editores"
+   }
+  },
+  "web:settings.groupCalendars.membersSeeOnlyBusyBlocks": {
+   "sha": "ba69b1bc01c3534f",
+   "state": "model",
+   "text": "Os membros veem apenas quando a agenda está ocupada, como blocos “Ocupado”. Os editores abaixo veem e alteram os eventos."
+  },
   "web:settings.groupCalendars.membersSeeTheEventsOnly": {
    "sha": "98f11a83cc60b7ac",
    "state": "model",
@@ -53562,6 +54629,11 @@
    "sha": "82a30a8583b36c66",
    "state": "model",
    "text": "Nenhum grupo ainda. Os grupos aparecem quando um login inclui uma declaração de grupos ou quando você os atribui em Configurações → Admin → Usuários."
+  },
+  "web:settings.groupCalendars.switchViewAndFreeBusy": {
+   "sha": "3c0859af8107848d",
+   "state": "model",
+   "text": "Você pode alternar entre Pode visualizar e Apenas disponibilidade. Pode editar é definido quando a agenda é criada."
   },
   "web:settings.groupCalendars.team": {
    "sha": "015c33c4ec95d38f",

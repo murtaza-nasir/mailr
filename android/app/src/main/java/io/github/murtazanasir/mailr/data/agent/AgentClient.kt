@@ -26,6 +26,7 @@ import kotlinx.serialization.json.intOrNull
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.longOrNull
 import kotlinx.serialization.json.put
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
@@ -102,6 +103,29 @@ data class ChatSummary(
     @kotlinx.serialization.SerialName("title_parts") val titleParts: List<TextPart>? = null,
 )
 
+/**
+ * A file or image attached to a message to the assistant (POST /agent/attachments, agent/chat_files.py):
+ * the server read it at upload; [thumb] says GET /agent/attachments/{id}/thumb has a small copy.
+ * User turns of a reopened chat carry the same objects.
+ */
+@kotlinx.serialization.Serializable
+data class ChatFile(
+    val id: String,
+    val name: String = "",
+    val type: String = "",
+    val size: Long = 0,
+    val kind: String = "file",
+    val thumb: Boolean = false,
+    val width: Int? = null,
+    val height: Int? = null,
+    val pages: Int? = null,
+    val format: String? = null,
+    val truncated: Boolean = false,
+    val note: String? = null,
+) {
+    val isImage: Boolean get() = kind == "image"
+}
+
 /** A piece of a search result's text: plain, or a hit. */
 @kotlinx.serialization.Serializable
 data class TextPart(val text: String, val hit: Boolean = false)
@@ -157,8 +181,9 @@ class AgentClient(private val client: ApiClient) {
      * [localOnly]: `/local`, the chat stays on the local model from this message on (`local_only`).
      */
     fun turn(message: String, sessionId: String?, conversationId: Long?, resumeApprovalId: Long? = null,
-             about: AskAbout? = null, rerunFrom: Long? = null, localOnly: Boolean = false): Flow<Streamed> {
-        val body = chatBody(message, sessionId, conversationId, resumeApprovalId, about, rerunFrom, localOnly)
+             about: AskAbout? = null, rerunFrom: Long? = null, localOnly: Boolean = false,
+             attachments: List<String> = emptyList()): Flow<Streamed> {
+        val body = chatBody(message, sessionId, conversationId, resumeApprovalId, about, rerunFrom, localOnly, attachments)
         return stream(Request.Builder().url(client.url("agent/chat")).header("Accept", "text/event-stream")
             .post(MailrJson.encodeToString(body).toRequestBody(ApiClient.JSON_TYPE)).build(), failAsError = true)
     }
@@ -250,11 +275,26 @@ class AgentClient(private val client: ApiClient) {
     }
 
     companion object {
+        /** The server's limits (agent/chat_files.py): one file, and files per message. */
+        const val MAX_FILE_BYTES = 15L * 1024 * 1024
+        const val MAX_FILES = 5
+        /** What the picker and the share target offer: what the server can read. */
+        val ATTACH_TYPES = arrayOf(
+            "image/png", "image/jpeg", "image/gif", "image/webp", "application/pdf", "text/*", "application/rtf",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "application/vnd.oasis.opendocument.text", "application/vnd.oasis.opendocument.spreadsheet",
+            "application/vnd.oasis.opendocument.presentation",
+        )
+
         /** The JSON of a turn: `context` carries the conversation and/or the event or task asked about. */
         fun chatBody(message: String, sessionId: String?, conversationId: Long?, resumeApprovalId: Long?, about: AskAbout?,
-                     rerunFrom: Long? = null, localOnly: Boolean = false): JsonObject =
+                     rerunFrom: Long? = null, localOnly: Boolean = false, attachments: List<String> = emptyList()): JsonObject =
             buildJsonObject {
                 if (resumeApprovalId == null && rerunFrom == null) put("message", message)
+                if (attachments.isNotEmpty() && resumeApprovalId == null && rerunFrom == null)
+                    put("attachments", kotlinx.serialization.json.JsonArray(attachments.map { kotlinx.serialization.json.JsonPrimitive(it) }))
                 if (localOnly) put("local_only", true)
                 if (rerunFrom != null) put("rerun_from", rerunFrom)
                 if (sessionId != null) put("session_id", sessionId)
@@ -280,6 +320,70 @@ class AgentClient(private val client: ApiClient) {
                 })
             }
     }
+
+    /**
+     * ACT agent.chat_attach @android.assistant: one file for the next message (POST /agent/attachments,
+     * multipart "file"). The provider's size is checked first and the stream is cut off past [MAX_FILE_BYTES];
+     * the server reads the file now and answers what it found, or why it cannot read it (an [ApiException]).
+     */
+    suspend fun uploadAttachment(resolver: android.content.ContentResolver, uri: android.net.Uri): ChatFile {
+        var name = "attachment"
+        var size = -1L
+        resolver.query(uri, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME, android.provider.OpenableColumns.SIZE),
+            null, null, null)?.use { c ->
+            if (c.moveToFirst()) {
+                name = c.getString(0) ?: name
+                size = if (c.isNull(1)) -1 else c.getLong(1)
+            }
+        }
+        val type = resolver.getType(uri) ?: "application/octet-stream"
+        if (size > MAX_FILE_BYTES) throw tooBig(name)
+        val part = object : okhttp3.RequestBody() {
+            override fun contentType() = type.toMediaTypeOrNull()
+            override fun contentLength() = -1L
+            override fun isOneShot() = true
+            override fun writeTo(sink: okio.BufferedSink) {
+                val input = resolver.openInputStream(uri) ?: throw java.io.IOException(AppText.get(R.string.api_upload_cant_read, name))
+                input.use {
+                    val buf = ByteArray(64 * 1024)
+                    var total = 0L
+                    while (true) {
+                        val n = it.read(buf)
+                        if (n < 0) break
+                        total += n
+                        if (total > MAX_FILE_BYTES) throw java.io.IOException(tooBig(name).detail)
+                        sink.write(buf, 0, n)
+                    }
+                }
+            }
+        }
+        return postAttachment(name, part)
+    }
+
+    /** As [uploadAttachment], for bytes the app holds (tests, a staged copy). */
+    suspend fun uploadAttachment(name: String, type: String, bytes: ByteArray): ChatFile {
+        if (bytes.size > MAX_FILE_BYTES) throw tooBig(name)
+        return postAttachment(name, bytes.toRequestBody(type.toMediaTypeOrNull()))
+    }
+
+    private suspend fun postAttachment(name: String, part: okhttp3.RequestBody): ChatFile {
+        val body = okhttp3.MultipartBody.Builder().setType(okhttp3.MultipartBody.FORM).addFormDataPart("file", name, part).build()
+        return client.execute(Request.Builder().url(client.url("agent/attachments")).post(body).build(), ChatFile.serializer())
+    }
+
+    private fun tooBig(name: String) =
+        ApiException(413, AppText.get(R.string.asst_attach_too_big, name, MAX_FILE_BYTES / (1024 * 1024)))
+
+    /** Removes an upload that was not sent (DELETE /agent/attachments/{id}); sent ones go with their chat. */
+    suspend fun deleteAttachment(id: String) {
+        client.send("DELETE", "agent/attachments/$id", JsonObject.serializer(), idempotencyKey = null)
+    }
+
+    /** The small copy of an attached image (GET /agent/attachments/{id}/thumb), or null. */
+    suspend fun attachmentThumb(id: String): ByteArray? = catching {
+        val r = client.raw(Request.Builder().url(client.url("agent/attachments/$id/thumb")).get().build())
+        r.use { if (it.isSuccessful && it.header("Content-Type").orEmpty().startsWith("image/")) it.body?.bytes() else null }
+    }.getOrNull()
 
     /** A chat as stored (GET /agent/sessions/{id}), to show it again (ui/assistant/SessionReplay.kt). */
     suspend fun session(sessionId: String): JsonObject = client.get("agent/sessions/$sessionId", JsonObject.serializer())

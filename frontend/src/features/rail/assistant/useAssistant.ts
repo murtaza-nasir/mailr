@@ -6,6 +6,7 @@
 // stream drops, the hook re-attaches with GET /agent/chat/{id}/stream?after=<seq>, and if the run
 // is gone it reloads the chat, where an unfinished turn shows as interrupted with Retry.
 
+import type { CardHead } from '../../approvals/cardHead'
 import { msgText } from './present/serverText'
 import { CHATS_KEY, withTitle, type ChatSummary } from './chatList'
 import { cardToRef } from './cardRef'
@@ -22,6 +23,7 @@ import { ASSISTANT_SESSION_KEY, askContext } from '../../assistant-context/askAb
 import { toast, useUI } from '../../../stores/ui'
 import { useOfficeTabs } from '../../../themes/office/tabs'
 import type { AlsoCovers } from '../../approvals/grant'
+import type { ChatFile } from './ChatAttachments'
 import type { Citation } from './citations'
 import type { Display, Outcome } from './present/types'
 import { fallbackLabel, type Step } from './steps'
@@ -46,6 +48,8 @@ export interface ApprovalRef {
   also_covers?: AlsoCovers | null
   /** False when a hard rule held the card: it is decided once, with no grant buttons. */
   grants?: boolean | null
+  /** The type label, the object's own name and the short reason (agent/present.py card_head). */
+  head?: CardHead | null
 }
 
 export { cardToRef }
@@ -62,6 +66,7 @@ export interface ApprovalCardData {
   outcome?: Outcome | null
   also_covers?: AlsoCovers | null
   grants?: boolean | null
+  head?: CardHead | null
 }
 
 
@@ -116,6 +121,8 @@ export interface UserTurn {
   text: string
   id?: number
   skills?: string[]
+  /** Files and images sent with the message (ChatAttachments.tsx). */
+  attachments?: ChatFile[]
 }
 
 /** A draft the assistant made or changed in this turn (the "Open draft" card). */
@@ -193,6 +200,7 @@ interface ReplayTurn {
   unconfirmed?: boolean
   user_message_id?: number | null
   skills?: string[]
+  attachments?: ChatFile[]
   memory_ids?: number[]
 }
 
@@ -257,7 +265,7 @@ export function newAssistantTurn(extra: Partial<AssistantTurn> = {}): AssistantT
 function fromReplayTurns(s: SessionReplay): Turn[] {
   const turns: Turn[] = s.turns.map((t) =>
     t.role === 'user'
-      ? { role: 'user', text: t.content, id: t.id, skills: t.skills }
+      ? { role: 'user', text: t.content, id: t.id, skills: t.skills, ...(t.attachments?.length ? { attachments: t.attachments } : {}) }
       : newAssistantTurn({
           items: fromReplay(t.timeline, t.content, t.steps ?? []),
           approvals: (t.timeline ?? []).flatMap((i) => (i.type === 'approval' && i.approval ? [cardToRef(i.approval as ApprovalCardData)] : [])),
@@ -561,7 +569,7 @@ export function useAssistant(conversationId: number | null) {
   )
 
   const runTurn = useCallback(
-    async (body: Record<string, unknown>, userText: string | null, cut?: number) => {
+    async (body: Record<string, unknown>, userText: string | null, cut?: number, files?: ChatFile[]) => {
       const resuming = body.resume_approval_id != null
       const turn = newAssistantTurn({ resume: resuming })
       setTurns((list) => {
@@ -571,7 +579,7 @@ export function useAssistant(conversationId: number | null) {
         if (resuming && last?.role === 'assistant') {
           return [...base.slice(0, -1), { ...last, running: true, status: 'running', error: undefined, startedAt: Date.now() }]
         }
-        return [...base, ...(userText !== null ? [{ role: 'user', text: userText } as UserTurn] : []), turn]
+        return [...base, ...(userText !== null ? [{ role: 'user', text: userText, ...(files?.length ? { attachments: files } : {}) } as UserTurn] : []), turn]
       })
       setBusy(true)
       const ac = new AbortController()
@@ -617,9 +625,9 @@ export function useAssistant(conversationId: number | null) {
   )
 
   const run = useCallback(
-    (body: Record<string, unknown>, userText: string | null, cut?: number) => {
+    (body: Record<string, unknown>, userText: string | null, cut?: number, files?: ChatFile[]) => {
       if (abortRef.current) return
-      const p = runTurn(body, userText, cut)
+      const p = runTurn(body, userText, cut, files)
       flightRef.current = p
       return p
     },
@@ -734,12 +742,14 @@ export function useAssistant(conversationId: number | null) {
   }, [])
 
   const send = useCallback(
-    (text: string) => {
+    (text: string, files?: ChatFile[]) => {
       const t = text.trim()
-      if (!t) return
+      if (!t && !files?.length) return
       const local = localOnlyRef.current
+      // ACT agent.chat_attach @web.panel: the uploads' ids go with the message.
+      const attach = files?.length ? { attachments: files.map((f) => f.id) } : {}
       // The context is read once the editors are saved: it says what they show then.
-      void afterFlush(() => void run({ message: t, session_id: sessionRef.current, context: ctx(), ...(local ? { local_only: true } : {}) }, t))
+      void afterFlush(() => void run({ message: t, session_id: sessionRef.current, context: ctx(), ...attach, ...(local ? { local_only: true } : {}) }, t, undefined, files))
     },
     [run, ctx, afterFlush],
   )

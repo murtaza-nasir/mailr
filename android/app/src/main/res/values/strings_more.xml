@@ -13,4 +13,11 @@
     <string name="more_allow_menu">More ways to allow</string>
     <string name="more_always_allow">Always allow</string>
     <string name="more_allow_once">Allow once</string>
+    <plurals name="more_allow_menu_also">
+        <item quantity="one">More ways to allow, also approving %d other waiting request</item>
+        <item quantity="other">More ways to allow, also approving %d other waiting requests</item>
+    </plurals>
+    <string name="more_card_menu">More actions</string>
+    <string name="more_why_asks">Why it asks</string>
+    <string name="more_why_hide">Hide why it asks</string>
 </resources>

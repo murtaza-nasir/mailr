@@ -257,7 +257,7 @@ class NotesScreenshotTest(private val dark: Boolean) {
             })
         }
         waitFor(hasText("Cleo is in this list"))
-        // Cleo checks the limes: they go to the fold, which names her for a moment.
+        // Cleo checks the limes: they stay in their place, ticked and struck through, and the row names her for a moment.
         val limes = fake.items[shop.id]!!.first { it.text == "limes" }
         limes.checked = true; limes.version++
         compose.runOnIdle {
@@ -266,7 +266,7 @@ class NotesScreenshotTest(private val dark: Boolean) {
                 put("author", buildJsonObject { put("id", 2); put("name", "Cleo") })
             })
         }
-        waitFor(hasText("✓ Cleo: limes"))
+        waitFor(hasText("✓ Cleo"))
         compose.onRoot().captureRoboImage("screenshots/notes-$theme-presence.png")
     }
 }

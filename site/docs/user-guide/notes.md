@@ -149,8 +149,12 @@ the same items, with their order and history.
   added, a toast has **Add anyway**.
 - **Paste.** When you paste several lines, a prompt shows what will be added, such as "Add 7 items to
   Shopping (Costco 3, Corner market 4)?". Press `Enter` to add them.
-- **Check.** Click the box, or press `Ctrl + Enter` in the item. The item is struck through and
-  is moved into the "n checked" group at the bottom a moment later. Click it there to uncheck it.
+- **Check.** Click the box, or press `Ctrl + Enter` in the item. The item is ticked, struck through
+  and dimmed, and it stays in its place, so the list does not move while you work through it. An item
+  checked by another person or on another device while the list is open stays in its place too. Click
+  the box again to uncheck it. The next time you open the list, checked items are in the "n checked"
+  group at the bottom; click one there to uncheck it. The count includes the checked items still in
+  place.
 - **Edit.** Click the text. Type "x2" at the end to turn it into the quantity chip. Press
   `Shift + Enter` to add an extra line under the item ("the ripe ones").
 - **Delete.** Empty the text and press `Backspace`, or use the item's ⋮ menu.
@@ -159,7 +163,8 @@ the same items, with their order and history.
 
 <!-- covers: note.clear_checked note.uncheck_all checkitem.to_task -->
 
-Use **Clear checked** to remove the checked items (they stay in the version history). Use
+Use **Clear checked** to remove the checked items, including those still in place (they stay in
+the version history). Use
 **Uncheck all** in the ⋮ menu to start a list over, for example a packing list. Use **Turn into a
 task** in an item's menu to make a task with the item's text, linked back to the list.
 

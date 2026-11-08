@@ -238,6 +238,7 @@
     <string name="notes_keep_the_items">Сохранить элементы</string>
     <string name="notes_delete_them_too">Удалить и их</string>
     <string name="notes_check">Отметить</string>
+    <string name="notes_uncheck">Снять отметку</string>
     <string name="notes_move_to_section">Переместить в раздел</string>
     <string name="notes_edit_quantity">Изменить количество</string>
     <string name="notes_edit">Изменить</string>

@@ -88,21 +88,67 @@ fun displayIcon(name: String?): ImageVector = when (name) {
     else -> Icons.Outlined.VerifiedUser
 }
 
+/**
+ * The display's body: the summary, the reason ([showReason]; the approval card shows its own short line
+ * instead) and [fields] in a box, each with its label above its value.
+ */
 @Composable
-fun ApprovalBody(d: Display, modifier: Modifier = Modifier) {
+fun ApprovalBody(d: Display, modifier: Modifier = Modifier, fields: List<DisplayField> = d.fields, showReason: Boolean = true) {
+    val reason = d.reason.takeIf { showReason }
     Column(modifier.fillMaxWidth()) {
         d.summary?.let { Text(it, style = MaterialTheme.typography.bodyMedium) }
-        d.reason?.let {
+        reason?.let {
             Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 2.dp))
         }
-        if (d.fields.isNotEmpty()) {
+        if (fields.isNotEmpty()) {
             Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh,
-                modifier = Modifier.fillMaxWidth().padding(top = if (d.summary != null || d.reason != null) 8.dp else 0.dp)) {
+                modifier = Modifier.fillMaxWidth().padding(top = if (d.summary != null || reason != null) 8.dp else 0.dp)) {
                 Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    d.fields.forEach { FieldRow(it) }
+                    fields.forEach { FieldRow(it) }
                 }
             }
+        }
+    }
+}
+
+/** Value types too long or too structured for the card's line of facts: they keep their box. */
+private val LONG_VALUES = setOf("quote", "list", "query", "choices")
+
+private fun bare(s: String) = s.trim().removePrefix("“").removeSuffix("”").trim()
+
+/**
+ * The fields an approval card shows as one line of facts ("Due Mon 30 Nov, 09:00 · List Calendar"): the
+ * short ones, less a field that only repeats the card's heading ([heading], the task's or event's title,
+ * the email's subject). Every other field stays in [longFields].
+ */
+fun Display.factFields(heading: String?): List<DisplayField> = fields.filter { f ->
+    f.value.t !in LONG_VALUES && f.value.text.isNotBlank() &&
+        !(heading != null && f.value.t == "text" && bare(f.value.text).equals(bare(heading), ignoreCase = true))
+}
+
+/** The fields an approval card keeps in its box below the facts (quotes, lists, searches, choices). */
+fun Display.longFields(): List<DisplayField> = fields.filter { it.value.t in LONG_VALUES }
+
+/** The facts as one text: each label muted before its value, " · " between them; a change keeps its crossed-out old value. */
+fun factsText(fields: List<DisplayField>, muted: androidx.compose.ui.graphics.Color) = buildAnnotatedString {
+    fields.forEachIndexed { i, f ->
+        if (i > 0) withStyle(SpanStyle(color = muted)) { append(" · ") }
+        if (f.label.isNotBlank()) {
+            withStyle(SpanStyle(color = muted)) { append(f.label) }
+            append(" ")
+        }
+        val v = f.value
+        when (v.t) {
+            "diff" -> {
+                if (!v.before.isNullOrBlank()) {
+                    withStyle(SpanStyle(color = muted, textDecoration = TextDecoration.LineThrough)) { append(v.before) }
+                    append(" → ")
+                }
+                withStyle(SpanStyle(fontWeight = FontWeight.SemiBold)) { append(v.after ?: v.text) }
+            }
+            "labels" -> append(v.labels.joinToString(", ") { it.name }.ifBlank { v.text })
+            else -> append(v.text)
         }
     }
 }

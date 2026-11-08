@@ -225,4 +225,15 @@
         <item quantity="one">%1$s modifié par vous</item>
         <item quantity="other">%1$s modifiés par vous</item>
     </plurals>
+    <string name="asst_attach">Joindre des fichiers ou des images</string>
+    <string name="asst_attach_too_big">%1$s dépasse %2$d Mo et ne peut pas être joint.</string>
+    <plurals name="asst_attach_limit">
+        <item quantity="one">Un message peut contenir au maximum %1$d fichier.</item>
+        <item quantity="other">Un message peut contenir au maximum %1$d fichiers.</item>
+    </plurals>
+    <string name="asst_attach_remove">Supprimer %1$s</string>
+    <string name="asst_attach_uploading">Ajout en cours…</string>
+    <string name="asst_attach_failed">Impossible de joindre %1$s : %2$s</string>
+    <string name="asst_attach_image">Image %1$s</string>
+    <string name="asst_attach_sharing">Ajout pour %1$s…</string>
 </resources>

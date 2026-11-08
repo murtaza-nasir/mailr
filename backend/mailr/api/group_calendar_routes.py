@@ -1,7 +1,7 @@
 """Admin → Calendars → Group calendars (calendar/groups.py, site/docs/admin/calendars.md).
 
-An admin attaches calendars to mailr's groups: name, colour, what members may do (read or write)
-and, for read-only calendars, named editors. The admin sees only the group calendars' metadata and
+An admin attaches calendars to mailr's groups: name, colour, what members may do (write, read, or
+free/busy only on Stalwart 1.x) and, for the read and free/busy calendars, named editors. The admin sees only the group calendars' metadata and
 item counts, never a user's own calendars or events. The .ics export exists for the copy offered
 before a delete.
 """
@@ -42,7 +42,8 @@ async def _calendar_out(db: AsyncSession, gc: GroupCalendar) -> dict[str, Any]:
 # ACT settings.group_calendars @api
 @router.get("/groups")
 async def list_group_calendars(p: Principal = Depends(admin), db: AsyncSession = Depends(get_db)):
-    """Every known group with its members (for the editor picker) and its calendars."""
+    """Every known group with its members (for the editor picker) and its calendars. `access` lists
+    what members of a new calendar may get on this mail server ("freebusy" on Stalwart 1.x only)."""
     names = await groups.known_groups(db)
     gcs = list((await db.execute(select(GroupCalendar).order_by(GroupCalendar.group_name, GroupCalendar.name)))
                .scalars())
@@ -56,14 +57,17 @@ async def list_group_calendars(p: Principal = Depends(admin), db: AsyncSession =
     for name in names:
         members = await groups.members(db, name)
         out.append({"name": name, "members": [_person(u) for u in members], "calendars": by_group.get(name, [])})
-    return {"enabled": await builtin.instance_enabled(db), "groups": out}
+    from mailr.calendar import sharing
+
+    access = ["write", "read", groups.FREEBUSY] if await sharing.server_v1() else ["write", "read"]
+    return {"enabled": await builtin.instance_enabled(db), "groups": out, "access": access}
 
 
 class GroupCalendarIn(BaseModel):
     group: str = Field(min_length=1, max_length=200)
     name: str = Field(min_length=1, max_length=200)
     color: str | None = Field(None, pattern=_COLOR)
-    access: str = Field("write", pattern="^(read|write)$")
+    access: str = Field("write", pattern="^(read|write|freebusy)$")
     editors: list[int] = Field(default_factory=list, max_length=100)
 
 
@@ -91,7 +95,7 @@ async def create_group_calendar(body: GroupCalendarIn, p: Principal = Depends(ad
 class GroupCalendarPatch(BaseModel):
     name: str | None = Field(None, min_length=1, max_length=200)
     color: str | None = Field(None, pattern=_COLOR)
-    access: str | None = Field(None, pattern="^(read|write)$")
+    access: str | None = Field(None, pattern="^(read|write|freebusy)$")
     editors: list[int] | None = Field(None, max_length=100)
 
 

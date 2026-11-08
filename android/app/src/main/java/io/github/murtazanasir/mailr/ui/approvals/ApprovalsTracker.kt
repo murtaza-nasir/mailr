@@ -277,15 +277,18 @@ class ApprovalsTracker(
         }
     }
 
-    /** ACT approval.approve_many @android.approvals: "Allow all n" from one chat or agent, each request once. */
-    fun decideMany(group: List<Approval>) {
+    /**
+     * ACT approval.approve_many @android.approvals: Allow all ([approve]) or Deny all of a group from one
+     * chat or agent, each request once.
+     */
+    fun decideMany(group: List<Approval>, approve: Boolean = true) {
         this.scope.launch {
             try {
-                val r = g.api.decideMany(group.map { it.id })
+                val r = g.api.decideMany(group.map { it.id }, approve)
                 val keys = group.map(NotifyDecisions::approvalKey).toSet()
                 keys.forEach { Notifier.cancelApproval(g.context, it) }
                 _pending.update { list -> list?.filterNot { NotifyDecisions.approvalKey(it) in keys } }
-                _messages.emit(ApprovalNotice(allowedText(r.count, r.skipped.size)))
+                _messages.emit(ApprovalNotice(allowedText(r.count, r.skipped.size, approve)))
                 refresh()
             } catch (e: Exception) {
                 _messages.emit(ApprovalNotice(e.userMessage()))

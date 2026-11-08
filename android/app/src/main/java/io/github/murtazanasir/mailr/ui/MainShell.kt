@@ -242,6 +242,10 @@ internal fun AssistantRoute(nav: NavHostController, vm: AssistantViewModel, onOp
     var person by androidx.compose.runtime.saveable.rememberSaveable { androidx.compose.runtime.mutableStateOf<String?>(null) }
     val c by vm.composer.ui.collectAsStateWithLifecycle()
     val mic = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { ok -> if (ok) vm.composer.listen() }
+    // ACT agent.chat_attach @android.assistant: images and the files the server can read, from the phone's picker.
+    val files = rememberLauncherForActivityResult(ActivityResultContracts.OpenMultipleDocuments()) { uris ->
+        if (uris.isNotEmpty()) vm.attach(ctx.contentResolver, uris)
+    }
     val voice = ComposerVoice(c, vm.composer::setText,
         listen = {
             if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) vm.composer.listen()
@@ -348,6 +352,9 @@ internal fun AssistantRoute(nav: NavHostController, vm: AssistantViewModel, onOp
         reviewAction = vm::reviewAction,
         applyReview = vm::applyReview,
         reviewFilter = vm::makeReviewFilter,
+        attach = { files.launch(io.github.murtazanasir.mailr.data.agent.AgentClient.ATTACH_TYPES) },
+        removeAttachment = vm::removeAttachment,
+        thumb = { id -> g.agent.attachmentThumb(id) },
     ))
     }
     // ACT person.card @android.assistant: the card of a person the answer looked up, as a sheet over the chat.

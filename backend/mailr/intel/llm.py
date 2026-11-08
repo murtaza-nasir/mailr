@@ -376,6 +376,10 @@ async def chat(
     """Non-streaming chat completion. Returns the first choice's message dict
     ({"role","content","tool_calls"?}) plus "_model", "_endpoint" and "_local"."""
     r = await resolve(db, user, task, sensitive=sensitive, feature=feature, count=count)
+    from mailr.intel import modelcaps
+
+    # Image parts reach only a model that can view them (intel/modelcaps.py).
+    messages = modelcaps.for_model(messages, r.endpoint, r.model)
     body: dict[str, Any] = {"model": r.model, "messages": messages, "temperature": temperature,
                             "max_tokens": max_tokens}
     if tools:
@@ -520,6 +524,10 @@ async def chat_stream(
     (ThinkSplitter), and, at the end, {"tool_calls": [...], "finish": reason, "_model",
     "_endpoint", "_local"}."""
     r = await resolve(db, user, task, sensitive=sensitive, feature=feature)
+    from mailr.intel import modelcaps
+
+    # Image parts reach only a model that can view them (intel/modelcaps.py).
+    messages = modelcaps.for_model(messages, r.endpoint, r.model)
     body: dict[str, Any] = {"model": r.model, "messages": messages, "temperature": temperature,
                             "max_tokens": max_tokens, "stream": True}
     if tools:

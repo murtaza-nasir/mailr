@@ -7,15 +7,22 @@ object Checklist {
     /** One group of the editor: the top group (section null) or a section, with its unchecked items in display order. */
     data class Group(val section: Section?, val items: List<Item>, val mode: String, val collapsed: Boolean)
 
-    data class Layout(val groups: List<Group>, val checked: List<Item>)
+    /**
+     * [checked] is what the fold lists; [checkedCount] is its "n checked" and also counts the checked
+     * items that stay in their groups ([layout]'s `stay`).
+     */
+    data class Layout(val groups: List<Group>, val checked: List<Item>, val checkedCount: Int = checked.size)
 
     /**
      * The display order: the top group, then the sections by `order`; inside a group in `manual` mode
      * by `order`, in `learned` mode items with a rank by rank (ties by `order`), then items without
      * one by `added_at`. With [checkedAtBottom] checked items leave their group for the fold, newest
-     * check first; without it they keep their place.
+     * check first; without it they keep their place. A checked item whose id is in [stay] keeps its
+     * place too: the editor passes the items it has shown unchecked since the note was opened, so a
+     * check does not move the row until the note is opened again. Only the display changes.
      */
-    fun layout(items: List<Item>, sections: List<Section>, top: TopGroup, checkedAtBottom: Boolean): Layout {
+    fun layout(items: List<Item>, sections: List<Section>, top: TopGroup, checkedAtBottom: Boolean,
+               stay: Set<String> = emptySet()): Layout {
         val secs = sections.sortedWith(compareBy({ it.order }, { it.name }))
         val known = secs.map { it.id }.toSet()
         fun inGroup(sid: String?) = items.filter { (it.sectionId?.takeIf { s -> s in known }) == sid }
@@ -24,16 +31,14 @@ object Checklist {
             ranked.sortedWith(compareBy<Item>({ it.rank }, { it.order })) +
                 rest.sortedWith(compareBy<Item>({ it.addedAt ?: "￿" }, { it.order }))
         } else list.sortedWith(compareBy({ it.order }, { it.addedAt ?: "" }))
+        fun shown(g: List<Item>) = if (checkedAtBottom) g.filter { !it.checked || it.id in stay } else g
         val groups = ArrayList<Group>()
-        val top0 = inGroup(null)
-        groups += Group(null, arrange(if (checkedAtBottom) top0.filter { !it.checked } else top0, top.orderMode),
-            top.orderMode, top.collapsed)
-        for (s in secs) {
-            val g = inGroup(s.id)
-            groups += Group(s, arrange(if (checkedAtBottom) g.filter { !it.checked } else g, s.orderMode), s.orderMode, s.collapsed)
-        }
-        val checked = if (checkedAtBottom) items.filter { it.checked }.sortedByDescending { it.checkedAt ?: "" } else emptyList()
-        return Layout(groups, checked)
+        groups += Group(null, arrange(shown(inGroup(null)), top.orderMode), top.orderMode, top.collapsed)
+        for (s in secs) groups += Group(s, arrange(shown(inGroup(s.id)), s.orderMode), s.orderMode, s.collapsed)
+        if (!checkedAtBottom) return Layout(groups, emptyList())
+        val allChecked = items.filter { it.checked }
+        val checked = allChecked.filter { it.id !in stay }.sortedByDescending { it.checkedAt ?: "" }
+        return Layout(groups, checked, allChecked.size)
     }
 
     /** A key that sorts after [a] and before [b] (either may be null), for an optimistic move; the server's own keys replace it. */

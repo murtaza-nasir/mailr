@@ -11,3 +11,4 @@ meeting_prep_digest: "End a routine's digest with today's meetings and links to 
 local_models_only: "Local models only for me: Ambrose and every other model feature use only the local models of this server for your mail, notes and tables. Stricter only; the household rule can lock it."
 handled_elsewhere: "Addresses for other assistants: your own addresses (an alias, say) that another program reads and acts on. Standing orders leave mail sent only to them alone, unless an order names the address."
 sweep_rules: "Your standing rules for bulk reviews (/sweep, reviews in chat and routines): plain text up to 2000 characters, followed in every review before what you ask for in one review."
+assistant_images: "Let the assistant see images: photos and scans in mail and the images you attach in a chat reach its model, when that model can view images."

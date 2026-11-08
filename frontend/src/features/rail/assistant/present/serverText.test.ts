@@ -6,7 +6,7 @@ import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 import en from '../../../../locales/en.json'
 import { SERVER_KEYS } from './serverKeys'
-import { asQuestion, msgsText, msgText } from './serverText'
+import { msgsText, msgText } from './serverText'
 
 const server = JSON.parse(readFileSync(path.resolve(__dirname, '../../../../../../backend/mailr/i18n/en.json'), 'utf8'))
 
@@ -30,10 +30,5 @@ describe('server texts', () => {
     expect(msgText(undefined, 'Stored')).toBe('Stored')
     expect(msgsText([{ key: 'approvals.order.deliver.brief', params: {} }, { key: 'approvals.order.deliver.notify', params: {} }], 'x'))
       .toBe('a card on the email, a notification')
-  })
-
-  it('asks a question of a waiting card', () => {
-    expect(asQuestion('Send to Marco Silva')).toBe('Send to Marco Silva?')
-    expect(asQuestion('Done.')).toBe('Done.')
   })
 })

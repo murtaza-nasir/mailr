@@ -14,4 +14,13 @@
     <string name="more_allow_menu">Другие варианты разрешения</string>
     <string name="more_always_allow">Разрешать всегда</string>
     <string name="more_allow_once">Разрешить один раз</string>
+    <plurals name="more_allow_menu_also">
+        <item quantity="one">Другие способы разрешить, также подтверждение %d другого ожидающего запроса</item>
+        <item quantity="few">Другие способы разрешить, также подтверждение %d других ожидающих запросов</item>
+        <item quantity="many">Другие способы разрешить, также подтверждение %d других ожидающих запросов</item>
+        <item quantity="other">Другие способы разрешить, также подтверждение %d других ожидающих запросов</item>
+    </plurals>
+    <string name="more_card_menu">Другие действия</string>
+    <string name="more_why_asks">Почему это требуется</string>
+    <string name="more_why_hide">Скрыть причину</string>
 </resources>

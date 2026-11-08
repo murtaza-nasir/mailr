@@ -4,6 +4,7 @@ import { assistantNameNow } from '../rail/assistant/useAssistantName'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '../../api/client'
 import type { AlsoCovers } from './grant'
+import type { CardHead } from './cardHead'
 import type { Display, DisplayField, Outcome } from '../rail/assistant/present/types'
 import { cardToRef } from '../rail/assistant/cardRef'
 import type { ApprovalPreview, ApprovalRef } from '../rail/assistant/useAssistant'
@@ -31,6 +32,8 @@ export interface PendingApproval {
   also_covers?: AlsoCovers | null
   /** False when a hard rule held the card: it is decided once. */
   grants?: boolean | null
+  /** The type label, the object's own name and the short reason (agent/present.py card_head). */
+  head?: CardHead | null
 }
 
 export const approvalsKey = (status: string) => ['approvals', status] as const
@@ -88,40 +91,8 @@ export function historyLine(d: Display | null | undefined, max = 3): string | nu
   return parts.length ? parts.join(' · ') : null
 }
 
-/** Who asked, for "Allow all": one chat of the assistant, else the agent token or the assistant
- * (the backend's own grouping, POST /approvals/decide-many). */
+/** Who asked, for a group's Allow all and Deny all: one chat of the assistant, else the agent token
+ * or the assistant (the backend's own grouping, POST /approvals/decide-many). */
 export function requesterKey(p: Pick<PendingApproval, 'chat_session_id' | 'subject'>): string {
   return p.chat_session_id ? `chat:${p.chat_session_id}` : p.subject
-}
-
-export interface ApprovalGroup<T extends PendingApproval = PendingApproval> {
-  key: string
-  items: T[]
-  /** The waiting ones "Allow all" would decide, oldest first (the order they were asked in). */
-  pending: T[]
-}
-
-/** Cards grouped by who asked, each group where its newest card falls (the list stays newest first). */
-export function groupByRequester<T extends PendingApproval>(shown: T[]): ApprovalGroup<T>[] {
-  const out: ApprovalGroup<T>[] = []
-  const at = new Map<string, ApprovalGroup<T>>()
-  for (const p of shown) {
-    const k = requesterKey(p)
-    let g = at.get(k)
-    if (!g) {
-      g = { key: k, items: [], pending: [] }
-      at.set(k, g)
-      out.push(g)
-    }
-    g.items.push(p)
-    if (p.status === 'pending') g.pending.unshift(p)
-  }
-  return out
-}
-
-/** "this chat", "Claude Code", "Ambrose": who a group of requests came from. */
-export function groupSource(p: PendingApproval): string {
-  if (p.chat_session_id) return t('approvals.approvals.thisChat')
-  if (p.subject === 'assistant' || p.subject.startsWith('session:')) return t('approvals.approvals.text', { name: assistantNameNow() })
-  return p.actor || t('approvals.approvals.anAgent')
 }

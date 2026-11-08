@@ -260,7 +260,7 @@ export const SETTINGS_GROUPS: SettingsGroup[] = [
         title: t('common.models'),
         sections: [
           { id: 'local-models', title: t('settings.groups.localModelsOnlyForMe'), keys: ['local_models_only'], words: [t('common.localOnly'), t('settings.groups.hostedModels'), 'privacy'] },
-          { id: 'models', title: t('common.models'), keys: ['models'], words: [t('settings.groups.modelChoice')] },
+          { id: 'models', title: t('common.models'), keys: ['models', 'assistant_images'], words: [t('settings.groups.modelChoice'), t('settings.assistant.modelsSection.images'), 'vision', 'photos'] },
           { id: 'model-use', title: t('settings.groups.modelUse'), words: ['usage', t('settings.groups.tokensUsed')] },
         ],
       },

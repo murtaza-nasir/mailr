@@ -652,6 +652,7 @@
     <string name="cal_shared_by_share_through">Shared by %1$s · can edit and share (through %2$s)</string>
     <!-- %s: the group's name -->
     <string name="cal_shared_with_group">Shared with the %s group</string>
+    <string name="cal_shared_with_group_free_busy">Shared with the %s group · free/busy only</string>
     <string name="cal_shared_group_fallback">group</string>
     <!-- Live editing (ui/calendar/LiveEditors.kt): the other device's value of an all-day "when" -->
     <string name="cal_live_when_all_day">%1$s – %2$s, all day</string>

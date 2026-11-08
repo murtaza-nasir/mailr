@@ -150,6 +150,23 @@ function OpenPopover({ anchor, onClose, placement = 'bottom-start', children, cl
   const panels = useRef<Set<HTMLElement>>(new Set())
   const level = useMenuLevel()
   const root = useMemo<MenuRoot>(() => ({ stack, panels, inline, slot, setInlineDepth }), [inline, slot])
+  // A popover opened from inside another one (a card's menu in the "Waiting for you" bell): the
+  // outer one counts it as its own (a click in it is not outside), and Escape closes it first.
+  const outer = useContext(RootCtx)
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!outer || !el) return
+    const set = outer.panels.current
+    const stack = outer.stack.current
+    const close = () => onClose()
+    set.add(el)
+    stack.push(close)
+    return () => {
+      set.delete(el)
+      const i = stack.lastIndexOf(close)
+      if (i >= 0) stack.splice(i, 1)
+    }
+  }, [outer, onClose])
 
   useLayoutEffect(() => {
     if (!ref.current) return

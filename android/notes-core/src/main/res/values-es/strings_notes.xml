@@ -206,6 +206,7 @@
     <string name="notes_keep_the_items">Mantener los elementos</string>
     <string name="notes_delete_them_too">Eliminarlos también</string>
     <string name="notes_check">Marcar</string>
+    <string name="notes_uncheck">Desmarcar</string>
     <string name="notes_move_to_section">Mover a sección</string>
     <string name="notes_edit_quantity">Editar cantidad</string>
     <string name="notes_edit">Editar</string>

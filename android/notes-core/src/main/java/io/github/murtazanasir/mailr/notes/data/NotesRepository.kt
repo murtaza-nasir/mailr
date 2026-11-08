@@ -47,8 +47,8 @@ class NotesRepository(
     val api: NotesApi,
     private val database: NotesDatabase,
     private val scope: CoroutineScope,
-    /** "Now" and the timers whose length the user sees (ticks, presence); tests pass a virtual one. */
-    private val time: Timeline = Timeline.Real,
+    /** "Now" and the timers whose length the user sees (ticks, presence, a linked item's mark); tests pass a virtual one. */
+    internal val time: Timeline = Timeline.Real,
 ) {
     private fun clock(): Long = time.now()
     private val dao = database.notesDao()

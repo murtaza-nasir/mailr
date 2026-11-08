@@ -74,9 +74,12 @@ object Fixtures {
     val approvals = listOf(
         Approval(41, "token:12", "Claude Code", "calendar.create", "Default Calendar",
             ApprovalPreview("Create event", listOf("Wed 30 Sep, 14:00–15:00", "Review PADS submission with Alice")),
-            expiresAt = now.plusHours(20).toOffsetDateTime().toString()),
+            expiresAt = now.plusHours(20).toOffsetDateTime().toString(), createdAt = now.minusHours(1).toOffsetDateTime().toString(),
+            head = io.github.murtazanasir.mailr.data.api.ApprovalHead("event_new", "New event")),
         Approval(42, "assistant", "Ambrose", "mail.send", "alice@example.com",
-            ApprovalPreview("Send “Re: Quarterly plan”", listOf("To Alice Chen <alice@example.com>", "Friday at 10 works for me. See you then!"))),
+            ApprovalPreview("Send “Re: Quarterly plan”", listOf("To Alice Chen <alice@example.com>", "Friday at 10 works for me. See you then!")),
+            createdAt = now.minusMinutes(5).toOffsetDateTime().toString(),
+            head = io.github.murtazanasir.mailr.data.api.ApprovalHead("send", "Send email", name = "Re: Quarterly plan")),
     )
 
     /** Recent decisions for the Approvals screen's history. */

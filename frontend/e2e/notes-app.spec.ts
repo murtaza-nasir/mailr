@@ -115,7 +115,7 @@ test('checklist editing: add with the grammar, sections by paste, check into the
   expect(item(after, 'eggs')).toEqual(expect.objectContaining({ section_id: market.id, qty: expect.objectContaining({ amount: '12' }) }))
   expect(item(after, 'batteries')?.section_id).toBe(after.sections!.find((s) => s.name === 'Costco')!.id)
 
-  // ACT checkitem.check @web.note: the row strikes, then moves into the "n checked" fold.
+  // ACT checkitem.check @web.note: the row strikes in place; "n checked" counts it.
   await row(page, 'bread').getByRole('checkbox').click()
   await expect(editor(page).getByTestId('checked-fold')).toContainText('1 checked')
   expect(item(await get(page.request, n.id), 'bread')?.checked).toBe(true)
@@ -149,6 +149,81 @@ test('checklist editing: add with the grammar, sections by paste, check into the
   await bat.fill('')
   await bat.press('Backspace')
   await expect.poll(async () => item(await get(page.request, n.id), 'batteries')).toBeUndefined()
+})
+
+test('a checked row stays in place until the note is opened again; Clear checked, undo and a check from elsewhere', async ({ page }) => {
+  const n = await mk(page.request, { kind: 'checklist', title: 'E2E Stay', lines: 'milk\neggs\nbread\nbutter' })
+  await open(page, `/notes/n/${n.id}`)
+  const rows = editor(page).locator('.nt-group .nt-row input.nt-item-input')
+  const fold = editor(page).getByTestId('checked-fold')
+  await expect(rows).toHaveCount(4)
+  const order = () => expect.poll(() => rows.evaluateAll((els) => els.map((e) => (e as HTMLInputElement).value)))
+  const y = async (text: string) => (await row(page, text).boundingBox())!.y
+  const before = { eggs: await y('eggs'), butter: await y('butter') }
+
+  // ACT checkitem.check @web.note: ticked and struck through where it is, also after the old 600 ms move.
+  await row(page, 'milk').getByRole('checkbox').click()
+  await expect(row(page, 'milk')).toHaveClass(/checked/)
+  await expect(fold).toContainText('1 checked')
+  await page.waitForTimeout(1_000)
+  await order().toEqual(['milk', 'eggs', 'bread', 'butter'])
+  expect({ eggs: await y('eggs'), butter: await y('butter') }).toEqual(before)
+  expect(item(await get(page.request, n.id), 'milk')?.checked).toBe(true)
+
+  // The editor's Undo unchecks it in place; Redo checks it again, still in place.
+  const toolbar = editor(page).getByRole('toolbar')
+  await toolbar.getByRole('button', { name: 'Undo', exact: true }).click()
+  await expect(row(page, 'milk')).not.toHaveClass(/checked/)
+  await expect(fold).toHaveCount(0)
+  await toolbar.getByRole('button', { name: 'Redo', exact: true }).click()
+  await expect(row(page, 'milk')).toHaveClass(/checked/)
+  await order().toEqual(['milk', 'eggs', 'bread', 'butter'])
+
+  // A check from elsewhere (the API, as another device) arrives live and stays in place too.
+  const bread = item(await get(page.request, n.id), 'bread')!
+  const r = await page.request.patch(`/api/v1/notes/${n.id}/items/${bread.id}`, { data: { checked: true, base_version: bread.version } })
+  expect(r.ok(), await r.text()).toBeTruthy()
+  await expect(row(page, 'bread')).toHaveClass(/checked/)
+  await expect(fold).toContainText('2 checked')
+  await order().toEqual(['milk', 'eggs', 'bread', 'butter'])
+  expect({ eggs: await y('eggs'), butter: await y('butter') }).toEqual(before)
+
+  // ACT note.clear_checked @web.note: the rows checked in place go too.
+  await editor(page).getByRole('button', { name: 'Clear checked' }).click()
+  await page.getByRole('dialog', { name: 'Clear checked items?' }).getByRole('button', { name: 'Clear' }).click()
+  await order().toEqual(['eggs', 'butter'])
+  await expect(fold).toHaveCount(0)
+  const cleared = await get(page.request, n.id)
+  expect(cleared.items?.map((i) => i.text).sort()).toEqual(['butter', 'eggs'])
+
+  // Opened again (closed and reopened, then a reload), a checked item is in the fold.
+  await row(page, 'eggs').getByRole('checkbox').click()
+  await order().toEqual(['eggs', 'butter'])
+  await page.keyboard.press('Escape')
+  await expect(editor(page)).toHaveCount(0)
+  await card(page, 'E2E Stay').locator('.nt-card-title').click()
+  await order().toEqual(['butter'])
+  await expect(fold).toContainText('1 checked')
+  await page.reload()
+  await order().toEqual(['butter'])
+  await expect(fold).toContainText('1 checked')
+})
+
+test('a linked item is marked once; a later check leaves the scroll alone', async ({ page }) => {
+  const lines = Array.from({ length: 40 }, (_, i) => `thing ${i + 1}`).join('\n')
+  const n = await mk(page.request, { kind: 'checklist', title: 'E2E Long list', lines })
+  const target = item(await get(page.request, n.id), 'thing 35')!
+  await open(page, `/notes/n/${n.id}#i-${target.id}`)
+  await expect(row(page, 'thing 35')).toBeInViewport()
+  await expect(row(page, 'thing 35')).toHaveClass(/flash/)
+  // Back to the top, then a check there: the list does not jump back to the linked item.
+  await row(page, 'thing 1').scrollIntoViewIfNeeded()
+  await expect(row(page, 'thing 35')).not.toBeInViewport()
+  await row(page, 'thing 1').getByRole('checkbox').click()
+  await expect(row(page, 'thing 1')).toHaveClass(/checked/)
+  await page.waitForTimeout(500)
+  await expect(row(page, 'thing 1')).toBeInViewport()
+  await expect(row(page, 'thing 35')).not.toBeInViewport()
 })
 
 test('sections: create, rename, order mode, move and delete keeping the items', async ({ page }) => {

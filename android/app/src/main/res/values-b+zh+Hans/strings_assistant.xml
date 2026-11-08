@@ -202,4 +202,14 @@
     <plurals name="asst_review_changed_by_you">
         <item quantity="other">%1$s 个已由您更改</item>
     </plurals>
+    <string name="asst_attach">附加文件或图片</string>
+    <string name="asst_attach_too_big">%1$s 超过 %2$d MB，无法附加。</string>
+    <plurals name="asst_attach_limit">
+        <item quantity="other">每封邮件最多可附加 %1$d 个文件。</item>
+    </plurals>
+    <string name="asst_attach_remove">移除 %1$s</string>
+    <string name="asst_attach_uploading">正在附加…</string>
+    <string name="asst_attach_failed">无法附加 %1$s：%2$s</string>
+    <string name="asst_attach_image">图片 %1$s</string>
+    <string name="asst_attach_sharing">正在为 %1$s 附加…</string>
 </resources>

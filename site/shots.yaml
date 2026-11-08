@@ -2414,6 +2414,20 @@ shots:
   - goto /settings/ambrose/models
   - scroll to the "Model use" section
   capture: element the "Model use" section
+- name: assistant-attachments
+  page: user-guide/assistant.md
+  platform: web
+  theme: classic
+  scheme: light
+  viewport: desktop
+  route: /tasks
+  state: fresh seed (the demo model answers the scripted question about a whiteboard and a budget)
+  steps:
+  - goto /tasks, press Ctrl+. to open the assistant panel
+  - attach whiteboard.jpg (drawn by the recipe) and popup-budget.csv with the paperclip
+  - type "What is on the whiteboard, and what does the budget add up to?" and press Enter
+  - wait for the answer and the thumbnail of the photo
+  capture: element the assistant panel
 - name: assistant-answer-model
   page: user-guide/assistant.md
   platform: web
@@ -2533,7 +2547,7 @@ shots:
   steps:
   - goto /mail/inbox, press Ctrl+. to open the assistant panel
   - type "Remind Marco about the quote" and press Enter
-  - wait for the approval card (Allow once, Allow for this chat, Always allow…, Deny)
+  - wait for the approval card (type label, heading, Allow once, Deny, the grants menu, ⋮)
   capture: element the assistant panel
 - name: assistant-approvals-settings
   page: user-guide/approvals.md
@@ -2559,8 +2573,8 @@ shots:
   steps:
   - goto /mail/inbox
   - open the bell (Waiting for you) in the header
-  - wait for the "Create label “Travel”" card, whose grants say "(also approves 1 other waiting)"
-  capture: element that card with its "Requested by" line
+  - on the "Travel" card, open the grants menu ("+1"), whose grants say "(also approves 1 other waiting)"
+  capture: element that card with its open grants menu
 - name: assistant-skill-editor
   page: agents/skills.md
   platform: web
@@ -3264,8 +3278,8 @@ shots:
   state: seeded demo; a token "Claude Code" (read, label) asks three times to create a label (Receipts, Travel, School)
   steps:
   - goto /mail/inbox
-  - click the bell, then "Allow all 3" on the line "3 requests from Claude Code"
-  - wait for the list of the three requests
+  - click the bell
+  - wait for the group "Claude Code wants to add 3 labels" with Allow all and Deny all over its three cards
   capture: element the open bell
 - name: mail-create-from
   page: user-guide/reading.md

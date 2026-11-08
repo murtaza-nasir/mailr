@@ -14,4 +14,10 @@
     <string name="more_allow_menu">更多允许方式</string>
     <string name="more_always_allow">始终允许</string>
     <string name="more_allow_once">允许一次</string>
+    <plurals name="more_allow_menu_also">
+        <item quantity="other">更多允许方式，同时批准 %d 个其他待处理请求</item>
+    </plurals>
+    <string name="more_card_menu">更多操作</string>
+    <string name="more_why_asks">为何询问</string>
+    <string name="more_why_hide">隐藏询问原因</string>
 </resources>

@@ -8,8 +8,14 @@ import android.os.Build
 import io.github.murtazanasir.mailr.data.agent.AskAbout
 import io.github.murtazanasir.mailr.ui.MainActivity
 
-/** An instruction for the assistant from the ask capture: the item it is about and the words. */
-data class AskRequest(val about: AskAbout?, val text: String?)
+/**
+ * An instruction for the assistant from the ask capture: the item it is about and the words. [files]:
+ * uploads from a share (ui/share/ShareAskActivity.kt); they wait above the message box for Send.
+ */
+data class AskRequest(val about: AskAbout?, val text: String?,
+                      val files: List<io.github.murtazanasir.mailr.data.agent.ChatFile> = emptyList(),
+                      /** false: [text] waits in the message box instead of being sent (a share). */
+                      val send: Boolean = true)
 
 /**
  * Intents into the ask capture (AskActivity) and out of it into the app.

@@ -38,7 +38,7 @@ async def audit(
         AuditLog(
             user_id=principal.user_id,
             token_id=principal.token.id if principal.token else None,
-            actor=principal.actor,
+            actor=principal.actor[:50],  # "token:<name>": a long token name must not fail the write
             action=action,
             target=str(target)[:200],
             inputs=_trim(inputs or {}),

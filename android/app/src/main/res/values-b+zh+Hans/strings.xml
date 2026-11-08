@@ -14,6 +14,7 @@
     <string name="channel_sending_desc">无法发送的消息</string>
     <string name="share_compose_label">新邮件</string>
     <string name="share_self_label">发给自己</string>
+    <string name="share_ask_label">询问 Ambrose</string>
     <string name="share_self_long">发送给您自己</string>
     <string name="share_self_person">我</string>
     <string name="self_sending">正在发送给您自己…</string>

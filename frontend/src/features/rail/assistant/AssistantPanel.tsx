@@ -33,6 +33,7 @@ import { copyText, foldRepeatGroups, thinkingNow, turnText, type AnswerModel, ty
 import { askLabel, askSuggestions, useAskAbout } from '../../assistant-context/askAbout'
 import { appendWords, dictationContext } from '../../ask/dictation'
 import { MicButton } from '../../ask/MicButton'
+import { AttachButton, filesOf, PendingFiles, SentFiles, usePendingFiles } from './ChatAttachments'
 import { useAssistant, type ChatTitle, type ApprovalCardData, type ApprovalRef, type AssistantTurn, type DraftCard, type UserTurn } from './useAssistant'
 import { api } from '../../../api/client'
 import { focusOpen } from '../../../lib/live/editors'
@@ -447,7 +448,10 @@ function UserBubble({ turn, busy, onEdit, found }: { turn: UserTurn; busy: boole
           </button>
         )}
       </span>
-      <div className="chat-msg user bidi" dir="auto">{turn.text}</div>
+      <div className="chat-user-body">
+        {turn.attachments?.length ? <SentFiles files={turn.attachments} /> : null}
+        {turn.text ? <div className="chat-msg user bidi" dir="auto">{turn.text}</div> : null}
+      </div>
       <span className="chat-user-pic">
         <MyAvatar onlyPicture />
       </span>
@@ -496,6 +500,9 @@ function AssistantChat({ conversationId }: { conversationId: number | null }) {
     if (id === sessionId) setTitle({ text, renamed })
   }, [sessionId, setTitle])
   const [input, setInput] = useState('')
+  // ACT agent.chat_attach @web.panel: files from the paperclip, a paste or a drop, sent with the next message.
+  const pending = usePendingFiles()
+  const [dropping, setDropping] = useState(false)
   // Chats (ChatList.tsx): the list of earlier chats takes the panel; the chat stays mounted behind it.
   const [listOpen, setListOpen] = useState(false)
   const closeList = useCallback(() => setListOpen(false), [])
@@ -713,7 +720,7 @@ function AssistantChat({ conversationId }: { conversationId: number | null }) {
   const submitting = useRef(false)
   const submit = async () => {
     const typed = input
-    if (!typed.trim() || busy || submitting.current) return
+    if ((!typed.trim() && !pending.ready) || pending.uploading || busy || submitting.current) return
     submitting.current = true
     let list: ChatCommand[] | undefined
     try {
@@ -721,14 +728,14 @@ function AssistantChat({ conversationId }: { conversationId: number | null }) {
     } finally {
       submitting.current = false
     }
-    const command = parseCommand(typed, list)
+    const command = typed.trim() ? parseCommand(typed, list) : null
     if (command && list && runCommand(command.cmd, command.text, typed.trim(), list)) {
       setInput('')
       if (inputRef.current) inputRef.current.style.height = 'auto'
       return
     }
     follow.jump()
-    send(typed)
+    send(typed, pending.take())
     setInput('')
     if (inputRef.current) inputRef.current.style.height = 'auto'
   }
@@ -744,7 +751,25 @@ function AssistantChat({ conversationId }: { conversationId: number | null }) {
         <ChatHeaderTitle id={sessionId} title={title} onRenamed={onRenamed} />
       </HeaderTitle>
     )}
-    <div className="chat" style={listOpen ? { display: 'none' } : undefined}>
+    <div className={`chat${dropping ? ' chat-dropping' : ''}`} style={listOpen ? { display: 'none' } : undefined}
+      onDragOver={(e) => {
+        if (!Array.from(e.dataTransfer.types).includes('Files')) return
+        e.preventDefault()
+        e.dataTransfer.dropEffect = 'copy'
+        setDropping(true)
+      }}
+      onDragLeave={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setDropping(false)
+      }}
+      onDrop={(e) => {
+        const files = filesOf(e.dataTransfer)
+        setDropping(false)
+        if (!files.length) return
+        e.preventDefault()
+        pending.add(files)
+      }}
+      data-drop-label={tr('rail.assistant.attachments.dropHere')}
+    >
       <div className="chat-log" ref={logRef} aria-live="polite" aria-busy={busy}>
         {turns.length === 0 && (
           <div>
@@ -830,6 +855,7 @@ function AssistantChat({ conversationId }: { conversationId: number | null }) {
           ))}
         </div>
       )}
+      <PendingFiles items={pending.items} onRemove={pending.remove} />
       <form
         className="chat-input"
         onSubmit={(e) => {
@@ -854,6 +880,13 @@ function AssistantChat({ conversationId }: { conversationId: number | null }) {
             e.target.style.height = `${Math.min(160, e.target.scrollHeight)}px`
           }}
           onSelect={picker.sync}
+          onPaste={(e) => {
+            // A pasted screenshot or copied file is attached; pasted text stays text.
+            const files = filesOf(e.clipboardData)
+            if (!files.length) return
+            if (!e.clipboardData.getData('text/plain')) e.preventDefault()
+            pending.add(files)
+          }}
           onKeyDown={(e) => {
             if (picker.onKeyDown(e)) return
             // Ctrl + . closes the panel from the message box too (the shortcut that opened it).
@@ -868,6 +901,7 @@ function AssistantChat({ conversationId }: { conversationId: number | null }) {
             }
           }}
         />
+        <AttachButton disabled={busy} onFiles={pending.add} />
         {/* ACT agent.dictate @web.panel: the words land in the box, to read before sending. */}
         <MicButton disabled={busy} context={dictationContext(sessionId, about, conversationId !== null || localOnly)} onText={(t) => {
           setInput((v) => appendWords(v, t))
@@ -884,7 +918,7 @@ function AssistantChat({ conversationId }: { conversationId: number | null }) {
             <Square />
           </button>
         ) : (
-          <button type="submit" className="chat-send" aria-label={tr('common.send')} data-tip={tr('rail.assistant.assistantPanel.sendEnter')} disabled={!input.trim()}>
+          <button type="submit" className="chat-send" aria-label={tr('common.send')} data-tip={tr('rail.assistant.assistantPanel.sendEnter')} disabled={(!input.trim() && !pending.ready) || pending.uploading}>
             <ArrowUp />
           </button>
         )}

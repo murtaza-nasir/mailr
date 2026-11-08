@@ -219,6 +219,7 @@
     <string name="notes_keep_the_items">Keep the items</string>
     <string name="notes_delete_them_too">Delete them too</string>
     <string name="notes_check">Check</string>
+    <string name="notes_uncheck">Uncheck</string>
     <string name="notes_move_to_section">Move to section</string>
     <string name="notes_edit_quantity">Edit quantity</string>
     <string name="notes_edit">Edit</string>

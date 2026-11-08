@@ -75,6 +75,9 @@ DEFAULT_SETTINGS = {
     "brief_position": "top",
     # Short reply suggestions under a personal email (intel/routes.py reply_suggestions).
     "reply_suggestions": True,
+    # Images reach Ambrose's model (get_attachment, images attached to a chat message) when the
+    # model can view images, this is on and the outbound policy allows it (agent/vision.py).
+    "assistant_images": True,
     # VIP senders (lower-case addresses): their mail is always important, so it notifies at once
     # (intel/tasks.py); `is:vip` finds it.
     "vip": [],
@@ -787,7 +790,8 @@ async def patch_settings(body: dict, p: Principal = Depends(current), db: AsyncS
         if not isinstance(v, dict) or not isinstance(v.get("keep_completed_copy", True), bool):
             raise HTTPException(400, "tasks takes {\"keep_completed_copy\": true or false}")  # i18n: internal
         body = {**body, "tasks": {k: v[k] for k in ("keep_completed_copy",) if k in v}}
-    for k in ("auto_label", "advanced_settings", "meeting_prep_digest", "account_folders", "account_folders_hint_dismissed"):
+    for k in ("auto_label", "advanced_settings", "meeting_prep_digest", "account_folders", "account_folders_hint_dismissed",
+              "assistant_images"):
         if k in body and not isinstance(body[k], bool):
             raise HTTPException(400, f"{k} must be true or false")  # i18n: internal
     if "auto_label_precision" in body:

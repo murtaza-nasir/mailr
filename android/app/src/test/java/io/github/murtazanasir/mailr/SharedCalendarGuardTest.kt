@@ -74,6 +74,18 @@ class SharedCalendarGuardTest {
         assertEquals(listOf("Family"), viaGroup.shared?.via)
     }
 
+    /** Server calendar/groups.py: a group calendar shared with the group as free/busy only (Stalwart 1.x). */
+    @Test fun a_free_busy_only_group_calendar_is_named() {
+        val fb = coll("""{"url":"c7","name":"Rota","calendar_id":17,"events":true,"read_only":true,
+            "shared":{"kind":"group","group":"family","access":"freebusy","editor":false,"group_calendar_id":5}}""")
+        val editor = coll("""{"url":"c8","name":"Rota","calendar_id":18,"events":true,"read_only":false,
+            "shared":{"kind":"group","group":"family","access":"write","editor":true,"group_calendar_id":5}}""")
+        assertEquals("Shared with the family group · free/busy only", sharedLabel(fb))
+        assertEquals("Shared with the family group", sharedLabel(editor))
+        assertFalse(fb.canRenameOrDelete)
+        assertEquals("Only an administrator can rename or delete a group calendar. You can hide it.", fb.ownerNote)
+    }
+
     @Test fun the_repository_refuses_rename_and_delete_of_a_shared_calendar() = runBlocking {
         val g = coll(group)
         val before = h.requests.size

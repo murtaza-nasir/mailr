@@ -184,18 +184,33 @@ function Field({ f }: { f: DisplayField }) {
   )
 }
 
-export function ApprovalDisplay({ d }: { d: Display }) {
+/** The display. An approval card passes `fields` (the ones not on its facts line) and
+ *  `reason={false}` (its reason has a line of its own). */
+export function ApprovalDisplay({ d, fields = d.fields, reason = true }: { d: Display; fields?: DisplayField[]; reason?: boolean }) {
+  const summary = d.summary ? msgText(d.summary_msg, d.summary) : ''
+  if (!summary && !(reason && d.reason) && !fields.length) return null
   return (
     <div className="pv">
-      {d.summary && <p className="pv-summary">{msgText(d.summary_msg, d.summary)}</p>}
-      {d.reason && <p className="pv-reason">{msgText(d.reason_msg, d.reason)}</p>}
-      {d.fields.length > 0 && (
+      {summary && <p className="pv-summary">{summary}</p>}
+      {reason && d.reason && <p className="pv-reason">{msgText(d.reason_msg, d.reason)}</p>}
+      {fields.length > 0 && (
         <div className="pv-fields">
-          {d.fields.map((f, i) => (
+          {fields.map((f, i) => (
             <Field key={i} f={f} />
           ))}
         </div>
       )}
     </div>
+  )
+}
+
+/** One field on the facts line: "Due Mon 30 Nov, 09:00", the label quieter than the value. */
+export function Fact({ f }: { f: DisplayField }) {
+  return (
+    <span className="ap-fact">
+      {f.label && <span className="ap-fact-label">{msgText(f.label_msg, f.label)}</span>}
+      {f.label && ' '}
+      <Value v={f.value} />
+    </span>
   )
 }

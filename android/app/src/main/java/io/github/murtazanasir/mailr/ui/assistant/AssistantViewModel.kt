@@ -67,6 +67,8 @@ data class ChatTurn(
     val messageId: Long? = null,
     /** The bulk reviews this turn started (review_mail): a progress line each, then its review card. */
     val reviews: List<Long> = emptyList(),
+    /** A user turn's files and images (agent.chat_attach), shown with the message. */
+    val attachments: List<io.github.murtazanasir.mailr.data.agent.ChatFile> = emptyList(),
 ) {
     val steps: List<Step> get() = ChatTimeline.steps(items)
     /** The reply's text (every segment, in order) for Copy and the user role's message. */
@@ -109,7 +111,24 @@ data class AssistantState(
     val filtersMade: Map<String, Long?> = emptyMap(),
     /** "Always …" taps whose filter is on its way. */
     val filtersBusy: Set<String> = emptySet(),
-)
+    /** Files and images for the next message, uploading or ready (agent.chat_attach), shown above the box. */
+    val pending: List<PendingFile> = emptyList(),
+) {
+    /** The ready files, and whether Send may go (none still uploading). */
+    val readyFiles: List<io.github.murtazanasir.mailr.data.agent.ChatFile> get() = pending.mapNotNull { it.file }
+    val uploading: Boolean get() = pending.any { it.file == null }
+}
+
+/** A file picked for the next message: [file] is null while it uploads. */
+data class PendingFile(val key: String, val name: String, val size: Long = 0,
+                       val file: io.github.murtazanasir.mailr.data.agent.ChatFile? = null)
+
+/** The name a content provider gives [uri], or "attachment". */
+internal fun displayName(resolver: android.content.ContentResolver, uri: android.net.Uri): String = catching {
+    resolver.query(uri, arrayOf(android.provider.OpenableColumns.DISPLAY_NAME), null, null, null)?.use { c ->
+        if (c.moveToFirst()) c.getString(0) else null
+    }
+}.getOrNull() ?: uri.lastPathSegment?.substringAfterLast('/') ?: "attachment"
 
 /**
  * [saved]: the open chat's id survives the app's process being stopped (as the web keeps it for the
@@ -307,7 +326,7 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
     /** Sends the message box's words; dictation still running stops without adding more. */
     fun sendComposer() {
         val c = composer.ui.value
-        if (c.text.isBlank() || _state.value.busy || c.transcribing) return
+        if ((c.text.isBlank() && _state.value.readyFiles.isEmpty()) || _state.value.busy || c.transcribing) return
         if (c.listening) composer.cancelListening()
         send(c.text)
         composer.clear()
@@ -358,7 +377,8 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
      * chat starts about the item; a [text] that is not blank is sent at once, so the reply (and any
      * approval it needs) shows here. A conversation goes as the chat's conversation context.
      */
-    fun ask(about: AskAbout?, text: String?) {
+    fun ask(about: AskAbout?, text: String?, files: List<io.github.murtazanasir.mailr.data.agent.ChatFile> = emptyList(),
+            sendNow: Boolean = true) {
         if (_state.value.busy) stop()
         keepSession(null)
         _state.update {
@@ -366,16 +386,61 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
                 is AskAbout.Conversation -> AssistantState(contextConversation = about.id, contextTitle = about.title.ifBlank { null })
                 null -> AssistantState()
                 else -> AssistantState(about = about)
-            }.copy(blocked = it.blocked, commands = it.commands, skills = it.skills)
+            }.copy(blocked = it.blocked, commands = it.commands, skills = it.skills,
+                pending = files.map { f -> PendingFile(f.id, f.name, f.size, f) })
         }
-        if (!text.isNullOrBlank()) send(text)
+        // ACT agent.chat_attach @android.share: shared files wait above the box, with any shared words in it, for Send.
+        if (files.isNotEmpty() || !sendNow) {
+            if (!text.isNullOrBlank()) composer.setText(text)
+        } else if (!text.isNullOrBlank()) send(text)
+    }
+
+    /**
+     * ACT agent.chat_attach @android.assistant: files from the picker, uploaded at once (the server reads
+     * them and says what it cannot); each shows above the message box while it uploads. At most
+     * [io.github.murtazanasir.mailr.data.agent.AgentClient.MAX_FILES] per message.
+     */
+    fun attach(resolver: android.content.ContentResolver, uris: List<android.net.Uri>) {
+        val room = io.github.murtazanasir.mailr.data.agent.AgentClient.MAX_FILES - _state.value.pending.size
+        if (uris.size > room) _notices.trySend(AppText.plural(R.plurals.asst_attach_limit, io.github.murtazanasir.mailr.data.agent.AgentClient.MAX_FILES, io.github.murtazanasir.mailr.data.agent.AgentClient.MAX_FILES))
+        uris.take(maxOf(0, room)).forEach { uri -> upload(displayName(resolver, uri)) { g.agent.uploadAttachment(resolver, uri) } }
+    }
+
+    /** One upload shown as a pending file; a failure removes it and says why (the server's words). */
+    internal fun upload(name: String, block: suspend () -> io.github.murtazanasir.mailr.data.agent.ChatFile) {
+        val key = java.util.UUID.randomUUID().toString()
+        _state.update { it.copy(pending = it.pending + PendingFile(key, name)) }
+        viewModelScope.launch {
+            try {
+                val f = block()
+                var kept = false
+                _state.update { s ->
+                    kept = s.pending.any { it.key == key }
+                    s.copy(pending = s.pending.map { if (it.key == key) it.copy(name = f.name.ifBlank { name }, size = f.size, file = f) else it })
+                }
+                // Removed while it uploaded: the server's copy goes too.
+                if (!kept) g.scope.launch { catching { g.agent.deleteAttachment(f.id) } }
+            } catch (e: kotlinx.coroutines.CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                _state.update { s -> s.copy(pending = s.pending.filterNot { it.key == key }) }
+                _notices.trySend(AppText.get(R.string.asst_attach_failed, name, e.userMessage()))
+            }
+        }
+    }
+
+    /** A pending file's ✕: it leaves the message, and an uploaded one is deleted at the server. */
+    fun removeAttachment(key: String) {
+        val p = _state.value.pending.firstOrNull { it.key == key } ?: return
+        _state.update { s -> s.copy(pending = s.pending.filterNot { it.key == key }) }
+        p.file?.let { f -> g.scope.launch { catching { g.agent.deleteAttachment(f.id) } } }
     }
 
     fun newChat() {
         stop()
         keepSession(null)
         _state.update { AssistantState(contextConversation = it.contextConversation, contextTitle = it.contextTitle, about = it.about,
-            blocked = it.blocked, name = it.name, commands = it.commands, skills = it.skills) }
+            blocked = it.blocked, name = it.name, commands = it.commands, skills = it.skills, pending = it.pending) }
     }
 
     /**
@@ -418,11 +483,14 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
     fun setLocalOnly(on: Boolean) = _state.update { it.copy(localOnly = on) }
 
     fun send(text: String) {
-        if (text.isBlank() || _state.value.busy || _state.value.blocked != null) return
+        val st = _state.value
+        val files = st.readyFiles
+        if ((text.isBlank() && files.isEmpty()) || st.busy || st.blocked != null || st.uploading) return
         val typed = text.trim()
-        ChatCommands.parse(typed, _state.value.commands)?.let { (cmd, arg) -> if (runCommand(cmd, arg, typed)) return }
-        _state.update { it.copy(turns = it.turns + ChatTurn("user", text.trim()) + ChatTurn("assistant", streaming = true), busy = true, found = null) }
-        run(text.trim(), null)
+        if (files.isEmpty()) ChatCommands.parse(typed, st.commands)?.let { (cmd, arg) -> if (runCommand(cmd, arg, typed)) return }
+        _state.update { it.copy(turns = it.turns + ChatTurn("user", typed, attachments = files) + ChatTurn("assistant", streaming = true),
+            busy = true, found = null, pending = emptyList()) }
+        run(typed, null, attachments = files.map { it.id })
     }
 
     /**
@@ -734,7 +802,7 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
      * app re-attaches and carries on from the last event it had ([recover]), or reloads the finished
      * turn from the chat. The web does the same (useAssistant.ts recover).
      */
-    private fun run(text: String, resume: Long?, rerunFrom: Long? = null) {
+    private fun run(text: String, resume: Long?, rerunFrom: Long? = null, attachments: List<String> = emptyList()) {
         // The stream may break before the server names a new chat: the chat this turn made is found by its time.
         val since = if (_state.value.sessionId == null) AppClock.millis() else null
         job = viewModelScope.launch {
@@ -743,7 +811,8 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
                 var finished = false
                 var conflict = false
                 val local = _state.value.localOnly && resume == null && rerunFrom == null
-                g.agent.turn(text, _state.value.sessionId, _state.value.contextConversation, resume, _state.value.about, rerunFrom, local).collect { (n, ev) ->
+                g.agent.turn(text, _state.value.sessionId, _state.value.contextConversation, resume, _state.value.about, rerunFrom, local,
+                    attachments).collect { (n, ev) ->
                     if (n != null) seq = maxOf(seq, n)
                     if (ev is AgentEvent.Error && ev.status == 409 && _state.value.sessionId != null) {
                         conflict = true
@@ -886,7 +955,8 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
                     _state.update { it.copy(turns = turns.take(lastUser + 1) + ChatTurn("assistant", streaming = true)) }
                 } else messageId = null
             }
-            if (sid != null && messageId != null) run("", null, rerunFrom = messageId) else run(user.text, null)
+            if (sid != null && messageId != null) run("", null, rerunFrom = messageId)
+            else run(user.text, null, attachments = user.attachments.map { it.id })
         }
     }
 

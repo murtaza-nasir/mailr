@@ -9,7 +9,7 @@ import re
 import time
 from typing import Annotated, Any
 
-from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from fastapi import APIRouter, Depends, File, HTTPException, Query, Request, UploadFile
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from sqlalchemy import select, update
@@ -58,6 +58,8 @@ class ChatIn(BaseModel):
     # `/local` (agent/commands.py): this chat stays on the local model from this turn on (the
     # session becomes sensitive, which is sticky).
     local_only: bool = False
+    # Files and images uploaded with POST /agent/attachments, sent with this message (agent/chat_files.py).
+    attachments: list[str] | None = Field(None, max_length=5)
 
 
 class _Run:
@@ -171,7 +173,7 @@ async def chat(body: ChatIn, request: Request, p: Principal = Depends(scope("rea
                 async for ev in run_chat(sdb, p, text or "", session_id=body.session_id, context=body.context,
                                          resume=body.resume_approval_id, stop=run.stop,
                                          rerun_from=body.rerun_from, edit_from=body.edit_from,
-                                         sensitive=body.local_only):
+                                         sensitive=body.local_only, attachments=body.attachments):
                     if ev.get("type") == "session" and ev.get("session_id"):
                         run.session_id = ev["session_id"]
                         _RUNS[run.session_id] = run
@@ -206,6 +208,83 @@ async def chat_stream(session_id: str, after: int = 0, p: Principal = Depends(sc
     if run is None or not _owns(p, run.user_id, run.token_id):
         raise ApiError(404, "assistant.no_running_turn")
     return _sse(run, after)
+
+
+# ACT agent.chat_attach @api
+@router.post("/agent/attachments")
+async def upload_attachment(file: UploadFile = File(...), p: Principal = Depends(scope("read")),
+                            db: AsyncSession = Depends(get_db)):
+    """One file or image for a message to the assistant: checked and read now, sent later with
+    POST /agent/chat {"attachments": [id, …]}. Images (PNG, JPEG, GIF, WebP), PDFs, text files,
+    Word, Excel, PowerPoint, OpenDocument and RTF files, up to 15 MB each."""
+    # agent/chat_files.py
+    from mailr.agent import chat_files
+    from mailr.core.access import require_feature
+
+    await require_feature(db, p.user, "assistant")
+    data = await file.read(chat_files.MAX_BYTES + 1)
+    row = await chat_files.upload(db, p.user_id, file.filename, file.content_type, data)
+    await audit(db, p, "agent.attachment.upload", row.id, {"type": row.content_type, "size": row.size, "kind": row.kind})
+    await db.commit()
+    return chat_files.out(row)
+
+
+async def _attachment(db: AsyncSession, p: Principal, aid: str):
+    from mailr.models import ChatAttachment
+
+    a = await db.get(ChatAttachment, aid) if re.fullmatch(r"[0-9a-f]{32}", aid or "") else None
+    if a is None or a.user_id != p.user_id:
+        raise ApiError(404, "assistant.attachment_not_found")
+    if a.session_id is not None:
+        s = await db.get(ChatSession, a.session_id)
+        if s is None or not _owns(p, s.user_id, s.token_id):
+            raise ApiError(404, "assistant.attachment_not_found")
+    return a
+
+
+@router.get("/agent/attachments/{aid}")
+async def get_attachment_file(aid: str, p: Principal = Depends(scope("read")), db: AsyncSession = Depends(get_db)):
+    """The file as it was attached, as a download."""
+    from urllib.parse import quote
+
+    from fastapi.responses import Response
+
+    from mailr.models import ChatAttachment
+
+    a = await _attachment(db, p, aid)
+    data = (await db.execute(select(ChatAttachment.data).where(ChatAttachment.id == a.id))).scalar_one()
+    return Response(data, media_type="application/octet-stream", headers={
+        "Content-Disposition": f"attachment; filename*=UTF-8''{quote(a.filename)}",
+        "Cache-Control": "private, max-age=86400", "X-Content-Type-Options": "nosniff",
+        "Content-Security-Policy": "sandbox; default-src 'none'"})
+
+
+@router.get("/agent/attachments/{aid}/thumb")
+async def get_attachment_thumb(aid: str, p: Principal = Depends(scope("read")), db: AsyncSession = Depends(get_db)):
+    """A small copy of an attached image (or of a PDF's first page), without metadata."""
+    from fastapi.responses import Response
+
+    from mailr.models import ChatAttachment
+
+    a = await _attachment(db, p, aid)
+    thumb = (await db.execute(select(ChatAttachment.thumb).where(ChatAttachment.id == a.id))).scalar_one()
+    if not thumb or a.thumb_type not in ("image/jpeg", "image/png"):
+        raise ApiError(404, "assistant.attachment_not_found")
+    return Response(thumb, media_type=a.thumb_type, headers={
+        "Cache-Control": "private, max-age=86400", "X-Content-Type-Options": "nosniff",
+        "Content-Security-Policy": "sandbox; default-src 'none'"})
+
+
+# ACT agent.chat_attach (a chip's × removes an upload that was not sent)
+@router.delete("/agent/attachments/{aid}")
+async def delete_attachment(aid: str, p: Principal = Depends(scope("read")), db: AsyncSession = Depends(get_db)):
+    """Remove an upload that was not sent yet (sent ones go with their chat)."""
+    a = await _attachment(db, p, aid)
+    if a.message_id is not None:
+        raise ApiError(400, "assistant.attachment_sent")
+    await db.delete(a)
+    await db.commit()
+    return {"ok": True}
 
 
 @router.post("/agent/chat/{session_id}/stop")
@@ -526,7 +605,9 @@ def timeline(rows: list[ChatMessage], cards: dict[int, dict[str, Any]] | None = 
             if not note:
                 turns.append({"role": "user", "id": r.id, "content": r.content, "citations": [], "steps": [],
                               "created_at": r.created_at.isoformat(), "status": r.status,
-                              "skills": (r.meta or {}).get("skills") or []})
+                              "skills": (r.meta or {}).get("skills") or [],
+                              # Files and images sent with the message (agent/chat_files.out).
+                              "attachments": (r.meta or {}).get("attachments") or []})
             cur = {"role": "assistant", "user_message_id": None if note else r.id, "content": "", "citations": [],
                    "steps": [], "timeline": [], "status": r.status or "done",
                    "stop_reason": (r.meta or {}).get("stop_reason"), "resume": note,

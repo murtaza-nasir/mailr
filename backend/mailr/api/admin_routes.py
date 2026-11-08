@@ -292,9 +292,11 @@ class EndpointIn(BaseModel):
 
 
 def ep_out(e: ModelEndpoint) -> dict[str, Any]:
+    from mailr.intel import modelcaps
+
     return {"id": e.id, "name": e.name, "base_url": e.base_url, "has_api_key": bool(e.api_key_enc),
             "locality": e.locality, "adapter": e.adapter, "models": e.models, "defaults": e.defaults,
-            "enabled": e.enabled, "from_env": bool(e.from_env)}
+            "enabled": e.enabled, "from_env": bool(e.from_env), "capabilities": modelcaps.describe(e)}
 
 
 async def _locality_check(e: ModelEndpoint) -> dict[str, Any] | None:
@@ -366,6 +368,9 @@ async def add_endpoint(body: EndpointIn, p: Principal = Depends(admin), db: Asyn
     await db.flush()
     if body.api_key:  # sealed for this row, so it needs the id
         e.api_key_enc = encrypt_instance(body.api_key, context=model_endpoint_context(e.id))
+    from mailr.intel import modelcaps
+
+    await modelcaps.refresh(e)  # can its models view images (Admin → Models shows it)
     await audit(db, p, "admin.model_endpoint.add", str(e.id), {"base_url": e.base_url, "locality": e.locality},
                 always=True)
     await db.commit()
@@ -384,6 +389,9 @@ async def patch_endpoint(eid: int, body: EndpointIn, p: Principal = Depends(admi
     if not e.from_env:
         await _check_local(new_base, body.locality)
     before = {"base_url": e.base_url, "locality": e.locality}
+    # Another server, other models or another key: what the models can do is asked again.
+    redetect = (new_base != e.base_url.rstrip("/") or list(body.models) != list(e.models or [])
+                or body.api_key is not None or body.adapter != e.adapter)
     if new_base != e.base_url.rstrip("/"):
         await _forget_embed_checks(db, e.id)  # another server: its models are checked again
         if body.api_key is None:
@@ -396,8 +404,55 @@ async def patch_endpoint(eid: int, body: EndpointIn, p: Principal = Depends(admi
     if body.api_key is not None:
         e.api_key_enc = (encrypt_instance(body.api_key, context=model_endpoint_context(e.id))
                          if body.api_key else None)
+    if redetect:
+        from mailr.intel import modelcaps
+
+        await modelcaps.refresh(e)
     await audit(db, p, "admin.model_endpoint.update", str(e.id), {"before": before,
                 "after": {"base_url": e.base_url, "locality": e.locality}}, always=True)
+    await db.commit()
+    return ep_out(e)
+
+
+# ACT settings.model_capabilities @api
+@router.post("/models/{eid}/detect")
+async def detect_capabilities(eid: int, p: Principal = Depends(admin), db: AsyncSession = Depends(get_db)):
+    """Admin → Models → Detect: ask the endpoint's server again which of its models can view images.
+    An admin's override stays."""
+    # intel/modelcaps.py
+    e = await db.get(ModelEndpoint, eid)
+    if not e:
+        raise ApiError(404, "admin.endpoint_not_found")
+    await _safe_base(e.base_url)
+    from mailr.intel import modelcaps
+
+    found = await modelcaps.refresh(e)
+    await audit(db, p, "admin.model_endpoint.detect", str(e.id), {"found": found})
+    await db.commit()
+    return ep_out(e)
+
+
+class CapabilityIn(BaseModel):
+    model: str = Field(..., min_length=1, max_length=200)
+    # True or False: the admin's override; None: back to what detection found.
+    vision: bool | None = None
+
+
+@router.put("/models/{eid}/capabilities")
+async def set_capabilities(eid: int, body: CapabilityIn, p: Principal = Depends(admin),
+                           db: AsyncSession = Depends(get_db)):
+    """Admin → Models → "Can view images": the admin's choice for one model, or back to Automatic."""
+    e = await db.get(ModelEndpoint, eid)
+    if not e:
+        raise ApiError(404, "admin.endpoint_not_found")
+    if body.model not in (e.models or []) and body.model not in (e.defaults or {}).values():
+        raise ApiError(400, "models.model_not_listed")
+    from mailr.intel import modelcaps
+
+    before = modelcaps.entry(e, body.model).get("vision_manual")
+    modelcaps.set_manual(e, body.model, body.vision)
+    await audit(db, p, "admin.model_capabilities", str(e.id),
+                {"model": body.model, "before": before, "after": body.vision}, always=True)
     await db.commit()
     return ep_out(e)
 

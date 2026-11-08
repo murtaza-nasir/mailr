@@ -652,6 +652,7 @@
     <string name="cal_shared_by_edit_through">Доступно от %1$s · изменение (через %2$s)</string>
     <string name="cal_shared_by_share_through">Доступно от %1$s · изменение и доступ (через %2$s)</string>
     <string name="cal_shared_with_group">Общий доступ с группой %s</string>
+    <string name="cal_shared_with_group_free_busy">Общий доступ с группой %s · только занятость</string>
     <string name="cal_shared_group_fallback">группа</string>
     <string name="cal_live_when_all_day">%1$s – %2$s, весь день</string>
     <string name="cal_edit">Изменить</string>

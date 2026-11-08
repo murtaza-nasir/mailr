@@ -90,6 +90,8 @@ export interface Settings {
    *  Changed with PUT /screener/settings, never PATCH /me/settings. */
   screener?: boolean
   reply_suggestions?: boolean
+  /** Images reach Ambrose's model when it can view them (Settings → Ambrose → Models; backend agent/vision.py). On by default. */
+  assistant_images?: boolean
   /** VIP senders: always important; desktop notifications can be VIP-only. */
   vip?: string[]
   /** Archive also removes the label of the list it was done from (e.g. a "Later" tab). */
@@ -588,6 +590,15 @@ export interface ModelEndpoint {
   from_env?: boolean
   /** A local endpoint's connect-time check, run now (core/outbound.py); null for a hosted one. */
   locality_check?: { ok: boolean; error: string | null } | null
+  /** Per model: can it view images, and where that comes from (backend intel/modelcaps.py). */
+  capabilities?: Record<string, ModelCapability>
+}
+
+export interface ModelCapability {
+  vision: boolean
+  /** manual: the admin's choice; detected: the server said; unknown: it did not say (counts as no). */
+  source: 'manual' | 'detected' | 'unknown'
+  detected: boolean | null
 }
 
 export interface SessionInfo {

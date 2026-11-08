@@ -245,18 +245,26 @@ def _requester(pa: PendingAction) -> str:
 # ACT approval.approve_many @api
 @router.post("/approvals/decide-many")
 async def decide_many(body: DecideManyIn, p: Principal = Depends(current), db: AsyncSession = Depends(get_db)):
-    """"Allow all n from this chat": decide several waiting requests from one requester, each one
-    as if its own card had been tapped once, with "Allow once". No rule is stored, so
-    a hard rule that asks every time (the first message to a new address) is decided only for the
-    requests listed. A request already decided is skipped and reported."""
+    """"Allow all" / "Deny all" of a group of cards: decide several waiting requests from one
+    requester, each one as if its own card had been tapped once ("Allow once" or "Deny"), with the
+    same checks. No rule is stored, so a hard rule that asks every time (the first message to a new
+    address) is decided only for the requests listed. A request already decided is skipped and
+    reported with its status; an id that names no request of the user's is reported as
+    "not_found"."""
     _session_only(p)
     found: list[PendingAction] = []
+    skipped: list[dict[str, Any]] = []
     for aid in dict.fromkeys(str(i) for i in body.ids):
-        found.append(await _approval(db, p, aid))
+        try:
+            found.append(await _approval(db, p, aid))
+        except HTTPException as e:
+            # Gone, or never the user's: reported for this id, the others still decided.
+            if e.status_code != 404:
+                raise
+            skipped.append({"id": aid, "status": "not_found"})
     if len({_requester(pa) for pa in found}) > 1:
         raise ApiError(400, "permissions.different_sources")
     decided: list[PendingAction] = []
-    skipped: list[dict[str, Any]] = []
     for pa in found:
         try:
             decided.append((await permissions.decide_full(db, p.user, pa.id, body.decision, "once", announce=False)).pa)

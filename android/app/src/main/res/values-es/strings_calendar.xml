@@ -590,6 +590,7 @@
     <string name="cal_shared_by_edit_through">Compartido por %1$s · puede editar (a través de %2$s)</string>
     <string name="cal_shared_by_share_through">Compartido por %1$s · puede editar y compartir (a través de %2$s)</string>
     <string name="cal_shared_with_group">Compartido con el grupo %s</string>
+    <string name="cal_shared_with_group_free_busy">Compartido con el grupo %s · solo disponibilidad</string>
     <string name="cal_shared_group_fallback">grupo</string>
     <string name="cal_live_when_all_day">%1$s – %2$s, todo el día</string>
     <string name="cal_edit">Editar</string>

@@ -114,7 +114,7 @@ IMAGE_KINDS = ["images.prefetch"]
 # A copy of past sent mail to a provider (connectors/sentcopy.py) runs there too: it may take hours.
 MAINTENANCE_KINDS = ["export.user", "export.calendars", "export.notes", "export.group_calendars",
                      "intel.train_all", "people.rescore", "contacts.suggest", "contacts.signatures",
-                     "kb.extract", "db.dump", "sent.backfill", "mail.tally_check"]
+                     "kb.extract", "db.dump", "sent.backfill", "mail.tally_check", "models.detect_capabilities"]
 # Triage of imported mail and the embedding catch-up work through a mailbox a batch at a time,
 # for hours after a big import or a model change: a lane of their own, so live mail, sends,
 # reminders and snooze wake-ups never wait behind them.

@@ -55,6 +55,41 @@ Without a test, the row shows the endpoint's last success and last error from re
 visible before anyone reports missing features.
 <!-- covers: settings.model_test -->
 
+## Models that can view images
+
+Some models can read images as well as text. Ambrose shows such a model the photos and scans it opens in
+mail, and the images people attach in a chat. Other models are told only an image's size.
+
+The **Can view images** column of the endpoint list shows each model's setting:
+
+- **Automatic: yes** or **Automatic: no**: the model server said so when the endpoint was added or saved,
+  when **Detect** was clicked, or in the automatic check.
+- **Automatic: not known (no)**: the server did not say. The model is treated as text-only.
+- **Yes** or **No**: your own choice for that model. It stays when **Detect** runs again.
+
+Mailr asks the server in three ways, and takes the first answer:
+
+| Server | What is read |
+|---|---|
+| OpenAI-compatible, including OpenRouter and recent llama.cpp | `GET /models`: a model's `architecture.input_modalities` holding `image`, or its `capabilities` holding `vision` or `multimodal` |
+| llama.cpp | `GET /props`: `modalities.vision` |
+| Ollama | `POST /api/show`: `capabilities` holding `vision` |
+
+These requests carry no mail. A hosted provider that answers none of them is set by hand.
+
+Endpoints are also checked automatically, so existing endpoints need no **Detect**: each time the
+worker starts, and once a day, the servers of models that have never been checked are asked, with a
+short time limit per endpoint. A server that does not answer is asked again at the next check. Your
+own **Yes** or **No** is never changed by a check. The worker's log names each endpoint and what its
+server said.
+
+Images follow the same local-only rule as text: an image from a local-only account reaches only a local
+model, and only when that local model can view images. Each person can also turn images off for their own
+chats, under **Settings → Ambrose → Models → Let Ambrose see images**. See
+[Images and files](../user-guide/assistant.md#images-and-files).
+
+<!-- covers: settings.model_capabilities -->
+
 ## Models per task
 
 **Models per task** holds, for each task, one server default and one model for local-only mail.

@@ -1,8 +1,8 @@
 // ACT-SURFACES: web.reader web.nav
 // "Waiting for you": one bell in every theme and on the phone, with the
 // sections Approvals, Not sent and Reminders. The badge counts what needs you. Several waiting
-// requests from one agent get "Allow all n", which lists each one first and then decides each one
-// once (approval.approve_many). A failed send has Retry and a link into the Outbox
+// requests of one kind from one agent are grouped, and the group's Allow all decides each listed
+// one once (approval.approve_many). A failed send has Retry and a link into the Outbox
 // (draft.retry_send, draft.outbox). Screenshots in five themes, light and dark, desktop and phone.
 import os from 'node:os'
 import path from 'node:path'
@@ -44,7 +44,7 @@ async function failedSend(page: Page) {
   return () => retried
 }
 
-test('approval.approve_many: Allow all lists each request from one agent, then approves each once', async ({ page, seeded }) => {
+test('approval.approve_many: three requests from one agent form a group; Allow all approves each once', async ({ page, seeded }) => {
   expect(seeded.email).toBeTruthy()
   const ids = await labelRequests(page.request, ['E2E Many A', 'E2E Many B', 'E2E Many C'])
   await page.goto('/mail/inbox')
@@ -53,19 +53,19 @@ test('approval.approve_many: Allow all lists each request from one agent, then a
   await expect(bell).toHaveAccessibleName(/Waiting for you: 5 approvals/)
   await bell.click()
   const approvals = page.getByRole('region', { name: 'Approvals' })
-  const all = approvals.getByTestId('allow-all')
-  // Only the agent with several waiting requests gets the line; the seeded ones are one per chat.
-  await expect(all).toHaveCount(1)
-  await expect(all).toContainText('3 requests from claude-code')
-  await all.getByRole('button', { name: 'Allow all 3' }).click()
-  const list = all.getByRole('group', { name: 'Allow all 3 from claude-code' })
-  await expect(list.getByRole('listitem')).toHaveCount(3)
-  await expect(list).toContainText('E2E Many A')
+  const group = approvals.getByTestId('approval-group')
+  // Only the agent with several waiting requests of one kind is grouped; the seeded ones are one per chat.
+  await expect(group).toHaveCount(1)
+  await expect(group.getByRole('heading', { name: 'claude-code wants to add 3 labels' })).toBeVisible()
+  // Each request is listed under the header: three cards, open.
+  await expect(group.locator('.approval')).toHaveCount(3)
+  await expect(group).toContainText('E2E Many A')
   for (const scheme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: scheme })
     await page.screenshot({ path: path.join(SHOTS, `allow-all-${scheme}.png`) })
   }
-  await list.getByRole('button', { name: 'Allow all 3' }).click()
+  await page.emulateMedia({ colorScheme: 'light' })
+  await group.getByRole('button', { name: 'Allow all', exact: true }).click()
   await expect(page.locator('.toast').filter({ hasText: 'Allowed 3 requests.' })).toBeVisible()
   for (const id of ids) expect(await status(page.request, id)).not.toBe('pending')
   // No standing rule: a new request from the same agent still asks.

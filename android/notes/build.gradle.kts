@@ -46,8 +46,8 @@ android {
         applicationId = MailrIds.NOTES
         minSdk = 29
         targetSdk = 36
-        versionCode = 31
-        versionName = "2.1.4"
+        versionCode = 32
+        versionName = "2.1.5"
         // AppAuth receives the OIDC redirect on this scheme (io.github.murtazanasir.mailr.notes:/oauth2redirect),
         // never the mailr app's, so the two apps never answer each other's sign-in.
         manifestPlaceholders["appAuthRedirectScheme"] = MailrIds.NOTES

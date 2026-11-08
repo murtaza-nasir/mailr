@@ -59,10 +59,3 @@ export function msgsText(ms: unknown, fallback: string): string {
 export function displayTitle(d: { title: string; title_msg?: unknown }): string {
   return msgText(d.title_msg, d.title)
 }
-
-/** A waiting card asks: "Send to Marco Silva?", "Delete “Weekly sync”?". The server's title
- * says what will happen; a decided card keeps it as a statement. */
-export function asQuestion(title: string): string {
-  const s = title.trim()
-  return !s || /[?!.…]$/.test(s) ? s : t('rail.assistant.approvalCard.question', { title: s })
-}

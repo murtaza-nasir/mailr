@@ -285,15 +285,16 @@ class HouseholdListsTest {
             })
         }
         compose.eventually("the tick is marked") { repo.ticks.value[milk.id]?.first == "Cleo" }
-        // In the closed fold: her name and the item on the fold's line.
-        waitText("✓ Cleo: milk")
+        // Milk was on the screen unchecked, so it stays in its place, ticked, with her name on its row.
+        waitText("✓ Cleo")
+        compose.waitForNode(hasTestTag("item-${milk.id}"))
         // The name shows for 4 s (NotesRepository.TICK_MS) of the graph's time, which moves only here.
         graphs.time.advanceBy(NotesRepository.TICK_MS - 1)
         compose.waitForIdle()
         assertEquals("Cleo", repo.ticks.value[milk.id]?.first)
         graphs.time.advanceBy(1)
         compose.eventually("the tick's label goes after 4 s") { milk.id !in repo.ticks.value }
-        compose.eventually("the fold's line no longer names her") { compose.onAllNodes(hasText("✓ Cleo", substring = true)).fetchSemanticsNodes().isEmpty() }
+        compose.eventually("the row no longer names her") { compose.onAllNodes(hasText("✓ Cleo", substring = true)).fetchSemanticsNodes().isEmpty() }
     }
 
     // ================================================================ lists offline

@@ -271,4 +271,17 @@
         <item quantity="many">%1$s изменено вами</item>
         <item quantity="other">%1$s изменено вами</item>
     </plurals>
+    <string name="asst_attach">Прикрепить файлы или изображения</string>
+    <string name="asst_attach_too_big">%1$s превышает %2$d МБ и не может быть прикреплен.</string>
+    <plurals name="asst_attach_limit">
+        <item quantity="one">В письме можно прикрепить не более %1$d файла.</item>
+        <item quantity="few">В письме можно прикрепить не более %1$d файлов.</item>
+        <item quantity="many">В письме можно прикрепить не более %1$d файлов.</item>
+        <item quantity="other">В письме можно прикрепить не более %1$d файлов.</item>
+    </plurals>
+    <string name="asst_attach_remove">Удалить %1$s</string>
+    <string name="asst_attach_uploading">Прикрепление…</string>
+    <string name="asst_attach_failed">Не удалось прикрепить %1$s: %2$s</string>
+    <string name="asst_attach_image">Изображение %1$s</string>
+    <string name="asst_attach_sharing">Прикрепление для %1$s…</string>
 </resources>

@@ -7,7 +7,11 @@ when the token is local_only). Every fetch is audited; extracted text is wrapped
 
 Images reach the caller as {"_content": [{"type": "image", "data": <base64>, "mimeType"}]}.
 The MCP server turns that into an MCP image block (mcp/server.py); REST callers read the base64.
-The built-in assistant's chat models have no vision flag, so it gets "image attached (w×h)".
+The built-in assistant's loop takes `_content` out of the result and shows the image to the model
+in a message of its own after the round's tool results (agent/loop.py), when the model may see it
+(agent/vision.py: the model can view images, the person's setting, the outbound policy for the
+message's class) and the question has not used its images yet; otherwise it gets "image attached
+(w×h)" with the reason.
 """
 
 from __future__ import annotations
@@ -103,7 +107,9 @@ async def list_attachments(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
       "as an image, upright, scaled so the long side is at most max_px, without metadata. PDFs come "
       "back as their text plus one page as an image (`page`, default 1; with `page`, only that page's "
       "text). Text, Markdown, CSV, JSON, calendar files, HTML and attached emails come back as text "
-      "(at most 200,000 characters). Other types return only name, size and type. Files over 25 MB "
+      "(at most 200,000 characters), and so do Word, Excel and PowerPoint files and their OpenDocument "
+      "counterparts (.docx, .xlsx, .pptx, .odt, .ods, .odp) and RTF: sheets as comma-separated lines per "
+      "sheet (capped), slides with their notes. Other types return only name, size and type. Files over 25 MB "
       "are refused. " + UNTRUSTED,
       _obj({"message_id": {"type": "integer"},
             "attachment": {"type": ["integer", "string"],
@@ -121,6 +127,10 @@ async def get_attachment(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
         raise ToolError("'page' starts at 1")
     try:
         max_px = attachfetch.clamp_px(args.get("max_px"))
+        if ctx.vision is not None:  # the built-in assistant: a smaller default, a lower ceiling
+            from mailr.agent import vision
+
+            max_px = min(max_px, vision.MAX_PX) if args.get("max_px") not in (None, "") else vision.DEFAULT_PX
         attachfetch.check_rate(f"t{ctx.p.token.id}" if ctx.p.token else f"u{ctx.p.user_id}")
     except attachfetch.AttachmentError as e:
         raise ToolError(str(e)) from None
@@ -133,6 +143,17 @@ async def get_attachment(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
         if not await llm.available(ctx.db, ctx.p.user, "chat", sensitive=True):
             raise ToolError("this attachment is from a local-only account and no local model is configured, "
                             "so it cannot be read in this chat")
+    show, why_not = ctx.images, None
+    if ctx.vision is not None:
+        # The class of the call that will carry the image: the chat's, raised by the message's own.
+        show = await ctx.vision(bool(ctx.session_sensitive or m.local_only))
+        from mailr.agent import vision
+
+        if not vision.setting_on(ctx.p.user):
+            why_not = "the user has turned off images for the assistant (Settings, Models)"
+        if show and ctx.images_left is not None and ctx.images_left <= 0:
+            show, why_not = False, (f"this question has already shown {vision.MAX_PER_TURN} images, the most one "
+                                    "question can; ask about this one in a new question")
     index, meta = _pick(m, args.get("attachment"))
     info = {"index": index, "filename": meta.get("filename") or "attachment", "type": meta.get("type") or "",
             "size": meta.get("size") or 0, "inline": bool(meta.get("inline"))}
@@ -154,12 +175,12 @@ async def get_attachment(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
         raise await refuse("the attachment is missing from the stored message") from None
     try:
         res = await attachfetch.extract(data, ctype or info["type"], fname or info["filename"], charset,
-                                        max_px=max_px, page=page, render=ctx.images)
+                                        max_px=max_px, page=page, render=show)
     except attachfetch.AttachmentError as e:
         raise await refuse(str(e)) from None
     info["size"] = len(data)
     out: dict[str, Any] = {**base, "kind": res["kind"]}
-    for k in ("pages", "page", "truncated", "note"):
+    for k in ("pages", "page", "truncated", "note", "format"):
         if k in res:
             out[k] = res[k]
     if "text" in res:
@@ -168,15 +189,22 @@ async def get_attachment(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     if img:
         shape = {k: img[k] for k in ("mime_type", "width", "height", "bytes", "original_width",
                                      "original_height", "page") if k in img}
-        if ctx.images:
+        if show:
             out["image"] = shape
             out["_content"] = [{"type": "image", "data": img["data"], "mimeType": img["mime_type"]}]
+            if ctx.vision is not None:
+                from mailr.agent import loop
+
+                out["image"]["note"] = loop.IMAGE_SHOWN_NOTE
+                if ctx.images_left is not None:
+                    ctx.images_left -= 1
         else:
-            out["image"] = {**shape, "note": f"image attached ({img['width']}×{img['height']}); this chat "
-                                             "model cannot view images, so only its size is shown"}
+            w, h = attachfetch.upright_size(img)
+            out["image"] = {**shape, "note": f"image attached ({w}×{h}); "
+                            + (why_not or "this chat model cannot view images, so only its size is shown")}
     await _audit(ctx, "agent.get_attachment", f"{m.id}/{index}",
                  {"attachment": index, "max_px": max_px, "page": page},
                  {"kind": res["kind"], "type": ctype, "bytes_in": len(data),
-                  "image_bytes": (img or {}).get("bytes") if ctx.images else None,
+                  "image_bytes": (img or {}).get("bytes") if show else None,
                   "text_chars": len(res.get("text") or "")})
     return ToolResult(out, **ids)

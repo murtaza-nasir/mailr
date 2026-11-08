@@ -87,9 +87,15 @@ class ToolCtx:
     untrusted: bool = False
     # Whether the chat model is local (asked once per turn; see local_ok).
     local_model: bool | None = None
-    # The caller can take image content (the REST tool API and MCP). The built-in assistant's
-    # chat models have no vision flag, so it gets a text stub instead (get_attachment).
+    # The caller can take image content: always for the REST tool API and MCP. For the built-in
+    # assistant, whether this turn's model may see images (agent/vision.py: the model can view
+    # images, the person's setting, the outbound policy); `vision` answers the same for content of
+    # another class (a local-only message moves the chat to the local model), and `images_left`
+    # counts what one question may still show (agent/vision.MAX_PER_TURN). Without them the
+    # tools return "image attached (w×h)" instead.
     images: bool = False
+    vision: Callable[[bool], Awaitable[bool]] | None = None
+    images_left: int | None = None
     # Everything the model read this turn (agent/loop.py _read_text), for checking the links in
     # text it writes (agent/agentwrite.py). None outside the built-in assistant.
     known: Callable[[], str] | None = None

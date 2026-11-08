@@ -6,6 +6,12 @@ The **Ambrose** tab (it carries the assistant's name) is the same assistant as o
 
 <!-- covers: android:assistant -->
 
+To send images or files with a question, tap the paperclip beside the message box and pick them. Each one
+uploads at once and shows as a tile above the box; tap a tile's ✕ to remove it. A message can carry up to
+five files of up to 15 MB each, with or without text. The sent message shows the images and file names
+above it, also when the chat is opened again. What Ambrose reads of each kind of file is listed in
+[Images and files](../user-guide/assistant.md#images-and-files).
+
 ![The Android assistant tab with an answer and citation chips](../assets/shots/android-assistant.png)
 
 ## Chats
@@ -88,9 +94,9 @@ them are shown:
 
 ### Approvals
 
-- Pending actions come first, each with **Allow once**, **Deny** and ⋮ (**More ways to allow**). Under ⋮ are **Allow for 12 hours** (**Allow for this chat** for Ambrose) and **Always allow**. Each is listed with what it covers and how many other waiting requests of the same kind are approved with it.
+- Pending actions come first. Each card shows the kind of request (**New task**, **Send email**…), who asked and when, the item's own title (tap **more** for a long one), its key facts and, when a rule makes it ask, a short reason with ⓘ for the whole explanation. The buttons are in one row: **Allow once**, **Deny**, the grants menu and ⋮. The grants menu shows how many other waiting requests it also approves (**+1**) and holds **Allow for 12 hours** (**Allow for this chat** for Ambrose) and **Always allow**, each listed with what it covers. ⋮ holds **Ask Ambrose**.
 - After such a grant, a message is shown with the number of others approved, with **Undo** for those not yet carried out.
-- When one chat or one agent has several requests waiting, a line about it is shown: "3 requests from claude-code". Tap **Allow all 3** to list them first; tap **Allow all 3** in that list to allow each of them once. No rule is created.
+- Requests of the same kind from one chat or agent that are next to each other are grouped under one line: "claude-code wants to add 2 tasks". **Allow all** allows each listed request once; **Deny all** asks you to confirm, then denies each of them. No rule is created. A group of more than three starts closed, with one line per request.
 - The last ones are listed under **Recent decisions** with their outcome.
 - Tap **Ask** on a card to ask Ambrose to explain the action before you decide.
 
@@ -140,13 +146,14 @@ With **Start listening right away**, the microphone is on when you tap an Ask bu
 
 ## Share to Mailr
 
-Three Mailr targets are added to Android's share sheet:
+Four Mailr targets are added to Android's share sheet:
 
 | Target | Result |
 |---|---|
 | **New email** | The composer opens with what you shared: text, a link, files or images. After Send you return to the app you shared from. |
 | **Send to self** | The shared item is emailed to you without a composer. A card shows what you are sending, with a subject, a note and labels; tap **Send**. Nothing is sent if you close the card without a tap. After **Send**, Undo is offered on the card. Offline, it is sent later. |
 | **New task** | A task is created from the shared text or link. |
+| **Ask Ambrose** | A new chat opens with the shared images or files attached and any shared words in the message box. The files are uploaded to your server while a small card shows "Attaching for Ambrose…"; nothing reaches a model until you tap **Send**. |
 
 <!-- covers: android:share -->
 

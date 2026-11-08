@@ -206,6 +206,7 @@
     <string name="notes_keep_the_items">Einträge behalten</string>
     <string name="notes_delete_them_too">Auch diese löschen</string>
     <string name="notes_check">Häkchen setzen</string>
+    <string name="notes_uncheck">Abwählen</string>
     <string name="notes_move_to_section">In Abschnitt verschieben</string>
     <string name="notes_edit_quantity">Menge bearbeiten</string>
     <string name="notes_edit">Bearbeiten</string>

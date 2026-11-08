@@ -933,3 +933,9 @@
   gap: 6px;
   font-size: 14px;
 }
+
+/* Admin → Models → Can view images: one line per model (AdminTab.tsx VisionCell). */
+.vision-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.vision-row { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; max-width: 240px; }
+.vision-row > span { max-width: 100%; color: var(--text-2); }
+.vision-row .select { width: auto; padding-block: 2px; font-size: 12px; }

@@ -132,6 +132,7 @@ Where: Settings → Ambrose (Briefs & replies, Models, Trusted addresses, Standi
 | Key | Default | Values | Description |
 |---|---|---|---|
 | `models` | the server defaults |  | The model used for each assistant task. |
+| `assistant_images` | `true` | on / off | **Let Ambrose see images** (under Models): photos and scans in your mail and images you attach in a chat reach Ambrose's model, when that model can view images. Off: Ambrose learns only an image's size. See [Images and files](../user-guide/assistant.md#images-and-files). |
 | `advanced_settings` | `false` | on / off | Show the advanced parts of Settings: Agents & API, detailed filters, learning detail and the decisions lab. Admins always see them. |
 | `brief_position` | `top` | `top`, `side` | Where an assistant brief sits: above the messages or beside them. |
 | `local_models_only` | `false` | on / off | **Local models only for me**: Ambrose and every other model feature use only this server's local models for your mail, notes and tables. An admin's rule for everyone can lock it on. Change it with `PUT /api/v1/me/local-models`. See [Models](../admin/models.md). |

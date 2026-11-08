@@ -284,3 +284,157 @@ async def test_owner_acl_puts_editors_before_the_group(family):
     assert r.status_code == 200 and r.json()["editors"] == []
     sch = _named(await _sync(users["bob"]), "Rota")
     assert sch and sch["read_only"] is True
+
+
+async def _acl_as_owner(cg, gc, aces: list[str]) -> None:
+    body = ('<?xml version="1.0" encoding="utf-8"?><d:acl xmlns:d="DAV:" xmlns:c="urn:ietf:params:xml:ns:caldav">'
+            f'{"".join(aces)}</d:acl>')
+    async with groups.owner_client(cg.owner_login) as c:
+        r = await c.request("ACL", groups._url(gc.href), body=body, headers={"Content-Type": "application/xml"})
+        c._raise(r, "ACL")
+    await groups.invalidate_caches()
+
+
+async def test_free_busy_only_group_calendar(family):
+    """ACT settings.group_calendars, ACT calendar.group_shared: a group calendar shared with the
+    group as "Free/busy only". Stalwart 0.16: not offered, refused. Stalwart 1.x: the editor (Alice)
+    sees and changes everything; a member (Bob) gets read-only "Busy" blocks with no title, place or
+    guests, in the agenda, free/busy and Ambrose ("Busy (<calendar>)"), and edits answer 409; a
+    member outside the group (Carol) gets nothing; household free/busy leaves the blocks out. Bob
+    with an own View grant beside the group's free/busy reads the details (the union, as
+    calendar/sharing.access_of); Can view → Free/busy only clears every title at Bob's next sync,
+    and back restores the events."""
+    from datetime import UTC, datetime, timedelta
+
+    from helpers.agent_calendar_v2 import _ctx
+    from sqlalchemy import select
+
+    from mailr.agent.tools import run_tool
+    from mailr.calendar import household, shared_busy
+    from mailr.db import sessionmaker
+    from mailr.models import CalendarGroup, CalObject, GroupCalendar
+
+    group, users, clients = family
+    admin, alice, bob = clients["admin"], clients["alice"], clients["bob"]
+    for u in users.values():
+        await _sync(u)
+    from mailr.core.store import service_client
+    from mailr.core.store_groupware import is_v1
+
+    v1 = await is_v1(service_client(), cache=False)
+    offered = (await admin.get(f"{API}/admin/calendars/groups")).json()["access"]
+    r = await admin.post(f"{API}/admin/calendars/groups", json={
+        "group": group, "name": "Rota", "color": "#1565C0", "access": "freebusy", "editors": [users["alice"].id]})
+    if not v1:
+        assert offered == ["write", "read"]
+        assert r.status_code == 400 and "free/busy only" in r.json()["detail"], r.text
+        async with sessionmaker()() as db:
+            assert not (await db.execute(select(GroupCalendar).where(GroupCalendar.group_name == group))).first()
+        return
+    assert offered == ["write", "read", "freebusy"]
+    assert r.status_code == 200 and r.json()["access"] == "freebusy", r.text
+    gc_id = r.json()["id"]
+    async with sessionmaker()() as db:
+        gc = await db.get(GroupCalendar, gc_id)
+        cg = await db.get(CalendarGroup, group)
+        path = gc.href
+        assert path.startswith(groups.home_of(cg.owner_login))  # the owner account's, not the group's
+
+    # Alice, the editor: listed, writable, full details.
+    rota_a = _named(await _sync(users["alice"]), "Rota")
+    assert rota_a and rota_a["read_only"] is False and rota_a["shared"]["editor"] is True
+    assert rota_a["shared"]["access"] == "write"
+    d = (datetime.now(UTC) + timedelta(days=10)).date()
+    day = {"from": str(d), "to": str(d + timedelta(days=1))}
+    ev = {"summary": "Night shift handover", "start": f"{d}T15:00:00Z", "end": f"{d}T16:00:00Z",
+          "location": "Ward 3", "description": "Bring the keys"}
+    r = await alice.post(f"{API}/calendar/events", json={**ev, "calendar": rota_a["url"]})
+    assert r.status_code == 200, r.text
+    evs = (await alice.get(f"{API}/calendar/agenda", params=day)).json()["events"]
+    assert any(e["summary"] == ev["summary"] for e in evs)
+
+    # Bob, a member: busy blocks only.
+    rota_b = _named(await _sync(users["bob"]), "Rota")
+    assert rota_b and rota_b["read_only"] is True and rota_b["shareable"] is False
+    assert rota_b["shared"] == {"kind": "group", "group": group, "access": "freebusy", "editor": False,
+                                "group_calendar_id": gc_id}
+
+    async def bobs_events() -> list[dict]:
+        evs = (await bob.get(f"{API}/calendar/agenda", params=day)).json()["events"]
+        return [e for e in evs if e["calendar_id"] == rota_b["calendar_id"]]
+
+    [e] = await bobs_events()
+    assert e["summary"] == "Busy" and e["shared_busy"] is True and not e.get("location")
+    assert not e.get("description") and not e.get("attendees")
+    assert (e["start"], e["end"]) == (f"{d}T15:00:00+00:00", f"{d}T16:00:00+00:00")
+    r = await bob.get(f"{API}/calendar/freebusy", params=day)
+    assert r.status_code == 200 and r.json()["busy"], r.text
+    r = await bob.post(f"{API}/calendar/events", json={**ev, "calendar": rota_b["url"]})
+    assert r.status_code == 400, r.text
+    r = await bob.delete(f"{API}/calendar/events/{e['uid']}")
+    assert r.status_code == 409 and r.json()["code"] == "calendar.shared_busy_read_only", r.text
+    async with sessionmaker()() as db:
+        ctx = await _ctx(db, users["bob"].id)
+        res = await run_tool(ctx, "list_calendar", {"from": str(d), "to": str(d + timedelta(days=1))})
+        [item] = [i for i in res.data["items"] if i["summary"].startswith("Busy")]
+        assert item["summary"] == f"Busy (Rota (the {group} group))", item
+        assert "location" not in item and "Night" not in str(res.data)
+        await db.rollback()
+        assert str(rota_b["calendar_id"]) not in await household.calendars_of(db, users["bob"].id)
+    # Carol is in no group of it.
+    assert not _named(await _sync(users["carol"]), "Rota")
+
+    async def bobs_rows() -> list[CalObject]:
+        async with sessionmaker()() as db:
+            return list((await db.execute(select(CalObject).where(
+                CalObject.collection_id == rota_b["calendar_id"]))).scalars().all())
+
+    def no_details(rows: list[CalObject]) -> bool:
+        return bool(rows) and all(shared_busy.is_block(o.uid) or not (o.summary or o.location or o.ics or o.description)
+                                  for o in rows) and not any("Night" in (o.summary or "") + (o.ics or "") for o in rows)
+
+    assert no_details(await bobs_rows())
+
+    # An own View grant beside the group's free/busy: the union, so Bob lists it and reads it.
+    async with sessionmaker()() as db:
+        b_login = await groups.user_login(db, await db.get(type(users["bob"]), users["bob"].id))
+        a_login = await groups.user_login(db, await db.get(type(users["alice"]), users["alice"].id))
+    await _acl_as_owner(cg, gc, [groups._ace(groups.principal_of(a_login), ["read", "write"]),
+                                 groups._ace(groups.principal_of(b_login), ["read"]),
+                                 groups._ace(groups.principal_of(cg.store_group_login), ["read-free-busy"])])
+    rota_b2 = _named(await _sync(users["bob"]), "Rota")
+    assert rota_b2["calendar_id"] == rota_b["calendar_id"] and rota_b2["read_only"] is True
+    assert rota_b2["shared"]["access"] == "read"
+    [e] = await bobs_events()
+    assert e["summary"] == ev["summary"] and not e.get("shared_busy")
+    # mailr writes the whole ACL again (here: an editors change), and the own grant goes.
+    r = await admin.patch(f"{API}/admin/calendars/groups/{gc_id}", json={"editors": [users["alice"].id]})
+    assert r.status_code == 200, r.text
+    assert _named(await _sync(users["bob"]), "Rota")["shared"]["access"] == "freebusy"
+    [e] = await bobs_events()
+    assert e["summary"] == "Busy"
+    assert no_details(await bobs_rows())
+
+    # Free/busy only → Can view: Bob reads the events; back: no title or place is left.
+    r = await admin.patch(f"{API}/admin/calendars/groups/{gc_id}", json={"access": "read"})
+    assert r.status_code == 200 and r.json()["access"] == "read", r.text
+    rota_b3 = _named(await _sync(users["bob"]), "Rota")
+    assert rota_b3["calendar_id"] == rota_b["calendar_id"] and rota_b3["shared"]["access"] == "read"
+    [e] = await bobs_events()
+    assert e["summary"] == ev["summary"] and e.get("location") == "Ward 3"
+    r = await admin.patch(f"{API}/admin/calendars/groups/{gc_id}", json={"access": "freebusy"})
+    assert r.status_code == 200, r.text
+    assert _named(await _sync(users["bob"]), "Rota")["shared"]["access"] == "freebusy"
+    [e] = await bobs_events()
+    assert e["summary"] == "Busy" and not e.get("location")
+    assert no_details(await bobs_rows())
+    # Alice keeps everything throughout.
+    rota_a2 = _named(await _sync(users["alice"]), "Rota")
+    assert rota_a2["read_only"] is False
+    evs = (await alice.get(f"{API}/calendar/agenda", params=day)).json()["events"]
+    assert any(x["summary"] == ev["summary"] and x.get("location") == "Ward 3" for x in evs)
+    # Leaving the group: the blocks go.
+    r = await admin.put(f"{API}/admin/users/{users['bob'].id}/groups", json={"groups": []})
+    assert r.status_code == 200, r.text
+    await groups.reconcile()
+    assert not _named(await _sync(users["bob"]), "Rota")

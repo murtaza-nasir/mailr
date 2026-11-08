@@ -43,7 +43,9 @@
   is not enough there). `overrides_for` marks it
   `shared = {kind: "user", owner, owner_id, level, access, can_share}`, plus `own_level` and `via`
   (group names) when a group gives more. A free/busy-only calendar is not listed; the sync adds it
-  (calendar/shared_busy.py) with level `freebusy` and access `freebusy`.
+  (calendar/shared_busy.py) with level `freebusy` and access `freebusy`. A group calendar shared
+  with the user's group as free/busy only (calendar/groups.py) is added the same way
+  (`_group_free_busy_only`); its `shared_in` entry carries `group_calendar_id` instead of an owner.
 - **The owner's side.** Each sync of a built-in connector reads the ACLs of its own calendars in
   one depth-1 PROPFIND and keeps a summary (`caldav.acl`: path → [[login, level, is_user]]).
   The sharee's sync reads its level there; the owner's list shows "Shared with 2 people".
@@ -804,6 +806,7 @@ async def on_listing(client: dav.DavClient, user_id: int, home: str, infos: list
     out = Listing(shared_in, None)
     if v1:
         await _free_busy_only(client, user_id, me, mine, states, foreign, own_home, managed, previous or {}, out)
+        await _group_free_busy_only(client, user_id, {groups.path_of(i.href) for i in infos}, previous or {}, out)
     acl = await owner_summaries(client, home, who)
     if acl is None:
         try:
@@ -865,6 +868,49 @@ async def _free_busy_only(client: dav.DavClient, user_id: int, me: str, mine: di
         out.shared_in[p] = entry
 
 
+async def _group_free_busy_only(client: dav.DavClient, user_id: int, listed: set[str], previous: dict[str, Any],
+                                out: Listing) -> None:
+    """Group calendars shared with the user's group as free/busy only (calendar/groups.py) that the
+    listing leaves out: their busy periods, asked of the server as the user. A listed one (an
+    editor's, or one the user may read through an own grant: Stalwart 1.x takes the union, as
+    `access_of`) syncs in full instead. A refusal (not yet in the store group) leaves it out."""
+    from mailr.calendar import shared_busy
+    from mailr.core.access import effective_groups
+    from mailr.models import GroupCalendar
+
+    async with session_scope() as db:
+        user = await db.get(User, user_id)
+        if user is None or user.disabled:
+            return
+        mine = set(effective_groups(user))
+        gcs = [gc for gc in (await db.execute(select(GroupCalendar).where(
+            GroupCalendar.access == groups.FREEBUSY, GroupCalendar.href.is_not(None)))).scalars()
+            if gc.group_name in mine and groups.path_of(gc.href or "") not in listed]
+    if not gcs:
+        return
+    start, end = shared_busy.window()
+    for gc in gcs:
+        p = groups.path_of(gc.href or "")
+        href = client.abs(p) if client is not None else p
+        info = dav.CollectionInfo(href=href, displayname=gc.name, color=gc.color, components=["VEVENT"],
+                                  read_only=True, privileges=frozenset({"read-free-busy"}))
+        entry = {"owner_id": None, "group_calendar_id": gc.id, "group": gc.group_name, "level": FREEBUSY,
+                 "can_share": False, "own": None, "via": [], "direct": False}
+        try:
+            periods = await shared_busy.query(client, href, start, end)
+        except shared_busy.Refused as e:
+            log.info("free/busy of group calendar %s not readable for user %s: %s", gc.id, user_id, e)
+            continue
+        except Exception as e:  # noqa: BLE001  kept as it was until the next sync
+            log.warning("could not read the free/busy of group calendar %s for user %s: %s", gc.id, user_id, e)
+            if (previous.get(p) or {}).get("level") == FREEBUSY:
+                out.kept.append(info)
+                out.shared_in[p] = entry
+            continue
+        out.busy.append((info, periods))
+        out.shared_in[p] = entry
+
+
 # ---------------- what the user's calendar list shows ----------------
 
 
@@ -881,12 +927,14 @@ async def overrides_for(db: AsyncSession, user_id: int) -> dict[str, dict[str, A
     colls = (await db.execute(select(CalCollection.href).where(CalCollection.connector_id == conn.id,
                                                                CalCollection.deleted_at.is_(None)))).scalars().all()
     owners = {}
-    ids = {v.get("owner_id") for v in shared_in.values()}
+    ids = {v.get("owner_id") for v in shared_in.values() if v.get("owner_id")}
     if ids:
         owners = {u.id: u for u in (await db.execute(select(User).where(User.id.in_(ids)))).scalars()}
     out: dict[str, dict[str, Any]] = {}
     for href in colls:
         p = groups.path_of(href)
+        if p in shared_in and (shared_in[p] or {}).get("group_calendar_id"):
+            continue  # a group calendar's busy blocks: groups.overrides_for marks it
         if p in shared_in:
             s = shared_in[p]
             o = owners.get(s.get("owner_id"))

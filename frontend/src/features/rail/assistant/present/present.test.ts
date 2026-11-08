@@ -9,6 +9,7 @@ import blocksText from '../../../../../../spec/fixtures/agent-blocks-fixtures.js
 import blocksAndroid from '../../../../../../android/app/src/test/resources/design/agent-blocks-fixtures.json?raw'
 import mdText from '../../../../../../spec/fixtures/agent-markdown-fixtures.json?raw'
 import mdAndroid from '../../../../../../android/app/src/test/resources/design/agent-markdown-fixtures.json?raw'
+import { reasonOf } from '../../../approvals/cardHead'
 import { ApprovalCard } from '../ApprovalCard'
 import { Markdown } from '../Markdown'
 import type { ApprovalRef } from '../useAssistant'
@@ -53,7 +54,12 @@ describe('agent-blocks-fixtures.json', () => {
   for (const f of blocks.approvals) {
     it(`renders ${f.name}`, () => {
       const text = textOf(card(f))
-      for (const s of f.expect) expect(text, `${f.name}: “${s}”`).toContain(s.replace(/\s+/g, ' ').trim())
+      // The whole reason sits behind the card's ⓘ (its short line is on the card).
+      const reason = reasonOf({ action: f.action, display: f.display, head: null })?.full ?? ''
+      for (const s of f.expect) {
+        const want = s.replace(/\s+/g, ' ').trim()
+        expect(want && reason.includes(want) ? reason : text, `${f.name}: “${s}”`).toContain(want)
+      }
       // Raw machine text never reaches the card.
       expect(text).not.toMatch(/add_labels=|\[\d+\]$|Do: /)
     })

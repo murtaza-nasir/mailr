@@ -1,27 +1,33 @@
-// An action the assistant wants to take, waiting for the user: a clear preview (the server's display
-// model, drawn by present/ApprovalDisplay; older servers send title and lines) and the decision
-// buttons. Decisions go to POST /approvals/{id}/decide; the card then changes
-// in place to its outcome ("Approved · moved 6 messages to Trash") and the chat continues after it.
-// The same card decides in the top bar's "Waiting for you" bell (ApprovalsSection), over any page.
-// Ask (in the card's head) opens the ask capture with the approval as its chip: the assistant
-// explains it ("why does this need approval?"), but only these buttons decide it.
+// An action the assistant or an agent wants to take, waiting for the user. The card's top line says
+// what kind of request it is ("New task") and who asked when; its heading is the object's own title
+// (two lines, "more" for the rest); the key facts sit on one line, longer parts (an email's text, a
+// list) below; the reason is one short line with its whole text behind ⓘ. One row of actions: Allow
+// once, Deny, the grants menu ("+1 ▾": Allow for 12 hours / this chat, Always allow…, with how many
+// other waiting requests each also approves) and ⋮ (Ask the assistant). Decisions go to
+// POST /approvals/{id}/decide; the card then changes in place to its outcome ("Approved · moved 6
+// messages to Trash") and the chat continues after it. The same card decides in the "Waiting for
+// you" bell (ApprovalsSection) and in Settings. Ask opens the ask capture with the approval as its
+// chip: the assistant explains it, but only these buttons decide it.
 // ACT approval.approve @web.reader, ACT approval.deny @web.reader, ACT agent.ask_about @web.panel @web.reader @web.settings
 
 import { assistantNameNow } from './useAssistantName'
 import {
-  AlertTriangle, Archive, AudioLines, Bot, Brain, CalendarDays, Check, Clock, EllipsisVertical, FilePen, Filter, Mail, MailX, Send, Settings2,
+  AlertTriangle, Archive, AudioLines, Bot, Brain, CalendarDays, Check, ChevronDown, Clock, EllipsisVertical, FilePen, Filter, Info, Mail, MailX, Send, Settings2,
   ShieldAlert, ShieldCheck, Sparkles, SquareCheck, StickyNote, Tag, Trash2, Users, Workflow, X,
 } from 'lucide-react'
 import { QueryClientContext } from '@tanstack/react-query'
-import { useContext, useEffect, useState, type ReactElement } from 'react'
+import { Fragment, useContext, useEffect, useId, useLayoutEffect, useRef, useState, type ReactElement } from 'react'
 import { api } from '../../../api/client'
-import { toast, toastError } from '../../../stores/ui'
-import { alsoLabel, grantToast, scopeHelp, undoToast, type GrantResult } from '../../approvals/grant'
+import { Popover, MenuItem, useAnchor } from '../../../components/Popover'
+import { formatRelative } from '../../../lib/format'
+import { alsoLabel, scopeHelp } from '../../approvals/grant'
+import { headingOf, kindLabel, reasonOf, splitFields } from '../../approvals/cardHead'
+import { postDecision, type Scope } from '../../approvals/decide'
 import { openAsk } from '../../ask/askStore'
-import { ApprovalDisplay } from './present/ApprovalDisplay'
+import { ApprovalDisplay, Fact } from './present/ApprovalDisplay'
 import { ReviewPlan, type MoveKey } from './ReviewPlan'
 import { localOutcome } from './present/types'
-import { asQuestion, displayTitle, msgText } from './present/serverText'
+import { displayTitle, msgText } from './present/serverText'
 import type { ApprovalCardData, ApprovalPreview, ApprovalRef } from './useAssistant'
 import { t as tr, tx, appLocale } from '../../../i18n'
 import { clockOpts } from '../../../lib/dates'
@@ -80,8 +86,6 @@ const DERIVED: Record<string, string> = {
 }
 
 const DONE = new Set(['executed', 'denied', 'expired', 'failed'])
-
-export { asQuestion } from './present/serverText'
 
 function fmtWhen(v: unknown): string {
   if (typeof v !== 'string' || !v) return ''
@@ -149,22 +153,56 @@ function ThingPreview({ p }: { p: ApprovalPreview }) {
   return null
 }
 
-/** A grant button's class and name. When it also covers other waiting requests, its name says so and its label takes two lines. */
-function grantProps(className: string, label: string, n: number | undefined) {
-  const more = alsoLabel(n)
-  return more ? { className: `${className} ap-grant`, 'aria-label': `${label}${more}` } : { className }
+/** The heading: the object's own title, two lines at most, with "more" when it is longer. */
+function Heading({ text, decided }: { text: string; decided: boolean }) {
+  const ref = useRef<HTMLParagraphElement>(null)
+  const id = useId()
+  const [all, setAll] = useState(false)
+  const [clamped, setClamped] = useState(false)
+  useLayoutEffect(() => {
+    const el = ref.current
+    if (!el || all) return
+    const check = () => setClamped(isClamped(el))
+    check()
+    const ro = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(check)
+    ro?.observe(el)
+    return () => ro?.disconnect()
+  }, [text, all])
+  return (
+    <div className="ap-heading-row">
+      <p ref={ref} id={id} className={`ap-heading${all ? '' : ' clamp'}${decided ? ' decided' : ''}`} dir="auto">{text}</p>
+      {(clamped || all) && (
+        <button type="button" className="pv-link ap-heading-more" aria-expanded={all} aria-controls={id} onClick={() => setAll(!all)}>
+          {all ? tr('rail.assistant.present.approvalDisplay.showLess') : tr('approvals.cards.more')}
+        </button>
+      )}
+    </div>
+  )
 }
 
-/** "Allow for 12 hours", with "(also approves 2 other waiting)" under it when the grant covers others. */
-function GrantLabel({ label, n }: { label: string; n: number | undefined }) {
-  const more = alsoLabel(n).trim()
-  return more ? (
-    <>
-      <span>{label}</span>
-      <span className="ap-also">{more}</span>
-    </>
-  ) : (
-    <>{label}</>
+/** Whether a clamped heading hides some of its text. */
+export function isClamped(el: HTMLElement): boolean {
+  return el.scrollHeight > el.clientHeight + 1
+}
+
+/** "Asks first: written after reading email", with the whole reason behind ⓘ. */
+function Reason({ short, full }: { short: string; full: string }) {
+  const [open, setOpen] = useState(false)
+  const id = useId()
+  const more = full && full !== short
+  return (
+    <div className="ap-reason">
+      <div className="ap-reason-line">
+        <span className="ap-reason-short">{short}</span>
+        {more && (
+          <button type="button" className="icon-btn xs ap-reason-info" aria-label={tr('approvals.cards.whyItAsks')} data-tip={tr('approvals.cards.whyItAsks')}
+            aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)}>
+            <Info size={14} aria-hidden />
+          </button>
+        )}
+      </div>
+      {more && open && <p id={id} className="ap-reason-full" dir="auto">{full}</p>}
+    </div>
   )
 }
 
@@ -177,19 +215,26 @@ interface Props {
   actorName?: string
   /** Label for the time-limited grant: "Allow for this chat" (assistant) or "Allow for 12 hours" (tokens). */
   sessionLabel?: string
+  /** Who asked and when, on the card's top line ("claude-code · 1 hour ago"); the chat leaves it out. */
+  requester?: string
+  askedAt?: string | null
+  /** When the request expires, on the top line too (Settings). */
+  expiresAt?: string | null
 }
 
-export function ApprovalCard({ a, onStatus, onDecided, actorName = assistantNameNow(), sessionLabel = tr('rail.assistant.approvalCard.allowForThisChat') }: Props) {
+export function ApprovalCard({ a, onStatus, onDecided, actorName = assistantNameNow(), sessionLabel = tr('rail.assistant.approvalCard.allowForThisChat'), requester, askedAt, expiresAt }: Props) {
   const [busy, setBusy] = useState(false)
   const [always, setAlways] = useState(false)
   const [err, setErr] = useState<string | null>(null)
   const [details, setDetails] = useState(false)
-  const [moreOpen, setMoreOpen] = useState(false)
+  const grantsMenu = useAnchor()
+  const moreMenu = useAnchor()
   // A review card (agent/review.py): the user's own moves on it, sent with Apply (apply_changes).
   const [changes, setChanges] = useState<Record<number, MoveKey>>({})
   const changed = Object.keys(changes).length
   // The app's query cache, when there is one (the card also renders on its own in tests).
   const qc = useContext(QueryClientContext)
+  const name = assistantNameNow()
   const p = a.preview ?? {}
   const display = a.display ?? p.display ?? null
   const pending = a.status === 'pending'
@@ -211,35 +256,14 @@ export function ApprovalCard({ a, onStatus, onDecided, actorName = assistantName
     return () => window.removeEventListener('focus', check)
   }, [pending, a.id, onStatus, onDecided])
 
-  const decide = async (decision: 'approve' | 'deny', scope: 'once' | 'session' | 'always' = 'once') => {
+  const decide = async (decision: 'approve' | 'deny', scope: Scope = 'once') => {
     setBusy(true)
     setErr(null)
     try {
-      const r = await api.post<ApprovalCardData & GrantResult>(`/approvals/${a.id}/decide`, {
-        decision, scope, constraint: scope === 'always' ? 'derived' : 'none',
-        ...(review && changed && decision === 'approve' ? { changes } : {}),
-      })
+      const r = await postDecision(a.id, decision, scope, sessionLabel, qc,
+        review && changed && decision === 'approve' ? { changes } : {})
       let status = r.status
       onStatus(a.id, status, r)
-      // ACT approval.undo_grant @web.reader: the grant decided other waiting requests too. Say so,
-      // with Undo for the ones that have not run yet (and the rule).
-      const also = r.also_decided?.count ?? 0
-      if (also > 0 && scope !== 'once' && r.rule_id) {
-        void qc?.invalidateQueries({ queryKey: ['approvals'] })
-        const ruleId = r.rule_id
-        toast({
-          message: decision === 'approve' ? grantToast(scope, sessionLabel, also) : tr('rail.assistant.approvalCard.deniedAlsoDeniedOtherRequests', { count: also }),
-          actionLabel: tr('common.undo'),
-          onAction: () =>
-            void api
-              .post<{ reverted: number[]; kept: number[] }>(`/approvals/grants/${ruleId}/undo`)
-              .then((u) => {
-                toast({ message: undoToast(u.reverted.length, u.kept.length) })
-                void qc?.invalidateQueries({ queryKey: ['approvals'] })
-              })
-              .catch((e) => toastError(e, tr('common.undoFailed'))),
-        })
-      }
       // Wait (briefly) for an approved action to run, then let the chat continue.
       for (let i = 0; i < 30 && (status === 'approved' || status === 'executing'); i++) {
         await new Promise((res) => setTimeout(res, i < 10 ? 400 : 1000))
@@ -269,11 +293,20 @@ export function ApprovalCard({ a, onStatus, onDecided, actorName = assistantName
   const review = p.kind === 'review' ? p.review ?? null : null
   const danger = display?.danger ?? p.danger
   const title = display ? displayTitle(display) : a.title
+  const heading = headingOf({ action: a.action, title: a.title, display, head: a.head })
+  const kind = kindLabel(a) ?? ACTION_TEXT[a.action] ?? null
+  const reason = display ? reasonOf({ action: a.action, display, head: a.head }) : null
+  const split = display ? splitFields(display.fields, heading) : null
   const verb = ACTION_TEXT[a.action] ?? a.action
   const help = scopeHelp(verb, sessionLabel)
   const also = a.also_covers
+  // How many other waiting requests the grants would approve too: on the grants menu's button.
+  const alsoN = also?.session || also?.always_derived || 0
   // A card a hard rule held (the turn read mail, a review) is decided once: no grants on it.
   const grants = a.grants !== false
+  const when = [askedAt ? formatRelative(askedAt) : '', expiresAt ? tr('approvals.cards.expires', { relative: formatRelative(expiresAt) }) : '']
+    .filter(Boolean).join(' · ')
+  const askLabel = tr('rail.assistant.approvalCard.ask', { name })
   return (
     <div
       className={`approval${danger ? ' danger' : ''}${pending ? '' : ' decided'}`}
@@ -282,19 +315,20 @@ export function ApprovalCard({ a, onStatus, onDecided, actorName = assistantName
       data-approval-id={a.id}
       data-status={a.status}
     >
-      <div className="ap-head">
-        {(display && DISPLAY_ICON[display.icon]) ?? (a.action === 'mail.send' ? <Mail size={16} /> : <ShieldCheck size={16} />)}
-        <span className="ap-title">{pending ? asQuestion(title) : title}</span>
-        <button
-          type="button"
-          className="btn text sm ap-ask"
-          aria-label={tr('rail.assistant.approvalCard.askAboutThisApproval', { name: assistantNameNow(), title })}
-          data-tip={tr('rail.assistant.approvalCard.askAboutThisYouStill', { name: assistantNameNow() })}
-          onClick={(e) => openAsk({ kind: 'approval', id: a.id, title }, e.currentTarget)}
-        >
-          <Bot size={14} aria-hidden />{' '}{tr('rail.assistant.approvalCard.ask', { name: assistantNameNow() })}
-        </button>
+      <div className="ap-top">
+        <span className="ap-icon" aria-hidden>
+          {(display && DISPLAY_ICON[display.icon]) ?? (a.action === 'mail.send' ? <Mail size={14} /> : <ShieldCheck size={14} />)}
+        </span>
+        {kind && <span className="ap-kind">{kind}</span>}
+        {(requester || when) && (
+          <span className="ap-who" dir="auto" data-testid="approval-who" title={[requester, when].filter(Boolean).join(' · ')}>
+            {requester && <bdi>{requester}</bdi>}
+            {requester && when ? ' · ' : ''}
+            {when}
+          </span>
+        )}
       </div>
+      <Heading text={heading} decided={!pending} />
       {danger && pending && (
         <div className="ap-warning">
           <AlertTriangle size={14} />{' '}{tr('rail.assistant.approvalCard.thisCantBeUndoneFrom')}
@@ -302,8 +336,22 @@ export function ApprovalCard({ a, onStatus, onDecided, actorName = assistantName
       )}
       {review ? (
         (pending || details) && <ReviewPlan review={review} changes={changes} onChanges={setChanges} editable={pending && !busy} />
-      ) : display ? (
-        (pending || details) && <ApprovalDisplay d={display} />
+      ) : display && split ? (
+        (pending || details) && (
+          <>
+            {split.facts.length > 0 && (
+              <p className="ap-facts" data-testid="approval-facts">
+                {split.facts.map((f, i) => (
+                  <Fragment key={i}>
+                    {i > 0 && <span className="ap-sep" aria-hidden> · </span>}
+                    <Fact f={f} />
+                  </Fragment>
+                ))}
+              </p>
+            )}
+            <ApprovalDisplay d={display} fields={split.blocks} reason={false} />
+          </>
+        )
       ) : (
         <>
           {p.reason && <div className="ap-meta">{p.reason}</div>}
@@ -317,6 +365,7 @@ export function ApprovalCard({ a, onStatus, onDecided, actorName = assistantName
           )}
         </>
       )}
+      {pending && reason && <Reason short={reason.short} full={reason.full} />}
       {pending ? (
         <>
           {review ? (
@@ -328,6 +377,9 @@ export function ApprovalCard({ a, onStatus, onDecided, actorName = assistantName
                 {tr('rail.assistant.review.discard')}
               </button>
               {changed > 0 && <span className="muted rv-changed">{tr('rail.assistant.review.changedByYou', { count: changed })}</span>}
+              <span className="ap-spacer" />
+              <MoreMenu menu={moreMenu} label={askLabel} onAsk={(el) => openAsk({ kind: 'approval', id: a.id, title }, el)}
+                askName={tr('rail.assistant.approvalCard.askAboutThisApproval', { name, title })} />
             </div>
           ) : always ? (
             <div className="ap-always">
@@ -335,8 +387,10 @@ export function ApprovalCard({ a, onStatus, onDecided, actorName = assistantName
                 {tx('rail.assistant.approvalCard.fromNowOnLetWithout', { actorName, verb, value: DERIVED[a.action] ? ` ${DERIVED[a.action]}` : '', value2: a.action === 'mail.send' && tr('rail.assistant.approvalCard.aFirstMessageToA') }, { b: (c) => <b>{c}</b> })}
               </p>
               <div className="ap-buttons">
-                <button type="button" {...grantProps('btn filled sm', tr('rail.assistant.approvalCard.createRuleAndAllow'), also?.always_derived)} disabled={busy} data-tip={help.always} onClick={() => void decide('approve', 'always')}>
-                  <GrantLabel label={tr('rail.assistant.approvalCard.createRuleAndAllow')} n={also?.always_derived} />
+                <button type="button" className="btn filled sm ap-grant" aria-label={`${tr('rail.assistant.approvalCard.createRuleAndAllow')}${alsoLabel(also?.always_derived)}`}
+                  disabled={busy} data-tip={help.always} onClick={() => void decide('approve', 'always')}>
+                  <span>{tr('rail.assistant.approvalCard.createRuleAndAllow')}</span>
+                  {alsoLabel(also?.always_derived) && <span className="ap-also">{alsoLabel(also?.always_derived).trim()}</span>}
                 </button>
                 <button type="button" className="btn text sm" disabled={busy} onClick={() => setAlways(false)}>
                   {tr('common.back')}
@@ -348,26 +402,32 @@ export function ApprovalCard({ a, onStatus, onDecided, actorName = assistantName
               <button type="button" className="btn filled sm" disabled={busy} data-tip={help.once} onClick={() => void decide('approve', 'once')}>
                 {tr('rail.assistant.approvalCard.allowOnce')}
               </button>
-              {grants && (
-                <button type="button" {...grantProps('btn tonal sm', sessionLabel, also?.session)} disabled={busy} data-tip={help.session} onClick={() => void decide('approve', 'session')}>
-                  <GrantLabel label={sessionLabel} n={also?.session} />
-                </button>
-              )}
               <button type="button" className="btn text sm ap-deny" disabled={busy} data-tip={help.deny} onClick={() => void decide('deny')}>
                 {tr('rail.assistant.approvalCard.deny')}
               </button>
-              {/* The standing rule is a rarer choice, behind ⋮ (shown in place: the card also sits
-                  inside the approvals popover, where a second popover would close the first). */}
-              {!grants ? null : moreOpen ? (
-                <button type="button" {...grantProps('btn text sm', tr('rail.assistant.approvalCard.alwaysAllow'), also?.always_derived)} disabled={busy} data-tip={help.always} onClick={() => setAlways(true)}>
-                  <GrantLabel label={tr('rail.assistant.approvalCard.alwaysAllow')} n={also?.always_derived} />
-                </button>
-              ) : (
-                <button type="button" className="icon-btn sm ap-more" aria-label={tr('rail.assistant.approvalCard.moreChoices')} data-tip={tr('rail.assistant.approvalCard.moreChoices')} aria-expanded={false}
-                  disabled={busy} onClick={() => setMoreOpen(true)}>
-                  <EllipsisVertical size={16} />
-                </button>
+              <span className="ap-spacer" />
+              {grants && (
+                <>
+                  <button type="button" className="btn tonal sm ap-grants" disabled={busy} aria-haspopup="menu" aria-expanded={grantsMenu.open}
+                    aria-label={alsoN ? tr('approvals.cards.moreWaysToAllowAlso', { count: alsoN }) : tr('approvals.cards.moreWaysToAllow')}
+                    data-tip={alsoN ? tr('approvals.cards.moreWaysToAllowAlso', { count: alsoN }) : tr('approvals.cards.moreWaysToAllow')}
+                    onClick={(e) => grantsMenu.toggle(e.currentTarget)}>
+                    {alsoN > 0 && <span>{tr('approvals.cards.plusN', { n: alsoN })}</span>}
+                    <ChevronDown size={14} aria-hidden />
+                  </button>
+                  <Popover anchor={grantsMenu.anchor} open={grantsMenu.open} onClose={grantsMenu.close} placement="bottom-end"
+                    label={tr('approvals.cards.moreWaysToAllow')}>
+                    <MenuItem tip={help.session} onSelect={() => { grantsMenu.close(); void decide('approve', 'session') }}>
+                      <GrantItem label={sessionLabel} n={also?.session} />
+                    </MenuItem>
+                    <MenuItem tip={help.always} onSelect={() => { grantsMenu.close(); setAlways(true) }}>
+                      <GrantItem label={tr('rail.assistant.approvalCard.alwaysAllow')} n={also?.always_derived} />
+                    </MenuItem>
+                  </Popover>
+                </>
               )}
+              <MoreMenu menu={moreMenu} label={askLabel} onAsk={(el) => openAsk({ kind: 'approval', id: a.id, title }, el)}
+                askName={tr('rail.assistant.approvalCard.askAboutThisApproval', { name, title })} />
             </div>
           )}
           {err && <div className="ap-error">{err}</div>}
@@ -385,5 +445,35 @@ export function ApprovalCard({ a, onStatus, onDecided, actorName = assistantName
         </div>
       )}
     </div>
+  )
+}
+
+/** A grant in the grants menu: its name, and under it how many other waiting requests it also approves. */
+export function GrantItem({ label, n }: { label: string; n: number | undefined }) {
+  const more = alsoLabel(n)
+  return (
+    <span className="ap-grant-item">
+      <span>{label}</span>
+      {more && <span className="ap-also">{more}</span>}
+    </span>
+  )
+}
+
+/** ⋮ on a card: Ask the assistant about it (it explains; only the card's buttons decide). */
+function MoreMenu({ menu, label, askName, onAsk }: { menu: ReturnType<typeof useAnchor>; label: string; askName: string; onAsk: (el: HTMLElement) => void }) {
+  const opener = useRef<HTMLButtonElement>(null)
+  return (
+    <>
+      <button ref={opener} type="button" className="icon-btn sm ap-more" aria-label={tr('rail.assistant.approvalCard.moreChoices')}
+        data-tip={tr('rail.assistant.approvalCard.moreChoices')} aria-haspopup="menu" aria-expanded={menu.open}
+        onClick={(e) => menu.toggle(e.currentTarget)}>
+        <EllipsisVertical size={16} />
+      </button>
+      <Popover anchor={menu.anchor} open={menu.open} onClose={menu.close} placement="bottom-end" label={tr('rail.assistant.approvalCard.moreChoices')}>
+        <MenuItem icon={<Bot size={16} />} tip={askName} onSelect={() => { menu.close(); if (opener.current) onAsk(opener.current) }}>
+          {label}
+        </MenuItem>
+      </Popover>
+    </>
   )
 }

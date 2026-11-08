@@ -138,7 +138,7 @@ private fun Home(g: AppGraph, deepLinks: StateFlow<Destination?>, consume: () ->
             if (req == null) return@collect
             g.pendingAsk.value = null
             nav.popBackStack(Routes.MAIN, false)
-            assistant.ask(req.about, req.text)
+            assistant.ask(req.about, req.text, req.files, req.send)
             tab = Tab.ASSISTANT
         }
     }

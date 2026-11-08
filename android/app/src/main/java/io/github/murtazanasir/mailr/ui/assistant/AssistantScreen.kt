@@ -35,6 +35,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.automirrored.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.AddComment
+import androidx.compose.material.icons.outlined.AttachFile
 import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Public
@@ -161,6 +162,12 @@ data class AssistantCallbacks(
     val applyReview: ((Approval, Map<Long, String>) -> Unit)? = null,
     /** A review card's "Always …" on a sender (review id, move, sender): a filter for their future mail; null hides it. */
     val reviewFilter: ((Long, io.github.murtazanasir.mailr.data.api.ReviewGroup, io.github.murtazanasir.mailr.data.api.ReviewSender) -> Unit)? = null,
+    /** The message box's paper clip: the file picker (agent.chat_attach); null hides it. */
+    val attach: (() -> Unit)? = null,
+    /** A pending file's ✕, by its key; null shows no ✕. */
+    val removeAttachment: ((String) -> Unit)? = null,
+    /** An attached image's small copy, by attachment id (GET /agent/attachments/{id}/thumb); null shows an icon. */
+    val thumb: (suspend (String) -> ByteArray?)? = null,
 )
 
 
@@ -251,7 +258,11 @@ fun AssistantScreen(s: AssistantState, cb: AssistantCallbacks, voice: ComposerVo
                     val retry = cb.retry?.takeIf { !s.busy && blocked == null && AssistantViewModel.canRetry(s.turns) }
                     itemsIndexed(s.turns, key = { i, _ -> i }) { i, t ->
                         Box(Modifier.widthIn(max = 760.dp).fillMaxWidth()) {
-                            if (t.role == "user") UserBubble(t.text, found = s.found != null && t.messageId == s.found)
+                            if (t.role == "user") Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End,
+                                verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                if (t.attachments.isNotEmpty()) TurnFiles(t.attachments, cb.thumb)
+                                if (t.text.isNotBlank() || t.attachments.isEmpty()) UserBubble(t.text, found = s.found != null && t.messageId == s.found)
+                            }
                             else AssistantTurn(t, cb, retry.takeIf { i == s.turns.lastIndex }, s.reviews, s.reviewActing,
                                 cb.reviewFilter?.let { ReviewAlways(s.filtersMade.keys, s.filtersBusy, it) })
                         }
@@ -742,7 +753,7 @@ private fun Composer(input: String, onInput: (String) -> Unit, s: AssistantState
                      onSend: () -> Unit, sendText: (String) -> Unit) {
     val v = voice?.ui
     val mic = v != null && v.source != VoiceSource.NONE
-    val canSend = input.isNotBlank() && v?.transcribing != true
+    val canSend = (input.isNotBlank() || s.readyFiles.isNotEmpty()) && !s.uploading && v?.transcribing != true
     // ACT agent.commands @android.assistant: a `/` that opens the message lists the commands, then the
     // skills, filtered as the name is typed. Back (or deleting the `/`) closes the list.
     val picks = ChatCommands.picker(input, s.commands, s.skills)
@@ -777,7 +788,15 @@ private fun Composer(input: String, onInput: (String) -> Unit, s: AssistantState
                     modifier = Modifier.widthIn(max = 360.dp))
             }
             if (v != null) VoiceLine(v, voice.download)
+            if (s.pending.isNotEmpty()) PendingFiles(s.pending, cb.thumb, cb.removeAttachment)
             Row(verticalAlignment = Alignment.Bottom) {
+                // ACT agent.chat_attach @android.assistant: the paper clip opens the phone's file picker.
+                cb.attach?.let { pick ->
+                    IconButton(onClick = pick, enabled = !s.busy && s.pending.size < io.github.murtazanasir.mailr.data.agent.AgentClient.MAX_FILES,
+                        modifier = Modifier.padding(bottom = 4.dp).testTag("composer-attach")) {
+                        Icon(Icons.Outlined.AttachFile, stringResource(R.string.asst_attach))
+                    }
+                }
                 // Dictated words put the cursor after them (not at the start of the box).
                 val (field, onField) = io.github.murtazanasir.mailr.ui.components.rememberDictatedText(input, onInput)
                 TextField(

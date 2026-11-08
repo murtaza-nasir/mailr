@@ -135,6 +135,22 @@
     <string name="appr_arrival_more">%1$s · ещё %2$d</string>
     <string name="appr_allow_each_once">Разрешить каждый из этих запросов один раз?</string>
     <string name="appr_allow_all_n">Разрешить все %1$d</string>
+    <string name="appr_allow_all">Разрешить все</string>
+    <string name="appr_deny_all">Отклонить все</string>
+    <plurals name="appr_deny_all_title">
+        <item quantity="one">Отклонить %d запрос?</item>
+        <item quantity="few">Отклонить все %d запроса?</item>
+        <item quantity="many">Отклонить все %d запросов?</item>
+        <item quantity="other">Отклонить все %d запроса?</item>
+    </plurals>
+    <plurals name="appr_denied_count">
+        <item quantity="one">Отклонено %d запрос.</item>
+        <item quantity="few">Отклонено %d запроса.</item>
+        <item quantity="many">Отклонено %d запросов.</item>
+        <item quantity="other">Отклонено %d запроса.</item>
+    </plurals>
+    <string name="appr_group_fold">Свернуть эти запросы</string>
+    <string name="appr_group_unfold">Показать эти запросы</string>
     <string name="appr_cancel">Отмена</string>
     <string name="appr_waiting_for_you">Ожидает вас</string>
     <string name="appr_back">Назад</string>

@@ -9,7 +9,7 @@ import { connectCalendar, expect, test } from './fixtures'
 import { createEvent, isoDay, openIn } from './calendar-data'
 
 // A fixed fortnight, so the month grid holds both weeks on any test day.
-const day = (d: number, h = 0, m = 0) => new Date(2026, 10, d, h, m)
+const day = (d: number, h = 0, m = 0) => new Date(2031, 10, d, h, m)
 const iso = (d: number, h: number, m = 0) => day(d, h, m).toISOString()
 
 async function seed(page: Page, seeded: Parameters<typeof connectCalendar>[1]) {

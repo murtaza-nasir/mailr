@@ -244,7 +244,10 @@ class ComposerVoiceTest {
             ApprovalsScreen(Fixtures.approvals, emptyList(), null, false, SnackbarHostState(), {}, {}, { _, _, _ -> },
                 onAsk = { asked += it })
         }
-        compose.onAllNodesWithContentDescription("Ask Ambrose about this approval").onFirst().performClick()
+        // Ask sits in the card's ⋮.
+        compose.onAllNodesWithContentDescription("More actions").onFirst().performClick()
+        compose.waitForIdle()
+        compose.onNodeWithContentDescription("Ask Ambrose about this approval").performClick()
         assertEquals(listOf(41L), asked.map { it.id })
         assertEquals(AskAbout.Approval(41, "Create event"), askAbout(asked[0]))
         // Asking decides nothing: the decision buttons are still there.
@@ -302,7 +305,9 @@ class ComposerVoiceTest {
                 noop.copy(askApproval = { asked += it.id }))
         }
         // The chat follows to the end of a tall card: scroll back up to its header first.
-        compose.onNode(hasContentDescription("Ask Ambrose about this approval")).performScrollTo().performClick()
+        compose.onNode(hasContentDescription("More actions")).performScrollTo().performClick()
+        compose.waitForIdle()
+        compose.onNode(hasContentDescription("Ask Ambrose about this approval")).performClick()
         assertEquals(listOf(42L), asked)
     }
 }

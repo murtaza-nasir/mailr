@@ -26,7 +26,7 @@ def _register_handlers() -> None:
     for mod in ("mailr.intel.tasks", "mailr.connectors.tasks", "mailr.connectors.sentcopy", "mailr.calendar.tasks", "mailr.calendar.sync", "mailr.calendar.webcal", "mailr.core.push", "mailr.knowledge.tasks",
                 "mailr.assistant.orders", "mailr.assistant.errands", "mailr.agent.review", "mailr.assistant.forwards", "mailr.assistant.tools", "mailr.core.vacation", "mailr.core.mailgroup_tasks", "mailr.core.tally", "mailr.core.imageproxy", "mailr.core.screener",
                 "mailr.integrations.speakr.sync", "mailr.integrations.speakr.mail", "mailr.notes.tasks",
-                "mailr.tables.tasks"):
+                "mailr.tables.tasks", "mailr.intel.modelcaps"):
         try:
             __import__(mod)
         except ModuleNotFoundError as e:
@@ -79,6 +79,17 @@ async def main() -> None:
     await bootstrap(run_migrations=False)
     _register_handlers()
     await relane()
+    # Models nobody has asked about yet can view images or not (intel/modelcaps.py): asked once at
+    # every start, and daily (core/tasks.py), until their servers answer.
+    try:
+        from mailr.db import session_scope
+        from mailr.intel import modelcaps
+
+        async with session_scope() as db:
+            await modelcaps.queue_check(db)
+            await db.commit()
+    except Exception as e:  # noqa: BLE001  a convenience; the daily run tries again
+        log.warning("could not queue the model capability check: %s", type(e).__name__)
     # Seven lanes: everything else, writes to the users' mail servers (MAILR_UPSTREAM_CONCURRENCY
     # at a time, one per mail account), CalDAV sync two at a time, image proxy fetches two at a
     # time, scheduled upkeep two at a time, bulk reviews one at a time, and the triage of imported

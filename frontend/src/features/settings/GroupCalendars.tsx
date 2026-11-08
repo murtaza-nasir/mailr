@@ -1,6 +1,8 @@
 // Admin → Calendars → Group calendars (calendar/groups.py): calendars an admin attaches to a group.
 // Members see them under "Shared" in Calendar. The admin sees only these calendars' names,
 // colours, access, editors and item counts; never a user's own calendars or events.
+// "Free/busy only" (Stalwart 1.x, offered when the server lists it in `access`): members see busy
+// blocks titled "Busy"; the editors see and change the events. It switches with "Can view" in place.
 import { Check as Tick, Lock, Plus, Users } from 'lucide-react'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -25,11 +27,14 @@ export interface GroupCalendar {
   group: string
   name: string
   color: string | null
-  access: 'read' | 'write'
+  access: GroupAccess
   editors: GroupPerson[]
   ready: boolean
   items?: number | null
 }
+
+/** What members get: write ("Can edit"), read ("Can view"), freebusy ("Free/busy only", Stalwart 1.x). */
+export type GroupAccess = 'read' | 'write' | 'freebusy'
 
 export interface CalendarGroup {
   name: string
@@ -42,12 +47,14 @@ const KEY = ['admin', 'calendars', 'groups']
 export function accessLabel(c: Pick<GroupCalendar, 'access' | 'editors'>): string {
   if (c.access === 'write') return t('settings.groupCalendars.membersCanEdit')
   const n = c.editors.length
+  if (c.access === 'freebusy') return n ? t('settings.groupCalendars.membersSeeFreeBusyEditors', { count: n }) : t('settings.groupCalendars.membersSeeFreeBusy')
   return n ? t('settings.groupCalendars.membersCanViewEditors', { count: n }) : t('settings.groupCalendars.membersCanView')
 }
 
 /** ACT settings.group_calendars @web.settings */
 export function GroupCalendarsPanel({ enabled }: { enabled: boolean }) {
-  const q = useApi<{ enabled: boolean; groups: CalendarGroup[] }>(KEY, '/admin/calendars/groups')
+  const q = useApi<{ enabled: boolean; groups: CalendarGroup[]; access?: GroupAccess[] }>(KEY, '/admin/calendars/groups')
+  const offered = q.data?.access ?? ['write', 'read']
   const [editing, setEditing] = useState<{ group: CalendarGroup; cal: GroupCalendar | null } | null>(null)
   const [deleting, setDeleting] = useState<GroupCalendar | null>(null)
   const groups = q.data?.groups ?? []
@@ -84,7 +91,7 @@ export function GroupCalendarsPanel({ enabled }: { enabled: boolean }) {
                 <div key={c.id} className="gcal-row" data-testid="group-calendar">
                   <span className="gcal-swatch" style={{ background: c.color ?? 'var(--text-3)' }} aria-hidden />
                   <span className="gcal-name">{c.name}</span>
-                  <span className="pill">{c.access === 'read' && <Lock size={11} aria-hidden />} {accessLabel(c)}</span>
+                  <span className="pill">{c.access !== 'write' && <Lock size={11} aria-hidden />} {accessLabel(c)}</span>
                   {c.editors.length > 0 && <span className="muted gcal-editors">{t('settings.groupCalendars.editors', { map: c.editors.map((e) => e.name).join(', ') })}</span>}
                   <span className="muted gcal-count">{c.items == null ? '' : t('settings.groupCalendars.items', { count: c.items })}</span>
                   <button type="button" className="btn text sm" onClick={() => setEditing({ group: g, cal: c })}>{t('common.edit')}</button>
@@ -106,22 +113,28 @@ export function GroupCalendarsPanel({ enabled }: { enabled: boolean }) {
           </div>
         </>
       )}
-      {editing && <GroupCalendarDialog group={editing.group} cal={editing.cal} onClose={() => setEditing(null)} />}
+      {editing && <GroupCalendarDialog group={editing.group} cal={editing.cal} offered={offered} onClose={() => setEditing(null)} />}
       {deleting && <DeleteGroupCalendar cal={deleting} onClose={() => setDeleting(null)} />}
     </div>
   )
 }
 
-function GroupCalendarDialog({ group, cal, onClose }: { group: CalendarGroup; cal: GroupCalendar | null; onClose: () => void }) {
+function GroupCalendarDialog({ group, cal, offered, onClose }: { group: CalendarGroup; cal: GroupCalendar | null; offered: GroupAccess[]; onClose: () => void }) {
   const qc = useQueryClient()
   const [name, setName] = useState(cal?.name ?? '')
   const [color, setColor] = useState(cal?.color ?? SWATCHES[0].light.toUpperCase())
-  const [access, setAccess] = useState<'read' | 'write'>(cal?.access ?? 'write')
+  const [access, setAccess] = useState<GroupAccess>(cal?.access ?? 'write')
+  // Can edit is fixed once made (its calendar lives in the group's account); Can view and Free/busy
+  // only switch in place. Free/busy only is offered while the server lists it (Stalwart 1.x).
+  const fixed = !!cal && cal.access === 'write'
+  const freeBusy = offered.includes('freebusy') || cal?.access === 'freebusy'
+  const fbOff = !offered.includes('freebusy')
   const [editors, setEditors] = useState<number[]>(cal?.editors.map((e) => e.id) ?? [])
   const save = useMutation({
     mutationFn: () => {
       const body: Record<string, unknown> = { name: name.trim(), color: color.toUpperCase() }
-      if (access === 'read') body.editors = editors
+      if (access !== 'write') body.editors = editors
+      if (cal && access !== cal.access) body.access = access
       return cal ? api.patch(`/admin/calendars/groups/${cal.id}`, body) : api.post('/admin/calendars/groups', { ...body, group: group.name, access })
     },
     onSuccess: () => {
@@ -166,13 +179,18 @@ function GroupCalendarDialog({ group, cal, onClose }: { group: CalendarGroup; ca
           </button>
         ))}
       </div>
-      <fieldset className="gcal-access" disabled={!!cal}>
+      <fieldset className="gcal-access" disabled={fixed}>
         <legend>{t('settings.groupCalendars.membersOf', { groupName: group.name })}</legend>
-        <Radio name="gc-access" value="write" current={access} onChange={setAccess} label={t('settings.groupCalendars.canEdit')} desc={t('settings.groupCalendars.everyMemberAddsAndChanges')} />
+        <Radio name="gc-access" value="write" current={access} onChange={setAccess} disabled={!!cal} label={t('settings.groupCalendars.canEdit')} desc={t('settings.groupCalendars.everyMemberAddsAndChanges')} />
         <Radio name="gc-access" value="read" current={access} onChange={setAccess} label={t('settings.groupCalendars.canView')} desc={t('settings.groupCalendars.membersSeeTheEventsOnly')} />
-        {cal && <p className="muted" style={{ fontSize: 12, margin: '4px 0 0' }}>{t('settings.groupCalendars.accessIsSetWhenThe')}</p>}
+        {freeBusy && (
+          <Radio name="gc-access" value="freebusy" current={access} onChange={setAccess} disabled={fbOff && access !== 'freebusy'}
+            label={t('settings.groupCalendars.freeBusyOnly')}
+            desc={fbOff ? t('settings.groupCalendars.freeBusyNeedsStalwart1') : t('settings.groupCalendars.membersSeeOnlyBusyBlocks')} />
+        )}
+        {cal && <p className="muted" style={{ fontSize: 12, margin: '4px 0 0' }}>{fixed ? t('settings.groupCalendars.accessIsSetWhenThe') : t('settings.groupCalendars.switchViewAndFreeBusy')}</p>}
       </fieldset>
-      {access === 'read' && (
+      {access !== 'write' && (
         <fieldset className="gcal-editors-pick">
           <legend>{t('settings.groupCalendars.editors2')}</legend>
           {group.members.length === 0 ? (

@@ -464,6 +464,8 @@ body:has(.nt-overlay) .side-panel { position: relative; z-index: 59; }
   outline: none;
 }
 .nt-row.checked .nt-item-input { text-decoration: line-through; color: var(--text-2); }
+/* A row checked while the note is open stays in place (Checklist.tsx); its chip and extra line dim with it. */
+.nt-row.checked .nt-qty, .nt-row.checked .nt-extra { opacity: 0.6; }
 .nt-extra, .nt-extra-input { font-size: 13px; color: var(--text-2); }
 .nt-row-menu { opacity: 0; }
 .nt-row:hover .nt-row-menu, .nt-row:focus-within .nt-row-menu { opacity: 1; }

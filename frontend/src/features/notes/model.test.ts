@@ -6,7 +6,7 @@ import { describe, expect, it } from 'vitest'
 import { parseItems } from '../../lib/itemadd'
 import { pasteSummary } from './Checklist'
 import { parseLink } from './NoteEditor'
-import { checklistView, mdInline, noteMarkdown, noteText, qtyLabel, sortGroup, sortNotes, splitPinned, stepQty, trashLine, uuid7 } from './model'
+import { checklistView, mdInline, noteMarkdown, noteText, qtyLabel, sortGroup, sortNotes, splitPinned, stepQty, trashLine, uuid7, viewSinceOpened } from './model'
 import type { Item, Note, Section } from './types'
 
 const it0 = (p: Partial<Item>): Item => ({
@@ -49,9 +49,45 @@ describe('display order', () => {
     const inPlace = checklistView({ checked_at_bottom: false }, sections, items)
     expect(inPlace.checked).toEqual([])
     expect(inPlace.groups[0].items.map((i) => i.id)).toContain('c1')
-    // A check that lingers (600 ms) stays in its group.
-    const linger = checklistView({ checked_at_bottom: true }, sections, items, new Set(['c1']))
-    expect(linger.groups[0].items.map((i) => i.id)).toEqual(['top', 'c1'])
+    // A checked item in `stay` keeps its place; "n checked" still counts it.
+    const stay = checklistView({ checked_at_bottom: true }, sections, items, new Set(['c1']))
+    expect(stay.groups[0].items.map((i) => i.id)).toEqual(['top', 'c1'])
+    expect(stay.checked.map((i) => i.id)).toEqual(['c2'])
+    expect(stay.checkedCount).toBe(2)
+    expect(v.checkedCount).toBe(2)
+  })
+
+  it('an item shown unchecked since the note was opened stays in place when checked, until the next opening', () => {
+    const sections = [sec('s1', 'Bakery', 'i')]
+    const note = { checked_at_bottom: true }
+    const before = [
+      it0({ id: 'milk', order: 'a' }),
+      it0({ id: 'eggs', order: 'b' }),
+      it0({ id: 'bread', order: 'c', section_id: 's1' }),
+      it0({ id: 'old', order: 'd', checked: true, checked_at: '2026-10-01T10:00:00Z' }),
+    ]
+    const seen = new Set<string>()
+    const first = viewSinceOpened(seen, note, sections, before)
+    expect(first.groups.map((g) => g.items.map((i) => i.id))).toEqual([['milk', 'eggs'], ['bread']])
+    expect(first.checked.map((i) => i.id)).toEqual(['old'])
+    // A check here (milk) and one from another device (bread): both rows keep their places, ticked.
+    const checked = before.map((i) => (i.id === 'milk' || i.id === 'bread' ? { ...i, checked: true, checked_at: '2026-10-02T10:00:00Z' } : i))
+    const now = viewSinceOpened(seen, note, sections, checked)
+    expect(now.groups.map((g) => g.items.map((i) => i.id))).toEqual([['milk', 'eggs'], ['bread']])
+    expect(now.groups[0].items[0].checked).toBe(true)
+    expect(now.checked.map((i) => i.id)).toEqual(['old'])
+    expect(now.checkedCount).toBe(3)
+    // Unchecked again: still in the same place.
+    const unchecked = viewSinceOpened(seen, note, sections, checked.map((i) => (i.id === 'milk' ? { ...i, checked: false } : i)))
+    expect(unchecked.groups[0].items.map((i) => i.id)).toEqual(['milk', 'eggs'])
+    // A checked item that was never shown unchecked (added checked) goes to the fold at once.
+    const added = viewSinceOpened(seen, note, sections, [...checked, it0({ id: 'new', order: 'e', checked: true, checked_at: '2026-10-03T10:00:00Z' })])
+    expect(added.checked.map((i) => i.id)).toEqual(['new', 'old'])
+    // The next opening (a new set) puts the checked items into the fold.
+    const reopened = viewSinceOpened(new Set(), note, sections, checked)
+    expect(reopened.groups.map((g) => g.items.map((i) => i.id))).toEqual([['eggs'], []])
+    expect(reopened.checked.map((i) => i.id).sort()).toEqual(['bread', 'milk', 'old'])
+    expect(reopened.checkedCount).toBe(3)
   })
 
   it('an item whose section is gone sits in the top group', () => {

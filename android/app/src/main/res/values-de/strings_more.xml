@@ -14,4 +14,11 @@
     <string name="more_allow_menu">Weitere Freigabeoptionen</string>
     <string name="more_always_allow">Immer zulassen</string>
     <string name="more_allow_once">Einmal zulassen</string>
+    <plurals name="more_allow_menu_also">
+        <item quantity="one">Weitere Optionen zum Zulassen, auch %d andere wartende Anfrage genehmigen</item>
+        <item quantity="other">Weitere Optionen zum Zulassen, auch %d andere wartende Anfragen genehmigen</item>
+    </plurals>
+    <string name="more_card_menu">Weitere Aktionen</string>
+    <string name="more_why_asks">Warum es fragt</string>
+    <string name="more_why_hide">Warum es fragt ausblenden</string>
 </resources>

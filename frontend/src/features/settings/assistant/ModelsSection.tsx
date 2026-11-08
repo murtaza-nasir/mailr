@@ -11,7 +11,8 @@ import { api } from '../../../api/client'
 import { useMe } from '../../../api/hooks'
 import { Skeleton } from '../../../components/bits'
 import { toastError } from '../../../stores/ui'
-import { Section } from '../common'
+import { Check, Section } from '../common'
+import { useInstantSettings } from '../save'
 import { t as tr, tx } from '../../../i18n'
 
 interface Where {
@@ -34,6 +35,9 @@ interface TaskModels {
 
 interface ModelsOut {
   tasks: TaskModels[]
+  /** "Let Ambrose see images": the setting, and whether the chat model (and the one for local-only
+   *  content) can view images (backend agent/vision.py). */
+  images?: { setting: boolean; model: boolean; local_model: boolean }
   /** Model choice is off in the access policy. */
   locked?: boolean
   /** The access policy limits the models (not an admin). */
@@ -119,6 +123,7 @@ export function ModelsSection() {
               </div>
             )
           })}
+          {q.data.images && <ImagesRow images={q.data.images} />}
           <div className="mp-row">
             <div className="mp-head">
               <b>{tr('settings.assistant.modelsSection.searchIndex')}</b>
@@ -129,5 +134,30 @@ export function ModelsSection() {
         </div>
       )}
     </Section>
+  )
+}
+
+/** ACT settings.assistant_images @web.settings: whether images reach the assistant's model. */
+function ImagesRow({ images }: { images: { setting: boolean; model: boolean; local_model: boolean } }) {
+  const { s, set } = useInstantSettings()
+  const name = assistantNameNow()
+  const on = s.assistant_images !== false
+  const can = images.model || images.local_model
+  return (
+    <div className="mp-row" data-testid="assistant-images">
+      <div className="mp-head">
+        <b>{tr('settings.assistant.modelsSection.images')}</b>
+        <span className="muted">{tr('settings.assistant.modelsSection.imagesDesc', { name })}</span>
+      </div>
+      <Check
+        checked={on}
+        onChange={(v) => set('assistant_images', v)}
+        label={tr('settings.assistant.modelsSection.letSeeImages', { name })}
+        desc={!can ? tr('settings.assistant.modelsSection.imagesModelCannot', { name })
+          : images.model && images.local_model ? tr('settings.assistant.modelsSection.imagesModelCan')
+          : images.model ? tr('settings.assistant.modelsSection.imagesLocalCannot')
+          : tr('settings.assistant.modelsSection.imagesOnlyLocal')}
+      />
+    </div>
   )
 }

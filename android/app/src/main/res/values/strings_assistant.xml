@@ -231,4 +231,16 @@
         <item quantity="one">%1$s changed by you</item>
         <item quantity="other">%1$s changed by you</item>
     </plurals>
+    <!-- Attachments in the chat (agent.chat_attach). -->
+    <string name="asst_attach">Attach files or images</string>
+    <string name="asst_attach_too_big">%1$s is over %2$d MB and can\'t be attached.</string>
+    <plurals name="asst_attach_limit">
+        <item quantity="one">A message can carry at most %1$d file.</item>
+        <item quantity="other">A message can carry at most %1$d files.</item>
+    </plurals>
+    <string name="asst_attach_remove">Remove %1$s</string>
+    <string name="asst_attach_uploading">Attaching…</string>
+    <string name="asst_attach_failed">%1$s could not be attached: %2$s</string>
+    <string name="asst_attach_image">Image %1$s</string>
+    <string name="asst_attach_sharing">Attaching for %1$s…</string>
 </resources>

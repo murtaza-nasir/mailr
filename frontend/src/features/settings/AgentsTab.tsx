@@ -12,8 +12,8 @@ import { Check, Radio, Section } from './common'
 import { ACTION_LABELS, PermissionsSection } from './PermissionsSection'
 import { useVisibility } from './useVisibility'
 import { localOnlyChoice } from './visibility'
-import { ApprovalCard } from '../rail/assistant/ApprovalCard'
-import { STATUS_TEXT, actorLabel, historyLine, sessionLabelFor, toRef, useApprovals } from '../approvals/approvals'
+import { ApprovalList } from '../approvals/ApprovalList'
+import { STATUS_TEXT, actorLabel, historyLine, useApprovals } from '../approvals/approvals'
 import { t as tr, tx, appLocale } from '../../i18n'
 import { assistantNameNow } from '../rail/assistant/assistantName'
 
@@ -72,14 +72,7 @@ export function ApprovalsSection() {
         </div>
       ) : (
         <div className="approvals-grid">
-          {list.map((p) => (
-            <div key={p.id}>
-              <div className="approvals-meta">
-                {tx('settings.agentsTab.requestedBy', { actorLabel: actorLabel(p), value: p.created_at ? ` · ${formatRelative(p.created_at)}` : '', value2: p.expires_at ? tr('settings.agentsTab.expires', { relative: formatRelative(p.expires_at) }) : '' }, { b: (c) => <b>{c}</b> })}
-              </div>
-              <ApprovalCard a={toRef(p)} actorName={actorLabel(p)} sessionLabel={sessionLabelFor(p)} onStatus={refresh} onDecided={refresh} />
-            </div>
-          ))}
+          <ApprovalList items={list} onStatus={refresh} onDecided={refresh} withExpiry />
         </div>
       )}
       {(history.data ?? []).length > 0 && (

@@ -246,6 +246,293 @@
     <string name="srv_approvals_forward_summary">Вы переслали это с доверенного адреса. {{name}} выполняет запрос из заметки; каждый шаг по-прежнему требует отдельного разрешения.</string>
     <string name="srv_approvals_forward_title">Действовать согласно пересланной заметке</string>
     <string name="srv_approvals_generic_title">Подтвердить это действие</string>
+    <plurals name="srv_approvals_group_calendar">
+        <item quantity="one">{{who}} хочет изменить {{count}} календарь</item>
+        <item quantity="few">{{who}} хочет изменить {{count}} календаря</item>
+        <item quantity="many">{{who}} хочет изменить {{count}} календарей</item>
+        <item quantity="other">{{who}} хочет изменить {{count}} календаря</item>
+    </plurals>
+    <plurals name="srv_approvals_group_cleanup">
+        <item quantity="one">{{who}} хочет применить {{count}} план очистки</item>
+        <item quantity="few">{{who}} хочет применить {{count}} плана очистки</item>
+        <item quantity="many">{{who}} хочет применить {{count}} планов очистки</item>
+        <item quantity="other">{{who}} хочет применить {{count}} плана очистки</item>
+    </plurals>
+    <plurals name="srv_approvals_group_contacts">
+        <item quantity="one">{{who}} хочет изменить группы контактов: {{count}} запрос</item>
+        <item quantity="few">{{who}} хочет изменить группы контактов: {{count}} запроса</item>
+        <item quantity="many">{{who}} хочет изменить группы контактов: {{count}} запросов</item>
+        <item quantity="other">{{who}} хочет изменить группы контактов: {{count}} запроса</item>
+    </plurals>
+    <plurals name="srv_approvals_group_draft_change">
+        <item quantity="one">{{who}} хочет изменить {{count}} черновик</item>
+        <item quantity="few">{{who}} хочет изменить {{count}} черновика</item>
+        <item quantity="many">{{who}} хочет изменить {{count}} черновиков</item>
+        <item quantity="other">{{who}} хочет изменить {{count}} черновика</item>
+    </plurals>
+    <plurals name="srv_approvals_group_draft_new">
+        <item quantity="one">{{who}} хочет сохранить {{count}} черновик</item>
+        <item quantity="few">{{who}} хочет сохранить {{count}} черновика</item>
+        <item quantity="many">{{who}} хочет сохранить {{count}} черновиков</item>
+        <item quantity="other">{{who}} хочет сохранить {{count}} черновика</item>
+    </plurals>
+    <plurals name="srv_approvals_group_event_cancel">
+        <item quantity="one">{{who}} хочет отменить {{count}} мероприятие</item>
+        <item quantity="few">{{who}} хочет отменить {{count}} мероприятия</item>
+        <item quantity="many">{{who}} хочет отменить {{count}} мероприятий</item>
+        <item quantity="other">{{who}} хочет отменить {{count}} мероприятия</item>
+    </plurals>
+    <plurals name="srv_approvals_group_event_change">
+        <item quantity="one">{{who}} хочет изменить {{count}} мероприятие</item>
+        <item quantity="few">{{who}} хочет изменить {{count}} мероприятия</item>
+        <item quantity="many">{{who}} хочет изменить {{count}} мероприятий</item>
+        <item quantity="other">{{who}} хочет изменить {{count}} мероприятия</item>
+    </plurals>
+    <plurals name="srv_approvals_group_event_delete">
+        <item quantity="one">{{who}} хочет удалить {{count}} мероприятие</item>
+        <item quantity="few">{{who}} хочет удалить {{count}} мероприятия</item>
+        <item quantity="many">{{who}} хочет удалить {{count}} мероприятий</item>
+        <item quantity="other">{{who}} хочет удалить {{count}} мероприятия</item>
+    </plurals>
+    <plurals name="srv_approvals_group_event_new">
+        <item quantity="one">{{who}} хочет добавить {{count}} мероприятие</item>
+        <item quantity="few">{{who}} хочет добавить {{count}} мероприятия</item>
+        <item quantity="many">{{who}} хочет добавить {{count}} мероприятий</item>
+        <item quantity="other">{{who}} хочет добавить {{count}} мероприятия</item>
+    </plurals>
+    <plurals name="srv_approvals_group_filter">
+        <item quantity="one">{{who}} хочет изменить {{count}} фильтр</item>
+        <item quantity="few">{{who}} хочет изменить {{count}} фильтра</item>
+        <item quantity="many">{{who}} хочет изменить {{count}} фильтров</item>
+        <item quantity="other">{{who}} хочет изменить {{count}} фильтра</item>
+    </plurals>
+    <plurals name="srv_approvals_group_forwarded">
+        <item quantity="one">{{who}} хочет выполнить действие с {{count}} пересланной заметкой</item>
+        <item quantity="few">{{who}} хочет выполнить действие с {{count}} пересланными заметками</item>
+        <item quantity="many">{{who}} хочет выполнить действие с {{count}} пересланными заметками</item>
+        <item quantity="other">{{who}} хочет выполнить действие с {{count}} пересланной заметкой</item>
+    </plurals>
+    <plurals name="srv_approvals_group_invite">
+        <item quantity="one">{{who}} хочет отправить приглашения для {{count}} мероприятия</item>
+        <item quantity="few">{{who}} хочет отправить приглашения для {{count}} мероприятий</item>
+        <item quantity="many">{{who}} хочет отправить приглашения для {{count}} мероприятий</item>
+        <item quantity="other">{{who}} хочет отправить приглашения для {{count}} мероприятия</item>
+    </plurals>
+    <plurals name="srv_approvals_group_label_change">
+        <item quantity="one">{{who}} хочет изменить {{count}} ярлык</item>
+        <item quantity="few">{{who}} хочет изменить {{count}} ярлыка</item>
+        <item quantity="many">{{who}} хочет изменить {{count}} ярлыков</item>
+        <item quantity="other">{{who}} хочет изменить {{count}} ярлыка</item>
+    </plurals>
+    <plurals name="srv_approvals_group_label_delete">
+        <item quantity="one">{{who}} хочет удалить {{count}} ярлык</item>
+        <item quantity="few">{{who}} хочет удалить {{count}} ярлыка</item>
+        <item quantity="many">{{who}} хочет удалить {{count}} ярлыков</item>
+        <item quantity="other">{{who}} хочет удалить {{count}} ярлыка</item>
+    </plurals>
+    <plurals name="srv_approvals_group_label_new">
+        <item quantity="one">{{who}} хочет добавить {{count}} ярлык</item>
+        <item quantity="few">{{who}} хочет добавить {{count}} ярлыка</item>
+        <item quantity="many">{{who}} хочет добавить {{count}} ярлыков</item>
+        <item quantity="other">{{who}} хочет добавить {{count}} ярлыка</item>
+    </plurals>
+    <plurals name="srv_approvals_group_mail_delete">
+        <item quantity="one">{{who}} хочет удалить почту навсегда: {{count}} запрос</item>
+        <item quantity="few">{{who}} хочет удалить почту навсегда: {{count}} запроса</item>
+        <item quantity="many">{{who}} хочет удалить почту навсегда: {{count}} запросов</item>
+        <item quantity="other">{{who}} хочет удалить почту навсегда: {{count}} запроса</item>
+    </plurals>
+    <plurals name="srv_approvals_group_mail_organise">
+        <item quantity="one">{{who}} хочет упорядочить почту: {{count}} запрос</item>
+        <item quantity="few">{{who}} хочет упорядочить почту: {{count}} запроса</item>
+        <item quantity="many">{{who}} хочет упорядочить почту: {{count}} запросов</item>
+        <item quantity="other">{{who}} хочет упорядочить почту: {{count}} запроса</item>
+    </plurals>
+    <plurals name="srv_approvals_group_mail_spam">
+        <item quantity="one">{{who}} хочет сообщить о спаме: {{count}} запрос</item>
+        <item quantity="few">{{who}} хочет сообщить о спаме: {{count}} запроса</item>
+        <item quantity="many">{{who}} хочет сообщить о спаме: {{count}} запросов</item>
+        <item quantity="other">{{who}} хочет сообщить о спаме: {{count}} запроса</item>
+    </plurals>
+    <plurals name="srv_approvals_group_mail_trash">
+        <item quantity="one">{{who}} хочет переместить почту в Корзину: {{count}} запрос</item>
+        <item quantity="few">{{who}} хочет переместить почту в Корзину: {{count}} запроса</item>
+        <item quantity="many">{{who}} хочет переместить почту в Корзину: {{count}} запросов</item>
+        <item quantity="other">{{who}} хочет переместить почту в Корзину: {{count}} запроса</item>
+    </plurals>
+    <plurals name="srv_approvals_group_memory">
+        <item quantity="one">{{who}} хочет сохранить {{count}} запись в памяти</item>
+        <item quantity="few">{{who}} хочет сохранить {{count}} записи в памяти</item>
+        <item quantity="many">{{who}} хочет сохранить {{count}} записей в памяти</item>
+        <item quantity="other">{{who}} хочет сохранить {{count}} записи в памяти</item>
+    </plurals>
+    <plurals name="srv_approvals_group_note_change">
+        <item quantity="one">{{who}} хочет изменить {{count}} заметку</item>
+        <item quantity="few">{{who}} хочет изменить {{count}} заметки</item>
+        <item quantity="many">{{who}} хочет изменить {{count}} заметок</item>
+        <item quantity="other">{{who}} хочет изменить {{count}} заметки</item>
+    </plurals>
+    <plurals name="srv_approvals_group_note_delete">
+        <item quantity="one">{{who}} хочет удалить {{count}} заметку</item>
+        <item quantity="few">{{who}} хочет удалить {{count}} заметки</item>
+        <item quantity="many">{{who}} хочет удалить {{count}} заметок</item>
+        <item quantity="other">{{who}} хочет удалить {{count}} заметки</item>
+    </plurals>
+    <plurals name="srv_approvals_group_note_labels">
+        <item quantity="one">{{who}} хочет изменить ярлыки заметок: {{count}} запрос</item>
+        <item quantity="few">{{who}} хочет изменить ярлыки заметок: {{count}} запроса</item>
+        <item quantity="many">{{who}} хочет изменить ярлыки заметок: {{count}} запросов</item>
+        <item quantity="other">{{who}} хочет изменить ярлыки заметок: {{count}} запроса</item>
+    </plurals>
+    <plurals name="srv_approvals_group_note_new">
+        <item quantity="one">{{who}} хочет добавить {{count}} заметку</item>
+        <item quantity="few">{{who}} хочет добавить {{count}} заметки</item>
+        <item quantity="many">{{who}} хочет добавить {{count}} заметок</item>
+        <item quantity="other">{{who}} хочет добавить {{count}} заметки</item>
+    </plurals>
+    <plurals name="srv_approvals_group_order">
+        <item quantity="one">{{who}} хочет изменить {{count}} постоянное поручение</item>
+        <item quantity="few">{{who}} хочет изменить {{count}} постоянных поручения</item>
+        <item quantity="many">{{who}} хочет изменить {{count}} постоянных поручений</item>
+        <item quantity="other">{{who}} хочет изменить {{count}} постоянного поручения</item>
+    </plurals>
+    <plurals name="srv_approvals_group_phone_sync">
+        <item quantity="one">{{who}} хочет отправить занятые слоты: {{count}} запрос</item>
+        <item quantity="few">{{who}} хочет отправить занятые слоты: {{count}} запроса</item>
+        <item quantity="many">{{who}} хочет отправить занятые слоты: {{count}} запросов</item>
+        <item quantity="other">{{who}} хочет отправить занятые слоты: {{count}} запроса</item>
+    </plurals>
+    <plurals name="srv_approvals_group_recording">
+        <item quantity="one">{{who}} хочет изменить {{count}} запись</item>
+        <item quantity="few">{{who}} хочет изменить {{count}} записи</item>
+        <item quantity="many">{{who}} хочет изменить {{count}} записей</item>
+        <item quantity="other">{{who}} хочет изменить {{count}} записи</item>
+    </plurals>
+    <plurals name="srv_approvals_group_request">
+        <item quantity="one">У {{who}} {{count}} запрос</item>
+        <item quantity="few">У {{who}} {{count}} запроса</item>
+        <item quantity="many">У {{who}} {{count}} запросов</item>
+        <item quantity="other">У {{who}} {{count}} запроса</item>
+    </plurals>
+    <plurals name="srv_approvals_group_review">
+        <item quantity="one">{{who}} просит вас проверить {{count}} план</item>
+        <item quantity="few">{{who}} просит вас проверить {{count}} плана</item>
+        <item quantity="many">{{who}} просит вас проверить {{count}} планов</item>
+        <item quantity="other">{{who}} просит вас проверить {{count}} плана</item>
+    </plurals>
+    <plurals name="srv_approvals_group_rsvp">
+        <item quantity="one">{{who}} хочет ответить на {{count}} приглашение</item>
+        <item quantity="few">{{who}} хочет ответить на {{count}} приглашения</item>
+        <item quantity="many">{{who}} хочет ответить на {{count}} приглашений</item>
+        <item quantity="other">{{who}} хочет ответить на {{count}} приглашения</item>
+    </plurals>
+    <plurals name="srv_approvals_group_screener">
+        <item quantity="one">{{who}} хочет принять {{count}} решение Screener</item>
+        <item quantity="few">{{who}} хочет принять {{count}} решения Screener</item>
+        <item quantity="many">{{who}} хочет принять {{count}} решений Screener</item>
+        <item quantity="other">{{who}} хочет принять {{count}} решения Screener</item>
+    </plurals>
+    <plurals name="srv_approvals_group_send">
+        <item quantity="one">{{who}} хочет отправить {{count}} письмо</item>
+        <item quantity="few">{{who}} хочет отправить {{count}} письма</item>
+        <item quantity="many">{{who}} хочет отправить {{count}} писем</item>
+        <item quantity="other">{{who}} хочет отправить {{count}} письма</item>
+    </plurals>
+    <plurals name="srv_approvals_group_settings">
+        <item quantity="one">{{who}} хочет изменить настройки: {{count}} запрос</item>
+        <item quantity="few">{{who}} хочет изменить настройки: {{count}} запроса</item>
+        <item quantity="many">{{who}} хочет изменить настройки: {{count}} запросов</item>
+        <item quantity="other">{{who}} хочет изменить настройки: {{count}} запроса</item>
+    </plurals>
+    <plurals name="srv_approvals_group_skill">
+        <item quantity="one">{{who}} хочет изменить {{count}} навык</item>
+        <item quantity="few">{{who}} хочет изменить {{count}} навыка</item>
+        <item quantity="many">{{who}} хочет изменить {{count}} навыков</item>
+        <item quantity="other">{{who}} хочет изменить {{count}} навыка</item>
+    </plurals>
+    <plurals name="srv_approvals_group_table">
+        <item quantity="one">{{who}} хочет изменить {{count}} таблицу</item>
+        <item quantity="few">{{who}} хочет изменить {{count}} таблицы</item>
+        <item quantity="many">{{who}} хочет изменить {{count}} таблиц</item>
+        <item quantity="other">{{who}} хочет изменить {{count}} таблицы</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_change">
+        <item quantity="one">{{who}} хочет изменить {{count}} задачу</item>
+        <item quantity="few">{{who}} хочет изменить {{count}} задачи</item>
+        <item quantity="many">{{who}} хочет изменить {{count}} задач</item>
+        <item quantity="other">{{who}} хочет изменить {{count}} задачи</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_complete">
+        <item quantity="one">{{who}} хочет завершить {{count}} задачу</item>
+        <item quantity="few">{{who}} хочет завершить {{count}} задачи</item>
+        <item quantity="many">{{who}} хочет завершить {{count}} задач</item>
+        <item quantity="other">{{who}} хочет завершить {{count}} задачи</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_delete">
+        <item quantity="one">{{who}} хочет удалить {{count}} задачу</item>
+        <item quantity="few">{{who}} хочет удалить {{count}} задачи</item>
+        <item quantity="many">{{who}} хочет удалить {{count}} задач</item>
+        <item quantity="other">{{who}} хочет удалить {{count}} задачи</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_list">
+        <item quantity="one">{{who}} хочет изменить {{count}} список задач</item>
+        <item quantity="few">{{who}} хочет изменить {{count}} списка задач</item>
+        <item quantity="many">{{who}} хочет изменить {{count}} списков задач</item>
+        <item quantity="other">{{who}} хочет изменить {{count}} списка задач</item>
+    </plurals>
+    <plurals name="srv_approvals_group_task_new">
+        <item quantity="one">{{who}} хочет добавить {{count}} задачу</item>
+        <item quantity="few">{{who}} хочет добавить {{count}} задачи</item>
+        <item quantity="many">{{who}} хочет добавить {{count}} задач</item>
+        <item quantity="other">{{who}} хочет добавить {{count}} задач</item>
+    </plurals>
+    <plurals name="srv_approvals_group_unsubscribe">
+        <item quantity="one">{{who}} хочет отписаться: {{count}} запрос</item>
+        <item quantity="few">{{who}} хочет отписаться: {{count}} запроса</item>
+        <item quantity="many">{{who}} хочет отписаться: {{count}} запросов</item>
+        <item quantity="other">{{who}} хочет отписаться: {{count}} запроса</item>
+    </plurals>
+    <string name="srv_approvals_kind_calendar">Календарь</string>
+    <string name="srv_approvals_kind_cleanup">Очистка</string>
+    <string name="srv_approvals_kind_contacts">Группы контактов</string>
+    <string name="srv_approvals_kind_draft_change">Изменить черновик</string>
+    <string name="srv_approvals_kind_draft_new">Новый черновик</string>
+    <string name="srv_approvals_kind_event_cancel">Отменить мероприятие</string>
+    <string name="srv_approvals_kind_event_change">Изменить мероприятие</string>
+    <string name="srv_approvals_kind_event_delete">Удалить мероприятие</string>
+    <string name="srv_approvals_kind_event_new">Новое мероприятие</string>
+    <string name="srv_approvals_kind_filter">Фильтр</string>
+    <string name="srv_approvals_kind_forwarded">Пересланная заметка</string>
+    <string name="srv_approvals_kind_invite">Отправить приглашения</string>
+    <string name="srv_approvals_kind_label_change">Изменить ярлык</string>
+    <string name="srv_approvals_kind_label_delete">Удалить ярлык</string>
+    <string name="srv_approvals_kind_label_new">Новый ярлык</string>
+    <string name="srv_approvals_kind_mail_delete">Удалить навсегда</string>
+    <string name="srv_approvals_kind_mail_organise">Организовать почту</string>
+    <string name="srv_approvals_kind_mail_spam">Пожаловаться на спам</string>
+    <string name="srv_approvals_kind_mail_trash">В Корзину</string>
+    <string name="srv_approvals_kind_memory">Память</string>
+    <string name="srv_approvals_kind_note_change">Изменить заметку</string>
+    <string name="srv_approvals_kind_note_delete">Удалить заметку</string>
+    <string name="srv_approvals_kind_note_labels">Ярлыки заметок</string>
+    <string name="srv_approvals_kind_note_new">Новая заметка</string>
+    <string name="srv_approvals_kind_order">Постоянное поручение</string>
+    <string name="srv_approvals_kind_phone_sync">Календари телефона</string>
+    <string name="srv_approvals_kind_recording">Запись</string>
+    <string name="srv_approvals_kind_request">Запрос</string>
+    <string name="srv_approvals_kind_review">Проверка</string>
+    <string name="srv_approvals_kind_rsvp">Ответить на приглашение</string>
+    <string name="srv_approvals_kind_screener">Screener</string>
+    <string name="srv_approvals_kind_send">Отправить письмо</string>
+    <string name="srv_approvals_kind_settings">Настройки</string>
+    <string name="srv_approvals_kind_skill">Навык</string>
+    <string name="srv_approvals_kind_table">Таблица</string>
+    <string name="srv_approvals_kind_task_change">Изменить задачу</string>
+    <string name="srv_approvals_kind_task_complete">Завершить задачу</string>
+    <string name="srv_approvals_kind_task_delete">Удалить задачу</string>
+    <string name="srv_approvals_kind_task_list">Список задач</string>
+    <string name="srv_approvals_kind_task_new">Новая задача</string>
+    <string name="srv_approvals_kind_unsubscribe">Отписаться</string>
     <string name="srv_approvals_mail_add_labels_ask">Добавить ярлыки к {{what}}</string>
     <string name="srv_approvals_mail_add_labels_done">присвоены ярлыки {{what}}</string>
     <string name="srv_approvals_mail_add_labels_ing">Присвоение ярлыков {{what}}</string>
@@ -382,6 +669,29 @@
     <string name="srv_approvals_reason_read_mail_agent_outsider">Агент написал это после прочтения почты. {{names}} не участвовал в этой цепочке.</string>
     <string name="srv_approvals_reason_read_mail_agent_outsiders">Агент написал это после прочтения почты. {{names}} и {{last}} не участвовали в этой цепочке.</string>
     <string name="srv_approvals_reason_read_mail_agent_plain">Агент написал это после прочтения почты.</string>
+    <string name="srv_approvals_reason_short_bcc">Сначала спрашивает: после прочтения почты, с скрытой копией</string>
+    <string name="srv_approvals_reason_short_cleanup">Сначала спрашивает: планы очистки всегда требуют вашего подтверждения</string>
+    <string name="srv_approvals_reason_short_draft_new_people">Сначала спрашивает: черновик адресован людям вне цепочки</string>
+    <string name="srv_approvals_reason_short_draft_recipients">Сначала спрашивает: получатели черновика изменились</string>
+    <string name="srv_approvals_reason_short_errand_no_send">Сначала спрашивает: поручение не отправляется само по себе</string>
+    <string name="srv_approvals_reason_short_errand_shared">Сначала спрашивает: запись в общую заметку</string>
+    <string name="srv_approvals_reason_short_forever">Сначала спрашивает: действие необратимо</string>
+    <string name="srv_approvals_reason_short_forwarded">Сначала спрашивает: невозможно проверить автора</string>
+    <string name="srv_approvals_reason_short_hides_mail">Сначала спрашивает: скрывает почту после прочтения</string>
+    <string name="srv_approvals_reason_short_local_copy">Сначала спрашивает: будет скопировано только локальное содержимое</string>
+    <string name="srv_approvals_reason_short_lower_local">Сначала спрашивает: облачные модели могут прочитать это</string>
+    <string name="srv_approvals_reason_short_new_address">Сначала спрашивает: первое сообщение на новый адрес</string>
+    <string name="srv_approvals_reason_short_notes_hides">Сначала спрашивает: скрывает элементы после прочтения чужих сообщений</string>
+    <string name="srv_approvals_reason_short_notes_tainted">Сначала спрашивает: текст написан после прочтения чужих сообщений</string>
+    <string name="srv_approvals_reason_short_other">Сначала спрашивает</string>
+    <string name="srv_approvals_reason_short_outsider">Сначала спрашивает: {{names}} не было в этой цепочке</string>
+    <string name="srv_approvals_reason_short_outsiders">Сначала спрашивает: {{names}} и {{last}} не было в этой цепочке</string>
+    <string name="srv_approvals_reason_short_public_link">Сначала спрашивает: создается общедоступная ссылка</string>
+    <string name="srv_approvals_reason_short_read_mail">Сначала спрашивает: текст написан после прочтения почты</string>
+    <string name="srv_approvals_reason_short_screener">Сначала спрашивает: решения Screener принимаете вы</string>
+    <string name="srv_approvals_reason_short_tainted">Сначала спрашивает: текст написан после прочтения почты</string>
+    <string name="srv_approvals_reason_short_token_text">Сначала спрашивает: текст написан через API-токен</string>
+    <string name="srv_approvals_reason_short_whole_list">Сначала спрашивает: действие применяется ко всему списку</string>
     <string name="srv_approvals_result_already_done">уже выполнено выше</string>
     <plurals name="srv_approvals_result_changes_made">
         <item quantity="one">внесено {{count}} изменение</item>

@@ -26,7 +26,7 @@ PEOPLE_EMAIL = "alice-owner@example.org"
 SNAPSHOT_TABLES = [
     "audit_log",
     "labels", "conversations", "messages", "rules", "permission_rules", "outbox", "api_tokens",
-    "push_targets", "identities", "connectors", "sessions", "chat_sessions", "assistant_skills",
+    "push_targets", "identities", "connectors", "sessions", "chat_sessions", "chat_attachments", "assistant_skills",
     "kb_entities", "kb_memories", "label_decisions", "pending_actions", "forward_addresses", "people",
     "assistant_orders", "assistant_runs", "templates", "speakr_recordings", "recording_links",
     "person_groups", "person_suggestions", "screener_senders", "note_labels", "note_viewer_state",
@@ -164,8 +164,14 @@ async def _owner_objects(client, user, raw):
 
         trusted_addr = add(TrustedAddress(user_id=user.id, email="trusted-owner@work.example", code_hash="0" * 64,
                                           attempts=0, code_expires_at=now + timedelta(minutes=20)))
+        # A file attached to the owner's chat (agent/chat_files.py).
+        from mailr.models import ChatAttachment
+
+        chat_file = add(ChatAttachment(id=uuid.uuid4().hex, user_id=user.id, session_id=chat.id, filename=f"{MARK}.txt",
+                                       content_type="text/plain", size=len(MARK), kind="file", data=MARK.encode(),
+                                       text=MARK, thumb=MARK.encode(), thumb_type="image/png", info={}))
         await db.flush()
-        ids.update(import_batch=imp.id, webcal=wcal.id, trusted=trusted_addr.id)
+        ids.update(import_batch=imp.id, webcal=wcal.id, trusted=trusted_addr.id, chat_file=chat_file.id)
         ids.update(connector=conn.id, identity=ident.id, rule=rule.id, perm=perm.id, push=push.id,
                    session=sess.id, chat=chat.id, skill=skill.id, entity=ent.id, memory=mem.id,
                    fwd=fwd.email, pending=pend.id, job=job.id, decision=dec.id, outbox=ob.id,
@@ -267,6 +273,7 @@ def _fill(template: str, ids: dict) -> str | None:
         r"^/api/v1/approvals/grants/\{rule_id\}/undo": {"rule_id": ids["perm"]},
         r"^/api/v1/agent/chat/\{session_id\}": {"session_id": ids["chat"]},
         r"^/api/v1/agent/sessions/\{session_id\}": {"session_id": ids["chat"]},
+        r"^/api/v1/agent/attachments/\{aid\}": {"aid": ids["chat_file"]},
         r"^/api/v1/agent/reviews/\{rid\}": {"rid": ids["review"]},
         r"^/api/v1/agent/review-choices/\{cid\}": {"cid": ids["review_choice"]},
         r"^/api/v1/tokens/\{tid\}": {"tid": ids["token"]},

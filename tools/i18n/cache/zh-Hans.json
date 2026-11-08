@@ -544,6 +544,11 @@
    "state": "model",
    "text": "允许 12 小时"
   },
+  "android:app:appr_allow_all": {
+   "sha": "18bbf69cfe4e1755",
+   "state": "model",
+   "text": "全部允许"
+  },
   "android:app:appr_allow_all_n": {
    "sha": "8cef7c3d281ab3ca",
    "state": "model",
@@ -682,10 +687,39 @@
     "other": "已拒绝。同时拒绝了 %d 个其他请求。"
    }
   },
+  "android:app:appr_denied_count": {
+   "sha": "a817f711a2cda873",
+   "state": "model",
+   "text": {
+    "other": "已拒绝 %d 个请求。"
+   }
+  },
+  "android:app:appr_deny_all": {
+   "sha": "8bd9b8dbe3661b93",
+   "state": "model",
+   "text": "全部拒绝"
+  },
+  "android:app:appr_deny_all_title": {
+   "sha": "ed236022a94b1f23",
+   "state": "model",
+   "text": {
+    "other": "拒绝全部 %d 个请求？"
+   }
+  },
   "android:app:appr_empty_text": {
    "sha": "a7ad5d8141612d6e",
    "state": "model",
    "text": "审批、未发送的消息和到期的提醒会显示在此处。"
+  },
+  "android:app:appr_group_fold": {
+   "sha": "48cfe1f03df53329",
+   "state": "model",
+   "text": "折叠这些请求"
+  },
+  "android:app:appr_group_unfold": {
+   "sha": "61c88b53f2f73de4",
+   "state": "model",
+   "text": "显示这些请求"
   },
   "android:app:appr_header_approvals": {
    "sha": "9968828089b03728",
@@ -1268,6 +1302,48 @@
    "sha": "1afe3ad2b666f062",
    "state": "model",
    "text": "询问此任务…"
+  },
+  "android:app:asst_attach": {
+   "sha": "d203cefd9f6d83f1",
+   "state": "model",
+   "text": "附加文件或图片"
+  },
+  "android:app:asst_attach_failed": {
+   "sha": "7fe32139ed01c0f2",
+   "state": "model",
+   "text": "无法附加 %1$s：%2$s"
+  },
+  "android:app:asst_attach_image": {
+   "sha": "ffc37ef28098c2e0",
+   "state": "model",
+   "text": "图片 %1$s"
+  },
+  "android:app:asst_attach_limit": {
+   "sha": "06d4124161aec1a7",
+   "state": "model",
+   "text": {
+    "other": "每封邮件最多可附加 %1$d 个文件。"
+   }
+  },
+  "android:app:asst_attach_remove": {
+   "sha": "b2ba32534a7eab17",
+   "state": "model",
+   "text": "移除 %1$s"
+  },
+  "android:app:asst_attach_sharing": {
+   "sha": "00d6d46ec376b9b7",
+   "state": "model",
+   "text": "正在为 %1$s 附加…"
+  },
+  "android:app:asst_attach_too_big": {
+   "sha": "8b1f426b9ddaf5b5",
+   "state": "model",
+   "text": "%1$s 超过 %2$d MB，无法附加。"
+  },
+  "android:app:asst_attach_uploading": {
+   "sha": "703c93b211d12a2a",
+   "state": "model",
+   "text": "正在附加…"
   },
   "android:app:asst_chat_title_cd": {
    "sha": "ad011d801b5fa8d6",
@@ -4691,6 +4767,11 @@
    "sha": "76d3ee78a0e5b73b",
    "state": "model",
    "text": "与 %s 群组共享"
+  },
+  "android:app:cal_shared_with_group_free_busy": {
+   "sha": "fc65a3770d68ef1d",
+   "state": "model",
+   "text": "已与 %s 群组共享 · 仅显示忙/闲状态"
   },
   "android:app:cal_show_as": {
    "sha": "51fc7734454c58c6",
@@ -9653,6 +9734,13 @@
    "state": "manual",
    "text": "更多允许方式"
   },
+  "android:app:more_allow_menu_also": {
+   "sha": "6dd286c353ecd5ad",
+   "state": "model",
+   "text": {
+    "other": "更多允许方式，同时批准 %d 个其他待处理请求"
+   }
+  },
   "android:app:more_allow_once": {
    "sha": "d2ce72fd95f825da",
    "state": "model",
@@ -9693,6 +9781,11 @@
    "state": "model",
    "text": "此操作无法在 Mailr 中撤消。"
   },
+  "android:app:more_card_menu": {
+   "sha": "149682255a9fc3dc",
+   "state": "model",
+   "text": "更多操作"
+  },
   "android:app:more_deny": {
    "sha": "c0456fee0bc09c7e",
    "state": "model",
@@ -9712,6 +9805,16 @@
    "sha": "7eccff321619b1ac",
    "state": "model",
    "text": "隐藏详情"
+  },
+  "android:app:more_why_asks": {
+   "sha": "ad2d98e123d06064",
+   "state": "model",
+   "text": "为何询问"
+  },
+  "android:app:more_why_hide": {
+   "sha": "f342b24ef10ae213",
+   "state": "model",
+   "text": "隐藏询问原因"
   },
   "android:app:new_task_tile_label": {
    "sha": "cfe1b5e64c6eee08",
@@ -12545,6 +12648,11 @@
    "sha": "1a19295cf564147a",
    "state": "model",
    "text": "音频处理"
+  },
+  "android:app:share_ask_label": {
+   "sha": "34bc1aff3340800c",
+   "state": "model",
+   "text": "询问 Ambrose"
   },
   "android:app:share_compose_label": {
    "sha": "4db253ebb2f2ba46",
@@ -17164,6 +17272,11 @@
    "state": "model",
    "text": "取消归档"
   },
+  "android:notes-core:notes_uncheck": {
+   "sha": "bdbcabd5fb0d19dd",
+   "state": "model",
+   "text": "取消勾选"
+  },
   "android:notes-core:notes_uncheck_all": {
    "sha": "6fa3629d436ed245",
    "state": "model",
@@ -19621,6 +19734,498 @@
    "state": "model",
    "text": "批准此操作"
   },
+  "server:approvals.group.calendar": {
+   "sha": "21dc1c45ea097aad",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改 {{count}} 个日历"
+   }
+  },
+  "server:approvals.group.cleanup": {
+   "sha": "652f9eb16c6fd1f7",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要应用 {{count}} 个清理计划"
+   }
+  },
+  "server:approvals.group.contacts": {
+   "sha": "c6e0431a010564cf",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改联系人组：{{count}} 个请求"
+   }
+  },
+  "server:approvals.group.draft_change": {
+   "sha": "3909418ffeb8dcdf",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改 {{count}} 个草稿"
+   }
+  },
+  "server:approvals.group.draft_new": {
+   "sha": "2693b0fc7b7f506e",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要保存 {{count}} 个草稿"
+   }
+  },
+  "server:approvals.group.event_cancel": {
+   "sha": "0f87d83051b853f3",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要取消 {{count}} 个活动"
+   }
+  },
+  "server:approvals.group.event_change": {
+   "sha": "aac1d29d35e4c8e3",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改 {{count}} 个活动"
+   }
+  },
+  "server:approvals.group.event_delete": {
+   "sha": "e3c5eda7c4dc83f5",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要删除 {{count}} 个活动"
+   }
+  },
+  "server:approvals.group.event_new": {
+   "sha": "def1ffe34bef76d3",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要添加 {{count}} 个活动"
+   }
+  },
+  "server:approvals.group.filter": {
+   "sha": "6c1cc0e7d0076817",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改 {{count}} 个过滤器"
+   }
+  },
+  "server:approvals.group.forwarded": {
+   "sha": "2370e38a18408045",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要处理 {{count}} 个转发的笔记"
+   }
+  },
+  "server:approvals.group.invite": {
+   "sha": "725a71a1a4aeb53a",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要为 {{count}} 个活动发送邀请"
+   }
+  },
+  "server:approvals.group.label_change": {
+   "sha": "c23abc5560cdb640",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改 {{count}} 个标签"
+   }
+  },
+  "server:approvals.group.label_delete": {
+   "sha": "f62dd6f237e95850",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要删除 {{count}} 个标签"
+   }
+  },
+  "server:approvals.group.label_new": {
+   "sha": "af0b2f0c378cc422",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要添加 {{count}} 个标签"
+   }
+  },
+  "server:approvals.group.mail_delete": {
+   "sha": "afb16d25585c0dfa",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要永久删除邮件：{{count}} 个请求"
+   }
+  },
+  "server:approvals.group.mail_organise": {
+   "sha": "60763784766d0702",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要整理邮件：{{count}} 个请求"
+   }
+  },
+  "server:approvals.group.mail_spam": {
+   "sha": "db884bfeecff179e",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要报告垃圾邮件：{{count}} 个请求"
+   }
+  },
+  "server:approvals.group.mail_trash": {
+   "sha": "8dc44a55819dec8b",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要将邮件移至回收站：{{count}} 个请求"
+   }
+  },
+  "server:approvals.group.memory": {
+   "sha": "ef352423305131e2",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要保留 {{count}} 条记忆"
+   }
+  },
+  "server:approvals.group.note_change": {
+   "sha": "1b6e79c479da07c5",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改 {{count}} 条笔记"
+   }
+  },
+  "server:approvals.group.note_delete": {
+   "sha": "1aef44cea36f6a51",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要删除 {{count}} 条笔记"
+   }
+  },
+  "server:approvals.group.note_labels": {
+   "sha": "d4a9a52573f8a91d",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改笔记标签：{{count}} 个请求"
+   }
+  },
+  "server:approvals.group.note_new": {
+   "sha": "1e03d24f6bfa84b0",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要添加 {{count}} 条笔记"
+   }
+  },
+  "server:approvals.group.order": {
+   "sha": "f533d876aec10f65",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改 {{count}} 个常设指令"
+   }
+  },
+  "server:approvals.group.phone_sync": {
+   "sha": "d42f8bb5b852a1bc",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要发送忙碌时间：{{count}} 个请求"
+   }
+  },
+  "server:approvals.group.recording": {
+   "sha": "c712986efa082928",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改 {{count}} 个录音"
+   }
+  },
+  "server:approvals.group.request": {
+   "sha": "d43142552fd614ad",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 有 {{count}} 个请求"
+   }
+  },
+  "server:approvals.group.review": {
+   "sha": "caa3b4a4dadebecc",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 希望您审阅 {{count}} 个计划"
+   }
+  },
+  "server:approvals.group.rsvp": {
+   "sha": "0a74df64a2fb42de",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要回复 {{count}} 个邀请"
+   }
+  },
+  "server:approvals.group.screener": {
+   "sha": "1eefdca1b91cac2a",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要做出 {{count}} 个 Screener 决定"
+   }
+  },
+  "server:approvals.group.send": {
+   "sha": "eb01ac811c095387",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要发送 {{count}} 封邮件"
+   }
+  },
+  "server:approvals.group.settings": {
+   "sha": "3c77e615e3e5143d",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改设置：{{count}} 个请求"
+   }
+  },
+  "server:approvals.group.skill": {
+   "sha": "d45fde311706eda3",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改 {{count}} 项技能"
+   }
+  },
+  "server:approvals.group.table": {
+   "sha": "ef1b1d8983913fa6",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改 {{count}} 个表格"
+   }
+  },
+  "server:approvals.group.task_change": {
+   "sha": "ff62eba4ce43d85d",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改 {{count}} 个任务"
+   }
+  },
+  "server:approvals.group.task_complete": {
+   "sha": "3f9992c979e8a9d9",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要完成 {{count}} 个任务"
+   }
+  },
+  "server:approvals.group.task_delete": {
+   "sha": "996b99595eb5a994",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要删除 {{count}} 个任务"
+   }
+  },
+  "server:approvals.group.task_list": {
+   "sha": "df053e11de342ec4",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要更改 {{count}} 个任务列表"
+   }
+  },
+  "server:approvals.group.task_new": {
+   "sha": "f2657b6c5e13689e",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要添加 {{count}} 个任务"
+   }
+  },
+  "server:approvals.group.unsubscribe": {
+   "sha": "59b3d872b8fd46ca",
+   "state": "model",
+   "text": {
+    "other": "{{who}} 想要退订：{{count}} 个请求"
+   }
+  },
+  "server:approvals.kind.calendar": {
+   "sha": "727181e2e1586d2c",
+   "state": "model",
+   "text": "日历"
+  },
+  "server:approvals.kind.cleanup": {
+   "sha": "4d9ff1500db29b4f",
+   "state": "model",
+   "text": "清理"
+  },
+  "server:approvals.kind.contacts": {
+   "sha": "aef901fe3bb3ab73",
+   "state": "model",
+   "text": "联系人组"
+  },
+  "server:approvals.kind.draft_change": {
+   "sha": "bdb42950c7d7e88f",
+   "state": "model",
+   "text": "修改草稿"
+  },
+  "server:approvals.kind.draft_new": {
+   "sha": "30c17ce3ed14da43",
+   "state": "model",
+   "text": "新建草稿"
+  },
+  "server:approvals.kind.event_cancel": {
+   "sha": "d707efa262aa6a70",
+   "state": "model",
+   "text": "取消活动"
+  },
+  "server:approvals.kind.event_change": {
+   "sha": "2b6ffd2b34bea229",
+   "state": "model",
+   "text": "修改活动"
+  },
+  "server:approvals.kind.event_delete": {
+   "sha": "0f676bf8f232f234",
+   "state": "model",
+   "text": "删除活动"
+  },
+  "server:approvals.kind.event_new": {
+   "sha": "fc91c3619341a550",
+   "state": "model",
+   "text": "新建活动"
+  },
+  "server:approvals.kind.filter": {
+   "sha": "806fd7d0fadddfcd",
+   "state": "model",
+   "text": "过滤器"
+  },
+  "server:approvals.kind.forwarded": {
+   "sha": "0c38519e121dc4a7",
+   "state": "model",
+   "text": "转发的笔记"
+  },
+  "server:approvals.kind.invite": {
+   "sha": "14e1b82e3cab8de3",
+   "state": "model",
+   "text": "发送邀请"
+  },
+  "server:approvals.kind.label_change": {
+   "sha": "1b47ee05b6775c1a",
+   "state": "model",
+   "text": "修改标签"
+  },
+  "server:approvals.kind.label_delete": {
+   "sha": "dabe11ab518b58ae",
+   "state": "model",
+   "text": "删除标签"
+  },
+  "server:approvals.kind.label_new": {
+   "sha": "cd70b6f578855cfd",
+   "state": "model",
+   "text": "新建标签"
+  },
+  "server:approvals.kind.mail_delete": {
+   "sha": "ccfc104b838c9d9c",
+   "state": "model",
+   "text": "永久删除"
+  },
+  "server:approvals.kind.mail_organise": {
+   "sha": "768e4c4093d2de2c",
+   "state": "model",
+   "text": "整理邮件"
+  },
+  "server:approvals.kind.mail_spam": {
+   "sha": "a5e0c6c692535769",
+   "state": "model",
+   "text": "举报垃圾邮件"
+  },
+  "server:approvals.kind.mail_trash": {
+   "sha": "11b9283d7b52d5d5",
+   "state": "model",
+   "text": "移至回收站"
+  },
+  "server:approvals.kind.memory": {
+   "sha": "ecbeaaaec5fafe42",
+   "state": "model",
+   "text": "记忆"
+  },
+  "server:approvals.kind.note_change": {
+   "sha": "3313d1e0ee6bbcf0",
+   "state": "model",
+   "text": "修改笔记"
+  },
+  "server:approvals.kind.note_delete": {
+   "sha": "90d6fbb5822daa69",
+   "state": "model",
+   "text": "删除笔记"
+  },
+  "server:approvals.kind.note_labels": {
+   "sha": "1890947ea3dd8076",
+   "state": "model",
+   "text": "笔记标签"
+  },
+  "server:approvals.kind.note_new": {
+   "sha": "6bc294575523ebc9",
+   "state": "model",
+   "text": "新建笔记"
+  },
+  "server:approvals.kind.order": {
+   "sha": "13a8661944a7d473",
+   "state": "model",
+   "text": "常设指令"
+  },
+  "server:approvals.kind.phone_sync": {
+   "sha": "87538b0705e7b07c",
+   "state": "model",
+   "text": "手机日历"
+  },
+  "server:approvals.kind.recording": {
+   "sha": "b35872b56f1995a5",
+   "state": "model",
+   "text": "录音"
+  },
+  "server:approvals.kind.request": {
+   "sha": "f9939f2c12bf64be",
+   "state": "model",
+   "text": "请求"
+  },
+  "server:approvals.kind.review": {
+   "sha": "552e425de43e12fc",
+   "state": "model",
+   "text": "审阅"
+  },
+  "server:approvals.kind.rsvp": {
+   "sha": "9976b6728c63caf0",
+   "state": "model",
+   "text": "回复邀请"
+  },
+  "server:approvals.kind.screener": {
+   "sha": "e0ea0cbac51a01f2",
+   "state": "same",
+   "text": "Screener"
+  },
+  "server:approvals.kind.send": {
+   "sha": "a6b0b0ac391df2ec",
+   "state": "model",
+   "text": "发送邮件"
+  },
+  "server:approvals.kind.settings": {
+   "sha": "83909f82446ee9c3",
+   "state": "model",
+   "text": "设置"
+  },
+  "server:approvals.kind.skill": {
+   "sha": "b8a4eaf2427d7c8d",
+   "state": "model",
+   "text": "技能"
+  },
+  "server:approvals.kind.table": {
+   "sha": "0b982d8e0e671a51",
+   "state": "model",
+   "text": "表格"
+  },
+  "server:approvals.kind.task_change": {
+   "sha": "c6bee2fde8ca0129",
+   "state": "model",
+   "text": "修改任务"
+  },
+  "server:approvals.kind.task_complete": {
+   "sha": "11bf90ccf60bc48f",
+   "state": "model",
+   "text": "完成任务"
+  },
+  "server:approvals.kind.task_delete": {
+   "sha": "7c19332661ed817b",
+   "state": "model",
+   "text": "删除任务"
+  },
+  "server:approvals.kind.task_list": {
+   "sha": "7708a5fb9dce94d9",
+   "state": "model",
+   "text": "任务列表"
+  },
+  "server:approvals.kind.task_new": {
+   "sha": "cfe1b5e64c6eee08",
+   "state": "model",
+   "text": "新建任务"
+  },
+  "server:approvals.kind.unsubscribe": {
+   "sha": "ed1372ad165aa9bb",
+   "state": "model",
+   "text": "退订"
+  },
   "server:approvals.mail.add_labels.ask": {
    "sha": "87caaf09e5edd623",
    "state": "model",
@@ -20231,6 +20836,121 @@
    "sha": "b5d5e6638443c37b",
    "state": "model",
    "text": "代理在阅读邮件后撰写了此内容。"
+  },
+  "server:approvals.reason_short.bcc": {
+   "sha": "33b3a383f857686b",
+   "state": "model",
+   "text": "需先询问：在读取邮件后，包含 Bcc"
+  },
+  "server:approvals.reason_short.cleanup": {
+   "sha": "6a5dbf362ffad64f",
+   "state": "model",
+   "text": "需先询问：清理计划始终等待您的确认"
+  },
+  "server:approvals.reason_short.draft_new_people": {
+   "sha": "8b2cac4871e0447d",
+   "state": "model",
+   "text": "需先询问：向会话外的人发送草稿"
+  },
+  "server:approvals.reason_short.draft_recipients": {
+   "sha": "bf7ae8d36b5d37a6",
+   "state": "model",
+   "text": "需先询问：草稿的收件人已更改"
+  },
+  "server:approvals.reason_short.errand_no_send": {
+   "sha": "5ac2c4bd88c19473",
+   "state": "model",
+   "text": "需先询问：待办事项不会自行发送"
+  },
+  "server:approvals.reason_short.errand_shared": {
+   "sha": "524d09046c4f3d3a",
+   "state": "model",
+   "text": "需先询问：写入共享笔记"
+  },
+  "server:approvals.reason_short.forever": {
+   "sha": "44f9fe90b0427153",
+   "state": "model",
+   "text": "需先询问：无法撤消"
+  },
+  "server:approvals.reason_short.forwarded": {
+   "sha": "745a80aab324a7ca",
+   "state": "model",
+   "text": "需先询问：无法核实作者"
+  },
+  "server:approvals.reason_short.hides_mail": {
+   "sha": "2f53f55b223f4aa6",
+   "state": "model",
+   "text": "需先询问：在读取邮件后隐藏邮件"
+  },
+  "server:approvals.reason_short.local_copy": {
+   "sha": "b7e883da5996de80",
+   "state": "model",
+   "text": "需先询问：将复制仅限本地的内容"
+  },
+  "server:approvals.reason_short.lower_local": {
+   "sha": "06844c507f30efb3",
+   "state": "model",
+   "text": "需先询问：托管模型可能会读取此内容"
+  },
+  "server:approvals.reason_short.new_address": {
+   "sha": "49490d04fc5b9872",
+   "state": "model",
+   "text": "需先询问：向新地址发送的第一条消息"
+  },
+  "server:approvals.reason_short.notes_hides": {
+   "sha": "4a5fc8ff36298607",
+   "state": "model",
+   "text": "需先询问：在读取他人文本后隐藏内容"
+  },
+  "server:approvals.reason_short.notes_tainted": {
+   "sha": "11b44b07e368ebc6",
+   "state": "model",
+   "text": "需先询问：在读取他人文本后编写"
+  },
+  "server:approvals.reason_short.other": {
+   "sha": "4a7c2bd30534b1fa",
+   "state": "model",
+   "text": "需先询问"
+  },
+  "server:approvals.reason_short.outsider": {
+   "sha": "3e5750f62ce5092d",
+   "state": "model",
+   "text": "需先询问：{{names}} 不在该会话中"
+  },
+  "server:approvals.reason_short.outsiders": {
+   "sha": "af861b2082b5edf4",
+   "state": "model",
+   "text": "需先询问：{{names}} 和 {{last}} 不在该会话中"
+  },
+  "server:approvals.reason_short.public_link": {
+   "sha": "cb04f5b11e77c221",
+   "state": "model",
+   "text": "需先询问：创建公开链接"
+  },
+  "server:approvals.reason_short.read_mail": {
+   "sha": "bdaf265a40ffe456",
+   "state": "model",
+   "text": "需先询问：在读取邮件后编写"
+  },
+  "server:approvals.reason_short.screener": {
+   "sha": "6e16ef97fb50ec2d",
+   "state": "model",
+   "text": "需先询问：Screener 的决定由您做出"
+  },
+  "server:approvals.reason_short.tainted": {
+   "sha": "0abea5fee6628627",
+   "state": "model",
+   "text": "需先询问：在读取邮件后编写"
+  },
+  "server:approvals.reason_short.token_text": {
+   "sha": "f7b5395bb50ecc89",
+   "state": "model",
+   "text": "需先询问：通过 API 令牌编写"
+  },
+  "server:approvals.reason_short.whole_list": {
+   "sha": "18a4307b74f1444b",
+   "state": "model",
+   "text": "需先询问：对整个列表执行操作"
   },
   "server:approvals.result.already_done": {
    "sha": "a6d64c12097e8998",
@@ -22041,6 +22761,51 @@
    "state": "model",
    "text": "未找到用户"
   },
+  "server:errors.assistant.attachment_empty": {
+   "sha": "35a969468517bbed",
+   "state": "model",
+   "text": "文件为空"
+  },
+  "server:errors.assistant.attachment_gone": {
+   "sha": "23a98c02724f6bc0",
+   "state": "model",
+   "text": "附件已不存在，请重新附加"
+  },
+  "server:errors.assistant.attachment_heic": {
+   "sha": "381a568997e06fee",
+   "state": "model",
+   "text": "此服务器无法读取 HEIC 和 HEIF 照片，请改为附加 JPEG 或 PNG 文件"
+  },
+  "server:errors.assistant.attachment_not_found": {
+   "sha": "0383a16cbb846090",
+   "state": "model",
+   "text": "未找到该附件"
+  },
+  "server:errors.assistant.attachment_sent": {
+   "sha": "f57792fbdf42fba8",
+   "state": "model",
+   "text": "此文件已随消息发送；删除聊天时该文件也将被删除"
+  },
+  "server:errors.assistant.attachment_too_large": {
+   "sha": "b8e19d11802d56c0",
+   "state": "model",
+   "text": "附件大小不能超过 {{max}} MB"
+  },
+  "server:errors.assistant.attachment_type": {
+   "sha": "753ef8929e682d83",
+   "state": "model",
+   "text": "无法读取此类型的文件；请附加图片、PDF、文本文件，或 Word、Excel、PowerPoint、OpenDocument 或 RTF 文件"
+  },
+  "server:errors.assistant.attachment_unreadable": {
+   "sha": "a0b746ff7cd67418",
+   "state": "model",
+   "text": "无法读取文件：{{reason}}"
+  },
+  "server:errors.assistant.attachments_waiting": {
+   "sha": "6b4a71a28c29c78e",
+   "state": "model",
+   "text": "已有 {{max}} 个文件等待发送；请先发送或删除部分文件"
+  },
   "server:errors.assistant.chat_title_too_long": {
    "sha": "46b9048feb1fe29d",
    "state": "manual",
@@ -22105,6 +22870,11 @@
    "sha": "42827835971e7fc2",
    "state": "model",
    "text": "助手在此对话中仍在回复；请先停止它"
+  },
+  "server:errors.assistant.too_many_attachments": {
+   "sha": "2aae4a37addf52c5",
+   "state": "model",
+   "text": "一条消息最多只能包含 {{max}} 个文件"
   },
   "server:errors.assistant.unknown_review": {
    "sha": "ad3b42155d9a3765",
@@ -25691,6 +26461,82 @@
    "state": "model",
    "text": "未找到 {{value}}。链接可能错误或属于其他账户。"
   },
+  "web:approvals.cards.allowAll": {
+   "sha": "18bbf69cfe4e1755",
+   "state": "model",
+   "text": "全部允许"
+  },
+  "web:approvals.cards.allowAllTip": {
+   "sha": "06e03592ac09bd5a",
+   "state": "model",
+   "text": "允许此处列出的每个请求一次"
+  },
+  "web:approvals.cards.couldNotDenyThem": {
+   "sha": "7e168bb8696e0c58",
+   "state": "model",
+   "text": "无法拒绝这些请求"
+  },
+  "web:approvals.cards.deniedRequests": {
+   "sha": "e193619c72a66df0",
+   "state": "model",
+   "text": {
+    "other": "已拒绝 {{count}} 个请求。{{skipped}}"
+   }
+  },
+  "web:approvals.cards.denyAll": {
+   "sha": "8bd9b8dbe3661b93",
+   "state": "model",
+   "text": "全部拒绝"
+  },
+  "web:approvals.cards.denyAllQuestion": {
+   "sha": "5bfc4c3e37663c6d",
+   "state": "model",
+   "text": {
+    "other": "拒绝全部 {{count}} 个请求？智能体将被告知请求已被拒绝。"
+   }
+  },
+  "web:approvals.cards.expires": {
+   "sha": "a933f408f4cbec16",
+   "state": "model",
+   "text": "{{relative}} 过期"
+  },
+  "web:approvals.cards.hideRequests": {
+   "sha": "eefdd1bfae511823",
+   "state": "model",
+   "text": "隐藏请求"
+  },
+  "web:approvals.cards.more": {
+   "sha": "ba2a8232349d2f54",
+   "state": "model",
+   "text": "更多"
+  },
+  "web:approvals.cards.moreWaysToAllow": {
+   "sha": "f1d8c575803c167d",
+   "state": "model",
+   "text": "更多允许方式"
+  },
+  "web:approvals.cards.moreWaysToAllowAlso": {
+   "sha": "e4c72ab1b5f0ff48",
+   "state": "model",
+   "text": {
+    "other": "更多允许方式（同时批准 {{count}} 个其他待处理请求）"
+   }
+  },
+  "web:approvals.cards.plusN": {
+   "sha": "e840a9b8eeb25af2",
+   "state": "same",
+   "text": "+{{n}}"
+  },
+  "web:approvals.cards.showRequests": {
+   "sha": "7ba145a01ab40c62",
+   "state": "model",
+   "text": "显示请求"
+  },
+  "web:approvals.cards.whyItAsks": {
+   "sha": "ad2d98e123d06064",
+   "state": "model",
+   "text": "询问原因"
+  },
   "web:approvals.grant.aStandingRuleForThis": {
    "sha": "9c534521cb582715",
    "state": "model",
@@ -26708,6 +27554,11 @@
    "sha": "a5000c5f16365a88",
    "state": "model",
    "text": "来自邮件"
+  },
+  "web:calendar.eventDetail.groupBusyNote": {
+   "sha": "1631ef1e7a0d55f8",
+   "state": "model",
+   "text": "“{{group}}”群组日历仅与您共享忙碌时间。其编辑者可以查看标题和详细信息。"
   },
   "web:calendar.eventDetail.isNoLongerInYour": {
    "sha": "978a152a4ac78f85",
@@ -43628,6 +44479,61 @@
    "state": "model",
    "text": "您的管理员尚未授予您访问 {{name}} 的权限。"
   },
+  "web:rail.assistant.attachments.attach": {
+   "sha": "fee8fc0dfaf2afb1",
+   "state": "model",
+   "text": "附加图片或文件"
+  },
+  "web:rail.assistant.attachments.download": {
+   "sha": "c62d2a7f8df865ee",
+   "state": "model",
+   "text": "下载 {{name}}"
+  },
+  "web:rail.assistant.attachments.dropHere": {
+   "sha": "eb9f0d0c7bda01ac",
+   "state": "model",
+   "text": "将文件拖放到此处以附加"
+  },
+  "web:rail.assistant.attachments.imageAlt": {
+   "sha": "6cf533d5dac778db",
+   "state": "model",
+   "text": "已附加图片 {{name}}"
+  },
+  "web:rail.assistant.attachments.notReadable": {
+   "sha": "a1c1d0d06aa55515",
+   "state": "model",
+   "text": "无法读取 {{name}}：请附加图片、PDF、文本文件，或 Word、Excel、PowerPoint、OpenDocument 或 RTF 文件。"
+  },
+  "web:rail.assistant.attachments.pastedImage": {
+   "sha": "39a6c5c3d04bbe27",
+   "state": "model",
+   "text": "粘贴的图片"
+  },
+  "web:rail.assistant.attachments.remove": {
+   "sha": "f87ea03cf025802a",
+   "state": "model",
+   "text": "移除 {{name}}"
+  },
+  "web:rail.assistant.attachments.tooLarge": {
+   "sha": "2c4e1e17e9e34735",
+   "state": "model",
+   "text": "{{name}} 超过 {{max}} MB。"
+  },
+  "web:rail.assistant.attachments.tooMany": {
+   "sha": "7a37d6f4720a4a5f",
+   "state": "model",
+   "text": "每条消息最多可附加 {{max}} 个文件。"
+  },
+  "web:rail.assistant.attachments.uploadFailed": {
+   "sha": "04cbc0e13466824d",
+   "state": "model",
+   "text": "无法附加 {{name}}：{{error}}"
+  },
+  "web:rail.assistant.attachments.uploading": {
+   "sha": "760282e4e0e235ab",
+   "state": "model",
+   "text": "正在上传"
+  },
   "web:rail.assistant.chatList.backToChat": {
    "sha": "3f0f5060fc32cd1d",
    "state": "model",
@@ -47601,10 +48507,20 @@
    "state": "model",
    "text": "可以执行：{{map}}。在“按任务模型”下选择其用途。"
   },
+  "web:settings.adminTab.canModelViewImages": {
+   "sha": "186e624ddd465510",
+   "state": "model",
+   "text": "{{model}} 可查看图片"
+  },
   "web:settings.adminTab.canSignIn": {
    "sha": "0080c1fbc96e0773",
    "state": "model",
    "text": "{{email}} 可以登录"
+  },
+  "web:settings.adminTab.canViewImages": {
+   "sha": "7e2654b51e27f920",
+   "state": "model",
+   "text": "可查看图片"
   },
   "web:settings.adminTab.couldNotChangeTheDefault": {
    "sha": "020a0832a943891e",
@@ -47640,6 +48556,21 @@
    "sha": "2a1445586127b5a8",
    "state": "model",
    "text": "删除用户"
+  },
+  "web:settings.adminTab.detect": {
+   "sha": "4927fecd81c3dd60",
+   "state": "model",
+   "text": "检测"
+  },
+  "web:settings.adminTab.detectTip": {
+   "sha": "8a1068990c50a69b",
+   "state": "model",
+   "text": "再次询问模型服务器哪些模型可查看图片"
+  },
+  "web:settings.adminTab.detecting": {
+   "sha": "5bbcfbe2a7a10896",
+   "state": "model",
+   "text": "正在检测…"
   },
   "web:settings.adminTab.discover": {
    "sha": "b22f790b1fd2ecd3",
@@ -48103,6 +49034,31 @@
    "sha": "3cff8c2059a11ad0",
    "state": "model",
    "text": "用户仍然可以停止他们之前创建的共享。"
+  },
+  "web:settings.adminTab.visionAutoNo": {
+   "sha": "90d482f43a145e0e",
+   "state": "model",
+   "text": "自动：否"
+  },
+  "web:settings.adminTab.visionAutoUnknown": {
+   "sha": "11dc945ee1525dba",
+   "state": "model",
+   "text": "自动：未知（否）"
+  },
+  "web:settings.adminTab.visionAutoYes": {
+   "sha": "add2d384929f5d58",
+   "state": "model",
+   "text": "自动：是"
+  },
+  "web:settings.adminTab.visionNo": {
+   "sha": "b2cbc4e2e5545a6c",
+   "state": "model",
+   "text": "否"
+  },
+  "web:settings.adminTab.visionYes": {
+   "sha": "184fda5c980b9d9c",
+   "state": "model",
+   "text": "是"
   },
   "web:settings.adminTab.whereTheModelsAreOpenai": {
    "sha": "89500f3d6c6e442a",
@@ -49234,6 +50190,41 @@
    "sha": "121c9b9d618a054d",
    "state": "manual",
    "text": "（托管）"
+  },
+  "web:settings.assistant.modelsSection.images": {
+   "sha": "941b085d3176f81f",
+   "state": "model",
+   "text": "图片"
+  },
+  "web:settings.assistant.modelsSection.imagesDesc": {
+   "sha": "e8cba51cd628e8e5",
+   "state": "model",
+   "text": "邮件中的照片和扫描件，以及您在聊天中附加的图片。每次提问最多向 {{name}} 的模型提供四张图片。"
+  },
+  "web:settings.assistant.modelsSection.imagesLocalCannot": {
+   "sha": "b89e38626c25ce07",
+   "state": "model",
+   "text": "当前使用的模型可查看图片。但仅限本地模型的邮件所使用的模型无法查看图片：对于此类邮件，仅显示图片大小。"
+  },
+  "web:settings.assistant.modelsSection.imagesModelCan": {
+   "sha": "6d7915801c24472b",
+   "state": "model",
+   "text": "当前使用的模型可查看图片，包括仅限本地模型的邮件。"
+  },
+  "web:settings.assistant.modelsSection.imagesModelCannot": {
+   "sha": "a539d1fb66f6f807",
+   "state": "model",
+   "text": "{{name}} 使用的模型无法查看图片，因此 {{name}} 只能获知图片大小。管理员可在“管理”→“模型”中标记支持查看图片的模型。"
+  },
+  "web:settings.assistant.modelsSection.imagesOnlyLocal": {
+   "sha": "ea21d67938861d38",
+   "state": "model",
+   "text": "仅仅限本地模型的邮件所使用的模型可查看图片。在其他情况下，仅显示图片大小。"
+  },
+  "web:settings.assistant.modelsSection.letSeeImages": {
+   "sha": "7ce85f094120c643",
+   "state": "model",
+   "text": "允许 {{name}} 查看图片"
   },
   "web:settings.assistant.modelsSection.localOnlyMail": {
    "sha": "9f37c8fa3239220d",
@@ -52783,9 +53774,9 @@
    "text": "您的群组可以看到您何时忙碌。"
   },
   "web:settings.groupCalendars.aGroupCalendarBelongsTo": {
-   "sha": "f510a9bb6121fa24",
+   "sha": "d7b0752512e4b866",
    "state": "model",
-   "text": "群组日历会出现在日历的“共享”下，供群组所有成员查看。成员可以编辑它，或者在指定编辑者进行更改时查看它。群组来自您的登录提供方或“设置”→“管理员”→“用户”。"
+   "text": "群组日历会显示在“日历”的“共享”下，供群组的所有成员查看。成员可以编辑它，在指定编辑者更改时查看它，或者仅查看其忙碌时间。群组来自您的登录提供商或“设置”→“管理员”→“用户”。"
   },
   "web:settings.groupCalendars.accessIsSetWhenThe": {
    "sha": "9b682a412e789839",
@@ -52862,6 +53853,16 @@
    "state": "model",
    "text": "每位成员都可以添加和更改活动。"
   },
+  "web:settings.groupCalendars.freeBusyNeedsStalwart1": {
+   "sha": "d7ffb2010c8130db",
+   "state": "model",
+   "text": "需要邮件服务器上的 Stalwart 1.x。"
+  },
+  "web:settings.groupCalendars.freeBusyOnly": {
+   "sha": "883638ffa96db0e3",
+   "state": "model",
+   "text": "仅显示忙碌/空闲"
+  },
   "web:settings.groupCalendars.groupCalendarSaved": {
    "sha": "e475d68c5814dc63",
    "state": "model",
@@ -52908,6 +53909,23 @@
    "state": "model",
    "text": "{{groupName}} 的成员"
   },
+  "web:settings.groupCalendars.membersSeeFreeBusy": {
+   "sha": "94d5deffb8ebb5d7",
+   "state": "model",
+   "text": "成员仅查看空闲/忙碌状态"
+  },
+  "web:settings.groupCalendars.membersSeeFreeBusyEditors": {
+   "sha": "f5df1653ee35c8b7",
+   "state": "model",
+   "text": {
+    "other": "成员仅查看忙闲状态 · {{count}} 位编辑者"
+   }
+  },
+  "web:settings.groupCalendars.membersSeeOnlyBusyBlocks": {
+   "sha": "ba69b1bc01c3534f",
+   "state": "model",
+   "text": "成员仅查看日历何时忙碌，显示为“忙碌”块。下方的编辑者可以查看和更改活动。"
+  },
   "web:settings.groupCalendars.membersSeeTheEventsOnly": {
    "sha": "98f11a83cc60b7ac",
    "state": "model",
@@ -52932,6 +53950,11 @@
    "sha": "82a30a8583b36c66",
    "state": "model",
    "text": "暂无群组。当登录包含群组声明，或在“设置”→“管理员”→“用户”中分配群组时，群组会出现。"
+  },
+  "web:settings.groupCalendars.switchViewAndFreeBusy": {
+   "sha": "3c0859af8107848d",
+   "state": "model",
+   "text": "您可以在“可查看”和“仅空闲/忙碌”之间切换。“可编辑”在创建日历时设置。"
   },
   "web:settings.groupCalendars.team": {
    "sha": "015c33c4ec95d38f",

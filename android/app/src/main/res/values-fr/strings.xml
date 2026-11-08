@@ -14,6 +14,7 @@
     <string name="channel_sending_desc">Messages n\'ayant pas pu être envoyés</string>
     <string name="share_compose_label">Nouveau message</string>
     <string name="share_self_label">S\'envoyer à soi-même</string>
+    <string name="share_ask_label">Demander à Ambrose</string>
     <string name="share_self_long">S\'envoyer à soi-même</string>
     <string name="share_self_person">Moi</string>
     <string name="self_sending">Envoi à vous-même…</string>

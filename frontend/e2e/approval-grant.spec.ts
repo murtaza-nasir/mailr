@@ -1,6 +1,6 @@
 // ACT-SURFACES: web.reader
 // A grant on one card covers the other waiting requests of the same kind. An agent token asks twice to create a label. In the approvals drawer the first card's
-// "Allow for 12 hours" says it also approves the other one, before the tap. After the tap a toast
+// grants menu ("+1") says "Allow for 12 hours" also approves the other one, before the tap. After the tap a toast
 // says so, with Undo (approval.approve, approval.undo_grant). Screenshots light and dark.
 import os from 'node:os'
 import path from 'node:path'
@@ -33,12 +33,15 @@ test('Allow for 12 hours says it also approves the other waiting request, then o
   await page.getByRole('button', { name: /Waiting for you: \d+ approvals?/ }).click()
   const drawer = page.getByRole('region', { name: 'Approvals' })
   const card = drawer.locator(`[data-approval-id="${first}"]`)
-  const grant = card.getByRole('button', { name: 'Allow for 12 hours (also approves 1 other waiting)' })
+  // The grants sit in the card's grants menu, whose button shows how many others they cover.
+  const menuButton = card.getByRole('button', { name: 'More ways to allow (also approves 1 other waiting)' })
+  await expect(menuButton).toHaveText('+1')
+  await menuButton.click()
+  const menu = page.getByRole('menu', { name: 'More ways to allow' })
+  const grant = menu.getByRole('menuitem', { name: 'Allow for 12 hours (also approves 1 other waiting)' })
   await expect(grant).toBeVisible()
-  // "Always allow…" sits behind the card's ⋮.
-  await card.getByRole('button', { name: 'More choices' }).click()
-  await expect(card.getByRole('button', { name: 'Always allow… (also approves 1 other waiting)' })).toBeVisible()
-  // The help on the button says what the grant covers.
+  await expect(menu.getByRole('menuitem', { name: 'Always allow… (also approves 1 other waiting)' })).toBeVisible()
+  // The help on the item says what the grant covers.
   await expect(grant).toHaveAttribute('data-tip', /This agent may create or change labels for 12 hours without asking, with any input/)
   for (const scheme of ['light', 'dark'] as const) {
     await page.emulateMedia({ colorScheme: scheme })

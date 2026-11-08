@@ -312,8 +312,9 @@ class MailrApi(val client: ApiClient) {
     }
 
     /**
-     * ACT approval.approve_many: "Allow all n" for several waiting requests from one chat or agent. Each is
-     * decided once, as its own card would be; no rule is stored. Returns how many were decided.
+     * ACT approval.approve_many: Allow all (or Deny all, [approve] false) for several waiting requests from one
+     * chat or agent. Each is decided once, as its own card would be; no rule is stored. Returns how many were
+     * decided, and the ones skipped (decided elsewhere, or "not_found").
      */
     suspend fun decideMany(ids: List<Long>, approve: Boolean = true): DecideManyResult =
         client.send("POST", "approvals/decide-many", DecideManyResult.serializer(), MailrJson.encodeToString(buildJsonObject {

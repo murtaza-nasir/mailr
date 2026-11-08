@@ -27,6 +27,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.MoreVert
+import androidx.compose.material.icons.outlined.ArrowDropDown
+import androidx.compose.material.icons.outlined.MoreTime
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import io.github.murtazanasir.mailr.i18n.AppText
+import io.github.murtazanasir.mailr.ui.present.factFields
+import io.github.murtazanasir.mailr.ui.present.longFields
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.ui.platform.testTag
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -86,17 +94,11 @@ import java.util.Locale
 
 // ======================= approvals =======================
 
+// ======================= approvals =======================
+
 // The Approvals screen is in ui/approvals/ApprovalsUi.kt. ApprovalCard is one pending approval, on
 // that screen and in the assistant's chat.
 
-/**
- * One approval: the server's display model (ui/present/ApprovalBody.kt; older servers send title and
- * lines), the decision buttons while it waits, and once decided its outcome in place ("Approved ·
- * moved 6 messages to Trash") with the details folded away. ACT approval.approve @android.approvals @android.assistant, ACT approval.deny @android.approvals @android.assistant
- *
- * [onAsk] adds Ask to the header: the ask capture with this approval as its chip, so the assistant
- * can explain it. Only the buttons here decide it. ACT agent.ask_about @android.assistant @android.approvals
- */
 /** A grant in the card's Allow… menu: its label, and under it what it covers. */
 @Composable
 private fun GrantItem(label: String, help: String) {
@@ -106,7 +108,27 @@ private fun GrantItem(label: String, help: String) {
     }
 }
 
+/** "claude-code · 1 hr ago": who asked and when, for the card's head line. */
+fun requestedLine(a: Approval): String =
+    listOfNotNull(a.actor.ifBlank { AppText.get(R.string.more_an_agent) }, Format.parse(a.createdAt)?.let { Format.relative(it) })
+        .joinToString(" · ")
+
+/** How many other waiting requests the card's grants also approve: "Allow for 12 hours" first, else "Always allow". */
+fun grantCount(a: Approval): Int = a.alsoCovers?.let { if (it.session > 0) it.session else it.always } ?: 0
+
 /**
+ * One approval: the server's display model (ui/present/ApprovalBody.kt; older servers send title and
+ * lines), the decision buttons while it waits, and once decided its outcome in place ("Approved ·
+ * moved 6 messages to Trash") with the details folded away. ACT approval.approve @android.approvals @android.assistant, ACT approval.deny @android.approvals @android.assistant
+ *
+ * The card reads top to bottom: a head line with the kind of request ("New task") and who asked when;
+ * the object's own title as the heading (two lines, with More for the rest); the short facts on one or
+ * two lines and any longer value (a quote, a list) below; one line of why it asks, with ⓘ for the whole
+ * reason; and one row of answers: Allow once, Deny, the grants ("+1 ▾") and ⋮.
+ *
+ * [onAsk] adds Ask to ⋮: the ask capture with this approval as its chip, so the assistant can explain it.
+ * Only the buttons here decide it. ACT agent.ask_about @android.assistant @android.approvals
+ *
  * A review card (`preview.kind == "review"`, ACT agent.review_mail @android.assistant) shows its plan by
  * sender with a move menu per sender, conversation and kept or unsure row, and only Apply and Discard,
  * with "N changed by you" beside them. [onApplyReview] approves it once with the user's moves (`changes`,
@@ -117,45 +139,54 @@ private fun GrantItem(label: String, help: String) {
 fun ApprovalCard(a: Approval, onAsk: ((Approval) -> Unit)? = null, onApplyReview: ((Approval, Map<Long, String>) -> Unit)? = null,
                  reviewAlways: io.github.murtazanasir.mailr.ui.assistant.ReviewAlways? = null,
                  onDecide: (Approval, Boolean, String) -> Unit) {
-    var more by remember { mutableStateOf(false) }
-    var details by remember { mutableStateOf(false) }
+    var grantsOpen by remember(a.id) { mutableStateOf(false) }
+    var moreOpen by remember(a.id) { mutableStateOf(false) }
+    var details by remember(a.id) { mutableStateOf(false) }
+    var titleAll by remember(a.id) { mutableStateOf(false) }
+    var titleLong by remember(a.id) { mutableStateOf(false) }
+    var why by remember(a.id) { mutableStateOf(false) }
     val d = a.shown
     val review = a.review
     // A review card: the user's own moves on it, by conversation id, sent with Apply (apply_changes).
     var changes by androidx.compose.runtime.saveable.rememberSaveable(a.id) { mutableStateOf(emptyMap<Long, String>()) }
     val pending = a.status == "pending"
     val outcome = a.outcome?.takeIf { it.state == a.status }?.localized() ?: io.github.murtazanasir.mailr.ui.present.localOutcome(a.status)
+    val muted = MaterialTheme.colorScheme.onSurfaceVariant
     // A pending card (on the Approvals screen or in the assistant chat) hides other apps' overlays,
     // so none can cover its text while the buttons stay clear.
     if (pending) io.github.murtazanasir.mailr.ui.components.SensitiveScreen()
-    val neededDesc = stringResource(R.string.more_approval_needed_desc, d?.title ?: a.preview.title)
-    val outcomeDesc = stringResource(R.string.more_approval_outcome_desc, d?.title ?: a.preview.title, outcome.text)
+    val heading = a.heading
+    val neededDesc = stringResource(R.string.more_approval_needed_desc, heading)
+    val outcomeDesc = stringResource(R.string.more_approval_outcome_desc, heading, outcome.text)
     Card(Modifier.widthIn(max = 640.dp).fillMaxWidth().semantics { contentDescription = if (pending) neededDesc else outcomeDesc },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow),
         border = if (pending) androidx.compose.foundation.BorderStroke(1.dp,
             if (d?.danger == true) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary) else null) {
         Column(Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Surface(shape = CircleShape, color = MaterialTheme.colorScheme.tertiaryContainer, modifier = Modifier.size(36.dp)) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(io.github.murtazanasir.mailr.ui.present.displayIcon(d?.icon), null, Modifier.size(20.dp))
-                    }
+            // The head line: the kind of request, and who asked when. The label is measured first, so a long
+            // requester name is cut, never the label.
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().testTag("approval-head")) {
+                Icon(io.github.murtazanasir.mailr.ui.present.displayIcon(d?.icon), null, Modifier.size(16.dp),
+                    tint = MaterialTheme.colorScheme.primary)
+                Spacer(Modifier.width(6.dp))
+                a.typeLabel?.let {
+                    Text(it, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary, maxLines = 1,
+                        modifier = Modifier.testTag("approval-kind"))
+                    Spacer(Modifier.width(12.dp))
                 }
-                Spacer(Modifier.width(12.dp))
-                Column(Modifier.weight(1f)) {
-                    Text(d?.title ?: a.preview.title.ifBlank { a.action }, style = MaterialTheme.typography.titleMedium)
-                    Text(a.actor.ifBlank { stringResource(R.string.more_an_agent) }, style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                // Not on a legacy outbox row: its id is not a pending action's.
-                val askDesc = stringResource(R.string.more_ask_about_approval, io.github.murtazanasir.mailr.ui.assistantName())
-                if (onAsk != null && a.outboxId == null) androidx.compose.material3.TextButton(onClick = { onAsk(a) },
-                    contentPadding = PaddingValues(horizontal = 10.dp),
-                    modifier = Modifier.testTag("approval-ask").semantics { contentDescription = askDesc }) {
-                    Icon(Icons.Outlined.AutoAwesome, null, Modifier.size(18.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text(stringResource(R.string.more_ask_ambrose, io.github.murtazanasir.mailr.ui.assistantName()))
-                }
+                Text(requestedLine(a), style = MaterialTheme.typography.bodySmall, color = muted, maxLines = 1,
+                    overflow = TextOverflow.Ellipsis, textAlign = TextAlign.End,
+                    modifier = Modifier.weight(1f).testTag("approval-requested"))
+            }
+            Spacer(Modifier.height(6.dp))
+            // The object's own title, two lines at most; More shows the rest.
+            Text(heading, style = MaterialTheme.typography.titleMedium, maxLines = if (titleAll) Int.MAX_VALUE else 2,
+                overflow = TextOverflow.Ellipsis, modifier = Modifier.testTag("approval-heading"),
+                onTextLayout = { if (!titleAll) titleLong = it.hasVisualOverflow })
+            if (titleLong || titleAll) androidx.compose.material3.TextButton(onClick = { titleAll = !titleAll },
+                contentPadding = PaddingValues(horizontal = 0.dp), modifier = Modifier.height(32.dp).testTag("approval-title-more")) {
+                Text(stringResource(if (titleAll) R.string.present_show_less else R.string.present_show_more),
+                    style = MaterialTheme.typography.labelMedium)
             }
             if (!pending) {
                 Spacer(Modifier.height(8.dp))
@@ -164,7 +195,7 @@ fun ApprovalCard(a: Approval, onAsk: ((Approval) -> Unit)? = null, onApplyReview
                         color = when (a.status) {
                             "executed" -> MaterialTheme.colorScheme.primary
                             "denied", "failed", "expired" -> MaterialTheme.colorScheme.error
-                            else -> MaterialTheme.colorScheme.onSurfaceVariant
+                            else -> muted
                         })
                     if ((d != null && d.fields.isNotEmpty()) || review != null) androidx.compose.material3.TextButton(onClick = { details = !details }) { Text(stringResource(if (details) R.string.more_hide_details else R.string.more_details)) }
                 }
@@ -177,12 +208,19 @@ fun ApprovalCard(a: Approval, onAsk: ((Approval) -> Unit)? = null, onApplyReview
                     io.github.murtazanasir.mailr.ui.assistant.ReviewPlan(review, changes, onChanges = { changes = it },
                         editable = pending && onApplyReview != null, always = reviewAlways)
                 } else if (d != null) {
-                    Spacer(Modifier.height(12.dp))
+                    // The short fields on one line, the longer ones (the email's text, a list) in their box.
+                    val facts = d.factFields(a.head?.name)
+                    if (facts.isNotEmpty()) Text(io.github.murtazanasir.mailr.ui.present.factsText(facts, muted),
+                        style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(top = 4.dp).testTag("approval-facts"))
+                    val long = d.longFields()
                     if (d.danger && pending) Text(stringResource(R.string.more_cant_undo), style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(bottom = 6.dp))
-                    io.github.murtazanasir.mailr.ui.present.ApprovalBody(d)
+                        color = MaterialTheme.colorScheme.error, modifier = Modifier.padding(top = 6.dp))
+                    if (long.isNotEmpty() || d.summary != null) {
+                        Spacer(Modifier.height(8.dp))
+                        io.github.murtazanasir.mailr.ui.present.ApprovalBody(d, fields = long, showReason = false)
+                    }
                 } else if (a.preview.lines.isNotEmpty() || a.target.isNotBlank()) {
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(Modifier.height(8.dp))
                     Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surfaceContainerHigh,
                         modifier = Modifier.fillMaxWidth()) {
                         Column(Modifier.padding(12.dp)) {
@@ -194,10 +232,23 @@ fun ApprovalCard(a: Approval, onAsk: ((Approval) -> Unit)? = null, onApplyReview
                 }
             }
             if (!pending) return@Column
+            // Why it asks: one short line, and ⓘ for the whole reason.
+            a.shortReason?.let { short ->
+                val whyDesc = stringResource(if (why) R.string.more_why_hide else R.string.more_why_asks)
+                Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp).testTag("approval-reason")) {
+                    Text(short, style = MaterialTheme.typography.bodySmall, color = muted, modifier = Modifier.weight(1f, fill = false))
+                    IconButton(onClick = { why = !why }, modifier = Modifier.size(32.dp).testTag("approval-why")
+                        .semantics { contentDescription = whyDesc }) {
+                        Icon(Icons.Outlined.Info, null, Modifier.size(18.dp), tint = muted)
+                    }
+                }
+                if (why) Text(d?.reason ?: short, style = MaterialTheme.typography.bodySmall, color = muted,
+                    modifier = Modifier.padding(bottom = 4.dp).testTag("approval-why-text"))
+            }
             a.expiresAt?.let { Format.parse(it) }?.let {
                 Text(stringResource(R.string.more_expires_in, Format.relative(AppClock.now(), it, ago = false)),
-                    style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 8.dp))
+                    style = MaterialTheme.typography.labelSmall, color = muted,
+                    modifier = Modifier.padding(top = 4.dp))
             }
             Spacer(Modifier.height(12.dp))
             // A review card: only Apply and Discard, with how many conversations the user moved, as on the web.
@@ -209,37 +260,64 @@ fun ApprovalCard(a: Approval, onAsk: ((Approval) -> Unit)? = null, onApplyReview
                     Spacer(Modifier.weight(1f))
                     if (changes.isNotEmpty()) Text(pluralStringResource(R.plurals.asst_review_changed_by_you, changes.size,
                         java.text.NumberFormat.getIntegerInstance().format(changes.size)), style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.testTag("review-changed"))
+                        color = muted, modifier = Modifier.testTag("review-changed"))
                     Button(onClick = { onApplyReview?.invoke(a, changes) ?: onDecide(a, true, "once") }, modifier = Modifier.testTag("review-apply")) {
                         Text(stringResource(R.string.asst_review_apply))
                     }
                 }
+                if (onAsk != null) CardMenu(a, onAsk, moreOpen) { moreOpen = it }
                 return@Column
             }
-            // The answer buttons drop touches that come through another app's overlay (tapjacking).
-            Row(Modifier.refuseObscuredTouches(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                OutlinedButton(onClick = { onDecide(a, false, "once") }) { Text(stringResource(R.string.more_deny)) }
+            // One row of answers. The buttons drop touches that come through another app's overlay (tapjacking).
+            Row(Modifier.fillMaxWidth().refuseObscuredTouches().testTag("approval-actions"), horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically) {
+                Button(onClick = { onDecide(a, true, "once") }, contentPadding = PaddingValues(horizontal = 16.dp),
+                    modifier = Modifier.testTag("approval-allow")) { Text(stringResource(R.string.more_allow_once), maxLines = 1) }
+                OutlinedButton(onClick = { onDecide(a, false, "once") }, contentPadding = PaddingValues(horizontal = 16.dp),
+                    modifier = Modifier.testTag("approval-deny")) { Text(stringResource(R.string.more_deny), maxLines = 1) }
                 Spacer(Modifier.weight(1f))
-                // A card a hard rule held (grants false) is decided once: no ⋮ with grants, as on the web.
+                // A card a hard rule held (grants false) is decided once: no grants menu, as on the web.
                 if (a.outboxId == null && a.grants) Box {
-                    // The rarer, longer grants behind ⋮, as on the web; its name says what is inside.
-                    IconButton(onClick = { more = true }, modifier = Modifier.testTag("approval-more")) {
-                        Icon(Icons.Outlined.MoreVert, stringResource(R.string.more_allow_menu))
+                    val n = grantCount(a)
+                    val grantsDesc = if (n > 0) pluralStringResource(R.plurals.more_allow_menu_also, n, n) else stringResource(R.string.more_allow_menu)
+                    io.github.murtazanasir.mailr.look.TextButton(onClick = { grantsOpen = true }, contentPadding = PaddingValues(horizontal = 8.dp),
+                        modifier = Modifier.testTag("approval-grants").semantics { contentDescription = grantsDesc }) {
+                        // The count of others it approves too, else a clock: the grants are allowing for longer.
+                        if (n > 0) Text("+$n", maxLines = 1) else Icon(Icons.Outlined.MoreTime, null, Modifier.size(18.dp))
+                        Icon(Icons.Outlined.ArrowDropDown, null, Modifier.size(20.dp))
                     }
                     // Each grant says what it covers, and how many other waiting requests it approves too
                     // (io.github.murtazanasir.mailr.ui.approvals.GrantText).
                     val grant = io.github.murtazanasir.mailr.ui.approvals.GrantText
-                    DropdownMenu(more, { more = false }) {
+                    DropdownMenu(grantsOpen, { grantsOpen = false }) {
                         DropdownMenuItem({ GrantItem(grant.sessionLabel(a) + grant.also(a.alsoCovers?.session), grant.sessionHelp(a)) },
-                            { more = false; onDecide(a, true, "session") },
+                            { grantsOpen = false; onDecide(a, true, "session") },
                             modifier = Modifier.refuseObscuredTouches().testTag("approval-grant-session"))
                         DropdownMenuItem({ GrantItem(stringResource(R.string.more_always_allow) + grant.also(a.alsoCovers?.always), grant.ALWAYS_HELP) },
-                            { more = false; onDecide(a, true, "always") },
+                            { grantsOpen = false; onDecide(a, true, "always") },
                             modifier = Modifier.refuseObscuredTouches().testTag("approval-grant-always"))
                     }
                 }
-                Button(onClick = { onDecide(a, true, "once") }) { Text(stringResource(R.string.more_allow_once)) }
+                // Not on a legacy outbox row: its id is not a pending action's.
+                if (onAsk != null && a.outboxId == null) CardMenu(a, onAsk, moreOpen) { moreOpen = it }
             }
+        }
+    }
+}
+
+/** The card's ⋮: Ask (the assistant explains the request; only the card's buttons decide it). */
+@Composable
+private fun CardMenu(a: Approval, onAsk: (Approval) -> Unit, open: Boolean, setOpen: (Boolean) -> Unit) {
+    val name = io.github.murtazanasir.mailr.ui.assistantName()
+    val askDesc = stringResource(R.string.more_ask_about_approval, name)
+    Box {
+        IconButton(onClick = { setOpen(true) }, modifier = Modifier.size(40.dp).testTag("approval-more")) {
+            Icon(Icons.Outlined.MoreVert, stringResource(R.string.more_card_menu))
+        }
+        DropdownMenu(open, { setOpen(false) }) {
+            DropdownMenuItem({ Text(stringResource(R.string.more_ask_ambrose, name)) }, { setOpen(false); onAsk(a) },
+                leadingIcon = { Icon(Icons.Outlined.AutoAwesome, null) },
+                modifier = Modifier.testTag("approval-ask").semantics { contentDescription = askDesc })
         }
     }
 }

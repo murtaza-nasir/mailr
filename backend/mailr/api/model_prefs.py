@@ -81,7 +81,14 @@ async def my_models(p: Principal = Depends(current), db: AsyncSession = Depends(
                       "effective": await _effective(db, user, task, False),
                       "effective_local_only": await _effective(db, user, task, True)})
     embed = await llm.resolve_embed(db, sensitive=False, user_id=user.id)
-    return {"tasks": tasks, "locked": locked, "restricted": not acc.unrestricted,
+    from mailr.agent import vision
+
+    # Settings → Ambrose → Models → "Let Ambrose see images": the switch, and whether the chat model
+    # (and the one for local-only content) can view images (agent/vision.py).
+    images = {"setting": vision.setting_on(user),
+              "model": await vision.model_can_view(db, user, sensitive=False),
+              "local_model": await vision.model_can_view(db, user, sensitive=True)}
+    return {"tasks": tasks, "locked": locked, "restricted": not acc.unrestricted, "images": images,
             "message": None if acc.feature("assistant") else access.no_assistant_message(name),
             "embed": {"endpoint": embed.endpoint.name, "model": embed.model, "locality": embed.endpoint.locality}
             if embed else None}

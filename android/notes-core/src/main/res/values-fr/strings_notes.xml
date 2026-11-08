@@ -206,6 +206,7 @@
     <string name="notes_keep_the_items">Conserver les éléments</string>
     <string name="notes_delete_them_too">Les supprimer également</string>
     <string name="notes_check">Cocher</string>
+    <string name="notes_uncheck">Décocher</string>
     <string name="notes_move_to_section">Déplacer vers une section</string>
     <string name="notes_edit_quantity">Modifier la quantité</string>
     <string name="notes_edit">Modifier</string>

@@ -25,6 +25,8 @@ ALLOWED: dict[str, tuple[int, str]] = {
         1, PROBE + " (probe=True: is the chat model local)"),
     "api/mailgroup_routes.py::cleanup_suggest::llm.resolve::sensitive": (
         1, PROBE + " (probe=True; the job's model calls pass each message's local_only)"),
+    "api/model_prefs.py::my_models::vision.model_can_view::sensitive": (
+        1, PROBE + " (Settings shows whether the chat model can view images)"),
     "api/model_prefs.py::my_models::llm.resolve_embed::sensitive": (
         1, PROBE + " (Settings shows which embedding endpoint is in use)"),
     "api/onboarding_routes.py::_assistant::llm.available::sensitive": (1, PROBE),

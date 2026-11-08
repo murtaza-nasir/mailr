@@ -156,7 +156,8 @@ export type SharedInfo = GroupShared | UserShared
 export interface GroupShared {
   kind: 'group'
   group: string
-  access: 'read' | 'write'
+  /** What this member gets: freebusy = busy blocks only (a "Free/busy only" group calendar, Stalwart 1.x). */
+  access: 'read' | 'write' | 'freebusy'
   editor?: boolean
   group_calendar_id?: number
 }
@@ -202,7 +203,9 @@ export function sharedLabel(c: Pick<Collection, 'shared' | 'read_only'>): string
     if (c.shared.via?.length) return `${who} · ${throughLabel(c.shared.level, c.shared.via)}`
     return `${who}${c.read_only ? t('calendar.types.viewOnly') : ''}`
   }
-  return `${t('calendar.types.sharedWithTheGroup', { group: c.shared.group })}${c.read_only ? t('calendar.types.viewOnly') : ''}`
+  const group = t('calendar.types.sharedWithTheGroup', { group: c.shared.group })
+  if (c.shared.access === 'freebusy') return `${group}${t('calendar.types.freeBusyOnlySuffix')}`
+  return `${group}${c.read_only ? t('calendar.types.viewOnly') : ''}`
 }
 
 /** Who renames or deletes a calendar this user only shares. */
