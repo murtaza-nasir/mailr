@@ -1,7 +1,7 @@
 {
   "name": "mailr-web",
   "private": true,
-  "version": "0.40.41",
+  "version": "0.40.42",
   "type": "module",
   "scripts": {
     "dev": "vite",

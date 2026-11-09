@@ -4,6 +4,11 @@ The changes in each Mailr release are listed here, newest first. A release is ta
 on GitHub, and its image is published as `ghcr.io/murtaza-nasir/mailr:<version>`. The Android app
 of a release has the same version number; the separate Notes app has its own.
 
+## 0.40.42
+
+- Web notes: Clear checked right after checking an item now clears it too; before, the clear could
+  reach the server before the check and leave the item behind.
+
 ## 0.40.41
 
 - Group calendars can be shared with the group as **Free/busy only** (Stalwart 1.0 or later).

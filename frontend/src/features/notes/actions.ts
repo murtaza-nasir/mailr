@@ -29,6 +29,21 @@ function serial<T>(key: string, fn: () => Promise<T>): Promise<T> {
   return run
 }
 
+// Item edits (a check, a text change) are sent at once, not one after another, so a note-wide
+// write that depends on them (Clear checked) waits for the ones still on their way first.
+const itemWrites = new Map<string, Set<Promise<unknown>>>()
+function tracked<T>(noteId: string, p: Promise<T>): Promise<T> {
+  const set = itemWrites.get(noteId) ?? new Set<Promise<unknown>>()
+  itemWrites.set(noteId, set)
+  set.add(p)
+  void p.finally(() => { set.delete(p); if (set.size === 0) itemWrites.delete(noteId) }).catch(() => undefined)
+  return p
+}
+async function settled(noteId: string): Promise<void> {
+  const set = itemWrites.get(noteId)
+  if (set?.size) await Promise.allSettled([...set])
+}
+
 const versions = new Map<string, number>()
 /** The newest version of a note this tab knows (a save's answer, or the last read). */
 export function noteVersion(qc: QueryClient, id: string): number | undefined {
@@ -290,7 +305,7 @@ export async function patchItem(qc: QueryClient, noteId: string, item: Item, pat
     : editOp(me(), noteId, item, offlineEdit(patch), uuid7())).then(() => null)
   if (waits(noteId)) return later()
   try {
-    const r = await write<R<{ item: Item }>>(qc, 'PATCH', `${P(noteId)}/items/${enc(item.id)}`, body, { quiet: opts.quiet, label })
+    const r = await tracked(noteId, write<R<{ item: Item }>>(qc, 'PATCH', `${P(noteId)}/items/${enc(item.id)}`, body, { quiet: opts.quiet, label }))
     return r.item ?? null
   } catch (e) {
     if (isNetwork(e) && useNotesQueue.getState().user != null) return later()
@@ -327,7 +342,7 @@ export const moveItem = (qc: QueryClient, noteId: string, itemId: string, body: 
 
 // ACT note.clear_checked
 export const clearChecked = (qc: QueryClient, noteId: string) => offlineRefuses(t('notes.actions.checkedItemsAreCleared')) ? Promise.resolve({ count: 0 }) :
-  write<R<{ count: number }>>(qc, 'POST', `${P(noteId)}/items/clear-checked`, {}, { label: t('notes.actions.checkedItemsCleared') })
+  settled(noteId).then(() => serial(noteId, () => write<R<{ count: number }>>(qc, 'POST', `${P(noteId)}/items/clear-checked`, {}, { label: t('notes.actions.checkedItemsCleared') })))
 
 // ACT note.uncheck_all
 export const uncheckAll = (qc: QueryClient, noteId: string) => offlineRefuses(t('notes.actions.uncheckingEveryItemWorks')) ? Promise.resolve({ count: 0 }) :

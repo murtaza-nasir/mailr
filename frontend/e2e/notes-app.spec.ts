@@ -118,7 +118,8 @@ test('checklist editing: add with the grammar, sections by paste, check into the
   // ACT checkitem.check @web.note: the row strikes in place; "n checked" counts it.
   await row(page, 'bread').getByRole('checkbox').click()
   await expect(editor(page).getByTestId('checked-fold')).toContainText('1 checked')
-  expect(item(await get(page.request, n.id), 'bread')?.checked).toBe(true)
+  // The screen shows the tick at once; the save reaches the server a moment later.
+  await expect.poll(async () => item(await get(page.request, n.id), 'bread')?.checked).toBe(true)
   // Undo: the toast's Undo unchecks it again.
   await page.locator('.toast').getByRole('button', { name: 'Undo' }).last().click()
   await expect.poll(async () => item(await get(page.request, n.id), 'bread')?.checked).toBe(false)
@@ -136,7 +137,7 @@ test('checklist editing: add with the grammar, sections by paste, check into the
   await editor(page).getByRole('button', { name: 'Clear checked' }).click()
   await page.getByRole('dialog', { name: 'Clear checked items?' }).getByRole('button', { name: 'Clear' }).click()
   await expect(editor(page).getByTestId('checked-fold')).toHaveCount(0)
-  expect(item(await get(page.request, n.id), 'paper towels')).toBeUndefined()
+  await expect.poll(async () => item(await get(page.request, n.id), 'paper towels')).toBeUndefined()
 
   // ACT checkitem.move @web.note: Alt+↓ moves an item down; Alt+Shift+↑ to the previous section.
   const eggs = row(page, 'eggs').locator('input.nt-item-input')
@@ -168,7 +169,7 @@ test('a checked row stays in place until the note is opened again; Clear checked
   await page.waitForTimeout(1_000)
   await order().toEqual(['milk', 'eggs', 'bread', 'butter'])
   expect({ eggs: await y('eggs'), butter: await y('butter') }).toEqual(before)
-  expect(item(await get(page.request, n.id), 'milk')?.checked).toBe(true)
+  await expect.poll(async () => item(await get(page.request, n.id), 'milk')?.checked).toBe(true)
 
   // The editor's Undo unchecks it in place; Redo checks it again, still in place.
   const toolbar = editor(page).getByRole('toolbar')
@@ -312,7 +313,7 @@ test('usual items: a chip adds the item to its last section; × hides it', async
   // ACT checkitem.usual_add @web.note
   await strip.getByRole('button', { name: 'coffee', exact: true }).click()
   await expect(row(page, 'coffee')).toBeVisible()
-  expect(item(await get(page.request, n.id), 'coffee')?.checked).toBe(false)
+  await expect.poll(async () => item(await get(page.request, n.id), 'coffee')?.checked).toBe(false)
   // ACT checkitem.usual_dismiss @web.note
   await strip.getByRole('button', { name: 'Hide tea for now' }).click()
   await expect(editor(page).getByTestId('usual-strip')).toHaveCount(0)
