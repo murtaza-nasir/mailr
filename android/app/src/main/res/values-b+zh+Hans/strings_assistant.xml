@@ -85,6 +85,12 @@
     <string name="asst_step_denied">已拒绝</string>
     <string name="asst_step_expired">已过期</string>
     <string name="asst_step_failed">失败</string>
+    <string name="asst_remember_question">记住：“%1$s”？</string>
+    <string name="asst_remember_yes">是</string>
+    <string name="asst_remember_no">否</string>
+    <string name="asst_remember_kept">已记住：“%1$s”</string>
+    <string name="asst_remember_dropped">未记住：“%1$s”</string>
+    <string name="asst_remember_merged">已添加到其他记忆：“%1$s”</string>
     <plurals name="asst_used_memories">
         <item quantity="other">已使用记忆 · %d</item>
     </plurals>

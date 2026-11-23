@@ -122,6 +122,7 @@ fun UsedMemories(ids: List<Long>, actions: MemoryActions) {
                             verticalAlignment = Alignment.CenterVertically) {
                             Column(Modifier.weight(1f).padding(vertical = 6.dp)) {
                                 Text(m.text, style = MaterialTheme.typography.bodyMedium)
+                                io.github.murtazanasir.mailr.ui.memory.MergedFrom(m.mergedFrom.map { it.text })
                                 m.entity?.let {
                                     Text(if (it.isSelf) stringResource(R.string.asst_memory_you) else it.name,
                                         style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

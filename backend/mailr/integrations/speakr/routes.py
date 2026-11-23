@@ -16,7 +16,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from mailr.core.auth import Principal, scope
+from mailr.core.auth import Principal, current, scope
 from mailr.db import get_db
 from mailr.i18n import ApiError
 from mailr.integrations.speakr import action_items, followup, service, store
@@ -881,6 +881,48 @@ def _hook_http(e: Exception) -> HTTPException:
             return ApiError(502, "speakr.error_hint", error=str(e), hint=hint)
         return ApiError(502, "speakr.error", error=str(e))
     return _http(e)
+
+
+class SsoStartIn(BaseModel):
+    base_url: str = Field("", max_length=500)
+    connector_id: int | None = None
+    data_class: str = Field("local_only", pattern="^(normal|local_only)$")
+
+
+# ACT speakr.connect @api (Connect with single sign-on)
+@router.post("/sso/start")
+async def sso_start(body: SsoStartIn, p: Principal = Depends(current), db: AsyncSession = Depends(get_db)):
+    """The link that connects (or renews) a Speakr account through single sign-on. Signed-in
+    sessions only, like adding any account."""
+    from mailr.api.connector_routes import _session_only
+    from mailr.integrations.speakr import sso
+
+    _session_only(p)
+    return await sso.start(db, p.user, body.base_url, body.connector_id, body.data_class)
+
+
+# ACT speakr.connect @api (Speakr for everyone)
+@router.get("/auto")
+async def auto_status(p: Principal = Depends(current), db: AsyncSession = Depends(get_db)):
+    """The Speakr address the admin set for this server, whether it is connected at each single
+    sign-on, and how the last try went (`state`: connected, declined or failed with `reason`).
+    `notice` is true once after it was connected for you."""
+    from mailr.integrations.speakr import auto
+
+    return await auto.status(db, p.user)
+
+
+# ACT speakr.connect @api (Speakr for everyone: the notice was shown)
+@router.post("/auto/seen")
+async def auto_seen(p: Principal = Depends(current), db: AsyncSession = Depends(get_db)):
+    """The notice that Speakr was connected at sign-in has been shown."""
+    from mailr.api.connector_routes import _session_only
+    from mailr.integrations.speakr import auto
+
+    _session_only(p)
+    await auto.mark_seen(db, p.user)
+    await db.commit()
+    return {"ok": True}
 
 
 # ACT speakr.connect @api (Get updates instantly)

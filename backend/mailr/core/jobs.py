@@ -102,7 +102,7 @@ UPSTREAM_KINDS = ["connector.write_back", "connector.folder_op", "connector.rete
 # CalDAV sync and calendar upkeep get a lane too: a slow calendar server must not hold up
 # mail or reminders (reminders.fire stays in the main lane).
 CALDAV_KINDS = ["calendar.sync", "calendar.check", "calendar.itip_incoming", "calendar.rematerialize",
-                "calendar.reorder", "calendar.webcal_refresh"]
+                "calendar.reorder", "calendar.webcal_refresh", "calendar.park_alarms"]
 # Bulk reviews (agent/review.py) call the chat model batch after batch for minutes: one at a time,
 # in a lane of their own, so they never hold the slots sends and reminders need.
 REVIEW_KINDS = ["assistant.review"]

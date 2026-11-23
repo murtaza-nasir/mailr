@@ -2887,6 +2887,8 @@
       "learnQueued": "已开始学习。新建议将显示在“待审阅”下。",
       "lastLearned_other": "上次学习 {{when}} · {{count}} 条新内容",
       "lastFailed": "上次尝试（{{when}}）失败。{{reason}}",
+      "learningPaused": "已于 {{when}} 检查。有 15 条建议等待审核，因此未添加任何新内容。请审核这些建议以恢复学习。",
+      "updatesSaved": "保留此更改将修改您已保存的笔记：“{{text}}”",
       "learningOff": "从邮件中学习已关闭。",
       "neverLearned": "尚未从邮件中学习。",
       "errors": {
@@ -2911,7 +2913,11 @@
       "empty": "暂无记忆",
       "emptyHint": "告诉 {{name}} “记住 Sam 是我的会计师”，或在此处添加一条。",
       "makeTask": "创建任务",
-      "taskMade": "任务已添加。"
+      "taskMade": "任务已添加。",
+      "mergedFrom_other": "已合并自 {{count}} 条笔记",
+      "tidy": "整理",
+      "tidyTip": "查找需要合并或停用的记忆。建议会显示在“待审核”下。",
+      "tidyQueued": "已开始整理。任何需要合并或停用的内容都会显示在“待审核”下。"
     },
     "dialog": {
       "you": "您",
@@ -2925,6 +2931,30 @@
     "settings": {
       "learnFromChats": "从聊天中建议记忆",
       "learnFromChatsDesc": "当您告诉 {{name}} 一些长期信息时，它会显示在“记忆 → 待审阅”下。"
+    },
+    "ask": {
+      "question": "记住：“{{text}}”？",
+      "yes": "是",
+      "no": "否",
+      "kept": "已记住：“{{text}}”",
+      "dropped": "未记住：“{{text}}”",
+      "merged": "已添加到另一条记忆：“{{text}}”"
+    },
+    "review": {
+      "count_other": "{{count}} 项待审阅",
+      "openMemory": "打开待审阅的记忆",
+      "title_other": "{{count}} 条待审阅记忆",
+      "notNow": "暂不处理（下周再提醒）",
+      "otherTopic": "其他",
+      "merge": "合并",
+      "mergeInto": "合并至…",
+      "merged": "已合并。",
+      "retire": "停用",
+      "keepNote": "保留笔记",
+      "retires": "Ambrose 建议不再使用此已保存的记忆。",
+      "retiresWhy": "Ambrose 建议不再使用此已保存的记忆：{{reason}}",
+      "mergesNotes_other": "保留此项将替换 {{count}} 个已保存的记忆：",
+      "openAll": "在“记忆”页面上查看"
     }
   },
   "notes": {
@@ -7042,7 +7072,9 @@
       "theNavigationAccountsHint": "导航（关于“分别显示每个账户”提示上的 ✕）",
       "pageReaders": "网页阅读器",
       "defaultEmailApp": "默认邮件应用",
-      "emailLinks": "邮件链接"
+      "emailLinks": "邮件链接",
+      "integrations": "集成",
+      "speakrForEveryone": "Speakr 服务器"
     },
     "inboxTab": {
       "allTabs": "所有标签页",
@@ -7861,7 +7893,36 @@
       "webhookOn": "Webhook 已开启。",
       "webhookOnInSpeakrSet": "Webhook 已开启。在 Speakr 中，将 webhook 地址设置为 {{url}}",
       "webhookSecret": "Webhook 密钥",
-      "withoutThisSpeakrIsChecked": "如果没有 webhook，系统将每十分钟检查一次 Speakr。如果有，新的录音、转录、摘要、删除和编辑将立即到达。{{pollNote}}"
+      "withoutThisSpeakrIsChecked": "如果没有 webhook，系统将每十分钟检查一次 Speakr。如果有，新的录音、转录、摘要、删除和编辑将立即到达。{{pollNote}}",
+      "sso": {
+        "singleSignOn": "单点登录",
+        "connectWith": "使用 {{name}} 连接",
+        "help": "登录后，Speakr 会为 Mailr 创建一个令牌。使用此功能前，请先通过单点登录至少登录一次 Speakr。",
+        "orPaste": "或粘贴来自 Speakr 的 API 令牌：",
+        "connected": "Speakr 已连接。首次同步后将显示录音。",
+        "renewed": "已保存新的 Speakr 令牌，并在 Speakr 中撤销了旧令牌。",
+        "renewedOldKept": "已保存新的 Speakr 令牌。无法从 Mailr 撤销旧令牌；请在 Speakr 的“账户设置”→“API 令牌”中撤销它。",
+        "notSupported": "此 Speakr 版本不支持单点登录连接。请改为粘贴 API 令牌。",
+        "refused": "Speakr 未接受登录。可能是该服务器已关闭单点登录令牌，或者您尚未通过单点登录登录过 Speakr。请先登录一次 Speakr，或粘贴 API 令牌。",
+        "notAllowed": "Mailr 可能无法从此 Speakr 服务器获取令牌。Speakr 管理员可以将 Mailr 的客户端 ID 添加到允许交换令牌的客户端列表中。",
+        "limit": "您的 Speakr 账户已达到 API 令牌数量上限。请在 Speakr 的“账户设置”→“API 令牌”中撤销一个令牌，然后重试。",
+        "scopes": "此 Speakr 服务器提供的访问权限范围太窄，Mailr 需要读取权限。",
+        "rateLimited": "尝试次数过多。请稍后一小时再试。",
+        "unreachable": "无法连接到 Speakr。请检查地址并重试。",
+        "wrongAccount": "您登录的是其他账户。请使用您用于 Mailr 的账户登录。",
+        "alreadyConnected": "此 Speakr 服务器已连接。",
+        "expired": "连接请求已过期。请重新开始。",
+        "failed": "无法通过单点登录连接 Speakr。请改为粘贴 API 令牌。",
+        "linkRequired": "已存在使用您邮箱的 Speakr 账户。请先通过单点登录登录一次 Speakr 以进行关联，然后重试。",
+        "registrationClosed": "您还没有 Speakr 账户。请先使用单点登录登录一次 Speakr，然后重试。",
+        "refusedByPolicy": "该 Speakr 服务器的注册规则不允许此账户（邮箱域名不符，或邮箱未验证）。请联系其管理员，或粘贴令牌。"
+      },
+      "auto": {
+        "notice": "您在 {{url}} 的 Speakr 录音已在登录时连接。若要停止此操作，请移除下方账户。",
+        "gotIt": "知道了",
+        "failed": "登录时连接 {{url}} 失败。{{reason}} 将在下次登录时重试。",
+        "declined": "{{url}} 未在登录时连接，因为您已将其移除。请使用“添加 Speakr”重新连接。"
+      }
     },
     "speakrWebhook": {
       "editsMadeInSpeakrsOwn": "在 Speakr 自身页面中进行的编辑仍会在下一次十分钟检查时显示。",
@@ -8088,6 +8149,23 @@
       "sharedWithYou": "已与您共享",
       "fromYourPhone": "来自您手机的日历",
       "calendarLinks": "日历链接"
+    },
+    "adminSpeakr": {
+      "title": "Speakr 服务器",
+      "desc": "此 Mailr 服务器上所有用户的 Speakr 地址。当有人添加 Speakr 时，系统会自动填写该地址。",
+      "address": "Speakr 地址",
+      "autoConnect": "用户登录时自动连接 Speakr",
+      "autoConnectDesc": "使用单点登录登录 Mailr 的用户将自动连接至 Speakr，并会收到相应通知。如果用户手动断开连接，则不会再次自动连接。两台服务器必须使用相同的身份提供商，并且必须在 Speakr 中允许 Mailr 客户端。",
+      "noSso": "登录时自动连接需要此 Mailr 服务器启用单点登录。",
+      "localDesc": "这是登录时连接账户的默认设置。每位用户之后可以更改此设置。",
+      "check": "检查",
+      "saved": "Speakr 地址已保存。",
+      "removed": "Speakr 地址已移除。",
+      "checkUnreachable": "无法连接到 Speakr：{{detail}}",
+      "checkOld": "此 Speakr 版本不支持单点登录连接。用户仍可粘贴令牌。",
+      "checkExchangeOff": "Speakr 中已关闭单点登录令牌。",
+      "checkClientNotAllowed": "Mailr 客户端不在 Speakr 允许的交换客户端列表中。",
+      "checkReady": "准备就绪。从未使用单点登录登录过 Speakr 的用户需要先登录一次。之后，他们在下次登录 Mailr 时将自动连接。"
     }
   },
   "shortcuts": {

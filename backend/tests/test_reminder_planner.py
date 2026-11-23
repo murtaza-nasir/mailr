@@ -267,6 +267,8 @@ async def test_reminder_fire_sends_sse_and_push_only_to_opted_in_targets(user, c
     web = next(p for p in captured["push"] if p["kind"] == "webpush")
     assert web["data"]["tokens"]["snooze"] and web["data"]["key"] == key and web["priority"] == "high"
     assert "tokens" not in next(p for p in captured["push"] if p["kind"] == "ntfy")["data"]
+    # One id for the alert, the same over SSE and every push: a browser shows it once (sw.js).
+    assert sse["delivery"] and all(p["data"]["delivery"] == sse["delivery"] for p in captured["push"])
     assert (await _rows(user))[key].fired_at is not None
     # Fired once: the same job again does nothing.
     await _fire(rows[key])
@@ -539,6 +541,9 @@ async def test_reminder_repeat_alerts_again_up_to_three_times_to_opted_in_target
     assert captured["push"][-1]["data"]["again"] is True and captured["push"][-1]["priority"] == "high"
     # The third repeat was the last: no fourth is queued.
     assert len(await _repeat_jobs(user)) == 3
+    # Each repeat is a new alert: a new delivery id, shared by its SSE event and its push.
+    assert len({e["delivery"] for e in sse}) == 4
+    assert [p["data"]["delivery"] for p in captured["push"]] == [e["delivery"] for e in sse]
 
 
 async def test_reminder_repeat_stops_when_handled_or_snoozed_anywhere(client, user, captured):

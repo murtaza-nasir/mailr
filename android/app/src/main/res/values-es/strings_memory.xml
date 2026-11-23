@@ -12,6 +12,35 @@
         <item quantity="other">Último aprendizaje %1$s · %2$d nuevos</item>
     </plurals>
     <string name="memory_last_failed">El último intento %1$s falló. %2$s</string>
+    <plurals name="memory_review_count">
+        <item quantity="one">%d para revisar</item>
+        <item quantity="other">%d para revisar</item>
+    </plurals>
+    <plurals name="memory_review_title">
+        <item quantity="one">%d memoria para revisar</item>
+        <item quantity="other">%d memorias para revisar</item>
+    </plurals>
+    <string name="memory_review_not_now">Ahora no (hasta la próxima semana)</string>
+    <string name="memory_review_open_all">Revisar en la página de Memoria</string>
+    <string name="memory_review_other">Otros</string>
+    <string name="memory_review_retire">Retirar</string>
+    <string name="memory_review_keep_note">Conservar la nota</string>
+    <string name="memory_review_retires">Ambrose sugiere dejar de usar esta memoria guardada.</string>
+    <string name="memory_review_retires_why">Ambrose sugiere dejar de usar esta memoria guardada: %1$s</string>
+    <plurals name="memory_review_merges">
+        <item quantity="one">Conservar esto reemplaza %d memoria guardada:</item>
+        <item quantity="other">Conservar esto reemplaza %d memorias guardadas:</item>
+    </plurals>
+    <string name="memory_review_merged">Combinada.</string>
+    <string name="memory_tidy">Ordenar</string>
+    <string name="memory_tidy_queued">Ordenación iniciada. Cualquier elemento para combinar o retirar aparece en \"Para revisar\".</string>
+    <string name="memory_review_merge">Combinar</string>
+    <plurals name="memory_merged_from">
+        <item quantity="one">Combinado de %d nota</item>
+        <item quantity="other">Combinado de %d notas</item>
+    </plurals>
+    <string name="memory_updates_saved">Al mantener esto, se modifica la nota guardada: “%1$s”</string>
+    <string name="memory_learning_paused">Se revisó %1$s. Hay 15 sugerencias pendientes de revisión, por lo que no se añadió nada nuevo. Revísalas para reanudar el aprendizaje.</string>
     <string name="memory_learning_off">El aprendizaje desde el correo está desactivado.</string>
     <string name="memory_never_learned">Aún no se ha aprendido nada del correo.</string>
     <string name="memory_error_model_failed">El modelo no respondió. Se reintentará en una hora.</string>

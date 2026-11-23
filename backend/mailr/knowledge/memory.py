@@ -76,8 +76,9 @@ def sees_sensitive(p) -> bool:
 
 def mem_filter(p, *, include_suggested: bool = False, include_expired: bool = False):
     conds = [Memory.user_id == p.user_id]
-    if not include_suggested:
-        conds.append(Memory.status == "active")
+    # A merged note (status "merged") is kept only as the history of the note it went into
+    # (merged_from); it is never listed or used on its own.
+    conds.append(Memory.status.in_(("active", "suggested")) if include_suggested else Memory.status == "active")
     if not include_expired:
         conds.append(or_(Memory.expires_at.is_(None), Memory.expires_at > now()))
     if not sees_sensitive(p):
@@ -148,9 +149,14 @@ def chat_ref(m: Memory) -> dict[str, Any] | None:
     return None
 
 
-def memory_out(m: Memory, entity: Entity | None = None, *, chat: dict[str, Any] | None = None) -> dict[str, Any]:
+def memory_out(m: Memory, entity: Entity | None = None, *, chat: dict[str, Any] | None = None,
+               replaces: dict[str, Any] | None = None, merged_from: list[dict[str, Any]] | None = None,
+               merges: list[dict[str, Any]] | None = None, retires: dict[str, Any] | None = None
+               ) -> dict[str, Any]:
     """`chat`: the chat turn the memory came from, when that chat still exists and is the caller's
-    (the Memory page links "From a chat" to it); else null."""
+    (the Memory page links "From a chat" to it); else null. `replaces`: for a suggested edit, the
+    saved note it changes ({id, text}); else null. `merged_from`: the notes merged into this one
+    ({id, text, updated_at}, newest first; empty when none)."""
     return {"id": m.id, "text": m.text, "kind": m.kind, "entity_id": m.entity_id,
             "entity": {"id": entity.id, "name": entity.name, "kind": entity.kind, "is_self": bool(entity.is_self)}
             if entity else None,
@@ -159,7 +165,11 @@ def memory_out(m: Memory, entity: Entity | None = None, *, chat: dict[str, Any] 
             "expires_at": m.expires_at.isoformat() if m.expires_at else None,
             "use_count": m.use_count, "last_used_at": m.last_used_at.isoformat() if m.last_used_at else None,
             "created_at": m.created_at.isoformat() if m.created_at else None,
-            "updated_at": m.updated_at.isoformat() if m.updated_at else None, "chat": chat}
+            "updated_at": m.updated_at.isoformat() if m.updated_at else None, "chat": chat,
+            "replaces": replaces, "merged_from": merged_from or [],
+            # A tidy proposal: the other saved notes it merges ({id, text}), or the one it retires
+            # ({id, text, reason}).
+            "merges": merges or [], "retires": retires}
 
 
 async def with_entities(db: AsyncSession, rows: list[Memory], p=None) -> list[dict[str, Any]]:
@@ -180,8 +190,79 @@ async def with_entities(db: AsyncSession, rows: list[Memory], p=None) -> list[di
         live = set((await db.execute(select(ChatSession.id).where(
             ChatSession.id.in_({c["session_id"] for c in chats.values()}), ChatSession.user_id == p.user_id,
             ChatSession.token_id.is_(None)))).scalars())
-    return [memory_out(m, ents.get(m.entity_id), chat=c if (c := chats.get(m.id)) and c["session_id"] in live else None)
-            for m in rows]
+    # Suggested edits: the saved notes they change, among the ones the caller may see.
+    rids = {i for m in rows if m.status == "suggested" and (i := replaces_id(m)) is not None}
+    rids |= {i for m in rows if m.status == "suggested" for i in _ref_ids(m, "merges") + _ref_ids(m, "retires")}
+    olds: dict[int, Memory] = {}
+    if rids:
+        q2 = select(Memory).where(Memory.id.in_(rids), Memory.status == "active")
+        if p is not None:
+            q2 = q2.where(mem_filter(p, include_expired=True))
+        olds = {o.id: o for o in (await db.execute(q2)).scalars()}
+
+    def old(m: Memory) -> dict[str, Any] | None:
+        o = olds.get(replaces_id(m) or 0) if m.status == "suggested" else None
+        return {"id": o.id, "text": o.text} if o is not None else None
+
+    def merges_of(m: Memory) -> list[dict[str, Any]]:
+        if m.status != "suggested":
+            return []
+        return [{"id": o.id, "text": o.text} for i in _ref_ids(m, "merges") if (o := olds.get(i)) is not None]
+
+    def retires_of(m: Memory) -> dict[str, Any] | None:
+        ids = _ref_ids(m, "retires") if m.status == "suggested" else []
+        o = olds.get(ids[0]) if ids else None
+        reason = next((str(r.get("reason") or "") for r in m.refs or [] if isinstance(r, dict) and r.get("retires")), "")
+        return {"id": o.id, "text": o.text, "reason": reason} if o is not None else None
+
+    # Merged notes: the earlier texts under the note they went into.
+    merged: dict[int, list[dict[str, Any]]] = {}
+    if rows:
+        from sqlalchemy import Integer, cast, literal_column
+
+        into = cast(func.jsonb_path_query_first(Memory.refs, literal_column("'$[*].merged_into'::jsonpath")), Integer)
+        for r in (await db.execute(select(Memory.id, Memory.text, Memory.updated_at, into.label("into")).where(
+                Memory.user_id == rows[0].user_id, Memory.status == "merged",
+                into.in_([m.id for m in rows])).order_by(Memory.updated_at.desc()))).all():
+            merged.setdefault(int(r.into), []).append(
+                {"id": r.id, "text": r.text, "updated_at": r.updated_at.isoformat() if r.updated_at else None})
+
+    tops = topics(rows, ents)
+    return [memory_out(m, ents.get(m.entity_id), chat=c if (c := chats.get(m.id)) and c["session_id"] in live else None,
+                       replaces=old(m), merged_from=merged.get(m.id), merges=merges_of(m), retires=retires_of(m))
+            | {"topic": tops[m.id]} for m in rows]
+
+
+def topics(rows: list[Memory], ents: dict[int, Entity]) -> dict[int, dict[str, Any]]:
+    """The person or topic each note is about, for grouping a list ({key, name, self}). A topic,
+    project, organisation or place joins another whose words (topic_key) are a subset of its own:
+    "2027 PDC Conference" and "PDC 2027 AI Applications track" both go under "PDC 2027". People
+    match only by entity or exact name. `self` is the user; a note about nothing has key "other"."""
+    named: dict[int, tuple[str, str]] = {}  # id -> (name, kind)
+    out: dict[int, dict[str, Any]] = {}
+    for m in rows:
+        e = ents.get(m.entity_id) if m.entity_id else None
+        about = next((r["about"] for r in m.refs or [] if isinstance(r, dict) and isinstance(r.get("about"), dict)), None)
+        if (e is not None and e.is_self) or (e is None and about and about.get("self")):
+            out[m.id] = {"key": "self", "name": "", "self": True}
+        elif e is not None:
+            named[m.id] = (e.name, e.kind)
+        elif about and about.get("name"):
+            named[m.id] = (str(about["name"]), str(about.get("kind") or "person"))
+        else:
+            out[m.id] = {"key": "other", "name": "", "self": False}
+    reps: list[tuple[frozenset[str], str]] = []  # the clusters' smallest word sets, and their names
+    for mid, (name, kind) in sorted(named.items(), key=lambda x: (len(topic_key(x[1][0])), len(x[1][0]))):
+        words = topic_key(name) if kind != "person" else frozenset()
+        if not words:
+            out[mid] = {"key": f"{kind}:{name.strip().lower()}", "name": name, "self": False}
+            continue
+        rep = next(((w, n) for w, n in reps if w <= words), None)
+        if rep is None:
+            rep = (words, name)
+            reps.append(rep)
+        out[mid] = {"key": "topic:" + " ".join(sorted(rep[0])), "name": rep[1], "self": False}
+    return out
 
 
 # ---------------------------------------------------------------- "you"
@@ -418,7 +499,35 @@ async def find_entity(db: AsyncSession, p, ref: str | int | None, *, kind: str |
     for e in rows:
         if e.name.lower() == r or r in [a.lower() for a in e.aliases or []]:
             return e
+    if kind is None or kind in TOPIC_KINDS:
+        # A topic, project, organisation or place under another wording ("2027 PDC Conference" is
+        # "PDC 2027"): the same words, in any order, without years and filler words. People are
+        # matched exactly (names collide). docs/design/memory-quality.md, A3.
+        key = topic_key(r)
+        if key:
+            q2 = select(Entity).where(ent_filter(p), Entity.kind.in_(list(TOPIC_KINDS)))  # topic or project: one thing
+            for e in (await db.execute(q2.order_by(Entity.updated_at.desc()).limit(500))).scalars():
+                if key in {topic_key(n) for n in [e.name, *(e.aliases or [])]}:
+                    return e
     return None
+
+
+_TOPIC_FILLER = {"the", "a", "an", "of", "and", "for", "on", "in", "at", "to", "annual", "conference", "conf",
+                 "meeting", "meetings", "project", "workshop", "symposium", "event"}
+
+
+def topic_key(name: str) -> frozenset[str]:
+    """The words that name a topic, for matching another wording of it (empty: too little to match)."""
+    words = re.findall(r"[a-z0-9]+", (name or "").lower())
+    key = frozenset(w for w in words if w not in _TOPIC_FILLER and not re.fullmatch(r"(19|20)\d\d|'?\d\d", w))
+    return key if key and (len(key) > 1 or len(next(iter(key))) >= 3) else frozenset()
+
+
+def add_alias(e: Entity, name: str | None) -> None:
+    """Keep another wording of an entity's name as an alias (after a loose match)."""
+    n = " ".join(str(name or "").split())
+    if n and n.lower() != e.name.lower() and n.lower() not in [a.lower() for a in e.aliases or []]:
+        e.aliases = [*(e.aliases or []), n][:30]
 
 
 async def merge_target(db: AsyncSession, p, data: dict[str, Any], entity_id: int | None = None) -> Entity | None:
@@ -526,6 +635,8 @@ async def remember(db: AsyncSession, p, data: dict[str, Any], *, source: str = "
         spec = about if isinstance(about, dict) else ({"emails": [about], "name": about.split("@")[0]}
                                                       if "@" in str(about) else {"name": str(about)})
         ent = await find_entity(db, p, spec.get("name") or (spec.get("emails") or [None])[0], kind=spec.get("kind"))
+        if ent is not None and spec.get("name") and ent.kind != "person":
+            add_alias(ent, spec["name"])
         if ent is None and spec.get("emails"):
             ent = await find_entity(db, p, spec["emails"][0])
         if ent is None and status == "suggested":
@@ -576,6 +687,108 @@ async def remember(db: AsyncSession, p, data: dict[str, Any], *, source: str = "
     await db.flush()
     await enqueue_embed(db, p.user_id)
     return m, created
+
+
+async def chat_decision(db: AsyncSession, m: Memory, state: str) -> None:
+    """Record on the chat turn a suggestion came from what became of it ("kept", "dropped",
+    "merged"): the "Remember …?" line under that reply keeps the answer."""
+    from mailr.models import ChatMessage
+
+    ref = chat_ref(m)
+    if not ref or not ref.get("chat_message_id"):
+        return
+    row = await db.get(ChatMessage, int(ref["chat_message_id"]))
+    if row is None:
+        return
+    items = [dict(x) for x in (row.meta or {}).get("remember") or []]
+    for x in items:
+        if x.get("id") == m.id:
+            x["state"] = state
+            x["text"] = m.text
+    row.meta = {**(row.meta or {}), "remember": items}
+
+
+async def merge_into(db: AsyncSession, p, m: Memory, target: Memory) -> Memory:
+    """Merge note `m` into `target`: the target keeps its text and gains m's sources and the higher
+    confidence; m becomes status "merged" (refs `merged_into`), kept as the target's history
+    ("Merged from N notes") and never used again."""
+    keep = [r for r in m.refs or [] if isinstance(r, dict)
+            and not (set(r) & {"about", "replaces", "merges", "retires", "merged_into"})]
+    target.refs = (target.refs or []) + [r for r in keep if r not in (target.refs or [])]
+    if m.confidence is not None:
+        target.confidence = max(m.confidence, target.confidence or 0.0)
+    target.sensitive = bool(target.sensitive or m.sensitive)
+    target.updated_at = now()
+    m.refs = (m.refs or []) + [{"merged_into": target.id}]
+    m.status, m.pinned = "merged", False
+    await db.flush()
+    return target
+
+
+def replaces_id(m: Memory) -> int | None:
+    """The saved note a suggestion would edit when accepted (refs `replaces`), if any."""
+    return next((int(r["replaces"]) for r in m.refs or [] if isinstance(r, dict)
+                 and str(r.get("replaces") or "").isdigit()), None)
+
+
+def _ref_ids(m: Memory, key: str) -> list[int]:
+    out: list[int] = []
+    for r in m.refs or []:
+        v = r.get(key) if isinstance(r, dict) else None
+        for x in (v if isinstance(v, list) else [v] if v is not None else []):
+            if str(x).isdigit():
+                out.append(int(x))
+    return out
+
+
+async def _active(db: AsyncSession, p, ids: list[int]) -> list[Memory]:
+    if not ids:
+        return []
+    rows = {x.id: x for x in (await db.execute(select(Memory).where(
+        Memory.id.in_(ids), Memory.status == "active", mem_filter(p, include_expired=True)))).scalars()}
+    return [rows[i] for i in ids if i in rows]
+
+
+async def merged_notes(db: AsyncSession, p, m: Memory) -> list[Memory]:
+    """A tidy merge's other saved notes (refs `merges`), besides the one it edits (`replaces`)."""
+    return await _active(db, p, _ref_ids(m, "merges"))
+
+
+async def retired_note(db: AsyncSession, p, m: Memory) -> Memory | None:
+    """The saved note a tidy proposal would retire (refs `retires`)."""
+    got = await _active(db, p, _ref_ids(m, "retires")[:1])
+    return got[0] if got else None
+
+
+async def retire(db: AsyncSession, m: Memory) -> None:
+    """Stop using a saved note: it expires now (still listed, struck through, until deleted)."""
+    m.expires_at = now()
+    m.pinned = False
+    m.updated_at = now()
+    await db.flush()
+
+
+async def replaced_note(db: AsyncSession, p, m: Memory) -> Memory | None:
+    rid = replaces_id(m)
+    if rid is None:
+        return None
+    return (await db.execute(select(Memory).where(Memory.id == rid, Memory.status == "active",
+                                                  mem_filter(p, include_expired=True)))).scalar_one_or_none()
+
+
+async def apply_edit(db: AsyncSession, p, suggestion: Memory, note: Memory) -> Memory:
+    """Accept a suggested edit: the saved note takes its text, kind and expiry, and keeps both
+    notes' sources; the suggestion is deleted."""
+    refs = [{k: v for k, v in r.items() if k != "replaces"} if isinstance(r, dict) else r
+            for r in suggestion.refs or []]
+    await remember(db, p, {"text": suggestion.text, "kind": suggestion.kind,
+                           **({"expires_at": suggestion.expires_at} if suggestion.expires_at else {})},
+                   memory_id=note.id, refs=[r for r in refs if r], sensitive=suggestion.sensitive)
+    if suggestion.confidence is not None:
+        note.confidence = max(suggestion.confidence, note.confidence or 0.0)
+    await db.delete(suggestion)
+    await db.flush()
+    return note
 
 
 async def forget(db: AsyncSession, p, memory_id: int) -> Memory:

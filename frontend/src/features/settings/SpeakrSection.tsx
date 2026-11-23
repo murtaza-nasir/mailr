@@ -8,14 +8,16 @@ import { assistantNameNow } from '../rail/assistant/useAssistantName'
 // (Set up in Speakr creates the webhook through Speakr's API, Send test checks that Speakr
 // reaches mailr, Turn off deletes it; a secret pasted from a webhook made by hand also works), a
 // new token and Remove. The token and the webhook secret are never shown again after they are
-// saved.
+// saved. When Mailr signs in with single sign-on, the wizard and the new-token dialog can also
+// get the token from Speakr through the same sign-in (integrations/speakr/sso.py): the browser
+// goes to the provider and comes back here with ?speakr_sso=<result>.
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { AlertTriangle, CheckCircle2, KeyRound, Lock, Mic, Pause, Play, Plus, RefreshCw, Trash2 } from 'lucide-react'
-import { useState } from 'react'
-import { useLocation } from 'react-router'
+import { AlertTriangle, CheckCircle2, KeyRound, Lock, LogIn, Mic, Pause, Play, Plus, RefreshCw, Trash2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router'
 import { api } from '../../api/client'
-import { useApiList } from '../../api/hooks'
+import { useApi, useApiList, useAuthConfig } from '../../api/hooks'
 import type { Connector } from '../../api/types'
 import { Skeleton, Spinner, LoadFailed, failedEmpty } from '../../components/bits'
 import { ConfirmDialog, Dialog } from '../../components/Dialog'
@@ -47,6 +49,15 @@ interface TestOut {
   warnings?: string[]
 }
 
+/** GET /speakr/auto: the Speakr address the admin set, and connecting it at sign-in. */
+interface SpeakrAuto {
+  url: string | null
+  auto_connect: boolean
+  state: 'connected' | 'declined' | 'failed' | null
+  reason: string | null
+  notice: boolean
+}
+
 const STATUS_TEXT: Record<string, string> = { idle: t('common.upToDate'), syncing: t('settings.speakrSection.syncing'), error: t('settings.speakrSection.error'), paused: t('common.paused'), new: t('settings.speakrSection.new') }
 
 // ACT speakr.connect @web.settings, ACT speakr.sync @web.settings
@@ -58,6 +69,8 @@ export function SpeakrSection() {
   const [tokenFor, setTokenFor] = useState<SpeakrConnector | null>(null)
   const [hookFor, setHookFor] = useState<SpeakrConnector | null>(null)
   const [testing, setTesting] = useState<number | null>(null)
+  useSsoResult()
+  const auto = useApi<SpeakrAuto>(['speakr', 'auto'], '/speakr/auto')
   const rows = (q.data ?? []).filter((c) => c.kind === 'speakr')
   const vis = useVisibility()
   const location = useLocation()
@@ -65,6 +78,8 @@ export function SpeakrSection() {
     void qc.invalidateQueries({ queryKey: ['connectors'] })
     void qc.invalidateQueries({ queryKey: ['speakr'] })
   }
+  // ACT speakr.connect (Speakr for everyone: the notice after a sign-in connected it)
+  const seen = () => api.post('/speakr/auto/seen').then(done).catch((e) => toastError(e))
   const act = (c: Connector, path: string, msg: string) =>
     api.post(`/connectors/${c.id}/${path}`).then(() => { done(); toast({ message: msg }) }).catch((e) => toastError(e))
   const setLocal = (c: Connector, local: boolean) =>
@@ -91,7 +106,9 @@ export function SpeakrSection() {
   // In simple settings, a member with no Speakr server connected is not offered a third-party
   // product they may not use; advanced settings, a connection or a link to #speakr (the Recordings
   // app's "Connect Speakr") shows it.
-  if (!vis.advanced && !q.isLoading && rows.length === 0 && location.hash !== '#speakr') return null
+  // The admin's Speakr address shows it too.
+  if (!vis.advanced && !q.isLoading && rows.length === 0 && location.hash !== '#speakr' && !auto.data?.url) return null
+  const a = auto.data
   return (
     <Section
       id="speakr"
@@ -103,6 +120,23 @@ export function SpeakrSection() {
         </button>
       }
     >
+      {a?.url && a.notice && (
+        <div className="banner" role="status" data-testid="speakr-auto-notice" style={{ marginBottom: 12 }}>
+          <CheckCircle2 />
+          <span style={{ flex: 1 }}>{t('settings.speakrSection.auto.notice', { url: a.url })}</span>
+          <button type="button" className="btn text" onClick={() => void seen()}>{t('settings.speakrSection.auto.gotIt')}</button>
+        </div>
+      )}
+      {a?.url && a.auto_connect && a.state === 'failed' && (
+        <p className="muted" style={{ fontSize: 13 }} data-testid="speakr-auto-failed">
+          {t('settings.speakrSection.auto.failed', { url: a.url, reason: ssoText(a.reason ?? 'failed') })}
+        </p>
+      )}
+      {a?.url && a.auto_connect && a.state === 'declined' && rows.length === 0 && (
+        <p className="muted" style={{ fontSize: 13 }} data-testid="speakr-auto-declined">
+          {t('settings.speakrSection.auto.declined', { url: a.url })}
+        </p>
+      )}
       {q.isLoading ? <Skeleton height={60} /> : failedEmpty(q) ? <LoadFailed what={t('settings.speakrSection.speakrAccounts')} q={q} /> : rows.length === 0 ? (
         <div className="card"><p style={{ margin: 0 }} className="muted"><Mic size={16} />{' '}{t('settings.speakrSection.noSpeakrAccountConnected')}</p></div>
       ) : (
@@ -187,7 +221,8 @@ export function SpeakrSection() {
           })}
         </div>
       )}
-      {adding && <SpeakrWizard onClose={() => setAdding(false)} onDone={done} />}
+      {adding && <SpeakrWizard onClose={() => setAdding(false)} onDone={done}
+        address={a?.url && !rows.some((c) => c.config?.base_url === a.url) ? a.url : null} />}
       {tokenFor && <TokenDialog c={tokenFor} onClose={() => setTokenFor(null)} onDone={done} />}
       {hookFor && <WebhookDialog c={hookFor} onClose={() => setHookFor(null)} onDone={done} />}
       <ConfirmDialog
@@ -207,6 +242,86 @@ export function SpeakrSection() {
   )
 }
 
+const SSO_OK = new Set(['connected', 'renewed', 'renewed_old_kept'])
+// The results that integrations/speakr/sso.py names in ?speakr_sso=.
+const SSO_TEXT: Record<string, () => string> = {
+  connected: () => t('settings.speakrSection.sso.connected'),
+  renewed: () => t('settings.speakrSection.sso.renewed'),
+  renewed_old_kept: () => t('settings.speakrSection.sso.renewedOldKept'),
+  not_supported: () => t('settings.speakrSection.sso.notSupported'),
+  refused: () => t('settings.speakrSection.sso.refused'),
+  not_allowed: () => t('settings.speakrSection.sso.notAllowed'),
+  limit: () => t('settings.speakrSection.sso.limit'),
+  scopes: () => t('settings.speakrSection.sso.scopes'),
+  rate_limited: () => t('settings.speakrSection.sso.rateLimited'),
+  unreachable: () => t('settings.speakrSection.sso.unreachable'),
+  wrong_account: () => t('settings.speakrSection.sso.wrongAccount'),
+  already_connected: () => t('settings.speakrSection.sso.alreadyConnected'),
+  expired: () => t('settings.speakrSection.sso.expired'),
+  failed: () => t('settings.speakrSection.sso.failed'),
+  link_required: () => t('settings.speakrSection.sso.linkRequired'),
+  registration_closed: () => t('settings.speakrSection.sso.registrationClosed'),
+  refused_by_policy: () => t('settings.speakrSection.sso.refusedByPolicy'),
+}
+
+function ssoText(result: string): string {
+  return SSO_TEXT[Object.hasOwn(SSO_TEXT, result) ? result : 'failed']()
+}
+
+/** The result of a single sign-on round trip (?speakr_sso=…), shown once, then dropped from the address. */
+function useSsoResult() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const qc = useQueryClient()
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const result = params.get('speakr_sso')
+    if (!result) return
+    params.delete('speakr_sso')
+    const rest = params.toString()
+    navigate({ pathname: location.pathname, search: rest ? `?${rest}` : '', hash: location.hash }, { replace: true })
+    const key = Object.hasOwn(SSO_TEXT, result) ? result : 'failed'
+    const message = ssoText(key)
+    if (SSO_OK.has(key)) {
+      void qc.invalidateQueries({ queryKey: ['connectors'] })
+      toast({ message })
+    } else {
+      toastError(new Error(message))
+    }
+  }, [location.search, location.pathname, location.hash, navigate, qc])
+}
+
+/** Single sign-on is offered when Mailr itself signs in with it. */
+function useSsoName(): string | null {
+  const cfg = useAuthConfig()
+  if (!cfg.data?.oidc) return null
+  return cfg.data.oidc_name || t('settings.speakrSection.sso.singleSignOn')
+}
+
+async function startSso(body: { base_url?: string; connector_id?: number; data_class?: string }) {
+  try {
+    const out = await api.post<{ url: string }>('/speakr/sso/start', body)
+    window.location.assign(out.url)
+  } catch (e) {
+    toastError(e, t('settings.speakrSection.sso.failed'))
+  }
+}
+
+function SsoButton({ name, disabled, onClick }: { name: string; disabled?: boolean; onClick: () => void }) {
+  const [busy, setBusy] = useState(false)
+  return (
+    <div className="stack" style={{ gap: 4 }}>
+      <div>
+        <button type="button" className="btn tonal" data-testid="speakr-sso" disabled={disabled || busy}
+          onClick={() => { setBusy(true); onClick() }}>
+          {busy ? <Spinner small /> : <LogIn />}{' '}{t('settings.speakrSection.sso.connectWith', { name })}
+        </button>
+      </div>
+      <p className="muted" style={{ margin: 0, fontSize: 13 }}>{t('settings.speakrSection.sso.help')}</p>
+    </div>
+  )
+}
+
 function TokenHelp() {
   return (
     <p className="muted" style={{ margin: 0, fontSize: 13 }}>
@@ -215,12 +330,14 @@ function TokenHelp() {
   )
 }
 
-function SpeakrWizard({ onClose, onDone }: { onClose: () => void; onDone: () => void }) {
-  const [url, setUrl] = useState('')
+function SpeakrWizard({ onClose, onDone, address }: { onClose: () => void; onDone: () => void; address?: string | null }) {
+  // The admin's Speakr address, when set and not connected yet, is filled in.
+  const [url, setUrl] = useState(address ?? '')
   const [token, setToken] = useState('')
   const [local, setLocal] = useState(true)
   const [test, setTest] = useState<TestOut | null>(null)
   const [busy, setBusy] = useState(false)
+  const sso = useSsoName()
   const draft = () => ({ kind: 'speakr', name: '', config: { base_url: url.trim() }, secrets: { token: token.trim() }, data_class: local ? 'local_only' : 'normal' })
   const runTest = async () => {
     setBusy(true)
@@ -267,6 +384,13 @@ function SpeakrWizard({ onClose, onDone }: { onClose: () => void; onDone: () => 
           <input id="spk-url" className="input" placeholder="https://speakr.example.org" value={url}
             onChange={(e) => { setUrl(e.target.value); setTest(null) }} autoComplete="url" />
         </div>
+        {sso && (
+          <>
+            <SsoButton name={sso} disabled={url.trim().length < 9}
+              onClick={() => void startSso({ base_url: url.trim(), data_class: local ? 'local_only' : 'normal' })} />
+            <p className="muted" style={{ margin: 0, fontSize: 13 }}>{t('settings.speakrSection.sso.orPaste')}</p>
+          </>
+        )}
         <div className="field">
           <label htmlFor="spk-token">{t('settings.speakrSection.apiToken')}</label>
           <input id="spk-token" className="input" type="password" autoComplete="off" value={token}
@@ -293,6 +417,7 @@ function SpeakrWizard({ onClose, onDone }: { onClose: () => void; onDone: () => 
 
 function TokenDialog({ c, onClose, onDone }: { c: Connector; onClose: () => void; onDone: () => void }) {
   const [token, setToken] = useState('')
+  const sso = useSsoName()
   const save = useMutation({
     mutationFn: () => api.patch(`/connectors/${c.id}`, { secrets: { token: token.trim() } }),
     onSuccess: () => {
@@ -316,6 +441,12 @@ function TokenDialog({ c, onClose, onDone }: { c: Connector; onClose: () => void
       }
     >
       <div className="stack">
+        {sso && (
+          <>
+            <SsoButton name={sso} onClick={() => void startSso({ connector_id: c.id })} />
+            <p className="muted" style={{ margin: 0, fontSize: 13 }}>{t('settings.speakrSection.sso.orPaste')}</p>
+          </>
+        )}
         <div className="field">
           <label htmlFor="spk-new-token">{t('settings.speakrSection.apiToken')}</label>
           <input id="spk-new-token" className="input" type="password" autoComplete="off" value={token} onChange={(e) => setToken(e.target.value)} />

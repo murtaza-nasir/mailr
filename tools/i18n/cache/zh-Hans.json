@@ -1629,6 +1629,36 @@
    "state": "model",
    "text": "录音 %1$d：%2$s，时间 %3$s"
   },
+  "android:app:asst_remember_dropped": {
+   "sha": "01312c7b24091d9b",
+   "state": "model",
+   "text": "未记住：“%1$s”"
+  },
+  "android:app:asst_remember_kept": {
+   "sha": "787d96df8cc37502",
+   "state": "model",
+   "text": "已记住：“%1$s”"
+  },
+  "android:app:asst_remember_merged": {
+   "sha": "2dd79d2093d66c48",
+   "state": "model",
+   "text": "已添加到其他记忆：“%1$s”"
+  },
+  "android:app:asst_remember_no": {
+   "sha": "b2cbc4e2e5545a6c",
+   "state": "model",
+   "text": "否"
+  },
+  "android:app:asst_remember_question": {
+   "sha": "c9a7f2441fa65e80",
+   "state": "model",
+   "text": "记住：“%1$s”？"
+  },
+  "android:app:asst_remember_yes": {
+   "sha": "184fda5c980b9d9c",
+   "state": "model",
+   "text": "是"
+  },
   "android:app:asst_remove_context": {
    "sha": "1143ef89b6200b7f",
    "state": "model",
@@ -9499,6 +9529,11 @@
    "state": "model",
    "text": "从邮件中学习已关闭。"
   },
+  "android:app:memory_learning_paused": {
+   "sha": "af577e915e44c401",
+   "state": "model",
+   "text": "已检查 %1$s。有 15 条建议等待审核，因此未添加任何新内容。请审核这些建议以恢复学习。"
+  },
   "android:app:memory_load_failed": {
    "sha": "cd54f3d93c64af74",
    "state": "model",
@@ -9518,6 +9553,13 @@
    "sha": "d00c49eed3605188",
    "state": "model",
    "text": "创建任务"
+  },
+  "android:app:memory_merged_from": {
+   "sha": "d498acfc6d224e0a",
+   "state": "model",
+   "text": {
+    "other": "合并自 %d 条笔记"
+   }
   },
   "android:app:memory_more_options": {
    "sha": "2871130cbb008ebd",
@@ -9619,6 +9661,82 @@
    "state": "model",
    "text": "重试"
   },
+  "android:app:memory_review_count": {
+   "sha": "ec2b841903452339",
+   "state": "model",
+   "text": {
+    "other": "%d 条待审阅"
+   }
+  },
+  "android:app:memory_review_drop": {
+   "sha": "32da68e3c0b5c740",
+   "state": "model",
+   "text": "丢弃"
+  },
+  "android:app:memory_review_drop_all": {
+   "sha": "f0fc0a2f5975025e",
+   "state": "model",
+   "text": "全部丢弃"
+  },
+  "android:app:memory_review_keep_note": {
+   "sha": "545a6f27acf448a6",
+   "state": "model",
+   "text": "保留该笔记"
+  },
+  "android:app:memory_review_merge": {
+   "sha": "98e1f248dc311c7d",
+   "state": "model",
+   "text": "合并"
+  },
+  "android:app:memory_review_merged": {
+   "sha": "163c6d36423853d9",
+   "state": "model",
+   "text": "已合并。"
+  },
+  "android:app:memory_review_merges": {
+   "sha": "be6885e4c90843e3",
+   "state": "model",
+   "text": {
+    "other": "保留此项将替换 %d 条已保存的记忆："
+   }
+  },
+  "android:app:memory_review_not_now": {
+   "sha": "827476f68808e2c9",
+   "state": "model",
+   "text": "暂不处理（下周再提醒）"
+  },
+  "android:app:memory_review_open_all": {
+   "sha": "17ea4edc874a43d4",
+   "state": "model",
+   "text": "在“记忆”页面查看"
+  },
+  "android:app:memory_review_other": {
+   "sha": "1f1260ddd48575a9",
+   "state": "model",
+   "text": "其他"
+  },
+  "android:app:memory_review_retire": {
+   "sha": "312274950a5f0335",
+   "state": "model",
+   "text": "停用"
+  },
+  "android:app:memory_review_retires": {
+   "sha": "93d3ff586713bb3e",
+   "state": "model",
+   "text": "Ambrose 建议不再使用此已保存的记忆。"
+  },
+  "android:app:memory_review_retires_why": {
+   "sha": "cb2a86ccf40c2e31",
+   "state": "model",
+   "text": "Ambrose 建议不再使用此已保存的记忆：%1$s"
+  },
+  "android:app:memory_review_title": {
+   "sha": "96d87dc86b2901d2",
+   "state": "model",
+   "text": {
+    "other": "%d 条待审阅记忆"
+   }
+  },
   "android:app:memory_save": {
    "sha": "c1db83d165ed908a",
    "state": "model",
@@ -9684,6 +9802,16 @@
    "state": "model",
    "text": "例如：Sam 喜欢泰国菜，讨厌早晚餐。"
   },
+  "android:app:memory_tidy": {
+   "sha": "e29edec3e61b4096",
+   "state": "model",
+   "text": "整理"
+  },
+  "android:app:memory_tidy_queued": {
+   "sha": "f93dd31e7ba40779",
+   "state": "model",
+   "text": "已开始整理。任何需要合并或停用的内容将显示在“待审阅”下。"
+  },
   "android:app:memory_title": {
    "sha": "ecbeaaaec5fafe42",
    "state": "model",
@@ -9718,6 +9846,11 @@
    "sha": "129352d156d83e94",
    "state": "model",
    "text": "直到 %1$s"
+  },
+  "android:app:memory_updates_saved": {
+   "sha": "6e2612306bead0bd",
+   "state": "model",
+   "text": "保留此更改将更新您已保存的笔记：“%1$s”"
   },
   "android:app:memory_will_remember": {
    "sha": "a9a93009cb78602b",
@@ -22756,6 +22889,17 @@
    "state": "model",
    "text": "请先输入公共地址。"
   },
+  "server:errors.admin.speakr_address": {
+   "sha": "1068a26ce27c3e93",
+   "state": "english",
+   "text": "The Speakr address must start with https:// (or http:// on a private network).",
+   "why": "placeholders/markup differ: English has none, yours has ['http://）。']"
+  },
+  "server:errors.admin.speakr_needs_sso": {
+   "sha": "85776e8bba064c81",
+   "state": "model",
+   "text": "登录时自动连接需要此 Mailr 服务器启用单点登录。"
+  },
   "server:errors.admin.user_not_found": {
    "sha": "f0650a56e62fffd9",
    "state": "model",
@@ -23847,6 +23991,16 @@
    "sha": "439774f47dd30357",
    "state": "model",
    "text": "未找到实体"
+  },
+  "server:errors.knowledge.merge_into_itself": {
+   "sha": "0b07dbb6bbd37cca",
+   "state": "model",
+   "text": "记忆不能合并到自身"
+  },
+  "server:errors.knowledge.merge_saved_into_suggestion": {
+   "sha": "ace34b65170bd84c",
+   "state": "model",
+   "text": "已保存的记忆只能合并到另一条已保存的记忆"
   },
   "server:errors.knowledge.only_builtin_reset": {
    "sha": "f339e47e7dc56109",
@@ -38906,6 +39060,36 @@
    "state": "model",
    "text": "您的订阅"
   },
+  "web:memory.ask.dropped": {
+   "sha": "2de035192d964b64",
+   "state": "model",
+   "text": "未记住：“{{text}}”"
+  },
+  "web:memory.ask.kept": {
+   "sha": "ce1c39f4c006c221",
+   "state": "model",
+   "text": "已记住：“{{text}}”"
+  },
+  "web:memory.ask.merged": {
+   "sha": "64f95c257709aeb7",
+   "state": "model",
+   "text": "已添加到另一条记忆：“{{text}}”"
+  },
+  "web:memory.ask.no": {
+   "sha": "b2cbc4e2e5545a6c",
+   "state": "model",
+   "text": "否"
+  },
+  "web:memory.ask.question": {
+   "sha": "ae0bb3eab550643b",
+   "state": "model",
+   "text": "记住：“{{text}}”？"
+  },
+  "web:memory.ask.yes": {
+   "sha": "184fda5c980b9d9c",
+   "state": "model",
+   "text": "是"
+  },
   "web:memory.dialog.kindExample": {
    "sha": "d9392cd2452575a1",
    "state": "model",
@@ -39025,10 +39209,22 @@
    "state": "model",
    "text": "从邮件中学习已关闭。"
   },
+  "web:memory.page.learningPaused": {
+   "sha": "32d4ddd03ad9bc20",
+   "state": "model",
+   "text": "已于 {{when}} 检查。有 15 条建议等待审核，因此未添加任何新内容。请审核这些建议以恢复学习。"
+  },
   "web:memory.page.makeTask": {
    "sha": "d00c49eed3605188",
    "state": "model",
    "text": "创建任务"
+  },
+  "web:memory.page.mergedFrom": {
+   "sha": "8697699e6c8b053c",
+   "state": "model",
+   "text": {
+    "other": "已合并自 {{count}} 条笔记"
+   }
   },
   "web:memory.page.neverLearned": {
    "sha": "09c86cfc8b3ef3a0",
@@ -39050,6 +39246,21 @@
    "state": "model",
    "text": "任务已添加。"
   },
+  "web:memory.page.tidy": {
+   "sha": "e29edec3e61b4096",
+   "state": "model",
+   "text": "整理"
+  },
+  "web:memory.page.tidyQueued": {
+   "sha": "f93dd31e7ba40779",
+   "state": "model",
+   "text": "已开始整理。任何需要合并或停用的内容都会显示在“待审核”下。"
+  },
+  "web:memory.page.tidyTip": {
+   "sha": "efec985045c2f087",
+   "state": "model",
+   "text": "查找需要合并或停用的记忆。建议会显示在“待审核”下。"
+  },
   "web:memory.page.toReview": {
    "sha": "9d3eec955fa9bcc7",
    "state": "model",
@@ -39064,6 +39275,97 @@
    "sha": "92fbe22362dcd5f8",
    "state": "model",
    "text": "主题"
+  },
+  "web:memory.page.updatesSaved": {
+   "sha": "53d5c4947785e432",
+   "state": "model",
+   "text": "保留此更改将修改您已保存的笔记：“{{text}}”"
+  },
+  "web:memory.review.count": {
+   "sha": "ff3bbeb9b851e8f9",
+   "state": "model",
+   "text": {
+    "other": "{{count}} 项待审阅"
+   }
+  },
+  "web:memory.review.drop": {
+   "sha": "32da68e3c0b5c740",
+   "state": "model",
+   "text": "丢弃"
+  },
+  "web:memory.review.dropAll": {
+   "sha": "f0fc0a2f5975025e",
+   "state": "model",
+   "text": "全部丢弃"
+  },
+  "web:memory.review.keepNote": {
+   "sha": "545a6f27acf448a6",
+   "state": "model",
+   "text": "保留笔记"
+  },
+  "web:memory.review.merge": {
+   "sha": "98e1f248dc311c7d",
+   "state": "model",
+   "text": "合并"
+  },
+  "web:memory.review.mergeInto": {
+   "sha": "e29d4b1796c12bed",
+   "state": "model",
+   "text": "合并至…"
+  },
+  "web:memory.review.merged": {
+   "sha": "163c6d36423853d9",
+   "state": "model",
+   "text": "已合并。"
+  },
+  "web:memory.review.mergesNotes": {
+   "sha": "77ca2a503e4c67d2",
+   "state": "model",
+   "text": {
+    "other": "保留此项将替换 {{count}} 个已保存的记忆："
+   }
+  },
+  "web:memory.review.notNow": {
+   "sha": "827476f68808e2c9",
+   "state": "model",
+   "text": "暂不处理（下周再提醒）"
+  },
+  "web:memory.review.openAll": {
+   "sha": "17ea4edc874a43d4",
+   "state": "model",
+   "text": "在“记忆”页面上查看"
+  },
+  "web:memory.review.openMemory": {
+   "sha": "c81e79b90b04e687",
+   "state": "model",
+   "text": "打开待审阅的记忆"
+  },
+  "web:memory.review.otherTopic": {
+   "sha": "1f1260ddd48575a9",
+   "state": "model",
+   "text": "其他"
+  },
+  "web:memory.review.retire": {
+   "sha": "312274950a5f0335",
+   "state": "model",
+   "text": "停用"
+  },
+  "web:memory.review.retires": {
+   "sha": "93d3ff586713bb3e",
+   "state": "model",
+   "text": "Ambrose 建议不再使用此已保存的记忆。"
+  },
+  "web:memory.review.retiresWhy": {
+   "sha": "4240432316745f2a",
+   "state": "model",
+   "text": "Ambrose 建议不再使用此已保存的记忆：{{reason}}"
+  },
+  "web:memory.review.title": {
+   "sha": "a49114c0f1d9747e",
+   "state": "model",
+   "text": {
+    "other": "{{count}} 条待审阅记忆"
+   }
   },
   "web:memory.settings.learnFromChats": {
    "sha": "c4ee91a10dcb9eec",
@@ -48392,6 +48694,86 @@
    "state": "model",
    "text": "发件人姓名"
   },
+  "web:settings.adminSpeakr.address": {
+   "sha": "ba32049417a26f72",
+   "state": "model",
+   "text": "Speakr 地址"
+  },
+  "web:settings.adminSpeakr.autoConnect": {
+   "sha": "feaac28ec4f5f647",
+   "state": "model",
+   "text": "用户登录时自动连接 Speakr"
+  },
+  "web:settings.adminSpeakr.autoConnectDesc": {
+   "sha": "4095234b10d5ee92",
+   "state": "model",
+   "text": "使用单点登录登录 Mailr 的用户将自动连接至 Speakr，并会收到相应通知。如果用户手动断开连接，则不会再次自动连接。两台服务器必须使用相同的身份提供商，并且必须在 Speakr 中允许 Mailr 客户端。"
+  },
+  "web:settings.adminSpeakr.check": {
+   "sha": "25b62665d5983328",
+   "state": "model",
+   "text": "检查"
+  },
+  "web:settings.adminSpeakr.checkClientNotAllowed": {
+   "sha": "ce77413a423f0a0b",
+   "state": "model",
+   "text": "Mailr 客户端不在 Speakr 允许的交换客户端列表中。"
+  },
+  "web:settings.adminSpeakr.checkExchangeOff": {
+   "sha": "031e1df343718370",
+   "state": "model",
+   "text": "Speakr 中已关闭单点登录令牌。"
+  },
+  "web:settings.adminSpeakr.checkNoProvisioning": {
+   "sha": "fe637855e0b18d07",
+   "state": "model",
+   "text": "准备就绪。没有 Speakr 账户的用户需先使用单点登录登录一次 Speakr；之后，他们在下次登录 Mailr 时会自动连接。"
+  },
+  "web:settings.adminSpeakr.checkOld": {
+   "sha": "4cba5340c9f4e665",
+   "state": "model",
+   "text": "此 Speakr 版本不支持单点登录连接。用户仍可粘贴令牌。"
+  },
+  "web:settings.adminSpeakr.checkReady": {
+   "sha": "554e41a40df550a2",
+   "state": "model",
+   "text": "准备就绪。从未使用单点登录登录过 Speakr 的用户需要先登录一次。之后，他们在下次登录 Mailr 时将自动连接。"
+  },
+  "web:settings.adminSpeakr.checkUnreachable": {
+   "sha": "c8c1ded6c657ec43",
+   "state": "model",
+   "text": "无法连接到 Speakr：{{detail}}"
+  },
+  "web:settings.adminSpeakr.desc": {
+   "sha": "33987e64022daa8d",
+   "state": "model",
+   "text": "此 Mailr 服务器上所有用户的 Speakr 地址。当有人添加 Speakr 时，系统会自动填写该地址。"
+  },
+  "web:settings.adminSpeakr.localDesc": {
+   "sha": "e963234dee7aa79a",
+   "state": "model",
+   "text": "这是登录时连接账户的默认设置。每位用户之后可以更改此设置。"
+  },
+  "web:settings.adminSpeakr.noSso": {
+   "sha": "85776e8bba064c81",
+   "state": "model",
+   "text": "登录时自动连接需要此 Mailr 服务器启用单点登录。"
+  },
+  "web:settings.adminSpeakr.removed": {
+   "sha": "3df8b901377c8070",
+   "state": "model",
+   "text": "Speakr 地址已移除。"
+  },
+  "web:settings.adminSpeakr.saved": {
+   "sha": "2d84f1850c612ff6",
+   "state": "model",
+   "text": "Speakr 地址已保存。"
+  },
+  "web:settings.adminSpeakr.title": {
+   "sha": "fe004bd4613d8b24",
+   "state": "model",
+   "text": "Speakr 服务器"
+  },
   "web:settings.adminTab.aModelServerOnYour": {
    "sha": "210f18809a325967",
    "state": "model",
@@ -54269,6 +54651,11 @@
    "state": "model",
    "text": "应用安装"
   },
+  "web:settings.groups.integrations": {
+   "sha": "e63f8e07d5131765",
+   "state": "model",
+   "text": "集成"
+  },
   "web:settings.groups.invitationsAndRepeatingTasks": {
    "sha": "783e1d34305ddd1e",
    "state": "model",
@@ -54518,6 +54905,11 @@
    "sha": "8469d73dfacaed69",
    "state": "same",
    "text": "Speakr"
+  },
+  "web:settings.groups.speakrForEveryone": {
+   "sha": "fe004bd4613d8b24",
+   "state": "model",
+   "text": "Speakr 服务器"
   },
   "web:settings.groups.standingOrdersRoutines": {
    "sha": "48f96352d5053360",
@@ -58778,6 +59170,26 @@
    "state": "model",
    "text": "API 令牌"
   },
+  "web:settings.speakrSection.auto.declined": {
+   "sha": "5b211786d9826b9d",
+   "state": "model",
+   "text": "{{url}} 未在登录时连接，因为您已将其移除。请使用“添加 Speakr”重新连接。"
+  },
+  "web:settings.speakrSection.auto.failed": {
+   "sha": "a2f885208ca3d732",
+   "state": "model",
+   "text": "登录时连接 {{url}} 失败。{{reason}} 将在下次登录时重试。"
+  },
+  "web:settings.speakrSection.auto.gotIt": {
+   "sha": "481e29fbd9ffbe69",
+   "state": "model",
+   "text": "知道了"
+  },
+  "web:settings.speakrSection.auto.notice": {
+   "sha": "83fcc1e6dd31309b",
+   "state": "model",
+   "text": "您在 {{url}} 的 Speakr 录音已在登录时连接。若要停止此操作，请移除下方账户。"
+  },
   "web:settings.speakrSection.connectSpeakr": {
    "sha": "cf83f3ad9efe87cd",
    "state": "model",
@@ -59027,6 +59439,111 @@
    "sha": "b645b9682ba021fc",
    "state": "model",
    "text": "Speakr 已恢复。"
+  },
+  "web:settings.speakrSection.sso.alreadyConnected": {
+   "sha": "71ba380510fe1636",
+   "state": "model",
+   "text": "此 Speakr 服务器已连接。"
+  },
+  "web:settings.speakrSection.sso.connectWith": {
+   "sha": "cc2d430eb896bd39",
+   "state": "model",
+   "text": "使用 {{name}} 连接"
+  },
+  "web:settings.speakrSection.sso.connected": {
+   "sha": "17c4f041bdad2318",
+   "state": "model",
+   "text": "Speakr 已连接。首次同步后将显示录音。"
+  },
+  "web:settings.speakrSection.sso.expired": {
+   "sha": "7763203e805e73e9",
+   "state": "model",
+   "text": "连接请求已过期。请重新开始。"
+  },
+  "web:settings.speakrSection.sso.failed": {
+   "sha": "e13f5060bb8260fd",
+   "state": "model",
+   "text": "无法通过单点登录连接 Speakr。请改为粘贴 API 令牌。"
+  },
+  "web:settings.speakrSection.sso.help": {
+   "sha": "1715bb58a73f9e42",
+   "state": "model",
+   "text": "登录后，Speakr 会为 Mailr 创建一个令牌。使用此功能前，请先通过单点登录至少登录一次 Speakr。"
+  },
+  "web:settings.speakrSection.sso.limit": {
+   "sha": "3b863447cdb3e6c8",
+   "state": "model",
+   "text": "您的 Speakr 账户已达到 API 令牌数量上限。请在 Speakr 的“账户设置”→“API 令牌”中撤销一个令牌，然后重试。"
+  },
+  "web:settings.speakrSection.sso.linkRequired": {
+   "sha": "44749470e53832f3",
+   "state": "model",
+   "text": "已存在使用您邮箱的 Speakr 账户。请先通过单点登录登录一次 Speakr 以进行关联，然后重试。"
+  },
+  "web:settings.speakrSection.sso.notAllowed": {
+   "sha": "b62552c2b1632b06",
+   "state": "model",
+   "text": "Mailr 可能无法从此 Speakr 服务器获取令牌。Speakr 管理员可以将 Mailr 的客户端 ID 添加到允许交换令牌的客户端列表中。"
+  },
+  "web:settings.speakrSection.sso.notSupported": {
+   "sha": "6101518e2b779e20",
+   "state": "model",
+   "text": "此 Speakr 版本不支持单点登录连接。请改为粘贴 API 令牌。"
+  },
+  "web:settings.speakrSection.sso.orPaste": {
+   "sha": "87719178e56cb942",
+   "state": "model",
+   "text": "或粘贴来自 Speakr 的 API 令牌："
+  },
+  "web:settings.speakrSection.sso.rateLimited": {
+   "sha": "cb102427e556c17e",
+   "state": "model",
+   "text": "尝试次数过多。请稍后一小时再试。"
+  },
+  "web:settings.speakrSection.sso.refused": {
+   "sha": "bb5f6fbd4c66e50f",
+   "state": "model",
+   "text": "Speakr 未接受登录。可能是该服务器已关闭单点登录令牌，或者您尚未通过单点登录登录过 Speakr。请先登录一次 Speakr，或粘贴 API 令牌。"
+  },
+  "web:settings.speakrSection.sso.refusedByPolicy": {
+   "sha": "94f02c0e7bceb335",
+   "state": "model",
+   "text": "该 Speakr 服务器的注册规则不允许此账户（邮箱域名不符，或邮箱未验证）。请联系其管理员，或粘贴令牌。"
+  },
+  "web:settings.speakrSection.sso.registrationClosed": {
+   "sha": "d4357baa61531a43",
+   "state": "model",
+   "text": "您还没有 Speakr 账户。请先使用单点登录登录一次 Speakr，然后重试。"
+  },
+  "web:settings.speakrSection.sso.renewed": {
+   "sha": "ad1ad5a4a67cdbc4",
+   "state": "model",
+   "text": "已保存新的 Speakr 令牌，并在 Speakr 中撤销了旧令牌。"
+  },
+  "web:settings.speakrSection.sso.renewedOldKept": {
+   "sha": "25b125c0f20d229b",
+   "state": "model",
+   "text": "已保存新的 Speakr 令牌。无法从 Mailr 撤销旧令牌；请在 Speakr 的“账户设置”→“API 令牌”中撤销它。"
+  },
+  "web:settings.speakrSection.sso.scopes": {
+   "sha": "4268b77e9ac50a74",
+   "state": "model",
+   "text": "此 Speakr 服务器提供的访问权限范围太窄，Mailr 需要读取权限。"
+  },
+  "web:settings.speakrSection.sso.singleSignOn": {
+   "sha": "16ee9912e594454a",
+   "state": "model",
+   "text": "单点登录"
+  },
+  "web:settings.speakrSection.sso.unreachable": {
+   "sha": "031f319f3b199188",
+   "state": "model",
+   "text": "无法连接到 Speakr。请检查地址并重试。"
+  },
+  "web:settings.speakrSection.sso.wrongAccount": {
+   "sha": "06a8a39366363e6e",
+   "state": "model",
+   "text": "您登录的是其他账户。请使用您用于 Mailr 的账户登录。"
   },
   "web:settings.speakrSection.syncStarted": {
    "sha": "fc739b6d5326f209",

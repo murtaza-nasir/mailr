@@ -48,6 +48,7 @@ const wantsPwa = process.env.E2E_PWA === '1'
   || (!cli.files.length && !cli.projects.length)
 const webkit = process.env.E2E_WEBKIT_WS ? { connectOptions: { wsEndpoint: process.env.E2E_WEBKIT_WS } }
   : process.env.E2E_WEBKIT === 'local' ? {} : null
+const CHROME_ARGS = ['--disable-features=NativeNotifications,SystemNotifications']
 const pixel = { ...devices['Pixel 7'], hasTouch: true, isMobile: true }
 const iphone = { ...devices['iPhone 14'], hasTouch: true, isMobile: true, launchOptions: {} }
 const phoneProjects: NonNullable<PlaywrightTestConfig['projects']> = [
@@ -86,8 +87,11 @@ export default defineConfig({
     viewport: { width: 1440, height: 900 },
     // A browser build other than the one this Playwright expects: E2E_CHROME (with --browser=chromium)
     // or E2E_FIREFOX (with --browser=firefox).
-    launchOptions: process.env.E2E_CHROME ? { executablePath: process.env.E2E_CHROME }
-      : process.env.E2E_FIREFOX ? { executablePath: process.env.E2E_FIREFOX } : {},
+    // Chrome hands a page's notifications to the desktop even when headless, so the reminder
+    // specs' test reminders appeared on the developer's screen; without the system notification
+    // features they stay in the browser, where the specs check them.
+    launchOptions: process.env.E2E_CHROME ? { executablePath: process.env.E2E_CHROME, args: CHROME_ARGS }
+      : process.env.E2E_FIREFOX ? { executablePath: process.env.E2E_FIREFOX } : { args: CHROME_ARGS },
     trace: 'retain-on-failure',
     // The review screenshots specs used to take on every run are off (E2E_SHOTS, e2e/fixtures.ts);
     // a failed test still leaves a picture of where it stopped.

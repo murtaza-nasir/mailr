@@ -13,6 +13,36 @@
         <item quantity="other">Last learned %1$s · %2$d new</item>
     </plurals>
     <string name="memory_last_failed">Last try %1$s failed. %2$s</string>
+    <!-- The weekly review card at the top of the Ambrose screen, and the top bar's count. -->
+    <plurals name="memory_review_count">
+        <item quantity="one">%d to review</item>
+        <item quantity="other">%d to review</item>
+    </plurals>
+    <plurals name="memory_review_title">
+        <item quantity="one">%d memory to review</item>
+        <item quantity="other">%d memories to review</item>
+    </plurals>
+    <string name="memory_review_not_now">Not now (until next week)</string>
+    <string name="memory_review_open_all">Review on the Memory page</string>
+    <string name="memory_review_other">Other</string>
+    <string name="memory_review_retire">Retire</string>
+    <string name="memory_review_keep_note">Keep the note</string>
+    <string name="memory_review_retires">Ambrose suggests no longer using this saved memory.</string>
+    <string name="memory_review_retires_why">Ambrose suggests no longer using this saved memory: %1$s</string>
+    <plurals name="memory_review_merges">
+        <item quantity="one">Keeping this replaces %d saved memory:</item>
+        <item quantity="other">Keeping this replaces %d saved memories:</item>
+    </plurals>
+    <string name="memory_review_merged">Merged.</string>
+    <string name="memory_tidy">Tidy</string>
+    <string name="memory_tidy_queued">Tidying started. Anything to merge or retire shows under To review.</string>
+    <string name="memory_review_merge">Merge</string>
+    <plurals name="memory_merged_from">
+        <item quantity="one">Merged from %d note</item>
+        <item quantity="other">Merged from %d notes</item>
+    </plurals>
+    <string name="memory_updates_saved">Keeping this changes your saved note: “%1$s”</string>
+    <string name="memory_learning_paused">Checked %1$s. 15 suggestions are waiting for review, so nothing new was added. Review them to resume learning.</string>
     <string name="memory_learning_off">Learning from mail is off.</string>
     <string name="memory_never_learned">Not learned from mail yet.</string>
     <string name="memory_error_model_failed">The model didn\'t answer. Retried in an hour.</string>

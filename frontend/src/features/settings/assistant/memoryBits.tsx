@@ -81,7 +81,9 @@ export function useMemoryMutations() {
   const task = useMutation({
     mutationFn: (m: Memory) => {
       const conv = conversationOf(m)
-      return createTask(qc, { summary: taskSummaryOf(m.text), ...(conv ? { conversation_id: conv } : {}) })
+      // A dated commitment (refs `due`, docs/design/memory-quality.md A5) makes a task with that date.
+      const due = m.refs.find((r) => r.due)?.due
+      return createTask(qc, { summary: taskSummaryOf(m.text), ...(conv ? { conversation_id: conv } : {}), ...(due ? { due } : {}) })
     },
     onSuccess: (made) => {
       if (made) toast({ message: t('memory.page.taskMade') })
@@ -105,6 +107,26 @@ export function MemorySource({ m }: { m: Pick<Memory, 'source' | 'chat'> }) {
   )
 }
 
+/** "Merged from N notes" under a note: the earlier texts open under it (the notes merged into it are
+ *  never listed on their own). */
+export function MergedFrom({ m }: { m: Pick<Memory, 'merged_from'> }) {
+  const [open, setOpen] = useState(false)
+  const from = m.merged_from ?? []
+  if (!from.length) return null
+  return (
+    <div className="as-merged" data-testid="memory-merged">
+      <button type="button" className="as-link" aria-expanded={open} onClick={() => setOpen(!open)}>
+        {t('memory.page.mergedFrom', { count: from.length + 1 })}
+      </button>
+      {open && (
+        <ul className="as-merged-list">
+          {from.map((x) => <li key={x.id} dir="auto">{x.text}</li>)}
+        </ul>
+      )}
+    </div>
+  )
+}
+
 export function MemoryRow({ m, onEdit, hideEntity }: { m: Memory; onEdit: (m: Memory) => void; hideEntity?: boolean }) {
   const { pin, remove, task } = useMemoryMutations()
   const conv = conversationOf(m)
@@ -113,6 +135,7 @@ export function MemoryRow({ m, onEdit, hideEntity }: { m: Memory; onEdit: (m: Me
     <li className={`as-mem${m.pinned ? ' pinned' : ''}${expired ? ' expired' : ''}`}>
       <div className="as-mem-main">
         <div className="as-mem-text">{m.text}</div>
+        <MergedFrom m={m} />
         <div className="as-mem-meta">
           <span className="pill" data-tip={kindExample(m.kind)}>{kindLabel(m.kind)}</span>
           {!hideEntity && m.entity && <span className="pill info">{m.entity.is_self ? t('memory.dialog.you') : m.entity.name}</span>}

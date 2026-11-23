@@ -142,4 +142,23 @@ class FakeMemoryStore(
         check("task:${m.id}")
         tasks += m
     }
+
+    var reviewCard = true
+    override suspend fun counts(): io.github.murtazanasir.mailr.data.api.ReviewCounts {
+        check("counts")
+        return io.github.murtazanasir.mailr.data.api.ReviewCounts(suggested.size, reviewCard && suggested.isNotEmpty(), "2026-W47")
+    }
+    override suspend fun merge(id: Long, into: Long) {
+        check("merge:$id:$into")
+        val m = suggested.firstOrNull { it.id == id } ?: active.first { it.id == id }
+        suggested.remove(m)
+        active.remove(m)
+        val i = active.indexOfFirst { it.id == into }
+        if (i >= 0) active[i] = active[i].copy(mergedFrom = listOf(io.github.murtazanasir.mailr.data.api.MergedNote(m.id, m.text)) + active[i].mergedFrom)
+    }
+    override suspend fun tidy() = check("tidy")
+    override suspend fun dismissReviewCard() {
+        check("dismiss-card")
+        reviewCard = false
+    }
 }

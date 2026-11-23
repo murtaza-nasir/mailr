@@ -14,6 +14,43 @@
         <item quantity="other">Последнее обучение: %1$s · %2$d новых записей</item>
     </plurals>
     <string name="memory_last_failed">Последняя попытка %1$s не удалась. %2$s</string>
+    <plurals name="memory_review_count">
+        <item quantity="one">%d для проверки</item>
+        <item quantity="few">%d для проверки</item>
+        <item quantity="many">%d для проверки</item>
+        <item quantity="other">%d для проверки</item>
+    </plurals>
+    <plurals name="memory_review_title">
+        <item quantity="one">%d запись памяти для проверки</item>
+        <item quantity="few">%d записи памяти для проверки</item>
+        <item quantity="many">%d записей памяти для проверки</item>
+        <item quantity="other">%d записи памяти для проверки</item>
+    </plurals>
+    <string name="memory_review_not_now">Не сейчас (до следующей недели)</string>
+    <string name="memory_review_open_all">Открыть на странице «Память»</string>
+    <string name="memory_review_other">Другое</string>
+    <string name="memory_review_retire">Удалить</string>
+    <string name="memory_review_keep_note">Сохранить заметку</string>
+    <string name="memory_review_retires">Ambrose предлагает больше не использовать эту сохранённую память.</string>
+    <string name="memory_review_retires_why">Ambrose предлагает больше не использовать эту сохранённую память: %1$s</string>
+    <plurals name="memory_review_merges">
+        <item quantity="one">Сохранение заменит %d сохранённую запись:</item>
+        <item quantity="few">Сохранение заменит %d сохранённые записи:</item>
+        <item quantity="many">Сохранение заменит %d сохранённых записей:</item>
+        <item quantity="other">Сохранение заменит %d сохранённых записей:</item>
+    </plurals>
+    <string name="memory_review_merged">Объединено.</string>
+    <string name="memory_tidy">Навести порядок</string>
+    <string name="memory_tidy_queued">Начата оптимизация. Всё, что нужно объединить или удалить, находится в разделе «На проверке».</string>
+    <string name="memory_review_merge">Объединить</string>
+    <plurals name="memory_merged_from">
+        <item quantity="one">Объединено из %d заметки</item>
+        <item quantity="few">Объединено из %d заметок</item>
+        <item quantity="many">Объединено из %d заметок</item>
+        <item quantity="other">Объединено из %d заметки</item>
+    </plurals>
+    <string name="memory_updates_saved">Если сохранить это, ваша сохранённая заметка изменится: «%1$s»</string>
+    <string name="memory_learning_paused">Проверено: %1$s. 15 предложений ожидают проверки, поэтому новые не добавлены. Проверьте их, чтобы продолжить обучение.</string>
     <string name="memory_learning_off">Обучение на основе писем отключено.</string>
     <string name="memory_never_learned">Ещё не обучалось на основе писем.</string>
     <string name="memory_error_model_failed">Модель не ответила. Повторная попытка через час.</string>

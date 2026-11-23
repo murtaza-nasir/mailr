@@ -40,6 +40,9 @@ test('mail.read and mail.unread from a row, mail.star from the star', async ({ p
   await row(page, 'E2E Read me').hover()
   await row(page, 'E2E Read me').getByRole('button', { name: 'Mark as unread' }).click()
   await expect.poll(async () => (await conv(page.request, 'E2E Read me')).unread_count).toBe(1)
+  // The clicked button keeps focus; once the mouse leaves, the row's buttons go all the same.
+  await page.mouse.move(0, 0)
+  await expect(row(page, 'E2E Read me').getByRole('button', { name: 'Mark as read' })).toBeHidden()
 
   await row(page, 'E2E Star me').getByRole('button', { name: 'Star', exact: true, pressed: false }).click()
   await expect.poll(async () => (await conv(page.request, 'E2E Star me')).starred).toBe(true)

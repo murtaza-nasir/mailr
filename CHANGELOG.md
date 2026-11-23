@@ -4,6 +4,106 @@ The changes in each Mailr release are listed here, newest first. A release is ta
 on GitHub, and its image is published as `ghcr.io/murtaza-nasir/mailr:<version>`. The Android app
 of a release has the same version number; the separate Notes app has its own.
 
+## 0.40.53
+
+- No changes to the app: corrected examples in the source code and the release notes.
+
+## 0.40.52
+
+- The weekly review card of memories is short: one line per person or topic with a count, and
+  a topic's suggestions show when you open it. One conference or project under several names is
+  one topic there and on the Memory page (web and Android).
+- After you approve two of Ambrose's cards one after the other, Ambrose reports both. The second
+  approval used to be left out when the reply to the first was still being written (web and
+  Android).
+- On the mail list, a row's buttons go away when the mouse leaves, also after you click one of
+  them or come back from a message.
+
+## 0.40.51
+
+- Ambrose's memory: no more copies of what it already knows. Before suggesting memories from your
+  mail or a chat, Ambrose reads the memories and waiting suggestions about the same people and
+  topics, and updates one of them instead of adding another. A suggestion that says the same as
+  one already waiting is merged into it.
+- A suggested change to a memory you kept shows that memory under it. Keep changes the memory in
+  place (web and Android).
+- Reviewing suggestions without opening Settings: Ambrose asks "Remember …?" with Yes and No
+  under the reply to a message that states something lasting, the Ambrose panel shows how many
+  suggestions wait, and from Monday morning a review card at the top of the chat lists them by
+  topic, to keep, merge into another memory, drop or make into a task (web and Android).
+- A merged memory is one memory, with "Merged from 2 notes" and the earlier words under it.
+- Once a week Ambrose looks for saved memories to merge or retire (a commitment past its date, an
+  event that is over) and suggests it; nothing changes until you keep the suggestion. Tidy on the
+  Memory page does it now. To review is grouped by person or topic.
+- The same project or conference under another name ("PDC 2027", "the 2027 PDC meeting") is one
+  topic, and an agent's "remember" no longer adds what a memory already says.
+
+## 0.40.50
+
+- Ambrose's memory: fewer and better suggestions from your mail. Ambrose is told today's date and
+  suggests only lasting things (one memory per project, open commitments), and no longer suggests
+  meetings, accepted invitations, details inside one project, or the same thing in other words.
+  Suggestions it is unsure of are left out.
+- A commitment with a date stops being used three days after that date, and one whose date has
+  already passed is not suggested.
+- Suggestions not reviewed in 30 days, or past their date, are removed. While 15 wait, nothing new
+  is suggested and the Memory page says so (web and Android).
+
+## 0.40.49
+
+- Reminders on the web: a reminder is shown once per browser. It reaches a browser as a Web Push
+  and through every open Mailr tab; each alert now carries one id, and the service worker shows it
+  once. Before, Firefox on a Linux desktop showed a popup for each copy (three for one reminder
+  with two tabs open). A repeat (Remind again) still alerts again.
+
+## 0.40.48
+
+- Admin: the Speakr section is now called **Speakr server**, and its checkbox **Connect Speakr when
+  people sign in**. Its descriptions and the **Check** result are clearer.
+
+## 0.40.47
+
+- Forwarded notes: Ambrose reads the whole forward, including the forwarded email, and is told when
+  Mailr found a meeting invitation in it. Before, a note such as "Add this to my calendar" above an
+  Outlook forward was answered with "no invitation", because only the note was read.
+- Ambrose: in a conversation, a message that forwards an email is marked, so the forwarded email is
+  read in full. Replies, whose quotes are the earlier messages of the thread, are not marked.
+
+## 0.40.46
+
+- Speakr for everyone: Speakr accounts are not created from Mailr. A person without a Speakr
+  account signs in to Speakr with single sign-on once, and is connected at their next Mailr
+  sign-in; Mailr tries again after an hour instead of a week. The message to that person and the
+  admin **Check** say so.
+
+## 0.40.45
+
+- Speakr for everyone: an admin can set one Speakr address for the server (Settings → Admin →
+  Integrations). It is filled in when people add Speakr, and with single sign-on people can be
+  connected at each web sign-in without a step of their own. Each person sees a notice, and an
+  account they remove is not connected again. The sign-in never waits for Speakr. **Check** asks
+  the Speakr server what it supports. Nothing changes until an admin sets the address.
+- Speakr: removing an account that was connected with single sign-on also revokes its token in
+  Speakr. A pasted token is left alone.
+- Speakr: an account connected with single sign-on gets instant updates right away, and its
+  webhooks permission is no longer shown as a warning.
+- Speakr: when Speakr has no account for you, the reason is named (sign-up closed, an existing
+  account to link, or the server's email rules).
+
+## 0.40.44
+
+- Speakr: a Speakr account can be connected with single sign-on, when Mailr and Speakr use the
+  same sign-on and the Speakr server allows token exchange. You sign in again, and a token for
+  Mailr is created in Speakr; nothing has to be copied. The same button renews the token, and the
+  old token is revoked in Speakr when the Speakr version permits it. Pasting a token still works.
+
+## 0.40.43
+
+- Tasks: a completed task keeps no reminders in the calendar store, so desktop apps such as
+  KOrganizer no longer show reminders for tasks that are done. The reminders are set aside on
+  completion and put back on a reopen. Tasks completed or reopened in another app are corrected
+  at the next sync, and so are completed tasks from earlier releases.
+
 ## 0.40.42
 
 - Web notes: Clear checked right after checking an item now clears it too; before, the clear could

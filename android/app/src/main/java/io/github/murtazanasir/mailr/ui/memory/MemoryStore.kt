@@ -2,6 +2,11 @@ package io.github.murtazanasir.mailr.ui.memory
 
 import io.github.murtazanasir.mailr.AppGraph
 import io.github.murtazanasir.mailr.data.api.EntityDetail
+import io.github.murtazanasir.mailr.data.api.ReviewCounts
+import io.github.murtazanasir.mailr.data.api.dismissReviewCard
+import io.github.murtazanasir.mailr.data.api.memoryCounts
+import io.github.murtazanasir.mailr.data.api.mergeMemory
+import io.github.murtazanasir.mailr.data.api.tidyMemories
 import io.github.murtazanasir.mailr.data.api.KnownEntity
 import io.github.murtazanasir.mailr.data.api.LearningStatus
 import io.github.murtazanasir.mailr.data.api.Memory
@@ -44,7 +49,27 @@ interface MemoryStore {
     suspend fun person(email: String): PersonCard
     /** Make a task from a commitment, linked to the email it came from. */
     suspend fun makeTask(m: Memory)
+    /** The waiting suggestions and whether the weekly review card is due. */
+    suspend fun counts(): ReviewCounts
+    /** Merge note [id] into [into]: one note, "Merged from N notes". */
+    suspend fun merge(id: Long, into: Long)
+    /** Hide the weekly review card until next Monday. */
+    suspend fun dismissReviewCard()
+    /** Look for notes to merge or retire now (the proposals arrive as suggestions). */
+    suspend fun tidy()
 }
+
+/** The person or topic a suggestion is about: its entry, or the one kept in its refs. */
+fun suggestionTopic(m: Memory, you: String, other: String): String {
+    m.topic?.let { return if (it.self) you else it.name.ifBlank { other } }
+    m.entity?.let { return if (it.isSelf) you else it.name }
+    val about = m.refs.firstNotNullOfOrNull { it.about }
+    if (about?.self == true) return you
+    return about?.name?.ifBlank { null } ?: other
+}
+
+/** The key suggestions are grouped by: other wordings of one topic share it ([Memory.topic]). */
+fun suggestionTopicKey(m: Memory, you: String, other: String): String = m.topic?.key ?: suggestionTopic(m, you, other)
 
 /** "You promised Sam a quote." → "Promised Sam a quote" (the web's taskSummaryOf). */
 fun taskSummaryOf(text: String): String {
@@ -75,6 +100,13 @@ class ApiMemoryStore(private val g: AppGraph) : MemoryStore {
 
     // ACT memory.make_task @android.settings: the Tasks app's create path (queued while offline), with the email linked.
     override suspend fun makeTask(m: Memory) {
-        g.calendar.createTask(TaskDraft(g.calendar.newUid(), taskSummaryOf(m.text), conversationId = m.conversationId))
+        g.calendar.createTask(TaskDraft(g.calendar.newUid(), taskSummaryOf(m.text), due = m.due, conversationId = m.conversationId))
     }
+    override suspend fun counts() = g.api.memoryCounts()
+    // ACT memory.merge @android.assistant
+    override suspend fun merge(id: Long, into: Long) { g.api.mergeMemory(id, into) }
+    // ACT memory.dismiss_review_card @android.assistant
+    override suspend fun dismissReviewCard() { g.api.dismissReviewCard() }
+    // ACT memory.tidy @android.settings
+    override suspend fun tidy() { g.api.tidyMemories() }
 }

@@ -83,6 +83,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.murtazanasir.mailr.R
+import io.github.murtazanasir.mailr.i18n.AppText
 import io.github.murtazanasir.mailr.data.api.LearningStatus
 import io.github.murtazanasir.mailr.data.api.Memory
 import io.github.murtazanasir.mailr.i18n.LocaleFormats
@@ -114,6 +115,10 @@ data class MemoryCallbacks(
     val openSource: ((Long) -> Unit)? = null,
     /** "From a chat": the chat a memory came from, at the message (session id, chat message id). */
     val openChat: ((String, Long?) -> Unit)? = null,
+    /** Merge a suggestion into another note (id, into). */
+    val merge: (Long, Long) -> Unit = { _, _ -> },
+    /** Tidy: look for notes to merge or retire now; null hides it. */
+    val tidy: (() -> Unit)? = null,
 )
 
 /**
@@ -154,7 +159,7 @@ fun MemoryScreen(
                     Text(stringResource(R.string.memory_desc, assistantName), style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 4.dp))
                 }
-                item(key = "learning") { LearningRow(ui.learning, ui.learnBusy, now, cb.learnNow) }
+                item(key = "learning") { LearningRow(ui.learning, ui.learnBusy, now, cb.learnNow, cb.tidy) }
                 item(key = "filters") { Filters(ui, cb) }
                 when {
                     !ui.loaded -> item(key = "loading") { Loading() }
@@ -168,7 +173,7 @@ fun MemoryScreen(
                     }
                 }
                 if (ui.loaded && !nothing) {
-                    if (sections.review.isNotEmpty()) reviewItems(sections.review, ui.busy, assistantName, cb)
+                    if (sections.review.isNotEmpty()) reviewItems(sections.review, ui.active, ui.busy, assistantName, cb)
                     if (sections.about.isNotEmpty() || (!ui.filtered && ui.problem == null)) {
                         item(key = "h-about") { SectionHeader(stringResource(R.string.memory_about_you)) }
                         if (sections.about.isEmpty()) item(key = "about-empty") {
@@ -251,7 +256,7 @@ internal fun SectionHeader(t: String, modifier: Modifier = Modifier) {
 
 /** "Last learned 6:07 AM · 0 new" (or what went wrong) and Learn now. ACT memory.learning_status @android.settings */
 @Composable
-private fun LearningRow(s: LearningStatus?, busy: Boolean, now: ZonedDateTime, learnNow: () -> Unit) {
+private fun LearningRow(s: LearningStatus?, busy: Boolean, now: ZonedDateTime, learnNow: () -> Unit, tidy: (() -> Unit)? = null) {
     Row(Modifier.fillMaxWidth().padding(start = 20.dp, end = 8.dp).heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
         val last = s?.last
         val text = when {
@@ -259,6 +264,7 @@ private fun LearningRow(s: LearningStatus?, busy: Boolean, now: ZonedDateTime, l
             !s.enabled -> stringResource(R.string.memory_learning_off)
             last == null -> stringResource(R.string.memory_never_learned)
             last.error != null -> stringResource(R.string.memory_last_failed, learnedWhen(last.at, now), stringResource(learnError(last.error)))
+            last.full -> stringResource(R.string.memory_learning_paused, learnedWhen(last.at, now))
             else -> pluralStringResource(R.plurals.memory_last_learned, last.suggested, learnedWhen(last.at, now), last.suggested)
         }
         // The line keeps its height while it loads, so nothing below it moves.
@@ -270,6 +276,7 @@ private fun LearningRow(s: LearningStatus?, busy: Boolean, now: ZonedDateTime, l
             Spacer(Modifier.width(6.dp))
             Text(stringResource(R.string.memory_learn_now))
         }
+        tidy?.let { TextButton(onClick = it, modifier = Modifier.testTag("tidy-now")) { Text(stringResource(R.string.memory_tidy)) } }
     }
 }
 
@@ -324,8 +331,11 @@ private fun Filters(ui: MemoryUi, cb: MemoryCallbacks) {
     }
 }
 
-/** Suggestions from mail and chats: Keep or Dismiss, one by one or all at once. */
-private fun LazyListScope.reviewItems(items: List<Memory>, busy: Set<Long>, assistantName: String, cb: MemoryCallbacks) {
+/** Suggestions from mail and chats, grouped by person or topic: Keep, Merge, Create task (a
+ *  commitment), Dismiss; Keep all and Dismiss all for a topic and for every one. A tidy proposal says
+ *  which saved notes it merges, or which one it retires and why (docs/design/memory-quality.md, C10). */
+private fun LazyListScope.reviewItems(items: List<Memory>, saved: List<Memory>, busy: Set<Long>, assistantName: String,
+                                      cb: MemoryCallbacks) {
     item(key = "h-review") {
         Column {
             SectionHeader(stringResource(R.string.memory_to_review))
@@ -341,38 +351,80 @@ private fun LazyListScope.reviewItems(items: List<Memory>, busy: Set<Long>, assi
             }
         }
     }
-    items(items, key = { "s-${it.id}" }) { m -> ReviewRow(m, m.id in busy, assistantName, cb) }
+    val you = AppText.get(R.string.memory_you)
+    val other = AppText.get(R.string.memory_review_other)
+    items.groupBy { suggestionTopicKey(it, you, other) }.forEach { (key, ms) ->
+        val topic = suggestionTopic(ms.first(), you, other)
+        item(key = "g-$key") {
+            Row(Modifier.fillMaxWidth().padding(start = 20.dp, end = 12.dp, top = 8.dp).testTag("review-group"),
+                verticalAlignment = Alignment.CenterVertically) {
+                Pill(topic, info = true)
+                if (ms.size > 1) Row(Modifier.weight(1f), horizontalArrangement = Arrangement.End) {
+                    TextButton(onClick = { cb.keep(ms.map { it.id }) }) { Text(stringResource(R.string.memory_keep_all)) }
+                    TextButton(onClick = { cb.dismiss(ms.map { it.id }) }) { Text(stringResource(R.string.memory_dismiss_all)) }
+                }
+            }
+        }
+        val targets = saved.filter { suggestionTopicKey(it, you, other) == key } + ms.filter { it.retires == null }
+        items(ms, key = { "s-${it.id}" }) { m ->
+            ReviewRow(m, m.id in busy, assistantName, cb, if (m.retires != null) emptyList() else targets.filter { it.id != m.id })
+        }
+    }
+}
+
+/** What a suggestion changes besides adding itself: an edit of a saved note, a tidy merge, a retirement. */
+@Composable
+fun SuggestionChanges(m: Memory) {
+    val style = MaterialTheme.typography.bodySmall
+    val color = MaterialTheme.colorScheme.onSurfaceVariant
+    when {
+        m.retires != null -> Text(if (m.retires.reason.isBlank()) stringResource(R.string.memory_review_retires)
+            else stringResource(R.string.memory_review_retires_why, m.retires.reason), style = style, color = color,
+            modifier = Modifier.padding(top = 2.dp).testTag("memory-retires"))
+        m.merges.isNotEmpty() && m.replaces != null -> Column(Modifier.padding(top = 2.dp).testTag("memory-merges")) {
+            Text(pluralStringResource(R.plurals.memory_review_merges, m.merges.size + 1, m.merges.size + 1), style = style, color = color)
+            (listOf(m.replaces) + m.merges).forEach { Text("\u2022 ${it.text}", style = style, color = color, modifier = Modifier.padding(start = 8.dp)) }
+        }
+        m.replaces != null -> Text(stringResource(R.string.memory_updates_saved, m.replaces.text), style = MaterialTheme.typography.bodyMedium,
+            color = color, modifier = Modifier.padding(top = 2.dp).testTag("memory-replaces"))
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ReviewRow(m: Memory, busy: Boolean, assistantName: String, cb: MemoryCallbacks) {
-    val about = m.refs.firstNotNullOfOrNull { it.about }
-    val you = stringResource(R.string.memory_you)
-    val who = when {
-        m.entity != null -> if (m.entity.isSelf) you else m.entity.name
-        about?.self == true -> you
-        else -> about?.name?.ifBlank { null }
-    }
+private fun ReviewRow(m: Memory, busy: Boolean, assistantName: String, cb: MemoryCallbacks, targets: List<Memory> = emptyList()) {
     Column(Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 8.dp).testTag("review-row")) {
         Text(m.text, style = MaterialTheme.typography.bodyLarge)
+        SuggestionChanges(m)
         FlowRow(Modifier.padding(top = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             KindPill(m.kind)
-            if (who != null) Pill(who, info = true)
             SourceText(m, assistantName, cb)
             m.confidence?.let { MetaText(stringResource(R.string.memory_sure, Math.round(it * 100).toInt())) }
             m.conversationId?.let { c -> cb.openSource?.let { open -> SourceLink { open(c) } } }
         }
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            TextButton(onClick = { cb.dismiss(listOf(m.id)) }, enabled = !busy) { Text(stringResource(R.string.memory_dismiss)) }
+        FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+            TextButton(onClick = { cb.dismiss(listOf(m.id)) }, enabled = !busy) {
+                Text(stringResource(if (m.retires != null) R.string.memory_review_keep_note else R.string.memory_dismiss))
+            }
+            if (m.kind == "commitment" && m.retires == null) TextButton(onClick = { cb.makeTask(m); cb.dismiss(listOf(m.id)) }, enabled = !busy) {
+                Text(stringResource(R.string.memory_make_task))
+            }
+            if (targets.isNotEmpty()) Box {
+                var menu by remember { mutableStateOf(false) }
+                TextButton(onClick = { menu = true }, enabled = !busy, modifier = Modifier.testTag("merge-${m.id}")) {
+                    Text(stringResource(R.string.memory_review_merge))
+                }
+                DropdownMenu(menu, { menu = false }) {
+                    targets.forEach { t -> DropdownMenuItem({ Text(t.text, maxLines = 2) }, { menu = false; cb.merge(m.id, t.id) }) }
+                }
+            }
             FilledTonalButton(onClick = { cb.keep(listOf(m.id)) }, enabled = !busy) {
                 Icon(Icons.Outlined.Check, null, Modifier.size(18.dp))
                 Spacer(Modifier.width(6.dp))
-                Text(stringResource(R.string.memory_keep))
+                Text(stringResource(if (m.retires != null) R.string.memory_review_retire else R.string.memory_keep))
             }
         }
     }
-    HorizontalDivider(Modifier.padding(horizontal = 20.dp), color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 }
 
 private fun LazyListScope.groupItems(g: MemoryGroup, assistantName: String, now: ZonedDateTime, cb: MemoryCallbacks, card: Boolean) {
@@ -405,6 +457,7 @@ fun MemoryRow(m: Memory, assistantName: String, now: ZonedDateTime, cb: MemoryCa
         Column(Modifier.weight(1f)) {
             Text(m.text, style = MaterialTheme.typography.bodyLarge,
                 color = if (expired) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface)
+            MergedFrom(m.mergedFrom.map { it.text })
             FlowRow(Modifier.padding(top = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 KindPill(m.kind)
                 if (m.pinned) Icon(Icons.Outlined.PushPin, stringResource(R.string.memory_pin), Modifier.size(16.dp).align(Alignment.CenterVertically),
@@ -452,6 +505,23 @@ internal fun sourceLabel(source: String, assistantName: String): String = when (
     "extracted" -> stringResource(R.string.memory_source_mail)
     "chat" -> stringResource(R.string.memory_source_chat)
     else -> stringResource(R.string.memory_source_you)
+}
+
+/** "Merged from N notes" under a note: the earlier texts open under it (merged notes are never
+ *  listed on their own, docs/design/memory-quality.md). */
+@Composable
+fun MergedFrom(from: List<String>) {
+    if (from.isEmpty()) return
+    var open by remember { mutableStateOf(false) }
+    Column {
+        TextButton(onClick = { open = !open }, modifier = Modifier.testTag("memory-merged")) {
+            Text(pluralStringResource(R.plurals.memory_merged_from, from.size + 1, from.size + 1))
+        }
+        if (open) from.forEach {
+            Text("\u2022 $it", Modifier.padding(start = 8.dp, bottom = 2.dp), style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
 }
 
 @Composable

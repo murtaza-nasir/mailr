@@ -612,6 +612,8 @@ def timeline(rows: list[ChatMessage], cards: dict[int, dict[str, Any]] | None = 
                    "steps": [], "timeline": [], "status": r.status or "done",
                    "stop_reason": (r.meta or {}).get("stop_reason"), "resume": note,
                    "memory_ids": [int(i) for i in (r.meta or {}).get("memory_ids") or []],
+                   # "Remember …?" under the reply: suggestions from this message (C8).
+                   "remember": [dict(x) for x in (r.meta or {}).get("remember") or [] if isinstance(x, dict)],
                    "created_at": r.created_at.isoformat()}
             continue
         if r.role != "assistant":
@@ -649,6 +651,33 @@ def timeline(rows: list[ChatMessage], cards: dict[int, dict[str, Any]] | None = 
     return turns
 
 
+async def _remember_states(db: AsyncSession, p: Principal, turns: list[dict[str, Any]]) -> None:
+    """Bring the "Remember …?" items up to date: a waiting one kept or merged elsewhere (the Memory
+    page, the review card) says so, and one dropped or expired since is left out."""
+    from mailr.knowledge import memory
+    from mailr.models import Memory
+
+    items = [x for t in turns for x in t.get("remember") or []]
+    if not items:
+        return
+    ids = [int(x["id"]) for x in items if str(x.get("id") or "").isdigit()]
+    now = {m.id: m for m in (await db.execute(select(Memory).where(
+        Memory.id.in_(ids), Memory.user_id == p.user_id))).scalars()}
+    for t in turns:
+        out = []
+        for x in t.get("remember") or []:
+            m = now.get(int(x.get("id") or 0))
+            if not memory.sees_sensitive(p) and m is not None and m.sensitive:
+                continue
+            if x.get("state") in (None, "waiting"):
+                if m is None:
+                    continue  # dismissed elsewhere, or expired
+                x["state"] = {"active": "kept", "merged": "merged"}.get(m.status, "waiting")
+                x["text"] = m.text
+            out.append(x)
+        t["remember"] = out
+
+
 async def timeline_cards(db: AsyncSession, user_id: int, rows: list[ChatMessage]) -> dict[int, dict[str, Any]]:
     """The approval cards the rows' steps refer to, with their current status and outcome."""
     from mailr.agent.present import approval_card
@@ -676,6 +705,7 @@ async def chat_session(session_id: str, p: Principal = Depends(scope("read")), d
     rows = list((await db.execute(select(ChatMessage).where(ChatMessage.session_id == s.id)
                                   .order_by(ChatMessage.id))).scalars())
     turns = timeline(rows, await timeline_cards(db, p.user_id, rows))
+    await _remember_states(db, p, turns)
     run = _RUNS.get(s.id)
     running = bool(run and not run.done)
     for t in turns:

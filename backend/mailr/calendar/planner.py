@@ -29,6 +29,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import re
+import secrets
 from dataclasses import dataclass
 from datetime import UTC, date, datetime, time, timedelta, tzinfo
 from typing import Any
@@ -755,6 +756,10 @@ async def _deliver(db: AsyncSession, r: ReminderSchedule, cfg: dict[str, Any], *
     data = await payload_for(db, r, missed=missed, sound=cfg["sound"])
     if again:
         data["again"] = True
+    # One id for this alert, the same in the SSE event and the Web Push: a browser that gets both
+    # (and every open tab) shows it once (sw.js showPush). Firefox on a Linux desktop shows each
+    # showNotification as its own popup even with the same tag (three popups per reminder, 15 Nov 2026).
+    data["delivery"] = secrets.token_hex(8)
     if cfg["web"]["desktop"]:
         await notify(db, r.user_id, data)
     from mailr import i18n

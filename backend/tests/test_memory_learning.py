@@ -272,3 +272,240 @@ async def test_triage_asks_the_decision_model_with_the_senders_notes(client, use
         m, u = await db.get(Message, mid), await db.get(User, user.id)
         await classify.llm_smart(db, u, m, sensitive=False)
     assert seen["notes"] == ["(Dana) Dana is your accountant"]
+
+
+async def test_weak_and_past_proposals_are_left_out_and_a_due_date_ends_the_note(client, user, raw, fake):
+    """docs/design/memory-quality.md step 1: the keep test and skip list are in the prompt with
+    today's date, proposals under MIN_CONFIDENCE and commitments past their date are not offered,
+    and a dated commitment expires DUE_GRACE after its date."""
+    from datetime import timedelta
+
+    from mailr.knowledge import tasks
+
+    _, me = await _setup_identity(user)
+    mid, _ = await _ingest(user.id, raw("Review", frm=f"Me <{me}>", to="Chair <chair@conf.example>",
+                                        body="Happy to review one paper. I will send it by next Friday.",
+                                        date=_now_hdr()), source="send", roles=["sent"])
+    soon = (datetime.now(UTC) + timedelta(days=5)).date()
+    past = (datetime.now(UTC) - timedelta(days=2)).date()
+    ep = await _endpoint(user.id, "local")
+    try:
+        def item(text, kind="fact", conf=0.9, due=""):
+            return {"text": text, "kind": kind, "about_name": "", "about_email": "", "about_kind": "self",
+                    "message_id": mid, "confidence": conf, "due": due}
+        fake.replies = [json.dumps({"memories": [
+            item("You use a spreadsheet for reviews", conf=0.4),
+            item("You promised the chair a slide by last week", kind="commitment", due=past.isoformat()),
+            item("You will send the chair your review", kind="commitment", due=soon.isoformat())]})]
+        res = await tasks.extract_for_user(user.id, force=True)
+        assert res["suggested"] == 1, res
+        system = fake.posts[-1]["body"]["messages"][0]["content"]
+        assert "Today is" in system and "never a project" in system and "would change an answer" in system
+        assert '"due"' in json.dumps(fake.posts[-1]["body"]["response_format"])
+        assert ", sent " in fake.posts[-1]["body"]["messages"][1]["content"]
+        async with sessionmaker()() as db:
+            (m,) = (await db.execute(select(Memory).where(Memory.user_id == user.id))).scalars().all()
+            assert m.text == "You will send the chair your review" and m.status == "suggested"
+            assert {"due": soon.isoformat()}.items() <= m.refs[0].items()
+            assert m.expires_at is not None and m.expires_at.date() >= soon + tasks.DUE_GRACE - timedelta(days=1)
+    finally:
+        await _drop_endpoint(ep)
+
+
+async def test_old_suggestions_are_dropped_and_learning_waits_while_fifteen_wait(client, user, raw, fake):
+    from datetime import timedelta
+
+    from mailr.knowledge import tasks
+
+    _, me = await _setup_identity(user)
+    await _ingest(user.id, raw("Hi", frm=f"Me <{me}>", to="sam@acme.example", body="Thanks, Sam.",
+                               date=_now_hdr()), source="send", roles=["sent"])
+    now = datetime.now(UTC)
+
+    def row(text, **kw):
+        return Memory(user_id=user.id, kind="fact", text=text, source="extracted", status="suggested", refs=[],
+                      sensitive=False, pinned=False, use_count=0, **kw)
+
+    async with sessionmaker()() as db:
+        db.add_all([row("You were unreviewed for a month", updated_at=now - timedelta(days=31)),
+                    row("You had a date that passed", expires_at=now - timedelta(hours=1)),
+                    Memory(user_id=user.id, kind="fact", text="You keep an old accepted note", source="extracted",
+                           status="active", refs=[], sensitive=False, pinned=False, use_count=0,
+                           updated_at=now - timedelta(days=90)),
+                    *[row(f"You have waiting note {i}") for i in range(tasks.MAX_WAITING)]])
+        await db.commit()
+    ep = await _endpoint(user.id, "local")
+    try:
+        res = await tasks.extract_for_user(user.id, force=True)
+        assert res == {"messages": 0, "suggested": 0, "full": True}, res
+        assert fake.posts == []  # nothing is asked while the review queue is full
+        st = await _state(user.id)
+        assert "extract_since" not in st  # the mail is read once there is room
+        assert st["learn_runs"][0]["full"] is True and st["learn_runs"][0]["expired"] == 2
+        async with sessionmaker()() as db:
+            texts = {m.text for m in (await db.execute(select(Memory).where(Memory.user_id == user.id))).scalars()}
+        assert "You were unreviewed for a month" not in texts and "You had a date that passed" not in texts
+        assert "You keep an old accepted note" in texts  # accepted notes are never dropped this way
+        r = await client.get("/api/v1/assistant/memories/learning")
+        assert r.json()["last"]["full"] is True
+        # Reviewing one makes room: the next pass reads the mail, asking for at most the room left.
+        async with sessionmaker()() as db:
+            one = (await db.execute(select(Memory).where(Memory.user_id == user.id, Memory.status == "suggested")
+                                    .limit(1))).scalar_one()
+        assert (await client.post(f"/api/v1/assistant/memories/{one.id}/reject")).status_code == 200
+        fake.replies = [json.dumps({"memories": []})]
+        res = await tasks.extract_for_user(user.id, force=True)
+        assert res["messages"] == 1 and "at most 1 short memories" in fake.posts[-1]["body"]["messages"][0]["content"]
+    finally:
+        await _drop_endpoint(ep)
+
+
+def _row(user_id, text, *, status="suggested", entity_id=None, sensitive=False, refs=None):
+    return Memory(user_id=user_id, kind="fact", text=text, source="extracted", status=status, refs=refs or [],
+                  sensitive=sensitive, pinned=False, use_count=0, entity_id=entity_id)
+
+
+async def test_the_model_sees_known_notes_and_updates_one_instead_of_adding_a_copy(client, user, raw, fake):
+    """docs/design/memory-quality.md step 2 (A1): the waiting suggestions and the notes about the
+    user are shown as <known> with their numbers, a sensitive note is not shown to a call that
+    may reach a hosted model, and an update rewrites a suggestion in place."""
+    from mailr.knowledge import tasks
+
+    _, me = await _setup_identity(user)
+    mid, _ = await _ingest(user.id, raw("Reviews", frm=f"Me <{me}>", to="Chair <chair@conf.example>",
+                                        body="I can review a second paper, for the AI track this time.",
+                                        date=_now_hdr()), source="send", roles=["sent"])
+    async with sessionmaker()() as db:
+        wait = _row(user.id, "You review papers for the Plains Conference MIS track",
+                    refs=[{"about": {"name": "Plains Conference", "kind": "topic", "emails": []}}])
+        secret = _row(user.id, "You see a counsellor on Mondays", sensitive=True)
+        db.add_all([wait, secret])
+        await db.commit()
+        wait_id = wait.id
+    ep = await _endpoint(user.id, "hosted")
+    try:
+        fake.replies = [json.dumps({"memories": [{
+            "text": "You review papers for the Plains Conference MIS and AI tracks", "kind": "fact",
+            "about_name": "Plains Conference", "about_email": "", "about_kind": "topic", "message_id": mid,
+            "confidence": 0.9, "due": "", "action": "update", "update_id": wait_id}]})]
+        res = await tasks.extract_for_user(user.id, force=True)
+        assert res["suggested"] == 0 and res["updated"] == 1, res
+        sent = fake.posts[-1]["body"]["messages"]
+        assert "<known>" in sent[1]["content"] and "update_id" in sent[0]["content"]
+        assert f"[note {wait_id}] waiting for review, about Plains Conference: You review papers" in sent[1]["content"]
+        assert "counsellor" not in sent[1]["content"]  # sensitive: never to a hosted model
+        async with sessionmaker()() as db:
+            rows = (await db.execute(select(Memory).where(Memory.user_id == user.id,
+                                                          Memory.status == "suggested"))).scalars().all()
+        m = next(r for r in rows if r.id == wait_id)
+        assert m.text.endswith("MIS and AI tracks") and len(rows) == 2
+        assert any(r.get("message_id") == mid for r in m.refs) and any(r.get("about") for r in m.refs)
+        assert (await _state(user.id))["learn_runs"][0]["updated"] == 1
+    finally:
+        await _drop_endpoint(ep)
+
+
+async def test_an_edit_of_a_saved_note_waits_for_review_and_keeps_one_note(client, user, raw, fake):
+    """An update of a saved note is a suggestion that names it (`replaces`); the list shows the old
+    text, and keeping it changes the saved note instead of adding a second one."""
+    from mailr.knowledge import memory, tasks
+
+    _, me = await _setup_identity(user)
+    mid, _ = await _ingest(user.id, raw("Survey", frm=f"Me <{me}>", to="Ana <ana@uni.example>",
+                                        body="The survey study is now in data collection.",
+                                        date=_now_hdr()), source="send", roles=["sent"])
+    from mailr.core.auth import ALL_SCOPES, Principal
+    from mailr.models import User
+
+    async with sessionmaker()() as db:
+        p = Principal(user=await db.get(User, user.id), scopes=set(ALL_SCOPES) - {"admin"})
+        me_ent = await memory.self_entity(db, p, create=True)
+        saved = _row(user.id, "You are designing the survey study", status="active", entity_id=me_ent.id)
+        db.add(saved)
+        await db.commit()
+        saved_id = saved.id
+    ep = await _endpoint(user.id, "local")
+    try:
+        def edit(text):
+            return json.dumps({"memories": [{
+                "text": text, "kind": "fact", "about_name": "", "about_email": "", "about_kind": "self",
+                "message_id": mid, "confidence": 0.8, "due": "", "action": "update", "update_id": saved_id}]})
+        fake.replies = [edit("You are designing the survey study")]  # the same: nothing to propose
+        res = await tasks.extract_for_user(user.id, force=True)
+        assert res["suggested"] == 0 and "updated" not in res, res
+        assert f"[note {saved_id}] saved, about you: You are designing" in fake.posts[-1]["body"]["messages"][1]["content"]
+        fake.replies = [edit("You are collecting data for the survey study")]
+        async with sessionmaker()() as db:
+            (await db.get(AssistantProfile, user.id)).state = {}
+            await db.commit()
+        res = await tasks.extract_for_user(user.id, force=True)
+        assert res["suggested"] == 1, res
+        r = await client.get("/api/v1/assistant/memories", params={"status": "suggested"})
+        (s,) = r.json()["items"]
+        assert s["replaces"] == {"id": saved_id, "text": "You are designing the survey study"}
+        r = await client.post(f"/api/v1/assistant/memories/{s['id']}/accept")
+        assert r.status_code == 200 and r.json()["id"] == saved_id
+        assert r.json()["text"] == "You are collecting data for the survey study" and r.json()["status"] == "active"
+        async with sessionmaker()() as db:
+            rows = (await db.execute(select(Memory).where(Memory.user_id == user.id))).scalars().all()
+        assert [m.id for m in rows] == [saved_id]
+        assert any(x.get("message_id") == mid for x in rows[0].refs) and not any("replaces" in x for x in rows[0].refs)
+    finally:
+        await _drop_endpoint(ep)
+
+
+async def test_a_new_proposal_covered_by_a_waiting_suggestion_is_folded_in(client, user, raw, fake, monkeypatch):
+    """A2: a "new" proposal close in meaning to a waiting suggestion is merged into it when the
+    local decision model says it is covered; a different fact nearby is kept as its own."""
+    from embedfake import embedding_endpoint
+
+    from mailr.intel import jev
+    from mailr.knowledge import memory, relevance, tasks
+
+    _, me = await _setup_identity(user)
+    mid, _ = await _ingest(user.id, raw("Reviews", frm=f"Me <{me}>", to="Chair <chair@conf.example>",
+                                        body="Yes, I will review for the analytics track.",
+                                        date=_now_hdr()), source="send", roles=["sent"])
+    asked: list[dict] = []
+
+    async def decide(r, state, questions, timeout=10, **k):
+        asked.append(state)
+        same = "analytics track" in state["new"]["text"] and "analytics track" in state["saved"]["text"]
+        return {"same": {"noul": 0.6 if same else 0.02}}
+
+    async def endpoint(db, u):
+        return llm_resolved
+
+    from mailr.intel import llm
+    from mailr.models import ModelEndpoint
+
+    llm_resolved = llm.Resolved(ModelEndpoint(name="decider", base_url="http://decider.invalid/v1", adapter="jev",
+                                              locality="local", models=["decider"]), "decider", "decider")
+    monkeypatch.setattr(jev, "decide", decide)
+    monkeypatch.setattr(relevance, "check_endpoint", endpoint)
+    async with embedding_endpoint(monkeypatch):
+        async with sessionmaker()() as db:
+            wait = _row(user.id, "You review papers for the conference analytics track")
+            db.add(wait)
+            await db.commit()
+            wait_id = wait.id
+            await memory.embed_pending(db, user.id)
+            await db.commit()
+        ep = await _endpoint(user.id, "local")
+        try:
+            def new(text):
+                return {"text": text, "kind": "fact", "about_name": "", "about_email": "", "about_kind": "self",
+                        "message_id": mid, "confidence": 0.9, "due": "", "action": "new", "update_id": 0}
+            fake.replies = [json.dumps({"memories": [
+                new("You agreed to review papers for the conference analytics track"),
+                new("You review papers for the conference marketing track")]})]
+            res = await tasks.extract_for_user(user.id, force=True)
+            assert res["suggested"] == 1 and res["updated"] == 1, res
+            assert asked  # the decision model was asked
+            async with sessionmaker()() as db:
+                texts = {m.id: m.text for m in (await db.execute(select(Memory).where(
+                    Memory.user_id == user.id))).scalars()}
+            assert texts[wait_id] == "You agreed to review papers for the conference analytics track"
+            assert "You review papers for the conference marketing track" in texts.values() and len(texts) == 2
+        finally:
+            await _drop_endpoint(ep)

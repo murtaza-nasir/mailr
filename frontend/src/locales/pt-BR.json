@@ -3031,6 +3031,8 @@
       "lastLearned_one": "Último aprendizado {{when}} · {{count}} novo",
       "lastLearned_other": "Último aprendizado {{when}} · {{count}} novos",
       "lastFailed": "A última tentativa {{when}} falhou. {{reason}}",
+      "learningPaused": "Verificado {{when}}. 15 sugestões aguardam revisão, portanto nada novo foi adicionado. Revise-as para retomar o aprendizado.",
+      "updatesSaved": "Manter isso altera a nota salva: “{{text}}”",
       "learningOff": "O aprendizado a partir de e-mails está desativado.",
       "neverLearned": "Ainda não aprendeu nada a partir de e-mails.",
       "errors": {
@@ -3056,7 +3058,12 @@
       "empty": "Nenhuma memória ainda",
       "emptyHint": "Diga a {{name}} “lembre que o Sam é meu contador”, ou adicione uma aqui.",
       "makeTask": "Criar tarefa",
-      "taskMade": "Tarefa adicionada."
+      "taskMade": "Tarefa adicionada.",
+      "mergedFrom_one": "Mesclado de {{count}} nota",
+      "mergedFrom_other": "Mesclado de {{count}} notas",
+      "tidy": "Organizar",
+      "tidyTip": "Procure memórias para mesclar ou aposentar. As sugestões aparecem em \"Para revisar\".",
+      "tidyQueued": "Organização iniciada. O que precisar ser mesclado ou aposentado aparece em \"Para revisar\"."
     },
     "dialog": {
       "you": "Você",
@@ -3072,6 +3079,33 @@
     "settings": {
       "learnFromChats": "Sugerir memórias a partir de conversas",
       "learnFromChatsDesc": "Quando você contar algo duradouro a {{name}}, ele aparece em Memória → Para revisar."
+    },
+    "ask": {
+      "question": "Lembrar: “{{text}}”?",
+      "yes": "Sim",
+      "no": "Não",
+      "kept": "Lembrado: “{{text}}”",
+      "dropped": "Não lembrado: “{{text}}”",
+      "merged": "Adicionado a outra memória: “{{text}}”"
+    },
+    "review": {
+      "count_one": "{{count}} para revisar",
+      "count_other": "{{count}} para revisar",
+      "openMemory": "Abrir as memórias para revisar",
+      "title_one": "{{count}} memória para revisar",
+      "title_other": "{{count}} memórias para revisar",
+      "notNow": "Agora não (até a próxima semana)",
+      "otherTopic": "Outro",
+      "merge": "Mesclar",
+      "mergeInto": "Mesclar em…",
+      "merged": "Mesclado.",
+      "retire": "Aposentar",
+      "keepNote": "Manter a nota",
+      "retires": "Ambrose sugere não usar mais esta memória salva.",
+      "retiresWhy": "Ambrose sugere não usar mais esta memória salva: {{reason}}",
+      "mergesNotes_one": "Manter isto substitui {{count}} memória salva:",
+      "mergesNotes_other": "Manter isto substitui {{count}} memórias salvas:",
+      "openAll": "Revisar na página Memória"
     }
   },
   "notes": {
@@ -7378,7 +7412,9 @@
       "theNavigationAccountsHint": "a navegação (o ✕ na dica sobre Mostrar cada conta separadamente)",
       "pageReaders": "Leitores de páginas",
       "defaultEmailApp": "app de e-mail padrão",
-      "emailLinks": "links de e-mail"
+      "emailLinks": "links de e-mail",
+      "integrations": "Integrações",
+      "speakrForEveryone": "Servidor do Speakr"
     },
     "inboxTab": {
       "allTabs": "Todas as abas",
@@ -8215,7 +8251,36 @@
       "webhookOn": "Webhook ativado.",
       "webhookOnInSpeakrSet": "Webhook ativado. No Speakr, defina o endereço do webhook como {{url}}",
       "webhookSecret": "Segredo do webhook",
-      "withoutThisSpeakrIsChecked": "Sem um webhook, o Speakr é verificado a cada dez minutos. Com um, novas gravações, transcrições, resumos, exclusões e edições chegam imediatamente. {{pollNote}}"
+      "withoutThisSpeakrIsChecked": "Sem um webhook, o Speakr é verificado a cada dez minutos. Com um, novas gravações, transcrições, resumos, exclusões e edições chegam imediatamente. {{pollNote}}",
+      "sso": {
+        "singleSignOn": "login único",
+        "connectWith": "Conectar com {{name}}",
+        "help": "Depois de entrar, um token para o Mailr é criado no Speakr. Faça login no Speakr com login único pelo menos uma vez antes de usar isso.",
+        "orPaste": "Ou cole um token de API do Speakr:",
+        "connected": "O Speakr está conectado. As gravações aparecem após a primeira sincronização.",
+        "renewed": "Um novo token do Speakr foi salvo e o antigo foi revogado no Speakr.",
+        "renewedOldKept": "Um novo token do Speakr foi salvo. O token antigo não pôde ser revogado pelo Mailr; revogue-o no Speakr em Configurações da conta → Tokens de API.",
+        "notSupported": "Esta versão do Speakr não pode se conectar com login único. Cole um token de API.",
+        "refused": "O login não foi aceito pelo Speakr. Ou os tokens de login único estão desativados nesse servidor, ou você ainda não fez login no Speakr com login único. Faça login no Speakr uma vez ou cole um token de API.",
+        "notAllowed": "O Mailr não pode obter tokens deste servidor Speakr. Um administrador do Speakr pode adicionar o ID do cliente do Mailr aos clientes autorizados a trocar tokens.",
+        "limit": "Sua conta do Speakr atingiu o limite máximo de tokens de API permitidos. Revogue um no Speakr em Configurações da conta → Tokens de API e tente novamente.",
+        "scopes": "O acesso oferecido por este servidor Speakr é muito restrito para o Mailr: é necessário acesso de leitura.",
+        "rateLimited": "Muitas tentativas. Tente novamente em uma hora.",
+        "unreachable": "Não foi possível acessar o Speakr. Verifique o endereço e tente novamente.",
+        "wrongAccount": "Você entrou como outra pessoa. Entre com a conta que você usa para o Mailr.",
+        "alreadyConnected": "Este servidor Speakr já está conectado.",
+        "expired": "A solicitação de conexão expirou. Comece novamente.",
+        "failed": "Não foi possível conectar ao Speakr com login único. Cole um token de API.",
+        "linkRequired": "Já existe uma conta no Speakr com o seu e-mail. Faça login no Speakr uma vez com login único para vinculá-la e tente novamente.",
+        "registrationClosed": "Você ainda não tem uma conta no Speakr. Faça login no Speakr com login único uma vez e tente novamente.",
+        "refusedByPolicy": "As regras de cadastro desse servidor Speakr não permitem esta conta (o domínio do e-mail ou um e-mail não verificado). Peça ao administrador ou cole um token."
+      },
+      "auto": {
+        "notice": "Suas gravações no Speakr em {{url}} foram conectadas quando você fez login. Para parar isso, remova a conta abaixo.",
+        "gotIt": "Entendi",
+        "failed": "Conectar {{url}} no login não funcionou. {{reason}} Uma nova tentativa será feita em um login posterior.",
+        "declined": "{{url}} não está conectado no login porque você o removeu. Use Adicionar Speakr para conectá-lo novamente."
+      }
     },
     "speakrWebhook": {
       "editsMadeInSpeakrsOwn": "Edições feitas nas próprias páginas do Speakr ainda aparecem na próxima verificação de dez minutos.",
@@ -8445,6 +8510,23 @@
       "sharedWithYou": "Compartilhado com você",
       "fromYourPhone": "Agendas do seu celular",
       "calendarLinks": "Links de agenda"
+    },
+    "adminSpeakr": {
+      "title": "Servidor do Speakr",
+      "desc": "O endereço do Speakr para todos neste servidor Mailr. Ele é preenchido quando alguém adiciona o Speakr.",
+      "address": "Endereço do Speakr",
+      "autoConnect": "Conectar ao Speakr quando as pessoas entrarem",
+      "autoConnectDesc": "As pessoas que entram no Mailr com login único são conectadas ao Speakr e recebem um aviso. Quem remover a conexão não será conectado novamente. Ambos os servidores devem usar o mesmo provedor de identidade e o cliente do Mailr deve ser permitido no Speakr.",
+      "noSso": "Conectar no login requer login único neste servidor Mailr.",
+      "localDesc": "Este é o padrão para contas conectadas no login. Cada pessoa pode alterar a configuração depois.",
+      "check": "Verificar",
+      "saved": "Endereço do Speakr salvo.",
+      "removed": "Endereço do Speakr removido.",
+      "checkUnreachable": "Não foi possível acessar o Speakr: {{detail}}",
+      "checkOld": "Esta versão do Speakr não pode se conectar com login único. As pessoas ainda podem colar um token.",
+      "checkExchangeOff": "Tokens de login único estão desativados no Speakr.",
+      "checkClientNotAllowed": "O cliente do Mailr não está na lista de clientes de troca permitidos do Speakr.",
+      "checkReady": "Pronto. As pessoas que nunca entraram no Speakr com login único precisam fazer isso uma vez. Depois, elas serão conectadas no próximo login no Mailr."
     }
   },
   "shortcuts": {

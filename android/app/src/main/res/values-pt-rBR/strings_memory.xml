@@ -12,6 +12,35 @@
         <item quantity="other">Último aprendizado %1$s · %2$d novos</item>
     </plurals>
     <string name="memory_last_failed">A última tentativa %1$s falhou. %2$s</string>
+    <plurals name="memory_review_count">
+        <item quantity="one">%d para revisar</item>
+        <item quantity="other">%d para revisar</item>
+    </plurals>
+    <plurals name="memory_review_title">
+        <item quantity="one">%d memórias para revisar</item>
+        <item quantity="other">%d memórias para revisar</item>
+    </plurals>
+    <string name="memory_review_not_now">Agora não (até a próxima semana)</string>
+    <string name="memory_review_open_all">Revisar na página Memória</string>
+    <string name="memory_review_other">Outros</string>
+    <string name="memory_review_retire">Aposentar</string>
+    <string name="memory_review_keep_note">Manter a nota</string>
+    <string name="memory_review_retires">Ambrose sugere não usar mais esta memória salva.</string>
+    <string name="memory_review_retires_why">Ambrose sugere não usar mais esta memória salva: %1$s</string>
+    <plurals name="memory_review_merges">
+        <item quantity="one">Manter isto substitui %d memória salva:</item>
+        <item quantity="other">Manter isto substitui %d memórias salvas:</item>
+    </plurals>
+    <string name="memory_review_merged">Mesclada.</string>
+    <string name="memory_tidy">Organizar</string>
+    <string name="memory_tidy_queued">Organização iniciada. Itens para mesclar ou aposentar aparecem em \'Para revisar\'.</string>
+    <string name="memory_review_merge">Mesclar</string>
+    <plurals name="memory_merged_from">
+        <item quantity="one">Mesclado de %d notas</item>
+        <item quantity="other">Mesclado de %d notas</item>
+    </plurals>
+    <string name="memory_updates_saved">Manter isso altera sua nota salva: \"%1$s\"</string>
+    <string name="memory_learning_paused">Verificado %1$s. 15 sugestões aguardam revisão, portanto nada novo foi adicionado. Revise-as para retomar o aprendizado.</string>
     <string name="memory_learning_off">O aprendizado a partir de e-mails está desativado.</string>
     <string name="memory_never_learned">Ainda não aprendeu nada a partir de e-mails.</string>
     <string name="memory_error_model_failed">O modelo não respondeu. Nova tentativa em uma hora.</string>

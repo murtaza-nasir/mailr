@@ -57,4 +57,6 @@ ALLOWED: dict[str, tuple[int, str]] = {
         1, RESOLVE_THEN_FILTER + " (Memory.sensitive and sensitive entities)"),
     "knowledge/tasks.py::extract_for_user::llm.available::sensitive": (
         1, PROBE + " (is any chat model there; the extraction calls pass each group's class)"),
+    "knowledge/tasks.py::tidy_for_user::llm.available::sensitive": (
+        1, PROBE + " (is any chat model there; each entity's call passes its notes' class)"),
 }

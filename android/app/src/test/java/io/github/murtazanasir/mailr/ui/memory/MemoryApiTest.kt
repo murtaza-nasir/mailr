@@ -77,6 +77,7 @@ class MemoryApiTest {
                 val path = request.path.orEmpty()
                 return when {
                     path.startsWith("/api/v1/assistant/memories?") -> MockResponse().setBody(LIST)
+                    path == "/api/v1/assistant/memories/counts" -> MockResponse().setBody("""{"suggested":3,"review_card":true,"week":"2026-W47"}""")
                     path == "/api/v1/people/priya.shah@northwind.example" -> MockResponse().setBody(PERSON)
                     path == "/api/v1/tasks" -> MockResponse().setBody("""{"uid":"t-1","summary":"x"}""")
                     else -> MockResponse().setBody("""{"ok":true}""")
@@ -126,6 +127,36 @@ class MemoryApiTest {
         assertEquals("Studio team", card.groups.single().name)
         assertEquals("mobile", card.phones.single().type)
         assertEquals(2L, card.knowledge.entity?.id)
+    }
+
+    // ACT memory.review_count @android.assistant, ACT memory.merge @android.assistant, ACT memory.dismiss_review_card @android.assistant
+    @Test fun theReviewCardsEndpoints() = runBlocking {
+        val st = store()
+        val c = st.counts()
+        assertEquals(3, c.suggested)
+        assertTrue(c.reviewCard)
+        st.merge(21, 13)
+        assertEquals(13L, body("POST", "/api/v1/assistant/memories/21/merge")["into"]!!.jsonPrimitive.long)
+        st.dismissReviewCard()
+        assertTrue(requests.any { it.method == "POST" && it.path == "/api/v1/assistant/memories/review-card/dismiss" })
+    }
+
+    @Test fun aMergedNoteReadsItsHistoryAndACommitmentItsDate() {
+        val m = MailrJson.decodeFromString(Memory.serializer(), """{"id":13,"text":"Priya runs the review","status":"active",
+            "refs":[{"message_id":1,"conversation_id":2,"due":"2026-12-16"}],
+            "merged_from":[{"id":21,"text":"Priya runs the Thursday review","updated_at":"2026-11-20T10:00:00+00:00"}]}""")
+        assertEquals(listOf("Priya runs the Thursday review"), m.mergedFrom.map { it.text })
+        assertEquals("2026-12-16", m.due)
+    }
+
+    @Test fun aSuggestedEditReadsTheNoteItChanges() {
+        val m = MailrJson.decodeFromString(Memory.serializer(), """{"id":30,"text":"You are collecting data","kind":"fact",
+            "status":"suggested","refs":[{"message_id":7,"conversation_id":8,"replaces":5}],
+            "replaces":{"id":5,"text":"You are designing the survey"}}""")
+        assertEquals(5L, m.replaces?.id)
+        assertEquals("You are designing the survey", m.replaces?.text)
+        assertEquals(8L, m.conversationId)
+        assertEquals(null, MailrJson.decodeFromString(Memory.serializer(), """{"id":31,"text":"x","replaces":null}""").replaces)
     }
 
     @Test fun aCommitmentBecomesATaskLinkedToItsEmail() = runBlocking {

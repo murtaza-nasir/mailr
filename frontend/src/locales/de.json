@@ -3031,6 +3031,8 @@
       "lastLearned_one": "Zuletzt gelernt {{when}} · {{count}} neu",
       "lastLearned_other": "Zuletzt gelernt {{when}} · {{count}} neu",
       "lastFailed": "Letzter Versuch {{when}} fehlgeschlagen. {{reason}}",
+      "learningPaused": "Zuletzt geprüft {{when}}. 15 Vorschläge warten auf Überprüfung, daher wurden keine neuen hinzugefügt. Überprüfe sie, um das Lernen fortzusetzen.",
+      "updatesSaved": "Wenn du das behältst, wird deine gespeicherte Notiz geändert: „{{text}}“",
       "learningOff": "Lernen aus E-Mails ist deaktiviert.",
       "neverLearned": "Noch nichts aus E-Mails gelernt.",
       "errors": {
@@ -3056,7 +3058,12 @@
       "empty": "Noch keine Gedächtnisse",
       "emptyHint": "Sag {{name}} „merke dir, dass Sam mein Steuerberater ist“, oder füge hier eine hinzu.",
       "makeTask": "Aufgabe erstellen",
-      "taskMade": "Aufgabe hinzugefügt."
+      "taskMade": "Aufgabe hinzugefügt.",
+      "mergedFrom_one": "Zusammengeführt aus {{count}} Notiz",
+      "mergedFrom_other": "Zusammengeführt aus {{count}} Notizen",
+      "tidy": "Aufräumen",
+      "tidyTip": "Nach Gedächtnisinhalten suchen, die zusammengeführt oder entfernt werden können. Vorschläge werden unter \"Zu prüfen\" angezeigt.",
+      "tidyQueued": "Aufräumen gestartet. Inhalte zum Zusammenführen oder Entfernen werden unter \"Zu prüfen\" angezeigt."
     },
     "dialog": {
       "you": "Du",
@@ -3072,6 +3079,33 @@
     "settings": {
       "learnFromChats": "Gedächtnisse aus Chats vorschlagen",
       "learnFromChatsDesc": "Wenn du {{name}} etwas Dauerhaftes mitteilst, wird es unter Gedächtnis → Zu prüfen angezeigt."
+    },
+    "ask": {
+      "question": "Merken: „{{text}}“?",
+      "yes": "Ja",
+      "no": "Nein",
+      "kept": "Gemerkt: „{{text}}“",
+      "dropped": "Nicht gemerkt: „{{text}}“",
+      "merged": "Zu einer anderen Erinnerung hinzugefügt: „{{text}}“"
+    },
+    "review": {
+      "count_one": "{{count}} zu überprüfen",
+      "count_other": "{{count}} zu überprüfen",
+      "openMemory": "Erinnerungen zum Überprüfen öffnen",
+      "title_one": "{{count}} Erinnerung zum Überprüfen",
+      "title_other": "{{count}} Erinnerungen zum Überprüfen",
+      "notNow": "Nicht jetzt (bis nächste Woche)",
+      "otherTopic": "Andere",
+      "merge": "Zusammenführen",
+      "mergeInto": "Zusammenführen mit…",
+      "merged": "Zusammengeführt.",
+      "retire": "Entfernen",
+      "keepNote": "Notiz behalten",
+      "retires": "Ambrose schlägt vor, diesen gespeicherten Gedächtnisinhalt nicht mehr zu verwenden.",
+      "retiresWhy": "Ambrose schlägt vor, diesen gespeicherten Gedächtnisinhalt nicht mehr zu verwenden: {{reason}}",
+      "mergesNotes_one": "Das Behalten ersetzt {{count}} gespeicherten Gedächtnisinhalt:",
+      "mergesNotes_other": "Das Behalten ersetzt {{count}} gespeicherte Gedächtnisinhalte:",
+      "openAll": "Auf der Gedächtnis-Seite überprüfen"
     }
   },
   "notes": {
@@ -7378,7 +7412,9 @@
       "theNavigationAccountsHint": "die Navigation (das ✕ am Hinweis „Jedes Konto separat anzeigen“)",
       "pageReaders": "Seitenleser",
       "defaultEmailApp": "Standard-E-Mail-App",
-      "emailLinks": "E-Mail-Links"
+      "emailLinks": "E-Mail-Links",
+      "integrations": "Integrationen",
+      "speakrForEveryone": "Speakr-Server"
     },
     "inboxTab": {
       "allTabs": "Alle Tabs",
@@ -8215,7 +8251,36 @@
       "webhookOn": "Webhook aktiv.",
       "webhookOnInSpeakrSet": "Webhook aktiv. In Speakr die Webhook-Adresse auf {{url}} setzen",
       "webhookSecret": "Webhook-Secret",
-      "withoutThisSpeakrIsChecked": "Ohne Webhook wird Speakr alle zehn Minuten geprüft. Mit einem Webhook treffen neue Aufnahmen, Transkripte, Zusammenfassungen, Löschungen und Änderungen sofort ein. {{pollNote}}"
+      "withoutThisSpeakrIsChecked": "Ohne Webhook wird Speakr alle zehn Minuten geprüft. Mit einem Webhook treffen neue Aufnahmen, Transkripte, Zusammenfassungen, Löschungen und Änderungen sofort ein. {{pollNote}}",
+      "sso": {
+        "singleSignOn": "Single Sign-On",
+        "connectWith": "Mit {{name}} verbinden",
+        "help": "Nach der Anmeldung wird in Speakr ein Token für Mailr erstellt. Melde dich mindestens einmal über Single Sign-On bei Speakr an, bevor du dies nutzt.",
+        "orPaste": "Oder füge einen API-Token aus Speakr ein:",
+        "connected": "Speakr ist verbunden. Aufnahmen erscheinen nach der ersten Synchronisierung.",
+        "renewed": "Ein neuer Speakr-Token wurde gespeichert und der alte in Speakr widerrufen.",
+        "renewedOldKept": "Ein neuer Speakr-Token wurde gespeichert. Der alte Token konnte nicht von Mailr widerrufen werden; widerrufe ihn in Speakr unter Kontoeinstellungen → API-Tokens.",
+        "notSupported": "Diese Speakr-Version unterstützt keine Verbindung über Single Sign-On. Füge stattdessen einen API-Token ein.",
+        "refused": "Die Anmeldung wurde von Speakr nicht akzeptiert. Entweder sind Single-Sign-On-Tokens auf diesem Server deaktiviert oder du hast dich noch nicht über Single Sign-On bei Speakr angemeldet. Melde dich einmal bei Speakr an oder füge einen API-Token ein.",
+        "notAllowed": "Mailr darf keine Tokens von diesem Speakr-Server beziehen. Ein Speakr-Administrator kann die Client-ID von Mailr zu den Clients hinzufügen, die Tokens austauschen dürfen.",
+        "limit": "Dein Speakr-Konto hat die maximal zulässige Anzahl an API-Tokens. Widerrufe einen in Speakr unter Kontoeinstellungen → API-Tokens und versuche es erneut.",
+        "scopes": "Der Zugriff, den dieser Speakr-Server bietet, ist für Mailr zu eingeschränkt: Lesezugriff ist erforderlich.",
+        "rateLimited": "Zu viele Versuche. Versuche es in einer Stunde erneut.",
+        "unreachable": "Speakr konnte nicht erreicht werden. Überprüfe die Adresse und versuche es erneut.",
+        "wrongAccount": "Du hast dich als jemand anderes angemeldet. Melde dich mit dem Konto an, das du für Mailr nutzt.",
+        "alreadyConnected": "Dieser Speakr-Server ist bereits verbunden.",
+        "expired": "Die Verbindungsanfrage ist abgelaufen. Beginne erneut.",
+        "failed": "Speakr konnte nicht über Single Sign-On verbunden werden. Füge stattdessen einen API-Token ein.",
+        "linkRequired": "Ein Speakr-Konto mit deiner E-Mail-Adresse existiert bereits. Melde dich einmal über Single Sign-On bei Speakr an, um es zu verknüpfen, und versuche es dann erneut.",
+        "registrationClosed": "Du hast noch kein Speakr-Konto. Melde dich einmal über Single Sign-On bei Speakr an und versuche es erneut.",
+        "refusedByPolicy": "Die Anmelderegeln dieses Speakr-Servers erlauben dieses Konto nicht (E-Mail-Domain oder nicht verifizierte E-Mail-Adresse). Frage den Administrator oder füge ein Token ein."
+      },
+      "auto": {
+        "notice": "Deine Aufnahmen in Speakr unter {{url}} wurden bei der Anmeldung verbunden. Um dies zu beenden, entferne unten das Konto.",
+        "gotIt": "Verstanden",
+        "failed": "Das Verbinden von {{url}} bei der Anmeldung hat nicht funktioniert. {{reason}} Bei einer späteren Anmeldung wird erneut versucht.",
+        "declined": "{{url}} wird bei der Anmeldung nicht verbunden, da du es entfernt hast. Verwende „Speakr hinzufügen“, um es erneut zu verbinden."
+      }
     },
     "speakrWebhook": {
       "editsMadeInSpeakrsOwn": "Änderungen, die in Speakrs eigenen Seiten vorgenommen werden, werden weiterhin bei der nächsten Zehn-Minuten-Prüfung angezeigt.",
@@ -8445,6 +8510,23 @@
       "sharedWithYou": "Mit dir geteilt",
       "fromYourPhone": "Kalender von deinem Telefon",
       "calendarLinks": "Kalender-Links"
+    },
+    "adminSpeakr": {
+      "title": "Speakr-Server",
+      "desc": "Die Speakr-Adresse für alle auf diesem Mailr-Server. Sie wird ausgefüllt, wenn jemand Speakr hinzufügt.",
+      "address": "Speakr-Adresse",
+      "autoConnect": "Speakr bei Anmeldung verbinden",
+      "autoConnectDesc": "Personen, die sich mit Single Sign-On bei Mailr anmelden, werden mit Speakr verbunden und sehen einen Hinweis. Wer die Verbindung entfernt, wird nicht erneut verbunden. Beide Server müssen denselben Identitätsanbieter verwenden, und der Mailr-Client muss in Speakr zugelassen sein.",
+      "noSso": "Das Verbinden bei der Anmeldung erfordert Single Sign-On auf diesem Mailr-Server.",
+      "localDesc": "Dies ist die Standardeinstellung für Konten, die bei der Anmeldung verbunden werden. Jede Person kann die Einstellung später ändern.",
+      "check": "Prüfen",
+      "saved": "Speakr-Adresse gespeichert.",
+      "removed": "Speakr-Adresse entfernt.",
+      "checkUnreachable": "Speakr konnte nicht erreicht werden: {{detail}}",
+      "checkOld": "Diese Speakr-Version kann sich nicht mit Single Sign-On verbinden. Personen können weiterhin ein Token einfügen.",
+      "checkExchangeOff": "Single-Sign-On-Tokens sind in Speakr deaktiviert.",
+      "checkClientNotAllowed": "Der Mailr-Client ist nicht auf der Liste der zulässigen Exchange-Clients von Speakr.",
+      "checkReady": "Bereit. Personen, die sich noch nie mit Single Sign-On bei Speakr angemeldet haben, müssen dies einmal tun. Danach werden sie bei der nächsten Anmeldung bei Mailr verbunden."
     }
   },
   "shortcuts": {

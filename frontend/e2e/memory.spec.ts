@@ -5,6 +5,9 @@
 // a commitment as a task (memory.make_task), "Used memories" under an answer (memory.used), and
 // "From a chat" opening the chat a memory came from (memory.open_chat).
 // ACT memory.learning_status, ACT memory.learn_now
+// In the Ambrose panel (docs/design/memory-quality.md, step 3): memory.chat_ask ("Remember …?" under a
+// reply), memory.review_count ("n to review"), the weekly card (memory.dismiss_review_card) with
+// memory.merge, and "Merged from N notes" on the merged note.
 import type { Page } from '@playwright/test'
 import { expect, test } from './fixtures'
 
@@ -191,4 +194,102 @@ test('Used memories under an answer, and the card of a person Ambrose looked up'
 
   await page.getByTestId('open-person-card').click()
   await expect(page.getByRole('dialog').getByTestId('person-knows')).toContainText('Priya runs the reading group')
+})
+
+// A suggested edit of a saved note (docs/design/memory-quality.md, step 2) shows the note it changes.
+test('a suggested edit shows the saved note it changes', async ({ page }) => {
+  await page.route('**/api/v1/assistant/memories?status=suggested*', (r) => r.fulfill({ json: {
+    items: [{ id: 990, text: 'You are collecting data for the survey study', kind: 'fact', entity_id: null, entity: null,
+              source: 'extracted', status: 'suggested', confidence: 0.8, refs: [{ replaces: 5 }], sensitive: false,
+              pinned: false, expires_at: null, use_count: 0, last_used_at: null, created_at: null, updated_at: null,
+              chat: null, replaces: { id: 5, text: 'You are designing the survey study' } }],
+    counts: { active: 0, suggested: 1 } } }))
+  await page.goto('/settings/ambrose/memory')
+  await expect(page.getByTestId('memory-replaces'))
+    .toHaveText('Keeping this changes your saved note: “You are designing the survey study”')
+})
+
+/** The Ambrose panel, open (it stays open across a reload). */
+async function ensurePanel(page: Page) {
+  const button = page.locator('[data-ambrose]:visible')
+  await button.waitFor()
+  if ((await button.getAttribute('aria-pressed')) !== 'true') await button.click()
+  await expect(page.locator('.side-panel .chat')).toBeVisible()
+}
+
+async function openChat(page: Page, sessionId: string) {
+  await page.goto('/mail/inbox')
+  await page.evaluate((id) => sessionStorage.setItem('mailr.assistant.session', id), sessionId)
+  await page.reload()
+  await ensurePanel(page)
+}
+
+test('Remember …? under the reply keeps the answer, and the count follows', async ({ page, seeded }) => {
+  const chat = (seeded.extras as unknown as { memory: { chat: { session_id: string } } }).memory.chat
+  await openChat(page, chat.session_id)
+  await expect(page.getByTestId('review-count')).toHaveText('2 to review')
+  const ask = page.getByTestId('remember-ask')
+  await expect(ask).toContainText('Remember: \u201cYou are vegetarian\u201d?')
+  await ask.getByRole('button', { name: 'Yes' }).click()
+  await expect(ask).toContainText('Remembered: \u201cYou are vegetarian\u201d')
+  await expect(page.getByTestId('review-count')).toHaveText('1 to review')
+  await page.reload()
+  await ensurePanel(page)
+  await expect(page.getByTestId('remember-ask')).toContainText('Remembered: \u201cYou are vegetarian\u201d')
+})
+
+test('the weekly review card: one line per topic, merge into a saved note, Not now until next week', async ({ page }) => {
+  await page.goto('/mail/inbox')
+  await ensurePanel(page)
+  const card = page.getByTestId('review-card')
+  await expect(card).toContainText('2 memories to review')
+  // Topics are closed lines with a count; the notes show only under the opened one.
+  await expect(card.getByTestId('review-topic')).toHaveCount(2)
+  await expect(card.getByTestId('review-group')).toHaveCount(0)
+  await expect(card.getByRole('link', { name: 'Review on the Memory page' })).toBeVisible()
+  const topic = card.getByTestId('review-topic').filter({ hasText: 'Priya Natarajan' })
+  await topic.getByRole('button', { expanded: false }).click()
+  const priya = topic.getByTestId('review-group')
+  await priya.getByRole('button', { name: 'Merge' }).click()
+  await priya.getByRole('combobox', { name: 'Merge into\u2026' }).selectOption({ label: 'Priya runs the reading group' })
+  await expect(card).toContainText('1 memory to review')
+  await expect(card.getByTestId('review-topic')).toHaveCount(1)
+  await card.getByTestId('review-card-dismiss').click()
+  await expect(card).toHaveCount(0)
+  await page.reload()
+  await ensurePanel(page)
+  await expect(page.getByTestId('review-card')).toHaveCount(0)
+  // One note, with the merged text under it.
+  await page.goto('/settings/ambrose/memory')
+  const note = page.locator('#memory-people .as-mem', { hasText: 'Priya runs the reading group' })
+  await note.getByRole('button', { name: 'Merged from 2 notes' }).click()
+  await expect(note.getByTestId('memory-merged')).toContainText('Priya prefers calls in the morning')
+  await expect(page.getByText('Priya prefers calls in the morning', { exact: true })).toHaveCount(1)
+})
+
+// ACT memory.tidy: Tidy queues a pass; its proposals say which saved memories they merge or retire.
+test('tidy proposals: a merge lists the memories it replaces, a retirement says why', async ({ page }) => {
+  const base = { kind: 'fact', entity_id: null, entity: null, source: 'extracted', status: 'suggested', confidence: 0.8,
+    sensitive: false, pinned: false, expires_at: null, use_count: 0, last_used_at: null, created_at: null, updated_at: null,
+    chat: null, merged_from: [] }
+  await page.route('**/api/v1/assistant/memories?status=suggested*', (r) => r.fulfill({ json: {
+    items: [
+      { ...base, id: 991, text: 'You review for the MIS and AI tracks', refs: [{ replaces: 5, merges: [6] }],
+        replaces: { id: 5, text: 'You review for the MIS track' }, merges: [{ id: 6, text: 'You review for the AI track' }], retires: null },
+      { ...base, id: 992, text: 'You agreed to review one paper by 16 November', refs: [{ retires: 7, reason: 'the review was due 16 Nov' }],
+        replaces: null, merges: [], retires: { id: 7, text: 'You agreed to review one paper by 16 November', reason: 'the review was due 16 Nov' } },
+    ],
+    counts: { active: 0, suggested: 2 } } }))
+  await page.goto('/settings/ambrose/memory')
+  const merges = page.getByTestId('memory-merges')
+  await expect(merges).toContainText('Keeping this replaces 2 saved memories:')
+  await expect(merges).toContainText('You review for the MIS track')
+  await expect(merges).toContainText('You review for the AI track')
+  await expect(page.getByTestId('memory-retires')).toHaveText('Ambrose suggests no longer using this saved memory: the review was due 16 Nov')
+  const retire = page.locator('.as-mem', { hasText: 'by 16 November' })
+  await expect(retire.getByRole('button', { name: 'Retire' })).toBeVisible()
+  await expect(retire.getByRole('button', { name: 'Keep the note' })).toBeVisible()
+  const tidy = page.waitForResponse((r) => r.url().includes('/assistant/memories/tidy') && r.request().method() === 'POST')
+  await page.getByTestId('tidy-now').click()
+  expect((await tidy).ok()).toBeTruthy()
 })

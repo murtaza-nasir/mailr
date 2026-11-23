@@ -163,6 +163,42 @@ test('an approval card changes in place and the turn continues after it', async 
   await page.locator('.side-panel').screenshot({ path: `${SHOTS}/web-approval-resolved.png` })
 })
 
+test('a second approval decided while the first one\u2019s continuation runs gets its own continuation after it', async ({ page }) => {
+  await controlledChat(page)
+  const card = (id: number) => ({ id, action: 'rules.write', status: 'pending', target: 'Create filter', preview: { title: `Create filter ${id}`, display: filter.display }, display: filter.display, outcome: { state: 'pending', text: 'Waiting for your approval' }, expires_at: null })
+  const done = (id: number) => ({ ...card(id), status: 'executed', outcome: filter.outcomes.find((o) => o.state === 'executed') })
+  for (const id of [41, 42]) {
+    await page.route(`**/api/v1/approvals/${id}/decide`, (route) => route.fulfill({ json: done(id) }))
+    await page.route(`**/api/v1/approvals/${id}`, (route) => route.fulfill({ json: done(id) }))
+  }
+  await openAssistant(page)
+  await ask(page, 'File my finance and travel mail')
+  await push(page, 'session', { session_id: 'e2e-present-3', user_message_id: 1 })
+  for (const id of [41, 42]) await push(page, 'approval_required', { approval_id: id, action: 'rules.write', approval: card(id), preview: card(id).preview, status: 'pending', segment: 0 })
+  await push(page, 'final', { segment: 1, content: 'Approve the two cards above.', citations: [] })
+  await push(page, 'done', {})
+  await end(page)
+
+  const cards = page.locator('.approval')
+  await cards.nth(0).getByRole('button', { name: 'Allow once' }).click()
+  await expect.poll(() => page.evaluate(() => window.__chat.streams)).toBe(2)
+  // The first continuation still runs: the second approval waits for it, then continues.
+  await cards.nth(1).getByRole('button', { name: 'Allow once' }).click()
+  await expect(cards.nth(1).getByRole('status')).toHaveText('Approved · created the filter')
+  expect(await page.evaluate(() => window.__chat.streams)).toBe(2)
+  await push(page, 'session', { session_id: 'e2e-present-3', continuation: true, segment: 2 })
+  await push(page, 'final', { segment: 2, content: 'The first filter is live; the second still waits.', citations: [] })
+  // The reply ends on `done`; the queued continuation starts at once (no end(): it would close the new stream).
+  await push(page, 'done', {})
+  await expect.poll(() => page.evaluate(() => window.__chat.streams)).toBe(3)
+  expect(await page.evaluate(() => window.__chat.bodies[2])).toMatchObject({ resume_approval_id: 42 })
+  await push(page, 'session', { session_id: 'e2e-present-3', continuation: true, segment: 3 })
+  await push(page, 'final', { segment: 3, content: 'The second filter is live too.', citations: [] })
+  await push(page, 'done', {})
+  await end(page)
+  await expect(page.locator('.chat-turn .chat-msg').last()).toContainText('The second filter is live too.')
+})
+
 test('the log follows the stream, detaches when scrolled up, and Jump to latest returns', async ({ page }) => {
   await controlledChat(page)
   await page.setViewportSize({ width: 1280, height: 700 })

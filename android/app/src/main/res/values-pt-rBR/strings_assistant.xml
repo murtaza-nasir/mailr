@@ -87,6 +87,12 @@
     <string name="asst_step_denied">recusado</string>
     <string name="asst_step_expired">expirado</string>
     <string name="asst_step_failed">falhou</string>
+    <string name="asst_remember_question">Lembrar: “%1$s”?</string>
+    <string name="asst_remember_yes">Sim</string>
+    <string name="asst_remember_no">Não</string>
+    <string name="asst_remember_kept">Lembrado: “%1$s”</string>
+    <string name="asst_remember_dropped">Não lembrado: “%1$s”</string>
+    <string name="asst_remember_merged">Adicionado a outra memória: “%1$s”</string>
     <plurals name="asst_used_memories">
         <item quantity="one">Memória usada · %d</item>
         <item quantity="other">Memórias usadas · %d</item>

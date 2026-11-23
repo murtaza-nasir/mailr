@@ -126,7 +126,9 @@
       "local_public": "{{host}} 是一个公共地址，因此不能标记为本地。请使用您网络或本机上的地址，或将其标记为托管。",
       "local_public_no_host": "这是一个公共地址，因此不能标记为本地。请使用您网络或本机上的地址，或将其标记为托管。",
       "password_not_by_token": "密码由已登录的管理员更改，而不是通过 API 令牌",
-      "public_address_first": "请先输入公共地址。"
+      "public_address_first": "请先输入公共地址。",
+      "speakr_address": "The Speakr address must start with https:// (or http:// on a private network).",
+      "speakr_needs_sso": "登录时自动连接需要此 Mailr 服务器启用单点登录。"
     },
     "accounts": {
       "account_not_found": "未找到账户",
@@ -403,6 +405,8 @@
     },
     "knowledge": {
       "entity_not_found": "未找到实体",
+      "merge_into_itself": "记忆不能合并到自身",
+      "merge_saved_into_suggestion": "已保存的记忆只能合并到另一条已保存的记忆",
       "only_builtin_reset": "仅可重置内置技能",
       "skill_no_instructions": "该技能没有指令",
       "skill_not_found": "未找到技能",

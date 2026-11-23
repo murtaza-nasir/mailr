@@ -16,6 +16,7 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -147,6 +148,51 @@ class MemoryScreenTest {
         compose.until("\"accept:22\" in store.calls") { "accept:22" in store.calls }
         compose.until("\"To review\" gone") { compose.onAllNodesWithText("To review").fetchSemanticsNodes().isEmpty() }
         compose.until("\"1 memory kept.\" shown") { compose.onAllNodesWithText("1 memory kept.").fetchSemanticsNodes().isNotEmpty() }
+    }
+
+    @Test fun aSuggestedEditShowsTheSavedNoteItChanges() {
+        val store = FakeMemoryStore().apply {
+            suggested.clear()
+            suggested += io.github.murtazanasir.mailr.data.api.Memory(23, "You are collecting data for the survey study", "fact",
+                status = "suggested", source = "extracted",
+                replaces = io.github.murtazanasir.mailr.data.api.MemoryReplaced(5, "You are designing the survey study"))
+        }
+        show(store)
+        compose.onNodeWithTag("memory-replaces")
+            .assertTextEquals("Keeping this changes your saved note: \u201cYou are designing the survey study\u201d")
+    }
+
+    // ACT memory.merge @android.settings, ACT memory.tidy @android.settings
+    @Test fun suggestionsAreGroupedByTopicAndOneMergesIntoASavedNote() {
+        val store = show()
+        compose.onAllNodesWithTag("review-group").assertCountEquals(2)
+        compose.onNodeWithTag("merge-22").performClick()
+        // The note is listed under About you too: the menu's entry is the last one.
+        compose.onAllNodesWithText("You prefer short replies").onLast().performClick()
+        compose.until("\"merge:22:11\" in store.calls") { "merge:22:11" in store.calls }
+        compose.onNodeWithTag("tidy-now").performClick()
+        compose.until("\"tidy\" in store.calls") { "tidy" in store.calls }
+    }
+
+    @Test fun aTidyProposalSaysWhatItMergesOrRetires() {
+        val store = FakeMemoryStore().apply {
+            suggested.clear()
+            suggested += io.github.murtazanasir.mailr.data.api.Memory(31, "Priya runs the design review and the brand guide", "fact", 2, priya,
+                status = "suggested", source = "extracted",
+                replaces = io.github.murtazanasir.mailr.data.api.MemoryReplaced(13, "Priya runs the Thursday design review"),
+                merges = listOf(io.github.murtazanasir.mailr.data.api.MemoryReplaced(14, "You promised Priya the brand guide by Friday")))
+            suggested += io.github.murtazanasir.mailr.data.api.Memory(32, "The rebrand launches on 1 November", "fact", 4, lumen,
+                status = "suggested", source = "extracted",
+                retires = io.github.murtazanasir.mailr.data.api.MemoryRetired(16, "The rebrand launches on 1 November", "the launch is over"))
+        }
+        show(store)
+        compose.onNodeWithTag("memory-merges").assertExists()
+        compose.onNodeWithText("Keeping this replaces 2 saved memories:").assertExists()
+        compose.onNodeWithTag("memory-retires")
+            .assertTextEquals("Ambrose suggests no longer using this saved memory: the launch is over")
+        compose.onNodeWithText("Retire").assertExists()
+        compose.onNodeWithText("Keep the note").performClick()
+        compose.until("\"dismiss:32\" in store.calls") { "dismiss:32" in store.calls }
     }
 
     @Test fun keepAllKeepsEverySuggestion() {

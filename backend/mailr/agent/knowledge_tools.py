@@ -241,6 +241,16 @@ async def remember(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     refs = []
     if args.get("source_message_id") or args.get("source_conversation_id"):
         refs.append({k: int(args[f"source_{k}"]) for k in ("message_id", "conversation_id") if args.get(f"source_{k}")})
+    if a.get("memory_id") is None and str(a.get("text") or "").strip():
+        # The same thing in other words is not added again (docs/design/memory-quality.md, D).
+        from mailr.knowledge import tasks as kb_tasks
+
+        same = await kb_tasks.covered_by(ctx.db, ctx.p, str(a["text"]), sensitive=bool(ctx.session_sensitive))
+        if same is not None:
+            out = (await memory.with_entities(ctx.db, [same], ctx.p))[0]
+            return ToolResult({"status": "already_known", "memory": out,
+                               "note": "A note already says this; nothing was added. To change it, call remember "
+                                       "with its memory_id and the new text."}, sensitive=bool(same.sensitive))
     return await _write(ctx, "remember", a, refs)
 
 

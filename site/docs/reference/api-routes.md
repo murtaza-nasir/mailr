@@ -25,6 +25,7 @@ Scope: a signed-in session.
 | `POST /api/v1/auth/handover` | A one-time hand-over token, so another Mailr app on the same phone can sign in without a second sign-in. |
 | `POST /api/v1/auth/handover/redeem` | Exchange a hand-over token for a device session of the Notes app. |
 | `GET /api/v1/auth/oidc/callback` | The return address after sign-in at your OIDC provider. Register `${MAILR_BASE_URL}/api/v1/auth/oidc/callback` as the redirect URI. |
+| `GET /api/v1/auth/oidc/connect` | Sign in again at your OIDC provider to connect another app with single sign-on; `ticket` comes from `POST /api/v1/speakr/sso/start`. |
 | `POST /api/v1/auth/signup` | Create an account (only when `MAILR_ALLOW_SIGNUP` is on). |
 | `GET /api/v1/app/releases` | The Android apps offered on this server, with version, size and SHA-256. No sign-in needed. |
 | `GET /api/v1/app/{app}.apk` | Download the APK of `mailr` or `notes`. No sign-in needed. |
@@ -582,6 +583,10 @@ Scope: `read`, `memory` or `rules` to change.
 | `DELETE /api/v1/assistant/memories/{mid}` | Delete a note. |
 | `POST /api/v1/assistant/memories/{mid}/accept` | Accept a suggested note. |
 | `POST /api/v1/assistant/memories/{mid}/reject` | Dismiss a suggested note. |
+| `POST /api/v1/assistant/memories/{mid}/merge` | Merge a note into another (`into`): one note, with the merged text listed under it. |
+| `POST /api/v1/assistant/memories/tidy` | Look for notes to merge or retire now (proposals arrive as suggestions). |
+| `GET /api/v1/assistant/memories/counts` | How many suggestions wait, and whether the weekly review card is due. |
+| `POST /api/v1/assistant/memories/review-card/dismiss` | Hide the weekly review card until next Monday. |
 | `GET /api/v1/assistant/orders` | Your standing orders and routines. |
 | `POST /api/v1/assistant/orders` | Create a standing order or routine. |
 | `POST /api/v1/assistant/orders/preview` | Test an order on recent mail before you save it. |
@@ -696,6 +701,9 @@ Scope: `recordings`.
 | `POST /api/v1/speakr/connectors/{cid}/webhook` | Turn on Speakr's webhook for this account. |
 | `DELETE /api/v1/speakr/connectors/{cid}/webhook` | Turn the webhook off. |
 | `POST /api/v1/speakr/connectors/{cid}/webhook/test` | Test the webhook. |
+| `GET /api/v1/speakr/auto` | The Speakr address the admin set for this server, whether it is connected at each single sign-on, and how the last try went (`state`, `reason`); `notice` is true once after it was connected. |
+| `POST /api/v1/speakr/auto/seen` | The notice that Speakr was connected at sign-in has been shown. |
+| `POST /api/v1/speakr/sso/start` | Start connecting or renewing a Speakr account with single sign-on (`base_url` or `connector_id`, `data_class`); returns the link to open. Signed-in sessions only. |
 | `GET /api/v1/speakr/events/last-time` | The recording of the last meeting in a series. |
 | `GET /api/v1/speakr/events/recordings` | Recordings linked to (or suggested for) an event. |
 | `GET /api/v1/speakr/folders` | Your Speakr folders. |
@@ -760,6 +768,9 @@ Scope: a signed-in admin session. API tokens are refused, except an admin's toke
 | `PUT /api/v1/admin/models/{eid}/capabilities` | Set whether one model can view images (`vision`: true, false, or null for what the server said). |
 | `GET /api/v1/admin/policies` | Server-wide policies. |
 | `PUT /api/v1/admin/policies` | Change server-wide policies. |
+| `GET /api/v1/admin/speakr` | The Speakr address for everyone on this server, whether it is connected at sign-in, and the data class for those connections. |
+| `PUT /api/v1/admin/speakr` | Set the Speakr address (`url`, `auto_connect`, `data_class`); an empty address removes it. Existing Speakr accounts are not changed. |
+| `POST /api/v1/admin/speakr/check` | Ask a Speakr server, without a token, whether it can connect with single sign-on, create accounts, and accept Mailr's client. |
 | `GET /api/v1/admin/access` | Access policies, the identity-provider groups seen at sign-in, and what a policy can hold. |
 | `POST /api/v1/admin/access/policies` | Add an access policy. |
 | `PUT /api/v1/admin/access/policies/{pid}` | Change an access policy. |

@@ -1,0 +1,151 @@
+# The memory extraction eval (tests/memory_extraction_eval.py, tests/test_memory_extraction_eval.py).
+# Synthetic: example people and domains, nobody's real mail. The batches copy the failures seen in
+# real learning passes (Nov 2026): one conference proposed again in each email about it, invitations
+# and meetings saved as facts, details inside one project, three addresses that are different facts.
+#
+# Each batch: `known` notes (key → {text, status: active|suggested, about: an entity key, "self" or
+# omitted}), and `emails` the user sent (with the message each one answers). Scored on what the
+# learning pass leaves behind:
+#   want   key → regex: a note (new or updated) should say this;
+#   avoid  regexes no new note may match (things to skip);
+#   same   known keys a new note must not repeat: the pass may update them, never add a copy
+#          (a new note matching the known note's `match` regex is a duplicate);
+#   ok     regexes for new notes that are fine either way (a dated commitment beside its project).
+
+me: {name: Alex Morgan, email: alex@uni.example}
+entities:
+  plains: {kind: topic, name: Plains Decision Conference 2027, aliases: [Plains Conference, PDC 2027]}
+  dana: {kind: person, name: Dana Whitfield, emails: [dana@uni.example]}
+  ana: {kind: person, name: Ana Ruiz, emails: [ana@college.example]}
+
+batches:
+  - id: conference_again
+    known:
+      rev_mis: {status: suggested, about: plains, text: "You review papers for the MIS track of the Plains Decision Conference 2027.",
+                match: "(?i)review.*(MIS|plains|PDC)"}
+    emails:
+      - to: Track Chair <chair@pdc.example>
+        subject: "Re: PDC 2027 reviewer invitation, AI track"
+        body: "Hi Lee, yes, I can also review one paper for the AI track. I will have it done by the 16th."
+        answering: {from: Lee Chen <chair@pdc.example>, body: "Would you review for the AI Applications track as well? Reviews are due 16 December."}
+      - to: Track Chair <chair@pdc.example>
+        subject: "Re: PDC 2027 review assignment"
+        body: "Thanks, I received the paper and will review it."
+    want:
+      ai_track: "(?i)AI"
+    same: [rev_mis]
+    ok: ["(?i)(16|sixteenth)"]
+    avoid: ["(?i)received the paper"]
+
+  - id: invitations_and_meetings
+    known: {}
+    emails:
+      - to: Dana Whitfield <dana@uni.example>
+        subject: "Accepted: Curriculum meeting"
+        body: "Accepted. See you Thursday."
+      - to: Sam Ortiz <sam@lab.example>
+        subject: "Re: Lunch on Friday?"
+        body: "Sounds good, Friday at noon works."
+      - to: Group <grads@uni.example>
+        subject: "Notes from today's meeting"
+        body: "Thanks all for coming to today's planning meeting. The notes are attached."
+    want: {}
+    same: []
+    avoid: ["(?i)accept", "(?i)lunch", "(?i)attend", "(?i)meeting"]
+
+  - id: addresses_are_different_facts
+    known:
+      addr_main: {status: active, about: self, text: "You use alex@uni.example for general correspondence.",
+                  match: "(?i)alex@uni\\.example"}
+    emails:
+      - to: Society Office <office@society.example>
+        subject: "Account email change"
+        body: "Please use alex.reviews@mail.example for my society account and all paper submissions from now on."
+    want:
+      society_addr: "(?i)alex\\.reviews@mail\\.example"
+    same: [addr_main]
+    avoid: []
+
+  - id: project_details
+    known:
+      skills: {status: suggested, about: self, text: "You are working on a study of AI skills in job postings with Ana Ruiz.",
+               match: "(?i)(skills|job postings)"}
+    emails:
+      - to: Ana Ruiz <ana@college.example>
+        subject: "Re: extraction run"
+        body: "I switched the extractor to the 27B model in structured-output mode and renamed the plan files to plan-v2.md. Results by Monday."
+      - to: Ana Ruiz <ana@college.example>
+        subject: "Re: coding scheme"
+        body: "Agreed, we keep the three-level coding scheme."
+    want: {}
+    same: [skills]
+    avoid: ["(?i)27B|structured-output|plan-v2|plan files|coding scheme"]
+
+  - id: project_moves_on
+    known:
+      survey: {status: active, about: self, text: "You are designing a survey study of remote teams with Dana Whitfield.",
+               match: "(?i)survey"}
+    emails:
+      - to: Dana Whitfield <dana@uni.example>
+        subject: "Survey is live"
+        body: "The survey went live this morning, we are in data collection now. I'll share response counts each Friday."
+    want:
+      survey_now: "(?i)survey.*(collect|live)|(collect|live).*survey"
+    same: [survey]
+    avoid: []
+
+  - id: a_new_colleague
+    known: {}
+    emails:
+      - to: Ana Ruiz <ana@college.example>
+        subject: "Welcome"
+        body: "Welcome to the department, Ana. As the new chair of the risk management group you'll get the budget forms from me."
+    want:
+      ana_chair: "(?i)Ana.*(chair|risk)"
+    same: []
+    avoid: []
+
+  - id: an_open_commitment
+    known: {}
+    emails:
+      - to: Priya Raman <priya@uni.example>
+        subject: "Re: recommendation letter"
+        body: "Of course, I will send the recommendation letter by 15 January."
+        answering: {from: Priya Raman <priya@uni.example>, body: "Could you write me a recommendation letter for the fellowship? It is due 15 January."}
+    want:
+      letter: "(?i)letter"
+    same: []
+    avoid: []
+
+  - id: a_done_commitment
+    known: {}
+    emails:
+      - to: Priya Raman <priya@uni.example>
+        subject: "Letter sent"
+        body: "I submitted the recommendation letter this morning. Good luck!"
+    want: {}
+    same: []
+    avoid: ["(?i)letter"]
+
+  - id: same_conference_new_contact
+    known:
+      rev_mis: {status: suggested, about: plains, text: "You review papers for the MIS and AI tracks of the Plains Decision Conference 2027.",
+                match: "(?i)review.*(MIS|AI|plains|PDC)"}
+    emails:
+      - to: Ed Ho <ed@pdc.example>
+        subject: "Re: review system login"
+        body: "Thanks Ed, the login works now."
+    want: {}
+    same: [rev_mis]
+    avoid: ["(?i)login", "(?i)Ed .*contact"]
+
+  - id: a_preference
+    known: {}
+    emails:
+      - to: Dana Whitfield <dana@uni.example>
+        subject: "Re: call next week"
+        body: "Happy to talk. I keep mornings free for writing, so any afternoon works for me."
+    want:
+      afternoons: "(?i)(morning|afternoon)"
+    same: []
+    avoid: []

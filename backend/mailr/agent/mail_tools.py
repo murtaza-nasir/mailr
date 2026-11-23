@@ -4,6 +4,7 @@ and reply context. Registered in agent/tools.py, which re-exports them."""
 from __future__ import annotations
 
 import asyncio
+import re
 from typing import Any
 
 from fastapi import HTTPException
@@ -56,9 +57,24 @@ async def search_conversations(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult
     return ToolResult({"total": res["total"], "items": items}, conversation_ids=[c["id"] for c in res["items"]])
 
 
+# A message that forwards another email: its own subject starts with a forward prefix (English,
+# German, French, Spanish, Portuguese, Russian, Chinese), or an email is attached. A reply ("RE: …",
+# an Outlook reply with its From/Sent block included) is never one: its quote is the thread's
+# earlier messages, which get_conversation lists on their own.
+_FWD_SUBJECT = re.compile(r"^\s*(?:fwd?|wg|tr|rv|enc|пересл|转发|轉寄)\s*[:：]", re.IGNORECASE)
+
+
+def _forwards_an_email(m: Any) -> bool:
+    from mailr.core.mime import EMAIL_TYPES
+
+    return bool(_FWD_SUBJECT.match(m.subject or "")) or any(
+        a.get("type") in EMAIL_TYPES for a in m.attachments or [])
+
+
 @tool("get_conversation",
       "Read a whole conversation: every message with sender, recipients, date, attachments and the text "
-      "body (quoted history removed). " + UNTRUSTED,
+      "body (quoted history removed). A message marked `forwards_an_email` shows only its sender's own "
+      "text here: read the forwarded email with get_message_body. " + UNTRUSTED,
       _obj({"conversation_id": {"type": "integer"}}, ["conversation_id"]))
 async def get_conversation(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
     from mailr.api.mail_read import load_conversation
@@ -82,6 +98,7 @@ async def get_conversation(ctx: ToolCtx, args: dict[str, Any]) -> ToolResult:
             "draft": m.draft, "unread": not m.seen,
             "attachments": [a.get("filename") for a in m.attachments or [] if not a.get("inline")],
             "body": _u((m.body_text or m.snippet)[:6000]),
+            **({"forwards_an_email": True} if _forwards_an_email(m) else {}),
         } for m in msgs],
     }
     await _audit(ctx, "agent.get_conversation", str(cid))

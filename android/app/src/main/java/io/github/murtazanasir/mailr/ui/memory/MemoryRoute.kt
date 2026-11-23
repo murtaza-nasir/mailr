@@ -78,7 +78,7 @@ fun MemoryPage(
     }
     val cb = MemoryCallbacks(
         back = onBack, retry = vm::load, setQuery = vm::setQuery, setKind = vm::setKind, learnNow = vm::learnNow,
-        keep = vm::keep, dismiss = vm::dismiss,
+        keep = vm::keep, dismiss = vm::dismiss, merge = vm::merge, tidy = vm::tidy,
         add = { editing = MemorySheetRequest() }, edit = { editing = MemorySheetRequest(it) },
         delete = vm::delete, pin = vm::pin, makeTask = vm::makeTask,
         openCard = { card = it }, openSource = openConversation, openChat = chat,

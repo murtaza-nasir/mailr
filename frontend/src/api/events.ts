@@ -359,6 +359,8 @@ export function useLiveUpdates(enabled: boolean, assistantDesktop = true) {
           void qc.invalidateQueries({ queryKey: qk.summary(ev.conversation_id) })
         } else if (ev.type === 'memory_suggestions') {
           queue('memory')
+          // From a chat: that chat's "Remember …?" line (features/rail/assistant/useAssistant.ts).
+          if (ev.session_id) window.dispatchEvent(new CustomEvent('mailr:memory-asked', { detail: String(ev.session_id) }))
         } else if (ev.type === 'connector') {
           // Every sync pass reports "Up to date" again: refetch only for news (another status or
           // detail, or an account this tab has not listed).

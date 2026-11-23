@@ -788,12 +788,14 @@
 .conv-row .hover-actions .icon-btn {
   --icon-btn: calc(36px * var(--dz, 1));
 }
+/* Keyboard focus only: a clicked button keeps focus after the mouse leaves, and :focus-within kept
+   the buttons up on that row until the next click elsewhere. */
 .conv-row:hover .hover-actions,
-.conv-row:focus-within .hover-actions {
+.conv-row:is(:focus-visible, :has(:focus-visible)) .hover-actions {
   display: flex;
 }
 .conv-row:hover .tail,
-.conv-row:focus-within .tail {
+.conv-row:is(:focus-visible, :has(:focus-visible)) .tail {
   visibility: hidden;
 }
 
@@ -1027,7 +1029,7 @@ body.split-dragging iframe {
 /* A one-line row with an action chip: on hover the line makes room for the hover buttons, so the
    chip stays clickable (they sit on top of the line's end). */
 .conv-row.has-action:not(.with-chips):hover .content,
-.conv-row.has-action:not(.with-chips):focus-within .content {
+.conv-row.has-action:not(.with-chips):is(:focus-visible, :has(:focus-visible)) .content {
   padding-inline-end: calc(4 * 36px * var(--dz, 1) + 12px);
 }
 .conv-row .att-chips .action-chip-wrap {

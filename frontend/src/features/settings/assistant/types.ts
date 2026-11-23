@@ -64,6 +64,11 @@ export interface MemoryRef {
   chat_session_id?: string
   chat_message_id?: number
   about?: { name?: string; emails?: string[]; kind?: EntityKind; self?: boolean }
+  /** A dated commitment's date (YYYY-MM-DD). */
+  due?: string
+  /** A suggested edit: the saved note it changes. */
+  replaces?: number
+  merged_into?: number
 }
 
 export interface Memory {
@@ -85,6 +90,22 @@ export interface Memory {
   updated_at: string | null
   /** The chat turn a memory from a chat came from, while that chat exists ("From a chat" opens it). */
   chat?: { session_id: string; chat_message_id: number | null } | null
+  /** A suggested edit: the saved note it changes when kept (the note keeps its place). */
+  replaces?: { id: number; text: string } | null
+  /** Notes merged into this one, newest first (shown as "Merged from N notes"; never used alone). */
+  merged_from?: { id: number; text: string; updated_at: string | null }[]
+  /** A tidy proposal: the other saved notes it merges (with `replaces`), or the one it retires. */
+  merges?: { id: number; text: string }[]
+  retires?: { id: number; text: string; reason: string } | null
+  /** The person or topic it is about, for grouping (other wordings of a topic share a key). */
+  topic?: { key: string; name: string; self: boolean }
+}
+
+/** GET /assistant/memories/counts: waiting suggestions, and whether the weekly review card is due. */
+export interface MemoryCounts {
+  suggested: number
+  review_card: boolean
+  week: string
 }
 
 export interface MemoryList {
@@ -153,6 +174,10 @@ export interface LearningRun {
   suggested: number
   error: null | 'model_failed' | 'cut_off' | 'unreadable' | 'gave_up'
   cause?: string
+  /** No new suggestions: MAX_WAITING are waiting for review (knowledge/tasks.py). */
+  full?: boolean
+  /** Suggestions dropped in this pass, unreviewed for 30 days or past their date. */
+  expired?: number
 }
 
 export interface LearningStatus {
@@ -183,6 +208,7 @@ export const qkA = {
   entities: (q = '', kind = '') => ['assistant', 'entities', q, kind] as const,
   entity: (id: number) => ['assistant', 'entity', id] as const,
   learning: ['assistant', 'learning'] as const,
+  memoryCounts: ['assistant', 'memories', 'counts'] as const,
   memoriesById: (ids: number[]) => ['assistant', 'memories', 'ids', ids.join(',')] as const,
   orders: ['assistant', 'orders'] as const,
   runs: (orderId: number | null = null) => ['assistant', 'runs', orderId] as const,

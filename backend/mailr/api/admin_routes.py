@@ -1138,3 +1138,63 @@ async def tls_install(body: TlsIn, p: Principal = Depends(tls_admin)):
         return await tls.install(body.certificate, body.private_key)
     except tls.TlsError as e:
         raise HTTPException(400, str(e)) from None
+
+
+# ---------- Speakr for everyone (integrations/speakr/auto.py) ----------
+
+
+class SpeakrInstanceIn(BaseModel):
+    url: str = Field("", max_length=500)
+    auto_connect: bool = False
+    data_class: str = Field("local_only", pattern="^(normal|local_only)$")
+
+
+async def _speakr_out(db: AsyncSession) -> dict:
+    from mailr.integrations.speakr import auto
+
+    inst = await auto.instance(db)
+    return {"url": inst["url"] if inst else "", "auto_connect": bool(inst and inst["auto_connect"]),
+            "data_class": inst["data_class"] if inst else "local_only", "sso": auto.available()}
+
+
+@router.get("/speakr")
+async def speakr_instance(p: Principal = Depends(admin), db: AsyncSession = Depends(get_db)):
+    """The Speakr address for everyone on this server: it fills in the address when people add
+    Speakr and, with `auto_connect`, connects it at each single sign-on."""
+    return await _speakr_out(db)
+
+
+@router.put("/speakr")
+async def set_speakr_instance(body: SpeakrInstanceIn, p: Principal = Depends(admin), db: AsyncSession = Depends(get_db)):
+    """An empty address removes the setting. Connectors people already have are not changed."""
+    from mailr.integrations.speakr import auto
+    from mailr.integrations.speakr import client as sc
+
+    if not body.url.strip():
+        row = await db.get(InstanceSetting, auto.KEY)
+        if row is not None:
+            await db.delete(row)
+    else:
+        url = sc.normalize_base(body.url.strip())
+        if not url.lower().startswith(("http://", "https://")):
+            raise ApiError(400, "admin.speakr_address")
+        if body.auto_connect and not auto.available():
+            raise ApiError(400, "admin.speakr_needs_sso")
+        await _set_instance(db, auto.KEY, {"url": url, "auto_connect": body.auto_connect, "data_class": body.data_class})
+    await audit(db, p, "admin.speakr", "", {"url_set": bool(body.url.strip()), "auto_connect": body.auto_connect})
+    await db.commit()
+    return await _speakr_out(db)
+
+
+class SpeakrCheckIn(BaseModel):
+    url: str = Field(..., min_length=1, max_length=500)
+
+
+@router.post("/speakr/check")
+async def check_speakr_instance(body: SpeakrCheckIn, p: Principal = Depends(admin)):
+    """What that Speakr says about connecting with single sign-on: the exchange on, account
+    creation on, and Mailr's client allowed. Asked without a token."""
+    from mailr.core.netguard import private_ok_for
+    from mailr.integrations.speakr import auto
+
+    return await auto.check(body.url.strip(), private_ok_for(p.user))

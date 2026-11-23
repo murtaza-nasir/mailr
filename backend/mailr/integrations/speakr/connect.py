@@ -44,6 +44,10 @@ def scope_notes(scopes: list[str] | None, cfg: dict[str, Any] | None = None, lan
         out.append(S("full"))
         return out
     extra = [s for s in scopes if s in RISKY_SCOPES[1:]]
+    tok = cfg.get("speakr_token")
+    if cfg.get("token_origin") in ("sso", "auto") or (isinstance(tok, dict) and tok.get("sso") is True):
+        # Mailr asked for webhooks itself (instant updates), so it is not named as extra.
+        extra = [s for s in extra if s != "webhooks"]
     if extra:
         out.append(S("extra", scopes=", ".join(extra), count=len(extra)))
     if "read" not in scopes:
@@ -130,8 +134,10 @@ async def create(db: AsyncSession, p: Any, body: Any) -> Connector:
     db.add(row)
     await db.flush()
     await set_secrets(db, row, {"token": token})
+    from mailr.integrations.speakr import auto
     from mailr.integrations.speakr.sync import queue_sync
 
+    await auto.on_connect(db, p.user_id, info["base_url"])
     await queue_sync(db, row)
     await db.commit()
     return row
@@ -149,6 +155,9 @@ async def patch(db: AsyncSession, p: Any, c: Connector, body: Any) -> Connector:
         info = await probe(str(new_url or cfg.get("base_url") or ""), token, private_ok_for(p.user))
         cfg.update({k: info[k] for k in ("base_url", "speakr_user_id", "speakr_username", "speakr_name")})
         cfg["speakr_capabilities"] = info["capabilities"]
+        # A pasted token is the user's own: never revoked by mailr (sso.py sets the origin again
+        # after an exchange).
+        cfg.pop("token_origin", None)
         if info.get("token"):
             cfg["speakr_token"] = info["token"]
         else:

@@ -531,6 +531,10 @@ async def update(db: AsyncSession, user: User, p: Any, uid: str, changes: dict[s
             set_absolute_alarms(comp, [ical.parse_when(x, user_tz) for x in reminders_at])
         if any(k in changes for k in ("due", "start", "recurrence")):
             comp.pop("x-mailr-undo", None)  # an edited date ends what an undo could restore
+        if (("reminders" in changes or reminders_at is not None)
+                and ical.text_of(comp, "status").upper() == "COMPLETED"):
+            comp.pop(ical.PARKED_ALARMS, None)  # new reminders on a completed task replace the parked ones
+            ical.park_alarms(comp)
         if status is not None:
             ical.complete(comp, status == "completed")
         if not changes:
@@ -550,6 +554,73 @@ async def update(db: AsyncSession, user: User, p: Any, uid: str, changes: dict[s
     elif changes or reminders_at is not None or status is not None:
         obj, _ = await writer.rmw(db, user.id, p, obj, change, client_etag=etag)
     return await task_dict(db, obj, user_tz)
+
+
+# ---------------- reminders of tasks completed elsewhere ----------------
+
+
+def _alarms_misplaced() -> Any:
+    """Tasks whose reminders sit on the wrong side of ical.PARKED_ALARMS: completed with VALARMs
+    (completed in another app, or from before parking), or open again with reminders parked
+    (reopened in another app)."""
+    done = CalObject.status == "COMPLETED"
+    return or_(and_(done, CalObject.ics.contains("BEGIN:VALARM")),
+               and_(~done, CalObject.ics.contains(ical.PARKED_ALARMS)))
+
+
+def _place_alarms(cal: Calendar) -> None:
+    changed = False
+    for comp in cal.walk("VTODO"):  # the master and every changed occurrence
+        if ical.text_of(comp, "status").upper() == "COMPLETED":
+            changed = ical.park_alarms(comp) or changed
+        else:
+            changed = ical.unpark_alarms(comp) or changed
+    if not changed:
+        raise NoChange()
+
+
+async def queue_alarm_parking(db: AsyncSession, connector_id: int) -> None:
+    """After a sync: queue calendar.park_alarms when one of the connector's writable task lists
+    has a task to fix."""
+    hit = (await db.execute(
+        select(CalObject.user_id).join(CalCollection, CalCollection.id == CalObject.collection_id).where(
+            CalObject.connector_id == connector_id, CalObject.kind == "task", CalObject.deleted_at.is_(None),
+            CalCollection.read_only.is_(False), _alarms_misplaced()).limit(1))).scalar()
+    if hit is not None:
+        await enqueue(db, "calendar.park_alarms", {"connector_id": connector_id}, user_id=hit,
+                      dedupe_key=f"calendar.park_alarms:{connector_id}")
+
+
+async def park_alarms(db: AsyncSession, connector_id: int) -> int:
+    """Park the reminders of the connector's completed tasks and put back those of reopened ones;
+    returns how many tasks changed. Each task is committed on its own (as in retag_all)."""
+    ids = (await db.execute(
+        select(CalObject.id).join(CalCollection, CalCollection.id == CalObject.collection_id).where(
+            CalObject.connector_id == connector_id, CalObject.kind == "task", CalObject.deleted_at.is_(None),
+            CalCollection.read_only.is_(False), _alarms_misplaced()))).scalars().all()
+    n = 0
+    for oid in ids:
+        obj = await db.get(CalObject, oid)
+        if obj is None:
+            continue
+        try:
+            await writer.rmw(db, obj.user_id, None, obj, _place_alarms)
+            await db.commit()
+            n += 1
+        except NoChange:
+            await db.rollback()
+        except Exception as e:  # noqa: BLE001  one task's failure leaves the rest to do; the next sync retries it
+            await db.rollback()
+            log.warning("could not move the reminders of task %s: %s", oid, type(e).__name__)
+    return n
+
+
+@handler("calendar.park_alarms")
+async def park_alarms_job(payload: dict[str, Any], ctx) -> None:
+    from mailr.db import session_scope
+
+    async with session_scope() as db:
+        await park_alarms(db, int(payload["connector_id"]))
 
 
 # ---------------- subtasks ----------------

@@ -93,6 +93,9 @@ class User(Base):
     # ... and the counter in the known-client cookie stamp (api/auth_routes.signin_stamp), raised by
     # Sign out everywhere and password resets.
     signin_epoch: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    # Connecting the instance's Speakr at sign-in (integrations/speakr/auto.py), server-owned:
+    # {"url", "state": connected|declined|failed, "reason", "at"}. NULL: never tried.
+    speakr_auto: Mapped[dict[str, Any] | None] = mapped_column(JSONB)
 
 
 class Session(Base):

@@ -1693,3 +1693,136 @@ a.chat-file:focus-visible {
   font-size: 14px;
   pointer-events: none;
 }
+
+/* "Remember: …?" under a reply (MemoryReview.tsx). */
+.remember-ask {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+  font-size: 12.5px;
+}
+.remember-ask li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.remember-ask svg {
+  color: var(--text-3);
+  flex: none;
+}
+
+/* The weekly review card at the top of the chat. */
+.review-card {
+  margin: 4px 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--divider);
+  border-radius: var(--radius-md);
+  background: var(--surface-container);
+  font-size: 13px;
+}
+.review-card header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.review-card h3 {
+  flex: 1;
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.review-topics {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  max-height: min(45vh, 420px);
+  overflow-y: auto;
+}
+.review-topic {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 32px;
+  padding: 4px 4px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.review-topic:hover {
+  background: var(--hover);
+}
+.review-topic-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.review-chevron {
+  flex: none;
+  color: var(--text-3);
+  transition: transform 0.15s;
+}
+.review-topic[aria-expanded='true'] .review-chevron {
+  transform: rotate(90deg);
+}
+.review-chevron:dir(rtl) {
+  scale: -1 1;
+}
+.review-topic-body {
+  padding-block: 0 8px;
+  padding-inline: 24px 4px;
+}
+.review-topic-body .review-group {
+  margin-top: 0;
+}
+.review-open-all {
+  margin-top: 4px;
+}
+.review-group {
+  margin-top: 10px;
+}
+.review-group-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.review-group-all {
+  margin-inline-start: auto;
+  display: inline-flex;
+  gap: 2px;
+}
+.review-group ul {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+.review-item {
+  overflow-wrap: anywhere;
+}
+.review-kind {
+  font-size: 11.5px;
+}
+.review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+.review-merge {
+  margin-top: 4px;
+  max-width: 100%;
+}
+.review-count {
+  white-space: nowrap;
+}

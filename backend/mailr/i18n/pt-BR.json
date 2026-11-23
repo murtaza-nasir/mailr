@@ -126,7 +126,9 @@
       "local_public": "{{host}} é um endereço público, por isso não pode ser marcado como local. Use um endereço da sua rede ou desta máquina, ou marque-o como hospedado.",
       "local_public_no_host": "Este é um endereço público, por isso não pode ser marcado como local. Use um endereço da sua rede ou desta máquina, ou marque-o como hospedado.",
       "password_not_by_token": "as senhas são alteradas por um administrador conectado, não por um token de API",
-      "public_address_first": "Insira o endereço público primeiro."
+      "public_address_first": "Insira o endereço público primeiro.",
+      "speakr_address": "O endereço do Speakr deve começar com https:// (ou http:// em uma rede privada).",
+      "speakr_needs_sso": "Conectar no login requer login único neste servidor Mailr."
     },
     "accounts": {
       "account_not_found": "conta não encontrada",
@@ -404,6 +406,8 @@
     },
     "knowledge": {
       "entity_not_found": "entidade não encontrada",
+      "merge_into_itself": "uma memória não pode ser mesclada nela mesma",
+      "merge_saved_into_suggestion": "uma memória salva só pode ser mesclada em outra memória salva",
       "only_builtin_reset": "somente habilidades integradas podem ser redefinidas",
       "skill_no_instructions": "a habilidade não tem instruções",
       "skill_not_found": "habilidade não encontrada",

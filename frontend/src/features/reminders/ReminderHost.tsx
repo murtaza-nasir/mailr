@@ -22,7 +22,7 @@ import { useActiveReminders, useReminderActions, useReminderSettings, useReminde
 import {
   EXPAND_PARAM, itemFromPayload, kindOfKey, newMissed, planBurst, SHEET_PARAM, stackOrder, staleTags, TRIAGE_PARAM, whenLine, type ReminderItem, type ReminderPayload,
 } from './logic'
-import { closeTag, permission, setOpener, showMissed, showReminder, showSummary, shownTags } from './notify'
+import { chimeOnce, claim, closeTag, permission, setOpener, showMissed, showReminder, showSummary, shownTags, viaWorker } from './notify'
 import { ReminderSheet, useReminderPrefs } from './ReminderSheet'
 import { t as tr } from '../../i18n'
 
@@ -165,13 +165,23 @@ export function ReminderHost() {
         inAppToasts(batch.filter((p) => !p.missed), ctx.current.prefs)
         return
       }
-      const missed = batch.filter((p) => p.missed)
-      const live = batch.filter((p) => !p.missed)
-      if (missed.length && missedNoticeOn()) await showMissed(missed.length)
+      for (const p of batch) if (!p.missed) recent.current.set(p.key, Date.now())
+      // The service worker shows each delivery once for the whole browser: this tab's copy, the
+      // other tabs' and the Web Push carry the same id. Only without a worker does the tab show it,
+      // and then only the tab that claims the delivery.
+      const rest: ReminderPayload[] = []
+      for (const p of batch) {
+        if (p.missed && !missedNoticeOn()) continue
+        if (await viaWorker(p)) {
+          if (!p.missed) await chimeOnce(p.delivery ?? `${p.key}.${Math.floor(Date.now() / 60_000)}`)
+        } else if (!p.delivery || (await claim(p.delivery))) rest.push(p)
+      }
+      const missed = rest.filter((p) => p.missed)
+      const live = rest.filter((p) => !p.missed)
+      if (missed.length) await showMissed(missed.length)
       if (!live.length) return
       const showing = (await shownTags()).filter(isReminderTag)
       const plan = planBurst(showing, live.map((p) => p.key))
-      for (const p of live) recent.current.set(p.key, Date.now())
       if (plan.summary) {
         const keys = [...new Set([...showing, ...live.map((p) => p.key)])]
         await showSummary(keys.map(kindOfKey), keys)

@@ -1722,6 +1722,36 @@
    "state": "model",
    "text": "Запись %1$d: %2$s в %3$s"
   },
+  "android:app:asst_remember_dropped": {
+   "sha": "01312c7b24091d9b",
+   "state": "model",
+   "text": "Не запомнено: «%1$s»"
+  },
+  "android:app:asst_remember_kept": {
+   "sha": "787d96df8cc37502",
+   "state": "model",
+   "text": "Запомнено: «%1$s»"
+  },
+  "android:app:asst_remember_merged": {
+   "sha": "2dd79d2093d66c48",
+   "state": "model",
+   "text": "Добавлено в другую память: «%1$s»"
+  },
+  "android:app:asst_remember_no": {
+   "sha": "b2cbc4e2e5545a6c",
+   "state": "model",
+   "text": "Нет"
+  },
+  "android:app:asst_remember_question": {
+   "sha": "c9a7f2441fa65e80",
+   "state": "model",
+   "text": "Запомнить: «%1$s»?"
+  },
+  "android:app:asst_remember_yes": {
+   "sha": "184fda5c980b9d9c",
+   "state": "model",
+   "text": "Да"
+  },
   "android:app:asst_remove_context": {
    "sha": "1143ef89b6200b7f",
    "state": "model",
@@ -9937,6 +9967,11 @@
    "state": "model",
    "text": "Обучение на основе писем отключено."
   },
+  "android:app:memory_learning_paused": {
+   "sha": "af577e915e44c401",
+   "state": "model",
+   "text": "Проверено: %1$s. 15 предложений ожидают проверки, поэтому новые не добавлены. Проверьте их, чтобы продолжить обучение."
+  },
   "android:app:memory_load_failed": {
    "sha": "cd54f3d93c64af74",
    "state": "model",
@@ -9956,6 +9991,16 @@
    "sha": "d00c49eed3605188",
    "state": "model",
    "text": "Создать задачу"
+  },
+  "android:app:memory_merged_from": {
+   "sha": "d498acfc6d224e0a",
+   "state": "model",
+   "text": {
+    "one": "Объединено из %d заметки",
+    "few": "Объединено из %d заметок",
+    "many": "Объединено из %d заметок",
+    "other": "Объединено из %d заметки"
+   }
   },
   "android:app:memory_more_options": {
    "sha": "2871130cbb008ebd",
@@ -10057,6 +10102,91 @@
    "state": "model",
    "text": "Повторить"
   },
+  "android:app:memory_review_count": {
+   "sha": "ec2b841903452339",
+   "state": "model",
+   "text": {
+    "one": "%d для проверки",
+    "few": "%d для проверки",
+    "many": "%d для проверки",
+    "other": "%d для проверки"
+   }
+  },
+  "android:app:memory_review_drop": {
+   "sha": "32da68e3c0b5c740",
+   "state": "model",
+   "text": "Удалить"
+  },
+  "android:app:memory_review_drop_all": {
+   "sha": "f0fc0a2f5975025e",
+   "state": "model",
+   "text": "Удалить все"
+  },
+  "android:app:memory_review_keep_note": {
+   "sha": "545a6f27acf448a6",
+   "state": "model",
+   "text": "Сохранить заметку"
+  },
+  "android:app:memory_review_merge": {
+   "sha": "98e1f248dc311c7d",
+   "state": "model",
+   "text": "Объединить"
+  },
+  "android:app:memory_review_merged": {
+   "sha": "163c6d36423853d9",
+   "state": "model",
+   "text": "Объединено."
+  },
+  "android:app:memory_review_merges": {
+   "sha": "be6885e4c90843e3",
+   "state": "model",
+   "text": {
+    "one": "Сохранение заменит %d сохранённую запись:",
+    "few": "Сохранение заменит %d сохранённые записи:",
+    "many": "Сохранение заменит %d сохранённых записей:",
+    "other": "Сохранение заменит %d сохранённых записей:"
+   }
+  },
+  "android:app:memory_review_not_now": {
+   "sha": "827476f68808e2c9",
+   "state": "model",
+   "text": "Не сейчас (до следующей недели)"
+  },
+  "android:app:memory_review_open_all": {
+   "sha": "17ea4edc874a43d4",
+   "state": "model",
+   "text": "Открыть на странице «Память»"
+  },
+  "android:app:memory_review_other": {
+   "sha": "1f1260ddd48575a9",
+   "state": "model",
+   "text": "Другое"
+  },
+  "android:app:memory_review_retire": {
+   "sha": "312274950a5f0335",
+   "state": "model",
+   "text": "Удалить"
+  },
+  "android:app:memory_review_retires": {
+   "sha": "93d3ff586713bb3e",
+   "state": "model",
+   "text": "Ambrose предлагает больше не использовать эту сохранённую память."
+  },
+  "android:app:memory_review_retires_why": {
+   "sha": "cb2a86ccf40c2e31",
+   "state": "model",
+   "text": "Ambrose предлагает больше не использовать эту сохранённую память: %1$s"
+  },
+  "android:app:memory_review_title": {
+   "sha": "96d87dc86b2901d2",
+   "state": "model",
+   "text": {
+    "one": "%d запись памяти для проверки",
+    "few": "%d записи памяти для проверки",
+    "many": "%d записей памяти для проверки",
+    "other": "%d записи памяти для проверки"
+   }
+  },
   "android:app:memory_save": {
    "sha": "c1db83d165ed908a",
    "state": "model",
@@ -10122,6 +10252,16 @@
    "state": "model",
    "text": "Например: Сэм любит тайскую еду и не любит ранние ужины."
   },
+  "android:app:memory_tidy": {
+   "sha": "e29edec3e61b4096",
+   "state": "model",
+   "text": "Навести порядок"
+  },
+  "android:app:memory_tidy_queued": {
+   "sha": "f93dd31e7ba40779",
+   "state": "model",
+   "text": "Начата оптимизация. Всё, что нужно объединить или удалить, находится в разделе «На проверке»."
+  },
   "android:app:memory_title": {
    "sha": "ecbeaaaec5fafe42",
    "state": "model",
@@ -10156,6 +10296,11 @@
    "sha": "129352d156d83e94",
    "state": "model",
    "text": "До %1$s"
+  },
+  "android:app:memory_updates_saved": {
+   "sha": "6e2612306bead0bd",
+   "state": "manual",
+   "text": "Если сохранить это, ваша сохранённая заметка изменится: «%1$s»"
   },
   "android:app:memory_will_remember": {
    "sha": "a9a93009cb78602b",
@@ -23738,6 +23883,16 @@
    "state": "model",
    "text": "Сначала введите публичный адрес."
   },
+  "server:errors.admin.speakr_address": {
+   "sha": "1068a26ce27c3e93",
+   "state": "model",
+   "text": "Адрес Speakr должен начинаться с https:// (или http:// для частной сети)."
+  },
+  "server:errors.admin.speakr_needs_sso": {
+   "sha": "85776e8bba064c81",
+   "state": "model",
+   "text": "Подключение при входе требует настройки единого входа на этом сервере Mailr."
+  },
   "server:errors.admin.user_not_found": {
    "sha": "f0650a56e62fffd9",
    "state": "model",
@@ -24832,6 +24987,16 @@
    "sha": "439774f47dd30357",
    "state": "model",
    "text": "сущность не найдена"
+  },
+  "server:errors.knowledge.merge_into_itself": {
+   "sha": "0b07dbb6bbd37cca",
+   "state": "model",
+   "text": "память нельзя объединить с самой собой"
+  },
+  "server:errors.knowledge.merge_saved_into_suggestion": {
+   "sha": "ace34b65170bd84c",
+   "state": "model",
+   "text": "сохранённую память можно объединить только с другой сохранённой памятью"
   },
   "server:errors.knowledge.only_builtin_reset": {
    "sha": "f339e47e7dc56109",
@@ -40471,6 +40636,36 @@
    "state": "model",
    "text": "ваши подписки"
   },
+  "web:memory.ask.dropped": {
+   "sha": "2de035192d964b64",
+   "state": "model",
+   "text": "Не запомнено: «{{text}}»"
+  },
+  "web:memory.ask.kept": {
+   "sha": "ce1c39f4c006c221",
+   "state": "model",
+   "text": "Запомнено: «{{text}}»"
+  },
+  "web:memory.ask.merged": {
+   "sha": "64f95c257709aeb7",
+   "state": "model",
+   "text": "Добавлено в другую память: «{{text}}»"
+  },
+  "web:memory.ask.no": {
+   "sha": "b2cbc4e2e5545a6c",
+   "state": "model",
+   "text": "Нет"
+  },
+  "web:memory.ask.question": {
+   "sha": "ae0bb3eab550643b",
+   "state": "model",
+   "text": "Запомнить: «{{text}}»?"
+  },
+  "web:memory.ask.yes": {
+   "sha": "184fda5c980b9d9c",
+   "state": "model",
+   "text": "Да"
+  },
   "web:memory.dialog.kindExample": {
    "sha": "d9392cd2452575a1",
    "state": "model",
@@ -40596,10 +40791,25 @@
    "state": "model",
    "text": "Обучение на основе писем отключено."
   },
+  "web:memory.page.learningPaused": {
+   "sha": "32d4ddd03ad9bc20",
+   "state": "model",
+   "text": "Проверено {{when}}. Ожидает проверки 15 предложений, поэтому ничего нового не добавлено. Проверьте их, чтобы возобновить обучение."
+  },
   "web:memory.page.makeTask": {
    "sha": "d00c49eed3605188",
    "state": "model",
    "text": "Создать задачу"
+  },
+  "web:memory.page.mergedFrom": {
+   "sha": "8697699e6c8b053c",
+   "state": "model",
+   "text": {
+    "one": "Объединено из {{count}} заметки",
+    "few": "Объединено из {{count}} заметок",
+    "many": "Объединено из {{count}} заметок",
+    "other": "Объединено из {{count}} заметок"
+   }
   },
   "web:memory.page.neverLearned": {
    "sha": "09c86cfc8b3ef3a0",
@@ -40621,6 +40831,21 @@
    "state": "model",
    "text": "Задача добавлена."
   },
+  "web:memory.page.tidy": {
+   "sha": "e29edec3e61b4096",
+   "state": "model",
+   "text": "Навести порядок"
+  },
+  "web:memory.page.tidyQueued": {
+   "sha": "f93dd31e7ba40779",
+   "state": "model",
+   "text": "Начато наведение порядка. Воспоминания, которые можно объединить или удалить, появятся в разделе «На проверку»."
+  },
+  "web:memory.page.tidyTip": {
+   "sha": "efec985045c2f087",
+   "state": "model",
+   "text": "Ищите воспоминания для объединения или удаления. Предложения появятся в разделе «На проверку»."
+  },
   "web:memory.page.toReview": {
    "sha": "9d3eec955fa9bcc7",
    "state": "model",
@@ -40635,6 +40860,106 @@
    "sha": "92fbe22362dcd5f8",
    "state": "model",
    "text": "Темы"
+  },
+  "web:memory.page.updatesSaved": {
+   "sha": "53d5c4947785e432",
+   "state": "manual",
+   "text": "Если сохранить это, ваша сохранённая заметка изменится: «{{text}}»"
+  },
+  "web:memory.review.count": {
+   "sha": "ff3bbeb9b851e8f9",
+   "state": "model",
+   "text": {
+    "one": "{{count}} для проверки",
+    "few": "{{count}} для проверки",
+    "many": "{{count}} для проверки",
+    "other": "{{count}} для проверки"
+   }
+  },
+  "web:memory.review.drop": {
+   "sha": "32da68e3c0b5c740",
+   "state": "model",
+   "text": "Удалить"
+  },
+  "web:memory.review.dropAll": {
+   "sha": "f0fc0a2f5975025e",
+   "state": "model",
+   "text": "Удалить все"
+  },
+  "web:memory.review.keepNote": {
+   "sha": "545a6f27acf448a6",
+   "state": "model",
+   "text": "Оставить заметку"
+  },
+  "web:memory.review.merge": {
+   "sha": "98e1f248dc311c7d",
+   "state": "model",
+   "text": "Объединить"
+  },
+  "web:memory.review.mergeInto": {
+   "sha": "e29d4b1796c12bed",
+   "state": "model",
+   "text": "Объединить с…"
+  },
+  "web:memory.review.merged": {
+   "sha": "163c6d36423853d9",
+   "state": "model",
+   "text": "Объединено."
+  },
+  "web:memory.review.mergesNotes": {
+   "sha": "77ca2a503e4c67d2",
+   "state": "model",
+   "text": {
+    "one": "Если оставить это, будет заменено {{count}} сохраненное воспоминание:",
+    "few": "Если оставить это, будет заменено {{count}} сохраненных воспоминания:",
+    "many": "Если оставить это, будет заменено {{count}} сохраненных воспоминаний:",
+    "other": "Если оставить это, будет заменено {{count}} сохраненных воспоминаний:"
+   }
+  },
+  "web:memory.review.notNow": {
+   "sha": "827476f68808e2c9",
+   "state": "model",
+   "text": "Не сейчас (до следующей недели)"
+  },
+  "web:memory.review.openAll": {
+   "sha": "17ea4edc874a43d4",
+   "state": "model",
+   "text": "Открыть на странице «Память»"
+  },
+  "web:memory.review.openMemory": {
+   "sha": "c81e79b90b04e687",
+   "state": "model",
+   "text": "Открыть заметки для проверки"
+  },
+  "web:memory.review.otherTopic": {
+   "sha": "1f1260ddd48575a9",
+   "state": "model",
+   "text": "Другое"
+  },
+  "web:memory.review.retire": {
+   "sha": "312274950a5f0335",
+   "state": "model",
+   "text": "Удалить"
+  },
+  "web:memory.review.retires": {
+   "sha": "93d3ff586713bb3e",
+   "state": "model",
+   "text": "Ambrose предлагает больше не использовать это сохраненное воспоминание."
+  },
+  "web:memory.review.retiresWhy": {
+   "sha": "4240432316745f2a",
+   "state": "model",
+   "text": "Ambrose предлагает больше не использовать это сохраненное воспоминание: {{reason}}"
+  },
+  "web:memory.review.title": {
+   "sha": "a49114c0f1d9747e",
+   "state": "model",
+   "text": {
+    "one": "{{count}} заметка для проверки",
+    "few": "{{count}} заметки для проверки",
+    "many": "{{count}} заметок для проверки",
+    "other": "{{count}} заметок для проверки"
+   }
   },
   "web:memory.settings.learnFromChats": {
    "sha": "c4ee91a10dcb9eec",
@@ -50207,6 +50532,86 @@
    "state": "model",
    "text": "Ваше имя в отправленных письмах"
   },
+  "web:settings.adminSpeakr.address": {
+   "sha": "ba32049417a26f72",
+   "state": "model",
+   "text": "Адрес Speakr"
+  },
+  "web:settings.adminSpeakr.autoConnect": {
+   "sha": "feaac28ec4f5f647",
+   "state": "model",
+   "text": "Подключать Speakr при входе"
+  },
+  "web:settings.adminSpeakr.autoConnectDesc": {
+   "sha": "4095234b10d5ee92",
+   "state": "model",
+   "text": "Пользователи, входящие в Mailr через единый вход, подключаются к Speakr и видят уведомление. Если пользователь отключит соединение, оно не восстановится автоматически. Оба сервера должны использовать одного поставщика удостоверений, а клиент Mailr должен быть разрешен в Speakr."
+  },
+  "web:settings.adminSpeakr.check": {
+   "sha": "25b62665d5983328",
+   "state": "model",
+   "text": "Проверить"
+  },
+  "web:settings.adminSpeakr.checkClientNotAllowed": {
+   "sha": "ce77413a423f0a0b",
+   "state": "model",
+   "text": "Клиент Mailr не входит в список разрешённых клиентов обмена в Speakr."
+  },
+  "web:settings.adminSpeakr.checkExchangeOff": {
+   "sha": "031e1df343718370",
+   "state": "model",
+   "text": "Токены единого входа отключены в Speakr."
+  },
+  "web:settings.adminSpeakr.checkNoProvisioning": {
+   "sha": "fe637855e0b18d07",
+   "state": "model",
+   "text": "Готово. Пользователи без учётной записи Speakr должны один раз войти в Speakr через единый вход (SSO); после этого они будут подключены при следующем входе в Mailr."
+  },
+  "web:settings.adminSpeakr.checkOld": {
+   "sha": "4cba5340c9f4e665",
+   "state": "model",
+   "text": "Эта версия Speakr не поддерживает подключение через единый вход. Пользователи по-прежнему могут вставить токен."
+  },
+  "web:settings.adminSpeakr.checkReady": {
+   "sha": "554e41a40df550a2",
+   "state": "model",
+   "text": "Готово. Пользователям, которые никогда не входили в Speakr через единый вход, нужно сделать это один раз. После этого они будут подключаться автоматически при следующем входе в Mailr."
+  },
+  "web:settings.adminSpeakr.checkUnreachable": {
+   "sha": "c8c1ded6c657ec43",
+   "state": "model",
+   "text": "Не удалось связаться с Speakr: {{detail}}"
+  },
+  "web:settings.adminSpeakr.desc": {
+   "sha": "33987e64022daa8d",
+   "state": "model",
+   "text": "Адрес Speakr для всех пользователей этого сервера Mailr. Он заполняется автоматически, когда кто-то добавляет Speakr."
+  },
+  "web:settings.adminSpeakr.localDesc": {
+   "sha": "e963234dee7aa79a",
+   "state": "model",
+   "text": "Это значение по умолчанию для аккаунтов, подключаемых при входе. Каждый пользователь может изменить эту настройку позже."
+  },
+  "web:settings.adminSpeakr.noSso": {
+   "sha": "85776e8bba064c81",
+   "state": "model",
+   "text": "Подключение при входе требует настройки единого входа на этом сервере Mailr."
+  },
+  "web:settings.adminSpeakr.removed": {
+   "sha": "3df8b901377c8070",
+   "state": "model",
+   "text": "Адрес Speakr удалён."
+  },
+  "web:settings.adminSpeakr.saved": {
+   "sha": "2d84f1850c612ff6",
+   "state": "model",
+   "text": "Адрес Speakr сохранён."
+  },
+  "web:settings.adminSpeakr.title": {
+   "sha": "fe004bd4613d8b24",
+   "state": "model",
+   "text": "Сервер Speakr"
+  },
   "web:settings.adminTab.aModelServerOnYour": {
    "sha": "210f18809a325967",
    "state": "model",
@@ -56186,6 +56591,11 @@
    "state": "model",
    "text": "Установка приложения"
   },
+  "web:settings.groups.integrations": {
+   "sha": "e63f8e07d5131765",
+   "state": "model",
+   "text": "Интеграции"
+  },
   "web:settings.groups.invitationsAndRepeatingTasks": {
    "sha": "783e1d34305ddd1e",
    "state": "model",
@@ -56435,6 +56845,11 @@
    "sha": "8469d73dfacaed69",
    "state": "same",
    "text": "Speakr"
+  },
+  "web:settings.groups.speakrForEveryone": {
+   "sha": "fe004bd4613d8b24",
+   "state": "model",
+   "text": "Сервер Speakr"
   },
   "web:settings.groups.standingOrdersRoutines": {
    "sha": "48f96352d5053360",
@@ -60782,6 +61197,26 @@
    "state": "model",
    "text": "Токен API"
   },
+  "web:settings.speakrSection.auto.declined": {
+   "sha": "5b211786d9826b9d",
+   "state": "model",
+   "text": "{{url}} не подключается при входе, так как вы удалили его. Используйте «Добавить Speakr», чтобы подключить его снова."
+  },
+  "web:settings.speakrSection.auto.failed": {
+   "sha": "a2f885208ca3d732",
+   "state": "model",
+   "text": "Не удалось подключить {{url}} при входе. {{reason}} Повторная попытка будет сделана при следующем входе."
+  },
+  "web:settings.speakrSection.auto.gotIt": {
+   "sha": "481e29fbd9ffbe69",
+   "state": "model",
+   "text": "Понятно"
+  },
+  "web:settings.speakrSection.auto.notice": {
+   "sha": "83fcc1e6dd31309b",
+   "state": "model",
+   "text": "Ваши записи в Speakr по адресу {{url}} были подключены при входе. Чтобы отключить это, удалите учётную запись ниже."
+  },
   "web:settings.speakrSection.connectSpeakr": {
    "sha": "cf83f3ad9efe87cd",
    "state": "model",
@@ -61031,6 +61466,111 @@
    "sha": "b645b9682ba021fc",
    "state": "model",
    "text": "Работа Speakr возобновлена."
+  },
+  "web:settings.speakrSection.sso.alreadyConnected": {
+   "sha": "71ba380510fe1636",
+   "state": "model",
+   "text": "Этот сервер Speakr уже подключен."
+  },
+  "web:settings.speakrSection.sso.connectWith": {
+   "sha": "cc2d430eb896bd39",
+   "state": "model",
+   "text": "Подключиться через {{name}}"
+  },
+  "web:settings.speakrSection.sso.connected": {
+   "sha": "17c4f041bdad2318",
+   "state": "model",
+   "text": "Speakr подключен. Записи появятся после первой синхронизации."
+  },
+  "web:settings.speakrSection.sso.expired": {
+   "sha": "7763203e805e73e9",
+   "state": "model",
+   "text": "Срок действия запроса на подключение истек. Начните заново."
+  },
+  "web:settings.speakrSection.sso.failed": {
+   "sha": "e13f5060bb8260fd",
+   "state": "model",
+   "text": "Не удалось подключиться к Speakr с помощью единого входа. Вставьте API-токен вместо этого."
+  },
+  "web:settings.speakrSection.sso.help": {
+   "sha": "1715bb58a73f9e42",
+   "state": "model",
+   "text": "После входа в систему в Speakr будет создан токен для Mailr. Перед использованием этой функции хотя бы раз войдите в Speakr с помощью единого входа."
+  },
+  "web:settings.speakrSection.sso.limit": {
+   "sha": "3b863447cdb3e6c8",
+   "state": "model",
+   "text": "В вашем аккаунте Speakr достигнут максимальный лимит API-токенов. Отозовите один токен в Speakr в разделе «Настройки аккаунта» → «API-токены», затем повторите попытку."
+  },
+  "web:settings.speakrSection.sso.linkRequired": {
+   "sha": "44749470e53832f3",
+   "state": "model",
+   "text": "Учётная запись Speakr с вашим адресом электронной почты уже существует. Войдите в Speakr один раз через единый вход, чтобы связать их, а затем повторите попытку."
+  },
+  "web:settings.speakrSection.sso.notAllowed": {
+   "sha": "b62552c2b1632b06",
+   "state": "model",
+   "text": "Mailr не может получать токены с этого сервера Speakr. Администратор Speakr может добавить идентификатор клиента Mailr в список клиентов, которым разрешен обмен токенами."
+  },
+  "web:settings.speakrSection.sso.notSupported": {
+   "sha": "6101518e2b779e20",
+   "state": "model",
+   "text": "Эта версия Speakr не поддерживает единый вход. Вставьте API-токен вместо этого."
+  },
+  "web:settings.speakrSection.sso.orPaste": {
+   "sha": "87719178e56cb942",
+   "state": "model",
+   "text": "Или вставьте API-токен из Speakr:"
+  },
+  "web:settings.speakrSection.sso.rateLimited": {
+   "sha": "cb102427e556c17e",
+   "state": "model",
+   "text": "Слишком много попыток. Повторите попытку через час."
+  },
+  "web:settings.speakrSection.sso.refused": {
+   "sha": "bb5f6fbd4c66e50f",
+   "state": "model",
+   "text": "Вход не был принят сервером Speakr. Возможно, на этом сервере отключены токены единого входа, или вы еще не входили в Speakr с помощью единого входа. Войдите в Speakr один раз или вставьте API-токен."
+  },
+  "web:settings.speakrSection.sso.refusedByPolicy": {
+   "sha": "94f02c0e7bceb335",
+   "state": "model",
+   "text": "Правила регистрации на этом сервере Speakr не допускают эту учётную запись (домен электронной почты или непроверенный адрес). Обратитесь к администратору или вставьте токен."
+  },
+  "web:settings.speakrSection.sso.registrationClosed": {
+   "sha": "d4357baa61531a43",
+   "state": "model",
+   "text": "У вас ещё нет учётной записи Speakr. Войдите в Speakr через единый вход (SSO) один раз, а затем повторите попытку."
+  },
+  "web:settings.speakrSection.sso.renewed": {
+   "sha": "ad1ad5a4a67cdbc4",
+   "state": "model",
+   "text": "Новый токен Speakr сохранен, а старый отозван в Speakr."
+  },
+  "web:settings.speakrSection.sso.renewedOldKept": {
+   "sha": "25b125c0f20d229b",
+   "state": "model",
+   "text": "Новый токен Speakr сохранен. Старый токен не удалось отозвать из Mailr; отзовите его в Speakr в разделе «Настройки аккаунта» → «API-токены»."
+  },
+  "web:settings.speakrSection.sso.scopes": {
+   "sha": "4268b77e9ac50a74",
+   "state": "model",
+   "text": "Доступ, предоставляемый этим сервером Speakr, слишком ограничен для Mailr: требуется доступ на чтение."
+  },
+  "web:settings.speakrSection.sso.singleSignOn": {
+   "sha": "16ee9912e594454a",
+   "state": "model",
+   "text": "единый вход"
+  },
+  "web:settings.speakrSection.sso.unreachable": {
+   "sha": "031f319f3b199188",
+   "state": "model",
+   "text": "Не удалось связаться с сервером Speakr. Проверьте адрес и повторите попытку."
+  },
+  "web:settings.speakrSection.sso.wrongAccount": {
+   "sha": "06a8a39366363e6e",
+   "state": "model",
+   "text": "Вы вошли под другим именем. Войдите в аккаунт, который вы используете для Mailr."
   },
   "web:settings.speakrSection.syncStarted": {
    "sha": "fc739b6d5326f209",

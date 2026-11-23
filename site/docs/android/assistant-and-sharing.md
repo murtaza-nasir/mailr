@@ -68,9 +68,9 @@ A person's card shows what is known about them: their address, title, organisati
 
 On a phone the card slides up from the bottom. On an unfolded Fold or a tablet, it is shown beside the list on the Memory page. A topic has no card on the phone: edit its memories on the page, and its name, other names and domains on the web.
 
-Under an answer, the memories used for it are listed under **Used memories**. The line is still there when you reopen a chat after Android closed the app.
+Under an answer, the memories used for it are listed under **Used memories**. The line is still there when you reopen a chat after Android closed the app. When a message of yours states something lasting, a few seconds after the reply Ambrose asks under it, **Remember: "…"?**, with **Yes** and **No**. While suggestions wait, the top bar of the Ambrose tab says how many (**3 to review**); tap it to open the Memory page. From Monday morning a review card at the top of the chat lists the people and topics they are about, each with a count; tap one to see its suggestions, with **Keep**, **Merge**, **Dismiss**, **Create task** for a commitment, and **Keep all** and **Dismiss all** per topic; **To review** on the Memory page is grouped the same way, and **Tidy** there looks for memories to merge or retire; **×** hides it until next Monday. A merged memory shows **Merged from 2 notes**; tap it to see the earlier words.
 
-<!-- covers: memory.learning_status memory.learn_now memory.accept_suggestion memory.dismiss_suggestion memory.add memory.make_task memory.open_chat person.card person.memories memory.used -->
+<!-- covers: memory.learning_status memory.learn_now memory.accept_suggestion memory.dismiss_suggestion memory.add memory.make_task memory.open_chat person.card person.memories memory.used memory.chat_ask memory.review_count memory.dismiss_review_card memory.merge memory.tidy -->
 
 ![A person's card on Android, with Ambrose's memory](../assets/shots/android-person-card.png)
 

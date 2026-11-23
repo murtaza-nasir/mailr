@@ -245,7 +245,7 @@ async def test_discarding_a_review_card_resumes_the_chat_without_an_error(client
         n = len(fake_llm.requests)
         again = _events((await client.post("/api/v1/agent/chat", json={"session_id": "rv-discard",
                                                                         "resume_approval_id": r.approval_id})).text)
-        assert len(fake_llm.requests) == n and [e["type"] for e in again] == ["error"]
+        assert len(fake_llm.requests) == n and [(e["type"], e.get("already")) for e in again] == [("done", True)]
     finally:
         await _drop_endpoint(ep)
 

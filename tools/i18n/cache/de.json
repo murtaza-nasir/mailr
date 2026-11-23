@@ -1660,6 +1660,36 @@
    "state": "model",
    "text": "Aufnahme %1$d: %2$s um %3$s"
   },
+  "android:app:asst_remember_dropped": {
+   "sha": "01312c7b24091d9b",
+   "state": "model",
+   "text": "Nicht gemerkt: „%1$s“"
+  },
+  "android:app:asst_remember_kept": {
+   "sha": "787d96df8cc37502",
+   "state": "model",
+   "text": "Gemerkt: „%1$s“"
+  },
+  "android:app:asst_remember_merged": {
+   "sha": "2dd79d2093d66c48",
+   "state": "model",
+   "text": "Zu einer anderen Erinnerung hinzugefügt: „%1$s“"
+  },
+  "android:app:asst_remember_no": {
+   "sha": "b2cbc4e2e5545a6c",
+   "state": "model",
+   "text": "Nein"
+  },
+  "android:app:asst_remember_question": {
+   "sha": "c9a7f2441fa65e80",
+   "state": "model",
+   "text": "Merken: „%1$s“?"
+  },
+  "android:app:asst_remember_yes": {
+   "sha": "184fda5c980b9d9c",
+   "state": "model",
+   "text": "Ja"
+  },
   "android:app:asst_remove_context": {
    "sha": "1143ef89b6200b7f",
    "state": "model",
@@ -9645,6 +9675,11 @@
    "state": "model",
    "text": "Lernen aus E-Mails ist deaktiviert."
   },
+  "android:app:memory_learning_paused": {
+   "sha": "af577e915e44c401",
+   "state": "model",
+   "text": "Geprüft: %1$s. 15 Vorschläge warten auf Überprüfung, daher wurde nichts Neues hinzugefügt. Überprüfe sie, um das Lernen fortzusetzen."
+  },
   "android:app:memory_load_failed": {
    "sha": "cd54f3d93c64af74",
    "state": "model",
@@ -9664,6 +9699,14 @@
    "sha": "d00c49eed3605188",
    "state": "model",
    "text": "Aufgabe erstellen"
+  },
+  "android:app:memory_merged_from": {
+   "sha": "d498acfc6d224e0a",
+   "state": "model",
+   "text": {
+    "one": "Zusammengeführt aus %d Notiz",
+    "other": "Zusammengeführt aus %d Notizen"
+   }
   },
   "android:app:memory_more_options": {
    "sha": "2871130cbb008ebd",
@@ -9765,6 +9808,85 @@
    "state": "model",
    "text": "Erneut versuchen"
   },
+  "android:app:memory_review_count": {
+   "sha": "ec2b841903452339",
+   "state": "model",
+   "text": {
+    "one": "%d zu überprüfen",
+    "other": "%d zu überprüfen"
+   }
+  },
+  "android:app:memory_review_drop": {
+   "sha": "32da68e3c0b5c740",
+   "state": "model",
+   "text": "Verwerfen"
+  },
+  "android:app:memory_review_drop_all": {
+   "sha": "f0fc0a2f5975025e",
+   "state": "model",
+   "text": "Alle verwerfen"
+  },
+  "android:app:memory_review_keep_note": {
+   "sha": "545a6f27acf448a6",
+   "state": "model",
+   "text": "Notiz behalten"
+  },
+  "android:app:memory_review_merge": {
+   "sha": "98e1f248dc311c7d",
+   "state": "model",
+   "text": "Zusammenführen"
+  },
+  "android:app:memory_review_merged": {
+   "sha": "163c6d36423853d9",
+   "state": "model",
+   "text": "Zusammengeführt."
+  },
+  "android:app:memory_review_merges": {
+   "sha": "be6885e4c90843e3",
+   "state": "model",
+   "text": {
+    "one": "Das Behalten ersetzt %d gespeicherte Erinnerung:",
+    "other": "Das Behalten ersetzt %d gespeicherte Erinnerungen:"
+   }
+  },
+  "android:app:memory_review_not_now": {
+   "sha": "827476f68808e2c9",
+   "state": "model",
+   "text": "Nicht jetzt (bis nächste Woche)"
+  },
+  "android:app:memory_review_open_all": {
+   "sha": "17ea4edc874a43d4",
+   "state": "model",
+   "text": "Auf der Gedächtnis-Seite überprüfen"
+  },
+  "android:app:memory_review_other": {
+   "sha": "1f1260ddd48575a9",
+   "state": "model",
+   "text": "Andere"
+  },
+  "android:app:memory_review_retire": {
+   "sha": "312274950a5f0335",
+   "state": "model",
+   "text": "Verwerfen"
+  },
+  "android:app:memory_review_retires": {
+   "sha": "93d3ff586713bb3e",
+   "state": "model",
+   "text": "Ambrose schlägt vor, diese gespeicherte Erinnerung nicht mehr zu verwenden."
+  },
+  "android:app:memory_review_retires_why": {
+   "sha": "cb2a86ccf40c2e31",
+   "state": "model",
+   "text": "Ambrose schlägt vor, diese gespeicherte Erinnerung nicht mehr zu verwenden: %1$s"
+  },
+  "android:app:memory_review_title": {
+   "sha": "96d87dc86b2901d2",
+   "state": "model",
+   "text": {
+    "one": "%d Gedächtnis zu überprüfen",
+    "other": "%d Gedächtnisse zu überprüfen"
+   }
+  },
   "android:app:memory_save": {
    "sha": "c1db83d165ed908a",
    "state": "model",
@@ -9830,6 +9952,16 @@
    "state": "model",
    "text": "z. B. Sam bevorzugt thailändisches Essen und hasst frühes Abendessen."
   },
+  "android:app:memory_tidy": {
+   "sha": "e29edec3e61b4096",
+   "state": "model",
+   "text": "Aufräumen"
+  },
+  "android:app:memory_tidy_queued": {
+   "sha": "f93dd31e7ba40779",
+   "state": "model",
+   "text": "Aufräumen gestartet. Alles, was zusammengeführt oder verworfen werden kann, wird unter „Zu überprüfen“ angezeigt."
+  },
   "android:app:memory_title": {
    "sha": "ecbeaaaec5fafe42",
    "state": "model",
@@ -9864,6 +9996,11 @@
    "sha": "129352d156d83e94",
    "state": "model",
    "text": "Bis %1$s"
+  },
+  "android:app:memory_updates_saved": {
+   "sha": "6e2612306bead0bd",
+   "state": "model",
+   "text": "Wenn du das beibehältst, wird deine gespeicherte Notiz geändert: „%1$s“"
   },
   "android:app:memory_will_remember": {
    "sha": "a9a93009cb78602b",
@@ -23083,6 +23220,16 @@
    "state": "model",
    "text": "Gib zuerst die öffentliche Adresse ein."
   },
+  "server:errors.admin.speakr_address": {
+   "sha": "1068a26ce27c3e93",
+   "state": "model",
+   "text": "Die Speakr-Adresse muss mit https:// beginnen (oder http:// in einem privaten Netzwerk)."
+  },
+  "server:errors.admin.speakr_needs_sso": {
+   "sha": "85776e8bba064c81",
+   "state": "model",
+   "text": "Das Verbinden bei der Anmeldung erfordert Single Sign-On auf diesem Mailr-Server."
+  },
   "server:errors.admin.user_not_found": {
    "sha": "f0650a56e62fffd9",
    "state": "model",
@@ -24175,6 +24322,16 @@
    "sha": "439774f47dd30357",
    "state": "model",
    "text": "Entität nicht gefunden"
+  },
+  "server:errors.knowledge.merge_into_itself": {
+   "sha": "0b07dbb6bbd37cca",
+   "state": "model",
+   "text": "Ein Gedächtnis kann nicht in sich selbst zusammengeführt werden"
+  },
+  "server:errors.knowledge.merge_saved_into_suggestion": {
+   "sha": "ace34b65170bd84c",
+   "state": "model",
+   "text": "Ein gespeichertes Gedächtnis kann nur mit einem anderen gespeicherten Gedächtnis zusammengeführt werden"
   },
   "server:errors.knowledge.only_builtin_reset": {
    "sha": "f339e47e7dc56109",
@@ -39462,6 +39619,36 @@
    "state": "model",
    "text": "deine Abonnements"
   },
+  "web:memory.ask.dropped": {
+   "sha": "2de035192d964b64",
+   "state": "model",
+   "text": "Nicht gemerkt: „{{text}}“"
+  },
+  "web:memory.ask.kept": {
+   "sha": "ce1c39f4c006c221",
+   "state": "model",
+   "text": "Gemerkt: „{{text}}“"
+  },
+  "web:memory.ask.merged": {
+   "sha": "64f95c257709aeb7",
+   "state": "model",
+   "text": "Zu einer anderen Erinnerung hinzugefügt: „{{text}}“"
+  },
+  "web:memory.ask.no": {
+   "sha": "b2cbc4e2e5545a6c",
+   "state": "model",
+   "text": "Nein"
+  },
+  "web:memory.ask.question": {
+   "sha": "ae0bb3eab550643b",
+   "state": "model",
+   "text": "Merken: „{{text}}“?"
+  },
+  "web:memory.ask.yes": {
+   "sha": "184fda5c980b9d9c",
+   "state": "model",
+   "text": "Ja"
+  },
   "web:memory.dialog.kindExample": {
    "sha": "d9392cd2452575a1",
    "state": "model",
@@ -39583,10 +39770,23 @@
    "state": "model",
    "text": "Lernen aus E-Mails ist deaktiviert."
   },
+  "web:memory.page.learningPaused": {
+   "sha": "32d4ddd03ad9bc20",
+   "state": "model",
+   "text": "Zuletzt geprüft {{when}}. 15 Vorschläge warten auf Überprüfung, daher wurden keine neuen hinzugefügt. Überprüfe sie, um das Lernen fortzusetzen."
+  },
   "web:memory.page.makeTask": {
    "sha": "d00c49eed3605188",
    "state": "model",
    "text": "Aufgabe erstellen"
+  },
+  "web:memory.page.mergedFrom": {
+   "sha": "8697699e6c8b053c",
+   "state": "model",
+   "text": {
+    "one": "Zusammengeführt aus {{count}} Notiz",
+    "other": "Zusammengeführt aus {{count}} Notizen"
+   }
   },
   "web:memory.page.neverLearned": {
    "sha": "09c86cfc8b3ef3a0",
@@ -39608,6 +39808,21 @@
    "state": "model",
    "text": "Aufgabe hinzugefügt."
   },
+  "web:memory.page.tidy": {
+   "sha": "e29edec3e61b4096",
+   "state": "model",
+   "text": "Aufräumen"
+  },
+  "web:memory.page.tidyQueued": {
+   "sha": "f93dd31e7ba40779",
+   "state": "model",
+   "text": "Aufräumen gestartet. Inhalte zum Zusammenführen oder Entfernen werden unter \"Zu prüfen\" angezeigt."
+  },
+  "web:memory.page.tidyTip": {
+   "sha": "efec985045c2f087",
+   "state": "model",
+   "text": "Nach Gedächtnisinhalten suchen, die zusammengeführt oder entfernt werden können. Vorschläge werden unter \"Zu prüfen\" angezeigt."
+  },
   "web:memory.page.toReview": {
    "sha": "9d3eec955fa9bcc7",
    "state": "model",
@@ -39622,6 +39837,100 @@
    "sha": "92fbe22362dcd5f8",
    "state": "model",
    "text": "Themen"
+  },
+  "web:memory.page.updatesSaved": {
+   "sha": "53d5c4947785e432",
+   "state": "manual",
+   "text": "Wenn du das behältst, wird deine gespeicherte Notiz geändert: „{{text}}“"
+  },
+  "web:memory.review.count": {
+   "sha": "ff3bbeb9b851e8f9",
+   "state": "model",
+   "text": {
+    "one": "{{count}} zu überprüfen",
+    "other": "{{count}} zu überprüfen"
+   }
+  },
+  "web:memory.review.drop": {
+   "sha": "32da68e3c0b5c740",
+   "state": "model",
+   "text": "Verwerfen"
+  },
+  "web:memory.review.dropAll": {
+   "sha": "f0fc0a2f5975025e",
+   "state": "model",
+   "text": "Alle verwerfen"
+  },
+  "web:memory.review.keepNote": {
+   "sha": "545a6f27acf448a6",
+   "state": "model",
+   "text": "Notiz behalten"
+  },
+  "web:memory.review.merge": {
+   "sha": "98e1f248dc311c7d",
+   "state": "model",
+   "text": "Zusammenführen"
+  },
+  "web:memory.review.mergeInto": {
+   "sha": "e29d4b1796c12bed",
+   "state": "model",
+   "text": "Zusammenführen mit…"
+  },
+  "web:memory.review.merged": {
+   "sha": "163c6d36423853d9",
+   "state": "model",
+   "text": "Zusammengeführt."
+  },
+  "web:memory.review.mergesNotes": {
+   "sha": "77ca2a503e4c67d2",
+   "state": "model",
+   "text": {
+    "one": "Das Behalten ersetzt {{count}} gespeicherten Gedächtnisinhalt:",
+    "other": "Das Behalten ersetzt {{count}} gespeicherte Gedächtnisinhalte:"
+   }
+  },
+  "web:memory.review.notNow": {
+   "sha": "827476f68808e2c9",
+   "state": "model",
+   "text": "Nicht jetzt (bis nächste Woche)"
+  },
+  "web:memory.review.openAll": {
+   "sha": "17ea4edc874a43d4",
+   "state": "model",
+   "text": "Auf der Gedächtnis-Seite überprüfen"
+  },
+  "web:memory.review.openMemory": {
+   "sha": "c81e79b90b04e687",
+   "state": "model",
+   "text": "Erinnerungen zum Überprüfen öffnen"
+  },
+  "web:memory.review.otherTopic": {
+   "sha": "1f1260ddd48575a9",
+   "state": "model",
+   "text": "Andere"
+  },
+  "web:memory.review.retire": {
+   "sha": "312274950a5f0335",
+   "state": "model",
+   "text": "Entfernen"
+  },
+  "web:memory.review.retires": {
+   "sha": "93d3ff586713bb3e",
+   "state": "model",
+   "text": "Ambrose schlägt vor, diesen gespeicherten Gedächtnisinhalt nicht mehr zu verwenden."
+  },
+  "web:memory.review.retiresWhy": {
+   "sha": "4240432316745f2a",
+   "state": "model",
+   "text": "Ambrose schlägt vor, diesen gespeicherten Gedächtnisinhalt nicht mehr zu verwenden: {{reason}}"
+  },
+  "web:memory.review.title": {
+   "sha": "a49114c0f1d9747e",
+   "state": "model",
+   "text": {
+    "one": "{{count}} Erinnerung zum Überprüfen",
+    "other": "{{count}} Erinnerungen zum Überprüfen"
+   }
   },
   "web:memory.settings.learnFromChats": {
    "sha": "c4ee91a10dcb9eec",
@@ -49037,6 +49346,86 @@
    "state": "model",
    "text": "Dein Name in gesendeten E-Mails"
   },
+  "web:settings.adminSpeakr.address": {
+   "sha": "ba32049417a26f72",
+   "state": "model",
+   "text": "Speakr-Adresse"
+  },
+  "web:settings.adminSpeakr.autoConnect": {
+   "sha": "feaac28ec4f5f647",
+   "state": "model",
+   "text": "Speakr bei Anmeldung verbinden"
+  },
+  "web:settings.adminSpeakr.autoConnectDesc": {
+   "sha": "4095234b10d5ee92",
+   "state": "model",
+   "text": "Personen, die sich mit Single Sign-On bei Mailr anmelden, werden mit Speakr verbunden und sehen einen Hinweis. Wer die Verbindung entfernt, wird nicht erneut verbunden. Beide Server müssen denselben Identitätsanbieter verwenden, und der Mailr-Client muss in Speakr zugelassen sein."
+  },
+  "web:settings.adminSpeakr.check": {
+   "sha": "25b62665d5983328",
+   "state": "model",
+   "text": "Prüfen"
+  },
+  "web:settings.adminSpeakr.checkClientNotAllowed": {
+   "sha": "ce77413a423f0a0b",
+   "state": "model",
+   "text": "Der Mailr-Client ist nicht auf der Liste der zulässigen Exchange-Clients von Speakr."
+  },
+  "web:settings.adminSpeakr.checkExchangeOff": {
+   "sha": "031e1df343718370",
+   "state": "model",
+   "text": "Single-Sign-On-Tokens sind in Speakr deaktiviert."
+  },
+  "web:settings.adminSpeakr.checkNoProvisioning": {
+   "sha": "fe637855e0b18d07",
+   "state": "model",
+   "text": "Bereit. Personen ohne Speakr-Konto melden sich einmal über Single Sign-On bei Speakr an; danach werden sie bei ihrer nächsten Anmeldung bei Mailr verbunden."
+  },
+  "web:settings.adminSpeakr.checkOld": {
+   "sha": "4cba5340c9f4e665",
+   "state": "model",
+   "text": "Diese Speakr-Version kann sich nicht mit Single Sign-On verbinden. Personen können weiterhin ein Token einfügen."
+  },
+  "web:settings.adminSpeakr.checkReady": {
+   "sha": "554e41a40df550a2",
+   "state": "model",
+   "text": "Bereit. Personen, die sich noch nie mit Single Sign-On bei Speakr angemeldet haben, müssen dies einmal tun. Danach werden sie bei der nächsten Anmeldung bei Mailr verbunden."
+  },
+  "web:settings.adminSpeakr.checkUnreachable": {
+   "sha": "c8c1ded6c657ec43",
+   "state": "model",
+   "text": "Speakr konnte nicht erreicht werden: {{detail}}"
+  },
+  "web:settings.adminSpeakr.desc": {
+   "sha": "33987e64022daa8d",
+   "state": "model",
+   "text": "Die Speakr-Adresse für alle auf diesem Mailr-Server. Sie wird ausgefüllt, wenn jemand Speakr hinzufügt."
+  },
+  "web:settings.adminSpeakr.localDesc": {
+   "sha": "e963234dee7aa79a",
+   "state": "model",
+   "text": "Dies ist die Standardeinstellung für Konten, die bei der Anmeldung verbunden werden. Jede Person kann die Einstellung später ändern."
+  },
+  "web:settings.adminSpeakr.noSso": {
+   "sha": "85776e8bba064c81",
+   "state": "model",
+   "text": "Das Verbinden bei der Anmeldung erfordert Single Sign-On auf diesem Mailr-Server."
+  },
+  "web:settings.adminSpeakr.removed": {
+   "sha": "3df8b901377c8070",
+   "state": "model",
+   "text": "Speakr-Adresse entfernt."
+  },
+  "web:settings.adminSpeakr.saved": {
+   "sha": "2d84f1850c612ff6",
+   "state": "model",
+   "text": "Speakr-Adresse gespeichert."
+  },
+  "web:settings.adminSpeakr.title": {
+   "sha": "fe004bd4613d8b24",
+   "state": "model",
+   "text": "Speakr-Server"
+  },
   "web:settings.adminTab.aModelServerOnYour": {
    "sha": "210f18809a325967",
    "state": "model",
@@ -54947,6 +55336,11 @@
    "state": "model",
    "text": "App-Installation"
   },
+  "web:settings.groups.integrations": {
+   "sha": "e63f8e07d5131765",
+   "state": "model",
+   "text": "Integrationen"
+  },
   "web:settings.groups.invitationsAndRepeatingTasks": {
    "sha": "783e1d34305ddd1e",
    "state": "model",
@@ -55196,6 +55590,11 @@
    "sha": "8469d73dfacaed69",
    "state": "same",
    "text": "Speakr"
+  },
+  "web:settings.groups.speakrForEveryone": {
+   "sha": "fe004bd4613d8b24",
+   "state": "model",
+   "text": "Speakr-Server"
   },
   "web:settings.groups.standingOrdersRoutines": {
    "sha": "48f96352d5053360",
@@ -59484,6 +59883,26 @@
    "state": "model",
    "text": "API-Token"
   },
+  "web:settings.speakrSection.auto.declined": {
+   "sha": "5b211786d9826b9d",
+   "state": "model",
+   "text": "{{url}} wird bei der Anmeldung nicht verbunden, da du es entfernt hast. Verwende „Speakr hinzufügen“, um es erneut zu verbinden."
+  },
+  "web:settings.speakrSection.auto.failed": {
+   "sha": "a2f885208ca3d732",
+   "state": "model",
+   "text": "Das Verbinden von {{url}} bei der Anmeldung hat nicht funktioniert. {{reason}} Bei einer späteren Anmeldung wird erneut versucht."
+  },
+  "web:settings.speakrSection.auto.gotIt": {
+   "sha": "481e29fbd9ffbe69",
+   "state": "model",
+   "text": "Verstanden"
+  },
+  "web:settings.speakrSection.auto.notice": {
+   "sha": "83fcc1e6dd31309b",
+   "state": "model",
+   "text": "Deine Aufnahmen in Speakr unter {{url}} wurden bei der Anmeldung verbunden. Um dies zu beenden, entferne unten das Konto."
+  },
   "web:settings.speakrSection.connectSpeakr": {
    "sha": "cf83f3ad9efe87cd",
    "state": "model",
@@ -59733,6 +60152,111 @@
    "sha": "b645b9682ba021fc",
    "state": "model",
    "text": "Speakr fortgesetzt."
+  },
+  "web:settings.speakrSection.sso.alreadyConnected": {
+   "sha": "71ba380510fe1636",
+   "state": "model",
+   "text": "Dieser Speakr-Server ist bereits verbunden."
+  },
+  "web:settings.speakrSection.sso.connectWith": {
+   "sha": "cc2d430eb896bd39",
+   "state": "model",
+   "text": "Mit {{name}} verbinden"
+  },
+  "web:settings.speakrSection.sso.connected": {
+   "sha": "17c4f041bdad2318",
+   "state": "model",
+   "text": "Speakr ist verbunden. Aufnahmen erscheinen nach der ersten Synchronisierung."
+  },
+  "web:settings.speakrSection.sso.expired": {
+   "sha": "7763203e805e73e9",
+   "state": "model",
+   "text": "Die Verbindungsanfrage ist abgelaufen. Beginne erneut."
+  },
+  "web:settings.speakrSection.sso.failed": {
+   "sha": "e13f5060bb8260fd",
+   "state": "model",
+   "text": "Speakr konnte nicht über Single Sign-On verbunden werden. Füge stattdessen einen API-Token ein."
+  },
+  "web:settings.speakrSection.sso.help": {
+   "sha": "1715bb58a73f9e42",
+   "state": "model",
+   "text": "Nach der Anmeldung wird in Speakr ein Token für Mailr erstellt. Melde dich mindestens einmal über Single Sign-On bei Speakr an, bevor du dies nutzt."
+  },
+  "web:settings.speakrSection.sso.limit": {
+   "sha": "3b863447cdb3e6c8",
+   "state": "model",
+   "text": "Dein Speakr-Konto hat die maximal zulässige Anzahl an API-Tokens. Widerrufe einen in Speakr unter Kontoeinstellungen → API-Tokens und versuche es erneut."
+  },
+  "web:settings.speakrSection.sso.linkRequired": {
+   "sha": "44749470e53832f3",
+   "state": "model",
+   "text": "Ein Speakr-Konto mit deiner E-Mail-Adresse existiert bereits. Melde dich einmal über Single Sign-On bei Speakr an, um es zu verknüpfen, und versuche es dann erneut."
+  },
+  "web:settings.speakrSection.sso.notAllowed": {
+   "sha": "b62552c2b1632b06",
+   "state": "model",
+   "text": "Mailr darf keine Tokens von diesem Speakr-Server beziehen. Ein Speakr-Administrator kann die Client-ID von Mailr zu den Clients hinzufügen, die Tokens austauschen dürfen."
+  },
+  "web:settings.speakrSection.sso.notSupported": {
+   "sha": "6101518e2b779e20",
+   "state": "model",
+   "text": "Diese Speakr-Version unterstützt keine Verbindung über Single Sign-On. Füge stattdessen einen API-Token ein."
+  },
+  "web:settings.speakrSection.sso.orPaste": {
+   "sha": "87719178e56cb942",
+   "state": "model",
+   "text": "Oder füge einen API-Token aus Speakr ein:"
+  },
+  "web:settings.speakrSection.sso.rateLimited": {
+   "sha": "cb102427e556c17e",
+   "state": "model",
+   "text": "Zu viele Versuche. Versuche es in einer Stunde erneut."
+  },
+  "web:settings.speakrSection.sso.refused": {
+   "sha": "bb5f6fbd4c66e50f",
+   "state": "model",
+   "text": "Die Anmeldung wurde von Speakr nicht akzeptiert. Entweder sind Single-Sign-On-Tokens auf diesem Server deaktiviert oder du hast dich noch nicht über Single Sign-On bei Speakr angemeldet. Melde dich einmal bei Speakr an oder füge einen API-Token ein."
+  },
+  "web:settings.speakrSection.sso.refusedByPolicy": {
+   "sha": "94f02c0e7bceb335",
+   "state": "model",
+   "text": "Die Anmelderegeln dieses Speakr-Servers erlauben dieses Konto nicht (E-Mail-Domain oder nicht verifizierte E-Mail-Adresse). Frage den Administrator oder füge ein Token ein."
+  },
+  "web:settings.speakrSection.sso.registrationClosed": {
+   "sha": "d4357baa61531a43",
+   "state": "model",
+   "text": "Du hast noch kein Speakr-Konto. Melde dich einmal über Single Sign-On bei Speakr an und versuche es erneut."
+  },
+  "web:settings.speakrSection.sso.renewed": {
+   "sha": "ad1ad5a4a67cdbc4",
+   "state": "model",
+   "text": "Ein neuer Speakr-Token wurde gespeichert und der alte in Speakr widerrufen."
+  },
+  "web:settings.speakrSection.sso.renewedOldKept": {
+   "sha": "25b125c0f20d229b",
+   "state": "model",
+   "text": "Ein neuer Speakr-Token wurde gespeichert. Der alte Token konnte nicht von Mailr widerrufen werden; widerrufe ihn in Speakr unter Kontoeinstellungen → API-Tokens."
+  },
+  "web:settings.speakrSection.sso.scopes": {
+   "sha": "4268b77e9ac50a74",
+   "state": "model",
+   "text": "Der Zugriff, den dieser Speakr-Server bietet, ist für Mailr zu eingeschränkt: Lesezugriff ist erforderlich."
+  },
+  "web:settings.speakrSection.sso.singleSignOn": {
+   "sha": "16ee9912e594454a",
+   "state": "model",
+   "text": "Single Sign-On"
+  },
+  "web:settings.speakrSection.sso.unreachable": {
+   "sha": "031f319f3b199188",
+   "state": "model",
+   "text": "Speakr konnte nicht erreicht werden. Überprüfe die Adresse und versuche es erneut."
+  },
+  "web:settings.speakrSection.sso.wrongAccount": {
+   "sha": "06a8a39366363e6e",
+   "state": "model",
+   "text": "Du hast dich als jemand anderes angemeldet. Melde dich mit dem Konto an, das du für Mailr nutzt."
   },
   "web:settings.speakrSection.syncStarted": {
    "sha": "fc739b6d5326f209",

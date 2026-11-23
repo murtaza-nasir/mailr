@@ -91,6 +91,12 @@
     <string name="asst_step_denied">отклонено</string>
     <string name="asst_step_expired">истекло</string>
     <string name="asst_step_failed">ошибка</string>
+    <string name="asst_remember_question">Запомнить: «%1$s»?</string>
+    <string name="asst_remember_yes">Да</string>
+    <string name="asst_remember_no">Нет</string>
+    <string name="asst_remember_kept">Запомнено: «%1$s»</string>
+    <string name="asst_remember_dropped">Не запомнено: «%1$s»</string>
+    <string name="asst_remember_merged">Добавлено в другую память: «%1$s»</string>
     <plurals name="asst_used_memories">
         <item quantity="one">Использована память · %d</item>
         <item quantity="few">Использовано памяти · %d</item>

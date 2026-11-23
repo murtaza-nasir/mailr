@@ -20,6 +20,8 @@ import io.github.murtazanasir.mailr.data.api.ApprovalPreview
 import io.github.murtazanasir.mailr.data.api.Citation
 import io.github.murtazanasir.mailr.data.api.ComposePayload
 import io.github.murtazanasir.mailr.data.api.userMessage
+import io.github.murtazanasir.mailr.data.api.acceptMemory
+import io.github.murtazanasir.mailr.data.api.rejectMemory
 import io.github.murtazanasir.mailr.data.api.addNoteLink
 import io.github.murtazanasir.mailr.data.api.createTextNote
 import io.github.murtazanasir.mailr.data.voice.DictationOrder
@@ -51,6 +53,8 @@ data class ChatTurn(
     val approvals: List<Approval> = emptyList(),
     /** The notes that went into the prompt (the "Used memories" line). */
     val memoryIds: List<Long> = emptyList(),
+    /** "Remember …?" under the reply: suggestions from the message before it, with the answer. */
+    val remember: List<RememberItem> = emptyList(),
     val error: String? = null,
     /** A reply the app wrote itself for a slash command (/copy with nothing to copy, …): not an answer. */
     val notice: Boolean = false,
@@ -686,6 +690,16 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
      */
     fun applyReview(a: Approval, changes: Map<Long, String>) = decide(a, true, "once", changes)
 
+    /** An approval decided while a reply ran: its continuation runs when that reply ends ([run]). */
+    private var queuedResume: Pair<String?, Long>? = null
+
+    /** The continuation after an approval joins the last reply: no new turn, no user bubble. */
+    private fun continueAfter(approvalId: Long) {
+        updateLast { it.copy(streaming = true, error = null) }
+        _state.update { it.copy(busy = true) }
+        run("", approvalId)
+    }
+
     private fun decide(a: Approval, approve: Boolean, scope: String, changes: Map<Long, String>) {
         viewModelScope.launch {
             try {
@@ -701,12 +715,9 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
                     card = catching { g.api.approval(a.id) }.getOrNull() ?: card
                 }
                 card?.let { updateApproval(it) }
-                if (!_state.value.busy) {
-                    // The continuation joins the last reply: no new turn, no user bubble.
-                    updateLast { it.copy(streaming = true, error = null) }
-                    _state.update { it.copy(busy = true) }
-                    run("", a.id)
-                }
+                // While a reply still runs (the continuation of another approval), this one waits
+                // for it: one continuation reports every approval decided since the last.
+                if (_state.value.busy) queuedResume = _state.value.sessionId to a.id else continueAfter(a.id)
             } catch (e: Exception) {
                 updateLast { it.copy(error = e.userMessage()) }
             }
@@ -836,6 +847,7 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
             } finally {
                 updateLast { it.copy(streaming = false, reconnecting = false, finishedAt = it.finishedAt ?: AppClock.millis()) }
                 _state.update { it.copy(busy = false) }
+                queuedResume?.let { (sid, id) -> queuedResume = null; if (sid == _state.value.sessionId) continueAfter(id) }
             }
         }
     }
@@ -971,6 +983,36 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
         false
     }
 
+    /** A suggestion from the message just sent arrives a little after the reply (kb.chat_suggest): its
+     *  "Remember …?" line is read from the chat's transcript twice, a few seconds and half a minute later
+     *  (the app has no event stream for it). */
+    private fun rememberLater() {
+        val sid = _state.value.sessionId ?: return
+        viewModelScope.launch {
+            for (wait in listOf(REMEMBER_FIRST_MS, REMEMBER_AGAIN_MS)) {
+                kotlinx.coroutines.delay(wait)
+                if (_state.value.sessionId != sid) return@launch
+                val fresh = try { SessionReplay.turns(g.agent.session(sid)) } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { continue }
+                val asked = rememberByMessage(fresh)
+                if (asked.isEmpty()) continue
+                _state.update { st -> if (st.sessionId != sid) st else st.copy(turns = withRemember(st.turns, asked)) }
+            }
+        }
+    }
+
+    /** Yes or No on a "Remember …?" item (memory.chat_ask): kept, or dismissed. */
+    fun answerRemember(id: Long, keep: Boolean) {
+        viewModelScope.launch {
+            try {
+                if (keep) g.api.acceptMemory(id) else g.api.rejectMemory(id)
+            } catch (e: kotlinx.coroutines.CancellationException) { throw e } catch (_: Exception) { return@launch }
+            val state = if (keep) "kept" else "dropped"
+            _state.update { st -> st.copy(turns = st.turns.map { t ->
+                if (t.remember.none { it.id == id }) t else t.copy(remember = t.remember.map { if (it.id == id) it.copy(state = state) else it })
+            }) }
+        }
+    }
+
     private fun onEvent(ev: AgentEvent) {
         when (ev) {
             is AgentEvent.Session -> {
@@ -1007,7 +1049,10 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
             is AgentEvent.Final -> updateLast {
                 it.copy(items = ChatTimeline.apply(it.items, ev), citations = merge(it.citations, ev.citations))
             }
-            is AgentEvent.Done -> updateLast { it.copy(streaming = false, finishedAt = AppClock.millis(), memoryIds = ev.memoryIds.ifEmpty { it.memoryIds }) }
+            is AgentEvent.Done -> {
+                updateLast { it.copy(streaming = false, finishedAt = AppClock.millis(), memoryIds = ev.memoryIds.ifEmpty { it.memoryIds }) }
+                rememberLater()
+            }
             // The server's own reply to a slash command (agent/commands.py): an answer, not a failure.
             is AgentEvent.Error -> if (ev.code == "command") updateLast {
                 it.copy(items = ChatTimeline.apply(it.items, AgentEvent.Final(ev.message, emptyList())), streaming = false,
@@ -1028,6 +1073,23 @@ class AssistantViewModel(private val g: AppGraph, private val saved: SavedStateH
     }
 
     companion object {
+        const val REMEMBER_FIRST_MS = 6_000L
+        const val REMEMBER_AGAIN_MS = 25_000L
+
+        /** user message id → the "Remember …?" items of the reply after it. */
+        fun rememberByMessage(turns: List<ChatTurn>): Map<Long, List<RememberItem>> = buildMap {
+            turns.forEachIndexed { i, t ->
+                val u = turns.getOrNull(i - 1)
+                if (t.role == "assistant" && t.remember.isNotEmpty() && u?.role == "user" && u.messageId != null) put(u.messageId, t.remember)
+            }
+        }
+
+        fun withRemember(turns: List<ChatTurn>, asked: Map<Long, List<RememberItem>>): List<ChatTurn> = turns.mapIndexed { i, t ->
+            val u = turns.getOrNull(i - 1)
+            val got = if (t.role == "assistant" && u?.role == "user") u.messageId?.let { asked[it] } else null
+            if (got != null) t.copy(remember = got) else t
+        }
+
         private const val SESSION_KEY = "assistant.session"
 
         /** The picker's lists are read again when it opens, at most this often (unless a skill changed). */

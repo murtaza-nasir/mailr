@@ -8,6 +8,7 @@ whole CalDAV resource (master plus overrides). The builders (`build_event`, `bui
 
 from __future__ import annotations
 
+import base64
 import copy
 import re
 import uuid
@@ -834,17 +835,62 @@ def build_todo(payload: dict[str, Any], user_tz: tzinfo, uid: str | None = None)
     return cal
 
 
+# A completed to-do's reminders. Desktop apps that read the store over CalDAV keep firing a
+# completed VTODO's VALARMs (KOrganizer's reminder daemon does: KDE bug 497843), so on completion
+# the VALARMs are taken off and kept, base64 of their iCalendar text, in X-MAILR-PARKED-ALARMS;
+# a reopen puts them back. Base64, because the blocks carry the commas, semicolons and line
+# breaks that a TEXT value escapes and some clients rewrite. A to-do completed or reopened in
+# another app is handled after the next sync (todo.park_alarms).
+PARKED_ALARMS = "X-MAILR-PARKED-ALARMS"
+
+
+def park_alarms(comp: Any) -> bool:
+    """Move a VTODO's VALARMs into PARKED_ALARMS (added to any parked already). True if any moved."""
+    alarms = [s for s in comp.subcomponents if getattr(s, "name", "") == "VALARM"]
+    if not alarms:
+        return False
+    kept = _parked(comp)
+    comp.subcomponents = [s for s in comp.subcomponents if getattr(s, "name", "") != "VALARM"]
+    blob = b"".join(a.to_ical() for a in kept + alarms)
+    comp.pop(PARKED_ALARMS, None)
+    comp.add(PARKED_ALARMS, base64.b64encode(blob).decode("ascii"))
+    return True
+
+
+def unpark_alarms(comp: Any) -> bool:
+    """Put a VTODO's parked VALARMs back. True if there were any."""
+    if comp.get(PARKED_ALARMS) is None:
+        return False
+    for a in _parked(comp):
+        comp.add_component(a)
+    comp.pop(PARKED_ALARMS, None)
+    return True
+
+
+def _parked(comp: Any) -> list[Any]:
+    raw = text_of(comp, PARKED_ALARMS).strip()
+    if not raw:
+        return []
+    try:
+        return list(Alarm.from_ical(base64.b64decode(raw).decode("utf-8"), multiple=True))
+    except Exception:  # noqa: BLE001  a value another app damaged: nothing to put back
+        return []
+
+
 def complete(comp: Any, done: bool, when: datetime | None = None) -> None:
-    """Mark a VTODO completed (STATUS, COMPLETED, PERCENT-COMPLETE) or open again."""
+    """Mark a VTODO completed (STATUS, COMPLETED, PERCENT-COMPLETE) or open again. Its reminders
+    are parked on completion and come back on a reopen (PARKED_ALARMS)."""
     comp.pop("status", None)
     comp.pop("completed", None)
     if done:
+        park_alarms(comp)
         comp.add("status", "COMPLETED")
         comp.add("completed", (when or datetime.now(UTC)).astimezone(UTC))
         if comp.get("percent-complete") is not None:
             _replace(comp, "percent-complete", 100)
     else:
         comp.add("status", "NEEDS-ACTION")
+        unpark_alarms(comp)
         if _int(comp.get("percent-complete")) == 100:
             comp.pop("percent-complete", None)
 

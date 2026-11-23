@@ -248,6 +248,7 @@ async def _memory_extras(db, user) -> dict[str, Any]:
                        sensitive=False)
     db.add(chat)
     await db.flush()
+    stated_row: ChatMessage | None = None
     for role, text in (("user", "Find a restaurant near the office for Friday."),
                        ("assistant", "Northwind Bistro is two blocks away and has a table at 7 PM."),
                        ("user", "I'm vegetarian, so somewhere with good vegetarian dishes."),
@@ -256,10 +257,14 @@ async def _memory_extras(db, user) -> dict[str, Any]:
         db.add(row)
         await db.flush()
         if role == "user":
-            stated = row.id
+            stated, stated_row = row.id, row
     ids["sugg-chat"] = note(None, "You are vegetarian", "preference", status="suggested", source="chat",
                             confidence=0.9, refs=[{"about": {"self": True}, "chat_session_id": chat.id,
                                                    "chat_message_id": stated}])
+    await db.flush()
+    # "Remember …?" under the reply (knowledge/tasks.suggest_from_chat records it on the message).
+    assert stated_row is not None
+    stated_row.meta = {"remember": [{"id": ids["sugg-chat"].id, "text": "You are vegetarian", "state": "waiting"}]}
     ids["sugg-mail"] = note(None, "Priya prefers calls in the morning", "preference", status="suggested",
                             source="extracted", confidence=0.7,
                             refs=[{"about": {"name": "Priya Natarajan", "emails": ["priya@example.org"], "kind": "person"}}])

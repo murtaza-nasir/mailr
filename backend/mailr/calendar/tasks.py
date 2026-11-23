@@ -12,4 +12,4 @@ import mailr.calendar.phones  # calendar.phone_reconcile
 import mailr.calendar.planner
 import mailr.calendar.sharing  # calendar.shares_cleanup
 import mailr.calendar.sync
-import mailr.calendar.todo  # noqa: F401  (calendar.reorder, calendar.retag)
+import mailr.calendar.todo  # noqa: F401  (calendar.reorder, calendar.retag, calendar.park_alarms)

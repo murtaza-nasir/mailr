@@ -323,6 +323,11 @@ export const SETTINGS_GROUPS: SettingsGroup[] = [
         title: t('settings.groups.phoneApps'),
         sections: [{ id: 'admin-phones', title: t('settings.groups.phoneApps'), keys: ['calendars.phone_access', 'calendars.phone_url', 'phone_apps.notes_min_version'], words: ['android', 'apk', 'davx5', t('settings.groups.oldestVersion'), 'update'] }],
       },
+      {
+        id: 'integrations',
+        title: t('settings.groups.integrations'),
+        sections: [{ id: 'admin-speakr', title: t('settings.groups.speakrForEveryone'), words: ['speakr', 'recordings', 'single sign-on', 'sso'] }],
+      },
       { id: 'diagnostics', title: t('settings.groups.diagnostics'), sections: [{ id: 'diagnostics', title: t('settings.groups.diagnostics'), words: ['health', 'status', 'problems'] }] },
       {
         id: 'data',

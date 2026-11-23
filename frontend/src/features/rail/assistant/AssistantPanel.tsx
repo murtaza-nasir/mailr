@@ -44,6 +44,7 @@ import { saveAnswerToNote } from '../../notes/fromAnswer'
 import { t as tr, tx, appLocale } from '../../../i18n'
 import { useAssistantName } from './useAssistantName'
 import { UsedMemories } from './UsedMemories'
+import { RememberAsk, ReviewCard, ReviewCount, type RememberItem } from './MemoryReview'
 import { PersonCardDialog } from '../../people/PersonCardDialog'
 
 const SUGGESTIONS_CONV = [
@@ -152,11 +153,12 @@ interface TurnProps {
   onApproval: (id: number, status: string, card?: ApprovalCardData) => void
   onResume: (id: number) => void
   onReviewCard: (reviewId: number, card: ApprovalCardData) => void
+  onRemember: (id: number, state: RememberItem['state']) => void
   onRerun: (userMessageId: number) => void
   onUndo: (turn: number, config: number) => Promise<boolean>
 }
 
-function TurnView({ turn, index, isLast, conversationId, conv, onOpen, onApproval, onResume, onReviewCard, onRerun, onUndo }: TurnProps) {
+function TurnView({ turn, index, isLast, conversationId, conv, onOpen, onApproval, onResume, onReviewCard, onRemember, onRerun, onUndo }: TurnProps) {
   const openCompose = useCompose((s) => s.open)
   const qc = useQueryClient()
   const nav = useAmbroseNav()
@@ -261,6 +263,7 @@ function TurnView({ turn, index, isLast, conversationId, conv, onOpen, onApprova
       )}
       {!turn.running && <Sources turn={turn} onOpen={onOpen} />}
       {!turn.running && !!turn.memoryIds?.length && <UsedMemories ids={turn.memoryIds} />}
+      {!turn.running && !!turn.remember?.length && <RememberAsk items={turn.remember} onChange={onRemember} />}
       {!turn.running && (
         <div className="row chat-actions">
           {turn.drafts.map((d, j) => (
@@ -486,7 +489,7 @@ function useAssistantOff(): string | null {
 }
 
 function AssistantChat({ conversationId }: { conversationId: number | null }) {
-  const { turns, busy, sessionId, title, setTitle, skills, send, resume, stop, reset, open, openSession, updateApproval, addReviewCard, rerun, rerunLast, editResend, undoConfig, localOnly, setLocalOnly, notice, retitle } = useAssistant(conversationId)
+  const { turns, busy, sessionId, title, setTitle, skills, send, resume, stop, reset, open, openSession, updateApproval, addReviewCard, setRemember, rerun, rerunLast, editResend, undoConfig, localOnly, setLocalOnly, notice, retitle } = useAssistant(conversationId)
   const qc = useQueryClient()
   const commandList = useCommands().data?.items
   const skillList = useSkills().data?.items
@@ -771,6 +774,7 @@ function AssistantChat({ conversationId }: { conversationId: number | null }) {
       data-drop-label={tr('rail.assistant.attachments.dropHere')}
     >
       <div className="chat-log" ref={logRef} aria-live="polite" aria-busy={busy}>
+        <ReviewCard />
         {turns.length === 0 && (
           <div>
             <p className="muted" style={{ fontSize: 13, margin: '4px 0 0' }}>
@@ -799,6 +803,7 @@ function AssistantChat({ conversationId }: { conversationId: number | null }) {
               onOpen={openCitation}
               onApproval={updateApproval}
               onReviewCard={addReviewCard}
+              onRemember={setRemember}
               onResume={resume}
               onRerun={rerun}
               onUndo={undoConfig}
@@ -924,6 +929,7 @@ function AssistantChat({ conversationId }: { conversationId: number | null }) {
         )}
       </form>
       <HeaderAction>
+        <ReviewCount />
         {/* ACT agent.chat_list @web.panel: earlier chats, from the panel's header (no new navigation entry). */}
         <button type="button" className={`icon-btn sm${listOpen ? ' active' : ''}`} aria-label={tr('rail.assistant.chatList.chats')} aria-pressed={listOpen}
           data-tip={listOpen ? tr('rail.assistant.chatList.backToChat') : tr('rail.assistant.chatList.chats')} data-testid="chats-toggle"

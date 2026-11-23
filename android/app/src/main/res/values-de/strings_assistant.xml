@@ -87,6 +87,12 @@
     <string name="asst_step_denied">abgelehnt</string>
     <string name="asst_step_expired">abgelaufen</string>
     <string name="asst_step_failed">fehlgeschlagen</string>
+    <string name="asst_remember_question">Merken: „%1$s“?</string>
+    <string name="asst_remember_yes">Ja</string>
+    <string name="asst_remember_no">Nein</string>
+    <string name="asst_remember_kept">Gemerkt: „%1$s“</string>
+    <string name="asst_remember_dropped">Nicht gemerkt: „%1$s“</string>
+    <string name="asst_remember_merged">Zu einer anderen Erinnerung hinzugefügt: „%1$s“</string>
     <plurals name="asst_used_memories">
         <item quantity="one">Gedächtnis verwendet · %d</item>
         <item quantity="other">Gedächtnisse verwendet · %d</item>

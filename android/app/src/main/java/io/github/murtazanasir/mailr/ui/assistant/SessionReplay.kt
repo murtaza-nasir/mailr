@@ -72,6 +72,7 @@ object SessionReplay {
         }.getOrDefault(emptyList())
         val memoryIds = (t["memory_ids"] as? JsonArray).orEmpty().mapNotNull { (it as? JsonPrimitive)?.longOrNull }
         return ChatTurn("assistant", items = items, citations = cites, approvals = approvals, memoryIds = memoryIds,
+            remember = remember(t["remember"] as? JsonArray),
             error = if (str(t, "status") == "error") AppText.get(R.string.asst_failed) else null, streaming = false, startedAt = 0, finishedAt = 0,
             interrupted = str(t, "status") == "interrupted")
     }
@@ -89,6 +90,12 @@ object SessionReplay {
     /** A user turn's files and images (agent/chat_files.out), each kept only when it reads. */
     private fun files(a: JsonArray?): List<io.github.murtazanasir.mailr.data.agent.ChatFile> = a.orEmpty().mapNotNull { f ->
         catching { MailrJson.decodeFromJsonElement(io.github.murtazanasir.mailr.data.agent.ChatFile.serializer(), f) }.getOrNull()
+    }
+
+    /** The "Remember …?" items of a turn. */
+    fun remember(a: JsonArray?): List<RememberItem> = a.orEmpty().mapNotNull { it as? JsonObject }.mapNotNull { o ->
+        val id = (o["id"] as? JsonPrimitive)?.longOrNull ?: return@mapNotNull null
+        RememberItem(id, str(o, "text").orEmpty(), str(o, "state") ?: "waiting")
     }
 
     private fun card(o: JsonObject?): Approval? = o?.let { catching { MailrJson.decodeFromJsonElement(Approval.serializer(), it) }.getOrNull() }

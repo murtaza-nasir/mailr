@@ -57,6 +57,12 @@ self.addEventListener('message', (event) => {
   else if (m.type === 'mailr:refresh-shell') event.waitUntil(caches.open(SHELL).then((c) => c.delete('/index.html')))
   else if (m.type === 'mailr:badge') event.waitUntil(setBadge(m.count))
   else if (m.type === 'mailr:close-conversations') event.waitUntil(closeConversations(m.ids || []))
+  // A reminder an open tab received over SSE: shown here, once per delivery (showPush).
+  // The tab waits for the answer and shows the reminder itself when none comes (an older worker).
+  else if (m.type === 'mailr:reminder' && m.d && m.d.key) {
+    if (event.source) event.source.postMessage({ type: 'mailr:reminder-ack', id: m.id })
+    event.waitUntil(showPush(m.d))
+  }
   else if (m.type === 'mailr:version' && event.source) event.source.postMessage({ type: 'mailr:version', version: VERSION })
 })
 
@@ -365,17 +371,47 @@ function summaryTitle(kinds) {
   return `${kinds.length} ${one ? `${kinds[0]} reminder` : 'reminder'}${kinds.length === 1 ? '' : 's'}`
 }
 
+// The alerts this worker showed lately, by the server's delivery id. A reminder reaches a browser
+// as a Web Push and, through every open tab, as an SSE event the tab hands to this worker
+// ('mailr:reminder'); all carry the same `delivery`, and only the first is shown. Firefox on a
+// Linux desktop shows every showNotification as a new popup even with the same tag, so replacing
+// by tag is not enough (three popups per reminder, 15 Nov 2026). The open notification's data is
+// checked too, for a worker that was stopped between the two.
+const delivered = new Map()
+const DELIVERED_MS = 10 * 60_000
+
+async function alreadyShown(d, reg) {
+  const id = d && d.delivery
+  if (!id) return false // an older server: no id, shown as before
+  const now = Date.now()
+  for (const [k, t] of delivered) if (now - t > DELIVERED_MS) delivered.delete(k)
+  if (delivered.has(id)) return true
+  delivered.set(id, now)
+  try {
+    for (const n of await reg.getNotifications()) {
+      const nd = n.data || {}
+      if (nd.delivery === id || (Array.isArray(nd.deliveries) && nd.deliveries.includes(id))) return true
+    }
+  } catch {
+    /* no list: the map alone decides */
+  }
+  return false
+}
+
 async function showPush(d) {
   const key = d.key
   const kind = (d.item && d.item.kind) || kindOfKey(String(key))
   const reg = self.registration
+  if (await alreadyShown(d, reg)) return undefined
   if (d.missed) {
     // Missed reminders never arrive as a burst: one quiet notice that counts them.
     const prev = await reg.getNotifications({ tag: MISSED_TAG })
-    const n = ((prev[0] && prev[0].data && prev[0].data.count) || 0) + 1
+    const pd = (prev[0] && prev[0].data) || {}
+    const n = (pd.count || 0) + 1
+    const deliveries = [...(Array.isArray(pd.deliveries) ? pd.deliveries : []), ...(d.delivery ? [d.delivery] : [])].slice(-50)
     return reg.showNotification(`${n} missed reminder${n === 1 ? '' : 's'}`, {
       tag: MISSED_TAG, body: 'Open mailr to review them.', icon: ICON, badge: BADGE, silent: true,
-      data: { summary: true, count: n, url: withParam('/mail/inbox', 'reminders', 'review') },
+      data: { summary: true, count: n, deliveries, url: withParam('/mail/inbox', 'reminders', 'review') },
     })
   }
   const showing = (await reg.getNotifications()).filter((n) => n.tag && n.tag.includes('|'))
@@ -383,10 +419,11 @@ async function showPush(d) {
   tags.add(key)
   if (tags.size > STACK_LIMIT) {
     const kinds = [...tags].map(kindOfKey)
+    const deliveries = [...showing.map((n) => n.data && n.data.delivery), d.delivery].filter(Boolean).slice(-50)
     for (const n of showing) n.close()
     return reg.showNotification(summaryTitle(kinds), {
       tag: SUMMARY_TAG, body: 'Review them one by one in mailr.', icon: ICON, badge: BADGE, requireInteraction: true,
-      data: { summary: true, url: withParam('/mail/inbox', 'reminders', 'review') },
+      data: { summary: true, deliveries, url: withParam('/mail/inbox', 'reminders', 'review') },
     })
   }
   // A repeat (Remind again, d.again) has the same tag: it replaces the notification and, with
@@ -396,7 +433,7 @@ async function showPush(d) {
     tag: key, body: d.body || '', icon: ICON, badge: BADGE, requireInteraction: true, renotify: true,
     // ACT event.join @web.notification: the server's push carries the link as join_url.
     actions: buttons(kind, d.start, d.join || d.join_url, d.prep),
-    data: { key, kind, tokens: d.tokens || null, join: d.join || d.join_url || null, prep: pathOf(d.prep, null), url: withParam(d.click, 'reminder', key) },
+    data: { key, kind, delivery: d.delivery || null, tokens: d.tokens || null, join: d.join || d.join_url || null, prep: pathOf(d.prep, null), url: withParam(d.click, 'reminder', key) },
   })
 }
 

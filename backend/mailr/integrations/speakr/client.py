@@ -401,7 +401,9 @@ class SpeakrClient:
             raise SpeakrRateLimited(wait)
         if method == "GET":
             await _take(self._bucket)
-        headers = {"Authorization": f"Bearer {self._token}", "Accept": "application/json"}
+        headers = {"Accept": "application/json"}
+        if self._token:  # GET /sso/status (auto.check) is asked without a token
+            headers["Authorization"] = f"Bearer {self._token}"
         if etag:
             headers["If-None-Match"] = etag
         kw: dict[str, Any] = {"params": params, "headers": headers}
@@ -482,7 +484,9 @@ class SpeakrClient:
         if not isinstance(d, dict) or not isinstance(d.get("scopes"), list):
             return None
         return {"name": str(d.get("name") or "")[:100], "scopes": [str(x)[:20] for x in d["scopes"]][:20],
-                "expires_at": d.get("expires_at") if isinstance(d.get("expires_at"), str) else None}
+                "expires_at": d.get("expires_at") if isinstance(d.get("expires_at"), str) else None,
+                # Made by POST /tokens/exchange (a newer Speakr names the identity-provider client).
+                "sso": bool(d.get("sso_client_id"))}
 
     async def changes(self, cursor: str | None, *, limit: int = 200, scope: str = "own") -> tuple[list[dict[str, Any]], str | None, bool]:
         """GET /recordings/changes: (changes, next_cursor, has_more). Raises

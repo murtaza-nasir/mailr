@@ -93,7 +93,13 @@ async def sync_connector(connector_id: int, *, full: bool = False, served_since:
     ended a moment ago is never repeated)."""
     with side_pool():
         async with _slots():
-            return await _sync_locked(connector_id, full, served_since)
+            res = await _sync_locked(connector_id, full, served_since)
+        if not res.busy and res.error is None:
+            from mailr.calendar import todo
+
+            async with session_scope() as db:
+                await todo.queue_alarm_parking(db, connector_id)
+        return res
 
 
 _SLOTS: dict[asyncio.AbstractEventLoop, asyncio.Semaphore] = {}

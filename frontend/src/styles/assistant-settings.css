@@ -221,6 +221,11 @@ a.chip[aria-current='page'] .as-count {
   text-decoration: line-through;
   color: var(--text-3);
 }
+.as-mem-replaces {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--text-2);
+}
 .as-mem-main {
   flex: 1;
   min-width: 0;
@@ -1010,3 +1015,12 @@ button.as-link {
 .sw-defs dt { font-weight: 500; }
 .sw-defs dd { margin: 0; font-size: 13px; }
 .sw-choices { max-width: 640px; }
+.as-merged {
+  margin-top: 2px;
+  font-size: 12.5px;
+}
+.as-merged-list {
+  margin: 2px 0 0;
+  padding-inline-start: 18px;
+  color: var(--text-2);
+}

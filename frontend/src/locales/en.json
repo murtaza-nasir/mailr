@@ -3031,6 +3031,8 @@
       "lastLearned_one": "Last learned {{when}} · {{count}} new",
       "lastLearned_other": "Last learned {{when}} · {{count}} new",
       "lastFailed": "Last try {{when}} failed. {{reason}}",
+      "learningPaused": "Checked {{when}}. 15 suggestions are waiting for review, so nothing new was added. Review them to resume learning.",
+      "updatesSaved": "Keeping this changes your saved note: “{{text}}”",
       "learningOff": "Learning from mail is off.",
       "neverLearned": "Not learned from mail yet.",
       "errors": {
@@ -3056,7 +3058,12 @@
       "empty": "No memories yet",
       "emptyHint": "Tell {{name}} “remember that Sam is my accountant”, or add one here.",
       "makeTask": "Create task",
-      "taskMade": "Task added."
+      "taskMade": "Task added.",
+      "mergedFrom_one": "Merged from {{count}} note",
+      "mergedFrom_other": "Merged from {{count}} notes",
+      "tidy": "Tidy",
+      "tidyTip": "Look for memories to merge or retire. Suggestions show under To review.",
+      "tidyQueued": "Tidying started. Anything to merge or retire shows under To review."
     },
     "dialog": {
       "you": "You",
@@ -3072,6 +3079,33 @@
     "settings": {
       "learnFromChats": "Suggest memories from chats",
       "learnFromChatsDesc": "When you tell {{name}} something lasting, it shows under Memory → To review."
+    },
+    "ask": {
+      "question": "Remember: “{{text}}”?",
+      "yes": "Yes",
+      "no": "No",
+      "kept": "Remembered: “{{text}}”",
+      "dropped": "Not remembered: “{{text}}”",
+      "merged": "Added to another memory: “{{text}}”"
+    },
+    "review": {
+      "count_one": "{{count}} to review",
+      "count_other": "{{count}} to review",
+      "openMemory": "Open the memories to review",
+      "title_one": "{{count}} memory to review",
+      "title_other": "{{count}} memories to review",
+      "notNow": "Not now (until next week)",
+      "otherTopic": "Other",
+      "merge": "Merge",
+      "mergeInto": "Merge into…",
+      "merged": "Merged.",
+      "retire": "Retire",
+      "keepNote": "Keep the note",
+      "retires": "Ambrose suggests no longer using this saved memory.",
+      "retiresWhy": "Ambrose suggests no longer using this saved memory: {{reason}}",
+      "mergesNotes_one": "Keeping this replaces {{count}} saved memory:",
+      "mergesNotes_other": "Keeping this replaces {{count}} saved memories:",
+      "openAll": "Review on the Memory page"
     }
   },
   "notes": {
@@ -7378,7 +7412,9 @@
       "theNavigationAccountsHint": "the navigation (the ✕ on the hint about Show each account separately)",
       "pageReaders": "Page readers",
       "defaultEmailApp": "default email app",
-      "emailLinks": "email links"
+      "emailLinks": "email links",
+      "integrations": "Integrations",
+      "speakrForEveryone": "Speakr server"
     },
     "inboxTab": {
       "allTabs": "All tabs",
@@ -8215,7 +8251,36 @@
       "webhookOn": "Webhook on.",
       "webhookOnInSpeakrSet": "Webhook on. In Speakr, set the webhook address to {{url}}",
       "webhookSecret": "Webhook secret",
-      "withoutThisSpeakrIsChecked": "Without a webhook, Speakr is checked every ten minutes. With one, new recordings, transcripts, summaries, deletions and edits arrive at once. {{pollNote}}"
+      "withoutThisSpeakrIsChecked": "Without a webhook, Speakr is checked every ten minutes. With one, new recordings, transcripts, summaries, deletions and edits arrive at once. {{pollNote}}",
+      "sso": {
+        "singleSignOn": "single sign-on",
+        "connectWith": "Connect with {{name}}",
+        "help": "After you sign in, a token for Mailr is created in Speakr. Sign in to Speakr with single sign-on at least once before you use this.",
+        "orPaste": "Or paste an API token from Speakr:",
+        "connected": "Speakr is connected. Recordings appear after the first sync.",
+        "renewed": "A new Speakr token is saved, and the old one is revoked in Speakr.",
+        "renewedOldKept": "A new Speakr token is saved. The old token could not be revoked from Mailr; revoke it in Speakr under Account settings → API tokens.",
+        "notSupported": "This Speakr version cannot connect with single sign-on. Paste an API token instead.",
+        "refused": "The sign-in was not accepted by Speakr. Either single sign-on tokens are turned off on that server, or you have not signed in to Speakr with single sign-on yet. Sign in to Speakr once, or paste an API token.",
+        "notAllowed": "Mailr may not get tokens from this Speakr server. A Speakr administrator can add Mailr's client ID to the clients allowed to exchange tokens.",
+        "limit": "Your Speakr account has the most API tokens allowed. Revoke one in Speakr under Account settings → API tokens, then try again.",
+        "scopes": "The access offered by this Speakr server is too narrow for Mailr: read access is required.",
+        "rateLimited": "Too many attempts. Try again in an hour.",
+        "unreachable": "Speakr could not be reached. Check the address and try again.",
+        "wrongAccount": "You signed in as someone else. Sign in with the account you use for Mailr.",
+        "alreadyConnected": "This Speakr server is already connected.",
+        "expired": "The connection request expired. Start again.",
+        "failed": "Speakr could not be connected with single sign-on. Paste an API token instead.",
+        "linkRequired": "A Speakr account with your email already exists. Sign in to Speakr once with single sign-on to link it, then try again.",
+        "registrationClosed": "You have no Speakr account yet. Sign in to Speakr with single sign-on once, then try again.",
+        "refusedByPolicy": "The sign-up rules of that Speakr server do not allow this account (its email domain, or an email that is not verified). Ask its administrator, or paste a token."
+      },
+      "auto": {
+        "notice": "Your recordings in Speakr at {{url}} were connected when you signed in. To stop this, remove the account below.",
+        "gotIt": "Got it",
+        "failed": "Connecting {{url}} at sign-in did not work. {{reason}} Another try is made at a later sign-in.",
+        "declined": "{{url}} is not connected at sign-in, because you removed it. Use Add Speakr to connect it again."
+      }
     },
     "speakrWebhook": {
       "editsMadeInSpeakrsOwn": "Edits made in Speakr's own pages still show at the next ten-minute check.",
@@ -8445,6 +8510,23 @@
       "sharedWithYou": "Shared with you",
       "fromYourPhone": "Calendars from your phone",
       "calendarLinks": "Calendar links"
+    },
+    "adminSpeakr": {
+      "title": "Speakr server",
+      "desc": "The Speakr address for everyone on this Mailr server. It is filled in when someone adds Speakr.",
+      "address": "Speakr address",
+      "autoConnect": "Connect Speakr when people sign in",
+      "autoConnectDesc": "People who sign in to Mailr with single sign-on are connected to Speakr and are shown a notice. A person who removes the connection is not connected again. Both servers must use the same identity provider, and Mailr's client must be allowed in Speakr.",
+      "noSso": "Connecting at sign-in requires single sign-on on this Mailr server.",
+      "localDesc": "This is the default for accounts connected at sign-in. Each person can change the setting later.",
+      "check": "Check",
+      "saved": "Speakr address saved.",
+      "removed": "Speakr address removed.",
+      "checkUnreachable": "Speakr could not be reached: {{detail}}",
+      "checkOld": "This Speakr version cannot connect with single sign-on. People can still paste a token.",
+      "checkExchangeOff": "Single sign-on tokens are turned off in Speakr.",
+      "checkClientNotAllowed": "Mailr's client is not on Speakr's list of allowed exchange clients.",
+      "checkReady": "Ready. People who have never signed in to Speakr with single sign-on must do so once. They are then connected at their next Mailr sign-in."
     }
   },
   "shortcuts": {

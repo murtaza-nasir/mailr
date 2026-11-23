@@ -326,6 +326,7 @@ internal fun AssistantRoute(nav: NavHostController, vm: AssistantViewModel, onOp
             search = chats::search, rename = chats::rename),
             snack, mod, wide = wide)
     }) { mod ->
+    val reviewStore = androidx.compose.runtime.remember { io.github.murtazanasir.mailr.ui.memory.ApiMemoryStore(g) }
     AssistantScreen(shown, voice = voice, modifier = mod, snackbar = notices, cb = AssistantCallbacks(
         send = vm::send, stop = vm::stop, newChat = vm::newChat, clearContext = { vm.setContext(null, null) },
         openCitation = onOpenCitation,
@@ -343,6 +344,8 @@ internal fun AssistantRoute(nav: NavHostController, vm: AssistantViewModel, onOp
             save = { id, text -> g.api.updateMemory(id, text) },
             delete = { id -> g.api.deleteMemory(id) }),
         openMemory = { nav.navigate(Routes.MEMORY) { launchSingleTop = true } },
+        remember = vm::answerRemember,
+        review = reviewStore,
         openPerson = { person = it },
         openChats = { chatsOpen = !chatsOpen || !wide },
         retry = vm::retry,

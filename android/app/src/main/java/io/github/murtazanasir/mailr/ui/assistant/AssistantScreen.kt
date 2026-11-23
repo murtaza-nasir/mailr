@@ -87,6 +87,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -141,6 +142,10 @@ data class AssistantCallbacks(
     val memories: MemoryActions? = null,
     /** ⋮ → Memory (the Memory page); null hides the menu. */
     val openMemory: (() -> Unit)? = null,
+    /** Yes or No on a "Remember …?" line under a reply (memory.chat_ask); null hides the line. */
+    val remember: ((Long, Boolean) -> Unit)? = null,
+    /** The weekly review card and the "n to review" count (memory.review_count); null hides both. */
+    val review: io.github.murtazanasir.mailr.ui.memory.MemoryStore? = null,
     /** A person the answer looked up: their card (ACT person.card @android.assistant); null hides the chips. */
     val openPerson: ((String) -> Unit)? = null,
     /** The top bar's Chats button (earlier chats); null hides it. */
@@ -196,6 +201,10 @@ fun AssistantScreen(s: AssistantState, cb: AssistantCallbacks, voice: ComposerVo
                     snackbar: androidx.compose.material3.SnackbarHostState? = null) {
     // The assistant is off for this user (GET /me access): the message shows instead of a chat.
     val blocked = s.blocked
+    // The waiting suggestions (the top bar's "n to review", from the review card's read), and what
+    // reloads the card: a reply that ended, so a suggestion from it or a decision on it shows.
+    var waiting by remember { mutableIntStateOf(0) }
+    val reviewKey = s.turns.count { !it.streaming } + s.turns.sumOf { t -> t.remember.count { it.state != "waiting" } }
     var local by rememberSaveable { mutableStateOf("") }
     // With dictation the words live in the model, so dictated and typed words share one field.
     val input = voice?.ui?.text ?: local
@@ -240,6 +249,7 @@ fun AssistantScreen(s: AssistantState, cb: AssistantCallbacks, voice: ComposerVo
                             Icon(Icons.Outlined.History, stringResource(R.string.chats_title))
                         }
                     }
+                    if (blocked == null && cb.review != null) cb.openMemory?.let { ReviewCountChip(waiting, it) }
                     if (blocked == null) IconButton(onClick = cb.newChat, enabled = s.turns.isNotEmpty()) { Icon(Icons.Outlined.AddComment, stringResource(R.string.asst_new_chat)) }
                     if (cb.openMemory != null || rename != null) AssistantMenu(cb.openMemory, rename)
                 },
@@ -251,11 +261,15 @@ fun AssistantScreen(s: AssistantState, cb: AssistantCallbacks, voice: ComposerVo
                 // An earlier chat is loading: a thin bar over the top edge, so nothing below it moves.
                 if (s.opening) LinearProgressIndicator(Modifier.fillMaxWidth().align(Alignment.TopCenter).testTag("chat-opening"))
                 if (s.turns.isEmpty() && blocked != null) NoAccess(blocked)
-                else if (s.turns.isEmpty()) Welcome(onPick = { cb.send(it) })
+                else if (s.turns.isEmpty()) Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+                    cb.review?.let { Box(Modifier.padding(16.dp)) { MemoryReviewCard(it, reviewKey, cb.openMemory) { n -> waiting = n } } }
+                    Welcome(onPick = { cb.send(it) })
+                }
                 else LazyColumn(state = list, contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxSize().testTag("chat-log")) {
                     // Retry shows on the last turn only, while nothing runs.
                     val retry = cb.retry?.takeIf { !s.busy && blocked == null && AssistantViewModel.canRetry(s.turns) }
+                    cb.review?.let { store -> item(key = "review-card") { MemoryReviewCard(store, reviewKey, cb.openMemory) { n -> waiting = n } } }
                     itemsIndexed(s.turns, key = { i, _ -> i }) { i, t ->
                         Box(Modifier.widthIn(max = 760.dp).fillMaxWidth()) {
                             if (t.role == "user") Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.End,
@@ -415,6 +429,7 @@ private fun AssistantTurn(t: ChatTurn, cb: AssistantCallbacks, retry: (() -> Uni
             else if (ChatTimeline.thinking(t.items, t.streaming) { id -> t.approvals.any { it.id == id && it.status == "pending" } }) Thinking()
             if (t.citations.isNotEmpty() && !t.streaming) Sources(t.citations, cb.openCitation)
             if (t.memoryIds.isNotEmpty() && !t.streaming) cb.memories?.let { UsedMemories(t.memoryIds, it) }
+            if (t.remember.isNotEmpty() && !t.streaming) cb.remember?.let { RememberAsk(t.remember, it) }
             if (!t.streaming) cb.openPerson?.let { open ->
                 ChatTimeline.lookedUp(t.items).forEach { email ->
                     // A person the answer looked up: their card (contact details and Ambrose's memory).

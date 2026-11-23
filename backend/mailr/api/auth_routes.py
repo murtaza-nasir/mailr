@@ -394,14 +394,37 @@ async def oidc_start(request: Request, next: str = "/"):
     s = get_settings()
     if _canonical_mismatch(request):
         return RedirectResponse(s.base_url.rstrip("/") + "/api/v1/auth/oidc/start?" + urlencode({"next": next}))
+    if not next.startswith("/") or next.startswith("//"):
+        next = "/"
+    return await _to_provider({"next": next})
+
+
+@router.get("/auth/oidc/connect")
+async def oidc_connect(request: Request, ticket: str = ""):
+    """Sign in again at the provider to connect another app with single sign-on (Speakr). The
+    ticket comes from POST /speakr/sso/start for a signed-in user; after the sign-in, the
+    provider's access token is used to connect that app, and no session is opened."""
+    from mailr.integrations.speakr import sso
+
+    s = get_settings()
+    if _canonical_mismatch(request):
+        return RedirectResponse(s.base_url.rstrip("/") + "/api/v1/auth/oidc/connect?" + urlencode({"ticket": ticket}))
+    data = sso.read_ticket(ticket)
+    if data is None:
+        return RedirectResponse(sso.result_url("expired"))
+    return await _to_provider({"next": "/", "connect": "speakr", "ticket": data})
+
+
+async def _to_provider(extra: dict[str, Any]) -> RedirectResponse:
+    """The redirect to the provider's sign-in page, with state, nonce and PKCE verifier in the
+    short-lived sign-in cookie (plus `extra`, read back in the callback)."""
+    s = get_settings()
     d = await _discovery()
     verifier = secrets.token_urlsafe(48)
     challenge = base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).rstrip(b"=").decode()
     state_raw = secrets.token_urlsafe(16)
     nonce = secrets.token_urlsafe(16)
-    if not next.startswith("/") or next.startswith("//"):
-        next = "/"
-    cookie = _serializer().dumps({"s": state_raw, "v": verifier, "n": nonce, "next": next})
+    cookie = _serializer().dumps({**extra, "s": state_raw, "v": verifier, "n": nonce})
     params = {
         "response_type": "code", "client_id": s.oidc_client_id,
         "redirect_uri": s.base_url.rstrip("/") + "/api/v1/auth/oidc/callback",
@@ -422,9 +445,23 @@ async def oidc_callback(request: Request, code: str = "", state: str = "", error
         return await _oidc_callback(request, code, state, error, db)
     except HTTPException as e:
         log.info("OIDC sign-in failed: %s", e.detail)
+        if _connecting(request):
+            from mailr.integrations.speakr import sso
+
+            resp = RedirectResponse(sso.result_url("failed"))
+            resp.delete_cookie("mailr_oidc", path="/api/v1/auth/oidc")
+            return resp
         resp = RedirectResponse("/login?" + urlencode({"error": f"Single sign-on failed: {e.detail}"}))
         resp.delete_cookie("mailr_oidc", path="/api/v1/auth/oidc")
         return resp
+
+
+def _connecting(request: Request) -> bool:
+    """The sign-in in progress connects another app (oidc_connect), not a new session."""
+    try:
+        return bool(_serializer().loads(request.cookies.get("mailr_oidc", ""), max_age=600).get("connect"))
+    except (BadSignature, AttributeError):
+        return False
 
 
 async def _oidc_callback(request: Request, code: str, state: str, error: str, db: AsyncSession):
@@ -468,6 +505,14 @@ async def _oidc_callback(request: Request, code: str, state: str, error: str, db
         raise ApiError(400, "auth.token_wrong_app")
     if claims.get("nonce") != data["n"]:
         raise ApiError(400, "auth.nonce_mismatch")
+    if data.get("connect") == "speakr" and isinstance(data.get("ticket"), dict):
+        # Connecting Speakr (integrations/speakr/sso.py): no session is opened, and the access
+        # token goes only to the exchange request.
+        from mailr.integrations.speakr import sso
+
+        resp = RedirectResponse(await sso.finish(db, data["ticket"], dict(claims), tokens.get("access_token")))
+        resp.delete_cookie("mailr_oidc", path="/api/v1/auth/oidc")
+        return resp
     from mailr.core.invites import token_from_next
     from mailr.core.users import user_for_oidc_claims
 
@@ -476,10 +521,24 @@ async def _oidc_callback(request: Request, code: str, state: str, error: str, db
     await db.commit()
     raw, _ = await create_session(db, u, request.headers.get("user-agent", ""),
                                   request.client.host if request.client else "")
-    resp = RedirectResponse(data.get("next") or "/", background=picture_refresh(u.id, dict(claims), tokens.get("access_token")))
+    resp = RedirectResponse(data.get("next") or "/", background=after_sign_in(u.id, dict(claims), tokens.get("access_token")))
     _cookie(resp, raw, u)
     resp.delete_cookie("mailr_oidc", path="/api/v1/auth/oidc")
     return resp
+
+
+def after_sign_in(user_id: int, claims: dict, access_token: str | None = None):
+    """After the web sign-in response: the account picture, then the instance's Speakr
+    (integrations/speakr/auto.py). Neither delays nor fails the sign-in."""
+    from starlette.background import BackgroundTasks
+
+    from mailr.integrations.speakr import auto
+
+    tasks = BackgroundTasks()
+    for t in (picture_refresh(user_id, claims, access_token), auto.background(user_id, access_token)):
+        if t is not None:
+            tasks.add_task(t.func, *t.args, **t.kwargs)
+    return tasks
 
 
 def picture_refresh(user_id: int, claims: dict, access_token: str | None = None):

@@ -150,6 +150,37 @@ class MemoryViewModel(private val store: MemoryStore) : ViewModel() {
         }
     }
 
+    // ACT memory.merge @android.settings: a suggestion into another note (one note, "Merged from").
+    fun merge(id: Long, into: Long) {
+        _ui.update { it.copy(busy = it.busy + id) }
+        viewModelScope.launch {
+            try {
+                store.merge(id, into)
+                say(AppText.get(R.string.memory_review_merged))
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                say(failure(e))
+            } finally {
+                _ui.update { it.copy(busy = it.busy - id) }
+                load()
+            }
+        }
+    }
+
+    fun tidy() {
+        viewModelScope.launch {
+            try {
+                store.tidy()
+                say(AppText.get(R.string.memory_tidy_queued))
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                say(failure(e))
+            }
+        }
+    }
+
     // ACT memory.accept_suggestion @android.settings, ACT memory.dismiss_suggestion @android.settings
     fun keep(ids: List<Long>) = review(ids, keep = true)
 

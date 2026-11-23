@@ -374,8 +374,44 @@ async def test_the_run_gets_the_note_and_links_its_steps_to_the_forward(client, 
     assert done.status == "done" and set(done.delivered) >= {"brief", "notify"}
     assert "<note>\nStar this and remind me Friday.\n</note>" in seen["text"]
     assert "IGNORE" not in seen["text"]
+    assert "get_message_body" in seen["text"] and "found no calendar invitation" in seen["text"]
     assert seen["entry"]["via"] == {"kind": "conversation", "id": cid, "title": "Fw: Ops Review"}
     assert activity.VIA.get() is None
+
+
+async def test_the_run_is_told_about_a_forwarded_invitation(client, user, monkeypatch):
+    """A forwarded invitation: the run read the forward with get_conversation,
+    saw only the note, and said there was no invitation. It is now told to read the full text and
+    that the invitation is there, with the rsvp call that adds it."""
+    from mailr.assistant import errands, notify
+
+    addr = _addr()
+    await _trust(user, addr)
+    await _builtin(user, permission="allow")
+    start = (datetime.now(UTC) + timedelta(days=4)).replace(hour=15, minute=0, second=0, microsecond=0)
+    mid = await _arrive(user, _forward(addr, await _mine(user), note="Add this to my calendar.",
+                                       invite=_ics(f"hub-{uuid.uuid4().hex[:8]}", addr, start).encode()))
+    await _pass(mid)
+    async with sessionmaker()() as db:
+        run_id = (await db.execute(select(AssistantRun.id).where(AssistantRun.user_id == user.id))).scalar_one()
+    seen = {}
+
+    async def fake_chat(db, p, text, *, context=None, errand=None, **kw):
+        seen["text"] = text
+        yield {"type": "final", "content": "Added it.", "citations": []}
+
+    import mailr.agent.loop as loop
+
+    monkeypatch.setattr(loop, "run_chat", fake_chat)
+
+    async def fake_send(db, u, **kw):
+        return "sent"
+
+    monkeypatch.setattr(notify, "send", fake_send)
+    await errands.run_errand(run_id)
+    assert "Mailr found a meeting invitation" in seen["text"]
+    assert f"use rsvp with message_id {mid}, response accepted and send false" in seen["text"]
+    assert f"get_message_body (message_id {mid})" in seen["text"]
 
 
 # ---------------------------------------------------------------- standing orders and invitations
@@ -498,3 +534,40 @@ async def test_assistant_rsvp_send_false_only_adds_the_invitation(client, user):
         pa = (await db.execute(select(PendingAction).where(PendingAction.user_id == user.id))).scalar_one()
         assert pa.payload["_variant"] == "invite" and pa.payload["message_id"] == mid
         assert (await db.execute(select(Outbox).where(Outbox.user_id == user.id))).first() is None
+
+
+@pytest.mark.parametrize("subject, attached, expect", [
+    ("Fw: Ops Review", False, True), ("FWD: Ops Review", False, True), ("WG: Ops Review", False, True),
+    ("TR : Ops Review", False, True), ("Пересл.: x", False, False), ("Пересл: x", False, True),
+    ("RE: Fw: Ops Review", False, False), ("Re: Ops Review", False, False), ("Ops Review", True, True),
+    ("Firewall: report", False, False),
+])
+def test_which_messages_forward_an_email(subject, attached, expect):
+    from types import SimpleNamespace
+
+    import mailr.agent.tools  # noqa: F401  (registers mail_tools in order)
+    from mailr.agent.mail_tools import _forwards_an_email
+
+    atts = [{"filename": "x.eml", "type": "message/rfc822"}] if attached else []
+    assert _forwards_an_email(SimpleNamespace(subject=subject, attachments=atts)) is expect
+
+
+async def test_get_conversation_marks_a_forward_and_not_a_reply(client, user):
+    """A forward's body there is only the note: the run is pointed at get_message_body. A reply's
+    quote is the thread itself, so it is not marked."""
+    from mailr.agent.tools import ToolCtx, run_tool
+    from mailr.core.auth import ALL_SCOPES, Principal
+    from mailr.models import Message, User
+
+    addr = _addr()
+    fwd = await _arrive(user, _forward(addr, await _mine(user), note="Add this to my calendar."))
+    reply = await _arrive(user, _forward(addr, await _mine(user), note="Sounds good.", subject="RE: Ops Review"))
+    async with sessionmaker()() as db:
+        u = await db.get(User, user.id)
+        ctx = ToolCtx(db=db, p=Principal(user=u, scopes=set(ALL_SCOPES) - {"admin"}), assistant=True,
+                      chat_session_id="test-session")
+        for mid, expect in ((fwd, True), (reply, False)):
+            cid = (await db.get(Message, mid)).conversation_id
+            msgs = (await run_tool(ctx, "get_conversation", {"conversation_id": cid})).data["messages"]
+            got = next(m for m in msgs if m["message_id"] == mid)
+            assert got.get("forwards_an_email", False) is expect

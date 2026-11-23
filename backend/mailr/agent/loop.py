@@ -778,9 +778,12 @@ async def run_chat(db: AsyncSession, p, user_text: str, *, session_id: str | Non
         pa = await db.get(PendingAction, resume)
         if pa is not None and pa.user_id != p.user_id:
             pa = None  # another user's approval: nothing about it, not even whether it waits
-        waiting = pa is None or pa.status in ("pending", "approved", "executing")
-        yield {"type": "error", "message": "That approval is still waiting." if waiting
-               else "The chat already has that approval's outcome."}
+        if pa is None or pa.status in ("pending", "approved", "executing"):
+            yield {"type": "error", "message": "That approval is still waiting."}
+        else:
+            # Already reported: a resume queued while another continuation ran, and that one told
+            # the model of this approval too. Nothing to add; the reply before it stays as it is.
+            yield {"type": "done", "already": True}
         return
     stop = stop or asyncio.Event()
     _STOPS[s.id] = stop

@@ -935,6 +935,8 @@ data class MemoryNote(
     @Serializable(with = SafeTextSerializer::class) val text: String = "",
     val kind: String = "fact",
     val entity: MemoryAbout? = null,
+    /** Notes merged into this one ("Merged from N notes"). */
+    @SerialName("merged_from") val mergedFrom: List<MergedNote> = emptyList(),
 )
 
 @Serializable

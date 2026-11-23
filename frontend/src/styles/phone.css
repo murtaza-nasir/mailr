@@ -724,10 +724,10 @@ html[data-phone-chrome] .toasts {
 @media (hover: none) {
   /* A tap leaves a sticky :hover on touch screens; the row's hover buttons would cover its date
      until the next tap elsewhere. A swipe or a long press (the row's menu) does their work. */
-  .conv-row:hover:not(:focus-within) .hover-actions {
+  .conv-row:hover:not(:is(:focus-visible, :has(:focus-visible))) .hover-actions {
     display: none;
   }
-  .conv-row:hover:not(:focus-within) .tail {
+  .conv-row:hover:not(:is(:focus-visible, :has(:focus-visible))) .tail {
     visibility: visible;
   }
   .conv-row:hover {

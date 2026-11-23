@@ -347,11 +347,43 @@ async def accept_memory(mid: int, p: Principal = Depends(scope("read")), db: Asy
         p, include_suggested=True, include_expired=True)))).scalar_one_or_none()
     if m is None:
         raise ApiError(404, "common.memory_not_found")
+    if m.status == "suggested" and (gone := await memory.retired_note(db, p, m)) is not None:
+        # A tidy proposal to retire a saved note: it stops being used (expired now, still listed).
+        await memory.retire(db, gone)
+        await db.delete(m)
+        await audit(db, p, "assistant.accept_memory", str(mid))
+        await _changed(db, p, "memory")
+        await db.commit()
+        return (await memory.with_entities(db, [gone], p))[0]
+    if m.status == "suggested" and (old := await memory.replaced_note(db, p, m)) is not None:
+        # An edit of a saved note (the learner saw it and proposed a change): the note takes the
+        # new text and the suggestion goes. One note, as before, with both sources.
+        await memory.chat_decision(db, m, "kept")
+        others = await memory.merged_notes(db, p, m)
+        if others:
+            # A tidy merge: the proposal becomes the saved note, and every note it replaces goes
+            # into it (all of their texts stay under "Merged from").
+            m.refs = [r for r in m.refs or [] if not (isinstance(r, dict) and set(r) & {"replaces", "merges"})]
+            m.status, m.entity_id = "active", m.entity_id or old.entity_id
+            m.pinned = bool(old.pinned or any(o.pinned for o in others))
+            for o in [old, *others]:
+                await memory.merge_into(db, p, o, m)
+            await audit(db, p, "assistant.accept_memory", str(mid))
+            await _changed(db, p, "memory")
+            await db.commit()
+            return (await memory.with_entities(db, [m], p))[0]
+        await memory.apply_edit(db, p, m, old)
+        await audit(db, p, "assistant.accept_memory", str(mid))
+        await _changed(db, p, "memory")
+        await db.commit()
+        return (await memory.with_entities(db, [old], p))[0]
     about = next((r.get("about") for r in m.refs or [] if isinstance(r, dict) and r.get("about")), None)
     if about and m.entity_id is None and memory.is_self_ref(about):
         m.entity_id = (await memory.self_entity(db, p, create=True)).id
     elif about and m.entity_id is None:
         ent = await memory.find_entity(db, p, about.get("name"), kind=about.get("kind"))
+        if ent is not None and about.get("name") and ent.kind != "person":
+            memory.add_alias(ent, about["name"])  # another wording of a topic (A3)
         if ent is None and about.get("emails"):
             ent = await memory.find_entity(db, p, about["emails"][0])
         if ent is None:
@@ -362,6 +394,7 @@ async def accept_memory(mid: int, p: Principal = Depends(scope("read")), db: Asy
     m.status = "active"
     if m.source not in ("extracted", "chat"):
         m.source = "extracted"
+    await memory.chat_decision(db, m, "kept")
     await db.flush()
     await audit(db, p, "assistant.accept_memory", str(mid))
     await _changed(db, p, "memory")
@@ -378,14 +411,101 @@ async def reject_memory(mid: int, p: Principal = Depends(scope("read")), db: Asy
     if m is None:
         raise ApiError(404, "knowledge.suggestion_not_found")
     prof = await profile.get(db, p.user_id)
-    rejected = list((prof.state or {}).get("rejected") or [])
-    rejected = (rejected + [memory._norm(m.text)])[-300:]
-    prof.state = {**(prof.state or {}), "rejected": rejected}
+    from mailr.knowledge import tasks
+
+    if (key := tasks.tidy_key(m.refs)) is not None:
+        # A declined tidy proposal is not made again; its text stays proposable from mail.
+        declined = list((prof.state or {}).get("tidy_declined") or [])
+        prof.state = {**(prof.state or {}), "tidy_declined": (declined + [key])[-300:]}
+    else:
+        rejected = list((prof.state or {}).get("rejected") or [])
+        rejected = (rejected + [memory._norm(m.text)])[-300:]
+        prof.state = {**(prof.state or {}), "rejected": rejected}
+    await memory.chat_decision(db, m, "dropped")
     await db.delete(m)
     await audit(db, p, "assistant.reject_memory", str(mid))
     await _changed(db, p, "memory")
     await db.commit()
     return {"ok": True}
+
+
+class MergeIn(BaseModel):
+    into: int
+
+
+# ACT memory.merge @api
+@router.post("/memories/{mid}/merge")
+async def merge_memory(mid: int, body: MergeIn, p: Principal = Depends(scope("read")),
+                       db: AsyncSession = Depends(get_db)):
+    """Merge a note (a suggestion, or a saved note) into another: the other keeps its text and
+    gains the sources; the merged one is listed under it ("Merged from N notes") and never used
+    on its own. Returns the note merged into."""
+    _session_only(p, "merging memories")
+    both = {x.id: x for x in (await db.execute(select(Memory).where(
+        Memory.id.in_([mid, body.into]), memory.mem_filter(p, include_suggested=True, include_expired=True)))).scalars()}
+    m, target = both.get(mid), both.get(body.into)
+    if m is None or target is None:
+        raise ApiError(404, "common.memory_not_found")
+    if m.id == target.id:
+        raise ApiError(400, "knowledge.merge_into_itself")
+    if m.status == "active" and target.status != "active":
+        raise ApiError(400, "knowledge.merge_saved_into_suggestion")  # it would stop being used
+    await memory.chat_decision(db, m, "merged")
+    await memory.merge_into(db, p, m, target)
+    await audit(db, p, "assistant.merge_memory", f"{mid}->{target.id}")
+    await _changed(db, p, "memory")
+    await db.commit()
+    return (await memory.with_entities(db, [target], p))[0]
+
+
+@router.get("/memories/counts")
+async def memory_counts(p: Principal = Depends(scope("read")), db: AsyncSession = Depends(get_db)):
+    """How many suggestions wait (the "n to review" count on the Ambrose panel and the Memory tab),
+    and whether the weekly review card is due (from Monday morning, until dismissed that week)."""
+    from datetime import datetime
+
+    from mailr.calendar import tz
+    from mailr.knowledge import tasks
+
+    waiting = int((await db.execute(select(func.count()).select_from(Memory).where(
+        memory.mem_filter(p, include_suggested=True), Memory.status == "suggested"))).scalar_one())
+    prof = await profile.get(db, p.user_id)
+    now = datetime.now(await tz.user_zone(db, p.user))
+    card = not p.is_token and tasks.review_card_due(prof.state or {}, now, waiting)
+    return {"suggested": waiting, "review_card": card, "week": tasks.review_week(now)}
+
+
+# ACT memory.tidy @api
+@router.post("/memories/tidy")
+async def tidy_now(p: Principal = Depends(scope("read")), db: AsyncSession = Depends(get_db)):
+    """Look for notes to merge or retire now (the proposals arrive as suggestions)."""
+    from mailr.core.jobs import enqueue
+
+    _session_only(p, "tidying memories")
+    await enqueue(db, "kb.tidy", {"user_id": p.user_id, "force": True}, user_id=p.user_id,
+                  dedupe_key=f"kb.tidy:{p.user_id}")
+    await audit(db, p, "assistant.tidy_memories", "")
+    await db.commit()
+    return {"queued": True}
+
+
+# ACT memory.dismiss_review_card @api
+@router.post("/memories/review-card/dismiss")
+async def dismiss_review_card(p: Principal = Depends(scope("read")), db: AsyncSession = Depends(get_db)):
+    """Hide the weekly review card until next Monday (web and Android share it)."""
+    from datetime import datetime
+
+    from mailr.calendar import tz
+    from mailr.knowledge import tasks
+
+    _session_only(p, "the review card")
+    prof = await profile.get(db, p.user_id)
+    week = tasks.review_week(datetime.now(await tz.user_zone(db, p.user)))
+    prof.state = {**(prof.state or {}), "review_dismissed": week}
+    await audit(db, p, "assistant.dismiss_review_card", week)
+    await _changed(db, p, "memory")
+    await db.commit()
+    return {"ok": True, "week": week}
 
 
 @router.post("/memories/learn")

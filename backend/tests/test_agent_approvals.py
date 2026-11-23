@@ -54,6 +54,14 @@ async def test_trash_needs_approval_then_resumes(client, user, raw, fake_llm):
         assert evs2[-1]["type"] == "done", evs2
         note = fake_llm.requests[-1]["body"]["messages"][-1]
         assert note["role"] == "user" and "approved and done" in note["content"] and "[mailr:" in note["content"]
+
+        # Resumed again (a second card's continuation, queued while this one ran, when this one
+        # already reported both): nothing to add, no model call, no error on the reply.
+        calls = len(fake_llm.requests)
+        r3 = await client.post("/api/v1/agent/chat", json={"session_id": sid,
+                                                           "resume_approval_id": card["approval_id"]})
+        assert [(e["type"], e.get("already")) for e in _events(r3.text)] == [("done", True)]
+        assert len(fake_llm.requests) == calls
     finally:
         await _drop_endpoint(ep)
 

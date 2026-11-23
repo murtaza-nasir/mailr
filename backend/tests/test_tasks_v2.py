@@ -417,3 +417,60 @@ async def test_the_tag_rename_job_commits_each_task(client, user):
         assert "Errands" in _raw(cals["Personal"], t["uid"])
     tags = {t["name"]: t for t in (await client.get(f"{API}/tasks/tags")).json()}
     assert tags["Errands"]["count"] == 2 and tags["Errands"]["color"] == "#3366cc" and "shop" not in tags
+
+
+# ---------------- reminders of completed tasks ----------------
+
+
+async def test_completing_a_task_parks_its_reminders_and_a_reopen_restores_them(client, user):
+    """ACT task.complete, ACT task.reopen: a completed task carries no VALARM in the store (desktop
+    reminder daemons fire them), and a reopen gives the reminders back."""
+    cals, _ = await _connect(client)
+    t = await _task(client, summary="Get sunglasses", due="2030-06-01T15:00:00Z", reminders=[30],
+                    reminders_at=["2030-06-01T09:00:00Z"])
+    await client.patch(f"{API}/tasks/{t['uid']}", json={"completed": True})
+    raw = _raw(cals["Personal"], t["uid"])
+    assert "BEGIN:VALARM" not in raw and "X-MAILR-PARKED-ALARMS" in raw
+    r = (await client.patch(f"{API}/tasks/{t['uid']}", json={"completed": False})).json()
+    assert r["reminders"] == [30] and r["reminders_at"] == ["2030-06-01T09:00:00+00:00"]
+    raw = _raw(cals["Personal"], t["uid"])
+    assert raw.count("BEGIN:VALARM") == 2 and "X-MAILR-PARKED-ALARMS" not in raw
+
+
+async def test_a_task_completed_in_another_app_loses_its_reminders_after_a_sync(client, user):
+    """calendar.park_alarms: queued after a sync that finds a completed task with VALARMs (or a
+    reopened one with parked reminders); the other app's reopen gets its reminders back."""
+    from sqlalchemy import select
+
+    from mailr.calendar import sync
+    from mailr.models import Connector, Job
+
+    cals, _ = await _connect(client)
+    uid = f"o-{uuid.uuid4().hex[:8]}"
+    head = ("BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:x\r\nBEGIN:VTODO\r\n"
+            f"UID:{uid}\r\nDTSTAMP:20260101T000000Z\r\nSUMMARY:Fix the bike\r\nDUE:20300601T150000Z\r\n")
+    alarm = "BEGIN:VALARM\r\nACTION:DISPLAY\r\nDESCRIPTION:Fix the bike\r\nTRIGGER;RELATED=END:PT0S\r\nEND:VALARM\r\n"
+    cals["Personal"].save_todo(head + "STATUS:COMPLETED\r\nCOMPLETED:20260102T000000Z\r\n" + alarm
+                               + "END:VTODO\r\nEND:VCALENDAR\r\n")
+    async with sessionmaker()() as db:
+        cid = (await db.execute(select(Connector.id).where(Connector.user_id == user.id, Connector.kind == "caldav"))
+               ).scalar_one()
+    await sync.sync_connector(cid)
+    async with sessionmaker()() as db:
+        assert (await db.execute(select(Job.id).where(Job.kind == "calendar.park_alarms",
+                                                      Job.dedupe_key == f"calendar.park_alarms:{cid}"))).first()
+        assert await todo.park_alarms(db, cid) == 1
+    raw = _raw(cals["Personal"], uid)
+    assert "BEGIN:VALARM" not in raw and "X-MAILR-PARKED-ALARMS" in raw
+    # Reopened in the other app, which keeps the X-property it does not know.
+    reopened = raw.replace("STATUS:COMPLETED", "STATUS:NEEDS-ACTION")
+    reopened = "\r\n".join(x for x in reopened.splitlines() if not x.startswith("COMPLETED:")) + "\r\n"
+    other = cals["Personal"].todo_by_uid(uid)
+    other.data = reopened
+    other.save()
+    await sync.sync_connector(cid)
+    async with sessionmaker()() as db:
+        assert await todo.park_alarms(db, cid) == 1
+        assert await todo.park_alarms(db, cid) == 0
+    raw = _raw(cals["Personal"], uid)
+    assert raw.count("BEGIN:VALARM") == 1 and "X-MAILR-PARKED-ALARMS" not in raw

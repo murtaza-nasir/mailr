@@ -530,11 +530,17 @@ async def delete(cid: int, p: Principal = Depends(current), db: AsyncSession = D
     if c.kind == "speakr":
         # Removal deletes the mirror and the links (cascade), and the webhook mailr made in Speakr
         # (when Speakr can be reached); no recording in Speakr is touched.
+        # A token mailr made over single sign-on is revoked in Speakr too (best effort); a pasted
+        # one is left alone. The instance's Speakr is then not connected again at sign-in.
+        from mailr.integrations.speakr import auto as speakr_auto
+        from mailr.integrations.speakr import sso as speakr_sso
         from mailr.integrations.speakr import store as speakr_store
         from mailr.integrations.speakr import webhook as speakr_webhook
 
         if (c.config or {}).get("speakr_webhook_id"):
             await speakr_webhook.unregister(db, c)
+        await speakr_sso.revoke_on_remove(db, c)
+        await speakr_auto.on_remove(db, c)
         speakr_store.forget(c.id)
     if c.managed_by_admin:
         # Remembered, so it is never added again without the administrator saying so.

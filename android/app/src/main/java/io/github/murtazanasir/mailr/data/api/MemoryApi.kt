@@ -35,13 +35,46 @@ data class Memory(
     @SerialName("updated_at") val updatedAt: String? = null,
     /** The chat turn a memory from a chat came from, while that chat exists ("From a chat" opens it). */
     val chat: MemoryChat? = null,
+    /** A suggested edit: the saved note it changes when kept (the note keeps its place). */
+    val replaces: MemoryReplaced? = null,
+    /** Notes merged into this one, newest first ("Merged from N notes"; never used on their own). */
+    @SerialName("merged_from") val mergedFrom: List<MergedNote> = emptyList(),
+    /** A tidy proposal: the other saved notes it merges (with [replaces]), or the one it retires. */
+    val merges: List<MemoryReplaced> = emptyList(),
+    val retires: MemoryRetired? = null,
+    /** The person or topic it is about, for grouping (other wordings of a topic share a key). */
+    val topic: MemoryTopic? = null,
 ) {
     /** The email a memory came from, if any (its Source link). */
     val conversationId: Long? get() = refs.firstNotNullOfOrNull { it.conversationId }
     val messageId: Long? get() = refs.firstOrNull { it.conversationId != null }?.messageId
+    /** A dated commitment's date, if any. */
+    val due: String? get() = refs.firstNotNullOfOrNull { it.due }
     /** About you: no entity, or your own entry. */
     val aboutYou: Boolean get() = entity == null || entity.isSelf
 }
+
+/** A note merged into another: its earlier text, listed under the note it went into. */
+@Serializable
+data class MergedNote(val id: Long, @Serializable(with = SafeTextSerializer::class) val text: String = "",
+                      @SerialName("updated_at") val updatedAt: String? = null)
+
+/** GET /assistant/memories/counts: the waiting suggestions, and whether the weekly review card is due. */
+@Serializable
+data class ReviewCounts(val suggested: Int = 0, @SerialName("review_card") val reviewCard: Boolean = false, val week: String = "")
+
+/** The group a note belongs to on review (server's knowledge/memory.topics): `self` is the user. */
+@Serializable
+data class MemoryTopic(val key: String, val name: String = "", val self: Boolean = false)
+
+/** The saved note a tidy proposal retires, and why. */
+@Serializable
+data class MemoryRetired(val id: Long, @Serializable(with = SafeTextSerializer::class) val text: String = "",
+                         @Serializable(with = SafeTextSerializer::class) val reason: String = "")
+
+/** The saved note a suggested edit changes. */
+@Serializable
+data class MemoryReplaced(val id: Long, @Serializable(with = SafeTextSerializer::class) val text: String = "")
 
 /** Where a memory from a chat came from: the chat and the user's message in it. */
 @Serializable
@@ -56,6 +89,8 @@ data class MemoryRef(
     @SerialName("conversation_id") val conversationId: Long? = null,
     /** A suggestion's subject before it is kept (a person, a topic or you). */
     val about: RefAbout? = null,
+    /** A dated commitment's date (YYYY-MM-DD): Make a task gives the task that date. */
+    val due: String? = null,
 )
 
 @Serializable
@@ -80,6 +115,8 @@ data class LearningRun(
     val suggested: Int = 0,
     /** null, model_failed, cut_off, unreadable or gave_up. */
     val error: String? = null,
+    /** No new suggestions: 15 are waiting for review. */
+    val full: Boolean = false,
 )
 
 @Serializable
@@ -198,6 +235,15 @@ suspend fun MailrApi.learnNow() = client.send("POST", "assistant/memories/learn"
 suspend fun MailrApi.acceptMemory(id: Long) = client.send("POST", "assistant/memories/$id/accept", JsonElement.serializer())
 
 suspend fun MailrApi.rejectMemory(id: Long) = client.send("POST", "assistant/memories/$id/reject", JsonElement.serializer())
+
+suspend fun MailrApi.memoryCounts(): ReviewCounts = client.get("assistant/memories/counts", ReviewCounts.serializer())
+
+suspend fun MailrApi.mergeMemory(id: Long, into: Long) = client.send("POST", "assistant/memories/$id/merge", JsonElement.serializer(),
+    json(buildJsonObject { put("into", JsonPrimitive(into)) }))
+
+suspend fun MailrApi.tidyMemories() = client.send("POST", "assistant/memories/tidy", JsonElement.serializer())
+
+suspend fun MailrApi.dismissReviewCard() = client.send("POST", "assistant/memories/review-card/dismiss", JsonElement.serializer())
 
 suspend fun MailrApi.createMemory(e: MemoryEdit, sensitive: Boolean? = null) =
     client.send("POST", "assistant/memories", JsonElement.serializer(), json(memoryBody(e, sensitive)))

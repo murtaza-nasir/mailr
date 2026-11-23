@@ -12,6 +12,35 @@
         <item quantity="other">Zuletzt gelernt am %1$s · %2$d neu</item>
     </plurals>
     <string name="memory_last_failed">Letzter Versuch am %1$s fehlgeschlagen. %2$s</string>
+    <plurals name="memory_review_count">
+        <item quantity="one">%d zu überprüfen</item>
+        <item quantity="other">%d zu überprüfen</item>
+    </plurals>
+    <plurals name="memory_review_title">
+        <item quantity="one">%d Gedächtnis zu überprüfen</item>
+        <item quantity="other">%d Gedächtnisse zu überprüfen</item>
+    </plurals>
+    <string name="memory_review_not_now">Nicht jetzt (bis nächste Woche)</string>
+    <string name="memory_review_open_all">Auf der Gedächtnis-Seite überprüfen</string>
+    <string name="memory_review_other">Andere</string>
+    <string name="memory_review_retire">Verwerfen</string>
+    <string name="memory_review_keep_note">Notiz behalten</string>
+    <string name="memory_review_retires">Ambrose schlägt vor, diese gespeicherte Erinnerung nicht mehr zu verwenden.</string>
+    <string name="memory_review_retires_why">Ambrose schlägt vor, diese gespeicherte Erinnerung nicht mehr zu verwenden: %1$s</string>
+    <plurals name="memory_review_merges">
+        <item quantity="one">Das Behalten ersetzt %d gespeicherte Erinnerung:</item>
+        <item quantity="other">Das Behalten ersetzt %d gespeicherte Erinnerungen:</item>
+    </plurals>
+    <string name="memory_review_merged">Zusammengeführt.</string>
+    <string name="memory_tidy">Aufräumen</string>
+    <string name="memory_tidy_queued">Aufräumen gestartet. Alles, was zusammengeführt oder verworfen werden kann, wird unter „Zu überprüfen“ angezeigt.</string>
+    <string name="memory_review_merge">Zusammenführen</string>
+    <plurals name="memory_merged_from">
+        <item quantity="one">Zusammengeführt aus %d Notiz</item>
+        <item quantity="other">Zusammengeführt aus %d Notizen</item>
+    </plurals>
+    <string name="memory_updates_saved">Wenn du das beibehältst, wird deine gespeicherte Notiz geändert: „%1$s“</string>
+    <string name="memory_learning_paused">Geprüft: %1$s. 15 Vorschläge warten auf Überprüfung, daher wurde nichts Neues hinzugefügt. Überprüfe sie, um das Lernen fortzusetzen.</string>
     <string name="memory_learning_off">Lernen aus E-Mails ist deaktiviert.</string>
     <string name="memory_never_learned">Noch nichts aus E-Mails gelernt.</string>
     <string name="memory_error_model_failed">Das Modell hat nicht geantwortet. Erneuter Versuch in einer Stunde.</string>

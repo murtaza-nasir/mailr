@@ -6,7 +6,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Brain, ChevronDown, ChevronUp, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { api } from '../../../api/client'
-import { MemoryDialog, useMemoryMutations } from '../../settings/assistant/memoryBits'
+import { MemoryDialog, MergedFrom, useMemoryMutations } from '../../settings/assistant/memoryBits'
 import { qkA, type Memory } from '../../settings/assistant/types'
 import { t } from '../../../i18n'
 
@@ -38,6 +38,7 @@ export function UsedMemories({ ids }: { ids: number[] }) {
                 <span className="used-memory-text" dir="auto">{m.text}</span>
                 {m.entity && <span className="muted used-memory-about">{m.entity.is_self ? t('memory.dialog.you') : m.entity.name}</span>}
               </button>
+              <MergedFrom m={m} />
               <button type="button" className="icon-btn xs" aria-label={t('settings.assistant.memoryBits.deleteMemory')} data-tip={t('common.delete2')}
                 onClick={() => remove.mutate(m, { onSuccess: () => void qc.invalidateQueries({ queryKey: qkA.memoriesById(ids) }) })}>
                 <Trash2 size={14} />

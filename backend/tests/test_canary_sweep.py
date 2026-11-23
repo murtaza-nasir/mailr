@@ -62,6 +62,9 @@ SITE_EXEMPT: dict[str, str] = {
     "api/admin_routes.py::_embed_unchecked": "the admin's endpoint check embeds the fixed word 'test'",
     "api/admin_routes.py::test_endpoint": "the admin's endpoint check sends fixed test text, no user data",
     "cli.py::_reembed": "a command-line re-embedding run; the same embed_pending_passages as the job",
+    "knowledge/tasks.py::_same_waiting": "the merge check asks only the endpoint relevance.check_endpoint "
+                                         "returns, local Jev endpoints only (the relevance check's guard, "
+                                         "which the sweep runs); its embedding goes through embed.current",
 }
 # feature= names the sweep does not run, with the reason.
 FEATURE_EXEMPT: dict[str, str] = {}
@@ -199,6 +202,10 @@ async def _seed(client, user, speakr) -> World:
             mem = Memory(user_id=user.id, entity_id=e.id, text=f"Prefers Fridays {d['memory']}", source="extracted",
                          sensitive=sens, refs=[{"conversation_id": w.local_conv if sens else w.normal_conv}])
             db.add(mem)
+            # Three notes, so the tidy pass (kb.tidy) asks about this entity.
+            for extra in ("Reviews drafts", "Chairs the panel"):
+                db.add(Memory(user_id=user.id, entity_id=e.id, text=f"{extra} {d['memory']}", source="extracted",
+                              sensitive=sens, refs=[]))
             await db.flush()
             if sens:
                 w.memory_id = mem.id
@@ -450,6 +457,10 @@ async def _exercise(run: Run, client, user, w: World, net: FakeNet, names: dict[
 
     res = await run.step("kb.extract", extract_for_user(uid, force=True))
     run.log.append(f"kb.extract -> {res}")
+    from mailr.knowledge.tasks import tidy_for_user
+
+    res = await run.step("kb.tidy", tidy_for_user(uid, force=True))
+    run.log.append(f"kb.tidy -> {res}")
     await run.step("intel.embed_pending", _job("intel.embed_pending", {"user_id": uid}, uid))
     await run.step("kb.embed", _job("kb.embed", {"user_id": uid}, uid))
     await run.step("notes.embed", _job("notes.embed", {"user_id": uid}, uid))

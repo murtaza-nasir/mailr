@@ -126,7 +126,9 @@
       "local_public": "{{host}} est une adresse publique, elle ne peut donc pas être marquée comme locale. Utilisez une adresse de votre réseau ou de cette machine, ou marquez-la comme hébergée.",
       "local_public_no_host": "Il s'agit d'une adresse publique, elle ne peut donc pas être marquée comme locale. Utilisez une adresse de votre réseau ou de cette machine, ou marquez-la comme hébergée.",
       "password_not_by_token": "Les mots de passe sont modifiés par un administrateur connecté, pas par un jeton d'API",
-      "public_address_first": "Saisissez d'abord l'adresse publique."
+      "public_address_first": "Saisissez d'abord l'adresse publique.",
+      "speakr_address": "L'adresse de Speakr doit commencer par https:// (ou http:// sur un réseau privé).",
+      "speakr_needs_sso": "La connexion lors de la connexion nécessite l'authentification unique sur ce serveur Mailr."
     },
     "accounts": {
       "account_not_found": "Compte introuvable",
@@ -404,6 +406,8 @@
     },
     "knowledge": {
       "entity_not_found": "entité introuvable",
+      "merge_into_itself": "une mémoire ne peut pas être fusionnée avec elle-même",
+      "merge_saved_into_suggestion": "une mémoire enregistrée ne peut être fusionnée qu'avec une autre mémoire enregistrée",
       "only_builtin_reset": "seules les compétences intégrées peuvent être réinitialisées",
       "skill_no_instructions": "la compétence n'a pas d'instructions",
       "skill_not_found": "compétence introuvable",

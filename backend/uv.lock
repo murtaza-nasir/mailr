@@ -1493,7 +1493,7 @@ wheels = [
 
 [[package]]
 name = "mailr"
-version = "0.40.42"
+version = "0.40.53"
 source = { editable = "." }
 dependencies = [
     { name = "aiosmtplib" },

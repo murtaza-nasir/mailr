@@ -51,6 +51,8 @@ export interface ReminderPayload {
   again?: boolean
   /** An event with guests: the path of its meeting prep (event.prep). */
   prep?: string | null
+  /** The server's id for this alert, the same over SSE and Web Push: shown once per browser. */
+  delivery?: string
 }
 
 /** Remind again: the choices, worded as on Android. */

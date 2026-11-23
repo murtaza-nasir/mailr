@@ -1,8 +1,11 @@
-// Browser notifications for reminders. A notification's tag is the
-// reminder key, so a reminder shown twice (two tabs, or SSE and Web Push) replaces itself. With a
-// service worker the notification carries buttons; the worker sends a click or a button back to
-// this tab (onWorkerMessage), and acts through POST /reminders/act when the push carried a token.
-// Without one (the dev server) a plain Notification is used, without buttons.
+// Browser notifications for reminders. A reminder reaches a browser several times: as a Web Push
+// and over SSE in every open tab, all with the server's same `delivery` id. With a service worker,
+// the tabs hand their copy to it (viaWorker) and the worker shows each delivery once (sw.js
+// showPush): replacing by tag is not enough, since Firefox on a Linux desktop shows each
+// showNotification as a new popup. Its notification carries buttons; the worker sends a click or a
+// button back to this tab (onWorkerMessage), and acts through POST /reminders/act when the push
+// carried a token. Without a worker (the dev server) the one tab that claims the delivery shows a
+// plain Notification, without buttons. The tag is still the reminder key, so a repeat replaces it.
 
 import { api } from '../../api/client'
 import {
@@ -122,6 +125,66 @@ async function show(a: ShowArgs): Promise<void> {
     /* some browsers allow notifications only from a service worker */
     if (a.data.test) throw e
   }
+}
+
+/** Hands a reminder from the SSE stream to the service worker, which shows each delivery once for
+ * the whole browser (sw.js showPush): the Web Push and every open tab carry the same alert. False
+ * when there is no worker or it does not answer (an older worker), and the tab shows it itself. */
+export async function viaWorker(p: ReminderPayload): Promise<boolean> {
+  const reg = await registration()
+  const worker = reg?.active
+  const sw = typeof navigator !== 'undefined' ? navigator.serviceWorker : undefined
+  if (!worker || !sw) return false
+  const id = `${Date.now()}-${Math.random().toString(36).slice(2)}`
+  return new Promise<boolean>((resolve) => {
+    const done = (ok: boolean) => {
+      sw.removeEventListener('message', onMessage)
+      clearTimeout(timer)
+      resolve(ok)
+    }
+    const onMessage = (e: MessageEvent) => {
+      if (e.data?.type === 'mailr:reminder-ack' && e.data.id === id) done(true)
+    }
+    const timer = setTimeout(() => done(false), 1500)
+    sw.addEventListener('message', onMessage)
+    try {
+      worker.postMessage({ type: 'mailr:reminder', id, d: p })
+    } catch {
+      done(false)
+    }
+  })
+}
+
+const TAB = Math.random().toString(36).slice(2)
+
+/** One tab of this browser wins `name` (a delivery id): the others skip it. Used where no service
+ * worker shows the alert once (and for the tab's own chime). True when storage is unavailable. */
+export async function claim(name: string): Promise<boolean> {
+  const prefix = 'mailr.reminders.claim.'
+  const k = prefix + name
+  try {
+    if (localStorage.getItem(k)) return false
+    const mine = `${TAB}:${Date.now()}`
+    localStorage.setItem(k, mine)
+    await new Promise((r) => setTimeout(r, 40 + Math.random() * 60))
+    const won = localStorage.getItem(k) === mine
+    // Claims older than a day are dropped.
+    const now = Date.now()
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const key = localStorage.key(i)
+      if (!key?.startsWith(prefix) || key === k) continue
+      const at = Number((localStorage.getItem(key) ?? '').split(':')[1] ?? 0)
+      if (!(now - at < 86_400_000)) localStorage.removeItem(key)
+    }
+    return won
+  } catch {
+    return true
+  }
+}
+
+/** The chime for alerts the service worker shows: one tab plays it. */
+export async function chimeOnce(name: string): Promise<void> {
+  if (await claim(`chime.${name}`)) chime()
 }
 
 /** The tags this tab knows to be showing. */

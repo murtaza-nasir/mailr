@@ -98,6 +98,14 @@ When **Fetch** lists nothing, enter `https://<server>/dav/cal/` instead: your ca
 found from there. When you move from another calendar server, remove that server's resource
 afterwards, so events are not shown twice.
 
+## Reminders of completed tasks
+
+Some desktop apps, KOrganizer among them, show reminders for tasks that are already done. To
+prevent this, the reminders of a completed task are set aside when the task is completed, and no
+reminder is shown for it in any app. They are put back when the task is reopened. When a task is
+completed or reopened in another app, its reminders are moved at the next synchronisation, within
+15 minutes.
+
 ## Invitations made on a phone are not sent
 
 When you add guests to an event in a phone or desktop calendar app, the event is saved, but

@@ -28,6 +28,62 @@ You need a running Speakr server and an API token from it.
 
 The token is stored encrypted and never shown again. Use **Paste a new token…** to replace it.
 
+### Connect with single sign-on
+
+When you sign in to Mailr with single sign-on, and Speakr uses the same sign-on, the token can be
+created in Speakr for you instead of copied by hand. A Speakr version with token exchange is
+required, and a Speakr administrator turns it on.
+
+1. Sign in to Speakr with single sign-on at least once.
+2. In Mailr, click **Connect Speakr**, enter the **Speakr address** and click **Connect with**
+   followed by the name of your sign-on.
+3. Sign in again if you are asked. You then return to Mailr, and the account is connected.
+
+In Speakr's list of API tokens, the new token is named after your Mailr server. It is given only
+the access that Mailr uses (read, write, upload, share and webhooks, within what the Speakr server
+allows). Your sign-on token is used for this one request and is not stored. To renew the token
+later, open **Paste a new token…** and click the same button: the old token is revoked in Speakr
+when your Speakr version permits it; otherwise you are told where to revoke it yourself.
+
+When the connection fails, the reason is shown, for example that single sign-on tokens are off
+on that Speakr server, that you have not signed in to Speakr with single sign-on yet, that a
+Speakr account with your email exists and must be linked first (sign in to Speakr once), or that
+your Speakr account has reached its limit of API tokens. Pasting a token still works in every
+case.
+
+When you remove a Speakr account that was connected with single sign-on, its token is revoked in
+Speakr as well, when your Speakr version permits it. A token you pasted is left in Speakr,
+because you may use it elsewhere.
+
+### Connected when you sign in
+
+Your admin can set one Speakr server for everyone on your Mailr server. Its address is then
+filled in when you click **Add Speakr**. When your admin also turns on connecting at sign-in,
+you are connected to that Speakr the next time you sign in to Mailr's web app with single sign-on,
+without a step of your own:
+
+- A notice in **Settings → Accounts → Recordings (Speakr)** says that the account was connected.
+  Click **Got it** to hide it.
+- Recordings stay away from hosted models unless your admin chose otherwise. You can change
+  this and every other switch on the card.
+- To stop it, remove the account. It is not connected again at sign-in; use **Add Speakr** when
+  you want it back.
+- If you have no Speakr account yet, sign in to Speakr with single sign-on once. You are then
+  connected at your next Mailr sign-in, or at once with **Connect with**.
+- When the connection does not work, the reason is shown on the card, and another try is made at
+  a later sign-in: after an hour, or after a week when your Speakr admin must act first.
+
+Signing in on the Android app does not connect Speakr. An account connected at a web sign-in is
+used by the app as well.
+
+!!! note "For admins"
+    In Speakr's system settings, turn on SSO API tokens, and add Mailr's client ID from your
+    identity provider to both the allowed clients and the clients that may exchange tokens. Set
+    the scope limit to at least `read,write,upload` (add `share` and `webhooks` for share links
+    and instant updates). Mailr's own sign-on must be set up, see [Sign-in](../admin/sign-in.md).
+    To set one Speakr server for everyone and connect people at sign-in, see
+    [Speakr server](../admin/sign-in.md#speakr-server).
+
 ![The Recordings (Speakr) card in Settings, Accounts](../assets/shots/rec-connect.png)
 
 The card has these switches:

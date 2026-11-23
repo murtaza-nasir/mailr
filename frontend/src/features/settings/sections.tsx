@@ -7,6 +7,7 @@ import { ActivityPage } from '../activity/ActivityPage'
 import { PeopleTab } from '../people/PeopleTab'
 import { AccessTab } from './access/AccessTab'
 import { DevicesSection, IdentitiesSection, ImapSection, MailAccountsSection, PasswordSection } from './AccountsTab'
+import { AdminSpeakrSection } from './AdminSpeakr'
 import { CalendarsSection, DefaultsSection, ImageProxySection, LocalPolicySection, ModelsSection as AdminModelsSection, PoliciesSection, UsersSection } from './AdminTab'
 import { ApprovalsSection, AuditPart, OutboxSection, PermissionsPart, TokensPart } from './AgentsTab'
 import { BriefsSection } from './AmbroseSections'
@@ -132,4 +133,5 @@ export const SECTION_COMPONENTS: Record<string, ComponentType> = {
   diagnostics: DiagnosticsSection,
   'data-policies': PoliciesSection,
   'image-proxy': ImageProxySection,
+  'admin-speakr': AdminSpeakrSection,
 }

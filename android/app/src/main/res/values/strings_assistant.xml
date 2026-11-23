@@ -87,6 +87,13 @@
     <string name="asst_step_denied">denied</string>
     <string name="asst_step_expired">expired</string>
     <string name="asst_step_failed">failed</string>
+    <!-- "Remember: …?" under a reply: a suggestion from the message before it, then the answer. -->
+    <string name="asst_remember_question">Remember: “%1$s”?</string>
+    <string name="asst_remember_yes">Yes</string>
+    <string name="asst_remember_no">No</string>
+    <string name="asst_remember_kept">Remembered: “%1$s”</string>
+    <string name="asst_remember_dropped">Not remembered: “%1$s”</string>
+    <string name="asst_remember_merged">Added to another memory: “%1$s”</string>
     <!-- "Used memories · 2" under an answer: the notes that went into the prompt. -->
     <plurals name="asst_used_memories">
         <item quantity="one">Used memory · %d</item>

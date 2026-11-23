@@ -11,6 +11,31 @@
         <item quantity="other">上次学习 %1$s · %2$d 条新内容</item>
     </plurals>
     <string name="memory_last_failed">上次尝试 %1$s 失败。%2$s</string>
+    <plurals name="memory_review_count">
+        <item quantity="other">%d 条待审阅</item>
+    </plurals>
+    <plurals name="memory_review_title">
+        <item quantity="other">%d 条待审阅记忆</item>
+    </plurals>
+    <string name="memory_review_not_now">暂不处理（下周再提醒）</string>
+    <string name="memory_review_open_all">在“记忆”页面查看</string>
+    <string name="memory_review_other">其他</string>
+    <string name="memory_review_retire">停用</string>
+    <string name="memory_review_keep_note">保留该笔记</string>
+    <string name="memory_review_retires">Ambrose 建议不再使用此已保存的记忆。</string>
+    <string name="memory_review_retires_why">Ambrose 建议不再使用此已保存的记忆：%1$s</string>
+    <plurals name="memory_review_merges">
+        <item quantity="other">保留此项将替换 %d 条已保存的记忆：</item>
+    </plurals>
+    <string name="memory_review_merged">已合并。</string>
+    <string name="memory_tidy">整理</string>
+    <string name="memory_tidy_queued">已开始整理。任何需要合并或停用的内容将显示在“待审阅”下。</string>
+    <string name="memory_review_merge">合并</string>
+    <plurals name="memory_merged_from">
+        <item quantity="other">合并自 %d 条笔记</item>
+    </plurals>
+    <string name="memory_updates_saved">保留此更改将更新您已保存的笔记：“%1$s”</string>
+    <string name="memory_learning_paused">已检查 %1$s。有 15 条建议等待审核，因此未添加任何新内容。请审核这些建议以恢复学习。</string>
     <string name="memory_learning_off">从邮件中学习已关闭。</string>
     <string name="memory_never_learned">尚未从邮件中学习。</string>
     <string name="memory_error_model_failed">模型未响应。一小时后重试。</string>

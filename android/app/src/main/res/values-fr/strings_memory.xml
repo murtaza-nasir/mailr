@@ -12,6 +12,35 @@
         <item quantity="other">Dernier apprentissage %1$s · %2$d nouveaux</item>
     </plurals>
     <string name="memory_last_failed">La dernière tentative %1$s a échoué. %2$s</string>
+    <plurals name="memory_review_count">
+        <item quantity="one">%d à examiner</item>
+        <item quantity="other">%d à examiner</item>
+    </plurals>
+    <plurals name="memory_review_title">
+        <item quantity="one">%d mémoire à examiner</item>
+        <item quantity="other">%d mémoires à examiner</item>
+    </plurals>
+    <string name="memory_review_not_now">Pas maintenant (jusqu\'à la semaine prochaine)</string>
+    <string name="memory_review_open_all">Consulter la page Mémoire</string>
+    <string name="memory_review_other">Autre</string>
+    <string name="memory_review_retire">Retirer</string>
+    <string name="memory_review_keep_note">Conserver la note</string>
+    <string name="memory_review_retires">Ambrose suggère de ne plus utiliser cette mémoire enregistrée.</string>
+    <string name="memory_review_retires_why">Ambrose suggère de ne plus utiliser cette mémoire enregistrée : %1$s</string>
+    <plurals name="memory_review_merges">
+        <item quantity="one">Conserver ceci remplace %d mémoire enregistrée :</item>
+        <item quantity="other">Conserver ceci remplace %d mémoires enregistrées :</item>
+    </plurals>
+    <string name="memory_review_merged">Fusionné.</string>
+    <string name="memory_tidy">Nettoyer</string>
+    <string name="memory_tidy_queued">Nettoyage lancé. Les éléments à fusionner ou à retirer s\'affichent dans À examiner.</string>
+    <string name="memory_review_merge">Fusionner</string>
+    <plurals name="memory_merged_from">
+        <item quantity="one">Fusionné à partir de %d note</item>
+        <item quantity="other">Fusionné à partir de %d notes</item>
+    </plurals>
+    <string name="memory_updates_saved">Si vous conservez ceci, votre note enregistrée sera modifiée : « %1$s »</string>
+    <string name="memory_learning_paused">Vérification de %1$s effectuée. 15 suggestions sont en attente de validation, aucune nouvelle n\'a été ajoutée. Validez-les pour reprendre l\'apprentissage.</string>
     <string name="memory_learning_off">L\'apprentissage à partir des e-mails est désactivé.</string>
     <string name="memory_never_learned">Aucun apprentissage à partir des e-mails pour le moment.</string>
     <string name="memory_error_model_failed">Le modèle n\'a pas répondu. Nouvelle tentative dans une heure.</string>

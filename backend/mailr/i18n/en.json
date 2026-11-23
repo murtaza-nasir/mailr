@@ -126,7 +126,9 @@
       "local_public": "{{host}} is a public address, so it can't be marked local. Use an address on your network or this machine, or mark it hosted.",
       "local_public_no_host": "This is a public address, so it can't be marked local. Use an address on your network or this machine, or mark it hosted.",
       "password_not_by_token": "passwords are changed by a signed-in administrator, not an API token",
-      "public_address_first": "Enter the public address first."
+      "public_address_first": "Enter the public address first.",
+      "speakr_address": "The Speakr address must start with https:// (or http:// on a private network).",
+      "speakr_needs_sso": "Connecting at sign-in requires single sign-on on this Mailr server."
     },
     "accounts": {
       "account_not_found": "account not found",
@@ -404,6 +406,8 @@
     },
     "knowledge": {
       "entity_not_found": "entity not found",
+      "merge_into_itself": "a memory cannot be merged into itself",
+      "merge_saved_into_suggestion": "a saved memory can only be merged into another saved memory",
       "only_builtin_reset": "only built-in skills can be reset",
       "skill_no_instructions": "the skill has no instructions",
       "skill_not_found": "skill not found",

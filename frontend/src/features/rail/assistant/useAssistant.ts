@@ -6,6 +6,7 @@
 // stream drops, the hook re-attaches with GET /agent/chat/{id}/stream?after=<seq>, and if the run
 // is gone it reloads the chat, where an unfinished turn shows as interrupted with Retry.
 
+import type { RememberItem } from './MemoryReview'
 import type { CardHead } from '../../approvals/cardHead'
 import { msgText } from './present/serverText'
 import { CHATS_KEY, withTitle, type ChatSummary } from './chatList'
@@ -158,6 +159,8 @@ export interface AssistantTurn extends TimelineTurn {
   userMessageId?: number
   /** The notes that went into the prompt (the "Used memories" line). */
   memoryIds?: number[]
+  /** "Remember …?" under the reply: suggestions from the message before it, with the answer. */
+  remember?: RememberItem[]
   seconds?: number
   conversations?: number
   startedAt: number
@@ -202,6 +205,7 @@ interface ReplayTurn {
   skills?: string[]
   attachments?: ChatFile[]
   memory_ids?: number[]
+  remember?: RememberItem[]
 }
 
 /** A chat's title, and whether the user gave it (Rename) or it is the first question. */
@@ -278,6 +282,7 @@ function fromReplayTurns(s: SessionReplay): Turn[] {
           resume: t.resume,
           userMessageId: t.user_message_id ?? undefined,
           memoryIds: t.memory_ids ?? [],
+          remember: t.remember ?? [],
           error: t.status === 'error' ? tr('rail.assistant.useAssistant.couldNotAnswerThisRetry', { name: assistantNameNow() }) : undefined,
           startedAt: 0,
         }),
@@ -337,6 +342,10 @@ export function useAssistant(conversationId: number | null) {
   const abortRef = useRef<AbortController | null>(null)
   /** The turn in flight (run or follow), settled when its stream is over; open() waits for it. */
   const flightRef = useRef<Promise<unknown> | null>(null)
+  /** An approval decided while a reply was still running: its continuation runs when that reply
+   *  ends (one resume reports every approval decided since the last, agent/loop._approval_notes). */
+  const queuedResumeRef = useRef<{ session: string; id: number } | null>(null)
+  const drainResumeRef = useRef<(() => void) | null>(null)
   const sessionRef = useRef<string | null>(sessionId)
   const turnsRef = useRef<Turn[]>(turns)
   useEffect(() => {
@@ -464,6 +473,11 @@ export function useAssistant(conversationId: number | null) {
         patchLast((t) => ({ ...applyEvent(t, type, d), stopped: t.stopped || Boolean(d.stopped) }))
         return false
       case 'done':
+        if (d.already) {
+          // A resume whose approval the chat had already reported: the reply before it stays as it was.
+          patchLast((t) => ({ ...t, running: false, status: t.status === 'running' ? 'done' : t.status }))
+          return true
+        }
         patchLast((t) => ({
           ...applyEvent(t, type, d), running: false, status: d.stopped ? 'stopped' : 'done', stopped: t.stopped || Boolean(d.stopped),
           seconds: typeof d.seconds === 'number' ? d.seconds : (Date.now() - t.startedAt) / 1000,
@@ -627,7 +641,7 @@ export function useAssistant(conversationId: number | null) {
   const run = useCallback(
     (body: Record<string, unknown>, userText: string | null, cut?: number, files?: ChatFile[]) => {
       if (abortRef.current) return
-      const p = runTurn(body, userText, cut, files)
+      const p = runTurn(body, userText, cut, files).finally(() => drainResumeRef.current?.())
       flightRef.current = p
       return p
     },
@@ -654,6 +668,7 @@ export function useAssistant(conversationId: number | null) {
         if (abortRef.current === ac) {
           setBusy(false)
           abortRef.current = null
+          drainResumeRef.current?.()
         }
       }
     })()
@@ -778,10 +793,22 @@ export function useAssistant(conversationId: number | null) {
   const resume = useCallback(
     (approvalId: number) => {
       if (!sessionRef.current) return
+      if (abortRef.current) {
+        queuedResumeRef.current = { session: sessionRef.current, id: approvalId }
+        return
+      }
       void run({ session_id: sessionRef.current, resume_approval_id: approvalId, context: ctx() }, null)
     },
     [run, ctx],
   )
+  useEffect(() => {
+    drainResumeRef.current = () => {
+      const q = queuedResumeRef.current
+      if (!q || abortRef.current) return
+      queuedResumeRef.current = null
+      if (q.session === sessionRef.current) resume(q.id)
+    }
+  }, [resume])
 
   /** Regenerate the reply to a user message (replaces it and everything after it). */
   const rerun = useCallback(
@@ -856,6 +883,30 @@ export function useAssistant(conversationId: number | null) {
     })
   }, [])
 
+  /** The answer to a "Remember …?" item, as the server recorded it. */
+  const setRemember = useCallback((id: number, state: RememberItem['state']) => {
+    setTurns((list) => list.map((x) => (x.role === 'assistant' && x.remember?.some((r) => r.id === id)
+      ? { ...x, remember: x.remember.map((r) => (r.id === id ? { ...r, state } : r)) } : x)))
+  }, [])
+
+  // A suggestion from a message in this chat arrived after its turn (kb.chat_suggest): its
+  // "Remember …?" line, from the chat's transcript.
+  useEffect(() => {
+    const on = (e: Event) => {
+      const sid = (e as CustomEvent<string>).detail
+      if (!sid || sid !== sessionRef.current) return
+      void api.get<SessionReplay>(`/agent/sessions/${encodeURIComponent(sid)}`).then((s) => {
+        if (sessionRef.current !== sid) return
+        const by = new Map(s.turns.filter((t) => t.role === 'assistant' && t.user_message_id)
+          .map((t) => [t.user_message_id as number, t.remember ?? []]))
+        setTurns((list) => list.map((x) => (x.role === 'assistant' && x.userMessageId != null && by.has(x.userMessageId)
+          ? { ...x, remember: by.get(x.userMessageId) } : x)))
+      }).catch(() => undefined)
+    }
+    window.addEventListener('mailr:memory-asked', on)
+    return () => window.removeEventListener('mailr:memory-asked', on)
+  }, [])
+
   /** Undo a configuration change the assistant made (the server sent the request to make). */
   const undoConfig = useCallback(async (turnIndex: number, configIndex: number) => {
     const t = turnsRef.current[turnIndex]
@@ -872,5 +923,5 @@ export function useAssistant(conversationId: number | null) {
     return true
   }, [])
 
-  return { turns, busy, sessionId, title, setTitle, skills, send, resume, stop, reset, open, openSession, updateApproval, addReviewCard, rerun, rerunLast, editResend, undoConfig, localOnly, setLocalOnly, notice, retitle }
+  return { turns, busy, sessionId, title, setTitle, skills, send, resume, stop, reset, open, openSession, updateApproval, addReviewCard, setRemember, rerun, rerunLast, editResend, undoConfig, localOnly, setLocalOnly, notice, retitle }
 }

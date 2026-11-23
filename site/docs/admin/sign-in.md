@@ -75,3 +75,28 @@ The phone apps' sign-in is tied to the server address the app uses. A one-time v
 A sign-in lasts `MAILR_SESSION_DAYS` days (30 by default). Each user's browsers and phones are listed under **Settings → You → Password & devices**, where any of them can be signed out. A session stays valid until it expires or is signed out.
 
 API tokens for agents are separate from sessions. See [Tokens and scopes](../agents/tokens.md).
+
+## Speakr server
+
+When your users share one Speakr server that signs in with the same identity provider, enter its
+address in **Settings → Admin → Integrations → Speakr server**:
+
+- The address is filled in when someone clicks **Add Speakr**.
+- With **Connect Speakr when people sign in**, people who sign in to the web app with single
+  sign-on are connected to that Speakr in the background and are shown a notice. The sign-in never
+  waits for Speakr and is not blocked when Speakr cannot be reached. A person who removes the
+  connection is not connected again.
+- **Keep recordings away from hosted models** sets the data class of these connections. Each
+  person can change it later.
+- **Check** asks that Speakr, without a token, whether single sign-on tokens are on and whether
+  Mailr's client is allowed.
+
+Existing Speakr accounts are never changed, and turning the setting off stops only new
+connections.
+
+In Speakr, turn on SSO API tokens and add Mailr's web client ID to the allowed clients and to the
+clients that may exchange tokens. Speakr accounts are not created from Mailr: a person without a
+Speakr account signs in to Speakr with single sign-on once, and is connected at their next Mailr
+sign-in (tried again after an hour). The same applies to a Speakr account with the same email
+that is not yet linked to single sign-on.
+
